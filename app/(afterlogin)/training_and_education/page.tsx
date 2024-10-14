@@ -1,12 +1,9 @@
 "use client"
 import React, { useState } from 'react'
-import Image from 'next/image'
-import Navbar from '@/components/Navbar'
-import Sidebar from '@/components/Sidebar'
-import Form1 from "@/app/training_and_education/forms/form1"
-import Form2 from "@/app/training_and_education/forms/form2"
-import Form3 from "@/app/training_and_education/forms/form3"
-import Form4 from "@/app/training_and_education/forms/form4"
+import Form1 from "@/app/(afterlogin)/training_and_education/forms/form1"
+import Form2 from "@/app/(afterlogin)/training_and_education/forms/form2"
+import Form3 from "@/app/(afterlogin)/training_and_education/forms/form3"
+import Form4 from "@/app/(afterlogin)/training_and_education/forms/form4"
 import Preview_Form from './forms/preview_form'
 import Addvendor from '@/components/add_vendor'
 import { useRouter } from 'next/router'
@@ -28,23 +25,7 @@ const index = () => {
     setAddVendor(prev => !prev)
   }
   return (
-    <div className="h-screen bg-[#EBEBF6] grid grid-cols-6 relative overflow-hidden">
-       
-    <Image
-            className=" w-full absolute z-10 -top-96 -right-[500px] -rotate-6"
-            src={"/Lines.png"}
-            alt=""
-            width={1500}
-            height={100}
-            ></Image>
-            
-      <div className="col-span-1 px-11">
-        <Sidebar />
-      </div>
-      <div className="col-span-5 border-2 rounded-l-[60px] w-full h-screen bg-white overflow-scroll overflow-x-hidden relative">
-        <div className="sticky top-0 z-30 bg-white">
-          <Navbar/>
-        </div>
+        <>
         <div className="px-7 pb-7 pt-4 w-full relative z-20">
           <div>
         <h1 className="text-black text-[30px] font-medium capitalize" id="form_top">
@@ -79,14 +60,15 @@ const index = () => {
           />:""
         }
         </div>
-    </div>
+    
     {
       addVendor &&
-    <Addvendor
-    isAddVendor = {isAddVendor}
-    />
+      <Addvendor
+      isAddVendor = {isAddVendor}
+      />
     }
-    </div>
+    
+    </>
   )
 }
 

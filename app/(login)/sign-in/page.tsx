@@ -1,6 +1,6 @@
 import Image from "next/image";
 import React from "react";
-import Form from "@/app/sign-in/form";
+import Form from "@/app/(login)/sign-in/form";
 function Index() {
   return (
     <div className="bg-white h-screen md:flex text-black md:justify-between">

@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import Image from 'next/image'
 import Navbar from '@/components/Navbar'
 import Sidebar from '@/components/Sidebar'
-import Preview_Form from '@/app/execute/forms/preview_form'
+import Preview_Form from '@/app/(afterlogin)/execute/forms/preview_form'
 import Addvendor from '@/components/add_vendor'
 import { Button } from '@/components/ui/button'
 import { useRouter } from 'next/router'
@@ -62,9 +62,7 @@ const index = () => {
                 <h1 className="text-center">11/11/24</h1>
                 </div>
               </div>
-              
               <Button className="bg-[#4430bf] hover:bg-[#4430bf] px-10 text-white">Execute</Button>
-              
             </div>
 
         {
