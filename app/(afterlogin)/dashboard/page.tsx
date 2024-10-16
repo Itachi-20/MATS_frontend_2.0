@@ -6,8 +6,8 @@ import Details from '@/app/(afterlogin)/dashboard/details'
 const Index = () => {
   return (
     // <div className="h-screen bg-[#EBEBF6] grid grid-cols-6 relative overflow-hidden">
-       
-            
+
+
     //   <div className="col-span-1 px-11">
     //     <Sidebar />
     //   </div>
@@ -22,9 +22,9 @@ const Index = () => {
     //     <div className="sticky top-0 z-30 bg-white">
     //       <Navbar />
     //     </div>
-      <Details/>
     // </div>
     // </div>
+    (<Details/>)
   );
 };
 

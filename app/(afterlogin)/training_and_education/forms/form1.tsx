@@ -15,11 +15,12 @@ type Props = {
 
 const Form1 = ({ ...Props }: Props) => {
   return (
-    <div>
+    // </div>
+    (<div>
       <h1 className="text-black text-2xl font-normal uppercase pb-8">
         Basic Detail
       </h1>
-      <div className="grid grid-cols-2 gap-12">
+      <div className="grid grid-cols-2 gap-12 pb-8">
         <div className="flex flex-col gap-2">
           <label className="lable">
             Company Names <span className="text-[#e60000]">*</span>
@@ -97,6 +98,21 @@ const Form1 = ({ ...Props }: Props) => {
         </div>
         <div className="flex flex-col gap-2">
           <label className="lable">
+            City<span className="text-[#e60000]">*</span>
+          </label>
+          <Select>
+            <SelectTrigger className="dropdown">
+              <SelectValue placeholder="Theme" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="light">Light</SelectItem>
+              <SelectItem value="dark">Dark</SelectItem>
+              <SelectItem value="system">System</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="flex flex-col gap-2">
+          <label className="lable">
             State<span className="text-[#e60000]">*</span>
           </label>
           <Select>
@@ -155,15 +171,15 @@ const Form1 = ({ ...Props }: Props) => {
             </SelectContent>
           </Select>
         </div>
-        <div className="flex flex-col gap-2">
+        
+      </div>
+      <div className="grid grid-cols-2 gap-10">
+      <div className="flex flex-col gap-2">
           <label className="lable">
             Faculties<span className="text-[#e60000]">*</span>
           </label>
           <Textarea className='text-black shadow-md' placeholder='Type Here'/>
         </div>
-      </div>
-      <div className="grid grid-cols-2 gap-10">
-
       <div className="flex flex-col gap-2">
           <label className="lable">
             Participants<span className="text-[#e60000]">*</span>
@@ -178,8 +194,7 @@ const Form1 = ({ ...Props }: Props) => {
         </Button>
         <Button className='bg-[#4430bf] text-white text-md font-normal border' onClick={Props.nextForm}>Next</Button>
       </div>
-    </div>
-    // </div>
+    </div>)
   );
 };
 
