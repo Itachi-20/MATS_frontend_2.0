@@ -1,7 +1,4 @@
 import React from 'react'
-import Image from 'next/image'
-import Sidebar from '@/components/Sidebar'
-import Navbar from '@/components/Navbar'
 import { Input } from "@/components/ui/input";
 import {
   Select,

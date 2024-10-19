@@ -1,7 +1,12 @@
 import React from 'react'
 import { Input } from "@/components/ui/input";
 
-const basic_Details = () => {
+type Props = {
+  pathname:string
+}
+
+const basic_Details = ({...Props}:Props) => {
+  console.log(Props.pathname,"this is pathname")
   return (
     <div className="md:pb-8">
             <div className="flex md:gap-6" >
@@ -83,7 +88,7 @@ const basic_Details = () => {
                   readOnly={true}
                 ></Input>
               </div>
-              <div className="flex flex-col md:gap-2">
+              <div className={`flex flex-col md:gap-2  ${Props.pathname == "/assesment_program"?"hidden":""}`}>
                 <label className="text-black md:text-sm md:font-normal capitalize">
                 Therapy<span className="text-[#e60000]">*</span>
                 </label>
@@ -93,7 +98,7 @@ const basic_Details = () => {
                   readOnly={true}
                 ></Input>
               </div>
-              <div className="flex flex-col md:gap-2">
+              <div className={`flex flex-col md:gap-2  ${Props.pathname == "/assesment_program"?"hidden":""}`}>
                 <label className="text-black md:text-sm md:font-normal capitalize">
                 reporting head<span className="text-[#e60000]">*</span>
                 </label>

@@ -1,7 +1,12 @@
 import React from 'react'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-const event_Details = () => {
+
+type Props = {
+  pathname:string
+}
+
+const event_Details = ({...Props}:Props) => {
   return (
     <div className="md:pb-8">
             <div className="flex gap-6">
@@ -26,7 +31,7 @@ const event_Details = () => {
             <div className="grid md:grid-cols-3 md:gap-6">
               <div className="flex flex-col md:gap-2">
                 <label className="text-black md:text-sm md:font-normal capitalize">
-                Event Name<span className="text-[#e60000]">*</span>
+                {Props.pathname == "/assesment_program"?"Program Name":"Event Name"}<span className="text-[#e60000]">*</span>
                 </label>
                 <Input
                   className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
@@ -36,7 +41,17 @@ const event_Details = () => {
               </div>
               <div className="flex flex-col md:gap-2">
                 <label className="text-black md:text-sm md:font-normal capitalize">
-                event date<span className="text-[#e60000]">*</span>
+                {Props.pathname == "/assesment_program"?"Program Start Date":"Event Date"}<span className="text-[#e60000]">*</span>
+                </label>
+                <Input
+                  className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
+                  placeholder="Type Here"
+                  readOnly={true}
+                ></Input>
+              </div>
+              <div className={`flex flex-col md:gap-2  ${Props.pathname == "/assesment_program"?"":"hidden"}`}>
+                <label className="text-black md:text-sm md:font-normal capitalize">
+                Program End Date<span className="text-[#e60000]">*</span>
                 </label>
                 <Input
                   className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
@@ -46,7 +61,7 @@ const event_Details = () => {
               </div>
               <div className="flex flex-col md:gap-2">
                 <label className="text-black md:text-sm md:font-normal capitalize">
-                Event venue<span className="text-[#e60000]">*</span>
+                {Props.pathname == "/assesment_program"?"Program Venue and Location":"Event Venue"}<span className="text-[#e60000]">*</span>
                 </label>
                 <Input
                   className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"

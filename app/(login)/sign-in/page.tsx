@@ -1,12 +1,40 @@
+"use client"
 import React from 'react'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
+import { useAppContext } from '@/app/context/module'
+
+
 const Index = () => {
+  const router = useRouter();
+  const {user,setUser} = useAppContext();
+  const handleSubmit = async () => {
+    setUser("atul");
+   // router.push("/training_and_education");
+    try {
+        const response = await fetch("/api/dropdown", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            // body: JSON.stringify({
+            //     email: "",
+            //     password: "",
+            // }),
+        });
 
-
-  
-  const handleSubmit = ()=>{
-
-  }
+            console.log(await response.json())
+        if (response.ok) {
+            // Successful login, reload or redirect
+            // const currentUrl = window.location.href;
+            // window.location.href = currentUrl;
+        } else {
+            console.log('Login failed');
+        }
+    } catch (error) {
+        console.error("Error during login:", error);
+    }
+};
   return (
     <div className="md:w-[40%] flex justify-center relative bg-[url('/login_image.jpg')] md:bg-[url('/')] h-screen">
         <div className="flex flex-col justify-between">
@@ -41,7 +69,7 @@ const Index = () => {
             </h1>
           </div>
           <div className="flex justify-center gap-5 pb-4">
-            <button className="px-[35px] py-2 border border-[#000000] rounded-[50px]">
+            <button className="px-[35px] py-2 border border-[#000000] rounded-[50px]" onClick={handleSubmit}>
               Login
             </button>
             <button className="px-[35px] py-2  rounded-[50px] bg-black text-white">

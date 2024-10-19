@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { Montserrat, Poppins } from "next/font/google";
-
+import { AppWrapper } from "./context/module";
 const poppins = Poppins({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
   subsets: ['latin'],
@@ -38,11 +38,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <AppWrapper>
+
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased ${poppins.variable} ${montserrat.variable}`}
-      >
+        >
         {children}
       </body>
+        </AppWrapper>
     </html>
   );
 }

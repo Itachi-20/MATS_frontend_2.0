@@ -9,31 +9,10 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-
-
-type dropdownData = {
-  company:{
-    name:string,
-    company_name:"string"
-  }[],
-  division:{
-    name:string,
-    division_name:string
-  }[],
-  event_type:{
-    name:string,
-    event_name:string
-  }[],
-  vendor_type:{
-    name:string,
-    vendor_type:string
-  }[]
-}
-
 type Props = {
   nextForm: () => void;
-  dropdownData: dropdownData | null
 };
+
 const Form1 = ({ ...Props }: Props) => {
   return (
     // </div>
@@ -48,14 +27,12 @@ const Form1 = ({ ...Props }: Props) => {
           </label>
           <Select>
             <SelectTrigger className="dropdown">
-              <SelectValue placeholder="Select" />
+              <SelectValue placeholder="Theme" />
             </SelectTrigger>
             <SelectContent>
-              {Props.dropdownData && Props.dropdownData.company.map((item,index)=>{
-                return(
-                  <SelectItem value={item.name}>{item.company_name}</SelectItem>
-                )
-              })}
+              <SelectItem value="light">Light</SelectItem>
+              <SelectItem value="dark">Dark</SelectItem>
+              <SelectItem value="system">System</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -65,14 +42,12 @@ const Form1 = ({ ...Props }: Props) => {
           </label>
           <Select>
             <SelectTrigger className="dropdown">
-              <SelectValue placeholder="Select" />
+              <SelectValue placeholder="Theme" />
             </SelectTrigger>
             <SelectContent>
-            {Props.dropdownData && Props.dropdownData.division.map((item,index)=>{
-                return(
-                  <SelectItem value={item.name}>{item.division_name}</SelectItem>
-                )
-              })}
+              <SelectItem value="light">Light</SelectItem>
+              <SelectItem value="dark">Dark</SelectItem>
+              <SelectItem value="system">System</SelectItem>
             </SelectContent>
           </Select>
         </div>
