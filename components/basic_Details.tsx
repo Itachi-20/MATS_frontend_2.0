@@ -10,7 +10,7 @@ const basic_Details = ({...Props}:Props) => {
   return (
     <div className="md:pb-8">
             <div className="flex md:gap-6" >
-          <h1 className="text-black md:text-[30px] md:font-medium capitalize md:pb-4">
+          <h1 className="text-black md:text-[30px] md:font-medium uppercase md:pb-4">
               Basic Details
             </h1>
             <div className="pt-3">

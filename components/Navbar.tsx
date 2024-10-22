@@ -2,11 +2,16 @@
 import React from 'react';
 import Image from 'next/image';
 import { useAppContext } from '@/app/context/module';
+import { usePathname } from 'next/navigation'
+
 const Navbar = () => {
   const {user} = useAppContext();
+  const pathname = usePathname();
   return (
     <div className='flex justify-between rounded-tl-[60px] text-black p-3 shadow-md'>
-      <h1 className=' text-[#252424] text-[22px] pl-5 pt-2 font-semibold'>DashBoard</h1>
+      <h1 className=' text-[#252424] text-[22px] pl-5 pt-2 font-semibold capitalize'>
+        {pathname.substring(1).replace("_"," ")}
+      </h1>
       <div className='flex gap-8'>
         <div className='pt-2'>  
 <svg width="40" height="40" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">

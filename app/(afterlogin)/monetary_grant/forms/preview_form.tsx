@@ -3,7 +3,9 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox"
 import BasicDetails from "@/components/basic_Details"
 import EventDetails from "@/components/event_Details"
-import VendorDetails from "@/components/vendor_Details"
+import VendorDetails from "@/components/vendor_Details";
+import LogisticsBudget from "@/components/logistics_budget";
+import CompensationBudget from "@/components/compensation_budget"
 import TotalExpense from "@/components/total_Expense"
 import Documents from "@/components/documents"
 import Add_vendor from "@/components/add_vendor";
@@ -27,16 +29,17 @@ const Preview_Form = ({...Props}:Props) => {
 
         <EventDetails/>
 
-        <VendorDetails/>
+        <LogisticsBudget/>
+        <CompensationBudget/>
 
         <TotalExpense/>
             
         <Documents/>
         
-            <div className="flex md:pb-8 gap-3">
+            <div className="flex items-center md:pb-8 gap-3">
             <Checkbox />
-            <label className="text-black md:text-sm md:font-normal capitalize">
-            I hereby declare that all details filled by me are correct and genuine.<span className="text-[#e60000]">*</span>
+            <label className="text-black md:text-sm md:font-normal">
+              I hereby declare that all details filled by me are correct and genuine.<span className="text-[#e60000]">*</span>
                 </label>
             </div>
 
