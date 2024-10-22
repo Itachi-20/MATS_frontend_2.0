@@ -11,22 +11,7 @@ import TotalExpense from "@/components/total_Expense"
 import Documents from "@/components/documents"
 const Index = () => {
   return (
-    <div className="h-screen bg-[#EBEBF6] grid grid-cols-6 relative overflow-hidden">
-      <Image
-        className=" w-full absolute z-10 -top-96 -right-[500px] -rotate-6"
-        src={"/Lines.png"}
-        alt=""
-        width={1500}
-        height={100}
-      ></Image>
-
-      <div className="col-span-1 px-11">
-        <Sidebar />
-      </div>
-      <div className="col-span-5 border-2 rounded-l-[60px] w-full h-screen bg-white overflow-scroll overflow-x-hidden relative">
-        <div className="sticky top-0 z-30 bg-white">
-          <Navbar />
-        </div>
+    
         <div className="md:px-7 md:pb-7 md:pt-4 w-full relative z-20 text-black">
           <div className="pb-5">
             <div className="flex justify-between">
@@ -64,28 +49,11 @@ const Index = () => {
             
         <Documents/>
         
-            <div className="flex md:pb-8 gap-3">
-            <Checkbox />
-            <label className="text-black md:text-sm md:font-normal capitalize">
-            I hereby declare that all details filled by me are correct and genuine.<span className="text-[#e60000]">*</span>
-                </label>
-            </div>
+            
 
-            <div className="flex justify-end pt-5 gap-4">
-              <Button className="bg-white text-black border text-md font-normal">
-                {" "}
-                Save as Draft
-              </Button>
-              <Button className="bg-white text-black border text-md font-normal">
-                Back
-              </Button>
-              <Button className="bg-[#4430bf] text-white text-md font-normal border">
-                Next
-              </Button>
-            </div>
+            
         </div>
-      </div>
-    </div>
+    
   )
 }
 
