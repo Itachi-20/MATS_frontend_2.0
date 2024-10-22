@@ -178,6 +178,7 @@ const index = () => {
  
           const data = await response.json();
           setDropdownData(data.data);
+          setForm(prev=>prev+1);
          if (response.ok) {
          } else {
              console.log('Login failed');
