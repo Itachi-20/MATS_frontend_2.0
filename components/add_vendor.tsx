@@ -16,7 +16,7 @@ import {
 
 const add_vendor = ({...Props}:Props) => {
   return (
-     <div className="absolute z-50 w-full h-screen flex inset-0 items-center justify-center bg-black bg-opacity-50">
+     <div className="absolute z-50 w-full flex inset-0 items-center justify-center bg-black bg-opacity-50">
         <div className="border-2 rounded-xl p-5 bg-white relative">
         <h1 className="text-black text-[30px] font-medium capitalize pb-4">
               Add New Vendor
