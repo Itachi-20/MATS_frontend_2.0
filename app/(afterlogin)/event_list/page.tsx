@@ -26,8 +26,14 @@ type EventTable = {
   event_name: string;
   event_type: string;
   event_date: string;
-  total_expense: number;
+  event_end_date:string;
   event_requestor: string;
+  event_venue:string;
+  advance:string;
+  event_status:string;
+  post_activity_status:string;
+  total_expense: number;
+  
   level_1: level;
   level_2: level;
   level_3: level;
@@ -45,8 +51,13 @@ const Index = () => {
       event_name: "Annual Conference",
       event_type: "Conference",
       event_date: "2024-10-15",
-      total_expense: 15000,
+      event_end_date:"2024-11-20",
       event_requestor: "John Doe",
+      event_venue:"Name 0001",
+      advance:"Request",
+      event_status:"Approved",
+      post_activity_status:"Not Uploaded",
+      total_expense: 15000,     
       level_1: "Approved",
       level_2: "Pending",
       level_3: "Approved",
@@ -59,8 +70,13 @@ const Index = () => {
       event_name: "Product Launch",
       event_type: "Launch",
       event_date: "2024-11-20",
-      total_expense: 25000,
+      event_end_date:"2024-11-20",
+      event_venue:"Name 0001",
       event_requestor: "Jane Smith",
+      advance:"Request",
+      event_status:"Approved",
+      post_activity_status:"Not Uploaded",
+      total_expense: 25000,      
       level_1: "Pending",
       level_2: "Approved",
       level_3: "Approved",
@@ -73,8 +89,13 @@ const Index = () => {
       event_name: "Team Building Retreat",
       event_type: "Workshop",
       event_date: "2024-09-30",
-      total_expense: 8000,
+      event_end_date:"2024-11-20",
+      event_venue:"Name 0001",
       event_requestor: "Mike Johnson",
+      advance:"Request",
+      event_status:"Approved",
+      post_activity_status:"Not Uploaded",
+      total_expense: 8000,
       level_1: "Approved",
       level_2: "Approved",
       level_3: "Pending",
@@ -87,8 +108,13 @@ const Index = () => {
       event_name: "End of Year Gala",
       event_type: "Gala",
       event_date: "2024-12-31",
-      total_expense: 40000,
+      event_end_date:"2024-11-20",
+      event_venue:"Name 0001",
       event_requestor: "Emily Davis",
+      advance:"Request",
+      post_activity_status:"Not Uploaded",
+      event_status:"Approved",
+      total_expense: 40000,
       level_1: "Rejected",
       level_2: "Rejected",
       level_3: "Pending",
@@ -101,8 +127,13 @@ const Index = () => {
       event_name: "Marketing Workshop",
       event_type: "Workshop",
       event_date: "2024-10-10",
-      total_expense: 5500,
+      event_end_date:"2024-11-20",
+      event_venue:"Name 0001",
       event_requestor: "Alex Brown",
+      advance:"Request",      
+      event_status:"Approved",
+      post_activity_status:"Not Uploaded",
+      total_expense: 5500,
       level_1: "Pending",
       level_2: "Approved",
       level_3: "Rejected",
@@ -115,8 +146,13 @@ const Index = () => {
       event_name: "Client Appreciation Event",
       event_type: "Social",
       event_date: "2024-09-15",
-      total_expense: 12000,
+      event_end_date:"2024-11-20",
+      event_venue:"Name 0001",
       event_requestor: "Sara Miller",
+      advance:"Request",
+      event_status:"Approved",
+      post_activity_status:"Not Uploaded",
+      total_expense: 12000,
       level_1: "Approved",
       level_2: "Approved",
       level_3: "Approved",
@@ -128,28 +164,28 @@ const Index = () => {
 
   return (
     <>
-    
-      
         <div className="p-7 w-full relative z-20 text-black">
-          <div className="flex justify-between pb-5">
-            <Input
-              className="w-[40%] rounded-[50px] bg-[#ecf2ff]"
-              placeholder="Search"
-            />
+          <div className="flex justify-between pb-5 relative">           
+                <Input
+                    className="w-[40%] rounded-[50px] bg-[#ecf2ff] placeholder:text-black"
+                    placeholder="Search"
+                />
+                <Image src="svg/search.svg"  alt="search-icon" width={23} height={23} className="absolute right-[63%] top-[15%]"/> 
+                
             <div className="flex gap-5">
               <Select>
-                <SelectTrigger className="text-black shadow focus-visible:ring-transparent rounded-[25px] gap-4">
-                  <SelectValue placeholder="Theme" />
+                <SelectTrigger className="text-black shadow focus-visible:ring-transparent rounded-[25px] gap-4 border border-slate-400 !important">
+                  <SelectValue placeholder="Export" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="light">Light</SelectItem>
-                  <SelectItem value="dark">Dark</SelectItem>
-                  <SelectItem value="system">System</SelectItem>
+                  <SelectItem value="pdf">Pdf</SelectItem>
+                  <SelectItem value="excel">Excel</SelectItem>
+                  <SelectItem value="Print">Print</SelectItem>
                 </SelectContent>
               </Select>
               <Select>
-                <SelectTrigger className="text-black shadow focus-visible:ring-transparent rounded-[25px] gap-4">
-                  <SelectValue placeholder="Theme" />
+                <SelectTrigger className="text-black shadow focus-visible:ring-transparent rounded-[25px] gap-4 border border-slate-400 !important">
+                  <SelectValue placeholder="Filter" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="light">Light</SelectItem>
@@ -206,14 +242,14 @@ const Index = () => {
                       "text-center rounded-l-2xl text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                     }
                   >
-                    Request Number
+                   Request No.
                   </TableHead>
                   <TableHead
                     className={
                       "text-center text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                     }
                   >
-                    Event Name
+                    Event Name 
                   </TableHead>
                   <TableHead
                     className={
@@ -233,11 +269,12 @@ const Index = () => {
 
                   <TableHead
                     className={
-                      "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                      "text-center text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                     }
                   >
-                    Total Expense
+                    Event End date
                   </TableHead>
+
                   <TableHead
                     className={
                       "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
@@ -245,48 +282,37 @@ const Index = () => {
                   >
                     Event Requestor
                   </TableHead>
+
                   <TableHead
                     className={
                       "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                     }
                   >
-                    Level 1
+                    Event Venue
+                  </TableHead>
+                 
+                  <TableHead
+                    className={
+                      "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                    }
+                  >
+                    Advance 
                   </TableHead>
                   <TableHead
                     className={
                       "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                     }
                   >
-                    Level 2
+                   Event Status
                   </TableHead>
                   <TableHead
                     className={
                       "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                     }
                   >
-                    Level 3
+                    Post Activity Status
                   </TableHead>
-                  <TableHead
-                    className={
-                      "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
-                    }
-                  >
-                    Level 4
-                  </TableHead>
-                  <TableHead
-                    className={
-                      "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
-                    }
-                  >
-                    Level 5
-                  </TableHead>
-                  <TableHead
-                    className={
-                      "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
-                    }
-                  >
-                    Level 6
-                  </TableHead>
+                
                   <TableHead
                     className={
                       "text-center rounded-r-2xl text-[#625d5d] text-[15px] font-normal font-['Montserrat'] sticky right-0 z-50 bg-[#E0E9FF]"
@@ -303,138 +329,15 @@ const Index = () => {
                           <TableCell>{data.event_type}</TableCell>
                           <TableCell>{data.event_name}</TableCell>
                           <TableCell>{data.event_date}</TableCell>
-                          <TableCell>{data.total_expense}</TableCell>
+                          <TableCell>{data.event_end_date}</TableCell>
                           <TableCell>{data.event_requestor}</TableCell>
-                          <TableCell>
-                            <div  className="flex flex-col items-center">
-                              {data.level_1}
-                              {
-                                data.level_1 == "Approved"?
-                              <span className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
-                              A
-                              </span>
-                              :data.level_1 == "Pending"?
-                              <span className="w-6 rounded-md bg-[#fae8a8] text-[#937818] text-[15px] font-semibold">
-                              W
-                              </span>
-                              :
-                              <span className="w-6 rounded-md bg-[#feadad] text-[#9c0000] text-[15px] font-semibold">
-                              RJ
-                              </span>
-                              } 
-
-                            </div>
-
-                            </TableCell>
-                          <TableCell>
-                            <div className="flex flex-col items-center">
-
-                            {data.level_2}
-                          {
-                            data.level_2 == "Approved"?
-                            <span className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
-                            A
-                            </span>
-                            :
-                            data.level_2 == "Pending"?
-                            <span className="w-6 rounded-md bg-[#fae8a8] text-[#937818] text-[15px] font-semibold">
-                            W
-                            </span>
-                            :
-                            <span className="w-6 rounded-md bg-[#feadad] text-[#9c0000] text-[15px] font-semibold">
-                            RJ
-                            </span>
-                            }
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            <div className="flex flex-col items-center">
-
-                            {data.level_3}
-                          {
-                            data.level_3 == "Approved"?
-                            <div className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
-                            A
-                            </div>
-                            :data.level_3 == "Pending"?
-                            <div className="w-6 rounded-md bg-[#fae8a8] text-[#937818] text-[15px] font-semibold">
-                            W
-                            </div>
-                            :
-                            <div className="w-6 rounded-md bg-[#feadad] text-[#9c0000] text-[15px] font-semibold">
-                            RJ
-                            </div>
-                            }
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            <div className="flex flex-col items-center">
-
-                            {data.level_4}
-                          {
-                            data.level_4 == "Approved"?
-                            <div className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
-                            A
-                            </div>
-                            :data.level_4 == "Pending"?
-                            <div className="w-6 rounded-md bg-[#fae8a8] text-[#937818] text-[15px] font-semibold">
-                            W
-                            </div>
-                            :
-                            <div className="w-6 rounded-md bg-[#feadad] text-[#9c0000] text-[15px] font-semibold">
-                            RJ
-                            </div>
-                            }
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            <div className="flex flex-col items-center">
-
-                            {data.level_5}
-                          {
-                            data.level_5 == "Approved"?
-                            <div className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
-                            A
-                            </div>
-                            :data.level_5 == "Pending"?
-                            <div className="w-6 rounded-md bg-[#fae8a8] text-[#937818] text-[15px] font-semibold">
-                            W
-                            </div>
-                            :
-                            <div className="w-6 rounded-md bg-[#feadad] text-[#9c0000] text-[15px] font-semibold">
-                            RJ
-                            </div>
-                            }
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            <div className="flex flex-col items-center">
-
-                            {data.level_6}
-                          {
-                            data.level_6 == "Approved"?
-                            <div className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
-                            A
-                            </div>
-                            :data.level_6 == "Pending"?
-                            <div className="w-6 rounded-md bg-[#fae8a8] text-[#937818] text-[15px] font-semibold">
-                            W
-                            </div>
-                            :
-                            <div className="w-6 rounded-md bg-[#feadad] text-[#9c0000] text-[15px] font-semibold">
-                            RJ
-                            </div>
-                            }
-                            </div>
-                          </TableCell>
-                          <TableCell className="sticky right-0 bg-[white] z-50 ">
-                            <div className="">
-                            {
-                              data.level_1 == "Approved"?<button className="border rounded-full px-4 py-1 border-[#0e4154] text-[#0e4154]">view</button>
-                              :
-                              <button className="border rounded-full px-4 py-1 border-[#5dbe74] text-[#5dbe74]">Approve</button>
-                            }
-                            </div>
+                          <TableCell>{data.event_venue}</TableCell>
+                          <TableCell>{data.advance}</TableCell>
+                          <TableCell>{data.event_status}</TableCell>
+                          <TableCell>{data.post_activity_status}</TableCell>                        
+                          <TableCell className="sticky right-0 bg-[white] z-50 flex justify-between border-l border-slate-200">                          
+                              <Image src={"/svg/view.svg"} width={17} height={20} alt="view-svg" className="cursor-pointer"/>
+                              <Image src={"/svg/delete.svg"} width={15} height={20} alt="delete-svg" className="cursor-pointer"/>
                           </TableCell>
                 </TableRow>
                       );
@@ -443,7 +346,6 @@ const Index = () => {
             </Table>
           </div>
         </div>
-    
     </>
   );
 };
