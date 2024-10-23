@@ -8,7 +8,7 @@ import Preview_Form from './forms/preview_form'
 import Addvendor from '@/components/add_vendor'
 import { useRouter } from 'next/router'
 import { AppWrapper } from '@/app/context/module'
-
+import { usePathname } from 'next/navigation'
 
 type dropdownData = {
   company:{
@@ -50,7 +50,7 @@ type Logistics = {
 };
 
 type formData = {
-  name: string;
+  name: string | null;
   event_type: string;
   company: string;
   event_cost_center: string;
@@ -74,19 +74,28 @@ type formData = {
   division_category: string;
   division_sub_category:string;
   sub_type_of_activity:string;
+  any_govt_hcp:string,
+  no_of_hcp:number
 };
 
 
 
 
 const index = () => {
-  const [form,setForm] = useState(1);
+  const [form,setForm] = useState(3);
   const [addVendor,setAddVendor] = useState(false);
   const [dropdownData,setDropdownData] = useState<dropdownData | null>(null);
+  const [refNo,setRefNo] = useState<string | null>(localStorage.getItem("refno")?localStorage.getItem("refno"):"");
+  const pathname = usePathname();
 
+  let eventype:{[key:string]:string} = {} ;
+  eventype["training_and_education"] = "Training and Education";
+  useEffect(()=>{
+    setFormData({...formdata,name:refNo})
+  },[refNo])
   const [formdata, setFormData] = useState<formData>({
     name: "",
-    event_type: "",
+    event_type: eventype[pathname.substring(1)],
     company: "",
     event_cost_center: "",
     state: "",
@@ -109,12 +118,14 @@ const index = () => {
     division_category: "",
   division_sub_category:"",
   sub_type_of_activity:"",
+  any_govt_hcp:"",
+  no_of_hcp:0
   });
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    const Body = {
-      "data":formdata
+    if(refNo){
+      setFormData({...formdata,name:refNo})
     }
     try {
       const response = await fetch(
@@ -125,13 +136,18 @@ const index = () => {
             "Content-Type": "application/json",
           },
           credentials:'include',
-          body:JSON.stringify(Body)
+          body:JSON.stringify(formdata)
         }
       );
-
-      const data = await response.json();
-      console.log(data,"response data");
       if (response.ok) {
+        const data = await response.json();
+        console.log(data,"response data");
+          localStorage.setItem("refno",data.message);
+          setRefNo(data.message);
+        
+        setTimeout(()=>{
+          nextForm();
+        },1000)
       } else {
         console.log("submission failed");
       }
@@ -178,7 +194,6 @@ const index = () => {
  
           const data = await response.json();
           setDropdownData(data.data);
-          setForm(prev=>prev+1);
          if (response.ok) {
          } else {
              console.log('Login failed');
@@ -215,6 +230,9 @@ const index = () => {
           <Form2
           nextForm = {nextForm}
           prevForm={prevForm}
+          handlefieldChange = {handlefieldChange}
+          handleSelectChange={handleSelectChange}
+          handleSubmit={handleSubmit}
           />:
           form == 3?
           <Form3
