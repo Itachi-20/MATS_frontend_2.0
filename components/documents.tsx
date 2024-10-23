@@ -71,7 +71,6 @@ const documents = () => {
               <TableBody>
                 <TableRow className="text-black">
                   <TableCell>No Data</TableCell>
-
                 </TableRow>
               </TableBody>
             </Table>

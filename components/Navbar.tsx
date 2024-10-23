@@ -10,7 +10,8 @@ const Navbar = () => {
   return (
     <div className='flex justify-between rounded-tl-[60px] text-black p-3 shadow-md'>
       <h1 className=' text-[#252424] text-[22px] pl-5 pt-2 font-semibold capitalize'>
-        {pathname.substring(1).replace(/_/g," ")}
+        {pathname.substring(1).replace(/_/g," ").split("/")[0]}
+        {/* .split("/")[0]  */}
       </h1>
       <div className='flex gap-8'>
         <div className='pt-2'>  

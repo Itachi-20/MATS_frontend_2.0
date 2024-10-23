@@ -1,30 +1,26 @@
 'use client'
-import React from "react";
-import Sidebar from "@/components/Sidebar";
-import Navbar from "@/components/Navbar";
-import Image from "next/image";
+import React , {useState} from "react";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+
 import {
     Table,
     TableBody,
-    TableCaption,
     TableCell,
     TableHead,
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-const AuditTrail = () => {
+
+interface AuditTrailProps {
+    PageName: string; // Define the type of `id`, change to `number` or other types as needed
+}
+const AuditTrail: React.FC<AuditTrailProps> = ({PageName}) => {
+
+   
     const [isOpen, setIsOpen] = useState(false);
     const [expandedRow, setExpandedRow] = useState<number | null>(null);
+
     const dataHeader = [
         {
             title: "Request Number",
@@ -55,7 +51,8 @@ const AuditTrail = () => {
 
         },
     ]
-    const data = [
+     
+    const data = [     
         {
             "request_number": "5620",
             "event_name": "TAVI Workshop",
@@ -145,6 +142,7 @@ const AuditTrail = () => {
             "description": "Test of Training & Education was approved by Parita Pandya"
         }
     ];
+
     const handleExpandClick = (id: number) => {
         setIsOpen(!isOpen);
         setExpandedRow(expandedRow === id ? null : id); // Toggle row expansion
@@ -153,8 +151,19 @@ const AuditTrail = () => {
     return (
         <>
             <div className="p-6">
-                <div className="flex justify-between pb-5 gap-40">
-                    <div className="relative">
+                <div>
+                    { PageName === "eventListPage" ?
+                     <div>
+                
+                    <div className="flex justify-between">
+                        <h1 className=" md:text-[25px] md:font-normal capitalize md:pb-4">approver hierarchy</h1>
+                        <div className="flex gap-4 bg-white">
+                         <Button className="bg-white text-black border px-8 hover:bg-white">Back</Button>         
+                        </div>
+                    </div>
+                    </div>:
+                    <div className="flex justify-between pb-5 gap-40">
+                        <div className="relative">
                         <Input
                             className="bg-[#ecf2ff] rounded-full text-black pr-10 focus-visible:outline-none focus-visible:border-none focus:outline-none focus:border-none"
                             placeholder="Search"
@@ -200,6 +209,9 @@ const AuditTrail = () => {
                             Back
                         </Button>
                     </div>
+                    </div>
+                    }                    
+
                 </div>
                 <div className="border rounded-xl py-4 px-3 h-[32rem] overflow-y-auto">
                     <Table className="">
@@ -264,7 +276,6 @@ const AuditTrail = () => {
                                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                                                             <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5" />
                                                         </svg>
-
 
                                                     }
                                                 </TableCell>
