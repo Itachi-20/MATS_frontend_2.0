@@ -9,6 +9,9 @@ import CompensationBudget from "@/components/compensation_budget"
 import TotalExpense from "@/components/total_Expense"
 import Documents from "@/components/documents"
 import Add_vendor from "@/components/add_vendor";
+import ShippingDetails from "@/components/shipping_details";
+import BeneficiaryDetails from "@/components/beneficiary_details";
+
 type Props = {
     prevForm: ()=>void
 }
@@ -26,8 +29,9 @@ const Preview_Form = ({...Props}:Props) => {
         <div className="md:px-7 md:pb-7 md:pt-4 w-full relative z-20">
             
         <BasicDetails/>
-
-        <EventDetails/>
+        
+        <BeneficiaryDetails/>
+        <ShippingDetails/>
 
         <LogisticsBudget/>
         <CompensationBudget/>

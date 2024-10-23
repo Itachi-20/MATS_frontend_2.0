@@ -28,11 +28,11 @@ const Form2 = ({ ...Props }: Props) => {
     // </div>
     (<div>
       <h1 className='text-black text-2xl font-normal uppercase pb-8'>
-        Organisation Details
+        Shipping Details
       </h1>
       <div className='grid grid-cols-2 gap-12'>
         <div className='flex flex-col gap-2'>
-          <label className='lable'>Organization Name <span className='text-[#e60000]'>*</span></label>
+          <label className='lable'>Requesting Hospital Name <span className='text-[#e60000]'>*</span></label>
           <Input className='dropdown' placeholder='Type Here'></Input>
 
         </div>
@@ -45,7 +45,7 @@ const Form2 = ({ ...Props }: Props) => {
           <label className='lable'>Event End Date<span className='text-[#e60000]'>*</span></label>
           <input type='date' className=' dropdown h-10 rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm'></input>
         </div>
-        <div className='flex flex-col gap-2'>
+        {/* <div className='flex flex-col gap-2'>
           <label className='lable'>engagement of any government hCP’s?<span className='text-[#e60000]'>*</span></label>
           <Select>
             <SelectTrigger className="dropdown">
@@ -72,14 +72,17 @@ const Form2 = ({ ...Props }: Props) => {
             </SelectContent>
           </Select>
 
-        </div>
-
+        </div> */}
         <div className='flex flex-col gap-2'>
-          <label className='lable'>BU Rational<span className='text-[#e60000]'>*</span></label>
+          <label className='lable'>Ship To<span className='text-[#e60000]'>*</span></label>
           <Textarea className='text-black shadow-md' placeholder='Type Here' />
         </div>
         <div className='flex flex-col gap-2'>
-          <label className='lable'>Comments<span className='text-[#e60000]'>*</span></label>
+          <label className='lable'>Bill To<span className='text-[#e60000]'>*</span></label>
+          <Textarea className='text-black shadow-md' placeholder='Type Here' />
+        </div>
+        <div className='flex flex-col gap-2'>
+          <label className='lable'>BU Rational<span className='text-[#e60000]'>*</span></label>
           <Textarea className='text-black shadow-md' placeholder='Type Here' />
         </div>
       </div>

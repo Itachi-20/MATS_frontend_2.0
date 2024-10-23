@@ -1,28 +1,28 @@
 import React from 'react'
 import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-  } from "@/components/ui/select";
-  import { Textarea } from "@/components/ui/textarea";
-  import { Button } from "@/components/ui/button";
-  import {
-    Table,
-    TableBody,
-    TableCaption,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-  } from "@/components/ui/table";
-  import { Input } from '@/components/ui/input';
-  type Props = {
-    nextForm: ()=>void
-    prevForm: ()=>void
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Input } from '@/components/ui/input';
+type Props = {
+  nextForm: () => void
+  prevForm: () => void
 }
-const form4 = ({...Props}:Props) => {
+const form4 = ({ ...Props }: Props) => {
   return (
     // </div>
     (<div>
@@ -70,13 +70,13 @@ const form4 = ({...Props}:Props) => {
         </div>
       </div>
       <div className='border border-[#848484] p-4 rounded-2xl w-full'>
-            <h1 className="text-black pl-4 pb-4">
-                Document type:{" "}
-                <span className="font-semibold">Pre-Activity</span>
-            </h1>
-        
-        <div className="grid grid-cols-2 gap-4 bg-white">
-          <div className="col-span-1 flex flex-col gap-3">
+        <h1 className="text-black pl-4 pb-4">
+          Document type:{" "}
+          <span className="font-semibold">Pre-Activity</span>
+        </h1>
+
+        <div className="grid grid-cols-2 bg-white divide-x-2">
+          <div className="col-span-1 flex flex-col mr-2">
             <Table>
               <TableHeader>
                 <TableRow className="text-black">
@@ -136,7 +136,7 @@ const form4 = ({...Props}:Props) => {
               </TableBody>
             </Table>
           </div>
-          <div className="col-span-1 flex flex-col gap-3">
+          <div className="col-span-1 flex flex-col gap-3 pl-2">
             <Table>
               <TableHeader>
                 <TableRow className="text-black">
