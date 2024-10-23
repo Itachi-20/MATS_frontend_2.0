@@ -1,21 +1,16 @@
 import React from 'react'
-import {
-    Table,
-    TableBody,
-    TableCaption,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table";
-import { Checkbox } from '@/components/ui/checkbox';
+import { Input } from "@/components/ui/input";
 
-const LogisticBudget = () => {
+type Props = {
+    pathname: string
+}
+
+const Beneficiary_Details = () => {
     return (
-        <div className="pb-8">
-            <div className="flex gap-6">
+        <div className="md:pb-8">
+            <div className="flex md:gap-6" >
                 <h1 className="text-black md:text-[30px] md:font-medium uppercase md:pb-4">
-                    Logistics Budget
+                    Beneficiary Details
                 </h1>
                 <div className="pt-3">
                     <svg width="23" height="23" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -31,50 +26,30 @@ const LogisticBudget = () => {
                     </svg>
                 </div>
             </div>
-            <div className="border border-[#848484] p-7 rounded-[50px] w-full mr-4  bg-white">
-                <Table className={""}>
-                    <TableHeader className={"bg-[#E0E9FF]"}>
-                        <TableRow className={""}>
-                            <TableHead
-                                className={
-                                    "text-center rounded-l-2xl text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
-                                }
-                            >
-                                Vendor Type
-                            </TableHead>
-                           
-                            <TableHead
-                                className={
-                                    "text-center text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
-                                }
-                            >
-                                Amount (in INR)
-                            </TableHead>
-                            <TableHead
-                                className={
-                                    "text-center text-[#625d5d] rounded-r-2xl text-[15px] font-normal font-['Montserrat']"
-                                }
-                            >
-                                {"       "}
-                            </TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        <TableRow className="text-black text-center">
-                            <TableCell>sadsaasd</TableCell>
-                            <TableCell>asdasda</TableCell>
-                
-                        </TableRow>
-                        <TableRow className="text-black text-center">
-                            <TableCell>sadsaasd</TableCell>
-                            <TableCell>asdasda</TableCell>
-                            
-                        </TableRow>
-                    </TableBody>
-                </Table>
+            <div className="grid md:grid-cols-2 md:gap-6">
+                <div className="flex flex-col md:gap-2">
+                    <label className="text-black md:text-sm md:font-normal capitalize">
+                        Product Amount<span className="text-[#e60000]">*</span>
+                    </label>
+                    <Input
+                        className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
+                        placeholder="Type Here"
+                        readOnly={true}
+                    ></Input>
+                </div>
+                <div className="flex flex-col md:gap-2">
+                    <label className="text-black md:text-sm md:font-normal capitalize">
+                        Quantity<span className="text-[#e60000]">*</span>
+                    </label>
+                    <Input
+                        className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
+                        placeholder="Type Here"
+                        readOnly={true}
+                    ></Input>
+                </div>
             </div>
         </div>
     )
 }
 
-export default LogisticBudget;
+export default Beneficiary_Details
