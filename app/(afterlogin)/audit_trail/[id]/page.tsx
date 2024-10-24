@@ -1,18 +1,33 @@
 "use client";
 import React from 'react';
-import { useRouter } from 'next/navigation';
 import AuditTrail from '@/components/Audit-trail';
 
-export default function AuditTrailPage (){        
+type Data = {
+      "request_number": string,
+        "event_name": string,
+        "event_type":string,
+        "event_date": string,
+        "event_venue": string,
+        "type_of_activity":string,
+        "status":string
+}
 
-    // const router = useRouter() as unknown as { query: any };
+export default function AuditTrailPage (){    
 
-    // const { id } = router.query;
-    // console.log("id", id)
-
+  const data : Data[] = [     
+    {
+        "request_number": "5620",
+        "event_name": "TAVI Workshop",
+        "event_type": "Training and Education",
+        "event_date": "11-11-2024",
+        "event_venue": "Hhhh",
+        "type_of_activity": "Activity",
+        "status": "Active"
+    },
+  ]   
   return (
     <>
-     <AuditTrail PageName={"eventListPage"} />
+     <AuditTrail PageName={"eventListPage"} data={data}/>
     </>
   )
 }

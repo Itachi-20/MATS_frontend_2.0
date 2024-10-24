@@ -4,22 +4,8 @@ import Image from "next/image";
 import { useRouter } from 'next/navigation';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import {Table, TableBody,TableCell,TableHead,TableHeader,TableRow,} from "@/components/ui/table";
+import {Select,SelectContent,SelectItem,SelectTrigger,SelectValue,} from "@/components/ui/select";
 
 type EventTable = {
   request_number: string;
@@ -42,7 +28,6 @@ export default function EventList () {
     //  yadi new tab mein open kerna hai tab isko use karenge 
     // const url = "/event_list/${id}"
     // window.open(url, '_blank')
-
     // agar same tab mein open kerna hai  to isko use krenge 
     router.push("/event_list/${id}")
   }
@@ -123,15 +108,10 @@ export default function EventList () {
   ];
 
   return (
-    <>
         <div className="p-7 w-full relative z-20 text-black">
           <div className="flex justify-between pb-5 relative">           
-                <Input
-                    className="w-[40%] rounded-[50px] bg-[#ecf2ff] placeholder:text-black"
-                    placeholder="Search"
-                />
-                <Image src="svg/search.svg"  alt="search-icon" width={23} height={23} className="absolute right-[63%] top-[15%]"/> 
-                
+            <Input className="w-[40%] rounded-[50px] bg-[#ecf2ff] placeholder:text-black"  placeholder="Search" />
+            <Image src="svg/search.svg"  alt="search-icon" width={23} height={23} className="absolute right-[63%] top-[15%]"/>      
             <div className="flex gap-5">
               <Select>
                 <SelectTrigger className="text-black shadow focus-visible:ring-transparent rounded-[25px] gap-4 border border-slate-400 !important">
@@ -140,7 +120,7 @@ export default function EventList () {
                 <SelectContent>
                   <SelectItem value="pdf">Pdf</SelectItem>
                   <SelectItem value="excel">Excel</SelectItem>
-                  <SelectItem value="Print">Print</SelectItem>
+                  <SelectItem value="print">Print</SelectItem>
                 </SelectContent>
               </Select>
               <Select>
@@ -155,44 +135,25 @@ export default function EventList () {
               </Select>
               <Button className="text-black text-md font-normal bg-white hover:bg-white border rounded-[25px] px-8 py-5 shadow">
                 Back
-              </Button>
-              
+              </Button>             
             </div>
           </div>
           <div className="border bg-white h-full p-4 rounded-[18px]">
             <Table className={""}>
               <TableHeader className={"bg-[#E0E9FF]"}>
                 <TableRow className={"text-nowrap rounded-r-2xl"}>
-                  <TableHead
-                    className={
-                      "text-center rounded-l-2xl text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
-                    }
-                  >
+                  <TableHead className={"text-center rounded-l-2xl text-[#625d5d] text-[15px] font-normal font-['Montserrat']"}>
                    Request No.
                   </TableHead>
-                  <TableHead
-                    className={
-                      "text-center text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
-                    }
-                  >
+                  <TableHead  className={ "text-center text-[#625d5d] text-[15px] font-normal font-['Montserrat']"} >
                     Event Name 
                   </TableHead>
-                  <TableHead
-                    className={
-                      "text-center text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
-                    }
-                  >
+                  <TableHead className={"text-center text-[#625d5d] text-[15px] font-normal font-['Montserrat']" } >
                     Event Type
                   </TableHead>
-
-                  <TableHead
-                    className={
-                      "text-center text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
-                    }
-                  >
+                  <TableHead className={"text-center text-[#625d5d] text-[15px] font-normal font-['Montserrat']"} >
                     Event Date
                   </TableHead>
-
                   <TableHead
                     className={
                       "text-center text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
@@ -263,7 +224,6 @@ export default function EventList () {
                           <TableCell>{data.post_activity_status}</TableCell>                        
                           <TableCell className="sticky right-0 bg-[white] z-50 flex justify-between border-l border-slate-200"> 
                               <Image src={"/svg/view.svg"} width={17} height={20} alt="view-svg" className="cursor-pointer"  onClick={handleClick}/>                        
-
                               <Image src={"/svg/delete.svg"} width={15} height={20} alt="delete-svg" className="cursor-pointer"/>
                           </TableCell>
                 </TableRow>
@@ -273,6 +233,5 @@ export default function EventList () {
             </Table>
           </div>
         </div>
-    </>
   );
 };

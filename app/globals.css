@@ -80,3 +80,8 @@ body {
   display: block;
   opacity: 100%;
 }
+
+.tarkingBgColor{
+ background-color: linear-gradient(to right, #988AFF, #5945ED)
+
+}

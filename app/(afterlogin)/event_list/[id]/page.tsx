@@ -18,7 +18,6 @@ export default function EventListPage () {
   }
 
   return (
-    
         <div className="md:px-7 md:pb-7 md:pt-4 w-full relative z-20 text-black">
           <div className="pb-5">
             <div className="flex justify-between">
@@ -41,12 +40,12 @@ export default function EventListPage () {
               </div>
             </div>
           </div>
-        <BasicDetails />
-        <EventDetails />
-       <LogisticBudget />
-       <CompensationBudget />
-        <TotalExpense />            
-        <Documents /> 
+          <BasicDetails />
+          <EventDetails />
+          <LogisticBudget />
+          <CompensationBudget />
+          <TotalExpense />            
+          <Documents PageName={"eventListPage"} /> 
         </div>
   )}
 
