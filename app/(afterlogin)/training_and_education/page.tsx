@@ -31,22 +31,22 @@ type dropdownData = {
     name:string,
     state:string
   }[]
+  currency:{
+    name:string
+  }[]
 }
-
 
 type Compensation = {
   vendor_type: string;
   vendor_name: string;
-  est_amount: number;
+  amount: number;
   gst_included?: number;
   gst: number;
 };
 
 type Logistics = {
   vendor_type: string;
-  vendor_name: string;
-  est_amount: number;
-  gst: number;
+  amount: number;
 };
 
 type formData = {
@@ -82,51 +82,53 @@ type formData = {
 
 
 const index = () => {
+  const pathname = usePathname();
   const [form,setForm] = useState(3);
   const [addVendor,setAddVendor] = useState(false);
   const [dropdownData,setDropdownData] = useState<dropdownData | null>(null);
   const [refNo,setRefNo] = useState<string | null>(localStorage.getItem("refno")?localStorage.getItem("refno"):"");
-  const pathname = usePathname();
+
+  const [logisticsBudget,setLogisticBudget] = useState<Logistics[]>([]);
+
+  const [logisticVendorType,setLogisticVendorType] = useState("");
+  const [logisticAmount,setLogisticAmount] = useState(0);
+
+  const handleLogisticsAdd = ()=>{
+    console.log("inside function")
+    if(logisticVendorType&&logisticAmount>0){
+      const newObject:Logistics = {vendor_type:logisticVendorType,amount:logisticAmount};
+      setLogisticBudget(prevRows=>{
+       const updatedRecords =  [...prevRows,newObject]
+       console.log(updatedRecords)
+       return updatedRecords
+      }
+      )
+      setLogisticVendorType('');
+      setLogisticAmount(0);
+    }
+  }
+
 
   let eventype:{[key:string]:string} = {} ;
   eventype["training_and_education"] = "Training and Education";
   useEffect(()=>{
     setFormData({...formdata,name:refNo})
   },[refNo])
-  const [formdata, setFormData] = useState<formData>({
-    name: "",
-    event_type: eventype[pathname.substring(1)],
-    company: "",
-    event_cost_center: "",
-    state: "",
-    city: "",
-    event_start_date: "",
-    event_end_date: "",
-    bu_rational: "",
-    faculty: "",
-    participants: "",
-    therapy: "",
-    event_name: "",
-    event_venue: "",
-    comments: "",
-    compensation: [],
-    logistics: [],
-    total_compensation_expense: 0,
-    total_logistics_expense: 0,
-    event_requestor: "",
-    business_unit: "",
-    division_category: "",
-  division_sub_category:"",
-  sub_type_of_activity:"",
-  any_govt_hcp:"",
-  no_of_hcp:0
-  });
+  const [formdata, setFormData] = useState<formData | {}>({});
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+
+    const updatedFormData = {
+
+       ...formdata, logistics: logisticsBudget 
+    };
+
     if(refNo){
-      setFormData({...formdata,name:refNo})
+      updatedFormData.name = refNo;
     }
+    
+    
     try {
       const response = await fetch(
         "/api/training_and_education/handleSubmit",
@@ -136,7 +138,7 @@ const index = () => {
             "Content-Type": "application/json",
           },
           credentials:'include',
-          body:JSON.stringify(formdata)
+          body:JSON.stringify(updatedFormData)
         }
       );
       if (response.ok) {
@@ -240,6 +242,13 @@ const index = () => {
           prevForm={prevForm}
           isAddVendor = {isAddVendor}
           vendorType = {dropdownData && dropdownData.vendor_type}
+          currency = {dropdownData && dropdownData.currency}
+          handlefieldChange = {handlefieldChange}
+          handleSelectChange={handleSelectChange}
+          handleSubmit={handleSubmit}
+          handleLogisticsAdd = {handleLogisticsAdd}
+          setLogisticVendorType = {setLogisticVendorType}
+          setLogisticAmount={setLogisticAmount}
           />:
           form == 4?
           <Form4
