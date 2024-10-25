@@ -1,7 +1,9 @@
 'use client'
+import Link from "next/link";
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+
 import {
     Table,
     TableBody,
@@ -162,7 +164,9 @@ const AuditTrail: React.FC<AuditTrailProps> = (props) => {
                             <div className="flex justify-between">
                                 <h1 className=" md:text-[30px] md:font-normal capitalize md:pb-4 leading-[45px]">APPROVER HIERARCHY</h1>
                                 <div className="flex gap-4 bg-white">
-                                    <Button className="bg-white text-black border rounded-full px-8 hover:bg-white leading-[30px] text-[20px] font-normal">Back</Button>
+                                    <Link href={"/event_list/id/"}> 
+                                      <Button className="bg-white text-black border rounded-full px-8 hover:bg-white leading-[30px] text-[20px] font-normal">Back</Button>
+                                    </Link>
                                 </div>
                             </div>
                             <div className="p-4 border border-slate-300 rounded-3xl">

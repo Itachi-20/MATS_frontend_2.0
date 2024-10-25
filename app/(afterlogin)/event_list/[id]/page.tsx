@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import Link from "next/link";
 import { useRouter } from 'next/navigation';
 import Documents from "@/components/documents";
 import { Button } from "@/components/ui/button";
@@ -24,7 +25,9 @@ export default function EventListPage () {
                 <h1 className=" md:text-[30px] md:font-medium capitalize md:pb-4"> Training and Education</h1>
                 <div className="flex gap-4 bg-white">
                   <Button className="border border-[#4430bf] text-[#4430bf] px-6" onClick={handlClick}>Audit Trail</Button>
-                  <Button className="bg-white text-black border px-8 hover:bg-white">Back</Button>
+                  <Link href={"/event_list"}> 
+                    <Button className="bg-white text-black border px-8 hover:bg-white">Back</Button>
+                  </Link> 
                 </div>
               </div>
             <div className="flex border rounded-xl justify-between p-3 bg-white gap-4">

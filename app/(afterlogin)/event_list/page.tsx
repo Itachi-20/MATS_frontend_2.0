@@ -220,10 +220,10 @@ export default function EventList () {
                           <TableCell>{data.event_requestor}</TableCell>
                           <TableCell>{data.event_venue}</TableCell>
                           <TableCell>{data.advance}</TableCell>
-                          <TableCell>{data.event_status}</TableCell>
-                          <TableCell>{data.post_activity_status}</TableCell>                        
-                          <TableCell className="sticky right-0 bg-[white] z-50 flex justify-between border-l border-slate-200"> 
-                              <Image src={"/svg/view.svg"} width={17} height={20} alt="view-svg" className="cursor-pointer"  onClick={handleClick}/>                        
+                          <TableCell >{data.event_status}</TableCell>
+                          <TableCell >{data.post_activity_status}</TableCell>                        
+                          <TableCell className="sticky right-0 bg-[white] z-50 flex space-x-8 border-l border-slate-200 "> 
+                              <Image src={"/svg/view.svg"} width={17} height={20} alt="view-svg" className="cursor-pointer" onClick={handleClick} />                        
                               <Image src={"/svg/delete.svg"} width={15} height={20} alt="delete-svg" className="cursor-pointer"/>
                           </TableCell>
                 </TableRow>

@@ -7,6 +7,7 @@ import Form4 from "./forms/form4"
 import Preview_Form from './forms/preview_form'
 import Addvendor from '@/components/add_vendor'
 import { useRouter } from 'next/router'
+
 const Index = () => {
   const [form,setForm] = useState(1);
   const [addVendor,setAddVendor] = useState(false);

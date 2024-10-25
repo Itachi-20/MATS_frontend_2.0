@@ -15,7 +15,7 @@ const Navbar = () => {
       </h1>
       <div className='flex gap-8'>
         <div className='pt-2'>  
-<svg width="40" height="40" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg width="40" height="40" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
 <rect width="50" height="50" fill="#1E1E1E"/>
 <path d="M-7006 -1625H22516V-1645H-7006V-1625ZM22508 -1633V15395H22528V-1633H22508ZM22516 15387H-7006V15407H22516V15387ZM-6998 15395V-1633H-7018V15395H-6998ZM-7006 15387C-7001.58 15387 -6998 15390.6 -6998 15395H-7018C-7018 15401.6 -7012.63 15407 -7006 15407V15387ZM22508 15395C22508 15390.6 22511.6 15387 22516 15387V15407C22522.6 15407 22528 15401.6 22528 15395H22508ZM22516 -1625C22511.6 -1625 22508 -1628.59 22508 -1633H22528C22528 -1639.62 22522.6 -1645 22516 -1645V-1625ZM-7006 -1645C-7012.63 -1645 -7018 -1639.63 -7018 -1633H-6998C-6998 -1628.58 -7001.58 -1625 -7006 -1625V-1645Z" fill="white"/>
 <g clipPath="url(#clip0_510_25177)">
@@ -48,7 +48,7 @@ const Navbar = () => {
 <rect width="1728" height="1117" fill="white" transform="translate(-1384 -42)"/>
 </clipPath>
 </defs>
-</svg>
+        </svg>
 </div>
       <div className='flex flex-col pt-3'>
         <h1 className='text-xl font-semibold leading-[10px]'>{user}</h1> 

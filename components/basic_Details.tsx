@@ -1,6 +1,5 @@
 import React from 'react'
 import { Input } from "@/components/ui/input";
-import BeneficiaryDetails from "@/components/beneficiary_details";
 
 type Props = {
   pathname: string
