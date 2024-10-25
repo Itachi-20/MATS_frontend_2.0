@@ -25,11 +25,77 @@ type Props = {
     vendorType:{
       name:string,
       vendor_type:string
-    }[] | null
+    }[] | null,
+    currency:{
+      name:string
+    }[] | null,
+    handlefieldChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>)=>void;
+    handleSelectChange: (value:string,name:string)=>void;
+    handleSubmit:(e: React.MouseEvent<HTMLButtonElement>)=>void
+    handleLogisticsAdd:()=>void
+    setLogisticAmount:(value:number)=>void
+    setLogisticVendorType:(value:string)=>void
+
 }
 type Budget = "logistics" | "compansation" | "";
+
+type vendorName ={
+  name:string,
+  vendor_name: string 
+}[]
+
+type Compensation = {
+  vendor_type: string;
+  vendor_name: string;
+  amount: number;
+  gst_included?: number;
+  gst: number;
+};
+
+type Logistics = {
+  id:number
+  vendor_type: string;
+  amount: number;
+};
+
 const Form3 = ({...Props}:Props) => {
   const [budgetType, setBudgetType] = useState<Budget>("");
+  const [vendorName,setVendorName] = useState<vendorName | null>(null);
+  
+
+
+
+  const handleVendorTypeChangeApi = async (value:string) => {
+    try {
+      const response = await fetch(
+        `/api/training_and_education/vendorName?vendor_type=${value}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          "credentials":'include'
+        }
+      );
+
+      
+      if (response.ok) {
+        const data = await response.json();
+        setVendorName(data.data)
+        console.log(data,"vendor name api");
+      } else {
+        console.log("Login failed");
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
+    }
+  };
+
+
+  const handleAmountChange = (e:React.ChangeEvent<HTMLInputElement>)=>{
+    Props.setLogisticAmount(e.target.valueAsNumber)
+  }
+
   return (
     // </div>
     (<div>
@@ -62,14 +128,23 @@ const Form3 = ({...Props}:Props) => {
           <label className="lable">
             vendor type<span className="text-[#e60000]">*</span>
           </label>
-          <Select>
+          <Select
+          onValueChange={(value:string)=>{Props.setLogisticVendorType(value)}}
+          >
             <SelectTrigger className="dropdown">
               <SelectValue placeholder="Theme" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="light">Light</SelectItem>
-              <SelectItem value="dark">Dark</SelectItem>
-              <SelectItem value="system">System</SelectItem>
+              {Props && Props.vendorType?.filter((item,index)=>{
+                if(item.vendor_type == "Hotel" || item.vendor_type == "Travel" || item.vendor_type == "Food"){
+                  return item
+                }})
+                .map((item)=>{
+                  return(
+                    <SelectItem value={item.name}>{item.vendor_type}</SelectItem>
+                  )
+                })
+                }
             </SelectContent>
           </Select>
         </div>
@@ -80,10 +155,14 @@ const Form3 = ({...Props}:Props) => {
           <Input
             className="text-black shadow"
             placeholder="Type Here"
+            type='number'
+            onChange={handleAmountChange}
           ></Input>
         </div>
         <div className="flex justify-end pt-7">
-        <Button className="bg-white text-[#4430bf] border border-[#4430bf] text-md font-normal hover:bg-white">
+        <Button className="bg-white text-[#4430bf] border border-[#4430bf] text-md font-normal hover:bg-white" 
+        onClick={()=>Props.handleLogisticsAdd()}
+        >
           Add
         </Button>
         </div>
@@ -95,7 +174,9 @@ const Form3 = ({...Props}:Props) => {
         <label className="lable">
           vendor type<span className="text-[#e60000]">*</span>
         </label>
-        <Select>
+        <Select 
+        onValueChange={(value)=>{handleVendorTypeChangeApi(value)}}
+        >
           <SelectTrigger className="dropdown">
             <SelectValue placeholder="Select" />
           </SelectTrigger>
@@ -117,9 +198,13 @@ const Form3 = ({...Props}:Props) => {
             <SelectValue placeholder="Theme" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="light">Light</SelectItem>
-            <SelectItem value="dark">Dark</SelectItem>
-            <SelectItem value="system">System</SelectItem>
+            {
+              vendorName && vendorName.map((item,index)=>{
+                return(
+                  <SelectItem value={item.name}>{item.vendor_name}</SelectItem>
+                )
+              })
+            }
           </SelectContent>
         </Select>
       </div>
@@ -130,6 +215,7 @@ const Form3 = ({...Props}:Props) => {
         <Input
           className="text-black shadow"
           placeholder="Type Here"
+          type='number'
         ></Input>
       </div>
       <div className="flex flex-col gap-5 items-center">
@@ -373,6 +459,8 @@ const Form3 = ({...Props}:Props) => {
           <Input
             className="text-black shadow"
             placeholder="Type Here"
+            name='total_logistics_expense'
+            onChange={(e)=>Props.handlefieldChange(e)}
           ></Input>
         </div>
         <div className="flex flex-col col-span-1 gap-2">
@@ -381,12 +469,16 @@ const Form3 = ({...Props}:Props) => {
           </label>
           <Select>
             <SelectTrigger className="dropdown">
-              <SelectValue placeholder="Theme" />
+              <SelectValue placeholder="Select" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="light">Light</SelectItem>
-              <SelectItem value="dark">Dark</SelectItem>
-              <SelectItem value="system">System</SelectItem>
+              {
+                Props && Props.currency?.map((item,index)=>{
+                  return(
+                    <SelectItem value={item.name}>{item.name}</SelectItem>
+                  )
+                })
+              }
             </SelectContent>
           </Select>
         </div>
@@ -399,7 +491,7 @@ const Form3 = ({...Props}:Props) => {
         <Button className="bg-white text-black border text-md font-normal hover:bg-white" onClick={Props.prevForm}>
           Back
         </Button>
-        <Button className="bg-[#4430bf] text-white text-md font-normal border hover:bg-[#4430bf]" onClick={Props.nextForm}>
+        <Button className="bg-[#4430bf] text-white text-md font-normal border hover:bg-[#4430bf]" onClick={(e: React.MouseEvent<HTMLButtonElement>)=>Props.handleSubmit(e)}>
           Next
         </Button>
       </div>

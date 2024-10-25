@@ -8,7 +8,7 @@ import Preview_Form from './forms/preview_form'
 import Addvendor from '@/components/add_vendor'
 import { useRouter } from 'next/router'
 import { AppWrapper } from '@/app/context/module'
-
+import { usePathname } from 'next/navigation'
 
 type dropdownData = {
   company:{
@@ -31,26 +31,26 @@ type dropdownData = {
     name:string,
     state:string
   }[]
+  currency:{
+    name:string
+  }[]
 }
-
 
 type Compensation = {
   vendor_type: string;
   vendor_name: string;
-  est_amount: number;
+  amount: number;
   gst_included?: number;
   gst: number;
 };
 
 type Logistics = {
   vendor_type: string;
-  vendor_name: string;
-  est_amount: number;
-  gst: number;
+  amount: number;
 };
 
 type formData = {
-  name: string;
+  name: string | null;
   event_type: string;
   company: string;
   event_cost_center: string;
@@ -74,48 +74,61 @@ type formData = {
   division_category: string;
   division_sub_category:string;
   sub_type_of_activity:string;
+  any_govt_hcp:string,
+  no_of_hcp:number
 };
 
 
 
 
 const index = () => {
-  const [form,setForm] = useState(1);
+  const pathname = usePathname();
+  const [form,setForm] = useState(3);
   const [addVendor,setAddVendor] = useState(false);
   const [dropdownData,setDropdownData] = useState<dropdownData | null>(null);
+  const [refNo,setRefNo] = useState<string | null>(localStorage.getItem("refno")?localStorage.getItem("refno"):"");
 
-  const [formdata, setFormData] = useState<formData>({
-    name: "",
-    event_type: "",
-    company: "",
-    event_cost_center: "",
-    state: "",
-    city: "",
-    event_start_date: "",
-    event_end_date: "",
-    bu_rational: "",
-    faculty: "",
-    participants: "",
-    therapy: "",
-    event_name: "",
-    event_venue: "",
-    comments: "",
-    compensation: [],
-    logistics: [],
-    total_compensation_expense: 0,
-    total_logistics_expense: 0,
-    event_requestor: "",
-    business_unit: "",
-    division_category: "",
-  division_sub_category:"",
-  sub_type_of_activity:"",
-  });
+  const [logisticsBudget,setLogisticBudget] = useState<Logistics[]>([]);
+
+  const [logisticVendorType,setLogisticVendorType] = useState("");
+  const [logisticAmount,setLogisticAmount] = useState(0);
+
+  const handleLogisticsAdd = ()=>{
+    console.log("inside function")
+    if(logisticVendorType&&logisticAmount>0){
+      const newObject:Logistics = {vendor_type:logisticVendorType,amount:logisticAmount};
+      setLogisticBudget(prevRows=>{
+       const updatedRecords =  [...prevRows,newObject]
+       console.log(updatedRecords)
+       return updatedRecords
+      }
+      )
+      setLogisticVendorType('');
+      setLogisticAmount(0);
+    }
+  }
+
+
+  let eventype:{[key:string]:string} = {} ;
+  eventype["training_and_education"] = "Training and Education";
+  useEffect(()=>{
+    setFormData({...formdata,name:refNo})
+  },[refNo])
+  const [formdata, setFormData] = useState<formData | {}>({});
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    const Body = {
-      "data":formdata
+
+    const updatedFormData = {
+
+       ...formdata, logistics: logisticsBudget 
+    };
+
+    if(refNo){
+      updatedFormData.name = refNo;
     }
+    
+    
     try {
       const response = await fetch(
         "/api/training_and_education/handleSubmit",
@@ -125,13 +138,18 @@ const index = () => {
             "Content-Type": "application/json",
           },
           credentials:'include',
-          body:JSON.stringify(Body)
+          body:JSON.stringify(updatedFormData)
         }
       );
-
-      const data = await response.json();
-      console.log(data,"response data");
       if (response.ok) {
+        const data = await response.json();
+        console.log(data,"response data");
+          localStorage.setItem("refno",data.message);
+          setRefNo(data.message);
+        
+        setTimeout(()=>{
+          nextForm();
+        },1000)
       } else {
         console.log("submission failed");
       }
@@ -178,7 +196,6 @@ const index = () => {
  
           const data = await response.json();
           setDropdownData(data.data);
-          setForm(prev=>prev+1);
          if (response.ok) {
          } else {
              console.log('Login failed');
@@ -215,6 +232,9 @@ const index = () => {
           <Form2
           nextForm = {nextForm}
           prevForm={prevForm}
+          handlefieldChange = {handlefieldChange}
+          handleSelectChange={handleSelectChange}
+          handleSubmit={handleSubmit}
           />:
           form == 3?
           <Form3
@@ -222,6 +242,13 @@ const index = () => {
           prevForm={prevForm}
           isAddVendor = {isAddVendor}
           vendorType = {dropdownData && dropdownData.vendor_type}
+          currency = {dropdownData && dropdownData.currency}
+          handlefieldChange = {handlefieldChange}
+          handleSelectChange={handleSelectChange}
+          handleSubmit={handleSubmit}
+          handleLogisticsAdd = {handleLogisticsAdd}
+          setLogisticVendorType = {setLogisticVendorType}
+          setLogisticAmount={setLogisticAmount}
           />:
           form == 4?
           <Form4
