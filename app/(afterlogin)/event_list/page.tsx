@@ -139,7 +139,7 @@ export default function EventList () {
             </div>
           </div>
           <div className="border bg-white h-full p-4 rounded-[18px]">
-            <Table className={""}>
+            <Table>
               <TableHeader className={"bg-[#E0E9FF]"}>
                 <TableRow className={"text-nowrap rounded-r-2xl"}>
                   <TableHead className={"text-center rounded-l-2xl text-[#625d5d] text-[15px] font-normal font-['Montserrat']"}>
@@ -222,11 +222,11 @@ export default function EventList () {
                           <TableCell>{data.advance}</TableCell>
                           <TableCell >{data.event_status}</TableCell>
                           <TableCell >{data.post_activity_status}</TableCell>                        
-                          <TableCell className="sticky right-0 bg-[white] z-50 flex space-x-8 border-l border-slate-200 "> 
+                          <TableCell className="sticky right-0 bg-[white] z-50 flex space-x-7 border-l border-slate-200 w-[100%]"> 
                               <Image src={"/svg/view.svg"} width={17} height={20} alt="view-svg" className="cursor-pointer" onClick={handleClick} />                        
-                              <Image src={"/svg/delete.svg"} width={15} height={20} alt="delete-svg" className="cursor-pointer"/>
+                              <Image src={"/svg/delete.svg"} width={15} height={20} alt="delete-svg" className="cursor-pointer mr-1"/>
                           </TableCell>
-                </TableRow>
+                       </TableRow>
                       );
                     })}
               </TableBody>
