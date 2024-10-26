@@ -16,7 +16,7 @@ const total_Expense = () => {
         <div className="md:pb-8">
             <div className="flex gap-5">
                 <h1 className="text-black md:text-[30px] md:font-medium md:pb-4 uppercase">
-                    Compenstation Budget
+                    Compensation Budget
                 </h1>
                 <div className="pt-3">
 

@@ -14,7 +14,7 @@ const event_Details = ({ ...Props }: Props) => {
     <div className="md:pb-8">
       <div className="flex gap-6">
         <h1 className="text-black md:text-[30px] md:font-medium uppercase md:pb-4">
-          {pathname.substring(1) == 'monetary_grant' ? 'organisation Details':'event Details'}
+          {pathname.substring(1) == 'monetary_grant' || pathname.substring(1) == 'non_monetary_grant' ? 'organisation Details' : 'event Details'}
         </h1>
         <div
           className="pt-3">
@@ -34,7 +34,7 @@ const event_Details = ({ ...Props }: Props) => {
       <div className="grid md:grid-cols-3 md:gap-6">
         <div className="flex flex-col md:gap-2">
           <label className="text-black md:text-sm md:font-normal capitalize">
-            {Props.pathname == "/assesment_program" ? "Program Name" : "Event Name"}<span className="text-[#e60000]">*</span>
+            {pathname == "/assesment_program" ? "Program Name" : pathname == "/non_monetary_grant" ? "Organisation Name" : "Event Name"}<span className="text-[#e60000]">*</span>
           </label>
           <Input
             className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
@@ -42,16 +42,43 @@ const event_Details = ({ ...Props }: Props) => {
             readOnly={true}
           ></Input>
         </div>
-        <div className="flex flex-col md:gap-2">
-          <label className="text-black md:text-sm md:font-normal capitalize">
-            {Props.pathname == "/assesment_program" ? "Program Start Date" : "Event Date"}<span className="text-[#e60000]">*</span>
-          </label>
-          <Input
-            className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
-            placeholder="Type Here"
-            readOnly={true}
-          ></Input>
-        </div>
+        { 
+          pathname.substring(1) == 'sponsorship_program' || pathname.substring(1) == 'non_monetary_grant' &&
+          <>
+            <div className="flex flex-col md:gap-2">
+              <label className="text-black md:text-sm md:font-normal capitalize">
+                Event Start Date<span className="text-[#e60000]">*</span>
+              </label>
+              <Input
+                className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
+                placeholder="Type Here"
+                readOnly={true}
+              ></Input>
+            </div>
+            <div className="flex flex-col md:gap-2">
+            <label className="text-black md:text-sm md:font-normal capitalize">
+              Event End Date<span className="text-[#e60000]">*</span>
+            </label>
+            <Input
+              className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
+              placeholder="Type Here"
+              readOnly={true}
+            ></Input>
+          </div>
+          </>
+        }
+        { pathname.substring(1) != 'sponsorship_program' || pathname.substring(1) != 'non_monetary_grant' &&
+          <div className="flex flex-col md:gap-2">
+            <label className="text-black md:text-sm md:font-normal capitalize">
+              {Props.pathname == "/assesment_program" ? "Program Start Date" : "Event Date"}<span className="text-[#e60000]">*</span>
+            </label>
+            <Input
+              className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
+              placeholder="Type Here"
+              readOnly={true}
+            ></Input>
+          </div>
+        }
         <div className={`flex flex-col md:gap-2  ${Props.pathname == "/assesment_program" ? "" : "hidden"}`}>
           <label className="text-black md:text-sm md:font-normal capitalize">
             Program End Date<span className="text-[#e60000]">*</span>
@@ -62,36 +89,44 @@ const event_Details = ({ ...Props }: Props) => {
             readOnly={true}
           ></Input>
         </div>
-        <div className="flex flex-col md:gap-2">
-          <label className="text-black md:text-sm md:font-normal capitalize">
-            {Props.pathname == "/assesment_program" ? "Program Venue and Location" : "Event Venue"}<span className="text-[#e60000]">*</span>
-          </label>
-          <Input
-            className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
-            placeholder="Type Here"
-            readOnly={true}
-          ></Input>
-        </div>
-        <div className="flex flex-col md:gap-2">
-          <label className="text-black md:text-sm md:font-normal capitalize">
-            engagement of any government hCP’s?<span className="text-[#e60000]">*</span>
-          </label>
-          <Input
-            className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
-            placeholder="Type Here"
-            readOnly={true}
-          ></Input>
-        </div>
-        <div className="flex flex-col md:gap-2">
-          <label className="text-black md:text-sm md:font-normal capitalize">
-            Total Number of government HCP’s<span className="text-[#e60000]">*</span>
-          </label>
-          <Input
-            className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
-            placeholder="Type Here"
-            readOnly={true}
-          ></Input>
-        </div>
+
+        { pathname.substring(1) != 'non_monetary_grant' &&
+          <div className="flex flex-col md:gap-2">
+            <label className="text-black md:text-sm md:font-normal capitalize">
+              {Props.pathname == "/assesment_program" ? "Program Venue and Location" : "Event Venue"}<span className="text-[#e60000]">*</span>
+            </label>
+            <Input
+              className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
+              placeholder="Type Here"
+              readOnly={true}
+            ></Input>
+          </div>
+        }
+
+        {pathname.substring(1) != 'sponsorship_program' || pathname.substring(1) != 'non_monetary_grant' &&
+          <>
+            <div className="flex flex-col md:gap-2">
+              <label className="text-black md:text-sm md:font-normal capitalize">
+                engagement of any government hCP’s?<span className="text-[#e60000]">*</span>
+              </label>
+              <Input
+                className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
+                placeholder="Type Here"
+                readOnly={true}
+              ></Input>
+            </div>
+            <div className="flex flex-col md:gap-2">
+              <label className="text-black md:text-sm md:font-normal capitalize">
+                Total Number of government HCP’s<span className="text-[#e60000]">*</span>
+              </label>
+              <Input
+                className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
+                placeholder="Type Here"
+                readOnly={true}
+              ></Input>
+            </div>
+          </> 
+        }
         <div className="flex flex-col md:gap-2">
           <label className="text-black md:text-sm md:font-normal capitalize">
             BU rational<span className="text-[#e60000]">*</span>
@@ -102,16 +137,19 @@ const event_Details = ({ ...Props }: Props) => {
             readOnly={true}
           ></Input>
         </div>
-        <div className="flex flex-col md:gap-2">
-          <label className="text-black md:text-sm md:font-normal capitalize">
-            Comments<span className="text-[#e60000]">*</span>
-          </label>
-          <Textarea
-            className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
-            placeholder="Type Here"
-            readOnly={true}
-          ></Textarea>
-        </div>
+        {pathname.substring(1) != 'sponsorship_program' ?
+          <div className="flex flex-col md:gap-2">
+            <label className="text-black md:text-sm md:font-normal capitalize">
+              Comments<span className="text-[#e60000]">*</span>
+            </label>
+            <Textarea
+              className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
+              placeholder="Type Here"
+              readOnly={true}
+            ></Textarea>
+          </div> :
+          <></>
+        }
       </div>
     </div>
   )

@@ -1,5 +1,6 @@
 import React from 'react'
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import BeneficiaryDetails from "@/components/beneficiary_details";
 
 type Props = {
@@ -79,6 +80,28 @@ const Basic_Details = ({ ...Props }: Props) => {
             readOnly={true}
           ></Input>
         </div>
+
+        {/* should be condition based */}
+        <div className="flex flex-col gap-2">
+            <label className="lable">
+              Budget Sub Type<span className="text-[#e60000]">*</span>
+            </label>
+            <Input
+            className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
+            placeholder="Type Here"
+            readOnly={true}
+          ></Input>
+          </div>
+        <div className="flex flex-col md:gap-2">
+          <label className="text-black md:text-sm md:font-normal capitalize">
+            city<span className="text-[#e60000]">*</span>
+          </label>
+          <Input
+            className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
+            placeholder="Type Here"
+            readOnly={true}
+          ></Input>
+        </div>
         <div className="flex flex-col md:gap-2">
           <label className="text-black md:text-sm md:font-normal capitalize">
             state<span className="text-[#e60000]">*</span>
@@ -118,6 +141,19 @@ const Basic_Details = ({ ...Props }: Props) => {
             placeholder="Type Here"
             readOnly={true}
           ></Input>
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <label className="lable">
+            Faculties<span className="text-[#e60000]">*</span>
+          </label>
+          <Textarea className='text-black shadow-md bg-[#f6f6f6]' placeholder='Type Here' readOnly/>
+        </div>
+        <div className="flex flex-col gap-2">
+          <label className="lable">
+            Participants<span className="text-[#e60000]">*</span>
+          </label>
+          <Textarea className='text-black shadow-md bg-[#f6f6f6]' placeholder='Type Here' readOnly/>
         </div>
       </div>
     </div>

@@ -1,15 +1,17 @@
+'use client'
 import React from "react";
-
+import { useRouter } from "next/navigation";
 const Sidebar = () => {
   const moduleItems: string[] = [
     "Training & Education",
     "Awareness Program",
     "Monetary Grant",
     "HCP Services",
-    "Poor Patient Support",
+    "Patient Support",
     "Sponsorship Support",
     "Non Monetary Grant",
   ];
+  const router = useRouter();
   return (
     <div  className="flex flex-col justify-between h-screen">
       <div className="pt-10 text-black flex  flex-col">
@@ -86,7 +88,7 @@ const Sidebar = () => {
               {moduleItems &&
                 moduleItems.map((data,index) => {
                   return (
-                    <div key={index} className="child py-4 px-5 rounded-bl-xl text-black  border-l border-black ml-4 relative text-nowrap ">
+                    <div key={index} className="child py-4 px-5 rounded-bl-xl text-black  border-l border-black ml-4 relative text-nowrap" onClick={()=>router.push(data.toLowerCase().replaceAll(" ", "_"))}>
                       <div className="absolute -bottom-5 hover:bg-white rounded-xl text-black hover:text-[#4430bf] text-[12px] px-1 py-2 cursor-pointer">
                         {data}
                       </div>
