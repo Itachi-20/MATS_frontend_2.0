@@ -1,17 +1,19 @@
 "use client"
-import React, { useState } from 'react'
-import Form1 from "./forms/form1"
-import Form2 from "./forms/form2"
-import Form3 from "./forms/form3"
-import Form4 from "./forms/form4"
-import Preview_Form from './forms/preview_form'
-import Addvendor from '@/components/add_vendor'
-import { AppWrapper } from '@/app/context/module'
-import { usePathname } from 'next/navigation'
+import React, { useState } from 'react';
+import Form1 from "./forms/form1";
+import Form2 from "./forms/form2";
+import Form3 from "./forms/form3";
+import Form4 from "./forms/form4";
+import Adddocument from '@/components/add_document';
+import Preview_Form from './forms/preview_form';
+import Addvendor from '@/components/add_vendor';
+import { AppWrapper } from '@/app/context/module';
+import { usePathname } from 'next/navigation';
 const index = () => {
   const pathname = usePathname();
   const [form,setForm] = useState(1);
   const [addVendor,setAddVendor] = useState(false);
+  const [addDocument,setAddDocument] = useState(false);
   // const router = useRouter();
   const nextForm = ():void=>{
     setForm(prev=>prev+1);
@@ -26,6 +28,12 @@ const index = () => {
   const isAddVendor = ()=>{
     setAddVendor(prev => !prev)
   }
+
+  const isAddDocument = ()=>{
+    setAddDocument(prev => !prev)
+  }
+
+
   return (
         <>
         <AppWrapper>
@@ -66,9 +74,12 @@ const index = () => {
     
     {
       addVendor &&
-      <Addvendor
-      isAddVendor = {isAddVendor}
+      <Addvendor isAddVendor = {isAddVendor} isAddDocument={isAddDocument}
       />
+    }
+    {
+      addDocument &&
+      <Adddocument isAddDocument={isAddDocument}/>
     }
     </AppWrapper>
     </>
