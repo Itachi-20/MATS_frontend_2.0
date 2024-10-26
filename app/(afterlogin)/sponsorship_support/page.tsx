@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import Form1 from "./forms/form1";
 import Form2 from "./forms/form2";
 import Form3 from "./forms/form3";
-import Form4 from "./forms/form4";
 import Adddocument from '@/components/add_document';
 import Preview_Form from './forms/preview_form';
 import Addvendor from '@/components/add_vendor';
@@ -61,11 +60,6 @@ const index = () => {
           isAddVendor = {isAddVendor}
           />:
           form == 4?
-          <Form4
-          nextForm = {nextForm}
-          prevForm={prevForm}
-          />:
-          form == 5?
           <Preview_Form
           prevForm = {prevForm}
           />:""

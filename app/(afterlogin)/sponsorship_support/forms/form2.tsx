@@ -56,6 +56,38 @@ const Form2 = ({ ...Props }: Props) => {
           <Textarea className='text-black shadow-md' placeholder='Type Here' />
         </div>
       </div>
+      <div className=''>
+        <h1 className="text-black text-2xl font-normal uppercase py-8">
+          Expense Details
+        </h1>
+        <div className="grid grid-cols-4 gap-12">
+          <div className="flex flex-col col-span-2 gap-2">
+            <label className="lable">
+              Total Estimated Expense
+              <span className="text-[#e60000]">*</span>
+            </label>
+            <Input
+              className="text-black shadow"
+              placeholder="Type Here"
+            ></Input>
+          </div>
+          <div className="flex flex-col col-span-1 gap-2">
+            <label className="lable">
+              Currency<span className="text-[#e60000]">*</span>
+            </label>
+            <Select>
+              <SelectTrigger className="dropdown">
+                <SelectValue placeholder="Theme" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="light">Light</SelectItem>
+                <SelectItem value="dark">Dark</SelectItem>
+                <SelectItem value="system">System</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+      </div>
       <div className='flex justify-end pt-5 gap-4'>
         <Button className='bg-white text-black border text-md font-normal'> Save as Draft</Button>
         <Button className='bg-white text-black border text-md font-normal' onClick={Props.prevForm}>Back</Button>
