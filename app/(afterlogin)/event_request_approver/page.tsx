@@ -9,6 +9,7 @@ import EventDetails from "@/components/event_Details"
 import VendorDetails from "@/components/vendor_Details"
 import TotalExpense from "@/components/total_Expense"
 import Documents from "@/components/documents"
+
 const Index = () => {
   return (
     

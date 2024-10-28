@@ -1,12 +1,13 @@
 "use client"
 import React, { useState } from 'react'
-import Form1 from "@/app/(afterlogin)/awareness_program/forms/form1"
-import Form2 from "@/app/(afterlogin)/awareness_program/forms/form2"
-import Form3 from "@/app/(afterlogin)/awareness_program/forms/form3"
-import Form4 from "@/app/(afterlogin)/awareness_program/forms/form4"
+import Form1 from "./forms/form1"
+import Form2 from "./forms/form2"
+import Form3 from "./forms/form3"
+import Form4 from "./forms/form4"
 import Preview_Form from './forms/preview_form'
 import Addvendor from '@/components/add_vendor'
 import { useRouter } from 'next/router'
+
 const Index = () => {
   const [form,setForm] = useState(1);
   const [addVendor,setAddVendor] = useState(false);

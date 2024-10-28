@@ -38,6 +38,7 @@ type EventTable = {
 
 type level = "Approved" | "Rejected" | "Pending";
 const Index = () => {
+
   const events: EventTable[] = [
     {
       request_number: "REQ001",

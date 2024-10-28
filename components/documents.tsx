@@ -1,4 +1,5 @@
 import React from 'react'
+import Image from 'next/image';
 import {
   Table,
   TableBody,
@@ -8,7 +9,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-const documents = () => {
+import page from '@/app/(afterlogin)/advance_payment/page';
+
+interface DocumentsProps {
+  PageName: string; 
+}
+
+const Documents:React.FC<DocumentsProps> = ({PageName}) => {
   return (
     <div className="md:pb-8">
       <div className="flex gap-5">
@@ -69,17 +76,19 @@ const documents = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                <TableRow className="text-black">
+                <TableRow className="text-black flex justify-between items-center">
                   <TableCell>No Data</TableCell>
-
+                  { PageName === "eventListPage" && 
+                    <TableCell><Image src="/svg/view.svg" width={20} height={20}  alt='view-document' className='cursor-pointer' /></TableCell>
+                  }
                 </TableRow>
               </TableBody>
             </Table>
-          </div>
+          </div> 
         </div>
       </div>
     </div>
   )
 }
 
-export default documents
+export default Documents
