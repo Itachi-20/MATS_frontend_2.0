@@ -224,7 +224,7 @@ export default function EventList () {
                           <TableCell >{data.post_activity_status}</TableCell>                        
                           <TableCell className="sticky right-0 bg-[white] z-50 flex space-x-7 border-l border-slate-200 w-[100%]"> 
                               <Image src={"/svg/view.svg"} width={17} height={20} alt="view-svg" className="cursor-pointer" onClick={handleClick} />                        
-                              <Image src={"/svg/delete.svg"} width={15} height={20} alt="delete-svg" className="cursor-pointer mr-1"/>
+                              <Image src={"/svg/delete.svg"} width={15} height={20} alt="delete-svg" className="cursor-pointer mr-1" />
                           </TableCell>
                        </TableRow>
                       );
