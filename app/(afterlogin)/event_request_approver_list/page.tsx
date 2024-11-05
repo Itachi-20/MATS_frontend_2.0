@@ -129,16 +129,15 @@ const Index = () => {
   return (
     <>
         <div className="p-7 w-full relative z-20 text-black">
-          <div className="flex lg:justify-between flex-col-reverse lg:flex-row pb-5 gap-5 lg:gap-0">
-            
+          <div className="flex lg:justify-between flex-col-reverse lg:flex-row pb-5 gap-5 lg:gap-0">        
               <Input
                 className="lg:w-[40%] md:w-full sm:w-full rounded-[50px] bg-[#ecf2ff]"
                 placeholder="Search"
               />
             
-              <div className="flex justify-end gap-5">
+              <div className="flex justify-end lg:gap-5 sm:gap-[10px] gap-[10px]">
                 <Select>
-                  <SelectTrigger className="text-black w-34 shadow focus-visible:ring-transparent rounded-[25px] gap-4">
+                  <SelectTrigger className="text-black w-34 shadow focus-visible:ring-transparent lg:text-sm lg:rounded-[25px] lg:gap-4 sm:rounded-[50px] rounded-[50px] sm:text-[9px] sm:gap-[10px] gap-[10px] sm:font-normal sm:leading-[10.97px]">
                     <SelectValue placeholder="Theme" />
                   </SelectTrigger>
                   <SelectContent>
@@ -148,7 +147,7 @@ const Index = () => {
                   </SelectContent>
                 </Select>
                 <Select>
-                  <SelectTrigger className="text-black w-34 shadow focus-visible:ring-transparent rounded-[25px] gap-4">
+                  <SelectTrigger className="text-black w-34 shadow focus-visible:ring-transparent lg:text-sm lg:rounded-[25px] lg:gap-4 sm:rounded-[50px] rounded-[50px] sm:text-[9px] sm:gap-[10px] gap-[10px] sm:font-normal sm:leading-[10.97px]">
                     <SelectValue placeholder="Theme" />
                   </SelectTrigger>
                   <SelectContent>
@@ -157,7 +156,7 @@ const Index = () => {
                     <SelectItem value="system">System</SelectItem>
                   </SelectContent>
                 </Select>
-                <Button className="text-black text-md font-normal bg-white hover:bg-white border rounded-[25px] px-8 py-5 shadow">
+                <Button className="text-black text-md font-normal bg-white hover:bg-white border lg:px-8 lg:py-5 sm:px-[18px] sm:py-[10px] shadow lg:text-sm rounded-[50px] sm:text-[9px] sm:font-normal sm:leading-normal font-['Montserrat'] text-[9px]">
                   Back
                 </Button>
                 <div className="hidden lg:block">
@@ -200,26 +199,28 @@ const Index = () => {
           </div>
 
           <div className="border bg-white h-full p-4 rounded-[18px]">
-            <Table className={""}>
+            <Table>
               <TableHeader className={"bg-[#E0E9FF]"}>
-                <TableRow className={"text-nowrap rounded-r-2xl"}>
+                <TableRow className={"text-nowrap rounded-r-2xl text-[#000000]"}>
                   <TableHead
                     className={
-                      "text-center rounded-l-2xl text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                      "text-center rounded-l-2xl  lg:text-[15px] sm:text-[12px] font-normal font-['Montserrat'] leading-normal"
                     }
                   >
-                    Request Number
+                    Request No.
                   </TableHead>
+
                   <TableHead
                     className={
-                      "text-center text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                      "text-center lg:text-[15px] sm:text-[12px] font-normal font-['Montserrat'] leading-normal"
                     }
                   >
                     Event Name
                   </TableHead>
+
                   <TableHead
                     className={
-                      "text-center text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                      "text-center lg:text-[15px] sm:text-[12px] font-normal font-['Montserrat'] leading-normal"
                     }
                   >
                     Event Type
@@ -227,7 +228,7 @@ const Index = () => {
 
                   <TableHead
                     className={
-                      "text-center text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                      "text-center lg:text-[15px] sm:text-[12px] font-normal font-['Montserrat'] leading-normal"
                     }
                   >
                     Event Date
@@ -235,72 +236,82 @@ const Index = () => {
 
                   <TableHead
                     className={
-                      "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                      "text-center  lg:text-[15px] sm:text-[12px] font-normal font-['Montserrat'] leading-normal"
                     }
                   >
                     Total Expense
                   </TableHead>
+
                   <TableHead
                     className={
-                      "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                      "text-center  lg:text-[15px] sm:text-[12px] font-normal font-['Montserrat'] leading-normal"
                     }
                   >
                     Event Requestor
                   </TableHead>
+
                   <TableHead
                     className={
-                      "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                      "text-center  lg:text-[15px] sm:text-[12px] font-normal font-['Montserrat'] leading-normal"
                     }
                   >
                     Level 1
                   </TableHead>
+
                   <TableHead
                     className={
-                      "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                      "text-center  lg:text-[15px] sm:text-[12px] font-normal font-['Montserrat'] leading-normal"
                     }
                   >
                     Level 2
                   </TableHead>
+
                   <TableHead
                     className={
-                      "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                      "text-center  lg:text-[15px] sm:text-[12px] font-normal font-['Montserrat'] leading-normal]"
                     }
                   >
                     Level 3
                   </TableHead>
+
                   <TableHead
                     className={
-                      "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                      "text-center  lg:text-[15px] sm:text-[12px] font-normal font-['Montserrat'] leading-normal"
                     }
                   >
                     Level 4
                   </TableHead>
+
                   <TableHead
                     className={
-                      "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                      "text-center  lg:text-[15px] sm:text-[12px] font-normal font-['Montserrat'] leading-normal"
                     }
                   >
                     Level 5
                   </TableHead>
+
                   <TableHead
                     className={
-                      "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                      "text-center  lg:text-[15px] sm:text-[12px] font-normal font-['Montserrat'] leading-normal"
                     }
                   >
                     Level 6
                   </TableHead>
-                  <TableHead
-                    className={
-                      "text-center rounded-r-2xl text-[#625d5d] text-[15px] font-normal font-['Montserrat'] sticky right-0 z-50 bg-[#E0E9FF]"
+
+                  <TableHead 
+                     className={
+                      "text-center rounded-r-2xl lg:text-[15px] font-normal font-['Montserrat'] sticky right-0 z-50 bg-[#E0E9FF]"
                     }
-                  >Action</TableHead>
+                  >Action
+                  </TableHead>
+
                 </TableRow>
               </TableHeader>
               <TableBody>
                   {events &&
                     events.map((data, index) => {
                       return (
-                        <TableRow key={index} className="text-center text-nowrap">
+                        <TableRow key={index} className="text-center text-[] text-nowrap lg:text-[16px] sm:text-[10px] font-light leading-normal font-['Poppins']">
                           <TableCell>{data.request_number}</TableCell>
                           <TableCell>{data.event_type}</TableCell>
                           <TableCell>{data.event_name}</TableCell>
@@ -312,38 +323,38 @@ const Index = () => {
                               {data.level_1}
                               {
                                 data.level_1 == "Approved"?
-                              <span className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
+                              <span className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] lg:text-[15px] sm:text-[10px] font-semibold">
                               A
                               </span>
                               :data.level_1 == "Pending"?
-                              <span className="w-6 rounded-md bg-[#fae8a8] text-[#937818] text-[15px] font-semibold">
+                              <span className="w-6 rounded-md bg-[#fae8a8] text-[#937818] lg:text-[15px] sm:text-[10px] font-semibold">
                               W
                               </span>
                               :
-                              <span className="w-6 rounded-md bg-[#feadad] text-[#9c0000] text-[15px] font-semibold">
+                              <span className="w-6 rounded-md bg-[#feadad] text-[#9c0000] lg:text-[15px] sm:text-[10px] font-semibold">
                               RJ
                               </span>
                               } 
 
                             </div>
 
-                            </TableCell>
+                          </TableCell>
                           <TableCell>
                             <div className="flex flex-col items-center">
 
                             {data.level_2}
                           {
                             data.level_2 == "Approved"?
-                            <span className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
+                            <span className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] lg:text-[15px] sm:text-[10px] font-semibold">
                             A
                             </span>
                             :
                             data.level_2 == "Pending"?
-                            <span className="w-6 rounded-md bg-[#fae8a8] text-[#937818] text-[15px] font-semibold">
+                            <span className="w-6 rounded-md bg-[#fae8a8] text-[#937818] lg:text-[15px] sm:text-[10px] font-semibold">
                             W
                             </span>
                             :
-                            <span className="w-6 rounded-md bg-[#feadad] text-[#9c0000] text-[15px] font-semibold">
+                            <span className="w-6 rounded-md bg-[#feadad] text-[#9c0000] lg:text-[15px] sm:text-[10px] font-semibold">
                             RJ
                             </span>
                             }
@@ -355,15 +366,15 @@ const Index = () => {
                             {data.level_3}
                           {
                             data.level_3 == "Approved"?
-                            <div className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
+                            <div className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] lg:text-[15px] sm:text-[10px] font-semibold">
                             A
                             </div>
                             :data.level_3 == "Pending"?
-                            <div className="w-6 rounded-md bg-[#fae8a8] text-[#937818] text-[15px] font-semibold">
+                            <div className="w-6 rounded-md bg-[#fae8a8] text-[#937818] lg:text-[15px] sm:text-[10px]] font-semibold">
                             W
                             </div>
                             :
-                            <div className="w-6 rounded-md bg-[#feadad] text-[#9c0000] text-[15px] font-semibold">
+                            <div className="w-6 rounded-md bg-[#feadad] text-[#9c0000] lg:text-[15px] sm:text-[10px] font-semibold">
                             RJ
                             </div>
                             }
@@ -375,15 +386,15 @@ const Index = () => {
                             {data.level_4}
                           {
                             data.level_4 == "Approved"?
-                            <div className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
+                            <div className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] lg:text-[15px] sm:text-[10px] font-semibold">
                             A
                             </div>
                             :data.level_4 == "Pending"?
-                            <div className="w-6 rounded-md bg-[#fae8a8] text-[#937818] text-[15px] font-semibold">
+                            <div className="w-6 rounded-md bg-[#fae8a8] text-[#937818] lg:text-[15px] sm:text-[10px] font-semibold">
                             W
                             </div>
                             :
-                            <div className="w-6 rounded-md bg-[#feadad] text-[#9c0000] text-[15px] font-semibold">
+                            <div className="w-6 rounded-md bg-[#feadad] text-[#9c0000] lg:text-[15px] sm:text-[10px] font-semibold">
                             RJ
                             </div>
                             }
@@ -395,15 +406,15 @@ const Index = () => {
                             {data.level_5}
                           {
                             data.level_5 == "Approved"?
-                            <div className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
+                            <div className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] lg:text-[15px] sm:text-[10px] font-semibold">
                             A
                             </div>
                             :data.level_5 == "Pending"?
-                            <div className="w-6 rounded-md bg-[#fae8a8] text-[#937818] text-[15px] font-semibold">
+                            <div className="w-6 rounded-md bg-[#fae8a8] text-[#937818] lg:text-[15px] sm:text-[10px] font-semibold">
                             W
                             </div>
                             :
-                            <div className="w-6 rounded-md bg-[#feadad] text-[#9c0000] text-[15px] font-semibold">
+                            <div className="w-6 rounded-md bg-[#feadad] text-[#9c0000] lg:text-[15px] sm:text-[10px] font-semibold">
                             RJ
                             </div>
                             }
@@ -415,30 +426,30 @@ const Index = () => {
                             {data.level_6}
                           {
                             data.level_6 == "Approved"?
-                            <div className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
+                            <div className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] lg:text-[15px] sm:text-[10px] font-semibold">
                             A
                             </div>
                             :data.level_6 == "Pending"?
-                            <div className="w-6 rounded-md bg-[#fae8a8] text-[#937818] text-[15px] font-semibold">
+                            <div className="w-6 rounded-md bg-[#fae8a8] text-[#937818] lg:text-[15px] sm:text-[10px] font-semibold">
                             W
                             </div>
                             :
-                            <div className="w-6 rounded-md bg-[#feadad] text-[#9c0000] text-[15px] font-semibold">
+                            <div className="w-6 rounded-md bg-[#feadad] text-[#9c0000] lg:text-[15px] sm:text-[10px] font-semibold">
                             RJ
                             </div>
                             }
                             </div>
                           </TableCell>
-                          <TableCell className="sticky right-0 bg-[white] z-50 ">
-                            <div className="">
+                          <TableCell className="sticky right-0 bg-[white] z-50">
+                            <div>
                             {
-                              data.level_1 == "Approved"?<button className="border rounded-full px-4 py-1 border-[#0e4154] text-[#0e4154]">view</button>
+                              data.level_1 == "Approved"?<button className="border rounded-[50px] lg:px-[26px] lg:py-[6px] sm:px-[12px] sm:py-[3px] border-[#0e4154] text-[#0e4154] lg:text-[12px] sm:text-[7px] font-light leading-normal">view</button>
                               :
-                              <button className="border rounded-full px-4 py-1 border-[#5dbe74] text-[#5dbe74]">Approve</button>
+                              <button className="border rounded-[50px] lg:px-[14px] lg:py-[6px] sm:py-[3px] sm:px-[5px] border-[#5dbe74] text-[#5dbe74] lg:text-[12px] sm:text-[7px] font-light leading-normal">Approve</button>
                             }
                             </div>
                           </TableCell>
-                </TableRow>
+                        </TableRow>
                       );
                     })}
               </TableBody>
