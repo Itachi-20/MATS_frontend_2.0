@@ -19,13 +19,9 @@ import {
 } from "@/components/ui/table";
 import { Checkbox } from '@/components/ui/checkbox';
 type Props = {
-    nextForm: ()=>void,
-    prevForm: ()=>void,
-    isAddVendor: ()=>void,
-    vendorType:{
-      name:string,
-      vendor_type:string
-    }[] | null
+    nextForm: ()=>void
+    prevForm: ()=>void
+    isAddVendor: ()=>void
 }
 type Budget = "logistics" | "compansation" | "";
 const Form3 = ({...Props}:Props) => {
@@ -97,14 +93,12 @@ const Form3 = ({...Props}:Props) => {
         </label>
         <Select>
           <SelectTrigger className="dropdown">
-            <SelectValue placeholder="Select" />
+            <SelectValue placeholder="Theme" />
           </SelectTrigger>
           <SelectContent>
-          {Props && Props.vendorType?.map((item,index)=>{
-                return(
-                  <SelectItem value={item.name}>{item.vendor_type}</SelectItem>
-                )
-              })}
+            <SelectItem value="light">Light</SelectItem>
+            <SelectItem value="dark">Dark</SelectItem>
+            <SelectItem value="system">System</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -256,7 +250,7 @@ const Form3 = ({...Props}:Props) => {
         </Table>
       </div>
       <h1 className="text-black text-2xl font-normal uppercase pb-8">
-        Compenstation Budget
+        Compensation Budget
       </h1>
       <div className="border border-[#848484] p-7 rounded-[50px] w-full mr-4  bg-white">
         <Table className={""}>

@@ -5,7 +5,7 @@ import { useAppContext } from '@/app/context/module';
 import { usePathname } from 'next/navigation'
 
 const Navbar = () => {
-  const {user} = useAppContext();
+  const { user } = useAppContext();
   const pathname = usePathname();
   return (
     <div className='flex justify-between rounded-tl-[60px] text-black p-3 shadow-md'>
@@ -54,10 +54,10 @@ const Navbar = () => {
         <h1 className='text-xl font-semibold leading-[10px]'>{user}</h1> 
         <h1 className='text-[#5f5f5f] text-right'>Requester</h1>
         </div>
-      <Image className='rounded-full w-12 h-12' src={"/boy.jpg"} alt={""} width={30} height={30}/>
-        
-    </div>
+        <Image className='rounded-full w-12 h-12' src={"/boy.jpg"} alt={""} width={30} height={30} />
+
       </div>
+    </div>
   );
 }
 

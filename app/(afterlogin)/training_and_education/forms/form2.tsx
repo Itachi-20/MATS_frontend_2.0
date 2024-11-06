@@ -10,20 +10,17 @@ import {
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
-import { useContext } from 'react';
-import { AppContext } from '@/app/context/module'
-type Props = {
-    nextForm: ()=>void
-    prevForm: ()=>void
-}
-const Form2 = ({...Props}:Props) => {
-  const appContext = useContext(AppContext);
-  if (!appContext) {
-    throw new Error("SomeComponent must be used within an AppWrapper");
-  }
 
-  const { user } = appContext;
-  console.log(user,"this is user");
+type Props = {
+  prevForm: ()=>void
+  nextForm: () => void;
+  handlefieldChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>)=>void;
+  handleSelectChange: (value:string,name:string)=>void;
+  handleSubmit:(e: React.MouseEvent<HTMLButtonElement>)=>void
+}
+
+const Form2 = ({...Props}:Props) => {
+
   return (
     // </div>
     (<div>
@@ -33,92 +30,77 @@ const Form2 = ({...Props}:Props) => {
       <div className='grid grid-cols-2 gap-12'>
       <div className='flex flex-col gap-2'>
         <label className='lable'>Event Name <span className='text-[#e60000]'>*</span></label>
-        <Input className='dropdown' placeholder='Type Here'></Input>
+        <Input className='dropdown' placeholder='Type Here'
+        name='event_name'
+        onChange={(e)=>Props.handlefieldChange(e)}
+        ></Input>
 
       </div>
       <div className='flex flex-col gap-2'>
         <label className='lable'>Event Venue<span className='text-[#e60000]'>*</span></label>
-        <Input className='dropdown' placeholder='Type Here'></Input>
+        <Input className='dropdown' placeholder='Type Here'
+        name={"event_venue"}
+        onChange={(e)=>Props.handlefieldChange(e)}
+        ></Input>
 
       </div>
       <div className='flex flex-col gap-2'>
         <label className='lable'>Event Start Date<span className='text-[#e60000]'>*</span></label>
-        <input type='date' className='dropdown h-10 rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm'></input>
+        <input type='date' className='dropdown h-10 rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm'
+        name='event_start_date'
+        onChange={(e)=>Props.handlefieldChange(e)}
+        ></input>
 
       </div>
       <div className='flex flex-col gap-2'>
         <label className='lable'>Event End Date<span className='text-[#e60000]'>*</span></label>
-        <input type='date' className=' dropdown h-10 rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm'></input>
+        <input type='date' className=' dropdown h-10 rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm'
+        name='event_end_date'
+        onChange={(e)=>Props.handlefieldChange(e)}
+        ></input>
       </div>
       <div className='flex flex-col gap-2'>
         <label className='lable'>engagement of any government hCP’s?<span className='text-[#e60000]'>*</span></label>
-        <Select>
+        <Select
+        onValueChange={(value)=>Props.handleSelectChange(value,"any_govt_hcp")}
+        >
 <SelectTrigger className="dropdown">
 <SelectValue placeholder="Theme" />
 </SelectTrigger>
 <SelectContent>
-<SelectItem value="light">Light</SelectItem>
-<SelectItem value="dark">Dark</SelectItem>
-<SelectItem value="system">System</SelectItem>
+<SelectItem value="yes">Yes</SelectItem>
+<SelectItem value="no">No</SelectItem>
 </SelectContent>
 </Select>
 
       </div>
       <div className='flex flex-col gap-2'>
         <label className='lable'>Total number of government hCP’s<span className='text-[#e60000]'>*</span></label>
-        <Select>
-<SelectTrigger className="text-black shadow">
-<SelectValue placeholder="Theme" />
-</SelectTrigger>
-<SelectContent>
-<SelectItem value="light">Light</SelectItem>
-<SelectItem value="dark">Dark</SelectItem>
-<SelectItem value="system">System</SelectItem>
-</SelectContent>
-</Select>
-
-      </div>
-      <div className='flex flex-col gap-2'>
-        <label className='lable'>Therapy<span className='text-[#e60000]'>*</span></label>
-        <Select>
-<SelectTrigger className="dropdown">
-<SelectValue placeholder="Theme" />
-</SelectTrigger>
-<SelectContent>
-<SelectItem value="light">Light</SelectItem>
-<SelectItem value="dark">Dark</SelectItem>
-<SelectItem value="system">System</SelectItem>
-</SelectContent>
-</Select>
-
-      </div>
-      <div className='flex flex-col gap-2'>
-        <label className='lable'>Reporting Head<span className='text-[#e60000]'>*</span></label>
-        <Select>
-<SelectTrigger className="text-black shadow">
-<SelectValue placeholder="Theme" />
-</SelectTrigger>
-<SelectContent>
-<SelectItem value="light">Light</SelectItem>
-<SelectItem value="dark">Dark</SelectItem>
-<SelectItem value="system">System</SelectItem>
-</SelectContent>
-</Select>
-
+        <Input className='dropdown' placeholder='Type Here'
+        name='no_of_hcp'
+        type='number'
+        onChange={(e)=>Props.handlefieldChange(e)}
+        ></Input>
       </div>
       <div className='flex flex-col gap-2'>
         <label className='lable'>Comments<span className='text-[#e60000]'>*</span></label>
-        <Textarea className='text-black shadow-md' placeholder='Type Here'/>
+        <Textarea className='text-black shadow-md' placeholder='Type Here'
+        name='comments'
+        onChange={(e)=>{Props.handlefieldChange(e)}}
+        />
       </div>
       <div className='flex flex-col gap-2'>
         <label className='lable'>BU Rational<span className='text-[#e60000]'>*</span></label>
-        <Textarea className='text-black shadow-md' placeholder='Type Here'/>
+        <Textarea className='text-black shadow-md' placeholder='Type Here'
+        name='bu_rational'
+        onChange={(e)=>{Props.handlefieldChange(e)}}
+        />
       </div>
       </div>
       <div className='flex justify-end pt-5 gap-4'>
         <Button className='bg-white text-black border text-md font-normal'> Save as Draft</Button>
         <Button className='bg-white text-black border text-md font-normal' onClick={Props.prevForm}>Back</Button>
-        <Button className='bg-[#4430bf] text-white text-md font-normal border'onClick={Props.nextForm}>Next</Button>
+        <Button className='bg-[#4430bf] text-white text-md font-normal border'onClick={Props.handleSubmit}>Next</Button>
       </div>
     </div>)
   );

@@ -132,8 +132,6 @@ const Form1 = ({ ...Props }: Props) => {
       console.error("Error during login:", error);
     }
   };
-
-  console.log(subtypeActivity,"this is sub activity")
   return (
     // </div>
     <div>
@@ -213,7 +211,7 @@ const Form1 = ({ ...Props }: Props) => {
             onValueChange={(value)=>Props.handleSelectChange(value,"event_cost_center")}
             >
               <SelectTrigger className="dropdown">
-                <SelectValue placeholder="Theme" />
+                <SelectValue placeholder="Select" />
               </SelectTrigger>
               <SelectContent>
                 {eventCostCenter &&
@@ -249,14 +247,19 @@ const Form1 = ({ ...Props }: Props) => {
             <label className="lable">
               City<span className="text-[#e60000]">*</span>
             </label>
-            <Select onValueChange={(value)=>{handleBusinessUnitChange(value),Props.handleSelectChange(value,"company")}}>
+            <Select onValueChange={(value)=>{Props.handleSelectChange(value,"city")}}>
               <SelectTrigger className="dropdown">
-                <SelectValue placeholder="Theme" />
+                <SelectValue placeholder="Select" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="light">Light</SelectItem>
-                <SelectItem value="dark">Dark</SelectItem>
-                <SelectItem value="system">System</SelectItem>
+              {/* {Props.dropdownData &&
+                  Props.dropdownData.state.map((item, index) => {
+                    return (
+                      <SelectItem value={item.name}>
+                        {item.state}
+                      </SelectItem>
+                    );
+                  })} */}
               </SelectContent>
             </Select>
           </div>
@@ -264,14 +267,21 @@ const Form1 = ({ ...Props }: Props) => {
             <label className="lable">
               State<span className="text-[#e60000]">*</span>
             </label>
-            <Select>
+            <Select
+            onValueChange={(value)=>{Props.handleSelectChange(value,"state")}}
+            >
               <SelectTrigger className="dropdown">
-                <SelectValue placeholder="Theme" />
+                <SelectValue placeholder="Select" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="light">Light</SelectItem>
-                <SelectItem value="dark">Dark</SelectItem>
-                <SelectItem value="system">System</SelectItem>
+              {Props.dropdownData &&
+                  Props.dropdownData.state.map((item, index) => {
+                    return (
+                      <SelectItem value={item.name}>
+                        {item.state}
+                      </SelectItem>
+                    );
+                  })}
               </SelectContent>
             </Select>
           </div>
@@ -279,7 +289,9 @@ const Form1 = ({ ...Props }: Props) => {
             <label className="lable">
               Therapy<span className="text-[#e60000]">*</span>
             </label>
-            <Select>
+            <Select
+            onValueChange={(value)=>{Props.handleSelectChange(value,"therapy")}}
+            >
               <SelectTrigger className="dropdown">
                 <SelectValue placeholder="Select" />
               </SelectTrigger>
@@ -299,7 +311,7 @@ const Form1 = ({ ...Props }: Props) => {
             </label>
             <Select>
               <SelectTrigger className="dropdown">
-                <SelectValue placeholder="Theme" />
+                <SelectValue placeholder="Select" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="light">Light</SelectItem>
@@ -368,6 +380,8 @@ const Form1 = ({ ...Props }: Props) => {
             <Textarea
               className="text-black shadow-md"
               placeholder="Type Here"
+              name="faculty"
+              onChange={(e:React.ChangeEvent<HTMLTextAreaElement>)=>{Props.handlefieldChange(e)}}
             />
           </div>
           <div className="flex flex-col gap-2">
@@ -377,6 +391,8 @@ const Form1 = ({ ...Props }: Props) => {
             <Textarea
               className="text-black shadow-md"
               placeholder="Type Here"
+              name="participants"
+              onChange={(e:React.ChangeEvent<HTMLTextAreaElement>)=>{Props.handlefieldChange(e)}}
             />
           </div>
         </div>

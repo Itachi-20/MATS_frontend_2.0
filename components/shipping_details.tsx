@@ -30,16 +30,6 @@ const Basic_Details = ({ ...Props }: Props) => {
         </div>
       </div>
       <div className="grid md:grid-cols-3 md:gap-6">
-        <div className="flex flex-col md:gap-2">
-          <label className="text-black md:text-sm md:font-normal capitalize">
-            Requesting Hospital Name<span className="text-[#e60000]">*</span>
-          </label>
-          <Input
-            className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
-            placeholder="Type Here"
-            readOnly={true}
-          ></Input>
-        </div>
         <div className='flex flex-col gap-2'>
           <label className='lable'>Requesting Hospital Name <span className='text-[#e60000]'>*</span></label>
           <Input className='dropdown' placeholder='Type Here'></Input>

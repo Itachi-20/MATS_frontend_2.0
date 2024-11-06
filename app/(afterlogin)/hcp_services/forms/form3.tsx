@@ -250,7 +250,7 @@ const Form3 = ({...Props}:Props) => {
         </Table>
       </div>
       <h1 className="text-black text-2xl font-normal uppercase pb-8">
-        Compenstation Budget
+        Compensation Budget
       </h1>
       <div className="border border-[#848484] p-7 rounded-[50px] w-full mr-4  bg-white">
         <Table className={""}>
