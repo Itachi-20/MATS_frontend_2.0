@@ -39,14 +39,13 @@ type dropdownData = {
 type Compensation = {
   vendor_type: string;
   vendor_name: string;
-  amount: number;
+  est_amount: number;
   gst_included?: number;
-  gst: number;
 };
 
 type Logistics = {
   vendor_type: string;
-  amount: number;
+  est_amount: number;
 };
 
 type formData = {
@@ -90,24 +89,6 @@ const index = () => {
 
   const [logisticsBudget,setLogisticBudget] = useState<Logistics[]>([]);
 
-  const [logisticVendorType,setLogisticVendorType] = useState("");
-  const [logisticAmount,setLogisticAmount] = useState(0);
-
-  const handleLogisticsAdd = ()=>{
-    console.log("inside function")
-    if(logisticVendorType&&logisticAmount>0){
-      const newObject:Logistics = {vendor_type:logisticVendorType,amount:logisticAmount};
-      setLogisticBudget(prevRows=>{
-       const updatedRecords =  [...prevRows,newObject]
-       console.log(updatedRecords)
-       return updatedRecords
-      }
-      )
-      setLogisticVendorType('');
-      setLogisticAmount(0);
-    }
-  }
-
 
   let eventype:{[key:string]:string} = {} ;
   eventype["training_and_education"] = "Training and Education";
@@ -120,8 +101,7 @@ const index = () => {
     e.preventDefault();
 
     const updatedFormData = {
-
-       ...formdata, logistics: logisticsBudget 
+       ...formdata
     };
 
     if(refNo){
@@ -246,9 +226,8 @@ const index = () => {
           handlefieldChange = {handlefieldChange}
           handleSelectChange={handleSelectChange}
           handleSubmit={handleSubmit}
-          handleLogisticsAdd = {handleLogisticsAdd}
-          setLogisticVendorType = {setLogisticVendorType}
-          setLogisticAmount={setLogisticAmount}
+          setFormData = {setFormData}
+          logisticsBudget = {logisticsBudget}
           />:
           form == 4?
           <Form4

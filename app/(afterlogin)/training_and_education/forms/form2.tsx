@@ -68,8 +68,8 @@ const Form2 = ({...Props}:Props) => {
 <SelectValue placeholder="Theme" />
 </SelectTrigger>
 <SelectContent>
-<SelectItem value="yes">Yes</SelectItem>
-<SelectItem value="no">No</SelectItem>
+<SelectItem value="Yes">Yes</SelectItem>
+<SelectItem value="No">No</SelectItem>
 </SelectContent>
 </Select>
 
