@@ -23,23 +23,23 @@ const form4 = ({...Props}:Props) => {
 
   const FileUpload = async()=>{
     const formdata = new FormData();
-    if(file.length > 0){
-      return;
-    }
+    // if(file.length > 0){
+    //   return;
+    // }
     for (const key in file)
       {
          formdata.append("file", file[key]);
       }
     try {
       const response = await fetch(
-        `/api/training_and_education/fileUpload`,
+        `http://10.120.140.7:8000/api/method/matsapp.api.utils.uploads.upload_event_documents`,
         {
           method: "POST",
           headers: {
-            "Content-Type": "multipart/form-data",
+            //"Content-Type": "multipart/form-data",
           },
-          "credentials":'include',
-          body:formdata
+          body:formdata,
+          credentials:'include'
         }
       );
 
@@ -100,7 +100,7 @@ const form4 = ({...Props}:Props) => {
             </div>
             <Input type="file" onChange={(e)=>{handleFileUpload(e)}} id="file" className="hidden" multiple></Input>
           </label>
-          <Button className="bg-white text-black border text-md font-normal" onClick={()=>handleFileUpload}>
+          <Button className="bg-white text-black border text-md font-normal" onClick={()=>FileUpload()}>
           Add
         </Button>
         </div>
