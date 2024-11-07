@@ -1,33 +1,36 @@
 "use client"
-import React from 'react'
+import {ChangeEvent, useState} from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { useAppContext } from '@/app/context/module'
 
+type formData = {
+  user:string,
+  pwd:string
+}
 
 const Index = () => {
   const router = useRouter();
-  const {user,setUser} = useAppContext();
+  const [formData, setFormData] = useState<formData | {}>();
+
+  const handleOnChange = (e:ChangeEvent<HTMLInputElement>)=>{
+    const {name,value} = e.target;
+    setFormData(prev=>({...prev,[name]:value}))
+  }
+
+
   const handleSubmit = async () => {
-    setUser("atul");
-   // router.push("/training_and_education");
+    
     try {
-        const response = await fetch("/api/dropdown", {
-            method: "GET",
+        const response = await fetch("/api/sign-in", {
+            method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            // body: JSON.stringify({
-            //     email: "",
-            //     password: "",
-            // }),
+            body:JSON.stringify(formData),
+            credentials:"include"
         });
-
-            console.log(await response.json())
         if (response.ok) {
-            // Successful login, reload or redirect
-            // const currentUrl = window.location.href;
-            // window.location.href = currentUrl;
+          router.push("/dashboard");
         } else {
             console.log('Login failed');
         }
@@ -54,14 +57,18 @@ const Index = () => {
               className="h-16 bg-[#ebebf6] rounded-full mb-4 p-4"
               type="text"
               placeholder="User Id"
+              name="user"
               //size={50}
               required
+              onChange={(e)=>{handleOnChange(e)}}
             />
             <input
               className="h-16 bg-[#ebebf6] rounded-full p-4 my-5"
               type="password"
               placeholder="Password"
+              name="pwd"
              // size={50}
+             onChange={(e)=>{handleOnChange(e)}}
               required
             />
             <h1 className="text-sm text-[#4b4b4b] font-normal pl-2 hover:cursor-pointer">

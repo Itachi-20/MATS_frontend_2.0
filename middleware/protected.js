@@ -1,8 +1,7 @@
 // pages/protected.js
-import frappeAuthMiddleware from '/middleware/frappeAuthMiddleware';
-import { GetServerSidePropsContext } from 'next';
+import frappeAuthMiddleware from '../middleware/frappeAuthMiddleware';
 
-export async function getServerSideProps(context:GetServerSidePropsContext) {
+export async function getServerSideProps(context) {
     const { req, res } = context;
 
     // Call the middleware to check authentication
@@ -23,9 +22,7 @@ export async function getServerSideProps(context:GetServerSidePropsContext) {
         props: { user: req.user },
     };
 }
-type Props = {
-    user:string
-}
-export default function ProtectedPage({ ...Props }:Props) {
-    return <div>Welcome {Props.user}</div>;
+
+export default function ProtectedPage({ user }) {
+    return <div>Welcome {user}</div>;
 }

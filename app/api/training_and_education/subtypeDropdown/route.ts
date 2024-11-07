@@ -4,7 +4,7 @@ export async function POST(req: Request) {
     try {
         const body = await req.json()
 
-        const response = await fetch(`http://10.120.140.7:8000/api/method/matsapp.api.event.event.data_based_on_budget_type?budget=${body.budget}`, {
+        const response = await fetch(`${process.env.FRAPPE_URL}/api/method/matsapp.api.event.event.data_based_on_budget_type?budget=${body.budget}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

@@ -1,12 +1,4 @@
-import React from 'react'
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-  } from "@/components/ui/select";
-  import { Textarea } from "@/components/ui/textarea";
+import React, { useState } from 'react'
   import { Button } from "@/components/ui/button";
   import {
     Table,
@@ -23,6 +15,47 @@ import {
     prevForm: ()=>void
 }
 const form4 = ({...Props}:Props) => {
+  const [file,setFile] = useState<FileList | null>();
+  const handleFileUpload = (e:React.ChangeEvent<HTMLInputElement>)=>{
+    const files = (e.target as HTMLInputElement).files;
+    setFile(files);
+  }
+
+  const FileUpload = async()=>{
+    const formdata = new FormData();
+    if(file.length > 0){
+      return;
+    }
+    for (const key in file)
+      {
+         formdata.append("file", file[key]);
+      }
+    try {
+      const response = await fetch(
+        `/api/training_and_education/fileUpload`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          "credentials":'include',
+          body:formdata
+        }
+      );
+
+      
+      if (response.ok) {
+        const data = await response.json();
+       
+      } else {
+        console.log("Login failed");
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
+    }
+  }
+
+  console.log(file,"this is files");
   return (
     // </div>
     (<div>
@@ -65,8 +98,11 @@ const form4 = ({...Props}:Props) => {
               </svg>
               <h1 className="mt-[2px]">{"Upload File"}</h1>
             </div>
-            <Input type="file" id="file" className="hidden"></Input>
+            <Input type="file" onChange={(e)=>{handleFileUpload(e)}} id="file" className="hidden" multiple></Input>
           </label>
+          <Button className="bg-white text-black border text-md font-normal" onClick={()=>handleFileUpload}>
+          Add
+        </Button>
         </div>
       </div>
       <div className="border border-[#848484] p-4 rounded-2xl w-full grid grid-cols-2 gap-4 bg-white">

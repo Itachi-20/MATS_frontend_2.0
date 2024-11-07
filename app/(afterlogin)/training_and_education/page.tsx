@@ -82,7 +82,7 @@ type formData = {
 
 const index = () => {
   const pathname = usePathname();
-  const [form,setForm] = useState(3);
+  const [form,setForm] = useState(4);
   const [addVendor,setAddVendor] = useState(false);
   const [dropdownData,setDropdownData] = useState<dropdownData | null>(null);
   const [refNo,setRefNo] = useState<string | null>(localStorage.getItem("refno")?localStorage.getItem("refno"):"");
