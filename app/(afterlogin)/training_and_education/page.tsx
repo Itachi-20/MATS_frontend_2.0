@@ -78,13 +78,26 @@ type formData = {
 };
 
 
+type activityDropdown = {
+  activity:{
+    name:string,
+    activity_name:string
+  }[],
+  document:{
+    name:string,
+    activity_type:string,
+    document_name:string
+  }[]
+}
+
 
 
 const index = () => {
   const pathname = usePathname();
-  const [form,setForm] = useState(4);
+  const [form,setForm] = useState(1);
   const [addVendor,setAddVendor] = useState(false);
   const [dropdownData,setDropdownData] = useState<dropdownData | null>(null);
+  const [activityDropdown ,setActivityDropdown] = useState<activityDropdown | null>(null);
   const [refNo,setRefNo] = useState<string | null>(localStorage.getItem("refno")?localStorage.getItem("refno"):"");
 
   const [logisticsBudget,setLogisticBudget] = useState<Logistics[]>([]);
@@ -185,8 +198,34 @@ const index = () => {
      }
  };
 
+ const activityList = async () => {
+  try {
+      const response = await fetch("/api/training_and_education/activityList", {
+          method: "GET",
+          headers: {
+              "Content-Type": "application/json",
+          },
+          credentials:'include'
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setActivityDropdown(data.data);
+        console.log(data,"activity list")
+      } else {
+          console.log('Login failed');
+      }
+  } catch (error) {
+      console.error("Error during login:", error);
+  }
+};
+
   useEffect(()=>{
     dropdown();
+  },[])
+
+  useEffect(()=>{
+    activityList();
   },[])
   console.log(formdata,"this is form data");
   return (
@@ -233,6 +272,7 @@ const index = () => {
           <Form4
           nextForm = {nextForm}
           prevForm={prevForm}
+          activityDropdown={activityDropdown}
           />:
           form == 5?
           <Preview_Form

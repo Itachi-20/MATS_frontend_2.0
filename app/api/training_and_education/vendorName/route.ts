@@ -9,7 +9,7 @@ export async function GET(req: Request) {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Cookie':JSON.stringify(cookie),
+                'Cookie':`${cookie}`,
             },
         });
         const Response = await response.json();

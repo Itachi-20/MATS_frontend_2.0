@@ -8,7 +8,7 @@ export async function POST(req: Request) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Cookie':JSON.stringify(cookie),
+                'Cookie':cookie as string,
             },
             body:JSON.stringify(body)
             

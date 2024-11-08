@@ -1,3 +1,4 @@
+"use client"
 import React from "react";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
@@ -11,8 +12,37 @@ import TotalExpense from "@/components/total_Expense"
 import Documents from "@/components/documents"
 
 const Index = () => {
+  const handleApprove = async()=>{
+      try {
+        const response = await fetch(
+          "/api/eventRequestApprove",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials:'include',
+            body:JSON.stringify({
+              name:"DOM-00041",
+              "remark": "Test Approve Pre Activity",
+              "action":"Approved"
+            })
+          }
+        );
+  
+        const data = await response.json();
+  
+        if (response.ok) {
+        } else {
+          console.log("Login failed");
+        }
+      } catch (error) {
+        console.error("Error during login:", error);
+      }
+  };
   return (
-    
+
+
         <div className="md:px-7 md:pb-7 md:pt-4 w-full relative z-20 text-black">
           <div className="pb-5">
             <div className="flex justify-between">
@@ -34,13 +64,13 @@ const Index = () => {
                 </div>
               </div>
               <div className="flex gap-4 text-white items-center">
-              <Button className="bg-[#5dbe74] hover:bg-[#5dbe74] px-6">Approve</Button>
+              <Button className="bg-[#5dbe74] hover:bg-[#5dbe74] px-6" onClick={()=>handleApprove()}>Approve</Button>
               <Button className="bg-[#ff5757] hover:bg-[#ff5757] px-6">Reject</Button>
               <Button className="bg-[#4430bf] hover:bg-[#4430bf] px-6">Send Back</Button>
               </div>
             </div>
           </div>
-        <BasicDetails/>
+        {/* <BasicDetails/>
 
         <EventDetails/>
 
@@ -48,7 +78,7 @@ const Index = () => {
 
         <TotalExpense/>
             
-        <Documents/>
+        <Documents/> */}
         
             
 
