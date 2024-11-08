@@ -137,7 +137,7 @@ const Index = () => {
             
               <div className="flex justify-end lg:gap-5 sm:gap-[10px] gap-[10px]">
                 <Select>
-                  <SelectTrigger className="text-black w-34 shadow focus-visible:ring-transparent lg:text-sm lg:rounded-[25px] lg:gap-4 sm:rounded-[50px] rounded-[50px] sm:text-[9px] sm:gap-[10px] gap-[10px] sm:font-normal sm:leading-[10.97px]">
+                  <SelectTrigger className="text-black w-34 shadow focus-visible:ring-transparent lg:text-sm lg:rounded-[25px] lg:gap-4 sm:rounded-[50px] rounded-[50px] sm:text-[9px] sm:gap-[10px] gap-[9px] text-[9px] sm:font-normal sm:leading-[10.97px]">
                     <SelectValue placeholder="Theme" />
                   </SelectTrigger>
                   <SelectContent>
@@ -147,7 +147,7 @@ const Index = () => {
                   </SelectContent>
                 </Select>
                 <Select>
-                  <SelectTrigger className="text-black w-34 shadow focus-visible:ring-transparent lg:text-sm lg:rounded-[25px] lg:gap-4 sm:rounded-[50px] rounded-[50px] sm:text-[9px] sm:gap-[10px] gap-[10px] sm:font-normal sm:leading-[10.97px]">
+                  <SelectTrigger className="text-black w-34 shadow focus-visible:ring-transparent lg:text-sm lg:rounded-[25px] lg:gap-4 sm:rounded-[50px] rounded-[50px] sm:text-[9px] sm:gap-[10px] gap-[9px] text-[9px] sm:font-normal sm:leading-[10.97px]">
                     <SelectValue placeholder="Theme" />
                   </SelectTrigger>
                   <SelectContent>
@@ -156,7 +156,7 @@ const Index = () => {
                     <SelectItem value="system">System</SelectItem>
                   </SelectContent>
                 </Select>
-                <Button className="text-black text-md font-normal bg-white hover:bg-white border lg:px-8 lg:py-5 sm:px-[18px] sm:py-[10px] shadow lg:text-sm rounded-[50px] sm:text-[9px] sm:font-normal sm:leading-normal font-['Montserrat'] text-[9px]">
+                <Button className="text-black text-md font-normal bg-white hover:bg-white border lg:px-8 lg:py-4 sm:px-[20px] sm:py-[10px] px-[20px] py-[8px] shadow lg:text-sm rounded-[50px] sm:text-[9px] sm:font-normal sm:leading-normal font-['Montserrat'] text-[9px]">
                   Back
                 </Button>
                 <div className="hidden lg:block">
@@ -204,7 +204,7 @@ const Index = () => {
                 <TableRow className={"text-nowrap rounded-r-2xl text-[#000000]"}>
                   <TableHead
                     className={
-                      "text-center rounded-l-2xl  lg:text-[15px] sm:text-[12px] font-normal font-['Montserrat'] leading-normal"
+                      "text-center rounded-l-2xl lg:text-[15px] sm:text-[12px] text-[11px] font-normal font-['Montserrat'] leading-normal"
                     }
                   >
                     Request No.
@@ -212,7 +212,7 @@ const Index = () => {
 
                   <TableHead
                     className={
-                      "text-center lg:text-[15px] sm:text-[12px] font-normal font-['Montserrat'] leading-normal"
+                      "text-center lg:text-[15px] sm:text-[12px] text-[11px] font-normal font-['Montserrat'] leading-normal"
                     }
                   >
                     Event Name
@@ -220,7 +220,7 @@ const Index = () => {
 
                   <TableHead
                     className={
-                      "text-center lg:text-[15px] sm:text-[12px] font-normal font-['Montserrat'] leading-normal"
+                      "text-center lg:text-[15px] sm:text-[12px] text-[11px] font-normal font-['Montserrat'] leading-normal"
                     }
                   >
                     Event Type
@@ -228,7 +228,7 @@ const Index = () => {
 
                   <TableHead
                     className={
-                      "text-center lg:text-[15px] sm:text-[12px] font-normal font-['Montserrat'] leading-normal"
+                      "text-center lg:text-[15px] sm:text-[12px] text-[11px] font-normal font-['Montserrat'] leading-normal"
                     }
                   >
                     Event Date
@@ -236,7 +236,7 @@ const Index = () => {
 
                   <TableHead
                     className={
-                      "text-center  lg:text-[15px] sm:text-[12px] font-normal font-['Montserrat'] leading-normal"
+                      "text-center  lg:text-[15px] sm:text-[12px] text-[11px] font-normal font-['Montserrat'] leading-normal"
                     }
                   >
                     Total Expense
@@ -244,7 +244,7 @@ const Index = () => {
 
                   <TableHead
                     className={
-                      "text-center  lg:text-[15px] sm:text-[12px] font-normal font-['Montserrat'] leading-normal"
+                      "text-center  lg:text-[15px] sm:text-[12px] text-[11px] font-normal font-['Montserrat'] leading-normal"
                     }
                   >
                     Event Requestor
@@ -252,7 +252,7 @@ const Index = () => {
 
                   <TableHead
                     className={
-                      "text-center  lg:text-[15px] sm:text-[12px] font-normal font-['Montserrat'] leading-normal"
+                      "text-center  lg:text-[15px] sm:text-[12px] text-[11px] font-normal font-['Montserrat'] leading-normal"
                     }
                   >
                     Level 1
@@ -260,7 +260,7 @@ const Index = () => {
 
                   <TableHead
                     className={
-                      "text-center  lg:text-[15px] sm:text-[12px] font-normal font-['Montserrat'] leading-normal"
+                      "text-center  lg:text-[15px] sm:text-[12px] text-[11px] font-normal font-['Montserrat'] leading-normal"
                     }
                   >
                     Level 2
@@ -268,7 +268,7 @@ const Index = () => {
 
                   <TableHead
                     className={
-                      "text-center  lg:text-[15px] sm:text-[12px] font-normal font-['Montserrat'] leading-normal]"
+                      "text-center  lg:text-[15px] sm:text-[12px] text-[11px] font-normal font-['Montserrat'] leading-normal]"
                     }
                   >
                     Level 3
@@ -276,7 +276,7 @@ const Index = () => {
 
                   <TableHead
                     className={
-                      "text-center  lg:text-[15px] sm:text-[12px] font-normal font-['Montserrat'] leading-normal"
+                      "text-center  lg:text-[15px] sm:text-[12px] text-[11px] font-normal font-['Montserrat'] leading-normal"
                     }
                   >
                     Level 4
@@ -284,7 +284,7 @@ const Index = () => {
 
                   <TableHead
                     className={
-                      "text-center  lg:text-[15px] sm:text-[12px] font-normal font-['Montserrat'] leading-normal"
+                      "text-center  lg:text-[15px] sm:text-[12px] text-[11px] font-normal font-['Montserrat'] leading-normal"
                     }
                   >
                     Level 5
@@ -292,7 +292,7 @@ const Index = () => {
 
                   <TableHead
                     className={
-                      "text-center  lg:text-[15px] sm:text-[12px] font-normal font-['Montserrat'] leading-normal"
+                      "text-center  lg:text-[15px] sm:text-[12px] text-[11px] font-normal font-['Montserrat'] leading-normal"
                     }
                   >
                     Level 6
@@ -311,7 +311,7 @@ const Index = () => {
                   {events &&
                     events.map((data, index) => {
                       return (
-                        <TableRow key={index} className="text-center text-[] text-nowrap lg:text-[16px] sm:text-[10px] font-light leading-normal font-['Poppins']">
+                        <TableRow key={index} className="text-center text-nowrap lg:text-[16px] sm:text-[10px] text-[10px] font-light leading-normal font-['Poppins']">
                           <TableCell>{data.request_number}</TableCell>
                           <TableCell>{data.event_type}</TableCell>
                           <TableCell>{data.event_name}</TableCell>
@@ -443,9 +443,9 @@ const Index = () => {
                           <TableCell className="sticky right-0 bg-[white] z-50">
                             <div>
                             {
-                              data.level_1 == "Approved"?<button className="border rounded-[50px] lg:px-[26px] lg:py-[6px] sm:px-[12px] sm:py-[3px] border-[#0e4154] text-[#0e4154] lg:text-[12px] sm:text-[7px] font-light leading-normal">view</button>
+                              data.level_1 == "Approved"?<button className="border rounded-[50px] lg:px-[26px] lg:py-[6px] sm:px-[12px] sm:py-[3px] px-[10px] py-[2px] border-[#0e4154] text-[#0e4154] lg:text-[12px] sm:text-[7px] text-[6px] font-light leading-normal">view</button>
                               :
-                              <button className="border rounded-[50px] lg:px-[14px] lg:py-[6px] sm:py-[3px] sm:px-[5px] border-[#5dbe74] text-[#5dbe74] lg:text-[12px] sm:text-[7px] font-light leading-normal">Approve</button>
+                              <button className="border rounded-[50px] lg:px-[14px] lg:py-[6px] sm:py-[3px] sm:px-[5px] px-[4px] py-[2px] border-[#5dbe74] text-[#5dbe74] lg:text-[12px] sm:text-[7px] text-[6px] font-light leading-normal">Approve</button>
                             }
                             </div>
                           </TableCell>

@@ -11,7 +11,7 @@ import LogisticBudget from "@/components/logistics_budget";
 import CompensationBudget from "@/components/compensation_budget";
 
 export default function EventListPage () {
-
+ 
   const router = useRouter();
 
   const handlClick = () => {

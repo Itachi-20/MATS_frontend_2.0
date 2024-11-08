@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import Image from "next/image";
+import DatePicker from "./date-picker"
 import { useRouter } from 'next/navigation';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -106,57 +107,69 @@ export default function EventList () {
       post_activity_status:"Not Uploaded"
     },
   ];
-
+ 
   return (
         <div className="p-7 w-full relative z-20 text-black">
-          <div className="flex justify-between pb-5 relative">           
-            <Input className="w-[40%] rounded-[50px] bg-[#ecf2ff] placeholder:text-black"  placeholder="Search" />
-            <Image src="svg/search.svg"  alt="search-icon" width={23} height={23} className="absolute right-[63%] top-[15%]"/>      
-            <div className="flex gap-5">
+          <div className="flex lg:justify-between flex-col-reverse lg:flex-row pb-5 gap-5 lg:gap-0">
+            <Input
+              className="lg:w-[40%] md:w-full sm:w-full rounded-[50px] bg-[#ecf2ff]"
+              placeholder="Search"
+            />
+            
+            <div className="flex justify-end lg:gap-5 sm:gap-[10px] gap-[8px] items-center">
               <Select>
-                <SelectTrigger className="text-black shadow focus-visible:ring-transparent rounded-[25px] gap-4 border border-slate-400 !important">
+                <SelectTrigger className="text-black w-34 shadow focus-visible:ring-transparent lg:text-sm lg:rounded-[25px] lg:gap-4 sm:rounded-[50px] rounded-[50px] sm:text-[9px] sm:gap-[10px]  gap-[9px] sm:font-normal sm:leading-[10.97px] text-[9px]">
                   <SelectValue placeholder="Export" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="pdf">Pdf</SelectItem>
-                  <SelectItem value="excel">Excel</SelectItem>
                   <SelectItem value="print">Print</SelectItem>
+                  <SelectItem value="excel">Excel</SelectItem>
                 </SelectContent>
               </Select>
               <Select>
-                <SelectTrigger className="text-black shadow focus-visible:ring-transparent rounded-[25px] gap-4 border border-slate-400 !important">
-                  <SelectValue placeholder="Filter" />
+                <SelectTrigger className="text-black w-34 shadow focus-visible:ring-transparent lg:text-sm lg:rounded-[25px] lg:gap-4 sm:rounded-[50px] rounded-[50px] sm:text-[9px] sm:gap-[10px]  gap-[9px] sm:font-normal sm:leading-[10.97px] text-[9px]">
+                  <SelectValue placeholder="Status" className="cursor-pointer"/>
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="light">Light</SelectItem>
-                  <SelectItem value="dark">Dark</SelectItem>
-                  <SelectItem value="system">System</SelectItem>
+                  <SelectItem value="all">All</SelectItem>
+                  <SelectItem value="awaitingApproval">Awaitting Approval</SelectItem>
+                  <SelectItem value="approved">Approved</SelectItem>
+                  <SelectItem value="approved">Draft</SelectItem>
+                  <SelectItem value="sendback">Sendback</SelectItem>
+                  <SelectItem value="executed">Executed</SelectItem>
+                  <SelectItem value="rejected">Rejected</SelectItem>
+                  <SelectItem value="cancelled">Cancelled</SelectItem>
+                  <SelectItem value="closed">Closed</SelectItem>
+                  <SelectItem value="postactivity">PostActivity Document Uploaded</SelectItem>
                 </SelectContent>
               </Select>
-              <Button className="text-black text-md font-normal bg-white hover:bg-white border rounded-[25px] px-8 py-5 shadow">
+              <DatePicker />
+              <Button className="text-black text-md font-normal bg-white hover:bg-white border lg:px-7 lg:py-4 sm:px-[20px] sm:py-[10px] shadow lg:text-sm rounded-[50px] sm:text-[9px] sm:font-normal sm:leading-normal font-['Montserrat'] text-[9px]">
                 Back
-              </Button>             
+              </Button>
             </div>
           </div>
+          
           <div className="border bg-white h-full p-4 rounded-[18px]">
             <Table>
               <TableHeader className={"bg-[#E0E9FF]"}>
                 <TableRow className={"text-nowrap rounded-r-2xl"}>
-                  <TableHead className={"text-center rounded-l-2xl text-[#625d5d] text-[15px] font-normal font-['Montserrat']"}>
+                  <TableHead className={"text-center rounded-l-2xl text-[#625d5d] lg:text-[15px] sm:text-[12px] text-[11px] font-normal font-['Montserrat']"}>
                    Request No.
                   </TableHead>
-                  <TableHead  className={ "text-center text-[#625d5d] text-[15px] font-normal font-['Montserrat']"} >
+                  <TableHead  className={ "text-center text-[#625d5d] lg:text-[15px] sm:text-[12px] text-[11px] font-normal font-['Montserrat']"} >
                     Event Name 
                   </TableHead>
-                  <TableHead className={"text-center text-[#625d5d] text-[15px] font-normal font-['Montserrat']" } >
+                  <TableHead className={"text-center text-[#625d5d] lg:text-[15px] sm:text-[12px] text-[11px] font-normal font-['Montserrat']" } >
                     Event Type
                   </TableHead>
-                  <TableHead className={"text-center text-[#625d5d] text-[15px] font-normal font-['Montserrat']"} >
+                  <TableHead className={"text-center text-[#625d5d] lg:text-[15px] sm:text-[12px] text-[11px] font-normal font-['Montserrat']"} >
                     Event Date
                   </TableHead>
                   <TableHead
                     className={
-                      "text-center text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                      "text-center text-[#625d5d] lg:text-[15px] sm:text-[12px] text-[11px] font-normal font-['Montserrat']"
                     }
                   >
                     Event End date
@@ -164,7 +177,7 @@ export default function EventList () {
 
                   <TableHead
                     className={
-                      "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                      "text-center  text-[#625d5d] lg:text-[15px] sm:text-[12px] text-[11px] font-normal font-['Montserrat']"
                     }
                   >
                     Event Requestor
@@ -172,7 +185,7 @@ export default function EventList () {
 
                   <TableHead
                     className={
-                      "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                      "text-center  text-[#625d5d] lg:text-[15px] sm:text-[12px] text-[11px] font-normal font-['Montserrat']"
                     }
                   >
                     Event Venue
@@ -180,21 +193,21 @@ export default function EventList () {
                  
                   <TableHead
                     className={
-                      "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                      "text-center  text-[#625d5d] lg:text-[15px] sm:text-[12px] text-[11px] font-normal font-['Montserrat']"
                     }
                   >
                     Advance 
                   </TableHead>
                   <TableHead
                     className={
-                      "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                      "text-center  text-[#625d5d] lg:text-[15px] sm:text-[12px] text-[11px] font-normal font-['Montserrat']"
                     }
                   >
                    Event Status
                   </TableHead>
                   <TableHead
                     className={
-                      "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                      "text-center  text-[#625d5d] lg:text-[15px] sm:text-[12px] text-[11px] font-normal font-['Montserrat']"
                     }
                   >
                     Post Activity Status
@@ -202,7 +215,7 @@ export default function EventList () {
                 
                   <TableHead
                     className={
-                      "text-center rounded-r-2xl text-[#625d5d] text-[15px] font-normal font-['Montserrat'] sticky right-0 z-50 bg-[#E0E9FF]"
+                      "text-center rounded-r-2xl text-[#625d5d] lg:text-[15px] sm:text-[12px] text-[11px] font-normal font-['Montserrat'] sticky right-0 bg-[#E0E9FF]"
                     }
                   >Action</TableHead>
                 </TableRow>
@@ -211,7 +224,7 @@ export default function EventList () {
                   {events &&
                     events.map((data, index) => {
                       return (
-                        <TableRow key={index} className="text-center text-nowrap">
+                        <TableRow key={index} className="text-center text-nowrap lg:text-[16px] sm:text-[10px] text-[10px] font-light leading-normal font-['Poppins']">
                           <TableCell>{data.request_number}</TableCell>
                           <TableCell>{data.event_type}</TableCell>
                           <TableCell>{data.event_name}</TableCell>
@@ -222,9 +235,9 @@ export default function EventList () {
                           <TableCell>{data.advance}</TableCell>
                           <TableCell >{data.event_status}</TableCell>
                           <TableCell >{data.post_activity_status}</TableCell>                        
-                          <TableCell className="sticky right-0 bg-[white] z-50 flex space-x-7 border-l border-slate-200 w-[100%]"> 
-                              <Image src={"/svg/view.svg"} width={17} height={20} alt="view-svg" className="cursor-pointer" onClick={handleClick} />                        
-                              <Image src={"/svg/delete.svg"} width={15} height={20} alt="delete-svg" className="cursor-pointer mr-1" />
+                          <TableCell className="sticky right-0 bg-[white] flex lg:space-x-7 sm:space-x-5 space-x-2 border-l items-center border-slate-200 "> 
+                              <Image src={"/svg/view.svg"} width={17} height={20} alt="view-svg" className="cursor-pointer" onClick={handleClick} className="lg:w-[17px] lg:h-[20px] sm:w-[15px] sm:h-[18px] w-[14px] h-[16px]" />                        
+                              <Image src={"/svg/delete.svg"} width={15} height={20} alt="delete-svg" className="cursor-pointer mr-1"  className="lg:w-[15px] lg:h-[20px] sm:w-[12px] sm:h-[17px] w-[8px] h-[13px]"/>
                           </TableCell>
                        </TableRow>
                       );
