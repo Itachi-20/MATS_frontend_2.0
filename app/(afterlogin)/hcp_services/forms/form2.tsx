@@ -75,10 +75,7 @@ const Form2 = ({ ...Props }: Props) => {
           <label className='lable'>BU Rational<span className='text-[#e60000]'>*</span></label>
           <Textarea className='text-black shadow-md' placeholder='Type Here' />
         </div>
-        <div className='flex flex-col gap-2'>
-          <label className='lable'>Comments<span className='text-[#e60000]'>*</span></label>
-          <Textarea className='text-black shadow-md' placeholder='Type Here' />
-        </div>
+        
       </div>
       <div className='flex justify-end pt-5 gap-4'>
         <Button className='bg-white text-black border text-md font-normal'> Save as Draft</Button>
