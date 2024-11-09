@@ -1,4 +1,5 @@
-import React from "react";
+"use client"
+import {useEffect} from "react";
 import Image from "next/image";
 import Sidebar from "@/components/Sidebar";
 import Navbar from "@/components/Navbar";
@@ -20,6 +21,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import { GetServerSideProps } from "next";
+import { table } from "console";
+import { NextRequest } from "next/server";
 
 type EventTable = {
   request_number: string;
@@ -37,94 +41,130 @@ type EventTable = {
 };
 
 type level = "Approved" | "Rejected" | "Pending";
-const Index = () => {
 
-  const events: EventTable[] = [
-    {
-      request_number: "REQ001",
-      event_name: "Annual Conference",
-      event_type: "Conference",
-      event_date: "2024-10-15",
-      total_expense: 15000,
-      event_requestor: "John Doe",
-      level_1: "Approved",
-      level_2: "Pending",
-      level_3: "Approved",
-      level_4: "Rejected",
-      level_5: "Approved",
-      level_6: "Pending"
-    },
-    {
-      request_number: "REQ002",
-      event_name: "Product Launch",
-      event_type: "Launch",
-      event_date: "2024-11-20",
-      total_expense: 25000,
-      event_requestor: "Jane Smith",
-      level_1: "Pending",
-      level_2: "Approved",
-      level_3: "Approved",
-      level_4: "Pending",
-      level_5: "Rejected",
-      level_6: "Approved"
-    },
-    {
-      request_number: "REQ003",
-      event_name: "Team Building Retreat",
-      event_type: "Workshop",
-      event_date: "2024-09-30",
-      total_expense: 8000,
-      event_requestor: "Mike Johnson",
-      level_1: "Approved",
-      level_2: "Approved",
-      level_3: "Pending",
-      level_4: "Approved",
-      level_5: "Rejected",
-      level_6: "Approved"
-    },
-    {
-      request_number: "REQ004",
-      event_name: "End of Year Gala",
-      event_type: "Gala",
-      event_date: "2024-12-31",
-      total_expense: 40000,
-      event_requestor: "Emily Davis",
-      level_1: "Rejected",
-      level_2: "Rejected",
-      level_3: "Pending",
-      level_4: "Approved",
-      level_5: "Approved",
-      level_6: "Pending"
-    },
-    {
-      request_number: "REQ005",
-      event_name: "Marketing Workshop",
-      event_type: "Workshop",
-      event_date: "2024-10-10",
-      total_expense: 5500,
-      event_requestor: "Alex Brown",
-      level_1: "Pending",
-      level_2: "Approved",
-      level_3: "Rejected",
-      level_4: "Approved",
-      level_5: "Pending",
-      level_6: "Approved"
-    },
-    {
-      request_number: "REQ006",
-      event_name: "Client Appreciation Event",
-      event_type: "Social",
-      event_date: "2024-09-15",
-      total_expense: 12000,
-      event_requestor: "Sara Miller",
-      level_1: "Approved",
-      level_2: "Approved",
-      level_3: "Approved",
-      level_4: "Pending",
-      level_5: "Rejected",
-      level_6: "Approved"
+ const fetchTable = async(cookie:string): Promise<any>=>{
+  try {
+    const tableData = await fetch(
+      `http://10.120.140.7:8000/api/method/matsapp.api.event.event.get_event_list?activity=Post Activity`,
+      {
+        method: "GET",
+        headers:{
+          "Content-Type": "application/json",
+          //"Cookie":cookie as string
+        },
+        credentials: "include"
+      }
+    );
+    console.log(tableData,"this data")
+    if(tableData.ok){
+      const data: EventTable[] = await tableData.json();
+      console.log(data,"this data")
+      return data
     }
-  ];
+    
+  } catch (error) {
+    console.log(error,"something went wrong");
+  }
+}
+
+
+
+const Index = async() => {
+
+  //const tableData = await fetchTable(document.cookie);
+
+  useEffect(() => {
+    // Access cookies on the client side
+    const cookie = document.cookie;
+    fetchTable(cookie);
+  }, []);
+
+  // const events: EventTable[] = [
+  //   {
+  //     request_number: "REQ001",
+  //     event_name: "Annual Conference",
+  //     event_type: "Conference",
+  //     event_date: "2024-10-15",
+  //     total_expense: 15000,
+  //     event_requestor: "John Doe",
+  //     level_1: "Approved",
+  //     level_2: "Pending",
+  //     level_3: "Approved",
+  //     level_4: "Rejected",
+  //     level_5: "Approved",
+  //     level_6: "Pending"
+  //   },
+  //   {
+  //     request_number: "REQ002",
+  //     event_name: "Product Launch",
+  //     event_type: "Launch",
+  //     event_date: "2024-11-20",
+  //     total_expense: 25000,
+  //     event_requestor: "Jane Smith",
+  //     level_1: "Pending",
+  //     level_2: "Approved",
+  //     level_3: "Approved",
+  //     level_4: "Pending",
+  //     level_5: "Rejected",
+  //     level_6: "Approved"
+  //   },
+  //   {
+  //     request_number: "REQ003",
+  //     event_name: "Team Building Retreat",
+  //     event_type: "Workshop",
+  //     event_date: "2024-09-30",
+  //     total_expense: 8000,
+  //     event_requestor: "Mike Johnson",
+  //     level_1: "Approved",
+  //     level_2: "Approved",
+  //     level_3: "Pending",
+  //     level_4: "Approved",
+  //     level_5: "Rejected",
+  //     level_6: "Approved"
+  //   },
+  //   {
+  //     request_number: "REQ004",
+  //     event_name: "End of Year Gala",
+  //     event_type: "Gala",
+  //     event_date: "2024-12-31",
+  //     total_expense: 40000,
+  //     event_requestor: "Emily Davis",
+  //     level_1: "Rejected",
+  //     level_2: "Rejected",
+  //     level_3: "Pending",
+  //     level_4: "Approved",
+  //     level_5: "Approved",
+  //     level_6: "Pending"
+  //   },
+  //   {
+  //     request_number: "REQ005",
+  //     event_name: "Marketing Workshop",
+  //     event_type: "Workshop",
+  //     event_date: "2024-10-10",
+  //     total_expense: 5500,
+  //     event_requestor: "Alex Brown",
+  //     level_1: "Pending",
+  //     level_2: "Approved",
+  //     level_3: "Rejected",
+  //     level_4: "Approved",
+  //     level_5: "Pending",
+  //     level_6: "Approved"
+  //   },
+  //   {
+  //     request_number: "REQ006",
+  //     event_name: "Client Appreciation Event",
+  //     event_type: "Social",
+  //     event_date: "2024-09-15",
+  //     total_expense: 12000,
+  //     event_requestor: "Sara Miller",
+  //     level_1: "Approved",
+  //     level_2: "Approved",
+  //     level_3: "Approved",
+  //     level_4: "Pending",
+  //     level_5: "Rejected",
+  //     level_6: "Approved"
+  //   }
+  // ];
 
   return (
     <>
@@ -294,9 +334,9 @@ const Index = () => {
                   >Action</TableHead>
                 </TableRow>
               </TableHeader>
-              <TableBody>
-                  {events &&
-                    events.map((data, index) => {
+              {/* <TableBody>
+                  {tableData &&
+                    tableData.map((data:any, index:number) => {
                       return (
                         <TableRow key={index} className="text-center text-nowrap">
                           <TableCell>{data.request_number}</TableCell>
@@ -439,7 +479,7 @@ const Index = () => {
                 </TableRow>
                       );
                     })}
-              </TableBody>
+              </TableBody> */}
             </Table>
           </div>
         </div>

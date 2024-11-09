@@ -117,6 +117,13 @@ const index = () => {
        ...formdata
     };
 
+    const eventype = pathname.split("_").map((item,index)=>
+      (
+        item.charAt(0).toUpperCase() + item.slice(1).toLowerCase()
+      )
+    ).join().replaceAll("_"," ")
+    
+    updatedFormData.event_type = eventype
     if(refNo){
       updatedFormData.name = refNo;
     }
