@@ -26,11 +26,6 @@ export default function DateRangePicker() {
         type="text"
         readOnly
         onClick={togglePicker}
-        // value={
-        //   startDate && endDate
-        //     ? `${formatDate(startDate)} - ${formatDate(endDate)}`
-        //     : 'Select Date Range'
-        // }
         placeholder="Date"
         className="lg:w-24 sm:w-20 w-[70px] rounded-[50px] lg:px-3 lg:py-2 sm:px-3 sm:py-1 px-3 py-1 lg:text-[14px] sm:text-[10px] text-[9px] border border-gray-300 shadow-sm font-normal focus:outline-none cursor-pointer placeholder:text-black "
       />
