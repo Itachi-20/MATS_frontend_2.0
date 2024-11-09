@@ -9,6 +9,7 @@ import CompensationBudget from "@/components/compensation_budget"
 import TotalExpense from "@/components/total_Expense"
 import Documents from "@/components/documents"
 import Add_vendor from "@/components/add_vendor";
+import Add_document from "@/components/add_document";
 type Props = {
     prevForm: ()=>void
 }
@@ -30,7 +31,7 @@ const Preview_Form = ({...Props}:Props) => {
         <EventDetails/>
 
         <LogisticsBudget/>
-        
+
         <CompensationBudget/>
 
         <TotalExpense/>
@@ -60,7 +61,7 @@ const Preview_Form = ({...Props}:Props) => {
 
           dialog && 
           <Add_vendor
-          isAddVendor={isAddVendor}
+            isAddVendor={isAddVendor} isAddDocument={isAddDocument}
           />
         }
       </>

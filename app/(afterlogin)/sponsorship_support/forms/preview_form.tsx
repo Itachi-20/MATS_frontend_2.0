@@ -1,15 +1,14 @@
 import React,{useState} from "react";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox"
-import BasicDetails from "@/components/basic_Details"
-import EventDetails from "@/components/event_Details"
-import TotalExpense from "@/components/total_Expense"
-import Documents from "@/components/documents"
+import { Checkbox } from "@/components/ui/checkbox";
+import BasicDetails from "@/components/basic_Details";
+import EventDetails from "@/components/event_Details";
+import TotalExpense from "@/components/total_Expense";
+import Documents from "@/components/documents";
 import Add_vendor from "@/components/add_vendor";
 import SponsorshipDetails from "@/components/sponsorship_details";
 import OtherDetails from "@/components/other_details";
-import LogisticBudget from "@/components/logistics_budget";
-import CompensationBudget from "@/components/compensation_budget";
+
 type Props = {
     prevForm: ()=>void
 }
@@ -33,8 +32,7 @@ const Preview_Form = ({...Props}:Props) => {
 
         <OtherDetails/>
         <EventDetails/>
-        <LogisticBudget/>
-        <CompensationBudget/>
+      
         <TotalExpense/>
             
         <Documents/>

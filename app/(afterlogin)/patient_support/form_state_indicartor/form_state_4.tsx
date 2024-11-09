@@ -3,7 +3,7 @@ import React from 'react'
 export default function formstateindicator() {
     return (
             // <div className="relative flex items-center justify-between *:font-medium *:text-[15px] *:leading-normal before:content-[''] before:absolute before:top-[70%] before:left-[4%] before:right-[4%] before:h-[7px] before:bg-[#f0f0f0] before:z-0">
-            <div className="relative flex items-center justify-between *:font-medium *:text-[15px] *:leading-normal">
+            <div className="relative flex items-center justify-between *:font-medium *:text-[15px] *:leading-normal before:content-['']">
                 <div className=" flex flex-col items-center text-[#4430BF]">
                     <label>
                         Basic Details

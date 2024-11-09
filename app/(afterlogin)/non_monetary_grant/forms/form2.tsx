@@ -28,11 +28,11 @@ const Form2 = ({ ...Props }: Props) => {
     // </div>
     (<div>
       <h1 className='text-black text-2xl font-normal uppercase pb-8'>
-        Organisation Details
+        Equipment Grant Details
       </h1>
       <div className='grid grid-cols-2 gap-12'>
         <div className='flex flex-col gap-2'>
-          <label className='lable'>Organization Name <span className='text-[#e60000]'>*</span></label>
+          <label className='lable'>Name of Organization<span className='text-[#e60000]'>*</span></label>
           <Input className='dropdown' placeholder='Type Here'></Input>
 
         </div>

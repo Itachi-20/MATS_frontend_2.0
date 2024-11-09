@@ -1,14 +1,15 @@
 "use client"
 import React, { useState } from 'react';
 import Form1 from "./forms/form1";
-import Form2 from "./forms/form2"
-import Form3 from "./forms/form3"
-import Form4 from "./forms/form4"
-import Preview_Form from './forms/preview_form'
+import Form2 from "./forms/form2";
+import Form3 from "./forms/form3";
+import Form4 from "./forms/form4";
+import Preview_Form from './forms/preview_form';
 import Addvendor from '@/components/add_vendor';
 import Adddocument from '@/components/add_document';
-import { AppWrapper } from '@/app/context/module'
-import { usePathname } from 'next/navigation'
+import { AppWrapper } from '@/app/context/module';
+import { usePathname } from 'next/navigation';
+
 const index = () => {
   const pathname = usePathname();
   const [form,setForm] = useState(1);

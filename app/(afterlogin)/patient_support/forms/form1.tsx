@@ -231,7 +231,7 @@ const Form1 = ({ ...Props }: Props) => {
                         Product Amount<span className="text-[#e60000]">*</span>
                     </label>
                     <Input
-                        className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
+                        className="text-black shadow md:rounded-xl md:py-5"
                         placeholder="Type Here"
                     ></Input>
                 </div>
@@ -240,7 +240,8 @@ const Form1 = ({ ...Props }: Props) => {
                         Quantity<span className="text-[#e60000]">*</span>
                     </label>
                     <Input
-                        className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
+                        type="number"
+                        className="text-black shadow md:rounded-xl md:py-5"
                         placeholder="Type Here"
                     ></Input>
                 </div>
