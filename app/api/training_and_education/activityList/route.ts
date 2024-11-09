@@ -1,10 +1,8 @@
-import { NextResponse, NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
 
-export async function POST(req: Request) {
+export async function GET(req: Request) {
     try {
-        const body = await req.json()
-
-        const response = await fetch(`${process.env.FRAPPE_URL}/api/method/matsapp.api.event.event.get_division_based_data?division=${body.division}`, {
+        const response = await fetch(`${process.env.FRAPPE_URL}/api/method/matsapp.api.event.event.get_document_and_activity_type`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

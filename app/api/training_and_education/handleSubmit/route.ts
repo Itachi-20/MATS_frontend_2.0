@@ -4,11 +4,11 @@ export async function POST(req: Request) {
     try {
         const body = await req.json();
         const cookie = req.headers.get("cookie");
-        const response = await fetch(`http://10.120.140.7:8000/api/method/matsapp.api.event.event.save_event_data`, {
+        const response = await fetch(`${process.env.FRAPPE_URL}/api/method/matsapp.api.event.event.save_event_data`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Cookie':JSON.stringify(cookie),
+                'Cookie':cookie as string,
             },
             body:JSON.stringify(body)
             

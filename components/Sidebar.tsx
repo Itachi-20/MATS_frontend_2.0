@@ -1,6 +1,8 @@
 'use client'
 import React from "react";
-import { useRouter } from "next/navigation";
+import Image from "next/image";
+import Link from "next/link";
+
 const Sidebar = () => {
   const moduleItems: string[] = [
     "Training & Education",
@@ -11,7 +13,9 @@ const Sidebar = () => {
     "Sponsorship Support",
     "Non Monetary Grant",
   ];
-  const router = useRouter();
+  const settingsItems: string[] = [
+    "Change Password",
+  ];
   return (
     <div  className="flex flex-col justify-between h-screen">
       <div className="pt-10 text-black flex  flex-col">
@@ -81,12 +85,12 @@ const Sidebar = () => {
                 </g>
               </svg>
 
-              <h1 className="pt-1">Modules</h1>
+            <h1 className="pt-1">Modules</h1>
             </div>
             <div id="element" className="z-10" >
             {/* <div className="hidden group-hover:block duration-100 delay-100 transition-all" id="element"> */}
               {moduleItems &&
-                moduleItems.map((data,index) => {
+                moduleItems.map((data,index) => { 
                   return (
                     <div key={index} className="child py-4 px-5 rounded-bl-xl text-black  border-l border-black ml-4 relative text-nowrap" onClick={()=>router.push(data.toLowerCase().replaceAll(" ", "_"))}>
                       <div className="absolute -bottom-5 hover:bg-white rounded-xl text-black hover:text-[#4430bf] text-[12px] px-1 py-2 cursor-pointer">
@@ -127,33 +131,30 @@ const Sidebar = () => {
             </svg>
             <h1 className="pt-1">Reports</h1>
           </div>
-          <div className=" flex py-2 gap-2 pl-2 hover:border hover:rounded-xl hover:bg-[#4430bf] hover:text-white hover:cursor-pointer">
-            <svg
-              width="32"
-              height="32"
-              viewBox="0 0 32 32"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <g id="mdi:cog-outline">
-                <path
-                  id="Vector"
-                  d="M13.3329 29.3334C12.9995 29.3334 12.7195 29.0934 12.6662 28.7734L12.1729 25.2401C11.3329 24.9067 10.6129 24.4534 9.91953 23.9201L6.59953 25.2668C6.3062 25.3734 5.9462 25.2667 5.7862 24.9734L3.11953 20.3601C3.03793 20.2227 3.00916 20.0603 3.0386 19.9032C3.06805 19.7462 3.1537 19.6052 3.27953 19.5067L6.09286 17.2934L5.99953 16.0001L6.09286 14.6667L3.27953 12.4934C3.1537 12.3949 3.06805 12.254 3.0386 12.0969C3.00916 11.9399 3.03793 11.7775 3.11953 11.6401L5.7862 7.02675C5.9462 6.73341 6.3062 6.61342 6.59953 6.73342L9.91953 8.06675C10.6129 7.54675 11.3329 7.09342 12.1729 6.76008L12.6662 3.22675C12.7195 2.90675 12.9995 2.66675 13.3329 2.66675H18.6662C18.9995 2.66675 19.2795 2.90675 19.3329 3.22675L19.8262 6.76008C20.6662 7.09342 21.3862 7.54675 22.0795 8.06675L25.3995 6.73342C25.6929 6.61342 26.0529 6.73341 26.2129 7.02675L28.8795 11.6401C29.0529 11.9334 28.9729 12.2934 28.7195 12.4934L25.9062 14.6667L25.9995 16.0001L25.9062 17.3334L28.7195 19.5067C28.9729 19.7067 29.0529 20.0667 28.8795 20.3601L26.2129 24.9734C26.0529 25.2667 25.6929 25.3868 25.3995 25.2668L22.0795 23.9334C21.3862 24.4534 20.6662 24.9067 19.8262 25.2401L19.3329 28.7734C19.2795 29.0934 18.9995 29.3334 18.6662 29.3334H13.3329ZM14.9995 5.33341L14.5062 8.81342C12.9062 9.14675 11.4929 10.0001 10.4662 11.1867L7.25286 9.80008L6.25286 11.5334L9.0662 13.6001C8.53286 15.1556 8.53286 16.8445 9.0662 18.4001L6.23953 20.4801L7.23953 22.2134L10.4795 20.8267C11.5062 22.0001 12.9062 22.8534 14.4929 23.1734L14.9862 26.6667H17.0129L17.5062 23.1867C19.0929 22.8534 20.4929 22.0001 21.5195 20.8267L24.7595 22.2134L25.7595 20.4801L22.9329 18.4134C23.4662 16.8534 23.4662 15.1601 22.9329 13.6001L25.7462 11.5334L24.7462 9.80008L21.5329 11.1867C20.4852 9.97385 19.064 9.14365 17.4929 8.82675L16.9995 5.33341H14.9995Z"
-                  fill="#636363"
-                />
-                <circle
-                  id="Ellipse 106"
-                  opacity="0.4"
-                  cx="16"
-                  cy="16"
-                  r="3.75"
-                  stroke="#636363"
-                  strokeWidth="2.5"
-                />
-              </g>
-            </svg>
-            <h1 className="pt-1">Settings</h1>
+          
+         {/* START SETTING MANU  */}
+          <div id="parent">
+            <div className="flex py-2 gap-2 pl-2 hover:border hover:rounded-xl hover:bg-[#4430bf] group hover:text-white hover:cursor-pointer">
+              <Image src="/svg/setting.svg" width={32}  height={32} alt="setting-icon" />
+              <h1 className="pt-1">Settings</h1>
+            </div>           
+            <div id="element" className="z-10" >
+                {settingsItems &&
+                  settingsItems.map((data,index) => { 
+                    return (
+                      <div key={index} className="child py-4 px-5 rounded-bl-xl text-black  border-l border-black ml-4 relative text-nowrap ">
+                       <Link href="/change_password">
+                          <div className="absolute -bottom-5 hover:bg-white rounded-xl text-black hover:text-[#4430bf] text-[12px] px-1 py-2 cursor-pointer">
+                          {data} 
+                          </div>
+                      </Link>
+                      </div>
+                    );
+                  })}
+            </div>           
           </div>
+          {/* END SETTING MANU  */}
+
         </div>
       </div>
       <div className="pb-24 flex gap-3 pl-3">

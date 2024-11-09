@@ -5,11 +5,11 @@ export async function GET(req: Request) {
         const url = new URL(req.url);
         const vendor_type = url.searchParams.get('vendor_type');
         const cookie = req.headers.get("cookie");
-        const response = await fetch(`http://10.120.140.7:8000/api/resource/Master Vendor?filters={"vendor_type":"${vendor_type}"}&fields=["name","vendor_name"]`, {
+        const response = await fetch(`${process.env.FRAPPE_URL}/api/resource/Master Vendor?filters={"vendor_type":"${vendor_type}"}&fields=["name","vendor_name"]`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Cookie':JSON.stringify(cookie),
+                'Cookie':`${cookie}`,
             },
         });
         const Response = await response.json();

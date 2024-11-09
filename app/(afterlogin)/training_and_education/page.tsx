@@ -40,14 +40,13 @@ type dropdownData = {
 type Compensation = {
   vendor_type: string;
   vendor_name: string;
-  amount: number;
+  est_amount: number;
   gst_included?: number;
-  gst: number;
 };
 
 type Logistics = {
   vendor_type: string;
-  amount: number;
+  est_amount: number;
 };
 
 type formData = {
@@ -80,14 +79,28 @@ type formData = {
 };
 
 
+type activityDropdown = {
+  activity:{
+    name:string,
+    activity_name:string
+  }[],
+  document:{
+    name:string,
+    activity_type:string,
+    document_name:string
+  }[]
+}
+
 
 
 const index = () => {
   const pathname = usePathname();
-  const [form, setForm] = useState(3);
-  const [addVendor, setAddVendor] = useState(false);
-  const [dropdownData, setDropdownData] = useState<dropdownData | null>(null);
-  const [refNo, setRefNo] = useState<string | null>(localStorage.getItem("refno") ? localStorage.getItem("refno") : "");
+
+  const [form,setForm] = useState(1);
+  const [addVendor,setAddVendor] = useState(false);
+  const [dropdownData,setDropdownData] = useState<dropdownData | null>(null);
+  const [activityDropdown ,setActivityDropdown] = useState<activityDropdown | null>(null);
+  const [refNo,setRefNo] = useState<string | null>(localStorage.getItem("refno")?localStorage.getItem("refno"):"");
 
   const [logisticsBudget, setLogisticBudget] = useState<Logistics[]>([]);
 
@@ -126,8 +139,8 @@ const index = () => {
     e.preventDefault();
 
     const updatedFormData = {
+        ...formdata, logistics: logisticsBudget
 
-      ...formdata, logistics: logisticsBudget
     };
 
     if (refNo) {
@@ -192,29 +205,57 @@ const index = () => {
 
 
   const dropdown = async () => {
-    try {
-      const response = await fetch("/api/training_and_education/dropdown", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
+
+     try {
+         const response = await fetch("/api/training_and_education/dropdown", {
+             method: "GET",
+             headers: {
+                 "Content-Type": "application/json",
+             },
+         });
+ 
+          const data = await response.json();
+          setDropdownData(data.data);
+         if (response.ok) {
+         } else {
+             console.log('Login failed');
+         }
+     } catch (error) {
+         console.error("Error during login:", error);
+     }
+ };
+
+ const activityList = async () => {
+  try {
+      const response = await fetch("/api/training_and_education/activityList", {
+          method: "GET",
+          headers: {
+              "Content-Type": "application/json",
+          },
+          credentials:'include'
       });
 
-      const data = await response.json();
-      setDropdownData(data.data);
       if (response.ok) {
+        const data = await response.json();
+        setActivityDropdown(data.data);
+        console.log(data,"activity list")
       } else {
-        console.log('Login failed');
+          console.log('Login failed');
       }
-    } catch (error) {
+  } catch (error) {
       console.error("Error during login:", error);
-    }
-  };
+  }
+};
 
-  useEffect(() => {
+  useEffect(()=>{
     dropdown();
-  }, [])
-  console.log(formdata, "this is form data");
+  },[])
+
+  useEffect(()=>{
+    activityList();
+  },[])
+  console.log(formdata,"this is form data");
+
   return (
     <>
       <AppWrapper>
@@ -269,10 +310,52 @@ const index = () => {
         </div>
 
         {
+
+          form == 1?
+          <Form1
+          nextForm = {nextForm}
+          dropdownData={dropdownData}
+          handlefieldChange = {handlefieldChange}
+          handleSelectChange={handleSelectChange}
+          handleSubmit={handleSubmit}
+          />:
+          form == 2?
+          <Form2
+          nextForm = {nextForm}
+          prevForm={prevForm}
+          handlefieldChange = {handlefieldChange}
+          handleSelectChange={handleSelectChange}
+          handleSubmit={handleSubmit}
+          />:
+          form == 3?
+          <Form3
+          nextForm = {nextForm}
+          prevForm={prevForm}
+          isAddVendor = {isAddVendor}
+          vendorType = {dropdownData && dropdownData.vendor_type}
+          currency = {dropdownData && dropdownData.currency}
+          handlefieldChange = {handlefieldChange}
+          handleSelectChange={handleSelectChange}
+          handleSubmit={handleSubmit}
+          setFormData = {setFormData}
+          logisticsBudget = {logisticsBudget}
+          />:
+          form == 4?
+          <Form4
+          nextForm = {nextForm}
+          prevForm={prevForm}
+          activityDropdown={activityDropdown}
+          />:
+          form == 5?
+          <Preview_Form
+          prevForm = {prevForm}
+          />:""
+}{
           addVendor &&
           <Addvendor
             isAddVendor={isAddVendor} isAddDocument={isAddDocument}
           />
+
         }
         {
           addDocument &&
