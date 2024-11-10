@@ -5,8 +5,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-      <div className="bg-white h-screen md:flex text-black md:justify-between">
-      <div className="w-[60%] text-white relative md:block hidden">
+      <div className="bg-white h-screen md:grid grid-cols-3 text-black">
+      <div className=" col-span-2 text-white relative md:block hidden">
         <Image
           className=""
           src={"/login_image.jpg"}
