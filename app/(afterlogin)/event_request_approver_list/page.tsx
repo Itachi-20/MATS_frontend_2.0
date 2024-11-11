@@ -1,9 +1,5 @@
-"use client"
-import {useEffect} from "react";
-import Image from "next/image";
-import Sidebar from "@/components/Sidebar";
-import Navbar from "@/components/Navbar";
 import { Input } from "@/components/ui/input";
+import { cookies } from 'next/headers'
 import {
   Select,
   SelectContent,
@@ -21,9 +17,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { GetServerSideProps } from "next";
-import { table } from "console";
-import { NextRequest } from "next/server";
 
 type EventTable = {
   request_number: string;
@@ -42,23 +35,22 @@ type EventTable = {
 
 type level = "Approved" | "Rejected" | "Pending";
 
- const fetchTable = async(cookie:string): Promise<any>=>{
+ const fetchTable = async()=>{
   try {
+    const cookie = await cookies();
+    const Cookie = cookie.toString();
     const tableData = await fetch(
       `http://10.120.140.7:8000/api/method/matsapp.api.event.event.get_event_list?activity=Post Activity`,
       {
         method: "GET",
         headers:{
           "Content-Type": "application/json",
-          //"Cookie":cookie as string
+          "Cookie":Cookie
         },
-        credentials: "include"
       }
     );
-    console.log(tableData,"this data")
     if(tableData.ok){
-      const data: EventTable[] = await tableData.json();
-      console.log(data,"this data")
+      const data = await tableData.json();
       return data
     }
     
@@ -71,14 +63,7 @@ type level = "Approved" | "Rejected" | "Pending";
 
 const Index = async() => {
 
-  //const tableData = await fetchTable(document.cookie);
-
-  useEffect(() => {
-    // Access cookies on the client side
-    const cookie = document.cookie;
-    fetchTable(cookie);
-  }, []);
-
+  const tableData = await fetchTable();
   // const events: EventTable[] = [
   //   {
   //     request_number: "REQ001",
@@ -237,9 +222,9 @@ const Index = async() => {
               </div>
             </div>
           </div>
-          <div className="border bg-white h-full p-4 rounded-[18px]">
-            <Table className={""}>
-              <TableHeader className={"bg-[#E0E9FF]"}>
+          <div className="border bg-white  p-4 rounded-[18px]">
+            <Table className="">
+              <TableHeader className={"bg-[#E0E9FF] "}>
                 <TableRow className={"text-nowrap rounded-r-2xl"}>
                   <TableHead
                     className={
@@ -334,15 +319,15 @@ const Index = async() => {
                   >Action</TableHead>
                 </TableRow>
               </TableHeader>
-              {/* <TableBody>
+              <TableBody className="">
                   {tableData &&
-                    tableData.map((data:any, index:number) => {
+                    tableData.message.map((data:any, index:number) => {
                       return (
                         <TableRow key={index} className="text-center text-nowrap">
-                          <TableCell>{data.request_number}</TableCell>
+                          <TableCell>{data.name}</TableCell>
                           <TableCell>{data.event_type}</TableCell>
                           <TableCell>{data.event_name}</TableCell>
-                          <TableCell>{data.event_date}</TableCell>
+                          <TableCell>{data.event_start_date}</TableCell>
                           <TableCell>{data.total_expense}</TableCell>
                           <TableCell>{data.event_requestor}</TableCell>
                           <TableCell>
@@ -353,13 +338,13 @@ const Index = async() => {
                               <span className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
                               A
                               </span>
-                              :data.level_1 == "Pending"?
-                              <span className="w-6 rounded-md bg-[#fae8a8] text-[#937818] text-[15px] font-semibold">
-                              W
-                              </span>
-                              :
+                              :data.level_1 == "Rejected"?
                               <span className="w-6 rounded-md bg-[#feadad] text-[#9c0000] text-[15px] font-semibold">
                               RJ
+                              </span>
+                              :
+                              <span className="w-6 rounded-md bg-[#fae8a8] text-[#937818] text-[15px] font-semibold">
+                              W
                               </span>
                               } 
 
@@ -479,7 +464,7 @@ const Index = async() => {
                 </TableRow>
                       );
                     })}
-              </TableBody> */}
+              </TableBody>
             </Table>
           </div>
         </div>
