@@ -96,36 +96,33 @@ type activityDropdown = {
 const index = () => {
   const pathname = usePathname();
 
-  const [form,setForm] = useState(1);
+  const [form,setForm] = useState(3);
   const [addVendor,setAddVendor] = useState(false);
   const [dropdownData,setDropdownData] = useState<dropdownData | null>(null);
   const [activityDropdown ,setActivityDropdown] = useState<activityDropdown | null>(null);
   const [refNo,setRefNo] = useState<string | null>(localStorage.getItem("refno")?localStorage.getItem("refno"):"");
 
   const [logisticsBudget, setLogisticBudget] = useState<Logistics[]>([]);
-
-  const [logisticVendorType, setLogisticVendorType] = useState("");
-  const [logisticAmount, setLogisticAmount] = useState(0);
   const [addDocument,setAddDocument] = useState(false);
 
   const isAddDocument = ()=>{
     setAddDocument(prev => !prev)
   }
 
-  const handleLogisticsAdd = () => {
-    console.log("inside function")
-    if (logisticVendorType && logisticAmount > 0) {
-      const newObject: Logistics = { vendor_type: logisticVendorType, amount: logisticAmount };
-      setLogisticBudget(prevRows => {
-        const updatedRecords = [...prevRows, newObject]
-        console.log(updatedRecords)
-        return updatedRecords
-      }
-      )
-      setLogisticVendorType('');
-      setLogisticAmount(0);
-    }
-  }
+  // const handleLogisticsAdd = () => {
+  //   console.log("inside function")
+  //   if (logisticVendorType && logisticAmount > 0) {
+  //     const newObject: Logistics = { vendor_type: logisticVendorType, amount: logisticAmount };
+  //     setLogisticBudget(prevRows => {
+  //       const updatedRecords = [...prevRows, newObject]
+  //       console.log(updatedRecords)
+  //       return updatedRecords
+  //     }
+  //     )
+  //     setLogisticVendorType('');
+  //     setLogisticAmount(0);
+  //   }
+  // }
 
 
   let eventype: { [key: string]: string } = {};
@@ -139,17 +136,17 @@ const index = () => {
     e.preventDefault();
 
     const updatedFormData = {
-        ...formdata, logistics: logisticsBudget
+        ...formdata
 
     };
 
-    const eventype = pathname.split("_").map((item,index)=>
-      (
-        item.charAt(0).toUpperCase() + item.slice(1).toLowerCase()
-      )
-    ).join().replaceAll("_"," ")
+    // const eventype = pathname.split("_").map((item,index)=>
+    //   (
+    //     item.charAt(0).toUpperCase() + item.slice(1).toLowerCase()
+    //   )
+    // ).join().replaceAll("_"," ").replaceAll(","," ").replace("/","")
     
-    updatedFormData.event_type = eventype
+    updatedFormData.event_type = "Training and Education"
     if(refNo){
       updatedFormData.name = refNo;
     }
@@ -292,22 +289,22 @@ const index = () => {
                 /> :
                 form == 3 ?
                   <Form3
-                    nextForm={nextForm}
-                    prevForm={prevForm}
-                    isAddVendor={isAddVendor}
-                    vendorType={dropdownData && dropdownData.vendor_type}
-                    currency={dropdownData && dropdownData.currency}
-                    handlefieldChange={handlefieldChange}
-                    handleSelectChange={handleSelectChange}
-                    handleSubmit={handleSubmit}
-                    handleLogisticsAdd={handleLogisticsAdd}
-                    setLogisticVendorType={setLogisticVendorType}
-                    setLogisticAmount={setLogisticAmount}
+                  nextForm = {nextForm}
+                  prevForm={prevForm}
+                  isAddVendor = {isAddVendor}
+                  vendorType = {dropdownData && dropdownData.vendor_type}
+                  currency = {dropdownData && dropdownData.currency}
+                  handlefieldChange = {handlefieldChange}
+                  handleSelectChange={handleSelectChange}
+                  handleSubmit={handleSubmit}
+                  setFormData = {setFormData}
+                  logisticsBudget = {logisticsBudget}
                   /> :
                   form == 4 ?
                     <Form4
-                      nextForm={nextForm}
-                      prevForm={prevForm}
+                    nextForm = {nextForm}
+                    prevForm={prevForm}
+                    activityDropdown={activityDropdown}
                     /> :
                     form == 5 ?
                       <Preview_Form
@@ -316,7 +313,7 @@ const index = () => {
           }
         </div>
 
-        {
+        {/* {
 
           form == 1?
           <Form1
@@ -361,6 +358,17 @@ const index = () => {
           addVendor &&
           <Addvendor
             isAddVendor={isAddVendor} isAddDocument={isAddDocument}
+          />
+
+        }
+        {
+          addDocument &&
+          <Adddocument isAddDocument={isAddDocument} />
+        } */}
+        {
+          addVendor &&
+          <Addvendor
+            isAddVendor={isAddVendor} //isAddDocument={isAddDocument}
           />
 
         }

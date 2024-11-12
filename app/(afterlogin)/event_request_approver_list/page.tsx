@@ -40,7 +40,7 @@ type level = "Approved" | "Rejected" | "Pending";
     const cookie = await cookies();
     const Cookie = cookie.toString();
     const tableData = await fetch(
-      `http://10.120.140.7:8000/api/method/matsapp.api.event.event.get_event_list?activity=Post Activity`,
+      `http://10.120.140.7:8000/api/method/matsapp.api.event.event.get_event_list?activity=Pre Activity`,
       {
         method: "GET",
         headers:{

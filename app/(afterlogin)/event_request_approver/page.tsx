@@ -23,7 +23,7 @@ const Index = () => {
             },
             credentials:'include',
             body:JSON.stringify({
-              name:"DOM-00041",
+              name:"DOM-00043",
               "remark": "Test Approve Pre Activity",
               "action":"Approved"
             })
@@ -70,7 +70,7 @@ const Index = () => {
               </div>
             </div>
           </div>
-        {/* <BasicDetails/>
+        <BasicDetails/>
 
         <EventDetails/>
 
@@ -78,7 +78,7 @@ const Index = () => {
 
         <TotalExpense/>
             
-        <Documents/> */}
+        <Documents/>
         
             
 
