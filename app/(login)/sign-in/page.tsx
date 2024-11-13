@@ -39,9 +39,9 @@ const Index = () => {
     }
 };
   return (
-    <div className="md:w-[40%] flex justify-center relative bg-[url('/login_image.jpg')] md:bg-[url('/')] h-screen">
+    <div className=" w-full relative bg-[url('/login_image.jpg')] md:bg-[url('/')] h-screen">
         <div className="flex flex-col justify-between">
-          <div className="md:pt-10 flex justify-end">
+          <div className="md:pt-10 flex justify-end pr-7">
             <Image
               src={"/login_logo.png"}
               alt=""
@@ -49,12 +49,12 @@ const Index = () => {
               height={100}
             ></Image>
           </div>
-          <div className="flex flex-col pb-5">
+          <div className="flex flex-col pb-5 justify-center items-center w-full px-20">
             <h1 className='text-center text-black text-[50px] font-medium pb-10'>
               MATS
             </h1>
             <input
-              className="h-16 bg-[#ebebf6] rounded-full mb-4 p-4"
+              className="h-16 bg-[#ebebf6] rounded-full mb-4 p-4 w-full"
               type="text"
               placeholder="User Id"
               name="user"
@@ -63,7 +63,7 @@ const Index = () => {
               onChange={(e)=>{handleOnChange(e)}}
             />
             <input
-              className="h-16 bg-[#ebebf6] rounded-full p-4 my-5"
+              className="h-16 bg-[#ebebf6] rounded-full p-4 my-5 w-full"
               type="password"
               placeholder="Password"
               name="pwd"
