@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/select";
 import Image from 'next/image'
 import { useState } from 'react'
-import UploadExport from '@/app/(afterlogin)/postexpense/upload/export_popup'
+import UploadExport from '@/app/(afterlogin)/post_expense/upload/export_popup'
 const page = () => {
     const [open, setOpen] = useState(false);
     const [exportopen, setExportOpen] = useState(false);

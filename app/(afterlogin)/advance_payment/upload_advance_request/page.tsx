@@ -13,15 +13,10 @@ import {
 } from "@/components/ui/select";
 import Image from 'next/image'
 import { useState } from 'react'
-import UploadExport from '@/app/(afterlogin)/postexpense/upload/export_popup'
 const page = () => {
     const [open, setOpen] = useState(false);
-    const [exportopen, setExportOpen] = useState(false);
     const handleUplaod = () => {
         setOpen(prevState => !prevState);
-    };
-    const handleExport = () => {
-        setExportOpen(prevState => !prevState);
     };
     const [fileName, setFileName] = useState();
     const handleFileChange: any = (e: any) => {
@@ -147,7 +142,6 @@ const page = () => {
                     <Button className='bg-[#4430BF] px-10'>Submit</Button>
                 </div>
             </div>
-            {exportopen && <UploadExport handleExport={handleExport} />}
         </>
     )
 }
