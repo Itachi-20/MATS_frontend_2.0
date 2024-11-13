@@ -1,8 +1,5 @@
 "use client";
 import React from "react";
-import {useEffect,useState} from "react"
-import Image from "next/image";
-import DatePicker from "./date-picker"
 import { useRouter } from 'next/navigation';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -10,10 +7,10 @@ import {Table, TableBody,TableCell,TableHead,TableHeader,TableRow,} from "@/comp
 import {Select,SelectContent,SelectItem,SelectTrigger,SelectValue,} from "@/components/ui/select";
 
 type EventTable = {
-  name: string;
+  request_number: string;
   event_name: string;
   event_type: string;
-  event_start_date: string;
+  event_date: string;
   event_end_date:string;
   event_requestor: string;
   event_venue:string;
@@ -22,51 +19,87 @@ type EventTable = {
   post_activity_status:string;
 };
 
-export default function EventList () {
-
+export default function ApprovalRequestPage () {
   const router = useRouter();
-  const handleClick = (refno:string) => {
-
-    //  yadi new tab mein open kerna hai tab isko use karenge 
-    // const url = "/event_list/${id}"
-    // window.open(url, '_blank')
-    // agar same tab mein open kerna hai  to isko use krenge 
-    router.push(`/event_list/${refno}`)
+  const handleClick = () => {
+    router.push("/approval_request/${request_no}")
   }
 
-  const [tableData,setTableData] = useState<EventTable[]>()
-
-  const fetchTableData = async()=>{
-    try {
-      const Data = await fetch(
-        `/api/eventList`,
-        {
-          method: "POST",
-          headers:{
-            "Content-Type": "application/json",
-          },
-          credentials:'include',
-          body:JSON.stringify({
-            activity:"Pre Activity"
-          })
-        }
-      );
-      if(Data.ok){
-        const data = await Data.json();
-        setTableData(data.message)
-      }
-      
-    } catch (error) {
-      console.log(error,"something went wrong");
-    }
-  }
-
-   useEffect(()=>{
-  fetchTableData();
-  },[])
-
-  console.log(tableData,"this is state data")
-
+  const events: EventTable[] = [
+    {
+      request_number: "REQ001",
+      event_name: "Annual Conference",
+      event_type: "Conference",
+      event_date: "2024-10-15",
+      event_end_date:"2024-11-20",
+      event_requestor: "John Doe",
+      event_venue:"Name 0001",
+      advance:"Request",
+      event_status:"Approved",
+      post_activity_status:"Not Uploaded"
+    },
+    {
+      request_number: "REQ002",
+      event_name: "Product Launch",
+      event_type: "Launch",
+      event_date: "2024-11-20",
+      event_end_date:"2024-11-20",
+      event_venue:"Name 0001",
+      event_requestor: "Jane Smith",
+      advance:"Request",
+      event_status:"Approved",
+      post_activity_status:"Not Uploaded"
+    },
+    {
+      request_number: "REQ003",
+      event_name: "Team Building Retreat",
+      event_type: "Workshop",
+      event_date: "2024-09-30",
+      event_end_date:"2024-11-20",
+      event_venue:"Name 0001",
+      event_requestor: "Mike Johnson",
+      advance:"Request",
+      event_status:"Approved",
+      post_activity_status:"Not Uploaded",
+    },
+    {
+      request_number: "REQ004",
+      event_name: "End of Year Gala",
+      event_type: "Gala",
+      event_date: "2024-12-31",
+      event_end_date:"2024-11-20",
+      event_venue:"Name 0001",
+      event_requestor: "Emily Davis",
+      advance:"Request",
+      post_activity_status:"Not Uploaded",
+      event_status:"Approved"
+    },
+    {
+      request_number: "REQ005",
+      event_name: "Marketing Workshop",
+      event_type: "Workshop",
+      event_date: "2024-10-10",
+      event_end_date:"2024-11-20",
+      event_venue:"Name 0001",
+      event_requestor: "Alex Brown",
+      advance:"Request",      
+      event_status:"Approved",
+      post_activity_status:"Not Uploaded"
+    },
+    {
+      request_number: "REQ006",
+      event_name: "Client Appreciation Event",
+      event_type: "Social",
+      event_date: "2024-09-15",
+      event_end_date:"2024-11-20",
+      event_venue:"Name 0001",
+      event_requestor: "Sara Miller",
+      advance:"Request",
+      event_status:"Approved",
+      post_activity_status:"Not Uploaded"
+    },
+  ];
+ 
   return (
         <div className="p-7 w-full relative z-20 text-black">
           <div className="flex lg:justify-between flex-col-reverse lg:flex-row pb-5 gap-5 lg:gap-0">
@@ -88,9 +121,9 @@ export default function EventList () {
               </Select>
               <Select>
                 <SelectTrigger className="text-black w-34 shadow focus-visible:ring-transparent lg:text-sm lg:rounded-[25px] lg:gap-4 sm:rounded-[50px] rounded-[50px] sm:text-[9px] sm:gap-[10px]  gap-[9px] sm:font-normal sm:leading-[10.97px] text-[9px]">
-                  <SelectValue placeholder="Status" className="cursor-pointer"/>
+                  <SelectValue placeholder="Filter" className="cursor-pointer"/>
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="w-52">
                   <SelectItem value="all">All</SelectItem>
                   <SelectItem value="awaitingApproval">Awaitting Approval</SelectItem>
                   <SelectItem value="approved">Approved</SelectItem>
@@ -103,7 +136,6 @@ export default function EventList () {
                   <SelectItem value="postactivity">PostActivity Document Uploaded</SelectItem>
                 </SelectContent>
               </Select>
-              <DatePicker />
               <Button className="text-black text-md font-normal bg-white hover:bg-white border lg:px-7 lg:py-4 sm:px-[20px] sm:py-[10px] shadow lg:text-sm rounded-[50px] sm:text-[9px] sm:font-normal sm:leading-normal font-['Montserrat'] text-[9px]">
                 Back
               </Button>
@@ -180,24 +212,23 @@ export default function EventList () {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                  {tableData &&
-                    tableData.map((data, index) => {
+                  {events &&
+                    events.map((data, index) => {
                       return (
-                        <TableRow key={index} className="text-center text-nowrap">
-                          <TableCell>{data.name}</TableCell>
+                        <TableRow key={index} className="text-center text-nowrap lg:text-[16px] sm:text-[10px] text-[10px] font-light leading-normal font-['Poppins']">
+                          <TableCell>{data.request_number}</TableCell>
                           <TableCell>{data.event_type}</TableCell>
                           <TableCell>{data.event_name}</TableCell>
-                          <TableCell>{data.event_start_date}</TableCell>
+                          <TableCell>{data.event_date}</TableCell>
                           <TableCell>{data.event_end_date}</TableCell>
                           <TableCell>{data.event_requestor}</TableCell>
                           <TableCell>{data.event_venue}</TableCell>
                           <TableCell>{data.advance}</TableCell>
                           <TableCell >{data.event_status}</TableCell>
-                          <TableCell >{data.post_activity_status}</TableCell>                        
-                          <TableCell className="sticky right-0 bg-[white] z-50 flex space-x-8 border-l border-slate-200 "> 
-                              <Image src={"/svg/view.svg"} width={17} height={20} alt="view-svg" className="cursor-pointer" onClick={()=>handleClick(data.name)} />                        
+                          <TableCell >{data.post_activity_status}</TableCell>      
+                          <TableCell className="sticky right-0 bg-[white] flex border-l items-center border-slate-200"> 
+                             <button className="rounded-[50px] lg:px-[14px] lg:py-[7px] sm:py-[3px] sm:px-[4px] px-[3px] py-[2px] border-[0.5px] border-[#0E4154] text-[#0E4154] lg:text-[12px] sm:text-[7px] text-[6px] font-light leading-normal" onClick={handleClick}>Take Action</button>
                           </TableCell>
-                          
                        </TableRow>
                       );
                     })}
@@ -207,3 +238,5 @@ export default function EventList () {
         </div>
   );
 };
+
+

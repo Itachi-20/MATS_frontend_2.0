@@ -17,7 +17,8 @@ interface AuditTrailProps {
     PageName: string;
     data: Data[];
 }
-const AuditTrail: React.FC<AuditTrailProps> = (props) => {
+
+const AuditTrail: React.FC<AuditTrailProps> = (props ) => {
 
     const PageName = props.PageName;
 
@@ -55,7 +56,7 @@ const AuditTrail: React.FC<AuditTrailProps> = (props) => {
         },
     ]
 
-    const data = props.data.length > 0 ? (
+    const data = props?.data?.length < 0  ? (
         props.data
     ) : (
         [
@@ -160,7 +161,7 @@ const AuditTrail: React.FC<AuditTrailProps> = (props) => {
             <div className="p-6 space-y-10">
                 <div>
                     {PageName === "eventListPage" ? (
-                        <div>
+                    <div>
                             <div className="flex justify-between">
                                 <h1 className=" md:text-[30px] md:font-normal capitalize md:pb-4 leading-[45px]">APPROVER HIERARCHY</h1>
                                 <div className="flex gap-4 bg-white">
@@ -192,7 +193,7 @@ const AuditTrail: React.FC<AuditTrailProps> = (props) => {
                                 </div>
                             </div>
                         </div>
-                    ) : (
+                 ) : ( 
                         <div className="flex justify-between pb-5 gap-40">
                             <div className="relative">
                                 <Input

@@ -234,14 +234,14 @@ useEffect(()=>{
                 </div>
               </div>
             <div className="flex border rounded-xl justify-between p-3 bg-white gap-4">
-              <div className="grid grid-cols-2 w-full gap-4">
+              <div className="grid grid-cols-3 w-full gap-4">
               <div className="col-span-1">
                 <h1 className="bg-[#ecf2ff] px-2 rounded-xl text-center">Request Number</h1>
                 <h1 className="text-center">{eventData?.name}</h1>
               </div>
               <div className="col-span-1 ">
                 <h1 className="bg-[#ecf2ff] px-2 rounded-xl text-center">Request Date</h1>
-                <h1 className="text-center">{eventData?.modified.substring(0,10)}</h1>
+                <h1 className="text-center">11/11/24</h1>
               </div>
               </div>
             </div>
