@@ -12,7 +12,7 @@ import { Textarea } from './ui/textarea';
 
 type Props = {
   isAddVendor: () => void
-  //isAddDocument: () => void
+  isAddDocument: () => void
 }
 
 const add_vendor = ({ ...Props }: Props) => {
@@ -92,7 +92,7 @@ const add_vendor = ({ ...Props }: Props) => {
               type="button"
               className="text-black shadow"
               placeholder="Type Here"
-              //onClick={Props.isAddDocument}
+              onClick={Props.isAddDocument}
             ></Input>
           </div>
           <div className="flex flex-col gap-2">
