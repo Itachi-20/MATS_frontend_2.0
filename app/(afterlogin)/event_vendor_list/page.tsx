@@ -16,11 +16,21 @@ import ViewDocument from '@/components/view_document';
 import Adddocument from '@/components/add_document';
 import { View } from 'lucide-react';
 
+type EventTable = {
+  vendor_type: string;
+  vendor_name: string;
+  vendor_code: string;
+  remark: string;
+  pan_number: number;
+  email: string;
+  contact: number;
+};
+
 const page = () => {
   const [viewVendor, setViewVendor] = useState(false);
   const [addDocument, setAddDocument] = useState(false);
   const [viewDocument, setViewDocument] = useState(false);
-  const [vendorData, setVendorData] = useState();
+  const [vendorData, setVendorData] = useState<EventTable | undefined>(undefined);
   
   const isViewVendor = () => {
     setViewVendor(prev => !prev)
@@ -67,11 +77,11 @@ const page = () => {
             </Button>
           </div>
         </div>
-        <Table isViewVendor={isViewVendor} />
+        <Table isViewVendor={isViewVendor} vendorData={setVendorData}/>
       </div>
       {
         viewVendor &&
-        <Viewvendor isViewVendor={isViewVendor} isAddDocument={isAddDocument} isViewDocument={isViewDocument} />
+        <Viewvendor isViewVendor={isViewVendor} isAddDocument={isAddDocument} isViewDocument={isViewDocument} vendorInfo = {vendorData}/>
       }
       {
         addDocument &&

@@ -20,7 +20,7 @@ type EventTable = {
 
 const events: EventTable[] = [
   {
-    vendor_type: "REQ001",
+    vendor_type: "Light",
     vendor_name: "Annual Conference",
     vendor_code: "Conference",
     remark: "2024-10-15",
@@ -29,7 +29,7 @@ const events: EventTable[] = [
     contact: 1234567890
   },
   {
-    vendor_type: "REQ002",
+    vendor_type: "Dark",
     vendor_name: "Product Launch",
     vendor_code: "Launch",
     remark: "2024-11-20",
@@ -38,7 +38,7 @@ const events: EventTable[] = [
     contact: 1234567890
   },
   {
-    vendor_type: "REQ003",
+    vendor_type: "System",
     vendor_name: "Team Building Retreat",
     vendor_code: "Workshop",
     remark: "2024-09-30",
@@ -48,7 +48,7 @@ const events: EventTable[] = [
 
   },
   {
-    vendor_type: "REQ004",
+    vendor_type: "Light",
     vendor_name: "End of Year Gala",
     vendor_code: "Gala",
     remark: "2024-12-31",
@@ -58,7 +58,7 @@ const events: EventTable[] = [
 
   },
   {
-    vendor_type: "REQ005",
+    vendor_type: "Dark",
     vendor_name: "Marketing Workshop",
     vendor_code: "Workshop",
     remark: "2024-10-10",
@@ -67,7 +67,7 @@ const events: EventTable[] = [
     contact: 1234567890
   },
   {
-    vendor_type: "REQ006",
+    vendor_type: "System",
     vendor_name: "Client Appreciation Event",
     vendor_code: "Social",
     remark: "2024-09-15",
@@ -79,6 +79,7 @@ const events: EventTable[] = [
 
 type Props = {
   isViewVendor: () => void;
+  vendorData: React.Dispatch<React.SetStateAction<EventTable | undefined>>;
 };
 
 const table = ({ ...Props }: Props) => {
@@ -162,7 +163,7 @@ const table = ({ ...Props }: Props) => {
                   <TableCell>{data.email}</TableCell>
                   <TableCell>{data.contact}</TableCell>
                   <TableCell className="flex space-x-6 items-center justify-center border-l-2">
-                    <div className="hover:cursor-pointer" onClick={Props.isViewVendor}>
+                    <div className="hover:cursor-pointer" onClick={()=>{Props.isViewVendor(); Props.vendorData(data)}}>
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
                         <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
                         <path fillRule="evenodd" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 0 1 0-1.113ZM17.25 12a5.25 5.25 0 1 1-10.5 0 5.25 5.25 0 0 1 10.5 0Z" clipRule="evenodd" />

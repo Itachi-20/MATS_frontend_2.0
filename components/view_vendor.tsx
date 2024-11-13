@@ -10,13 +10,29 @@ import {
 import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
 
+type EventTable = {
+  vendor_type: string;
+  vendor_name: string;
+  vendor_code: string;
+  remark: string;
+  pan_number: number;
+  email: string;
+  contact: number;
+};
+
 type Props = {
   isViewVendor: () => void
   isAddDocument: () => void
   isViewDocument: () => void
+  vendorInfo: EventTable | undefined
 }
 
 const view_vendor = ({ ...Props }: Props) => {
+
+  const handleSelectField = (value:string):void => {
+    console.log("Here is your selected value:",value);
+  }
+
   return (
     <div className="absolute z-50 flex inset-0 items-center justify-center bg-black bg-opacity-50">
       <div className="border-2 rounded-xl p-5 bg-white relative">
@@ -28,9 +44,9 @@ const view_vendor = ({ ...Props }: Props) => {
             <label className="text-black text-sm font-normal capitalize">
               vendor type<span className="text-[#e60000]">*</span>
             </label>
-            <Select>
+            <Select onValueChange={handleSelectField}>
               <SelectTrigger className="text-black shadow">
-                <SelectValue placeholder="Theme" />
+                <SelectValue placeholder={Props.vendorInfo ? Props.vendorInfo.vendor_type:""} />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="light">Light</SelectItem>
@@ -46,6 +62,7 @@ const view_vendor = ({ ...Props }: Props) => {
             <Input
               className="text-black shadow"
               placeholder="Type Here"
+              value={Props.vendorInfo ? Props.vendorInfo.vendor_code:""}
             ></Input>
           </div>
           <div className="flex flex-col gap-2">
@@ -55,6 +72,7 @@ const view_vendor = ({ ...Props }: Props) => {
             <Input
               className="text-black shadow"
               placeholder="Type Here"
+              value={Props.vendorInfo ? Props.vendorInfo.vendor_name:""}
             ></Input>
           </div>
           <div className="flex flex-col gap-2">
@@ -64,6 +82,7 @@ const view_vendor = ({ ...Props }: Props) => {
             <Input
               className="text-black shadow"
               placeholder="Type Here"
+              value={Props.vendorInfo ? Props.vendorInfo.contact:""}
             ></Input>
           </div>
           <div className="flex flex-col gap-2">
@@ -73,6 +92,7 @@ const view_vendor = ({ ...Props }: Props) => {
             <Input
               className="text-black shadow"
               placeholder="Type Here"
+              value={Props.vendorInfo ? Props.vendorInfo.pan_number:""}
             ></Input>
           </div>
           <div className="flex flex-col gap-2">
@@ -82,6 +102,7 @@ const view_vendor = ({ ...Props }: Props) => {
             <Input
               className="text-black shadow"
               placeholder="Type Here"
+              value={Props.vendorInfo ? Props.vendorInfo.email:""}
             ></Input>
           </div>
           
@@ -115,6 +136,7 @@ const view_vendor = ({ ...Props }: Props) => {
             <Textarea
               className="text-black shadow"
               placeholder="Type Here"
+              value={Props.vendorInfo ? Props.vendorInfo.remark:""}
             ></Textarea>
           </div>
           
