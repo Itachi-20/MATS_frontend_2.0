@@ -123,7 +123,7 @@ export default function ApprovalRequestDetail() {
               <Button className="bg-white text-black border rounded-[8px] text-lg leading-normal font-normal px-[50px] py-[10px] font-['Poppins']">
                  Back
               </Button>                
-              <DialogBox button={'Approve'} />
+              <DialogBox button={'Approve'} msg={"Submitted Successfully"}/>
             </div>
 
         </div>

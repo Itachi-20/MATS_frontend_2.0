@@ -1,9 +1,10 @@
 import React from 'react';
 import CorrectSign from "@/public/svg/arrow";
 import { Button } from "@/components/ui/button";
+import { Input } from './ui/input';
 import { AlertDialog,AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger, } from "@/components/ui/alert-dialog";
 
-export default function Dialog({button}) {
+export default function Dialog({button,msg}) {
   return (
     <AlertDialog >
       <AlertDialogTrigger asChild>
@@ -11,11 +12,27 @@ export default function Dialog({button}) {
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader className='space-y-[40px]'>
-          <AlertDialogTitle className='text-center text-[30px] text font-["Poppins"] font-light leading-normal'>Submitted Successfully</AlertDialogTitle>
+          <AlertDialogTitle className='text-center text-[27px] text font-["Poppins"] font-light leading-normal'>{msg}</AlertDialogTitle>
           <AlertDialogDescription className='flex justify-center'>
-          <CorrectSign />
+         { msg == "Are you sure you want to submit?" || "Confirmation Alert" ?
+          <div className='flex flex-col space-y-4 w-full'>
+          {msg == "Confirmation Alert" && <Input type='date'></Input>}
+         <div className='flex space-x-[30px] items-center justify-center'>
+           <Button className='px-[32px] py-[3px] rounded-[8px] bg-[#FF532D] text-white text-[15px] font-normal leading-normal'>No</Button>
+           <Button className='px-[32px] py-[3px] rounded-[8px] bg-[#5DBE74] text-white text-[15px] font-normal leading-normal'>Yes</Button>
+         </div></div>:
+          
+        
+         <CorrectSign />
+          
+         } 
+
           </AlertDialogDescription>
+          { msg == "Are you sure you want to submit?" || "Confirmation Alert" ? " " :
           <AlertDialogTitle className='text-center text-[18px] text font-["Poppins"] font-normal leading-normal space-x-1/2'><span>Redirecting to </span><span className='font-semibold'>Dashboard </span></AlertDialogTitle>
+
+
+          }
         </AlertDialogHeader>
       </AlertDialogContent>
     </AlertDialog>

@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import DocumentDetails from '@/components/execute/document-details';
+import DialogBox from '@/components/dialogbox';
 
 const page = () => {
     return (
@@ -27,7 +28,7 @@ const page = () => {
                             <h1 className="text-center">11/11/24</h1>
                         </div>
                         <div className="col-span-1 flex justify-center pt-1">
-                            <Button className="bg-[#4430BF] border px-[68px] py-[10px] rounded-[8px] text-[20px] font-normal leading-normal font-['Poppins'] hover:cursor-not-allowed text-gray-500">Execute</Button>
+                            <Button className="px-20"><DialogBox button={"Execute"} msg={"Confirmation Alert"}/></Button>
                         </div>
                     </div>
                 </div>

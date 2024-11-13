@@ -267,7 +267,7 @@ export default function LogisticActualBudget() {
                         Back
                     </Button>
                 </Link>
-                <DialogBox button={"Submit"} />
+                <DialogBox button={"Submit"} msg={"Submitted Successfully"} />
                 
             </div>
         </div>
