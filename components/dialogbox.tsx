@@ -7,7 +7,7 @@ export default function Dialog({button}) {
   return (
     <AlertDialog >
       <AlertDialogTrigger asChild>
-      <Button className='bg-[#4430bf] text-white text-lg font-normal leading-normal border rounded-[8px] px-[31px] py-[10px]'>{button}</Button>
+      <Button className='bg-[#4430bf] text-white text-lg font-normal leading-normal px-[31px] py-[10px]'>{button}</Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader className='space-y-[40px]'>

@@ -24,13 +24,13 @@ type EventTable = {
 export default function EventList () {
 
   const router = useRouter();
-  const handleClick = () => {
+  const handleClick = (id) => {
 
     //  yadi new tab mein open kerna hai tab isko use karenge 
     // const url = "/event_list/${id}"
     // window.open(url, '_blank')
     // agar same tab mein open kerna hai  to isko use krenge 
-    router.push("/event_list/${id}")
+    router.push(`/event_list/${id}`)
   }
 
   const events: EventTable[] = [
@@ -235,10 +235,11 @@ export default function EventList () {
                           <TableCell>{data.advance}</TableCell>
                           <TableCell >{data.event_status}</TableCell>
                           <TableCell >{data.post_activity_status}</TableCell>                        
-                          <TableCell className="sticky right-0 bg-[white] flex lg:space-x-7 sm:space-x-5 space-x-2 border-l items-center border-slate-200 "> 
-                              <Image src={"/svg/view.svg"} width={17} height={20} alt="view-svg" className="cursor-pointer" onClick={handleClick} className="lg:w-[17px] lg:h-[20px] sm:w-[15px] sm:h-[18px] w-[14px] h-[16px] cursor-pointer"/>                        
-                              <Image src={"/svg/delete.svg"} width={15} height={20} alt="delete-svg" className="cursor-pointer mr-1"  className="lg:w-[15px] lg:h-[20px] sm:w-[12px] sm:h-[17px] w-[8px] h-[13px] cursor-pointer"/>
+                          <TableCell className="sticky right-0 bg-[white] flex lg:space-x-7 sm:space-x-5 space-x-2 border-l items-center border-slate-200 py-3 "> 
+                              <Image src={"/svg/view.svg"} width={17} height={20} alt="view-svg" className="cursor-pointer" onClick={()=> handleClick(`${data.request_number}`)} className="lg:w-[17px] lg:h-[20px] sm:w-[15px] sm:h-[18px] w-[14px] h-[16px] cursor-pointer"/>                        
+                              <Image src={"/svg/editIcon.svg"} width={20} height={20} alt="delete-svg" className="cursor-pointer mr-1"  className="lg:w-[15px] lg:h-[20px] sm:w-[12px] sm:h-[17px] w-[8px] h-[13px] cursor-pointer"/>     
                           </TableCell>
+                          
                        </TableRow>
                       );
                     })}
