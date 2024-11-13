@@ -61,14 +61,14 @@ const page = () => {
         </div>
         <Table isAddVendor={isAddVendor} />
       </div>
-      {
+      {/* {
         addVendor &&
         <Addvendor isAddVendor={isAddVendor} isAddDocument={isAddDocument} />
       }
       {
         addDocument &&
         <Adddocument isAddDocument={isAddDocument} />
-      }
+      } */}
     </>
   )
 }

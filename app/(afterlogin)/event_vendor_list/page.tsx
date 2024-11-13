@@ -11,18 +11,27 @@ import {
 import { Button } from "@/components/ui/button";
 import Table from "@/app/(afterlogin)/event_vendor_list/table";
 import { useState } from 'react';
-import Addvendor from '@/components/add_vendor';
+import Viewvendor from '@/components/view_vendor';
+import ViewDocument from '@/components/view_document';
 import Adddocument from '@/components/add_document';
+import { View } from 'lucide-react';
 
 const page = () => {
-  const [addVendor, setAddVendor] = useState(false);
+  const [viewVendor, setViewVendor] = useState(false);
   const [addDocument, setAddDocument] = useState(false);
-  const isAddVendor = () => {
-    setAddVendor(prev => !prev)
+  const [viewDocument, setViewDocument] = useState(false);
+  const [vendorData, setVendorData] = useState();
+  
+  const isViewVendor = () => {
+    setViewVendor(prev => !prev)
   }
 
   const isAddDocument = () => {
     setAddDocument(prev => !prev)
+  }
+
+  const isViewDocument = () => {
+    setViewDocument(prev => !prev)
   }
   return (
     <>
@@ -58,15 +67,19 @@ const page = () => {
             </Button>
           </div>
         </div>
-        <Table isAddVendor={isAddVendor} />
+        <Table isViewVendor={isViewVendor} />
       </div>
       {
-        addVendor &&
-        <Addvendor isAddVendor={isAddVendor} isAddDocument={isAddDocument} />
+        viewVendor &&
+        <Viewvendor isViewVendor={isViewVendor} isAddDocument={isAddDocument} isViewDocument={isViewDocument} />
       }
       {
         addDocument &&
         <Adddocument isAddDocument={isAddDocument} />
+      }
+      {
+        viewDocument &&
+        <ViewDocument isViewDocument={isViewDocument}/>
       }
     </>
   )
