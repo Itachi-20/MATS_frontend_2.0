@@ -2,8 +2,10 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const Sidebar = () => {
+  const router = useRouter();   
   const moduleItems: string[] = [
     "Training & Education",
     "Awareness Program",
@@ -85,7 +87,7 @@ const Sidebar = () => {
                 </g>
               </svg>
 
-            <h1 className="pt-1">Modules</h1>
+              <h1 className="pt-1">Modules</h1>
             </div>
             <div id="element" className="z-10" >
             {/* <div className="hidden group-hover:block duration-100 delay-100 transition-all" id="element"> */}
