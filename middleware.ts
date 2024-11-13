@@ -17,5 +17,5 @@ export async function middleware(req:Request) {
 
 // Optional: Define route matching
 export const config = {
-    matcher: ['/protected/*'],
+    matcher: ['/afterlogin'],
 };
