@@ -180,7 +180,7 @@ const Index = () => {
     const refno = param.get("refno");
       try {
         const response = await fetch(
-          "/api/eventRequestApprove/Approve",
+          "/api/postActivityDocument/approval",
           {
             method: "POST",
             headers: {
@@ -210,7 +210,7 @@ const Index = () => {
     console.log("inside event Data")
     try {
       const response = await fetch(
-        "/api/eventRequestApprove/fetchData",
+        "/api/postActivityDocument/fetchData",
         {
           method: "POST",
           headers: {

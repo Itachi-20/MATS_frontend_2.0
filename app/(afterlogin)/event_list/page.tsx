@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import {useEffect,useState} from "react"
 import Image from "next/image";
 import { useRouter } from 'next/navigation';
 import { Input } from "@/components/ui/input";
@@ -8,10 +9,10 @@ import {Table, TableBody,TableCell,TableHead,TableHeader,TableRow,} from "@/comp
 import {Select,SelectContent,SelectItem,SelectTrigger,SelectValue,} from "@/components/ui/select";
 
 type EventTable = {
-  request_number: string;
+  name: string;
   event_name: string;
   event_type: string;
-  event_date: string;
+  event_start_date: string;
   event_end_date:string;
   event_requestor: string;
   event_venue:string;
@@ -23,89 +24,47 @@ type EventTable = {
 export default function EventList () {
 
   const router = useRouter();
-  const handleClick = () => {
+  const handleClick = (refno:string) => {
 
     //  yadi new tab mein open kerna hai tab isko use karenge 
     // const url = "/event_list/${id}"
     // window.open(url, '_blank')
     // agar same tab mein open kerna hai  to isko use krenge 
-    router.push("/event_list/${id}")
+    router.push(`/event_list/${refno}`)
   }
 
-  const events: EventTable[] = [
-    {
-      request_number: "REQ001",
-      event_name: "Annual Conference",
-      event_type: "Conference",
-      event_date: "2024-10-15",
-      event_end_date:"2024-11-20",
-      event_requestor: "John Doe",
-      event_venue:"Name 0001",
-      advance:"Request",
-      event_status:"Approved",
-      post_activity_status:"Not Uploaded"
-    },
-    {
-      request_number: "REQ002",
-      event_name: "Product Launch",
-      event_type: "Launch",
-      event_date: "2024-11-20",
-      event_end_date:"2024-11-20",
-      event_venue:"Name 0001",
-      event_requestor: "Jane Smith",
-      advance:"Request",
-      event_status:"Approved",
-      post_activity_status:"Not Uploaded"
-    },
-    {
-      request_number: "REQ003",
-      event_name: "Team Building Retreat",
-      event_type: "Workshop",
-      event_date: "2024-09-30",
-      event_end_date:"2024-11-20",
-      event_venue:"Name 0001",
-      event_requestor: "Mike Johnson",
-      advance:"Request",
-      event_status:"Approved",
-      post_activity_status:"Not Uploaded",
-    },
-    {
-      request_number: "REQ004",
-      event_name: "End of Year Gala",
-      event_type: "Gala",
-      event_date: "2024-12-31",
-      event_end_date:"2024-11-20",
-      event_venue:"Name 0001",
-      event_requestor: "Emily Davis",
-      advance:"Request",
-      post_activity_status:"Not Uploaded",
-      event_status:"Approved"
-    },
-    {
-      request_number: "REQ005",
-      event_name: "Marketing Workshop",
-      event_type: "Workshop",
-      event_date: "2024-10-10",
-      event_end_date:"2024-11-20",
-      event_venue:"Name 0001",
-      event_requestor: "Alex Brown",
-      advance:"Request",      
-      event_status:"Approved",
-      post_activity_status:"Not Uploaded"
-    },
-    {
-      request_number: "REQ006",
-      event_name: "Client Appreciation Event",
-      event_type: "Social",
-      event_date: "2024-09-15",
-      event_end_date:"2024-11-20",
-      event_venue:"Name 0001",
-      event_requestor: "Sara Miller",
-      advance:"Request",
-      event_status:"Approved",
-      post_activity_status:"Not Uploaded"
-    },
-  ];
+  const [tableData,setTableData] = useState<EventTable[]>()
+
+  const fetchTableData = async()=>{
+    try {
+      const Data = await fetch(
+        `/api/eventList`,
+        {
+          method: "POST",
+          headers:{
+            "Content-Type": "application/json",
+          },
+          credentials:'include',
+          body:JSON.stringify({
+            activity:"Pre Activity"
+          })
+        }
+      );
+      if(Data.ok){
+        const data = await Data.json();
+        setTableData(data.message)
+      }
+      
+    } catch (error) {
+      console.log(error,"something went wrong");
+    }
+  }
+
+   useEffect(()=>{
+  fetchTableData();
+  },[])
+
+  console.log(tableData,"this is state data")
 
   return (
         <div className="p-7 w-full relative z-20 text-black">
@@ -208,14 +167,14 @@ export default function EventList () {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                  {events &&
-                    events.map((data, index) => {
+                  {tableData &&
+                    tableData.map((data, index) => {
                       return (
                         <TableRow key={index} className="text-center text-nowrap">
-                          <TableCell>{data.request_number}</TableCell>
+                          <TableCell>{data.name}</TableCell>
                           <TableCell>{data.event_type}</TableCell>
                           <TableCell>{data.event_name}</TableCell>
-                          <TableCell>{data.event_date}</TableCell>
+                          <TableCell>{data.event_start_date}</TableCell>
                           <TableCell>{data.event_end_date}</TableCell>
                           <TableCell>{data.event_requestor}</TableCell>
                           <TableCell>{data.event_venue}</TableCell>
@@ -223,8 +182,7 @@ export default function EventList () {
                           <TableCell >{data.event_status}</TableCell>
                           <TableCell >{data.post_activity_status}</TableCell>                        
                           <TableCell className="sticky right-0 bg-[white] z-50 flex space-x-8 border-l border-slate-200 "> 
-                              <Image src={"/svg/view.svg"} width={17} height={20} alt="view-svg" className="cursor-pointer" onClick={handleClick} />                        
-                              <Image src={"/svg/delete.svg"} width={15} height={20} alt="delete-svg" className="cursor-pointer"/>
+                              <Image src={"/svg/view.svg"} width={17} height={20} alt="view-svg" className="cursor-pointer" onClick={()=>handleClick(data.name)} />                        
                           </TableCell>
                 </TableRow>
                       );
