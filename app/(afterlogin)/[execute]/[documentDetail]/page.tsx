@@ -28,7 +28,7 @@ const page = () => {
                             <h1 className="text-center">11/11/24</h1>
                         </div>
                         <div className="col-span-1 flex justify-center pt-1">
-                            <Button className="px-20"><DialogBox button={"Execute"} msg={"Confirmation Alert"}/></Button>
+                            <Button className="px-20"><DialogBox button={"Execute"} msg={"Next Occurrence date"}/></Button>
                         </div>
                     </div>
                 </div>

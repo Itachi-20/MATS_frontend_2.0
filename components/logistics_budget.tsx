@@ -17,7 +17,7 @@ const LogisticBudget: React.FC<LogisticsProps> = ({ RequestNo }) => {
         <div className="pb-8">
             <div className="flex gap-6">
                 <h1 className="text-black md:text-[30px] md:font-medium uppercase md:pb-4">
-                    {RequestNo === 10101 ? 'LOGISTICS tentative BUDGET' : 'Logistics Budget'}
+                    {RequestNo === 10101 ? 'LOGISTICS tentative BUDGET' : 'Logistics Budget'} <span className='text-[#636363] text-[22px] t'>(Occurrence 4 - 12/12/24- 24/12/24)</span>
                 </h1>
                 {RequestNo === 10101 ? '' :
                     <div className="pt-3">
