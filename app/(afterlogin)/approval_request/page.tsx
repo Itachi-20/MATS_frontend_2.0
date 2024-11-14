@@ -21,9 +21,9 @@ type EventTable = {
 
 export default function ApprovalRequestPage () {
   const router = useRouter();
-  const handleClick = () => {
-    router.push("/approval_request/${request_no}")
-  }
+  // const handleClick = () => {
+  //   router.push("/approval_request/${request_no}")
+  // }
 
   const events: EventTable[] = [
     {
@@ -227,7 +227,7 @@ export default function ApprovalRequestPage () {
                           <TableCell >{data.event_status}</TableCell>
                           <TableCell >{data.post_activity_status}</TableCell>      
                           <TableCell className="sticky right-0 bg-[white] flex border-l items-center border-slate-200"> 
-                             <button className="rounded-[50px] lg:px-[14px] lg:py-[7px] sm:py-[3px] sm:px-[4px] px-[3px] py-[2px] border-[0.5px] border-[#0E4154] text-[#0E4154] lg:text-[12px] sm:text-[7px] text-[6px] font-light leading-normal" onClick={handleClick}>Take Action</button>
+                             <button className="rounded-[50px] lg:px-[14px] lg:py-[7px] sm:py-[3px] sm:px-[4px] px-[3px] py-[2px] border-[0.5px] border-[#0E4154] text-[#0E4154] lg:text-[12px] sm:text-[7px] text-[6px] font-light leading-normal" onClick={()=> router.push(`/approval_request/${data.request_number}`)}>Take Action</button>
                           </TableCell>
                        </TableRow>
                       );

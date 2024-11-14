@@ -69,14 +69,14 @@ export default function LogisticActualBudget() {
                             Add New vendor
                         </span>
                     </button>
-                    <button className='flex space-x-[10px] border-[1px] border-[#E5E5E5] rounded-[8px] items-center py-[6px] px-6'>
+                    {/* <button className='flex space-x-[10px] border-[1px] border-[#E5E5E5] rounded-[8px] items-center py-[6px] px-6'>
                         <svg width="14" height="17" viewBox="0 0 14 17" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path id="Vector" d="M12.5394 9.64286H8.06739V15.3571C8.06739 15.6602 7.97316 15.9509 7.80542 16.1653C7.63769 16.3796 7.41019 16.5 7.17298 16.5C6.93577 16.5 6.70827 16.3796 6.54054 16.1653C6.3728 15.9509 6.27857 15.6602 6.27857 15.3571V9.64286H1.80652C1.56931 9.64286 1.34181 9.52245 1.17408 9.30812C1.00634 9.09379 0.912109 8.8031 0.912109 8.5C0.912109 8.1969 1.00634 7.90621 1.17408 7.69188C1.34181 7.47755 1.56931 7.35714 1.80652 7.35714H6.27857V1.64286C6.27857 1.33975 6.3728 1.04906 6.54054 0.834735C6.70827 0.620407 6.93577 0.5 7.17298 0.5C7.41019 0.5 7.63769 0.620407 7.80542 0.834735C7.97316 1.04906 8.06739 1.33975 8.06739 1.64286V7.35714H12.5394C12.7767 7.35714 13.0041 7.47755 13.1719 7.69188C13.3396 7.90621 13.4338 8.1969 13.4338 8.5C13.4338 8.8031 13.3396 9.09379 13.1719 9.30812C13.0041 9.52245 12.7767 9.64286 12.5394 9.64286Z" fill="#635E5E" />
                         </svg>
                         <span className='text-[18px] font-normal leading-normal text-[#000]'>
                             Add vendor
                         </span>
-                    </button>
+                    </button> */}
                 </div>
             </div>
 
@@ -267,9 +267,78 @@ export default function LogisticActualBudget() {
                         Back
                     </Button>
                 </Link>
-                <DialogBox button={"Submit"} />
+                <DialogBox button={"Submit"} msg={"Submitted Successfully"} />
                 
             </div>
+           <div>
+             <h1 className="text-black md:text-[30px] md:font-medium uppercase">
+               occurrence budget history
+                </h1>
+            <div className="border bg-white h-full p-4 mt-[20px] rounded-[18px]">
+                <Table >
+                    <TableHeader className={"bg-[#E0E9FF]"}>
+                        <TableRow className={"text-nowrap rounded-r-2xl"}>
+                            <TableHead className={"text-center rounded-l-2xl text-[#625d5d] lg:text-[15px] sm:text-[12px] text-[11px] font-normal font-['Montserrat']"}>
+                               Occurrence
+                            </TableHead>
+                            <TableHead className={"text-center text-[#625d5d] lg:text-[15px] sm:text-[12px] text-[11px] font-normal font-['Montserrat']"} >
+                               Occurrence date
+                            </TableHead>
+                            <TableHead className={"text-center text-[#625d5d] lg:text-[15px] sm:text-[12px] text-[11px] font-normal font-['Montserrat']"} >
+                              Actual Amount
+                            </TableHead>
+                            <TableHead className={"text-center text-[#625d5d] lg:text-[15px] sm:text-[12px] text-[11px] font-normal font-['Montserrat']"} >
+                                GST
+                            </TableHead>
+                            <TableHead
+                                className={
+                                    "text-center text-[#625d5d] lg:text-[15px] sm:text-[12px] text-[11px] font-normal font-['Montserrat']"
+                                }
+                            >
+                                Total Amount
+                            </TableHead>
+                            <TableHead
+                                className={
+                                    "text-center text-[#625d5d] rounded-r-xl lg:text-[15px] sm:text-[12px] text-[11px] font-normal font-['Montserrat']"
+                                }
+                            >
+                                {/* Total Amount */}
+                            </TableHead>
+                           
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {events &&
+                            events.map((data, index) => {
+                                return (
+                                    <TableRow key={index} className="text-center text-nowrap lg:text-[16px] sm:text-[10px] text-[10px] font-light leading-normal font-['Poppins'] border-b border-slate-200">
+                                        <TableCell>{data.vendor_type}</TableCell>
+                                        <TableCell>{data.vendor_name}</TableCell>
+                                        <TableCell>{data.actual_amount}</TableCell>
+                                        <TableCell>{data.gst}</TableCell>
+                                        <TableCell>{data.total_amount}</TableCell>
+                                        <TableCell className="sticky right-0 bg-white flex lg:space-x-7 sm:space-x-5 space-x-2 border-l justify-end mr-4 border-slate-200">
+                                            <Image src={"/svg/editIcon.svg"} width={17} height={20} alt="view-svg" className="cursor-pointer" onClick={handleClick} className="lg:w-[17px] lg:h-[20px] sm:w-[15px] sm:h-[18px] w-[14px] h-[16px] cursor-pointer" />
+                                            <Image src={"/svg/view.svg"} width={15} height={20} alt="delete-svg" className="cursor-pointer mr-1" className="lg:w-[15px] lg:h-[20px] sm:w-[12px] sm:h-[17px] w-[8px] h-[13px] cursor-pointer" />
+                                        </TableCell>
+                                    </TableRow>
+                                );
+                            })}
+                                                       
+                          <TableRow>                             
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>               
+                            <TableCell className='text-right'>Total</TableCell>               
+                            <TableCell className='flex justify-end text-4 font-medium leading-normal font-["Poppins"]'>
+                                <span className='font-normal px-5 py-[10px] bg-[#F5F5F5]'>40,000</span>
+                            </TableCell>                            
+                         </TableRow>
+                    </TableBody>
+                </Table>
+            </div>
+           </div>
         </div>
     )
 }
