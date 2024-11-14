@@ -183,9 +183,10 @@ const LogisticBudget = ({...Props}:Props) => {
         <div className="pb-8">
             <div className="flex gap-6">
                 <h1 className="text-black md:text-[30px] md:font-medium uppercase md:pb-4">
-                    {RequestNo === 10101 ? 'LOGISTICS tentative BUDGET' : 'Logistics Budget'}
+                    {Props.eventData?.name? 'LOGISTICS tentative BUDGET' : 'Logistics Budget'}
+                    {/* LOGISTICS tentative BUDGET */}
                 </h1>
-                {RequestNo === 10101 ? '' :
+                {Props.eventData?.name? '' :
                     <div className="pt-3">
                         <svg width="23" height="23" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <g id="Group">

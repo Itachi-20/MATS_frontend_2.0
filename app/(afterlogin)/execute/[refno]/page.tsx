@@ -1,9 +1,23 @@
-import React from 'react';
+"use client"
+import React, { useEffect } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import DocumentDetails from '@/components/execute/document-details';
+import { useParams } from 'next/navigation'
 
 const page = () => {
+    const param = useParams();
+    const refno = param.refno;
+    console.log(refno,"this is document refno")
+
+    const fetchData = async()=>{
+        
+    }
+
+    useEffect(()=>{
+
+    })
+
     return (
         <div className="md:px-7 md:pb-7 md:pt-[35px] w-full relative z-20 text-black">
             <div className="pb-5">
