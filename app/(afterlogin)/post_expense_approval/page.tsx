@@ -431,10 +431,10 @@ const Index = () => {
                                                 </div>
                                             </TableCell>
                                             <TableCell className="sticky right-0 bg-[white] z-50 ">
-                                            {
-                                                    data.level_1 == "Approved" && data.level_2 == "Approved" ?
-                                                <button className="border rounded-full px-4 py-1 border-[#0E4154] text-[#0E4154]" onClick={() => router.push(`/advance_payment/update_utr/${data.request_number}`)} >Update UTR</button>
-                                                :<button className="border rounded-full px-4 py-1 border-[#0E4154] text-[#0E4154]" onClick={() => router.push(`/advance_payment/${data.request_number}`)} >Take Action</button>
+                                                {
+                                                    data.level_1 == "Approved" ?
+                                                <button className="border rounded-full px-4 py-1 border-[#0E4154] text-[#0E4154]" onClick={() => router.push(`/post_expense_approval/update_utr/${data.request_number}`)} >Update UTR</button>
+                                                :<button className="border rounded-full px-4 py-1 border-[#0E4154] text-[#0E4154]" onClick={() => router.push(`/post_expense_approval/${data.request_number}`)} >Take Action</button>
                                                 }
                                             </TableCell>
                                         </TableRow>

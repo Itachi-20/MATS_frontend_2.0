@@ -9,7 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import page from '@/app/(afterlogin)/advance_payment/page';
+import page from '@/app/(afterlogin)/advance_payment/[request_number]/page';
 
 interface DocumentsProps {
   PageName: string; 
