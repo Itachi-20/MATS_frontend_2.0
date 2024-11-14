@@ -263,7 +263,10 @@ const ExecutePage:React.FC = () => {
           pathname=""
           eventData = {data}
           />
-          <TotalExpense />            
+          <TotalExpense 
+          pathname=""
+          eventData = {data}
+          />            
           <Documents /> 
         </div>
   )}

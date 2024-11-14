@@ -3,8 +3,34 @@ import CorrectSign from "@/public/svg/arrow";
 import { Button } from "@/components/ui/button";
 import { Input } from './ui/input';
 import { AlertDialog,AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger, } from "@/components/ui/alert-dialog";
+import { useRouter } from 'next/navigation';
+export default function Dialog({button,msg,refno}) {
+const router = useRouter();
+  const handleExecute = async()=>{
+      try {
+          const tableData = await fetch(
+            `/api/eventExecute/execute`,
+            {
+              method: "POST",
+              headers:{
+                "Content-Type": "application/json",
+              },
+              credentials:"include",
+              body:JSON.stringify({
+              name: refno
+              })
+            }
+          );
+          if(tableData.ok){
+            router.push("/event_list");
+          }
+          
+        } catch (error) {
+          console.log(error,"something went wrong");
+        }
+  }
+  
 
-export default function Dialog({button,msg}) {
   return (
     <AlertDialog >
       <AlertDialogTrigger asChild>
@@ -12,7 +38,7 @@ export default function Dialog({button,msg}) {
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader className='space-y-[40px]'>
-          <AlertDialogTitle className='text-center text-[20px] text font-["Poppins"] font-light leading-normal'>{msg}</AlertDialogTitle>
+          <AlertDialogTitle className='text-center text-[20px] text font-["Poppins"] font-light leading-normal text-black'>{msg}</AlertDialogTitle>
           <AlertDialogDescription className='flex justify-center'>
          { msg == "Are you sure you wanted to execute the event?" || msg == "Next Occurrence date" ? 
            (
@@ -20,7 +46,7 @@ export default function Dialog({button,msg}) {
                   {msg == "Next Occurrence date" && <Input type='date'></Input>}
                   <div className='flex space-x-[30px] items-center justify-center'>
                     <Button className='px-[32px] py-[3px] rounded-[8px] bg-[#FF532D] text-white text-[15px] font-normal leading-normal'>No</Button>
-                    <Button className='px-[32px] py-[3px] rounded-[8px] bg-[#5DBE74] text-white text-[15px] font-normal leading-normal'>Yes</Button>
+                    <Button className='px-[32px] py-[3px] rounded-[8px] bg-[#5DBE74] text-white text-[15px] font-normal leading-normal' onClick={()=>handleExecute()}>Yes</Button>
                   </div>
               </div>
            ):(
