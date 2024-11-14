@@ -13,9 +13,9 @@ import CompensationBudget from "@/components/execute/compensation-budget";
 const ExecutePage:React.FC = () => {
    
     const router = useRouter();
-    const handlClick = () => {
-        router.push("/audit_trail/${id}")
-     }
+    // const handleClick = () => {
+    //     router.push("/${traning_And_education}/${id}")
+    //  }
 
   return (
         <div className="md:px-7 md:pb-7 md:pt-[35px] w-full relative z-20 text-black">
@@ -24,8 +24,8 @@ const ExecutePage:React.FC = () => {
             <div className="flex justify-between">
                 <h1 className=" md:text-[30px] md:font-medium capitalize md:pb-4"> Training and Education</h1>
                 <div className="flex gap-4 bg-white leading-normal">
-                  <Button className="border border-[#4430bf] text-[#FFF] px-6 bg-[#4430BF] text-[16px]" onClick={handlClick}>Advance Payment</Button>
-                  <Button className="border border-[#4430bf] text-[#4430bf] px-6 text-[18px]" onClick={handlClick}>Audit Trail</Button>
+                  <Button className="border border-[#4430bf] text-[#FFF] px-6 bg-[#4430BF] text-[16px]">Advance Payment</Button>
+                  <Button className="border border-[#4430bf] text-[#4430bf] px-6 text-[18px]">Audit Trail</Button>
                   <Link href={"/event_list"}> 
                     <Button className="bg-white text-black border px-9 hover:bg-white text-[18px]">Back</Button>
                   </Link> 
@@ -43,7 +43,7 @@ const ExecutePage:React.FC = () => {
                 <h1 className="text-center">11/11/24</h1>
               </div>
               <div className="col-span-1 flex justify-center pt-1">
-                <Button className="bg-[#4430BF] text-[#FFF] border px-[68px] py-[10px] rounded-[8px] text-[20px] font-normal leading-normal font-['Poppins']">Next</Button>
+                <Button className="bg-[#4430BF] text-[#FFF] border px-[68px] py-[10px] rounded-[8px] text-[20px] font-normal leading-normal font-['Poppins']" onClick={()=> router.push(`/traning_And_education/${1234567}`)}>Next</Button>
                </div>
               </div>
             </div>

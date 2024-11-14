@@ -1,8 +1,10 @@
 import React from 'react';
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import DocumentDetails from '@/components/execute/document-details';
 import DialogBox from '@/components/dialogbox';
+import { Button } from '@/components/ui/button';
+import { useRouter } from 'next/navigation';
+
+import DocumentDetails from '@/components/execute/document-details';
 
 const page = () => {
     return (
@@ -12,7 +14,7 @@ const page = () => {
                     <h1 className=" md:text-[30px] md:font-medium capitalize md:pb-4"> Training and Education</h1>
                     <div className="flex gap-4 bg-white leading-normal">
                         <Button className="border border-[#4430bf] text-[#4430bf] px-6 text-[18px]">Audit Trail</Button>
-                        <Link href={"/event_list"}>
+                        <Link href={"/"}>
                             <Button className="bg-white text-black border px-9 hover:bg-white text-[18px]">Back</Button>
                         </Link>
                     </div>
@@ -28,7 +30,10 @@ const page = () => {
                             <h1 className="text-center">11/11/24</h1>
                         </div>
                         <div className="col-span-1 flex justify-center pt-1">
-                            <Button className="px-20"><DialogBox button={"Execute"} msg={"Next Occurrence date"}/></Button>
+                            <Button className="px-20">
+                                {/* <DialogBox button={"Execute"} msg={"Next Occurrence date"}/> */}
+                                <DialogBox button={"Execute"} msg={"Are you sure you wanted to execute the event?"}/>
+                                </Button>
                         </div>
                     </div>
                 </div>
