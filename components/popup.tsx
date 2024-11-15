@@ -15,7 +15,7 @@ import { useState } from "react";
 import DialogBox from "@/components/dialogbox"
 import { DialogClose } from "@radix-ui/react-dialog";
 
-export  default function DialogDemo({button,uplaodmsg,setFiles}) {
+export  default function DialogDemo({button,uplaodmsg,setFile,FileUpload}) {
   const [fileName, setFileName] = useState();
   const [openPopup, setPopup] = useState(true)
 
@@ -44,7 +44,7 @@ const handleFileUpload = (e:React.ChangeEvent<HTMLInputElement>)=>{
               <label className="items-center justify-center py-2 px-16 rounded-md cursor-pointer">
                 <p className="">
                   <Image src={`${fileName ? '/svg/uploadedFileIcon.svg' :'/svg/uploadFileIcon.svg'}`} alt="uploadIcon" width={150} height={50} />
-                  <Input type="file" className="hidden" onChange={handleFileChange} multiple/>
+                  <Input type="file" className="hidden" onChange={handleFileUpload} multiple/>
                 </p>
                 <p className="space-y-2">
                 <span className="text-[18px] font-medium leading-normal flex justify-center text-black text-wrap">{fileName ? fileName: 'Upload files'}</span>
@@ -57,7 +57,7 @@ const handleFileUpload = (e:React.ChangeEvent<HTMLInputElement>)=>{
                 <div className="flex gap-4 bg-white leading-normal">
 
                   <Button className="bg-white text-black border px-6 hover:bg-white text-[18px]">Back</Button>
-                  <Button className="border border-[#4430bf] text-[#FFF] px-6 bg-[#4430BF] text-[16px]">Next</Button>
+                  <Button className="border border-[#4430bf] text-[#FFF] px-6 bg-[#4430BF] text-[16px]" onClick={()=>FileUpload()}>Next</Button>
 
                   </div>
           </DialogFooter>

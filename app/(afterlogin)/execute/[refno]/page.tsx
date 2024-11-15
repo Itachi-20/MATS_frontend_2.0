@@ -286,7 +286,9 @@ const page = () => {
                     </div>
                 </div>
             </div>
-            <DocumentDetails />
+            <DocumentDetails 
+            refno={refno}
+            />
         </div>
     )
 }

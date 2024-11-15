@@ -206,16 +206,16 @@ const LogisticBudget = ({...Props}:Props) => {
                 <Table className={""}>
                     <TableHeader className={"bg-[#E0E9FF]"}>
                         <TableRow className={""}>
-                            <TableHead
+                            {/* <TableHead
                                 className={
                                     "text-center rounded-l-2xl text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                                 }
-                            >
+                            > */}
                                 {/* Vendor Type */}
-                            </TableHead>
+                            {/* </TableHead> */}
                             <TableHead
                                 className={
-                                    "text-center text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                                    "text-center text-[#625d5d] rounded-l-2xl text-[15px] font-normal font-['Montserrat']"
                                 }
                             >
                                 Vendor Type
