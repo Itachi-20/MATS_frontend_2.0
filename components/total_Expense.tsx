@@ -165,7 +165,7 @@ type Document = {
 
 
 type Props = {
-  eventData:EventEntry | undefined
+  eventData:EventEntry | null
 }
 
 const total_Expense = ({...Props}:Props) => {

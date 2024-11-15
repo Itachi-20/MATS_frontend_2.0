@@ -8,37 +8,38 @@ import Form4 from "@/app/(afterlogin)/awareness_program/forms/form4";
 import Preview_Form from './forms/preview_form';
 import Addvendor from '@/components/add_vendor';
 import Adddocument from '@/components/add_document';
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation';
 import { useEffect } from 'react'
 import { usePathname } from 'next/navigation'
 import { AppWrapper } from '@/app/context/module'
+import { useSearchParams } from 'next/navigation'
 type dropdownData = {
-  company:{
-    name:string,
-    company_name:"string"
+  company: {
+    name: string,
+    company_name: "string"
   }[],
-  division:{
-    name:string,
-    division_name:string
+  division: {
+    name: string,
+    division_name: string
   }[],
-  requestor:{
-    full_name:string,
-    email:string
+  requestor: {
+    full_name: string,
+    email: string
   }[],
-  vendor_type:{
-    name:string,
-    vendor_type:string
+  vendor_type: {
+    name: string,
+    vendor_type: string
   }[],
-  state:{
-    name:string,
-    state:string
+  state: {
+    name: string,
+    state: string
   }[]
   // city:{
   //   name:string,
   //   state:string
   // }[]
-  currency:{
-    name:string
+  currency: {
+    name: string
   }[]
 }
 
@@ -77,39 +78,45 @@ type formData = {
   event_requestor: string;
   business_unit: string;
   division_category: string;
-  division_sub_category:string;
-  sub_type_of_activity:string;
-  any_govt_hcp:string,
-  no_of_hcp:number
+  division_sub_category: string;
+  sub_type_of_activity: string;
+  any_govt_hcp: string,
+  no_of_hcp: number
 };
 
-
+type activityDropdown = {
+  activity: {
+    name: string,
+    activity_name: string
+  }[],
+  document: {
+    name: string,
+    activity_type: string,
+    document_name: string
+  }[]
+}
 
 const Index = () => {
   const pathname = usePathname();
-  const [form,setForm] = useState(1);
-  const [addVendor,setAddVendor] = useState(false);
-  const [dropdownData,setDropdownData] = useState<dropdownData | null>(null);
-  const [refNo,setRefNo] = useState<string | null>(localStorage.getItem("refno")?localStorage.getItem("refno"):"");
+  const searchParams = useSearchParams()
+  const search = searchParams.get('forms')
+  console.log("search", search)
+  const router = useRouter()
+  const [form, setForm] = useState<string | number | null>(searchParams.get('forms'));
+  const [activityDropdown, setActivityDropdown] = useState<activityDropdown | null>(null);
+  const [addVendor, setAddVendor] = useState(false);
+  const [dropdownData, setDropdownData] = useState<dropdownData | null>(null);
+  const [refNo, setRefNo] = useState<string | null>(localStorage.getItem("refno") ? localStorage.getItem("refno") : "");
+  const [logisticsBudget, setLogisticBudget] = useState<Logistics[]>([]);
 
-  const [logisticsBudget,setLogisticBudget] = useState<Logistics[]>([]);
-
-
-  let eventype:{[key:string]:string} = {} ;
+  console.log(form, 'form')
+  let eventype: { [key: string]: string } = {};
   eventype["awareness_program"] = "Awareness Program";
-  useEffect(()=>{
-    setFormData({...formdata,name:refNo})
-  },[refNo])
+  useEffect(() => {
+    setFormData({ ...formdata, name: refNo })
+  }, [refNo])
   const [formdata, setFormData] = useState<formData | {}>({});
-  // const router = useRouter();
-  const nextForm = (): void => {
-    setForm(prev => prev + 1);
-    // router.push("/modules#form_top")
-  }
-  const prevForm = () => {
-    setForm(prev => prev - 1);
-    // router.push("/modules#form_top")
-  }
+
   const isAddVendor = () => {
     setAddVendor(prev => !prev)
   }
@@ -117,15 +124,15 @@ const Index = () => {
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const updatedFormData = {
-       ...formdata
+      ...formdata
     };
     updatedFormData.event_type = "Awareness Program";
 
-    if(refNo){
+    if (refNo) {
       updatedFormData.name = refNo;
     }
-    
-    
+
+
     try {
       const response = await fetch(
         "/api/training_and_education/handleSubmit",
@@ -134,19 +141,30 @@ const Index = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          credentials:'include',
-          body:JSON.stringify(updatedFormData)
+          credentials: 'include',
+          body: JSON.stringify(updatedFormData)
         }
       );
       if (response.ok) {
         const data = await response.json();
-        console.log(data,"response data");
-          localStorage.setItem("refno",data.message);
-          // setRefNo(data.message);
-        
-        setTimeout(()=>{
-          nextForm();
-        },1000)
+        console.log(data, "response data");
+        localStorage.setItem("refno", data.message);
+        setRefNo(data.message);
+
+        setTimeout(() => {
+          if (search == "1") {
+            router.push(`/awareness_program?forms=2`);
+          }
+          if (search == "2") {
+            router.push(`/awareness_program?forms=3`);
+          }
+          if (search == "3") {
+            router.push(`/awareness_program?forms=4`);
+          }
+          if (search == "4") {
+            router.push(`/awareness_program?forms=5`);
+          }
+        }, 1000)
       } else {
         console.log("submission failed");
       }
@@ -156,42 +174,66 @@ const Index = () => {
   };
 
 
-  const handlefieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>)=>{
-    const {name,value} = e.target;
-    setFormData(prev =>({ ...prev, [name]: value }));
+  const handlefieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
   }
 
 
-  const handleSelectChange = (value: string, name:string) => {
+  const handleSelectChange = (value: string, name: string) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
 
+  const activityList = async () => {
+    try {
+      const response = await fetch("/api/training_and_education/activityList", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: 'include'
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setActivityDropdown(data.data);
+        console.log(data, "activity list")
+      } else {
+        console.log('Login failed');
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
+    }
+  };
+  useEffect(()=>{
+    activityList();
+  },[])
   const dropdown = async () => {
     try {
-        const response = await fetch("/api/training_and_education/dropdown", {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
+      const response = await fetch("/api/training_and_education/dropdown", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-         const data = await response.json();
-         setDropdownData(data.data);
-        if (response.ok) {
-        } else {
-            console.log('Login failed');
-        }
+      const data = await response.json();
+      setDropdownData(data.data);
+      if (response.ok) {
+      } else {
+        console.log('Login failed');
+      }
     } catch (error) {
-        console.error("Error during login:", error);
+      console.error("Error during login:", error);
     }
-};
+  };
 
- useEffect(()=>{
-   dropdown();
- },[])
+  useEffect(() => {
+    dropdown();
+  }, [])
 
- console.log(formdata,"this is form data");
+  console.log(formdata, "this is form data");
 
   return (
     <>
@@ -203,41 +245,48 @@ const Index = () => {
           <div className='py-9'></div>
         </div>
         {
-          form == 1?
-          <Form1
-          nextForm = {nextForm}
-          dropdownData={dropdownData}
-          handlefieldChange = {handlefieldChange}
-          handleSelectChange={handleSelectChange}
-          handleSubmit={handleSubmit}
-          />:
-          form == 2?
-          <Form2
-          nextForm = {nextForm}
-          prevForm={prevForm}
-          />:
-          form == 3?
-          <Form3
-          nextForm = {nextForm}
-          prevForm={prevForm}
-          isAddVendor = {isAddVendor}
-          />:
-          form == 4?
-          <Form4
-          nextForm = {nextForm}
-          prevForm={prevForm}
-          />:
-          form == 5?
-          <Preview_Form
-          prevForm = {prevForm}
-          />:""
+          search == "1" ?
+            <Form1
+              // nextForm = {nextForm}
+              dropdownData={dropdownData}
+              handlefieldChange={handlefieldChange}
+              handleSelectChange={handleSelectChange}
+              handleSubmit={handleSubmit}
+            /> :
+            search == "2" ?
+              <Form2
+                handlefieldChange={handlefieldChange}
+                handleSelectChange={handleSelectChange}
+                handleSubmit={handleSubmit}
+              /> :
+              search == "3" ?
+                <Form3
+                  vendorType={dropdownData && dropdownData.vendor_type}
+                  currency={dropdownData && dropdownData.currency}
+                  handlefieldChange={handlefieldChange}
+                  handleSelectChange={handleSelectChange}
+                  handleSubmit={handleSubmit}
+                  setFormData={setFormData}
+                  logisticsBudget={logisticsBudget}
+                  isAddVendor={isAddVendor}
+                /> :
+                search == "4" ?
+                  <Form4
+                    // nextForm = {nextForm}
+                    // prevForm={prevForm}
+                    handleSubmit={handleSubmit}
+                    activityDropdown={activityDropdown}
+                  /> :
+                  search == "5" ?
+                    <Preview_Form
+                    /> : ""
         }
       </div>
 
       {
         addVendor &&
         <Addvendor
-          isAddVendor={isAddVendor} 
+          isAddVendor={isAddVendor}
         />
       }
     </>
