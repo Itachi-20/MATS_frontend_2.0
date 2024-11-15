@@ -44,10 +44,10 @@ const page = () => {
                             <h1 className="text-center">11/11/24</h1>
                         </div>
                         <div className="col-span-1 flex justify-center pt-1">
-                            <Button className="px-20">
+                            <div className="px-20">
                                 {/* <DialogBox button={"Execute"} msg={"Next Occurrence date"}/> */}
                                 <DialogBox button={"Execute"} msg={"Are you sure you wanted to execute the event?"}/>
-                            </Button>
+                            </div>
                         </div>
                     </div>
                 </div>
