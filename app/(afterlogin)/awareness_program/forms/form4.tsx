@@ -1,12 +1,4 @@
-import React from 'react'
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-  } from "@/components/ui/select";
-  import { Textarea } from "@/components/ui/textarea";
+import React, { useState } from 'react'
   import { Button } from "@/components/ui/button";
   import {
     Table,
@@ -18,11 +10,86 @@ import {
     TableRow,
   } from "@/components/ui/table";
   import { Input } from '@/components/ui/input';
+  import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+  } from "@/components/ui/select";
+import { Item } from '@radix-ui/react-select';
+
+  type activityDropdown = {
+    activity:{
+      name:string,
+      activity_name:string
+    }[],
+    document:{
+      name:string,
+      activity_type:string,
+      document_name:string
+    }[]
+  }
+
   type Props = {
-    nextForm: ()=>void
-    prevForm: ()=>void
+    handleSubmit:(e: React.MouseEvent<HTMLButtonElement>)=>void
+    activityDropdown:activityDropdown| null
 }
 const form4 = ({...Props}:Props) => {
+  const [file,setFile] = useState<FileList | null>();
+  const [activityType,setActivityType] = useState("");
+  const [refno,setRefno] = useState(localStorage.getItem("refno")?localStorage.getItem("refno"):"");
+  const [documentType,setDocumentType] = useState("");
+  const handleFileUpload = (e:React.ChangeEvent<HTMLInputElement>)=>{
+    const files = (e.target as HTMLInputElement).files;
+    setFile(files);
+  }
+
+  const FileUpload = async()=>{
+    const formdata = new FormData();
+
+    if (file && file.length > 0) {
+      for (let i = 0; i < file.length; i++) {
+        formdata.append("file", file[i]); 
+      }
+    } else {
+      console.log("No file to upload");
+      return;  
+    }
+      formdata.append("docname",refno as string)
+      formdata.append("activity_type",activityType);
+      formdata.append("document_type",documentType)
+    try {
+      const response = await fetch(
+        `/api/training_and_education/fileUpload`,
+        {
+          method: "POST",
+          headers: {
+            //"Content-Type": "multipart/form-data",
+          },
+          body:formdata,
+          credentials:'include'
+        }
+      );
+
+      
+      if (response.ok) {
+        const data = await response.json();
+       
+      } else {
+        console.log("Login failed");
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
+    }
+  }
+
+
+  const handleActivityTypeChange = (value:string)=>{
+    setActivityType(value);
+  }
+
+  console.log(file,"this is files");
   return (
     // </div>
     (<div>
@@ -34,13 +101,51 @@ const form4 = ({...Props}:Props) => {
           <label className="lable">
             Document Type <span className="text-[#e60000]">*</span>
           </label>
-          <Input className="shadow-md" placeholder="Type Here"></Input>
+          <Select
+          onValueChange={(value)=>handleActivityTypeChange(value)}
+            >
+              <SelectTrigger className="dropdown">
+                <SelectValue placeholder="Select" />
+              </SelectTrigger>
+              <SelectContent>
+                {
+                  Props.activityDropdown && Props.activityDropdown.activity.map((item,index)=>{
+                    return (
+                      <SelectItem value={item.name}>
+                        {item.activity_name}
+                      </SelectItem>
+                    )
+                  })
+                }
+                    
+              </SelectContent>
+            </Select>
         </div>
         <div className="flex flex-col gap-2 col-span-1">
           <label className="text-black text-sm font-normal capitalize">
             Supporting Documents<span className="text-[#e60000]">*</span>
           </label>
-          <Input className="shadow-md" placeholder="Type Here"></Input>
+          <Select
+           onValueChange={(value)=>setDocumentType(value)}
+            >
+              <SelectTrigger className="dropdown">
+                <SelectValue placeholder="Select" />
+              </SelectTrigger>
+              <SelectContent>
+                {
+                  Props.activityDropdown && Props.activityDropdown.document.filter((item,index)=>{
+                    if(item.activity_type == activityType){
+                      return item
+                    }
+                  }).map((item,index)=>{
+                    return (
+                      <SelectItem value={item.name}>{item.document_name}</SelectItem>
+                    )
+                  })
+                }
+                    
+              </SelectContent>
+            </Select>
         </div>
         <div className="flex justify-around col-span-1 text-nowrap">
           <label
@@ -65,8 +170,11 @@ const form4 = ({...Props}:Props) => {
               </svg>
               <h1 className="mt-[2px]">{"Upload File"}</h1>
             </div>
-            <Input type="file" id="file" className="hidden"></Input>
+            <Input type="file" onChange={(e)=>{handleFileUpload(e)}} id="file" className="hidden" multiple></Input>
           </label>
+          <Button className="bg-white text-black border text-md font-normal" onClick={()=>FileUpload()}>
+          Add
+        </Button>
         </div>
       </div>
       <div className="border border-[#848484] p-4 rounded-2xl w-full grid grid-cols-2 gap-4 bg-white">
@@ -204,10 +312,10 @@ const form4 = ({...Props}:Props) => {
           {" "}
           Save as Draft
         </Button>
-        <Button className="bg-white text-black border text-md font-normal" onClick={Props.prevForm}>
+        <Button className="bg-white text-black border text-md font-normal">
           Back
         </Button>
-        <Button className="bg-[#4430bf] text-white text-md font-normal border" onClick={Props.nextForm}>
+        <Button className="bg-[#4430bf] text-white text-md font-normal border" onClick={(e: React.MouseEvent<HTMLButtonElement>)=>Props.handleSubmit(e)} >
           Next
         </Button>
       </div>
