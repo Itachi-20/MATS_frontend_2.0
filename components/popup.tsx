@@ -29,53 +29,58 @@ export  default function DialogDemo({button,uplaodmsg}) {
           <DialogHeader>
             <DialogTitle className="text-center text-[30px] font-normal font-['Poppins']">{uplaodmsg}</DialogTitle>
           </DialogHeader>
-          <div className="flex flex-col gap-2">
-            <div className="flex justify-center items-center">
-              <label className="items-center justify-center py-2 px-16 rounded-md cursor-pointer">
+          <div className="">
+            <div className="flex justify-center items-center">                
+              <label className="items-center justify-items-center py-2 px-10 rounded-md cursor-pointer space-x-2 space-y-1 w-fit">
 
-                <span className="flex gap-2 items-center">
-                  {fileNames.length === 0 ? 
-                    (<Image
-                      src="/svg/uploadFileIcon.svg"
-                      alt="uploadIcon"
-                      width={150}
-                      height={50}
-                    />
-                    )
-                    :
-                    (
-                      fileNames.map((fileName, index) => (
-                      <Image
-                        key={index}
-                        src="/svg/uploadedFileIcon.svg"
-                        alt="uploadedIcon"
-                        width={150}
-                        height={50}
-                      />
-                    )))                  
-                  }                  
-                  <Input type="file" className="hidden" onChange={handleFileChange} multiple/>
-                </span>
-                
-                <p className="flex flex-wrap gap-4 items-center">
+                        <span className="flex gap-3 items-center">
+                          {fileNames.length === 0 ? 
+                            (<Image
+                              src="/svg/uploadFileIcon.svg"
+                              alt="uploadIcon"
+                              width={150}
+                              height={50}
+                            />
+                            )
+                            :
+                            (
+                              fileNames.map((fileName, index) => (
+                              <Image
+                                key={index}
+                                src="/svg/uploadedFileIcon.svg"
+                                alt="uploadedIcon"
+                                width={120}
+                                height={30}
+                              />
+                            )))                  
+                          }                  
+                          <Input type="file" className="hidden" onChange={handleFileChange} multiple/>
+                        </span>
 
-                  <span className="flex flex-wrap gap-4 items-center">
-                    {fileNames.map((fileName, index) => {
-                    return(
-                      <span className="text-[18px] font-medium leading-normal flex  justify-center">{fileName ? fileName: 'Upload files'}</span>    
-                    )})}
-                  </span>
+                        <span className="flex flex-wrap gap-5 items-center">
+                          {fileNames.length === 0 ?
+                          (
+                            <span className="text-[18px] font-medium leading-normal flex  justify-end ">Upload files</span>    
 
-                  <span className="flex gap-12 items-center justify-center px-4">
-                    {fileNames.map((fileName,index)=>{
-                      return (
-                        <span className="flex justify-center">{fileName ? 'Remove file':'' }</span>
-                      )
-                  })}
-                  </span>
+                          ):
+                          (
+                            fileNames.map((fileName, index) => {
+                              return(  
+                                <span className="text-[18px] font-medium leading-normal flex  justify-end ">{fileName ? fileName: ''}</span>    
+                              )})
+                          )}
+                            
+                        </span>
 
-                </p>
-              </label>
+                        <span className="flex gap-12 items-center justify-center px-4">
+                            {fileNames.map((fileName,index)=>{
+                              return (
+                                <span className="flex justify-center">{fileName ? 'Remove file':'' }</span>
+                              )
+                          })}
+                        </span>
+
+                </label>
             </div>
           </div>        
           <DialogFooter>

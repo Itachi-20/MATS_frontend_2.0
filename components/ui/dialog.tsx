@@ -1,5 +1,4 @@
 "use client"
-
 import * as React from "react"
 import * as DialogPrimitive from "@radix-ui/react-dialog"
 import { X } from "lucide-react"
@@ -38,9 +37,9 @@ const DialogContent = React.forwardRef<
     <DialogPrimitive.Content
       ref={ref}
       style={{
-        width: "900px", // or any larger width you need
-        minWidth: "900px",
-        maxWidth: "none", // Remove max-width constraint
+        width: "800px", 
+        minWidth: "800px",
+        maxWidth: "none", 
         height: "400px",
         left: "50%",
         top: "50%",

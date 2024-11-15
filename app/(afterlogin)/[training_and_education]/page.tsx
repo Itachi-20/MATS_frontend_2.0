@@ -21,9 +21,7 @@ const Page:React.FC = () => {
                 <div className="flex gap-4 bg-white leading-normal">
                   <Button className="border border-[#4430bf] text-[#FFF] px-6 bg-[#4430BF] text-[16px]" >Advance Payment</Button>
                   <Button className="border border-[#4430bf] text-[#4430bf] px-6 text-[18px]" >Audit Trail</Button>
-                  <Link href={"/event_list"}> 
                     <Button className="bg-white text-black border px-9 hover:bg-white text-[18px]">Back</Button>
-                  </Link>
                 </div>
             </div>
 

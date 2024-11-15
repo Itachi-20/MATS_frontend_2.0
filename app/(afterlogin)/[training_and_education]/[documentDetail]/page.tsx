@@ -28,7 +28,7 @@ const page = () => {
                     <h1 className=" md:text-[30px] md:font-medium capitalize md:pb-4"> Training and Education</h1>
                     <div className="flex gap-4 bg-white leading-normal">
                         <Button className="border border-[#4430bf] text-[#4430bf] px-6 text-[18px]">Audit Trail</Button>
-                        <Link href={"/"}>
+                        <Link href={"/training_and_education"}>
                             <Button className="bg-white text-black border px-9 hover:bg-white text-[18px]">Back</Button>
                         </Link>
                     </div>
