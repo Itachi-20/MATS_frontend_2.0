@@ -1,21 +1,186 @@
 "use client"
-import React from "react";
-import Image from "next/image";
-import Navbar from "@/components/Navbar";
-import Sidebar from "@/components/Sidebar";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox"
 import BasicDetails from "@/components/basic_Details"
 import EventDetails from "@/components/event_Details"
 import VendorDetails from "@/components/vendor_Details"
 import TotalExpense from "@/components/total_Expense"
 import Documents from "@/components/documents"
+import { useSearchParams } from 'next/navigation'
+
+type EventEntry = {
+  name: string;
+  owner: string;
+  creation: string;
+  modified: string;
+  modified_by: string;
+  docstatus: number;
+  idx: number;
+  event_type: string;
+  company: string;
+  event_cost_center: string;
+  state: string;
+  sub_type_of_activity: string;
+  business_unit: string;
+  division_category: string;
+  therapy: string;
+  event_requestor: string;
+  division_sub_category: string;
+  status: string;
+  current_stage: string;
+  event_name: string;
+  event_start_date: string;
+  any_govt_hcp: string;
+  comments: string;
+  faculty: string;
+  event_venue: string;
+  event_end_date: string;
+  no_of_hcp: number;
+  bu_rational: string;
+  participants: string;
+  total_compensation_expense: number;
+  has_advance_expense: number;
+  total_logistics_expense: number;
+  total_estimated_expense: number;
+  currency: string;
+  preactivity_status: string;
+  advance_status: string;
+  post_activity_status: string;
+  post_expense_status: string;
+  post_expense_check: number;
+  travel_expense_status: string;
+  travel_expense_check: number;
+  invoice_amount: number;
+  basic_amount: number;
+  tds: number;
+  gst: number;
+  net_amount: number;
+  doctype: string;
+  compensation: Compensation[];
+  travel_expense_approvers: any[]; // Empty array, can be customized later
+  post_expense_approvers: any[]; // Empty array, can be customized later
+  preactivity_approvers: ApproverStatus[];
+  post_activity_approvers: any[]; // Empty array, can be customized later
+  occurrence_status: OccurrenceStatus[];
+  logistics: Logistics[];
+  documents: Document[];
+  advance_approvers: any[]; // Empty array, can be customized later
+  city:string
+  reporting_head:string
+}
+
+type Compensation = {
+  name: string;
+  owner: string;
+  creation: string;
+  modified: string;
+  modified_by: string;
+  docstatus: number;
+  idx: number;
+  vendor_type: string;
+  actual_amount: number;
+  status: string;
+  vendor_name: string;
+  advance: number;
+  budget_category: string;
+  est_amount: number;
+  gst_included: number;
+  gst: string;
+  occurrence_no: number;
+  parent: string;
+  parentfield: string;
+  parenttype: string;
+  doctype: string;
+}
+
+type ApproverStatus = {
+  name: string;
+  owner: string;
+  creation: string;
+  modified: string;
+  modified_by: string;
+  docstatus: number;
+  idx: number;
+  approver_level: string;
+  action_date: string;
+  approver: string;
+  remarks: string;
+  approver_status: string;
+  occurrence_no: number;
+  parent: string;
+  parentfield: string;
+  parenttype: string;
+  doctype: string;
+}
+
+type OccurrenceStatus = {
+  name: string;
+  owner: string;
+  creation: string;
+  modified: string;
+  modified_by: string;
+  docstatus: number;
+  idx: number;
+  occurrence_no: number;
+  status: string;
+  parent: string;
+  parentfield: string;
+  parenttype: string;
+  doctype: string;
+}
+
+type Logistics = {
+  name: string;
+  owner: string;
+  creation: string;
+  modified: string;
+  modified_by: string;
+  docstatus: number;
+  idx: number;
+  vendor_type: string;
+  actual_amount: number;
+  status: string;
+  advance: number;
+  budget_category: string;
+  est_amount: number;
+  gst_included: number;
+  gst: string;
+  occurrence_no: number;
+  parent: string;
+  parentfield: string;
+  parenttype: string;
+  doctype: string;
+}
+
+type Document = {
+  name: string;
+  owner: string;
+  creation: string;
+  modified: string;
+  modified_by: string;
+  docstatus: number;
+  idx: number;
+  activity_type: string;
+  occurrence_no: number;
+  document_type: string;
+  file: string;
+  parent: string;
+  parentfield: string;
+  parenttype: string;
+  doctype: string;
+}
+
 
 const Index = () => {
-  const handleApprove = async()=>{
+
+  const [eventData,setEventData] = useState<EventEntry>();
+  const param = useSearchParams()
+
+  const handleApprove = async(value:string)=>{
+    const refno = param.get("refno");
       try {
         const response = await fetch(
-          "/api/eventRequestApprove",
+          "/api/eventRequestApprove/Approve",
           {
             method: "POST",
             headers: {
@@ -23,9 +188,9 @@ const Index = () => {
             },
             credentials:'include',
             body:JSON.stringify({
-              name:"DOM-00043",
+              name:refno,
               "remark": "Test Approve Pre Activity",
-              "action":"Approved"
+              "action":value
             })
           }
         );
@@ -40,6 +205,43 @@ const Index = () => {
         console.error("Error during login:", error);
       }
   };
+
+  const eventDataApi = async()=>{
+    console.log("inside event Data")
+    try {
+      const response = await fetch(
+        "/api/eventRequestApprove/fetchData",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials:'include',
+          body:JSON.stringify({
+            name:param.get("refno")
+          })
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        setEventData(data.data);
+        
+        
+      } else {
+        console.log("Login failed");
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
+    }
+};
+
+
+
+useEffect(()=>{
+  eventDataApi();
+},[])
+
   return (
 
 
@@ -56,33 +258,42 @@ const Index = () => {
               <div className="grid grid-cols-2 w-full gap-4">
               <div className="col-span-1">
                 <h1 className="bg-[#ecf2ff] px-2 rounded-xl text-center">Request Number</h1>
-                <h1 className="text-center">1234567</h1>
+                <h1 className="text-center">{eventData && eventData.name}</h1>
                 </div>
               <div className="col-span-1">
                 <h1 className="bg-[#ecf2ff] px-2 rounded-xl text-center">Request Date</h1>
-                <h1 className="text-center">11/11/24</h1>
+                <h1 className="text-center">{eventData?.modified.substring(0,10)}</h1>
                 </div>
               </div>
               <div className="flex gap-4 text-white items-center">
-              <Button className="bg-[#5dbe74] hover:bg-[#5dbe74] px-6" onClick={()=>handleApprove()}>Approve</Button>
-              <Button className="bg-[#ff5757] hover:bg-[#ff5757] px-6">Reject</Button>
-              <Button className="bg-[#4430bf] hover:bg-[#4430bf] px-6">Send Back</Button>
+              <Button className="bg-[#5dbe74] hover:bg-[#5dbe74] px-6" onClick={()=>handleApprove("Approved")}>Approve</Button>
+              <Button className="bg-[#ff5757] hover:bg-[#ff5757] px-6" onClick={()=>handleApprove("Rejected")}>Reject</Button>
+              <Button className="bg-[#4430bf] hover:bg-[#4430bf] px-6" onClick={()=>handleApprove("SendBack")}>Send Back</Button>
               </div>
             </div>
           </div>
-        <BasicDetails/>
+        <BasicDetails
+        pathname=""
+        eventData = {eventData}
+        />
 
-        <EventDetails/>
+        <EventDetails
+        pathname=""
+        eventData = {eventData}
+        />
 
-        <VendorDetails/>
+        <VendorDetails
+        eventData = {eventData}
+        />
 
-        <TotalExpense/>
+        <TotalExpense
+        eventData = {eventData}
+        />
             
-        <Documents/>
-        
-            
-
-            
+        <Documents
+        eventData = {eventData}
+        PageName=""
+        />
         </div>
     
   )

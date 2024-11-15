@@ -96,7 +96,7 @@ type activityDropdown = {
 const index = () => {
   const pathname = usePathname();
 
-  const [form,setForm] = useState(3);
+  const [form,setForm] = useState(1);
   const [addVendor,setAddVendor] = useState(false);
   const [dropdownData,setDropdownData] = useState<dropdownData | null>(null);
   const [activityDropdown ,setActivityDropdown] = useState<activityDropdown | null>(null);
