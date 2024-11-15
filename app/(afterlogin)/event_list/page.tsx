@@ -1,8 +1,8 @@
 "use client";
 import React from "react";
-import {useEffect,useState} from "react"
 import Image from "next/image";
 import DatePicker from "./date-picker"
+import {useEffect,useState} from "react";
 import { useRouter } from 'next/navigation';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -25,6 +25,7 @@ type EventTable = {
 export default function EventList () {
 
   const router = useRouter();
+
   const handleClick = (refno:string) => {
 
     //  yadi new tab mein open kerna hai tab isko use karenge 

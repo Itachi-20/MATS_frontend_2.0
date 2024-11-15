@@ -47,7 +47,7 @@ const page = () => {
                             <Button className="px-20">
                                 {/* <DialogBox button={"Execute"} msg={"Next Occurrence date"}/> */}
                                 <DialogBox button={"Execute"} msg={"Are you sure you wanted to execute the event?"}/>
-                                </Button>
+                            </Button>
                         </div>
                     </div>
                 </div>

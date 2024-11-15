@@ -12,6 +12,8 @@ const Sidebar = () => {
     "Patient Support",
     "Sponsorship Support",
     "Non Monetary Grant",
+    "State Information",
+    'Person State Information'
   ];
   const settingsItems: string[] = [
     "Change Password",

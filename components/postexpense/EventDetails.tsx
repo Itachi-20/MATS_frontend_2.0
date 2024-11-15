@@ -10,6 +10,7 @@ const event_Details = () => {
       <div className="flex gap-6">
         <h1 className="text-black md:text-[30px] md:font-medium uppercase md:pb-4">
           {/* {pathname.substring(1) == 'monetary_grant' || pathname.substring(1) == 'non_monetary_grant' ? 'organisation Details' : 'event Details'} */}
+           Event Detail
         </h1>
       </div>
       <div className="grid md:grid-cols-3 md:gap-6">

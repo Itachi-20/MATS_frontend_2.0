@@ -146,7 +146,7 @@ const DocumentDetails = () => {
                       <TableCell>FullySignedOffAgreementLetter.docx</TableCell>
                       <TableCell className="flex space-x-6">
                         <Image src="/svg/editIcon.svg" width={20} height={20} alt='view-document' className='cursor-pointer' />
-                        <Image src="/svg/delete.svg" width={18} height={20} alt='view-document' className='cursor-pointer' />
+                        <Image src="/svg/delete.svg" width={18} height={20} alt='delete-icon' className='cursor-pointer' />
                       </TableCell>
                     </TableRow>
                   </TableBody>
