@@ -38,9 +38,9 @@ const index = () => {
         <AppWrapper>
         <div className="px-7 pb-7 pt-4 w-full relative z-20">
           <div>
-        {/* <h1 className="text-black text-[30px] font-medium capitalize" id="form_top">
-        {pathname.substring(1).split("_")}
-              </h1> */}
+        <h1 className="text-black text-[30px] font-medium capitalize" id="form_top">
+        {/* {pathname.replace("/","").replaceAll("_"," ")} */}
+              </h1>
               <div className='py-9'></div>
           </div>
         {

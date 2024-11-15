@@ -32,9 +32,8 @@ import { Item } from '@radix-ui/react-select';
   }
 
   type Props = {
-    nextForm: ()=>void
-    prevForm: ()=>void
     activityDropdown:activityDropdown| null
+    handleSubmit:(e:React.MouseEvent<HTMLButtonElement, MouseEvent>)=>void
 }
 const form4 = ({...Props}:Props) => {
   const [file,setFile] = useState<FileList | null>();
@@ -313,10 +312,10 @@ const form4 = ({...Props}:Props) => {
           {" "}
           Save as Draft
         </Button>
-        <Button className="bg-white text-black border text-md font-normal" onClick={Props.prevForm}>
+        <Button className="bg-white text-black border text-md font-normal">
           Back
         </Button>
-        <Button className="bg-[#4430bf] text-white text-md font-normal border" onClick={Props.nextForm}>
+        <Button className="bg-[#4430bf] text-white text-md font-normal border" onClick={(e)=>Props.handleSubmit(e)}>
           Next
         </Button>
       </div>

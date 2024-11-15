@@ -19,8 +19,6 @@ import {
 } from "@/components/ui/table";
 import { Checkbox } from '@/components/ui/checkbox';
 type Props = {
-    nextForm: ()=>void,
-    prevForm: ()=>void,
     isAddVendor: ()=>void,
     vendorType:{
       name:string,
@@ -527,7 +525,7 @@ const Form3 = ({...Props}:Props) => {
           {" "}
           Save as Draft
         </Button>
-        <Button className="bg-white text-black border text-md font-normal hover:bg-white" onClick={Props.prevForm}>
+        <Button className="bg-white text-black border text-md font-normal hover:bg-white">
           Back
         </Button>
         <Button className="bg-[#4430bf] text-white text-md font-normal border hover:bg-[#4430bf]" onClick={(e: React.MouseEvent<HTMLButtonElement>)=>Props.handleSubmit(e)}>

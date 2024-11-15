@@ -7,10 +7,10 @@ import Form4 from "@/app/(afterlogin)/training_and_education/forms/form4";
 import Preview_Form from './forms/preview_form';
 import Addvendor from '@/components/add_vendor';
 import Adddocument from '@/components/add_document';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { AppWrapper } from '@/app/context/module';
 import { usePathname } from 'next/navigation';
-
+import { useSearchParams } from 'next/navigation'
 type dropdownData = {
   company: {
     name: string,
@@ -95,8 +95,10 @@ type activityDropdown = {
 
 const index = () => {
   const pathname = usePathname();
-
-  const [form,setForm] = useState(1);
+  const searchParams = useSearchParams()
+  const search = searchParams.get('forms')
+  const router = useRouter()
+  const [form,setForm] = useState<string | number | null>(searchParams.get('forms'));
   const [addVendor,setAddVendor] = useState(false);
   const [dropdownData,setDropdownData] = useState<dropdownData | null>(null);
   const [activityDropdown ,setActivityDropdown] = useState<activityDropdown | null>(null);
@@ -171,7 +173,18 @@ const index = () => {
         setRefNo(data.message);
 
         setTimeout(() => {
-          nextForm();
+          if (search == "1") {
+            router.push(`/training_and_education?forms=2`);
+          }
+          if (search == "2") {
+            router.push(`/training_and_education?forms=3`);
+          }
+          if (search == "3") {
+            router.push(`/training_and_education?forms=4`);
+          }
+          if (search == "4") {
+            router.push(`/training_and_education?forms=5`);
+          }
         }, 1000)
       } else {
         console.log("submission failed");
@@ -192,16 +205,16 @@ const index = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // const router = useRouter();
-  const nextForm = (): void => {
-    setForm(prev => prev + 1);
-    // router.push("/modules#form_top")
-  }
+  // // const router = useRouter();
+  // const nextForm = (): void => {
+  //   setForm(prev => prev + 1);
+  //   // router.push("/modules#form_top")
+  // }
 
-  const prevForm = () => {
-    setForm(prev => prev - 1);
-    // router.push("/modules#form_top")
-  }
+  // const prevForm = () => {
+  //   setForm(prev => prev - 1);
+  //   // router.push("/modules#form_top")
+  // }
 
   const isAddVendor = () => {
     setAddVendor(prev => !prev)
@@ -266,31 +279,33 @@ const index = () => {
         <div className="px-7 pb-7 pt-4 w-full relative z-20">
           <div>
             <h1 className="text-black text-[30px] font-medium capitalize" id="form_top">
-              Training & Education
+              {/* Training & Education */}
+              {/* {pathname.replace("/","").replaceAll("_"," ")} */}
+
             </h1>
             <div className='py-9'></div>
           </div>
           {
-            form == 1 ?
+            search == "1" ?
               <Form1
-                nextForm={nextForm}
+                //nextForm={nextForm}
                 dropdownData={dropdownData}
                 handlefieldChange={handlefieldChange}
                 handleSelectChange={handleSelectChange}
                 handleSubmit={handleSubmit}
               /> :
-              form == 2 ?
+              search == "2" ?
                 <Form2
-                  nextForm={nextForm}
-                  prevForm={prevForm}
+                  //nextForm={nextForm}
+                  //prevForm={prevForm}
                   handlefieldChange={handlefieldChange}
                   handleSelectChange={handleSelectChange}
                   handleSubmit={handleSubmit}
                 /> :
-                form == 3 ?
+                search == "3" ?
                   <Form3
-                  nextForm = {nextForm}
-                  prevForm={prevForm}
+                 // nextForm = {nextForm}
+                  //prevForm={prevForm}
                   isAddVendor = {isAddVendor}
                   vendorType = {dropdownData && dropdownData.vendor_type}
                   currency = {dropdownData && dropdownData.currency}
@@ -300,15 +315,16 @@ const index = () => {
                   setFormData = {setFormData}
                   logisticsBudget = {logisticsBudget}
                   /> :
-                  form == 4 ?
+                  search == "4" ?
                     <Form4
-                    nextForm = {nextForm}
-                    prevForm={prevForm}
+                   // nextForm = {nextForm}
+                    //prevForm={prevForm}
                     activityDropdown={activityDropdown}
+                    handleSubmit = {handleSubmit}
                     /> :
-                    form == 5 ?
+                    search == "5" ?
                       <Preview_Form
-                        prevForm={prevForm}
+                       // prevForm={prevForm}
                       /> : ""
           }
         </div>

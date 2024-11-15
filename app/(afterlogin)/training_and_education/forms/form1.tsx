@@ -55,7 +55,7 @@ type subtypeActivity = {
 
 
 type Props = {
-  nextForm: () => void;
+  
   dropdownData: dropdownData | null;
   handlefieldChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>)=>void;
   handleSelectChange: (value:string,name:string)=>void;

@@ -171,7 +171,6 @@ type ActivityDocument = {
   document: DocumentDetails[];
 };
 
-
 const ExecutePage:React.FC = () => {
   const [data,setData] = useState<EventEntry>();
   const param = useSearchParams()
@@ -184,7 +183,7 @@ const ExecutePage:React.FC = () => {
      const fetchData = async()=>{
       try {
         const tableData = await fetch(
-          `api/execute/fetchData`,
+          `api/previewData`,
           {
             method: "POST",
             headers:{
@@ -207,7 +206,7 @@ const ExecutePage:React.FC = () => {
      }
 
      const handleNext = (refno:string)=>{
-      router.push(`/execute/${refno}`)
+      router.push(`/post_document_activity/${refno}`)
      }
 
 
@@ -267,7 +266,6 @@ const ExecutePage:React.FC = () => {
           eventData = {data}
           />            
           <Documents 
-          pathname=""
           eventData = {data}
           /> 
         </div>

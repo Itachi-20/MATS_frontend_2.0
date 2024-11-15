@@ -12,8 +12,6 @@ import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 
 type Props = {
-  prevForm: () => void
-  nextForm: () => void;
   handlefieldChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
   handleSelectChange: (value: string, name: string) => void;
   handleSubmit: (e: React.MouseEvent<HTMLButtonElement>) => void
@@ -99,7 +97,7 @@ const Form2 = ({ ...Props }: Props) => {
       </div>
       <div className='flex justify-end pt-5 gap-4'>
         <Button className='bg-white text-black border text-md font-normal'> Save as Draft</Button>
-        <Button className='bg-white text-black border text-md font-normal' onClick={Props.prevForm}>Back</Button>
+        <Button className='bg-white text-black border text-md font-normal'>Back</Button>
         <Button className='bg-[#4430bf] text-white text-md font-normal border' onClick={Props.handleSubmit}>Next</Button>
       </div>
     </div>)

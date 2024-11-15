@@ -94,7 +94,7 @@ const Sidebar = () => {
               {moduleItems &&
                 moduleItems.map((data,index) => { 
                   return (
-                    <div key={index} className="child py-4 px-5 rounded-bl-xl text-black  border-l border-black ml-4 relative text-nowrap" onClick={()=>router.push(data.toLowerCase().replaceAll(" ", "_"))}>
+                    <div key={index} className="child py-4 px-5 rounded-bl-xl text-black  border-l border-black ml-4 relative text-nowrap" onClick={()=>router.push(data.toLowerCase().replaceAll(" ", "_").replace("&","and") + "?forms=1")}>
                       <div className="absolute -bottom-5 hover:bg-white rounded-xl text-black hover:text-[#4430bf] text-[12px] px-1 py-2 cursor-pointer">
                         {data}
                       </div>

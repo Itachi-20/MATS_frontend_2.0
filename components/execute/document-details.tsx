@@ -21,7 +21,9 @@ import {
 } from "@/components/ui/select";
 
 import { useSearchParams } from "next/navigation";
-
+import Link from "next/link";
+import { Checkbox } from "../ui/checkbox";
+import Addvendor from "../add_vendor";
 
 type document = {
   name: string;
@@ -52,12 +54,172 @@ type activityDropdown = {
   document: Document[];
 };
 
+type EventEntry = {
+  name: string;
+  owner: string;
+  creation: string;
+  modified: string;
+  modified_by: string;
+  docstatus: number;
+  idx: number;
+  event_type: string;
+  company: string;
+  event_cost_center: string;
+  state: string;
+  sub_type_of_activity: string;
+  business_unit: string;
+  division_category: string;
+  therapy: string;
+  event_requestor: string;
+  division_sub_category: string;
+  status: string;
+  current_stage: string;
+  event_name: string;
+  event_start_date: string;
+  any_govt_hcp: string;
+  comments: string;
+  faculty: string;
+  event_venue: string;
+  event_end_date: string;
+  no_of_hcp: number;
+  bu_rational: string;
+  participants: string;
+  total_compensation_expense: number;
+  has_advance_expense: number;
+  total_logistics_expense: number;
+  total_estimated_expense: number;
+  currency: string;
+  preactivity_status: string;
+  advance_status: string;
+  post_activity_status: string;
+  post_expense_status: string;
+  post_expense_check: number;
+  travel_expense_status: string;
+  travel_expense_check: number;
+  invoice_amount: number;
+  basic_amount: number;
+  tds: number;
+  gst: number;
+  net_amount: number;
+  doctype: string;
+  compensation: Compensation[];
+  travel_expense_approvers: any[]; // Empty array, can be customized later
+  post_expense_approvers: any[]; // Empty array, can be customized later
+  preactivity_approvers: ApproverStatus[];
+  post_activity_approvers: any[]; // Empty array, can be customized later
+  occurrence_status: OccurrenceStatus[];
+  logistics: Logistics[];
+  documents: ActivityDocument[];
+  advance_approvers: any[]; // Empty array, can be customized later
+  city:string
+  reporting_head:string
+}
+
+type Compensation = {
+  name: string;
+  owner: string;
+  creation: string;
+  modified: string;
+  modified_by: string;
+  docstatus: number;
+  idx: number;
+  vendor_type: string;
+  actual_amount: number;
+  status: string;
+  vendor_name: string;
+  advance: number;
+  budget_category: string;
+  est_amount: number;
+  gst_included: number;
+  gst: string;
+  occurrence_no: number;
+  parent: string;
+  parentfield: string;
+  parenttype: string;
+  doctype: string;
+}
+
+type ApproverStatus = {
+  name: string;
+  owner: string;
+  creation: string;
+  modified: string;
+  modified_by: string;
+  docstatus: number;
+  idx: number;
+  approver_level: string;
+  action_date: string;
+  approver: string;
+  remarks: string;
+  approver_status: string;
+  occurrence_no: number;
+  parent: string;
+  parentfield: string;
+  parenttype: string;
+  doctype: string;
+}
+
+type OccurrenceStatus = {
+  name: string;
+  owner: string;
+  creation: string;
+  modified: string;
+  modified_by: string;
+  docstatus: number;
+  idx: number;
+  occurrence_no: number;
+  status: string;
+  parent: string;
+  parentfield: string;
+  parenttype: string;
+  doctype: string;
+}
+
+type Logistics = {
+  name: string;
+  owner: string;
+  creation: string;
+  modified: string;
+  modified_by: string;
+  docstatus: number;
+  idx: number;
+  vendor_type: string;
+  actual_amount: number;
+  status: string;
+  advance: number;
+  budget_category: string;
+  est_amount: number;
+  gst_included: number;
+  gst: string;
+  occurrence_no: number;
+  parent: string;
+  parentfield: string;
+  parenttype: string;
+  doctype: string;
+}
+
+type File = {
+  url: string;
+  name: string;
+  file_name:string
+};
+
+type DocumentDetails = {
+  type: string;
+  file: File[];
+};
+
+type ActivityDocument = {
+  activity_type: string;
+  document: DocumentDetails[];
+};
+
 
 
 
 type Props = {
   pathname:string
-  documentData:DocumentData | undefined
+  data: EventEntry | undefined
   refno:string
 }
 
@@ -93,7 +255,7 @@ const DocumentDetails = ({...Props}:Props) => {
     }
       formdata.append("docname",Props.refno)
       formdata.append("document_type",activityType as string);
-      formdata.append("activity_type","Executed")
+      formdata.append("activity_type","Post Activity")
     try {
       const response = await fetch(
         `/api/training_and_education/fileUpload`,
@@ -119,7 +281,11 @@ const DocumentDetails = ({...Props}:Props) => {
     }
   }
 
-  const [files,setFiles] = useState();
+  const [isChecked,setIsChecked] = useState<boolean>();
+  const [isAddVendor,setIsAddVendor] = useState<boolean>();
+
+  
+  
 
   const fetchDropdown = async()=>{
     try {
@@ -146,7 +312,7 @@ const DocumentDetails = ({...Props}:Props) => {
     fetchDropdown();
   },[])
 
-
+console.log(Props.data,"this is data")
   return (
     <div className="px-6 pt-10">
 
@@ -158,10 +324,10 @@ const DocumentDetails = ({...Props}:Props) => {
           </label>
           <Select>
             <SelectTrigger className="dropdown bg-[#F6F6F6]">
-              <SelectValue placeholder="Executed" />
+              <SelectValue placeholder="Post Activity" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="Executed">Executed</SelectItem>
+              <SelectItem value="Post Activity">Post Activity</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -179,7 +345,7 @@ const DocumentDetails = ({...Props}:Props) => {
             <SelectContent>
             {
                   activitydropdown && activitydropdown.document.filter((item,index)=>{
-                    if(item.activity_type == "Executed"){
+                    if(item.activity_type == "Post Activity"){
                       return item
                     }
                   }).map((item,index)=>{
@@ -228,121 +394,69 @@ const DocumentDetails = ({...Props}:Props) => {
           </h1>
         </div>
 
-        <div className='border border-[#848484] p-4 rounded-2xl w-full'>
-          <div className="border-b border-[#848484] pb-6">
-            <h1 className="text-black pl-4 pb-4">
-              Document type:
-              <span className="font-semibold"> Execute</span>
-            </h1>
-            <div className="grid grid-cols-2 bg-white divide-x-2">
-              <div className="col-span-1 flex flex-col mr-2">
-                <Table>
-                  <TableHeader>
-                    <TableRow className="text-black">
-                      <TableHead className={"bg-[#E0E9FF] rounded-2xl text-[15px] w-full"}
-                      >
-                        <span>Supporting Document</span>
-                      </TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {/* {
-                      Props.documentData && Props.documentData.
-                    } */}
-                    <TableRow className="text-black">
-                      <TableCell>Fully Signed Off Agreement Letter</TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </div>
-              <div className="col-span-1 flex flex-col gap-3 pl-2">
-                <Table>
-                  <TableHeader>
-                    <TableRow className="text-black">
-                      <TableHead
-                        className={"bg-[#E0E9FF] rounded-2xl text-[15px]"}
-                      >
-                        Uploded Documents
-                      </TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    <TableRow className="text-black flex justify-between items-center">
-                      <TableCell>FullySignedOffAgreementLetter.docx</TableCell>
-                      <TableCell className="flex space-x-6">
-                        <Image src="/svg/editIcon.svg" width={20} height={20} alt='view-document' className='cursor-pointer' />
-                        <Image src="/svg/delete.svg" width={18} height={20} alt='view-document' className='cursor-pointer' />
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </div>
-            </div>
+        {
+        Props.data && Props.data.documents?.map((item,index)=>{
+          return (
+      <div className='border border-[#848484] p-4 rounded-2xl w-full'>
+        <h1 className="text-black pl-4 pb-4">
+          Document type:{" "}
+          <span className="font-semibold">{item.activity_type}</span>
+        </h1>
+        <div className="bg-white">
+          <div className="flex flex-col">
+            <Table>
+              <TableHeader>
+                <TableRow className="text-black">
+                  <TableHead className={"bg-[#E0E9FF] rounded-2xl text-[15px] w-[50%]"}
+                  >
+                    Supporting Document
+                  </TableHead>
+                  <TableHead className={"bg-[#E0E9FF] rounded-2xl text-[15px] w-[50%]"}
+                  >
+                    Supporting Document
+                    
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {
+                  item && item.document?.map((item2,index)=>{
+                    return (
+                <TableRow className="text-black">
+                  <TableCell>{item2.type}</TableCell>
+                  <TableCell>{item2.file?.map((item3,index)=>{
+                    return (
+                      <div className='flex justify-between'>
+                      <div className='pb-2'>{item3.file_name}</div>
+                      <div>
+                        <Link rel="stylesheet" href={item3.url}>
+                      <Image src={"/svg/view.svg"} width={20} height={20}  alt='view-document' className='cursor-pointer' />
+                        </Link>
+                      
+                      </div>
+                      </div>
+                    )
+                  })}</TableCell>
+                </TableRow>
+                    )
+                  })
+                }
+                <TableRow className="text-black">
+                  
+                </TableRow>
+              </TableBody>
+            </Table>
           </div>
 
-          <div className="pt-6">
-            <h1 className="text-black pl-4 pb-4">
-              Document type:{" "}
-              <span className="font-semibold">Pre-Activity</span>
-            </h1>
-            <div className="grid grid-cols-2 bg-white divide-x-2">
-              <div className="col-span-1 flex flex-col mr-2">
-                <Table className=''>
-                  <TableHeader>
-                    <TableRow className="text-black">
-                      <TableHead className={"bg-[#E0E9FF] rounded-2xl text-[15px] w-full"}
-                      >
-                        <span>Supporting Document</span>
-
-                      </TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    <TableRow className="text-black">
-                      <TableCell>Letter of understanding joint event</TableCell>
-                    </TableRow>
-                    <TableRow className="text-black">
-                      <TableCell>Letter of understanding joint event</TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </div>
-              <div className="col-span-1 flex flex-col gap-3 pl-2">
-                <Table>
-                  <TableHeader>
-                    <TableRow className="text-black">
-                      <TableHead
-                        className={"bg-[#E0E9FF] rounded-2xl text-[15px]"}
-                      >
-                        Uploded Documents
-                      </TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    <TableRow className="text-black flex justify-between items-center">
-                      <TableCell>Stationary.cSV</TableCell>
-                      <TableCell className="flex space-x-6">
-                        <Image src="/svg/editIcon.svg" width={20} height={20} alt='view-document' className='cursor-pointer' />
-                        <Image src="/svg/delete.svg" width={18} height={20} alt='view-document' className='cursor-pointer' />
-                      </TableCell>
-                    </TableRow>
-                    <TableRow className="text-black flex justify-between items-center">
-                      <TableCell>Stationary.cSV</TableCell>
-                      <TableCell className="flex space-x-6">
-                        <Image src="/svg/editIcon.svg" width={20} height={20} alt='view-document' className='cursor-pointer' />
-                        <Image src="/svg/delete.svg" width={18} height={20} alt='view-document' className='cursor-pointer' />
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </div>
-            </div>
-          </div>
         </div>
-
       </div>
+      )
+    })
+  }
+
 
     </div>
+      </div>
   )
 }
 

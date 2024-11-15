@@ -10,6 +10,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import page from '@/app/(afterlogin)/advance_payment/[request_number]/page';
+import Link from 'next/link';
 
 interface DocumentsProps {
   PageName: string; 
@@ -70,7 +71,7 @@ type EventEntry = {
   post_activity_approvers: any[]; // Empty array, can be customized later
   occurrence_status: OccurrenceStatus[];
   logistics: Logistics[];
-  documents: Document[];
+  documents: ActivityDocument[];
   advance_approvers: any[]; // Empty array, can be customized later
   city:string
   reporting_head:string
@@ -159,23 +160,22 @@ type Logistics = {
   doctype: string;
 }
 
-type Document = {
+type File = {
+  url: string;
   name: string;
-  owner: string;
-  creation: string;
-  modified: string;
-  modified_by: string;
-  docstatus: number;
-  idx: number;
+  file_name:string
+};
+
+type DocumentDetails = {
+  type: string;
+  file: File[];
+};
+
+type ActivityDocument = {
   activity_type: string;
-  occurrence_no: number;
-  document_type: string;
-  file: string;
-  parent: string;
-  parentfield: string;
-  parenttype: string;
-  doctype: string;
-}
+  document: DocumentDetails[];
+};
+
 
 type Props = {
   eventData:EventEntry | null
@@ -192,54 +192,64 @@ const Documents = ({PageName,...Props}:Props) => {
       </div>
 
 
-      <div className='border border-[#848484] p-4 rounded-2xl w-full'>
+      {
+        Props.eventData && Props.eventData.documents?.map((item,index)=>{
+          return (
+      <div className='border border-[#848484] p-4 rounded-2xl w-full mb-8'>
         <h1 className="text-black pl-4 pb-4">
           Document type:{" "}
-          <span className="font-semibold">Pre-Activity</span>
+          <span className="font-semibold">{item.activity_type}</span>
         </h1>
-        <div className="grid grid-cols-2 bg-white divide-x-2">
-          <div className="col-span-1 flex flex-col mr-2">
-            <Table className=''>
+        <div className="bg-white">
+          <div className="flex flex-col">
+            <Table>
               <TableHeader>
                 <TableRow className="text-black">
-                  <TableHead className={"bg-[#E0E9FF] rounded-2xl text-[15px] w-full"}
+                  <TableHead className={"bg-[#E0E9FF] rounded-2xl text-[15px] w-[50%]"}
                   >
-                    <span>Supporting Document</span>
+                    Supporting Document
+                  </TableHead>
+                  <TableHead className={"bg-[#E0E9FF] rounded-2xl text-[15px] w-[50%]"}
+                  >
+                    Supporting Document
                     
                   </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
+                {
+                  item && item.document?.map((item2,index)=>{
+                    return (
                 <TableRow className="text-black">
-                  <TableCell>No Data</TableCell>
-
+                  <TableCell>{item2.type}</TableCell>
+                  <TableCell>{item2.file?.map((item3,index)=>{
+                    return (
+                      <div className='flex justify-between'>
+                      <div className='pb-2'>{item3.file_name}</div>
+                      <div>
+                        <Link rel="stylesheet" href={item3.url}>
+                      <Image src={"/svg/view.svg"} width={20} height={20}  alt='view-document' className='cursor-pointer' />
+                        </Link>
+                      
+                      </div>
+                      </div>
+                    )
+                  })}</TableCell>
+                </TableRow>
+                    )
+                  })
+                }
+                <TableRow className="text-black">
+                  
                 </TableRow>
               </TableBody>
             </Table>
           </div>
-          <div className="col-span-1 flex flex-col gap-3 pl-2">
-            <Table>
-              <TableHeader>
-                <TableRow className="text-black">
-                  <TableHead
-                    className={"bg-[#E0E9FF] rounded-2xl text-[15px]"}
-                  >
-                    Uploded Documents
-                  </TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                <TableRow className="text-black flex justify-between items-center">
-                  <TableCell>No Data</TableCell>
-                  { PageName === "eventListPage" && 
-                    <TableCell><Image src="/svg/view.svg" width={20} height={20}  alt='view-document' className='cursor-pointer' /></TableCell>
-                  }
-                </TableRow>
-              </TableBody>
-            </Table>
-          </div> 
         </div>
       </div>
+      )
+    })
+  }
     </div>
   )
 }
