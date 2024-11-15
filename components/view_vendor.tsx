@@ -10,26 +10,43 @@ import {
 import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
 
+type EventTable = {
+  vendor_type: string;
+  vendor_name: string;
+  vendor_code: string;
+  remark: string;
+  pan_number: number;
+  email: string;
+  contact: number;
+};
+
 type Props = {
-  isAddVendor: () => void
+  isViewVendor: () => void
   isAddDocument: () => void
+  isViewDocument: () => void
+  vendorInfo: EventTable | undefined
 }
 
-const add_vendor = ({ ...Props }: Props) => {
+const view_vendor = ({ ...Props }: Props) => {
+
+  const handleSelectField = (value:string):void => {
+    console.log("Here is your selected value:",value);
+  }
+
   return (
     <div className="absolute z-50 flex inset-0 items-center justify-center bg-black bg-opacity-50">
       <div className="border-2 rounded-xl p-5 bg-white relative">
         <h1 className="text-black text-[30px] font-medium capitalize pb-4">
-          Add New Vendor
+          Entry Details
         </h1>
         <div className="grid grid-cols-3 gap-6">
           <div className="flex flex-col gap-2">
             <label className="text-black text-sm font-normal capitalize">
               vendor type<span className="text-[#e60000]">*</span>
             </label>
-            <Select>
+            <Select onValueChange={handleSelectField}>
               <SelectTrigger className="text-black shadow">
-                <SelectValue placeholder="Theme" />
+                <SelectValue placeholder={Props.vendorInfo ? Props.vendorInfo.vendor_type:""} />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="light">Light</SelectItem>
@@ -45,6 +62,7 @@ const add_vendor = ({ ...Props }: Props) => {
             <Input
               className="text-black shadow"
               placeholder="Type Here"
+              value={Props.vendorInfo ? Props.vendorInfo.vendor_code:""}
             ></Input>
           </div>
           <div className="flex flex-col gap-2">
@@ -54,6 +72,7 @@ const add_vendor = ({ ...Props }: Props) => {
             <Input
               className="text-black shadow"
               placeholder="Type Here"
+              value={Props.vendorInfo ? Props.vendorInfo.vendor_name:""}
             ></Input>
           </div>
           <div className="flex flex-col gap-2">
@@ -63,6 +82,7 @@ const add_vendor = ({ ...Props }: Props) => {
             <Input
               className="text-black shadow"
               placeholder="Type Here"
+              value={Props.vendorInfo ? Props.vendorInfo.contact:""}
             ></Input>
           </div>
           <div className="flex flex-col gap-2">
@@ -72,6 +92,7 @@ const add_vendor = ({ ...Props }: Props) => {
             <Input
               className="text-black shadow"
               placeholder="Type Here"
+              value={Props.vendorInfo ? Props.vendorInfo.pan_number:""}
             ></Input>
           </div>
           <div className="flex flex-col gap-2">
@@ -81,6 +102,7 @@ const add_vendor = ({ ...Props }: Props) => {
             <Input
               className="text-black shadow"
               placeholder="Type Here"
+              value={Props.vendorInfo ? Props.vendorInfo.email:""}
             ></Input>
           </div>
           
@@ -90,9 +112,21 @@ const add_vendor = ({ ...Props }: Props) => {
             </label>
             <Input
               type="button"
-              className="text-black shadow"
+              className="text-black border-dotted cursor-pointer"
               placeholder="Type Here"
               onClick={Props.isAddDocument}
+            ></Input>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label className="text-black text-sm font-normal capitalize">
+              View Document<span className="text-[#e60000]">*</span>
+            </label>
+            <Input
+              type="button"
+              className="text-black border-dotted cursor-pointer"
+              placeholder="Type Here"
+              onClick={Props.isViewDocument}
             ></Input>
           </div>
           <div className="flex flex-col gap-2">
@@ -102,13 +136,14 @@ const add_vendor = ({ ...Props }: Props) => {
             <Textarea
               className="text-black shadow"
               placeholder="Type Here"
+              value={Props.vendorInfo ? Props.vendorInfo.remark:""}
             ></Textarea>
           </div>
           
           
         </div>
         <div className="flex justify-end pt-5 gap-4">
-          <Button className="bg-white text-black border text-md font-normal hover:bg-white" onClick={Props.isAddVendor}>
+          <Button className="bg-white text-black border text-md font-normal hover:bg-white" onClick={Props.isViewVendor}>
             Back
           </Button>
           <Button className="bg-[#4430bf] text-white text-md font-normal border hover:bg-[#4430bf]">
@@ -120,4 +155,4 @@ const add_vendor = ({ ...Props }: Props) => {
   )
 }
 
-export default add_vendor
+export default view_vendor

@@ -1,8 +1,8 @@
-"use client";
-import React from 'react'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { usePathname } from 'next/navigation'
+'use client'
+import React from 'react';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { usePathname } from 'next/navigation';
 
 type EventEntry = {
   name: string;

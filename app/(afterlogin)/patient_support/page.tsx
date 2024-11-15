@@ -43,9 +43,12 @@ const index = () => {
         <div className="px-7 pb-7 pt-4 w-full relative z-20">
           {
             form == 1 ? (
-              <Form1
-                nextForm={nextForm}
-              />
+              <>
+                <FormState1/>
+                <Form1
+                  nextForm={nextForm}
+                />
+              </>
             )
               :
               form == 2 ?
