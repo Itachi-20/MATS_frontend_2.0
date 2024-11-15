@@ -174,7 +174,7 @@ type Document = {
 
 
 type Props = {
-  eventData : EventEntry | undefined
+  eventData : EventEntry | null
 }
 
 const vendor_Details = ({...Props}:Props) => {

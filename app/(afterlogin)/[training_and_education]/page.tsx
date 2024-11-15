@@ -58,15 +58,10 @@ const Page:React.FC = () => {
             <div className="flex justify-between">
                 <h1 className=" md:text-[30px] md:font-medium capitalize md:pb-4"> Training and Education</h1>
                 <div className="flex gap-4 bg-white leading-normal">
-<<<<<<<< HEAD:app/(afterlogin)/post_expense/page.tsx
-                  <Button className="border border-[#4430bf] text-[#FFF] px-6 bg-[#4430BF] text-[16px]" onClick={handlClick}>Advance Payment</Button>
-                  <Button className="border border-[#4430bf] text-[#4430bf] px-6 text-[18px]" onClick={handlClick}>Audit Trail</Button>
-                  <Link href={"/event_list"}>
-========
                   <Button className="border border-[#4430bf] text-[#FFF] px-6 bg-[#4430BF] text-[16px]">Advance Payment</Button>
                   <Button className="border border-[#4430bf] text-[#4430bf] px-6 text-[18px]">Audit Trail</Button>
                   <Link href={"/event_list"}> 
->>>>>>>> firozDev:app/(afterlogin)/[training_and_education]/page.tsx
+
                     <Button className="bg-white text-black border px-9 hover:bg-white text-[18px]">Back</Button>
                   </Link>
                 </div>
@@ -84,11 +79,9 @@ const Page:React.FC = () => {
                 <h1 className="text-center">11/11/24</h1>
               </div>
               <div className="col-span-1 flex justify-center pt-1">
-<<<<<<<< HEAD:app/(afterlogin)/post_expense/page.tsx
-                <Button className="bg-[#4430BF] text-[#FFF] border px-[20px] py-[10px] rounded-[8px] text-[20px] font-normal leading-normal font-['Poppins']" onClick={()=> router.push("/postexpense/upload")}>Submit Document</Button>
-========
+
                 <Button className="bg-[#4430BF] text-[#FFF] border px-[68px] py-[10px] rounded-[8px] text-[20px] font-normal leading-normal font-['Poppins']" onClick={()=> router.push(`/traning_And_education/${1234567}`)}>Next</Button>
->>>>>>>> firozDev:app/(afterlogin)/[training_and_education]/page.tsx
+
                </div>
               </div>
             </div>

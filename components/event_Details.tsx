@@ -169,7 +169,7 @@ type Document = {
 
 type Props = {
   pathname: string
-  eventData:EventEntry | undefined
+  eventData:EventEntry | null
 }
 
 const event_Details = ({ ...Props }: Props) => {

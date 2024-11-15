@@ -178,7 +178,7 @@ type Document = {
 }
 
 type Props = {
-  eventData:EventEntry | undefined
+  eventData:EventEntry | null
   PageName:string
 }
 

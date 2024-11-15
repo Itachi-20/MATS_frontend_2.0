@@ -12,13 +12,126 @@ import { Textarea } from "@/components/ui/textarea";
 import {budget_options}  from "@/app/page";
 import {business_unit_options} from "@/app/page";
 
-type Props = {
-  nextForm: () => void;
+type dropdownData = {
+  company: {
+    name: string;
+    company_name: "string";
+  }[];
+  division: {
+    name: string;
+    division_name: string;
+  }[];
+  requestor: {
+    full_name: string;
+    email: string;
+  }[];
+  vendor_type: {
+    name: string;
+    vendor_type: string;
+  }[];
+  state: {
+    name: string;
+    state: string;
+  }[];
 };
+
+type eventCostCenter = {
+  cost_center: {
+    name: string;
+    cost_center_description: string;
+  }[];
+  division_category: {
+    name: string;
+    category: string;
+  }[];
+  therapy: {
+    name: string;
+    therapy: string;
+  }[];
+};
+
+type subtypeActivity = {
+    name: string;
+    division_sub_category: string
+}[];
+
+type Props = {
+  // nextForm: () => void;
+  dropdownData: dropdownData | null;
+  handlefieldChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>)=>void;
+  handleSelectChange: (value:string,name:string)=>void;
+  handleSubmit:(e: React.MouseEvent<HTMLButtonElement>)=>void
+}
 
 const Form1 = ({ ...Props }: Props) => {
   const[businessUnit, setBusinessUnit] = useState("");
   const[budget, setBudget] = useState("");  
+
+  const [eventCostCenter, setEventCostCenter] =
+    useState<eventCostCenter | null>(null);
+  const [subtypeActivity, setSubtypeActivity] =
+    useState<subtypeActivity | null>(null);
+  const [subtypeActivityVisible, setSubtypeActivityVisible] = useState(false);
+
+  const handleBudgetChange = async (value: string) => {
+    try {
+      const response = await fetch(
+        "/api/monetary_grant/subtypeDropdown",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            budget: value,
+          }),
+        }
+      );
+
+      const data = await response.json();
+      setSubtypeActivity(data.data);
+      if (value == "National") {
+        setSubtypeActivityVisible(true);
+      } else {
+        setSubtypeActivityVisible(false);
+      }
+
+      if (response.ok) {
+      } else {
+        console.log("Login failed");
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
+    }
+  };
+
+  const handleBusinessUnitChange = async (value: string) => {
+    try {
+      const response = await fetch(
+        "/api/monetary_grant/eventCostCenterDropdown",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            division: value,
+          }),
+        }
+      );
+
+      const data = await response.json();
+      setEventCostCenter(data.data);
+
+      if (response.ok) {
+      } else {
+        console.log("Login failed");
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
+    }
+  };
+
   return (
     // </div>
     (<div>
@@ -30,145 +143,193 @@ const Form1 = ({ ...Props }: Props) => {
           <label className="lable">
             Company Names <span className="text-[#e60000]">*</span>
           </label>
-          <Select>
-            <SelectTrigger className="dropdown">
-              <SelectValue placeholder="Theme" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="light">Light</SelectItem>
-              <SelectItem value="dark">Dark</SelectItem>
-              <SelectItem value="system">System</SelectItem>
-            </SelectContent>
-          </Select>
+          <Select
+            onValueChange={(value)=>Props.handleSelectChange(value,"company")}
+            >
+              <SelectTrigger className="dropdown">
+                <SelectValue placeholder="Select" />
+              </SelectTrigger>
+              <SelectContent>
+                {Props.dropdownData &&
+                  Props.dropdownData.company.map((item, index) => {
+                    return (
+                      <SelectItem value={item.name}>
+                        {item.company_name}
+                      </SelectItem>
+                    );
+                  })}
+              </SelectContent>
+            </Select>
         </div>
         <div className="flex flex-col gap-2">
           <label className="lable">
             Business Unit<span className="text-[#e60000]">*</span>
           </label>
-          <Select onValueChange={setBusinessUnit}>
-            <SelectTrigger className="dropdown">
-              <SelectValue placeholder="--Selected--" />
-            </SelectTrigger>
-            <SelectContent>
-              { 
-                business_unit_options && business_unit_options.map((item:string,index:number)=>(
-                  <SelectItem key={index} value={item}>{item}</SelectItem>
-                ))
-              }
-            </SelectContent>
-          </Select>
+          <Select onValueChange={(value)=>{handleBusinessUnitChange(value),Props.handleSelectChange(value,"business_unit")}}>
+              <SelectTrigger className="dropdown">
+                <SelectValue placeholder="Select" />
+              </SelectTrigger>
+              <SelectContent>
+                {Props.dropdownData &&
+                  Props.dropdownData.division.map((item, index) => {
+                    return (
+                      <SelectItem value={item.name}>
+                        {item.division_name}
+                      </SelectItem>
+                    );
+                  })}
+              </SelectContent>
+            </Select>
         </div>
         <div className="flex flex-col gap-2">
           <label className="lable">
             Event requester<span className="text-[#e60000]">*</span>
           </label>
-          <Select>
-            <SelectTrigger className="dropdown">
-              <SelectValue placeholder="Theme" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="light">Light</SelectItem>
-              <SelectItem value="dark">Dark</SelectItem>
-              <SelectItem value="system">System</SelectItem>
-            </SelectContent>
-          </Select>
+          <Select
+            onValueChange={(value)=>Props.handleSelectChange(value,"event_requestor")}
+            >
+              <SelectTrigger className="dropdown">
+                <SelectValue placeholder="Select" />
+              </SelectTrigger>
+              <SelectContent>
+                {Props.dropdownData &&
+                  Props.dropdownData.requestor.map((item, index) => {
+                    return (
+                      <SelectItem value={item.email}>
+                        {item.full_name}
+                      </SelectItem>
+                    );
+                  })}
+              </SelectContent>
+            </Select>
         </div>
         <div className="flex flex-col gap-2">
           <label className="lable">
             event cost center<span className="text-[#e60000]">*</span>
           </label>
-          <Select>
-            <SelectTrigger className="dropdown">
-              <SelectValue placeholder="Theme" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="light">Light</SelectItem>
-              <SelectItem value="dark">Dark</SelectItem>
-              <SelectItem value="system">System</SelectItem>
-            </SelectContent>
-          </Select>
+          <Select
+            onValueChange={(value)=>Props.handleSelectChange(value,"event_cost_center")}
+            >
+              <SelectTrigger className="dropdown">
+                <SelectValue placeholder="Select" />
+              </SelectTrigger>
+              <SelectContent>
+                {eventCostCenter &&
+                  eventCostCenter.cost_center.map((item, index) => {
+                    return (
+                      <SelectItem value={item.name}>
+                        {item.cost_center_description}
+                      </SelectItem>
+                    );
+                  })}
+              </SelectContent>
+            </Select>
         </div>
         <div className="flex flex-col gap-2">
           <label className="lable">
             Budget<span className="text-[#e60000]">*</span>
           </label>
-          <Select onValueChange={setBudget}>
-            <SelectTrigger className="dropdown">
-              <SelectValue placeholder="--Selected--" />
-            </SelectTrigger>
-            <SelectContent>
-              { 
-                budget_options && budget_options.map((item:string,index:number)=>(
-                  <SelectItem key={index} value={item}>{item}</SelectItem>
-                ))
-              }
-            </SelectContent>
-          </Select>
+          <Select onValueChange={(value)=>{handleBudgetChange(value),Props.handleSelectChange(value,"division_category")}}>
+              <SelectTrigger className="dropdown">
+                <SelectValue placeholder="Select" />
+              </SelectTrigger>
+              <SelectContent>
+                {eventCostCenter &&
+                  eventCostCenter.division_category.map((item, index) => {
+                    return (
+                      <SelectItem value={item.name}>{item.category}</SelectItem>
+                    );
+                  })}
+              </SelectContent>
+            </Select>
         </div>
-        {
-          businessUnit == "Endosurgery" && budget == "National" &&          
-          <div className="flex flex-col gap-2">
+        <div
+            className={`flex flex-col gap-2 ${
+              subtypeActivityVisible ? "" : "hidden"
+            }`}
+          >
             <label className="lable">
               Budget Sub Type<span className="text-[#e60000]">*</span>
             </label>
-            <Select>
+            <Select
+            onValueChange={(value)=>{Props.handleSelectChange(value,"division_sub_category")}}
+            >
               <SelectTrigger className="dropdown">
-                <SelectValue placeholder="--Selected--" />
+                <SelectValue placeholder="Theme" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="light">P1</SelectItem>
-                <SelectItem value="dark">P2</SelectItem>
-                <SelectItem value="system">P3</SelectItem>
-                <SelectItem value="system">Trade</SelectItem>
+                {subtypeActivity &&
+                  subtypeActivity.map((item, index) => {
+                    return (
+                      <SelectItem value={item.name}>
+                        {item.division_sub_category}
+                      </SelectItem>
+                    );
+                  })}
               </SelectContent>
             </Select>
           </div>
-
-        }
         <div className="flex flex-col gap-2">
           <label className="lable">
             City<span className="text-[#e60000]">*</span>
           </label>
-          <Select>
-            <SelectTrigger className="dropdown">
-              <SelectValue placeholder="Theme" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="light">Light</SelectItem>
-              <SelectItem value="dark">Dark</SelectItem>
-              <SelectItem value="system">System</SelectItem>
-            </SelectContent>
-          </Select>
+          <Select onValueChange={(value)=>{Props.handleSelectChange(value,"city")}}>
+              <SelectTrigger className="dropdown">
+                <SelectValue placeholder="Select" />
+              </SelectTrigger>
+              <SelectContent>
+              {/* {Props.dropdownData &&
+                  Props.dropdownData.state.map((item, index) => {
+                    return (
+                      <SelectItem value={item.name}>
+                        {item.state}
+                      </SelectItem>
+                    );
+                  })} */}
+              </SelectContent>
+            </Select>
         </div>
         <div className="flex flex-col gap-2">
           <label className="lable">
             State<span className="text-[#e60000]">*</span>
           </label>
-          <Select>
-            <SelectTrigger className="dropdown">
-              <SelectValue placeholder="Theme" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="light">Light</SelectItem>
-              <SelectItem value="dark">Dark</SelectItem>
-              <SelectItem value="system">System</SelectItem>
-            </SelectContent>
-          </Select>
+          <Select
+            onValueChange={(value)=>{Props.handleSelectChange(value,"state")}}
+            >
+              <SelectTrigger className="dropdown">
+                <SelectValue placeholder="Select" />
+              </SelectTrigger>
+              <SelectContent>
+              {Props.dropdownData &&
+                  Props.dropdownData.state.map((item, index) => {
+                    return (
+                      <SelectItem value={item.name}>
+                        {item.state}
+                      </SelectItem>
+                    );
+                  })}
+              </SelectContent>
+            </Select>
         </div>
         <div className="flex flex-col gap-2">
           <label className="lable">
             Therapy<span className="text-[#e60000]">*</span>
           </label>
-          <Select>
-            <SelectTrigger className="dropdown">
-              <SelectValue placeholder="Theme" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="light">Light</SelectItem>
-              <SelectItem value="dark">Dark</SelectItem>
-              <SelectItem value="system">System</SelectItem>
-            </SelectContent>
-          </Select>
+          <Select
+            onValueChange={(value)=>{Props.handleSelectChange(value,"therapy")}}
+            >
+              <SelectTrigger className="dropdown">
+                <SelectValue placeholder="Select" />
+              </SelectTrigger>
+              <SelectContent>
+                {eventCostCenter &&
+                  eventCostCenter.therapy.map((item, index) => {
+                    return (
+                      <SelectItem value={item.name}>{item.therapy}</SelectItem>
+                    );
+                  })}
+              </SelectContent>
+            </Select>
         </div>
         <div className="flex flex-col gap-2">
           <label className="lable">
@@ -189,16 +350,24 @@ const Form1 = ({ ...Props }: Props) => {
           <label className="lable">
             Sub Type Of Activity<span className="text-[#e60000]">*</span>
           </label>
-          <Select>
-            <SelectTrigger className="dropdown">
-              <SelectValue placeholder="Theme" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="light">Light</SelectItem>
-              <SelectItem value="dark">Dark</SelectItem>
-              <SelectItem value="system">System</SelectItem>
-            </SelectContent>
-          </Select>
+          <Select
+            onValueChange={(value)=>{Props.handleSelectChange(value,"sub_type_of_activity")}}
+            >
+              <SelectTrigger className="dropdown">
+                <SelectValue placeholder="Theme" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Meril Event">
+                  {"Meril Event"}
+                </SelectItem>
+                <SelectItem value="Mix Event">
+                  {"Mix Event"}
+                </SelectItem>
+                <SelectItem value="Marketing Event">
+                  {"Marketing Event"}
+                </SelectItem>
+              </SelectContent>
+            </Select>
         </div>
         
       </div>
@@ -207,13 +376,23 @@ const Form1 = ({ ...Props }: Props) => {
           <label className="lable">
             Faculties<span className="text-[#e60000]">*</span>
           </label>
-          <Textarea className='text-black shadow-md' placeholder='Type Here'/>
+          <Textarea
+              className="text-black shadow-md"
+              placeholder="Type Here"
+              name="faculty"
+              onChange={(e:React.ChangeEvent<HTMLTextAreaElement>)=>{Props.handlefieldChange(e)}}
+            />
         </div>
       <div className="flex flex-col gap-2">
           <label className="lable">
             Participants<span className="text-[#e60000]">*</span>
           </label>
-          <Textarea className='text-black shadow-md' placeholder='Type Here'/>
+          <Textarea
+              className="text-black shadow-md"
+              placeholder="Type Here"
+              name="participants"
+              onChange={(e:React.ChangeEvent<HTMLTextAreaElement>)=>{Props.handlefieldChange(e)}}
+            />
       </div>
         </div>
       <div className="flex justify-end pt-5 gap-4">
@@ -221,7 +400,12 @@ const Form1 = ({ ...Props }: Props) => {
           {" "}
           Save as Draft
         </Button>
-        <Button className='bg-[#4430bf] text-white text-md font-normal border' onClick={Props.nextForm}>Next</Button>
+        <Button
+            className="bg-[#4430bf] text-white text-md font-normal border"
+            onClick={(e: React.MouseEvent<HTMLButtonElement>)=>Props.handleSubmit(e)}
+          >
+            Next
+          </Button>
       </div>
     </div>)
   );
