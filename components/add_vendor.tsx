@@ -17,7 +17,7 @@ type Props = {
 
 const add_vendor = ({ ...Props }: Props) => {
   return (
-    <div className="absolute z-50 flex inset-0 items-center justify-center bg-black bg-opacity-50">
+    <div className="absolute z-30 flex inset-0 items-center justify-center bg-black bg-opacity-50">
       <div className="border-2 rounded-xl p-5 bg-white relative">
         <h1 className="text-black text-[30px] font-medium capitalize pb-4">
           Add New Vendor

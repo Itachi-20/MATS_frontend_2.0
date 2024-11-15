@@ -14,9 +14,36 @@ import { useState, useEffect } from 'react';
 import Viewvendor from '@/components/view_vendor';
 import ViewDocument from '@/components/view_document';
 import Adddocument from '@/components/add_document';
+import Addvendor from '@/components/add_vendor';
 import { View } from 'lucide-react';
 
-type EventTable  = {
+type dropdownData = {
+  company: {
+    name: string,
+    company_name: "string"
+  }[],
+  division: {
+    name: string,
+    division_name: string
+  }[],
+  requestor: {
+    full_name: string,
+    email: string
+  }[],
+  vendor_type: {
+    name: string,
+    vendor_type: string
+  }[],
+  state: {
+    name: string,
+    state: string
+  }[]
+  currency: {
+    name: string
+  }[]
+}
+
+type EventTable = {
   name: string;
   vendor_type: string;
   vendor_name: string;
@@ -27,7 +54,7 @@ type EventTable  = {
   contact_number: string;
 }[];
 
-type particularVendorData ={
+type particularVendorData = {
   name: string;
   vendor_type: string;
   vendor_name: string;
@@ -43,6 +70,9 @@ const page = () => {
   const [viewDocument, setViewDocument] = useState(false);
   const [vendorData, setVendorData] = useState<EventTable | undefined>();
   const [particularVendorData, setParticularVendorData] = useState<particularVendorData | undefined>();
+  const [dropdownData,setDropdownData] = useState<dropdownData | null>(null);
+  const [addVendor,setAddVendor] = useState(false);
+
   const isViewVendor = () => {
     setViewVendor(prev => !prev)
   }
@@ -65,7 +95,7 @@ const page = () => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log(data,'data')
+        console.log(data, 'data')
         setVendorData(data.data);
       } else {
         console.log('Error fetching data');
@@ -75,9 +105,38 @@ const page = () => {
     }
   };
 
+  const isAddVendor = () => {
+    setAddVendor(prev => !prev)
+  }
+
+  const dropdown = async () => {
+
+    try {
+        const response = await fetch("/api/training_and_education/dropdown", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+
+         const data = await response.json();
+         setDropdownData(data.data);
+        if (response.ok) {
+        } else {
+            console.log('Login failed');
+        }
+    } catch (error) {
+        console.error("Error during login:", error);
+    }
+};
+
   useEffect(() => {
     VendorList();
   }, [])
+
+  useEffect(()=>{
+    dropdown();
+  },[])
 
   console.log("vendorData", vendorData)
 
@@ -90,6 +149,14 @@ const page = () => {
             placeholder="Search"
           />
           <div className="flex gap-5">
+          <Button className="bg-white text-black border text-md font-normal rounded-xl py-2 hover:bg-white" onClick={isAddVendor}>
+          <svg width="14" height="17" viewBox="0 0 14 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path id="Vector" d="M12.5394 9.64286H8.06739V15.3571C8.06739 15.6602 7.97316 15.9509 7.80542 16.1653C7.63769 16.3796 7.41019 16.5 7.17298 16.5C6.93577 16.5 6.70827 16.3796 6.54054 16.1653C6.3728 15.9509 6.27857 15.6602 6.27857 15.3571V9.64286H1.80652C1.56931 9.64286 1.34181 9.52245 1.17408 9.30812C1.00634 9.09379 0.912109 8.8031 0.912109 8.5C0.912109 8.1969 1.00634 7.90621 1.17408 7.69188C1.34181 7.47755 1.56931 7.35714 1.80652 7.35714H6.27857V1.64286C6.27857 1.33975 6.3728 1.04906 6.54054 0.834735C6.70827 0.620407 6.93577 0.5 7.17298 0.5C7.41019 0.5 7.63769 0.620407 7.80542 0.834735C7.97316 1.04906 8.06739 1.33975 8.06739 1.64286V7.35714H12.5394C12.7767 7.35714 13.0041 7.47755 13.1719 7.69188C13.3396 7.90621 13.4338 8.1969 13.4338 8.5C13.4338 8.8031 13.3396 9.09379 13.1719 9.30812C13.0041 9.52245 12.7767 9.64286 12.5394 9.64286Z" fill="#635E5E" />
+          </svg>
+          <span>
+            Add New Vendor
+          </span>
+          </Button>
             <Select>
               <SelectTrigger className="dropdown rounded-[25px] gap-4">
                 <SelectValue className="text-nowrap" placeholder="Vendor Type" />
@@ -115,7 +182,7 @@ const page = () => {
             </Button>
           </div>
         </div>
-        <Table isViewVendor={isViewVendor} vendorData={vendorData}  vendorInfo={setParticularVendorData} />
+        <Table isViewVendor={isViewVendor} vendorData={vendorData} vendorInfo={setParticularVendorData} isViewDocument={isViewDocument}/>
       </div>
       {
         viewVendor &&
@@ -129,6 +196,15 @@ const page = () => {
         viewDocument &&
         <ViewDocument isViewDocument={isViewDocument} />
       }
+
+      {
+          addVendor &&
+          <Addvendor
+            isAddVendor={isAddVendor} isAddDocument={isAddDocument}
+
+          />
+
+        }
     </>
   )
 }
