@@ -10,28 +10,39 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import Table from "@/app/(afterlogin)/event_vendor_list/table";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Viewvendor from '@/components/view_vendor';
 import ViewDocument from '@/components/view_document';
 import Adddocument from '@/components/add_document';
 import { View } from 'lucide-react';
 
-type EventTable = {
+type EventTable  = {
+  name: string;
   vendor_type: string;
   vendor_name: string;
-  vendor_code: string;
   remark: string;
-  pan_number: number;
+  pan_number: string;
+  vendor_code: string;
   email: string;
-  contact: number;
-};
+  contact_number: string;
+}[];
 
+type particularVendorData ={
+  name: string;
+  vendor_type: string;
+  vendor_name: string;
+  remark: string;
+  pan_number: string;
+  vendor_code: string;
+  email: string;
+  contact_number: string;
+}
 const page = () => {
   const [viewVendor, setViewVendor] = useState(false);
   const [addDocument, setAddDocument] = useState(false);
   const [viewDocument, setViewDocument] = useState(false);
-  const [vendorData, setVendorData] = useState<EventTable | undefined>(undefined);
-  
+  const [vendorData, setVendorData] = useState<EventTable | undefined>();
+  const [particularVendorData, setParticularVendorData] = useState<particularVendorData | undefined>();
   const isViewVendor = () => {
     setViewVendor(prev => !prev)
   }
@@ -43,6 +54,33 @@ const page = () => {
   const isViewDocument = () => {
     setViewDocument(prev => !prev)
   }
+  const VendorList = async () => {
+    try {
+      const response = await fetch("/api/vendorList", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data,'data')
+        setVendorData(data.data);
+      } else {
+        console.log('Error fetching data');
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
+    }
+  };
+
+  useEffect(() => {
+    VendorList();
+  }, [])
+
+  console.log("vendorData", vendorData)
+
   return (
     <>
       <div className='p-7 w-full relative z-20 text-black'>
@@ -77,11 +115,11 @@ const page = () => {
             </Button>
           </div>
         </div>
-        <Table isViewVendor={isViewVendor} vendorData={setVendorData}/>
+        <Table isViewVendor={isViewVendor} vendorData={vendorData}  vendorInfo={setParticularVendorData} />
       </div>
       {
         viewVendor &&
-        <Viewvendor isViewVendor={isViewVendor} isAddDocument={isAddDocument} isViewDocument={isViewDocument} vendorInfo = {vendorData}/>
+        <Viewvendor isViewVendor={isViewVendor} isAddDocument={isAddDocument} isViewDocument={isViewDocument} vendorInfo={particularVendorData} />
       }
       {
         addDocument &&
@@ -89,7 +127,7 @@ const page = () => {
       }
       {
         viewDocument &&
-        <ViewDocument isViewDocument={isViewDocument}/>
+        <ViewDocument isViewDocument={isViewDocument} />
       }
     </>
   )
