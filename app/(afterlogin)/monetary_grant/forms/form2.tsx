@@ -1,5 +1,6 @@
 "use client"
 import React from 'react';
+import { useState } from 'react';
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -26,7 +27,7 @@ const Form2 = ({ ...Props }: Props) => {
 
   // const { user } = appContext;
   // console.log(user, "this is user");
-
+  const[EngageHCP, setEngageHCP] = useState<string>("");
   
   return (
     // </div>
@@ -61,7 +62,7 @@ const Form2 = ({ ...Props }: Props) => {
         <div className='flex flex-col gap-2'>
           <label className='lable'>engagement of any government hCP’s?<span className='text-[#e60000]'>*</span></label>
           <Select
-            onValueChange={(value)=>Props.handleSelectChange(value,"any_govt_hcp")}
+            onValueChange={(value)=>{Props.handleSelectChange(value,"any_govt_hcp"); setEngageHCP(value);}}
             >
             <SelectTrigger className="dropdown">
             <SelectValue placeholder="Select" />
@@ -73,15 +74,18 @@ const Form2 = ({ ...Props }: Props) => {
           </Select>
 
         </div>
-        <div className='flex flex-col gap-2'>
-          <label className='lable'>Total number of government hCP’s<span className='text-[#e60000]'>*</span></label>
-          <Input className='dropdown' placeholder='Type Here'
-            name='no_of_hcp'
-            type='number'
-            onChange={(e)=>Props.handlefieldChange(e)}
-          ></Input>
 
-        </div>
+        { EngageHCP == "Yes" &&
+          <div className='flex flex-col gap-2'>
+            <label className='lable'>Total number of government hCP’s<span className='text-[#e60000]'>*</span></label>
+            <Input className='dropdown' placeholder='Type Here'
+              name='no_of_hcp'
+              type='number'
+              onChange={(e)=>Props.handlefieldChange(e)}
+            ></Input>
+
+          </div>
+        }
 
         <div className='flex flex-col gap-2'>
           <label className='lable'>BU Rational<span className='text-[#e60000]'>*</span></label>
