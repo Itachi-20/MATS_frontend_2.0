@@ -45,7 +45,7 @@ const page = () => {
             </Select>
             {/* <Select>
               <SelectTrigger className="dropdown rounded-[25px] gap-4">
-                <SelectValue placeholder="Theme" />
+                <SelectValue placeholder="Select" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="light">Light</SelectItem>

@@ -60,7 +60,7 @@ const Form3 = ({...Props}:Props) => {
           </label>
           <Select>
             <SelectTrigger className="dropdown">
-              <SelectValue placeholder="Theme" />
+              <SelectValue placeholder="Select" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="light">Light</SelectItem>
@@ -93,7 +93,7 @@ const Form3 = ({...Props}:Props) => {
         </label>
         <Select>
           <SelectTrigger className="dropdown">
-            <SelectValue placeholder="Theme" />
+            <SelectValue placeholder="Select" />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="light">Light</SelectItem>
@@ -108,7 +108,7 @@ const Form3 = ({...Props}:Props) => {
         </label>
         <Select>
           <SelectTrigger className="dropdown">
-            <SelectValue placeholder="Theme" />
+            <SelectValue placeholder="Select" />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="light">Light</SelectItem>
@@ -375,7 +375,7 @@ const Form3 = ({...Props}:Props) => {
           </label>
           <Select>
             <SelectTrigger className="dropdown">
-              <SelectValue placeholder="Theme" />
+              <SelectValue placeholder="Select" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="light">Light</SelectItem>

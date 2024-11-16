@@ -37,7 +37,7 @@ const table = ({...Props}:Props) => {
             <div className="flex gap-5">
               <Select>
                 <SelectTrigger className="text-black shadow focus-visible:ring-transparent rounded-[25px] gap-4">
-                  <SelectValue placeholder="Theme" />
+                  <SelectValue placeholder="Select" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="light">Light</SelectItem>
@@ -47,7 +47,7 @@ const table = ({...Props}:Props) => {
               </Select>
               <Select>
                 <SelectTrigger className="text-black shadow focus-visible:ring-transparent rounded-[25px] gap-4">
-                  <SelectValue placeholder="Theme" />
+                  <SelectValue placeholder="Select" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="light">Light</SelectItem>

@@ -255,7 +255,7 @@ const Form1 = ({ ...Props }: Props) => {
             onValueChange={(value)=>{Props.handleSelectChange(value,"division_sub_category")}}
             >
               <SelectTrigger className="dropdown">
-                <SelectValue placeholder="Theme" />
+                <SelectValue placeholder="Select" />
               </SelectTrigger>
               <SelectContent>
                 {subtypeActivity &&
@@ -337,7 +337,7 @@ const Form1 = ({ ...Props }: Props) => {
           </label>
           <Select>
             <SelectTrigger className="dropdown">
-              <SelectValue placeholder="Theme" />
+              <SelectValue placeholder="Select" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="light">Light</SelectItem>
@@ -354,7 +354,7 @@ const Form1 = ({ ...Props }: Props) => {
             onValueChange={(value)=>{Props.handleSelectChange(value,"sub_type_of_activity")}}
             >
               <SelectTrigger className="dropdown">
-                <SelectValue placeholder="Theme" />
+                <SelectValue placeholder="Select" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="Meril Event">

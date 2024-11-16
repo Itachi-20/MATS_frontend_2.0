@@ -65,7 +65,7 @@ const Form2 = ({...Props}:Props) => {
         onValueChange={(value)=>Props.handleSelectChange(value,"any_govt_hcp")}
         >
 <SelectTrigger className="dropdown">
-<SelectValue placeholder="Theme" />
+<SelectValue placeholder="Select" />
 </SelectTrigger>
 <SelectContent>
 <SelectItem value="Yes">Yes</SelectItem>

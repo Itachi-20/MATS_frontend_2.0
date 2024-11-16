@@ -44,7 +44,7 @@ const Form2 = ({...Props}:Props) => {
         <label className='lable'>engagement of any government hCP’s?<span className='text-[#e60000]'>*</span></label>
         <Select>
 <SelectTrigger className="dropdown">
-<SelectValue placeholder="Theme" />
+<SelectValue placeholder="Select" />
 </SelectTrigger>
 <SelectContent>
 <SelectItem value="light">Light</SelectItem>
@@ -58,7 +58,7 @@ const Form2 = ({...Props}:Props) => {
         <label className='lable'>Total number of government hCP’s<span className='text-[#e60000]'>*</span></label>
         <Select>
 <SelectTrigger className="text-black shadow">
-<SelectValue placeholder="Theme" />
+<SelectValue placeholder="Select" />
 </SelectTrigger>
 <SelectContent>
 <SelectItem value="light">Light</SelectItem>

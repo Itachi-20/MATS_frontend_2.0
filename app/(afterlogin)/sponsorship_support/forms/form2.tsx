@@ -77,7 +77,7 @@ const Form2 = ({ ...Props }: Props) => {
             </label>
             <Select>
               <SelectTrigger className="dropdown">
-                <SelectValue placeholder="Theme" />
+                <SelectValue placeholder="Select" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="light">Light</SelectItem>

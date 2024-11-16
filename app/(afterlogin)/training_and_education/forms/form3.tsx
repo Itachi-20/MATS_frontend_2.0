@@ -209,7 +209,7 @@ const Form3 = ({...Props}:Props) => {
           onValueChange={(value:string)=>{setLogisticVendorType(value)}}
           >
             <SelectTrigger className="dropdown">
-              <SelectValue placeholder="Theme" />
+              <SelectValue placeholder="Select" />
             </SelectTrigger>
             <SelectContent>
               {Props && Props.vendorType?.filter((item,index)=>{
@@ -274,7 +274,7 @@ const Form3 = ({...Props}:Props) => {
         onValueChange={(value:string)=>{setCompansationVendorName(value)}}
         >
           <SelectTrigger className="dropdown">
-            <SelectValue placeholder="Theme" />
+            <SelectValue placeholder="Select" />
           </SelectTrigger>
           <SelectContent>
             {
