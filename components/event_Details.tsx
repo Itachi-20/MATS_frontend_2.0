@@ -168,7 +168,7 @@ type ActivityDocument = {
 
 type Props = {
   pathname: string
-  eventData:EventEntry | null
+  eventData:EventEntry | undefined | null
 }
 
 const event_Details = ({ ...Props }: Props) => {

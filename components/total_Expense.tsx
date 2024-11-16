@@ -60,6 +60,7 @@ type EventEntry = {
   advance_approvers: any[]; // Empty array, can be customized later
   city:string
   reporting_head:string
+  any_additional_expense:string
 }
 
 type Compensation = {
@@ -164,7 +165,7 @@ type ActivityDocument = {
 
 
 type Props = {
-  eventData:EventEntry | null
+  eventData:EventEntry | undefined | null
 }
 
 const total_Expense = ({...Props}:Props) => {
@@ -184,7 +185,7 @@ const total_Expense = ({...Props}:Props) => {
             className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
             placeholder="Type Here"
             readOnly={true}
-            value={Props.eventData?.total_estimated_expense}
+            value={Props.eventData?.any_additional_expense}
           ></Input>
         </div>
         <div className="flex flex-col md:gap-2">

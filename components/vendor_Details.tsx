@@ -173,7 +173,7 @@ type ActivityDocument = {
 
 
 type Props = {
-  eventData: EventEntry | null
+    eventData: EventEntry | undefined | null
 }
 
 const vendor_Details = ({ ...Props }: Props) => {

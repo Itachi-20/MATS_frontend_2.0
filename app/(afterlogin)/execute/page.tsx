@@ -184,7 +184,7 @@ const ExecutePage:React.FC = () => {
      const fetchData = async()=>{
       try {
         const tableData = await fetch(
-          `api/execute/fetchData`,
+          `api/previewData`,
           {
             method: "POST",
             headers:{

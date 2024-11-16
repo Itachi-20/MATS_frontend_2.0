@@ -295,6 +295,7 @@ const page = () => {
                 </div>
             </div>
             <DocumentDetails 
+            eventType='Post Activity'
             pathname=''
             refno={refno}
             data={data}

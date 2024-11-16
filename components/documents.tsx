@@ -178,11 +178,12 @@ type ActivityDocument = {
 
 
 type Props = {
-  eventData:EventEntry | null
+  eventData:EventEntry | undefined | null
   PageName:string
 }
 
 const Documents = ({PageName,...Props}:Props) => {
+  console.log(Props.eventData?.documents,"this is documents")
   return (
     <div className="md:pb-8">
       <div className="flex gap-5">
@@ -209,7 +210,7 @@ const Documents = ({PageName,...Props}:Props) => {
                   >
                     Supporting Document
                   </TableHead>
-                  <TableHead className={"bg-[#E0E9FF] rounded-2xl text-[15px] w-[50%]"}
+                  <TableHead className={"bg-[#E0E9FF] rounded-2xl text-[15px] w-[50%] divide-x-2"}
                   >
                     Supporting Document
                     
@@ -220,7 +221,7 @@ const Documents = ({PageName,...Props}:Props) => {
                 {
                   item && item.document?.map((item2,index)=>{
                     return (
-                <TableRow className="text-black">
+                <TableRow className="text-black divide-x-2">
                   <TableCell>{item2.type}</TableCell>
                   <TableCell>{item2.file?.map((item3,index)=>{
                     return (

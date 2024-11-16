@@ -8,11 +8,172 @@ import {
     SelectValue,
   } from "@/components/ui/select";
 
+  type EventEntry = {
+    name: string;
+    owner: string;
+    creation: string;
+    modified: string;
+    modified_by: string;
+    docstatus: number;
+    idx: number;
+    event_type: string;
+    company: string;
+    event_cost_center: string;
+    state: string;
+    sub_type_of_activity: string;
+    business_unit: string;
+    division_category: string;
+    therapy: string;
+    event_requestor: string;
+    division_sub_category: string;
+    status: string;
+    current_stage: string;
+    event_name: string;
+    event_start_date: string;
+    any_govt_hcp: string;
+    comments: string;
+    faculty: string;
+    event_venue: string;
+    event_end_date: string;
+    no_of_hcp: number;
+    bu_rational: string;
+    participants: string;
+    total_compensation_expense: number;
+    has_advance_expense: number;
+    total_logistics_expense: number;
+    total_estimated_expense: number;
+    currency: string;
+    preactivity_status: string;
+    advance_status: string;
+    post_activity_status: string;
+    post_expense_status: string;
+    post_expense_check: number;
+    travel_expense_status: string;
+    travel_expense_check: number;
+    invoice_amount: number;
+    basic_amount: number;
+    tds: number;
+    gst: number;
+    net_amount: number;
+    doctype: string;
+    compensation: Compensation[];
+    travel_expense_approvers: any[]; // Empty array, can be customized later
+    post_expense_approvers: any[]; // Empty array, can be customized later
+    preactivity_approvers: ApproverStatus[];
+    post_activity_approvers: any[]; // Empty array, can be customized later
+    occurrence_status: OccurrenceStatus[];
+    logistics: Logistics[];
+    documents: ActivityDocument[];
+    advance_approvers: any[]; // Empty array, can be customized later
+    city:string
+    reporting_head:string
+  }
+  
+  type Compensation = {
+    name: string;
+    owner: string;
+    creation: string;
+    modified: string;
+    modified_by: string;
+    docstatus: number;
+    idx: number;
+    vendor_type: string;
+    actual_amount: number;
+    status: string;
+    vendor_name: string;
+    advance: number;
+    budget_category: string;
+    est_amount: number;
+    gst_included: number;
+    gst: string;
+    occurrence_no: number;
+    parent: string;
+    parentfield: string;
+    parenttype: string;
+    doctype: string;
+  }
+  
+  type ApproverStatus = {
+    name: string;
+    owner: string;
+    creation: string;
+    modified: string;
+    modified_by: string;
+    docstatus: number;
+    idx: number;
+    approver_level: string;
+    action_date: string;
+    approver: string;
+    remarks: string;
+    approver_status: string;
+    occurrence_no: number;
+    parent: string;
+    parentfield: string;
+    parenttype: string;
+    doctype: string;
+  }
+  
+  type OccurrenceStatus = {
+    name: string;
+    owner: string;
+    creation: string;
+    modified: string;
+    modified_by: string;
+    docstatus: number;
+    idx: number;
+    occurrence_no: number;
+    status: string;
+    parent: string;
+    parentfield: string;
+    parenttype: string;
+    doctype: string;
+  }
+  
+  type Logistics = {
+    name: string;
+    owner: string;
+    creation: string;
+    modified: string;
+    modified_by: string;
+    docstatus: number;
+    idx: number;
+    vendor_type: string;
+    actual_amount: number;
+    status: string;
+    advance: number;
+    budget_category: string;
+    est_amount: number;
+    gst_included: number;
+    gst: string;
+    occurrence_no: number;
+    parent: string;
+    parentfield: string;
+    parenttype: string;
+    doctype: string;
+  }
+  
+  type File = {
+    url: string;
+    name: string;
+    file_name:string
+  };
+  
+  type DocumentDetails = {
+    type: string;
+    file: File[];
+  };
+  
+  type ActivityDocument = {
+    activity_type: string;
+    document: DocumentDetails[];
+  };
+
 type Props = {
     pathname: string
+    eventData: EventEntry | null | EventEntry
 }
 
-const Other_Details = () => {
+const Other_Details = ({...Props}:Props) => {
     return (
         <div className="md:pb-8">
             <div className="flex md:gap-6" >
@@ -42,6 +203,7 @@ const Other_Details = () => {
                     className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
                     placeholder="Type Here"
                     readOnly
+                    value={Props.eventData?.comments}
                 ></Input>
             </div>
             <div className="flex flex-col md:gap-2">

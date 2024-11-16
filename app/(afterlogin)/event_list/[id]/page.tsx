@@ -189,7 +189,7 @@ export default function EventListPage () {
     console.log("inside event Data")
     try {
       const response = await fetch(
-        "/api/eventRequestApprove/fetchData",
+        "/api/previewData",
         {
           method: "POST",
           headers: {

@@ -221,6 +221,7 @@ type Props = {
   pathname:string
   data: EventEntry | undefined
   refno:string
+  eventType:string
 }
 
 const DocumentDetails = ({...Props}:Props) => {
@@ -255,7 +256,7 @@ const DocumentDetails = ({...Props}:Props) => {
     }
       formdata.append("docname",Props.refno)
       formdata.append("document_type",activityType as string);
-      formdata.append("activity_type","Post Activity")
+      formdata.append("activity_type",Props.eventType)
     try {
       const response = await fetch(
         `/api/training_and_education/fileUpload`,
@@ -324,10 +325,10 @@ console.log(Props.data,"this is data")
           </label>
           <Select>
             <SelectTrigger className="dropdown bg-[#F6F6F6]">
-              <SelectValue placeholder="Post Activity" />
+              <SelectValue placeholder={Props.eventType} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="Post Activity">Post Activity</SelectItem>
+              <SelectItem value={Props.eventType}>{Props.eventType}</SelectItem>
             </SelectContent>
           </Select>
         </div>

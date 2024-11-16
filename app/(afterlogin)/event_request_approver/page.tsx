@@ -63,7 +63,7 @@ type EventEntry = {
   post_activity_approvers: any[]; // Empty array, can be customized later
   occurrence_status: OccurrenceStatus[];
   logistics: Logistics[];
-  documents: Document[];
+  documents: ActivityDocument[];
   advance_approvers: any[]; // Empty array, can be customized later
   city:string
   reporting_head:string
@@ -152,23 +152,22 @@ type Logistics = {
   doctype: string;
 }
 
-type Document = {
+type File = {
+  url: string;
   name: string;
-  owner: string;
-  creation: string;
-  modified: string;
-  modified_by: string;
-  docstatus: number;
-  idx: number;
+  file_name:string
+};
+
+type DocumentDetails = {
+  type: string;
+  file: File[];
+};
+
+type ActivityDocument = {
   activity_type: string;
-  occurrence_no: number;
-  document_type: string;
-  file: string;
-  parent: string;
-  parentfield: string;
-  parenttype: string;
-  doctype: string;
-}
+  document: DocumentDetails[];
+};
+
 
 
 const Index = () => {
@@ -210,7 +209,7 @@ const Index = () => {
     console.log("inside event Data")
     try {
       const response = await fetch(
-        "/api/eventRequestApprove/fetchData",
+        "/api/previewData",
         {
           method: "POST",
           headers: {
