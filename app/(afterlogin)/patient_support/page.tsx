@@ -237,7 +237,7 @@ const index = () => {
 
   const handleBackButton = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    router.push(`/non_monetary_grant?forms=${Number(search)-1}`);
+    router.push(`/patient_support?forms=${Number(search)-1}`);
   }
 
   useEffect(() => {
