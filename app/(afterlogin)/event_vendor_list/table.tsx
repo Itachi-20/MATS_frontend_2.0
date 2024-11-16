@@ -38,7 +38,6 @@ type Props = {
   vendorInfo: (data: particularVendorData) => void;
 };
 const table = ({ ...Props }: Props) => {
-  console.log("Props",Props.vendorData)
   return (
     <div className="border bg-white h-full p-4 rounded-[18px]">
       <Table className={""}>
