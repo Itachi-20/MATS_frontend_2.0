@@ -26,6 +26,8 @@ const Form2 = ({ ...Props }: Props) => {
 
   // const { user } = appContext;
   // console.log(user, "this is user");
+
+  
   return (
     // </div>
     (<div>

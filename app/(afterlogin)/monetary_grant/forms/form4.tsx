@@ -104,7 +104,7 @@ const form4 = ({...Props}:Props) => {
             Document Type <span className="text-[#e60000]">*</span>
           </label>
           <Select
-          onValueChange={(value)=>handleActivityTypeChange(value)}
+            onValueChange={(value)=>handleActivityTypeChange(value)}
             >
               <SelectTrigger className="dropdown">
                 <SelectValue placeholder="Select" />
@@ -180,10 +180,10 @@ const form4 = ({...Props}:Props) => {
         </div>
       </div>
       <div className='border border-[#848484] p-4 rounded-2xl w-full'>
-            <h1 className="text-black pl-4 pb-4">
-                Document type:{" "}
-                <span className="font-semibold">Pre-Activity</span>
-            </h1>
+        <h1 className="text-black pl-4 pb-4">
+            Document type:{" "}
+            <span className="font-semibold">Pre-Activity</span>
+        </h1>
         
         <div className="grid grid-cols-2 gap-4 bg-white">
           <div className="col-span-1 flex flex-col gap-3">

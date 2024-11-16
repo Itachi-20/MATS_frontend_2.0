@@ -12,6 +12,7 @@ import Add_vendor from "@/components/add_vendor";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 type Props = {
+  handleBackButton: (e: React.MouseEvent<HTMLButtonElement>) => void
 }
 
 type EventEntry = {
@@ -72,7 +73,11 @@ type EventEntry = {
   documents: Document[];
   advance_approvers: any[]; // Empty array, can be customized later
   city: string
-  reporting_head: string
+  reporting_head:string;
+  requesting_hospital_name:string;
+  ship_to:string;
+  bill_to:string;
+  organization_name:string;
 }
 
 type Compensation = {
@@ -183,9 +188,6 @@ const Preview_Form = ({...Props}:Props) => {
   const [dialog,setDialog] = useState(false);
   const [addVendor,setAddVendor] = useState(false);
   const [isChecked, setIsChecked] = useState<boolean>(false);
-
-
-  
   const [refNo,setRefNo] = useState<string | null>(localStorage.getItem("refno")?localStorage.getItem("refno"):"");
   
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -303,7 +305,7 @@ const Preview_Form = ({...Props}:Props) => {
           <Button className="bg-white text-black border text-md font-normal">
             Save as Draft
           </Button>
-          <Button className="bg-white text-black border text-md font-normal">
+          <Button className="bg-white text-black border text-md font-normal" onClick={Props.handleBackButton}>
             Back
           </Button>
           <Button className={`bg-[#4430bf] text-white  font-normal border`} disabled={!isChecked} onClick={(e: React.MouseEvent<HTMLButtonElement>) => handleFinalSubmit(e)}>

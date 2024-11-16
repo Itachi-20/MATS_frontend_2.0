@@ -289,7 +289,7 @@ const index = () => {
                   <Form3
                   // nextForm = {nextForm}
                   handleBackButton = {handleBackButton}
-                // prevForm={prevForm}
+                  // prevForm={prevForm}
                   isAddVendor = {isAddVendor}
                   vendorType = {dropdownData && dropdownData.vendor_type}
                   currency = {dropdownData && dropdownData.currency}
@@ -305,6 +305,7 @@ const index = () => {
                     /> :
                     search == "5" ?
                       <Preview_Form
+                        handleBackButton={handleBackButton}
                       /> : ""
           }
         </div>
