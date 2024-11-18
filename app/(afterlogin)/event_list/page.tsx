@@ -66,7 +66,7 @@ export default function EventList () {
   fetchTableData();
   },[])
 
-  console.log(tableData,"this is state data")
+  // console.log(tableData[0].name,"this is state data")
 
   return (
         <div className="p-7 w-full relative z-20 text-black">

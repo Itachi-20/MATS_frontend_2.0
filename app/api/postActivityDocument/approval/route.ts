@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server';
 export async function POST(req: Request) {
     try {
         const body = await req.json();
+        console.log(body,"body data--------------------")
         const cookies = req.headers.get("cookie")
         const response = await fetch(`${process.env.FRAPPE_URL}/api/method/matsapp.api.utils.utils.set_approver_status`, {
             method: 'POST',

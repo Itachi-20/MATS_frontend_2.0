@@ -13,8 +13,15 @@ const Sidebar = () => {
     "Sponsorship Support",
     "Non Monetary Grant",
     "State Information",
-    'Person State Information'
+    'Person State Information',
+    
   ];
+
+  const reportIcons: string[] = [
+    "Event Finance Report",
+    'Event Post Activity Approval Summary',
+  ];
+
   const settingsItems: string[] = [
     "Change Password",
   ];
@@ -103,36 +110,30 @@ const Sidebar = () => {
                 })}
             </div>
           </div>
-          <div className="flex py-2 gap-2 pl-2 hover:border hover:rounded-xl hover:bg-[#4430bf] hover:text-white hover:cursor-pointer">
-            <svg
-              width="32"
-              height="32"
-              viewBox="0 0 32 32"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <g id="Interface / Chart_Line">
-                <path
-                  id="Vector"
-                  d="M28 26.6667H4V6.66675"
-                  stroke="#636363"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  id="Vector_2"
-                  opacity="0.4"
-                  d="M28 9.33325L17.3333 18.6666L12 13.3333L4 19.9999"
-                  stroke="#636363"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </g>
-            </svg>
-            <h1 className="pt-1">Reports</h1>
+          
+          {/* START REPORT MANU  */}
+           <div id="parent">
+            <div className="flex py-2 gap-2 pl-2 hover:border hover:rounded-xl hover:bg-[#4430bf] group hover:text-white hover:cursor-pointer">
+              <Image src="/svg/reportIcon.svg" width={32}  height={32} alt="setting-icon" />
+              <h1 className="pt-1">Reports</h1>
+            </div>           
+            <div id="element" className="z-10" >
+                {reportIcons &&
+                  reportIcons.map((data,index) => { 
+                    return (
+                      <div key={index} className="child py-4 px-5 rounded-bl-xl text-black  border-l border-black ml-4 relative text-nowrap ">
+                       <Link href="/event_finance_report">
+                          <div className="absolute -bottom-5 hover:bg-white rounded-xl text-black hover:text-[#4430bf] text-[12px] px-1 py-2 cursor-pointer">
+                          {data} 
+                          </div>
+                      </Link>
+                      </div>
+                    );
+                  })}
+            </div>           
           </div>
+          {/* END REPORT MANU  */}
+
           
          {/* START SETTING MANU  */}
           <div id="parent">

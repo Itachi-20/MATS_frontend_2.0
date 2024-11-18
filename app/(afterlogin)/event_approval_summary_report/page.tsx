@@ -1,10 +1,6 @@
 'use client'
 import React from "react";
-import Image from "next/image";
-import Sidebar from "@/components/Sidebar";
-import Navbar from "@/components/Navbar";
 import { Input } from "@/components/ui/input";
-import { useRouter } from 'next/navigation';
 import {
     Select,
     SelectContent,
@@ -15,7 +11,6 @@ import {
 import {
     Table,
     TableBody,
-    TableCaption,
     TableCell,
     TableHead,
     TableHeader,
@@ -23,26 +18,28 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 
-type EventTable = {
+type EventApprovalSummaryReportTable = {
     request_number: string;
     event_name: string;
     event_type: string;
     event_date: string;
     total_expense: number;
     event_requestor: string;
+    created_by:string;
     level_1: level;
     level_2: level;
     level_3: level;
     level_4: level;
     level_5: level;
     level_6: level;
+    level_7: level;
+
 };
 
 type level = "Approved" | "Rejected" | "Pending";
 const Index = () => {
-    const router = useRouter()
 
-    const events: EventTable[] = [
+    const eventReports: EventApprovalSummaryReportTable[] = [
         {
             request_number: "REQ001",
             event_name: "Annual Conference",
@@ -50,12 +47,15 @@ const Index = () => {
             event_date: "2024-10-15",
             total_expense: 15000,
             event_requestor: "John Doe",
+            created_by:"2024-10-15",
+
             level_1: "Approved",
             level_2: "Pending",
             level_3: "Approved",
             level_4: "Rejected",
             level_5: "Approved",
-            level_6: "Pending"
+            level_6: "Pending",
+            level_7: "Pending"
         },
         {
             request_number: "REQ002",
@@ -64,12 +64,14 @@ const Index = () => {
             event_date: "2024-11-20",
             total_expense: 25000,
             event_requestor: "Jane Smith",
+            created_by:"2024-10-15",
             level_1: "Pending",
             level_2: "Approved",
             level_3: "Approved",
             level_4: "Pending",
             level_5: "Rejected",
-            level_6: "Approved"
+            level_6: "Approved",
+            level_7: "Pending"
         },
         {
             request_number: "REQ003",
@@ -78,12 +80,15 @@ const Index = () => {
             event_date: "2024-09-30",
             total_expense: 8000,
             event_requestor: "Mike Johnson",
+            created_by:"2024-10-15",
             level_1: "Approved",
             level_2: "Approved",
             level_3: "Pending",
             level_4: "Approved",
             level_5: "Rejected",
-            level_6: "Approved"
+            level_6: "Approved",
+            level_7: "Pending"
+
         },
         {
             request_number: "REQ004",
@@ -92,12 +97,14 @@ const Index = () => {
             event_date: "2024-12-31",
             total_expense: 40000,
             event_requestor: "Emily Davis",
+            created_by:"2024-10-15",
             level_1: "Rejected",
             level_2: "Rejected",
             level_3: "Pending",
             level_4: "Approved",
             level_5: "Approved",
-            level_6: "Pending"
+            level_6: "Pending",
+            level_7: "Pending"
         },
         {
             request_number: "REQ005",
@@ -106,12 +113,14 @@ const Index = () => {
             event_date: "2024-10-10",
             total_expense: 5500,
             event_requestor: "Alex Brown",
+            created_by:"2024-10-15",
             level_1: "Pending",
             level_2: "Approved",
             level_3: "Rejected",
             level_4: "Approved",
             level_5: "Pending",
-            level_6: "Approved"
+            level_6: "Approved",
+            level_7: "Pending"
         },
         {
             request_number: "REQ006",
@@ -120,18 +129,18 @@ const Index = () => {
             event_date: "2024-09-15",
             total_expense: 12000,
             event_requestor: "Sara Miller",
+            created_by:"2024-10-15",
             level_1: "Approved",
             level_2: "Approved",
             level_3: "Approved",
             level_4: "Pending",
             level_5: "Rejected",
-            level_6: "Approved"
+            level_6: "Approved",
+            level_7: "Pending"
         }
     ];
 
     return (
-        <>
-
             <div className="p-7 w-full relative z-20 text-black">
                 <div className="flex justify-between pb-5">
                     <Input
@@ -252,6 +261,13 @@ const Index = () => {
                                         "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                                     }
                                 >
+                                    Created By
+                                </TableHead>
+                                <TableHead
+                                    className={
+                                        "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                                    }
+                                >
                                     Level 1
                                 </TableHead>
                                 <TableHead
@@ -293,29 +309,32 @@ const Index = () => {
                                     className={
                                         "text-center rounded-r-2xl text-[#625d5d] text-[15px] font-normal font-['Montserrat'] sticky right-0 z-50 bg-[#E0E9FF]"
                                     }
-                                >Action</TableHead>
+                                >Level 7</TableHead>
+                        
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {events &&
-                                events.map((data, index) => {
+                            {eventReports &&
+                                eventReports.map((eventReport, index) => {
                                     return (
                                         <TableRow key={index} className="text-center text-nowrap">
-                                            <TableCell>{data.request_number}</TableCell>
-                                            <TableCell>{data.event_type}</TableCell>
-                                            <TableCell>{data.event_name}</TableCell>
-                                            <TableCell>{data.event_date}</TableCell>
-                                            <TableCell>{data.total_expense}</TableCell>
-                                            <TableCell>{data.event_requestor}</TableCell>
+                                            <TableCell>{eventReport.request_number}</TableCell>
+                                            <TableCell>{eventReport.event_type}</TableCell>
+                                            <TableCell>{eventReport.event_name}</TableCell>
+                                            <TableCell>{eventReport.event_date}</TableCell>
+                                            <TableCell>{eventReport.total_expense}</TableCell>
+                                            <TableCell>{eventReport.event_requestor}</TableCell>
+                                            <TableCell>{eventReport.created_by}</TableCell>
+
                                             <TableCell>
                                                 <div className="flex flex-col items-center">
-                                                    {data.level_1}
+                                                    {eventReport.level_1}
                                                     {
-                                                        data.level_1 == "Approved" ?
+                                                        eventReport.level_1 == "Approved" ?
                                                             <span className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
                                                                 A
                                                             </span>
-                                                            : data.level_1 == "Pending" ?
+                                                            : eventReport.level_1 == "Pending" ?
                                                                 <span className="w-6 rounded-md bg-[#fae8a8] text-[#937818] text-[15px] font-semibold">
                                                                     W
                                                                 </span>
@@ -331,14 +350,14 @@ const Index = () => {
                                             <TableCell>
                                                 <div className="flex flex-col items-center">
 
-                                                    {data.level_2}
+                                                    {eventReport.level_2}
                                                     {
-                                                        data.level_2 == "Approved" ?
+                                                        eventReport.level_2 == "Approved" ?
                                                             <span className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
                                                                 A
                                                             </span>
                                                             :
-                                                            data.level_2 == "Pending" ?
+                                                            eventReport.level_2 == "Pending" ?
                                                                 <span className="w-6 rounded-md bg-[#fae8a8] text-[#937818] text-[15px] font-semibold">
                                                                     W
                                                                 </span>
@@ -352,13 +371,13 @@ const Index = () => {
                                             <TableCell>
                                                 <div className="flex flex-col items-center">
 
-                                                    {data.level_3}
+                                                    {eventReport.level_3}
                                                     {
-                                                        data.level_3 == "Approved" ?
+                                                        eventReport.level_3 == "Approved" ?
                                                             <div className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
                                                                 A
                                                             </div>
-                                                            : data.level_3 == "Pending" ?
+                                                            : eventReport.level_3 == "Pending" ?
                                                                 <div className="w-6 rounded-md bg-[#fae8a8] text-[#937818] text-[15px] font-semibold">
                                                                     W
                                                                 </div>
@@ -372,13 +391,13 @@ const Index = () => {
                                             <TableCell>
                                                 <div className="flex flex-col items-center">
 
-                                                    {data.level_4}
+                                                    {eventReport.level_4}
                                                     {
-                                                        data.level_4 == "Approved" ?
+                                                        eventReport.level_4 == "Approved" ?
                                                             <div className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
                                                                 A
                                                             </div>
-                                                            : data.level_4 == "Pending" ?
+                                                            : eventReport.level_4 == "Pending" ?
                                                                 <div className="w-6 rounded-md bg-[#fae8a8] text-[#937818] text-[15px] font-semibold">
                                                                     W
                                                                 </div>
@@ -392,13 +411,13 @@ const Index = () => {
                                             <TableCell>
                                                 <div className="flex flex-col items-center">
 
-                                                    {data.level_5}
+                                                    {eventReport.level_5}
                                                     {
-                                                        data.level_5 == "Approved" ?
+                                                        eventReport.level_5 == "Approved" ?
                                                             <div className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
                                                                 A
                                                             </div>
-                                                            : data.level_5 == "Pending" ?
+                                                            : eventReport.level_5 == "Pending" ?
                                                                 <div className="w-6 rounded-md bg-[#fae8a8] text-[#937818] text-[15px] font-semibold">
                                                                     W
                                                                 </div>
@@ -412,13 +431,13 @@ const Index = () => {
                                             <TableCell>
                                                 <div className="flex flex-col items-center">
 
-                                                    {data.level_6}
+                                                    {eventReport.level_7}
                                                     {
-                                                        data.level_6 == "Approved" ?
+                                                        eventReport.level_7 == "Approved" ?
                                                             <div className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
                                                                 A
                                                             </div>
-                                                            : data.level_6 == "Pending" ?
+                                                            : eventReport.level_6 == "Pending" ?
                                                                 <div className="w-6 rounded-md bg-[#fae8a8] text-[#937818] text-[15px] font-semibold">
                                                                     W
                                                                 </div>
@@ -429,12 +448,25 @@ const Index = () => {
                                                     }
                                                 </div>
                                             </TableCell>
-                                            <TableCell className="sticky right-0 bg-[white] z-50 ">
-                                            {
-                                                    data.level_1 == "Approved" && data.level_2 == "Approved" ?
-                                                <button className="border rounded-full px-4 py-1 border-[#0E4154] text-[#0E4154]" onClick={() => router.push(`/advance_payment/update_utr/${data.request_number}`)} >Update UTR</button>
-                                                :<button className="border rounded-full px-4 py-1 border-[#0E4154] text-[#0E4154]" onClick={() => router.push(`/advance_payment/${data.request_number}`)} >Take Action</button>
-                                                }
+                                            <TableCell>
+                                                <div className="flex flex-col items-center">
+
+                                                    {eventReport.level_6}
+                                                    {
+                                                        eventReport.level_6 == "Approved" ?
+                                                            <div className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
+                                                                A
+                                                            </div>
+                                                            : eventReport.level_6 == "Pending" ?
+                                                                <div className="w-6 rounded-md bg-[#fae8a8] text-[#937818] text-[15px] font-semibold">
+                                                                    W
+                                                                </div>
+                                                                :
+                                                                <div className="w-6 rounded-md bg-[#feadad] text-[#9c0000] text-[15px] font-semibold">
+                                                                    RJ
+                                                                </div>
+                                                    }
+                                                </div>
                                             </TableCell>
                                         </TableRow>
                                     );
@@ -443,8 +475,6 @@ const Index = () => {
                     </Table>
                 </div>
             </div>
-
-        </>
     );
 };
 
