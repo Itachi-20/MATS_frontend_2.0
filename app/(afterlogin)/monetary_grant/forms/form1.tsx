@@ -350,7 +350,7 @@ const Form1 = ({ ...Props }: Props) => {
               <SelectValue placeholder={"Select"} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="Hitesh.mahto@merillife.com">Hitesh</SelectItem>
+              <SelectItem value="hitesh.mahto@merillife.com">Hitesh</SelectItem>
               <SelectItem value="vignesh.yadavar@merillife.com">Vignesh</SelectItem>
             </SelectContent>
           </Select>
