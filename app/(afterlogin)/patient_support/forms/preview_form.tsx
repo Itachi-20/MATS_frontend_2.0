@@ -83,6 +83,9 @@ type EventEntry = {
   ship_to:string;
   bill_to:string;
   organization_name:string;
+  product_amount: number;
+  quantity:number;
+  total_estimateed_expense: number;
 }
 
 type Compensation = {
@@ -272,6 +275,12 @@ const Preview_Form = ({...Props}:Props) => {
         <div className="md:px-7 md:pb-7 md:pt-4 w-full relative z-20">
             
         <BasicDetails
+          pathname={pathname}
+          eventData={preview_data}
+
+        />
+
+        <BeneficiaryDetails
           pathname={pathname}
           eventData={preview_data}
 

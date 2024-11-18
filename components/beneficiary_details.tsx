@@ -1,18 +1,125 @@
 import React from 'react'
 import { Input } from "@/components/ui/input";
 
+type EventEntry = {
+    name: string;
+    owner: string;
+    creation: string;
+    modified: string;
+    modified_by: string;
+    docstatus: number;
+    idx: number;
+    event_type: string;
+    company: string;
+    event_cost_center: string;
+    state: string;
+    sub_type_of_activity: string;
+    business_unit: string;
+    division_category: string;
+    therapy: string;
+    event_requestor: string;
+    division_sub_category: string;
+    status: string;
+    current_stage: string;
+    event_name: string;
+    event_start_date: string;
+    any_govt_hcp: string;
+    comments: string;
+    faculty: string;
+    event_venue: string;
+    event_end_date: string;
+    no_of_hcp: number;
+    bu_rational: string;
+    participants: string;
+    total_compensation_expense: number;
+    has_advance_expense: number;
+    total_logistics_expense: number;
+    total_estimated_expense: number;
+    currency: string;
+    preactivity_status: string;
+    advance_status: string;
+    post_activity_status: string;
+    post_expense_status: string;
+    post_expense_check: number;
+    travel_expense_status: string;
+    travel_expense_check: number;
+    invoice_amount: number;
+    basic_amount: number;
+    tds: number;
+    gst: number;
+    net_amount: number;
+    doctype: string;
+    compensation: Compensation[];
+    travel_expense_approvers: any[]; // Empty array, can be customized later
+    post_expense_approvers: any[]; // Empty array, can be customized later
+    preactivity_approvers: ApproverStatus[];
+    post_activity_approvers: any[]; // Empty array, can be customized later
+   
+    documents: Document[];
+    advance_approvers: any[]; // Empty array, can be customized later
+    city:string
+    reporting_head:string;
+    product_amount: number;
+    quantity:number;
+  }
+  
+  type Compensation = {
+    name: string;
+    owner: string;
+    creation: string;
+    modified: string;
+    modified_by: string;
+    docstatus: number;
+    idx: number;
+    vendor_type: string;
+    actual_amount: number;
+    status: string;
+    vendor_name: string;
+    advance: number;
+    budget_category: string;
+    est_amount: number;
+    gst_included: number;
+    gst: string;
+    occurrence_no: number;
+    parent: string;
+    parentfield: string;
+    parenttype: string;
+    doctype: string;
+  }
+  
+  type ApproverStatus = {
+    name: string;
+    owner: string;
+    creation: string;
+    modified: string;
+    modified_by: string;
+    docstatus: number;
+    idx: number;
+    approver_level: string;
+    action_date: string;
+    approver: string;
+    remarks: string;
+    approver_status: string;
+    occurrence_no: number;
+    parent: string;
+    parentfield: string;
+    parenttype: string;
+    doctype: string;
+  }
+
 type Props = {
     pathname: string
+    eventData:EventEntry | null
 }
 
-const Beneficiary_Details = () => {
+const Beneficiary_Details = ({...Props}:Props) => {
     return (
         <div className="md:pb-8">
             <div className="flex md:gap-6" >
                 <h1 className="text-black md:text-[30px] md:font-medium uppercase md:pb-4">
                     Beneficiary Details
                 </h1>
-                <div className="pt-3">
+                {/* <div className="pt-3">
                     <svg width="23" height="23" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g id="Group">
                             <g id="Vector">
@@ -24,7 +131,7 @@ const Beneficiary_Details = () => {
                             <path id="Vector_2" d="M21.939 4.8002C22.4663 4.27287 22.7626 3.55765 22.7626 2.81189C22.7626 2.06613 22.4663 1.35092 21.939 0.823585C21.4117 0.296252 20.6965 9.62388e-09 19.9507 0C19.2049 -9.62388e-09 18.4897 0.296252 17.9624 0.823585L7.53019 11.2186C6.99573 11.7512 6.69531 12.4746 6.69531 13.2291C6.69531 14.7966 7.96602 16.0673 9.53351 16.0673C10.288 16.0673 11.0114 15.7669 11.544 15.2324L21.939 4.8002ZM16.0678 2.678L20.0846 6.69479L16.0678 2.678Z" fill="black" />
                         </g>
                     </svg>
-                </div>
+                </div> */}
             </div>
             <div className="grid md:grid-cols-2 md:gap-6">
                 <div className="flex flex-col md:gap-2">
@@ -34,6 +141,7 @@ const Beneficiary_Details = () => {
                     <Input
                         className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
                         placeholder="Type Here"
+                        value={Props.eventData?.product_amount}
                         readOnly={true}
                     ></Input>
                 </div>
@@ -44,6 +152,7 @@ const Beneficiary_Details = () => {
                     <Input
                         className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
                         placeholder="Type Here"
+                        value={Props.eventData?.quantity}
                         readOnly={true}
                     ></Input>
                 </div>

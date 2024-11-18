@@ -1,5 +1,5 @@
 "use client"
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Input } from "@/components/ui/input"
 import {
   Select,
@@ -11,7 +11,13 @@ import {
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import { useContext } from 'react';
-import { AppContext } from '@/app/context/module'
+import { AppContext } from '@/app/context/module';
+import { useState } from 'react';
+
+type EventEntry = {
+  product_amount: number
+}
+
 type Props = {
   currency: {
     name: string
@@ -22,6 +28,37 @@ type Props = {
   handleBackButton: (e: React.MouseEvent<HTMLButtonElement>)=>void
 }
 const Form2 = ({ ...Props }: Props) => {
+  const [preview_data, setPreviewData] = useState<EventEntry | null>(null);
+  const [refNo,setRefNo] = useState<string | null>(localStorage.getItem("refno")?localStorage.getItem("refno"):"");
+
+  const PreviewData = async () => {
+    try {
+      const response = await fetch("/api/previewData", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          name: refNo
+        })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setPreviewData(data.data);
+        console.log(data, "PreviewData")
+      } else {
+        console.log('Login failed');
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
+    }
+  };
+
+  useEffect(()=>{
+    PreviewData();
+  },[]);
   return (
     // </div>
     (<div>
@@ -116,7 +153,9 @@ const Form2 = ({ ...Props }: Props) => {
             placeholder="Type Here"
             name='total_estimated_expense'
             type='number'
-            onChange={(e)=>Props.handlefieldChange(e)}
+            // onChange={(e)=>Props.handlefieldChange(e)}
+            value={preview_data?.product_amount}
+            readOnly
           ></Input>
         </div>
         <div className="flex flex-col col-span-1 gap-2">

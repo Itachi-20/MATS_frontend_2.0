@@ -84,6 +84,8 @@ type formData = {
   ship_to:string;
   bill_to:string;
   organization_name:string;
+  product_amount: number;
+  total_estimated_expense: number;
 };
 
 type activityDropdown = {
@@ -111,6 +113,36 @@ const index = () => {
   const router = useRouter()
   const [form, setForm] = useState<string | number | null>(searchParams.get('forms'));
   const [logisticsBudget, setLogisticBudget] = useState<Logistics[]>([]);
+  const [preview_data, setPreviewData] = useState<formData | null>(null);
+
+  const PreviewData = async () => {
+    try {
+      const response = await fetch("/api/previewData", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          name: refNo
+        })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setPreviewData(data.data);
+        console.log(data, "PreviewData")
+      } else {
+        console.log('Login failed');
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
+    }
+  };
+
+  useEffect(()=>{
+    PreviewData();
+  },[]);
 
   let eventype: { [key: string]: string } = {};
   eventype["monetary_grant"] = "Monetary Grant";
@@ -191,6 +223,8 @@ const index = () => {
     //     item.charAt(0).toUpperCase() + item.slice(1).toLowerCase()
     //   )
     // ).join().replaceAll("_"," ").replaceAll(","," ").replace("/","")
+
+    updatedFormData.total_estimated_expense = preview_data?.product_amount;
 
     updatedFormData.event_type = "Patient Support"
     if (refNo) {

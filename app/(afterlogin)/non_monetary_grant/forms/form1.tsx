@@ -333,14 +333,13 @@ const Form1 = ({ ...Props }: Props) => {
           <label className="lable">
             Reporting Head<span className="text-[#e60000]">*</span>
           </label>
-          <Select>
+          <Select onValueChange={(value) => { Props.handleSelectChange(value, "reporting_head") }}>
             <SelectTrigger className="dropdown">
-              <SelectValue placeholder="Select" />
+              <SelectValue placeholder={"Select"} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="light">Light</SelectItem>
-              <SelectItem value="dark">Dark</SelectItem>
-              <SelectItem value="system">System</SelectItem>
+              <SelectItem value="Hitesh.mahto@merillife.com">Hitesh</SelectItem>
+              <SelectItem value="vignesh.yadavar@merillife.com">Vignesh</SelectItem>
             </SelectContent>
           </Select>
         </div>

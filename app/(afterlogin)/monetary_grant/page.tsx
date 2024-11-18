@@ -198,6 +198,11 @@ const index = () => {
     //   )
     // ).join().replaceAll("_"," ").replaceAll(","," ").replace("/","")
 
+    if(updatedFormData.any_govt_hcp == "No"){
+      updatedFormData.no_of_hcp = 0
+    }
+
+
     updatedFormData.event_type = "Monetary Grant"
     if (refNo) {
       updatedFormData.name = refNo;

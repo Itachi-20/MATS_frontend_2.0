@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import {budget_options}  from "@/app/page";
 import {business_unit_options} from "@/app/page";
+import { useEffect } from "react";
 
 type dropdownData = {
   company: {
@@ -66,6 +67,15 @@ type Props = {
 const Form1 = ({ ...Props }: Props) => {
   const[businessUnit, setBusinessUnit] = useState("");
   const[budget, setBudget] = useState("");  
+  const [fullName, setFullName] = useState<string | null>(null);
+
+  useEffect(() => {
+    const cookies = document.cookie
+      .split('; ')
+      .find(row => row.startsWith('full_name='));
+    const value = cookies?.split('=')[1] ?? null;
+      setFullName(value);
+  }, []);
 
   const [eventCostCenter, setEventCostCenter] =
     useState<eventCostCenter | null>(null);
@@ -335,14 +345,13 @@ const Form1 = ({ ...Props }: Props) => {
           <label className="lable">
             Reporting Head<span className="text-[#e60000]">*</span>
           </label>
-          <Select>
+          <Select onValueChange={(value) => Props.handleSelectChange(value, "reporting_head")}>
             <SelectTrigger className="dropdown">
-              <SelectValue placeholder="Select" />
+              <SelectValue placeholder={"Select"} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="light">Light</SelectItem>
-              <SelectItem value="dark">Dark</SelectItem>
-              <SelectItem value="system">System</SelectItem>
+              <SelectItem value="Hitesh.mahto@merillife.com">Hitesh</SelectItem>
+              <SelectItem value="vignesh.yadavar@merillife.com">Vignesh</SelectItem>
             </SelectContent>
           </Select>
         </div>

@@ -112,13 +112,23 @@ const form4 = ({...Props}:Props) => {
                 <SelectValue placeholder="Select" />
               </SelectTrigger>
               <SelectContent>
-                {
+              {
                   Props.activityDropdown && Props.activityDropdown.activity.map((item,index)=>{
-                    return (
-                      <SelectItem value={item.name}>
+                    if(item.name == "Pre Activity"){
+                      return (
+                        <SelectItem value={item.name}>
                         {item.activity_name}
                       </SelectItem>
                     )
+                  }
+                  else{
+                    
+                      return (
+                        <SelectItem value={item.name} disabled>
+                        {item.activity_name}
+                      </SelectItem>
+                    )
+                  }
                   })
                 }
                     
@@ -151,7 +161,7 @@ const form4 = ({...Props}:Props) => {
               </SelectContent>
             </Select>
         </div>
-        <div className="flex justify-around col-span-1 text-nowrap">
+        <div className="flex justify-around col-span-1 text-nowrap items-end">
           <label
             htmlFor="file"
             className="lable hover:cursor-pointer "
