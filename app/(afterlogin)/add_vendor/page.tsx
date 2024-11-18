@@ -347,7 +347,7 @@ const router = useRouter()
                                         </svg>
                                         <h1 className="mt-[2px]">{fileName ? fileName : ' Receipt/Bill'}</h1>
                                     </div>
-                                    <Input type="file" onChange={(e) => { handleFileUpload(e) }} id="file" className="hidden" multiple></Input>
+                                    <Input type="file" onChange={(e) => { handleFileUpload(e) }} id="file" className="hidden"></Input>
                                 </label>
                                 <div className='items-baseline pt-7'>
                                 <Button
