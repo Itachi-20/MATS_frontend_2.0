@@ -1,18 +1,6 @@
 
 import React from 'react'
 import Table from './table'
-import { Button } from '@/components/ui/button'
-import { Textarea } from '@/components/ui/textarea'
-import { Input } from '@/components/ui/input'
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
-import Image from 'next/image'
-import { useState } from 'react'
 import { cookies } from 'next/headers'
 const fetchData = async(name:any)=>{
     console.log("name",name)
@@ -42,9 +30,9 @@ const fetchData = async(name:any)=>{
 
 
   const Page = async ({ ...params}:any) => {
-    const { refno } = await params; // Destructure `refno` from params
+    const { refno } = await params; 
     console.log(params.searchParams.refno,"sdfghytfrdfcgvbhnjmhygtfrdfgv")
-    const tableData = await fetchData(params.searchParams.refno); // Pass `refno` dynamically
+    const tableData = await fetchData(params.searchParams.refno);
   
     console.log(tableData, 'this is table data');
     return (

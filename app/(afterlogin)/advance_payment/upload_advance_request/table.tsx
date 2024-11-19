@@ -23,7 +23,7 @@ import {
 import Link from 'next/link';
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation';
-
+import ViewDocument from '@/components/view_document'
 type TableData = {
   name: string;
   event_date: string;
@@ -75,28 +75,21 @@ type vendorName = {
   vendor_name: string
 }[]
 
-type formData = {
-  name: string;
-  event_date: string;
-  cost_centre: string | null;
-  business_unit: string;
-  event_name: string | null;
-  sub_type_of_activity: string | null;
-  event_requestor: string;
-  total_compensation_expense: number;
-  actual_vendors: Array<any>
-};
 type VendorData = {
   vendor_type: string;
   vendor_name: string;
   advance: number;
   file: string;
 };
-
+type DocumentRow = {
+  file_name: string;
+  createdDate: string;
+  createdBy: string;
+  file_url: string;
+};
 const table = ({ tableData }: Props) => {
 
   const [open, setOpen] = useState(false);
-  const [compansationVendorType, setCompansationVendorType] = useState("");
   const [compansationVendorName, setCompansationVendorName] = useState("");
   const [dropdownData, setDropdownData] = useState<dropdownData | null>(null);
   const [vendorName, setVendorName] = useState<vendorName | null>(null);
@@ -107,13 +100,14 @@ const table = ({ tableData }: Props) => {
     advance: 0,
     file: '',
   });
-  const [file, setFile] = useState<File | null>(null)
-  const [fileName, setFileName] = useState();
+  const [file, setFile] = useState<FileList | null>();
+  const [fileData, setFileData] = useState<DocumentRow[] | undefined>();
+  const [fileList, setFileList] = useState<File[]>([]);
   const base_url = process.env.NEXT_PUBLIC_FRAPPE_URL;
   const router = useRouter();
-  const handleFileChange: any = (e: any) => {
-    setFile(e.target.files[0])
-    setFileName(e.target.files[0]?.name)
+  const handleFileUpload: any = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    setFileList(files);
   };
 
   const handleVendorTypeChangeApi = async (value: string) => {
@@ -180,27 +174,33 @@ const table = ({ tableData }: Props) => {
   };
 
   const addVendor = async () => {
-    console.log("file", file);
-    if (!file) {
+    console.log("fileList", fileList);
+    if (!fileList) {
       alert('Please upload a file');
       return;
     }
 
+    const formData = new FormData();
+    if (fileList && fileList.length > 0) {
+      for (let i = 0; i < fileList.length; i++) {
+        formData.append("file", fileList[i]);
+      }
+    } else {
+      console.log("No file to upload");
+      return;
+    }
     try {
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append("is_private", "1");
 
-      const response = await fetch('/api/fileUpload', { method: 'POST', body: formData });
+      const response = await fetch('/api/multipleFileUpload', { method: 'POST', body: formData });
 
       if (!response.ok) {
         throw new Error('File upload failed');
       }
 
       const data = await response.json();
-      const fileUrl = data.message.file_url;
-
-      const newVendor = { ...vendorDetails, file: fileUrl };
+      const file = data.message.files;
+      console.log("response data upload add", data)
+      const newVendor = { ...vendorDetails, file: file };
 
       setTableData(prev => ({
         ...prev,
@@ -233,8 +233,8 @@ const table = ({ tableData }: Props) => {
         const data = await response.json();
         console.log(data, "response data");
         setTimeout(() => {
-            router.push(`/event_list`);
-          }, 1000)
+          router.push(`/event_list`);
+        }, 1000)
       } else {
         console.log("submission failed");
       }
@@ -242,6 +242,13 @@ const table = ({ tableData }: Props) => {
       console.error("Error during Submission:", error);
     }
   };
+
+  const handleSetFileData = async (file: any) => {
+    console.log(file, 'file in setfile ')
+    setFileData(file);
+    setOpen(true)
+  };
+  console.log(fileList, 'fileList------------------------------------------')
 
   console.log(tabledata, 'tabledata------------------------------------------')
   return (
@@ -276,7 +283,7 @@ const table = ({ tableData }: Props) => {
           <div className='grid-cols-1 px-6'>
             <ul className=''>
               <li className='border-b p-2'>Business Unit :<span className='font-semibold px-1'>{tableData ? tableData.business_unit : ''}</span></li>
-              <li className='border-b p-2'>Sub Type Af activity :<span className='font-semibold px-1'>{tableData ? tableData.sub_type_of_activity : ''}</span></li>
+              <li className='border-b p-2'>Sub Type Of activity :<span className='font-semibold px-1'>{tableData ? tableData.sub_type_of_activity : ''}</span></li>
               <li className='border-b p-2'>Total Estimated Expense :<span className='font-semibold px-1'>{tableData ? tableData.total_compensation_expense : ''}</span></li>
             </ul>
           </div>
@@ -368,8 +375,12 @@ const table = ({ tableData }: Props) => {
 
           <label className="flex items-center gap-2 px-2 bg-[#F0EDFF] rounded-md shadow-sm cursor-pointer border-[1px]">
             <Image src={'/svg/download.svg'} alt='downloadsvg' width={20} height={20} />
-            <span className="font-medium text-[#4430BF] ">{fileName ? fileName : ' Receipt/Bill'}</span>
-            <Input type="file" className="hidden" onChange={handleFileChange} />
+            <span className="font-medium text-[#4430BF]">
+              {fileList.length > 0
+                ? fileList.map((file) => file.name).join(", ")
+                : "Receipt/Bill"}
+            </span>
+            <Input type="file" className="hidden" onChange={(e) => { handleFileUpload(e) }} id="file" multiple />
           </label>
           <Button className="border border-[#4430bf] text-[#4430bf] text-[18px]" onClick={addVendor} >Add</Button>
         </div>
@@ -490,15 +501,18 @@ const table = ({ tableData }: Props) => {
                           <TableCell>{data.net_amount}</TableCell>
                           <TableCell>{data.utr_number}</TableCell>
                           <TableCell>{data.payment_date}</TableCell>
+
                           <TableCell className='sticky right-0 z-50 gap-3 w-[120px] bg-white mt-2 flex border-l'>
-                            <Link
+                            {/* <Link
                               href={`${base_url}${data.file}`}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="text-blue-600 underline"
-                            >
-                              <Image src={'/svg/view.svg'} alt='viewsvg' width={24} height={18} />
-                            </Link>
+                            > */}
+                            {/* <Image src={'/svg/view.svg'} alt='viewsvg' width={24} height={18} /> */}
+                            <button onClick={() => handleSetFileData(data.file)}><Image src={'/svg/view.svg'} alt='viewsvg' width={24} height={18} /></button>
+
+                            {/* </Link> */}
                             <Image src={'/svg/editIcon.svg'} alt='editsvg' width={20} height={18} />
                             <Image src={'/svg/delete.svg'} alt='deletesvg' width={20} height={18} />
                           </TableCell>
@@ -520,6 +534,10 @@ const table = ({ tableData }: Props) => {
           <Button className='bg-[#4430BF] px-10' onClick={handleSubmit}>Submit</Button>
         </div>
       </div>
+      {
+        open &&
+        <ViewDocument setClose={setOpen} data={fileData} />
+      }
 
     </>
 
