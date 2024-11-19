@@ -132,7 +132,6 @@ const Index = () => {
     return (
         <>
 
-
             <div className="p-7 w-full relative z-20 text-black">
                 <div className="flex justify-between pb-5">
                     <Input

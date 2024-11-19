@@ -8,80 +8,35 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+
 type EventTable = {
+  name: string;
   vendor_type: string;
   vendor_name: string;
-  vendor_code: string;
   remark: string;
-  pan_number: number;
+  pan_number: string;
+  vendor_code: string;
   email: string;
-  contact: number;
-};
+  contact_number: string;
+}[];
 
-const events: EventTable[] = [
-  {
-    vendor_type: "Light",
-    vendor_name: "Annual Conference",
-    vendor_code: "Conference",
-    remark: "2024-10-15",
-    pan_number: 15000,
-    email: "John Doe",
-    contact: 1234567890
-  },
-  {
-    vendor_type: "Dark",
-    vendor_name: "Product Launch",
-    vendor_code: "Launch",
-    remark: "2024-11-20",
-    pan_number: 25000,
-    email: "Jane Smith",
-    contact: 1234567890
-  },
-  {
-    vendor_type: "System",
-    vendor_name: "Team Building Retreat",
-    vendor_code: "Workshop",
-    remark: "2024-09-30",
-    pan_number: 8000,
-    email: "Mike Johnson",
-    contact: 1234567890
-
-  },
-  {
-    vendor_type: "Light",
-    vendor_name: "End of Year Gala",
-    vendor_code: "Gala",
-    remark: "2024-12-31",
-    pan_number: 40000,
-    email: "Emily Davis",
-    contact: 1234567890
-
-  },
-  {
-    vendor_type: "Dark",
-    vendor_name: "Marketing Workshop",
-    vendor_code: "Workshop",
-    remark: "2024-10-10",
-    pan_number: 5500,
-    email: "Alex Brown",
-    contact: 1234567890
-  },
-  {
-    vendor_type: "System",
-    vendor_name: "Client Appreciation Event",
-    vendor_code: "Social",
-    remark: "2024-09-15",
-    pan_number: 12000,
-    email: "Sara Miller",
-    contact: 1234567890
-  }
-];
+type particularVendorData ={
+  name: string;
+  vendor_type: string;
+  vendor_name: string;
+  remark: string;
+  pan_number: string;
+  vendor_code: string;
+  email: string;
+  contact_number: string;
+}
 
 type Props = {
   isViewVendor: () => void;
-  vendorData: React.Dispatch<React.SetStateAction<EventTable | undefined>>;
+  isViewDocument: () => void;
+  vendorData: EventTable | undefined;
+  vendorInfo: (data: particularVendorData) => void;
 };
-
 const table = ({ ...Props }: Props) => {
   return (
     <div className="border bg-white h-full p-4 rounded-[18px]">
@@ -146,13 +101,11 @@ const table = ({ ...Props }: Props) => {
             >
               
             </TableHead>
-            
-
           </TableRow>
         </TableHeader>
         <TableBody>
-          {events &&
-            events.map((data, index) => {
+          {Props &&
+            Props.vendorData?.map((data, index) => {
               return (
                 <TableRow key={index} className="text-center text-nowrap">
                   <TableCell>{data.vendor_type}</TableCell>
@@ -161,15 +114,16 @@ const table = ({ ...Props }: Props) => {
                   <TableCell>{data.remark}</TableCell>
                   <TableCell>{data.pan_number}</TableCell>
                   <TableCell>{data.email}</TableCell>
-                  <TableCell>{data.contact}</TableCell>
+                  <TableCell>{data.contact_number}</TableCell>
                   <TableCell className="flex space-x-6 items-center justify-center border-l-2">
-                    <div className="hover:cursor-pointer" onClick={()=>{Props.isViewVendor(); Props.vendorData(data)}}>
+                  
+                    <div className="hover:cursor-pointer" onClick={()=>{Props.isViewDocument(); Props.vendorInfo(data)}}>
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
                         <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
                         <path fillRule="evenodd" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 0 1 0-1.113ZM17.25 12a5.25 5.25 0 1 1-10.5 0 5.25 5.25 0 0 1 10.5 0Z" clipRule="evenodd" />
                       </svg>
                     </div>
-                    <div className="hover:cursor-pointer">
+                    <div className="hover:cursor-pointer" onClick={()=>{Props.isViewVendor(); Props.vendorInfo(data)}}>
                       <svg
                         width="20"
                         height="20"

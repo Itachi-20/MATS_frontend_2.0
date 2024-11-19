@@ -10,14 +10,15 @@ import {
 import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
 
-type EventTable = {
+type EventTable  = {
+  name: string;
   vendor_type: string;
   vendor_name: string;
-  vendor_code: string;
   remark: string;
-  pan_number: number;
+  pan_number: string;
+  vendor_code: string;
   email: string;
-  contact: number;
+  contact_number: string;
 };
 
 type Props = {
@@ -82,7 +83,7 @@ const view_vendor = ({ ...Props }: Props) => {
             <Input
               className="text-black shadow"
               placeholder="Type Here"
-              value={Props.vendorInfo ? Props.vendorInfo.contact:""}
+              value={Props.vendorInfo ? Props.vendorInfo.contact_number:""}
             ></Input>
           </div>
           <div className="flex flex-col gap-2">
