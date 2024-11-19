@@ -69,6 +69,13 @@ type EventEntry = {
   advance_approvers: any[]; // Empty array, can be customized later
   city:string
   reporting_head:string
+  requesting_hospital_name:string 
+  ship_to:string 
+  bill_to:string 
+  organization_name:string
+  any_additional_expense:string 
+  product_details:string 
+  type_of_engagement:string
 }
 
 type Compensation = {

@@ -4,9 +4,10 @@ import Link from 'next/link';
 import DialogBox from '@/components/dialogbox';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
-
+import { Input } from '@/components/ui/input';
 import DocumentDetails from '@/components/execute/document-details';
 import { useParams } from 'next/navigation'
+import { Value } from '@radix-ui/react-select';
 type EventEntry = {
   name: string;
   owner: string;
@@ -175,6 +176,8 @@ const page = () => {
     const [data,setData] = useState<EventEntry>();
     const [isDialog,setIsDialog] = useState(false);
     const [isChecked,setIsChecked] = useState<boolean>();
+    const [isOccurance,setIsOccurance] = useState<boolean>(false);
+    const [occuranceDate,setOcccuranceDate] = useState<string>();
     const router = useRouter();
     // const fetchDocument = async()=>{
     //     try {
@@ -201,6 +204,12 @@ const page = () => {
     //       }
     // }
 
+
+  const handleOccurance = ()=>{
+    setIsOccurance(true);
+  }
+
+
     const fetchData = async()=>{
         try {
             const tableData = await fetch(
@@ -226,6 +235,8 @@ const page = () => {
           }
     }
 
+
+
     const handlePostDocument = async()=>{
       try {
           const tableData = await fetch(
@@ -237,7 +248,8 @@ const page = () => {
               },
               credentials:"include",
               body:JSON.stringify({
-              name: refno
+              name: refno,
+              date:occuranceDate
               })
             }
           );
@@ -249,6 +261,10 @@ const page = () => {
         } catch (error) {
           console.log(error,"something went wrong");
         }
+  }
+
+  const handleOccuranceDate = (e:React.ChangeEvent<HTMLInputElement>)=>{
+    setOcccuranceDate(e.target.value);
   }
 
 
@@ -312,13 +328,25 @@ const page = () => {
             </div>
         </div>
             {
-              isChecked &&
+              isChecked && data?.event_type != "HCP Services" &&
               <div className="absolute z-50 flex inset-0 items-center justify-center bg-black bg-opacity-50">
 <div className="border-2 rounded-xl p-5 bg-white relative">
   <h1 className='text-black pb-8 font-semibold text-lg'>Are you sure you want to declare this event?</h1>
   <div className='flex justify-center gap-4'>
   <Button className='bg-orange-600 px-12 border-none py-1' onClick={()=>setIsChecked(false)}>No</Button>
   <Button className='bg-green-600 px-12 border-none py-1' onClick={()=>handlePostDocument()}>Yes</Button>
+  </div>
+</div>
+</div>
+  }
+  {
+              isChecked && data?.event_type == "HCP Services" &&
+              <div className="absolute z-50 flex inset-0 items-center justify-center bg-black bg-opacity-50 w-full">
+<div className="border-2 rounded-xl p-10 px-20 bg-white relative">
+  <h1 className='text-black pb-8 font-semibold text-lg'>Occurance Date</h1>
+  <Input className='pb-4 text-black' type='date' onChange={(e)=>handleOccuranceDate(e)}></Input>
+  <div className='flex justify-center gap-4 pt-4'>
+  <Button className='bg-green-600 px-12 border-none py-1' onClick={()=>handlePostDocument()}>Submit</Button>
   </div>
 </div>
 </div>

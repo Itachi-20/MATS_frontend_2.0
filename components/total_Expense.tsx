@@ -61,6 +61,8 @@ type EventEntry = {
   city:string
   reporting_head:string
   any_additional_expense:string
+  product_details:string
+  type_of_engagement:string
 }
 
 type Compensation = {
