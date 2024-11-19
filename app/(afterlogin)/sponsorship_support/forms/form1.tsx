@@ -264,7 +264,7 @@ const Form1 = ({ ...Props }: Props) => {
            onValueChange={(value)=>Props.handleSelectChange(value,"event_cost_center")}
           >
             <SelectTrigger className="dropdown">
-              <SelectValue placeholder="Theme" />
+              <SelectValue placeholder="Select" />
             </SelectTrigger>
             <SelectContent>
             {eventCostCenter &&
@@ -332,7 +332,7 @@ const Form1 = ({ ...Props }: Props) => {
           onValueChange={(value)=>{Props.handleSelectChange(value,"therapy")}}
           >
             <SelectTrigger className="dropdown">
-              <SelectValue placeholder="Theme" />
+              <SelectValue placeholder="Select" />
             </SelectTrigger>
             <SelectContent>
             {eventCostCenter &&
@@ -375,7 +375,7 @@ const Form1 = ({ ...Props }: Props) => {
           onValueChange={(value)=>{Props.handleSelectChange(value,"city")}}
           >
             <SelectTrigger className="dropdown">
-              <SelectValue placeholder="Theme" />
+              <SelectValue placeholder="Select" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="light">Light</SelectItem>
@@ -393,7 +393,7 @@ const Form1 = ({ ...Props }: Props) => {
           onValueChange={(value)=>{Props.handleSelectChange(value,"reporting_head")}}
           >
             <SelectTrigger className="dropdown">
-              <SelectValue placeholder="Theme" />
+              <SelectValue placeholder="Select" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="light">Light</SelectItem>
@@ -410,7 +410,7 @@ const Form1 = ({ ...Props }: Props) => {
           onValueChange={(value)=>{Props.handleSelectChange(value,"sub_type_of_activity")}}
           >
             <SelectTrigger className="dropdown">
-              <SelectValue placeholder="Theme" />
+              <SelectValue placeholder="Select" />
             </SelectTrigger>
             <SelectContent>
             <SelectItem value="Meril Event">

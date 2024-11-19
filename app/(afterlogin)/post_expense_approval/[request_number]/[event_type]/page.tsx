@@ -5,7 +5,18 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import Comment_box from '@/components/Comment_box'
 import Image from 'next/image'
-import { Input } from '@/components/ui/input'
+import { Input } from '@/components/ui/input';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from '@/components/ui/textarea';
+
+
+
 const page = () => {
     const [open, setOpen] = useState(false);
 
@@ -63,6 +74,189 @@ const page = () => {
                 </div>
 
                 <Table />
+
+                <div className=" grid grid-cols-3 gap-4 py-7">
+                    <div className='grid-cols-1 space-y-2'>
+                        <label htmlFor="basic_amount" className="text-black md:text-sm md:font-normal capitalize">
+                            Basic Amount<span className="text-[#e60000] ">*</span>
+                        </label>
+                        <Input
+                            type='number'
+                            className="text-black shadow md:rounded-sm md:py-1"
+                            placeholder="Type here ..."
+                            id='date'
+                            name='basic_amount'
+                        ></Input>
+                    </div>
+                    <div className='grid-cols-1 space-y-2'>
+                        <label htmlFor="gst" className="text-black md:text-sm md:font-normal capitalize">
+                            GST<span className="text-[#e60000] ">*</span>
+                        </label>
+                        <Input
+                            className="text-black shadow md:rounded-sm md:py-1"
+                            placeholder="Type here ..."
+                            id='gst'
+                            name='gst'
+                        ></Input>
+                    </div>
+                    <div className='grid-cols-1 space-y-2'>
+                        <label htmlFor="invoice_amount" className="text-black md:text-sm md:font-normal capitalize">
+                            Invoice Amount<span className="text-[#e60000] ">*</span>
+                        </label>
+                        <Input
+                            type='number'
+                            className="text-black shadow md:rounded-sm md:py-1"
+                            placeholder="Type here ..."
+                            id='invoice_amount'
+                            name='invoice_amount'
+                        ></Input>
+                    </div>
+                    <div className='grid-cols-1 space-y-2'>
+                        <label htmlFor="invoice_amount" className="text-black md:text-sm md:font-normal capitalize">
+                            Advance Amount<span className="text-[#e60000] ">*</span>
+                        </label>
+                        <Input
+                            type='number'
+                            className="text-black shadow md:rounded-sm md:py-1"
+                            placeholder="Type here ..."
+                            id='invoice_amount'
+                            name='invoice_amount'
+                        ></Input>
+                    </div>
+                    <div className='grid-cols-1 space-y-2'>
+                        <label htmlFor="invoice_amount" className="text-black md:text-sm md:font-normal capitalize">
+                            Balance Amount<span className="text-[#e60000] ">*</span>
+                        </label>
+                        <Input
+                            type='number'
+                            className="text-black shadow md:rounded-sm md:py-1"
+                            placeholder="Type here ..."
+                            id='invoice_amount'
+                            name='invoice_amount'
+                        ></Input>
+                    </div>
+                    <div className='grid-cols-1 space-y-2'>
+                        <label htmlFor="invoice_amount" className="text-black md:text-sm md:font-normal capitalize">
+                            Requestor Name<span className="text-[#e60000] ">*</span>
+                        </label>
+                        <Input
+                            type='text'
+                            className="text-black shadow md:rounded-sm md:py-1"
+                            placeholder="Type here ..."
+                            id='invoice_amount'
+                            name='invoice_amount'
+                        ></Input>
+                    </div>
+                    <div className='grid-cols-1 space-y-2'>
+                        <label htmlFor="invoice_amount" className="text-black md:text-sm md:font-normal capitalize">
+                            Created By Name<span className="text-[#e60000] ">*</span>
+                        </label>
+                        <Input
+                            type='text'
+                            className="text-black shadow md:rounded-sm md:py-1"
+                            placeholder="Type here ..."
+                            id='invoice_amount'
+                            name='invoice_amount'
+                        ></Input>
+                    </div>
+
+                    <div className='grid-cols-1 space-y-2'>
+                        <label htmlFor="invoice_amount" className="text-black md:text-sm md:font-normal capitalize">
+                            Sales Person Reporting Name<span className="text-[#e60000] ">*</span>
+                        </label>
+                        <Input
+                            type='text'
+                            className="text-black shadow md:rounded-sm md:py-1"
+                            placeholder="Type here ..."
+                            id='invoice_amount'
+                            name='invoice_amount'
+                        ></Input>
+                    </div>
+                    
+                    <div className='grid-cols-1 space-y-2'>
+                        <label htmlFor="zone" className="text-black md:text-sm md:font-normal capitalize">
+                            Zone<span className="text-[#e60000] ">*</span>
+                        </label>
+                        <Select>
+                            <SelectTrigger className="dropdown rounded-sm gap-4">
+                                <SelectValue placeholder="-Select-" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="null">-Select-</SelectItem>
+                                <SelectItem value="light">Light</SelectItem>
+                                <SelectItem value="dark">Dark</SelectItem>
+                                <SelectItem value="system">System</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
+                    <div className='grid-cols-1 space-y-2'>
+                        <label htmlFor="state" className="text-black md:text-sm md:font-normal capitalize">
+                            State<span className="text-[#e60000] ">*</span>
+                        </label>
+                        <Select>
+                            <SelectTrigger className="dropdown rounded-sm gap-4">
+                                <SelectValue placeholder="-Select-" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="null">-Select-</SelectItem>
+                                <SelectItem value="light">Light</SelectItem>
+                                <SelectItem value="dark">Dark</SelectItem>
+                                <SelectItem value="system">System</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
+                    <div className='grid-cols-1 space-y-2'>
+                        <label htmlFor="city" className="text-black md:text-sm md:font-normal capitalize">
+                            City<span className="text-[#e60000] ">*</span>
+                        </label>
+                        <Select>
+                            <SelectTrigger className="dropdown rounded-sm gap-4">
+                                <SelectValue placeholder="-Select-" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="null">-Select-</SelectItem>
+                                <SelectItem value="light">Light</SelectItem>
+                                <SelectItem value="dark">Dark</SelectItem>
+                                <SelectItem value="system">System</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
+                    <div className='grid-cols-1 space-y-2'>
+                        <label htmlFor="remark" className="text-black md:text-sm md:font-normal capitalize">
+                            Narration<span className="text-[#e60000] ">*</span>
+                        </label>
+                        <Textarea
+                            className="text-black shadow md:rounded-sm md:py-2"
+                            placeholder="Type here ..."
+                            id='narration'
+                            name='narration'
+                        ></Textarea>
+                    </div>
+                    <div className='grid-cols-1 space-y-2'>
+                        <label htmlFor="remark" className="text-black md:text-sm md:font-normal capitalize">
+                            Shail Sir Post Activity Date<span className="text-[#e60000] ">*</span>
+                        </label>
+                        <Input
+                            type='date'
+                            className="text-black shadow md:rounded-sm md:py-1"
+                            placeholder="Type here ..."
+                            id='shail_sir_post_activity_date'
+                            name='shail_sir_post_activity_date'
+                        ></Input>
+                    </div>
+                    <div className='grid-cols-1 space-y-2'>
+                        <label htmlFor="remark" className="text-black md:text-sm md:font-normal capitalize">
+                            Post Expense Submission Date<span className="text-[#e60000] ">*</span>
+                        </label>
+                        <Input
+                            type='date'
+                            className="text-black shadow md:rounded-sm md:py-1"
+                            placeholder="Type here ..."
+                            id='post_expense_submission_date'
+                            name='post_expense_submission_date'
+                        ></Input>
+                    </div>
+                </div>
 
                 <div className='flex justify-end gap-2 pt-8'>
                     <Button className='bg-[#5DBE74] px-6' onClick={handleApprove}>Approve</Button>

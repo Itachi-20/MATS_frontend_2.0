@@ -27,7 +27,7 @@ const view_document = ({ ...Props }: Props) => {
                         </label>
                         <Select>
                             <SelectTrigger className="text-black shadow">
-                                <SelectValue placeholder="Theme" />
+                                <SelectValue placeholder="Select" />
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectItem value="light">Light</SelectItem>

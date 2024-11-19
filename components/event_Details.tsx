@@ -61,8 +61,12 @@ type EventEntry = {
   logistics: Logistics[];
   documents: ActivityDocument[];
   advance_approvers: any[]; // Empty array, can be customized later
-  city:string
-  reporting_head:string
+  city:string;
+  reporting_head:string;
+  requesting_hospital_name:string;
+  ship_to:string;
+  bill_to:string;
+  organization_name:string;
 }
 
 type Compensation = {
@@ -183,19 +187,19 @@ const event_Details = ({ ...Props }: Props) => {
         
       </div>
       <div className="grid md:grid-cols-3 md:gap-6">
-        <div className="flex flex-col md:gap-2">
+        <div className={`flex flex-col md:gap-2 ${pathname == "/patient_support" ? 'hidden':''}`}>
           <label className="text-black md:text-sm md:font-normal capitalize">
-            {pathname == "/assesment_program" ? "Program Name" : pathname == "/non_monetary_grant" ? "Organisation Name" : "Event Name"}<span className="text-[#e60000]">*</span>
+            {pathname == ("/assesment_program") ? "Program Name" : (pathname == "/non_monetary_grant") || (pathname == "/monetary_grant") ? "Organisation Name" : "Event Name"}<span className="text-[#e60000]">*</span>
           </label>
           <Input
             className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
             placeholder="Type Here"
             readOnly={true}
-            value={Props.eventData?.event_name}
+            value={pathname.substring(1) == "monetary_grant" ? Props.eventData?.organization_name : Props.eventData?.event_name}
           ></Input>
         </div>
         { 
-          pathname.substring(1) == 'sponsorship_program' || pathname.substring(1) == 'non_monetary_grant' &&
+          (pathname.substring(1) == 'sponsorship_program' || pathname.substring(1) == 'non_monetary_grant' || pathname.substring(1) == 'patient_support' || pathname.substring(1) == 'monetary_grant') &&
           <>
             <div className="flex flex-col md:gap-2">
               <label className="text-black md:text-sm md:font-normal capitalize">
@@ -221,6 +225,46 @@ const event_Details = ({ ...Props }: Props) => {
           </div>
           </>
         }
+
+        { 
+          pathname.substring(1) == 'patient_support' &&
+          <>
+            <div className="flex flex-col md:gap-2">
+              <label className="text-black md:text-sm md:font-normal capitalize">
+              Requesting Hospital Name<span className="text-[#e60000]">*</span>
+              </label>
+              <Input
+                className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
+                placeholder="Type Here"
+                readOnly={true}
+                value={Props.eventData?.requesting_hospital_name}
+              ></Input>
+            </div>
+            <div className="flex flex-col md:gap-2">
+            <label className="text-black md:text-sm md:font-normal capitalize">
+              Ship To<span className="text-[#e60000]">*</span>
+            </label>
+            <Input
+              className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
+              placeholder="Type Here"
+              readOnly={true}
+              value={Props.eventData?.ship_to}
+            ></Input>
+          </div>
+          <div className="flex flex-col md:gap-2">
+            <label className="text-black md:text-sm md:font-normal capitalize">
+              Bill To<span className="text-[#e60000]">*</span>
+            </label>
+            <Input
+              className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
+              placeholder="Type Here"
+              readOnly={true}
+              value={Props.eventData?.bill_to}
+            ></Input>
+          </div>
+          </>
+        }
+
         { pathname.substring(1) != 'sponsorship_program' || pathname.substring(1) != 'non_monetary_grant' &&
           <div className="flex flex-col md:gap-2">
             <label className="text-black md:text-sm md:font-normal capitalize">
@@ -245,7 +289,7 @@ const event_Details = ({ ...Props }: Props) => {
           ></Input>
         </div>
 
-        { pathname.substring(1) != 'non_monetary_grant' &&
+        { (pathname.substring(1) != 'non_monetary_grant' && pathname.substring(1) != 'patient_support' && pathname.substring(1) != 'monetary_grant') &&
           <div className="flex flex-col md:gap-2">
             <label className="text-black md:text-sm md:font-normal capitalize">
               {Props.pathname == "/assesment_program" ? "Program Venue and Location" : "Event Venue"}<span className="text-[#e60000]">*</span>
@@ -259,7 +303,7 @@ const event_Details = ({ ...Props }: Props) => {
           </div>
         }
 
-        {pathname.substring(1) != 'sponsorship_program' || pathname.substring(1) != 'non_monetary_grant' &&
+        { (pathname.substring(1) != 'sponsorship_program' && pathname.substring(1) != 'non_monetary_grant') &&
           <>
             <div className="flex flex-col md:gap-2">
               <label className="text-black md:text-sm md:font-normal capitalize">
@@ -272,16 +316,19 @@ const event_Details = ({ ...Props }: Props) => {
                 value={Props.eventData?.any_govt_hcp}
               ></Input>
             </div>
-            <div className="flex flex-col md:gap-2">
-              <label className="text-black md:text-sm md:font-normal capitalize">
-                Total Number of government HCP’s<span className="text-[#e60000]">*</span>
-              </label>
-              <Input
-                className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
-                placeholder="Type Here"
-                readOnly={true}
-              ></Input>
-            </div>
+            { Props.eventData?.any_govt_hcp == "Yes" &&
+              <div className="flex flex-col md:gap-2">
+                <label className="text-black md:text-sm md:font-normal capitalize">
+                  Total Number of government HCP’s<span className="text-[#e60000]">*</span>
+                </label>
+                <Input
+                  className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
+                  placeholder="Type Here"
+                  readOnly={true}
+                  value={Props.eventData?.no_of_hcp}
+                ></Input>
+              </div>
+            }
           </> 
         }
         <div className="flex flex-col md:gap-2">
@@ -295,7 +342,7 @@ const event_Details = ({ ...Props }: Props) => {
             value={Props.eventData?.bu_rational}
           ></Input>
         </div>
-        {pathname.substring(1) != 'sponsorship_program' ?
+        {(pathname.substring(1) != 'sponsorship_program' && pathname.substring(1) != 'patient_support') ?
           <div className="flex flex-col md:gap-2">
             <label className="text-black md:text-sm md:font-normal capitalize">
               Comments<span className="text-[#e60000]">*</span>
