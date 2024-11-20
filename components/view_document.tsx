@@ -20,8 +20,7 @@ import {
 import Link from "next/link";
 type DocumentRow = {
     file_name: string;
-    createdDate: string;
-    createdBy: string;
+    name:string;
     file_url: string;
   };
 

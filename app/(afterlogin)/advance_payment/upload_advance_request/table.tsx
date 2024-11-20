@@ -83,8 +83,9 @@ type VendorData = {
 };
 type DocumentRow = {
   file_name: string;
-  createdDate: string;
-  createdBy: string;
+  // createdDate: string;
+  // createdBy: string;
+  name:string;
   file_url: string;
 };
 const table = ({ tableData }: Props) => {
