@@ -1,3 +1,4 @@
+"use client"
 import React,{useState,useEffect} from "react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox"
@@ -313,13 +314,6 @@ const Preview_Form = () => {
               </Button>
             </div>
         </div>
-        {
-
-          dialog && 
-          <Add_vendor
-          isAddVendor={isAddVendor}
-          />
-        }
       </>
   )
 }

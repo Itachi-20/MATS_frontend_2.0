@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+"use client"
+import React, { useState,useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -9,6 +10,7 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { useRouter } from "next/navigation";
 
 type dropdownData = {
   company: {
@@ -120,12 +122,12 @@ type subtypeActivity = {
 
 type Props = {
   dropdownData: dropdownData | null;
-  handlefieldChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>)=>void;
-  handleSelectChange: (value:string,name:string)=>void;
-  handleSubmit:(e: React.MouseEvent<HTMLButtonElement>)=>void
+  // handlefieldChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>)=>void;
+  // handleSelectChange: (value:string,name:string)=>void;
+  // handleSubmit:(e: React.MouseEvent<HTMLButtonElement>)=>void
 };
-
 const Form1 = ({ ...Props }: Props) => {
+  const router = useRouter();
   const[businessUnit, setBusinessUnit] = useState("");
   const[budget, setBudget] = useState("");
   const [eventCostCenter, setEventCostCenter] =
@@ -134,7 +136,60 @@ const Form1 = ({ ...Props }: Props) => {
     useState<subtypeActivity | null>(null);
   const [subtypeActivityVisible, setSubtypeActivityVisible] = useState(false); 
   const[engagementTypes, setEngagementTypes] = useState("");  
-  const typeOfEngagement = ["One Time","MSA","Scientific Advisory Consultancy Agreement","Royalty Agreement","Product development And Royalty Agreement","Product Development Agreement", "Product feeedback Agreement"];
+  const [formdata, setFormData] = useState<formData | {}>({});
+  const [refNo,setRefNo] = useState<string | null>(localStorage.getItem("refno")?localStorage.getItem("refno"):"");
+
+  const handleSelectChange = (value: string, name: string) => {
+       setFormData((prev) => ({ ...prev, [name]: value }));
+     };
+
+     const handlefieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+         const { name, value } = e.target;
+         setFormData(prev => ({ ...prev, [name]: value }));
+       }
+
+       const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+          e.preventDefault();
+      
+          const updatedFormData = {
+              ...formdata
+      
+          };
+          
+          updatedFormData.event_type = "HCP Services"
+          if(refNo){
+            updatedFormData.name = refNo;
+          }
+      
+      
+          try {
+            const response = await fetch(
+              "/api/training_and_education/handleSubmit",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                credentials: 'include',
+                body: JSON.stringify(updatedFormData)
+              }
+            );
+            if (response.ok) {
+              const data = await response.json();
+              console.log(data, "response data");
+              localStorage.setItem("refno", data.message);
+              setRefNo(data.message);
+      
+              setTimeout(() => {
+                router.push(`/hcp_services?forms=2`);
+              }, 1000)
+            } else {
+              console.log("submission failed");
+            }
+          } catch (error) {
+            console.error("Error during Submission:", error);
+          }
+        };
 
 
   const handleBudgetChange = async (value: string) => {
@@ -196,7 +251,11 @@ const Form1 = ({ ...Props }: Props) => {
     }
   };
 
+  useEffect(() => {
+       setFormData({ ...formdata, name: refNo })
+     }, [refNo])
 
+console.log(formdata,"this is form data")
   return (
     // </div>
     (<div>
@@ -209,7 +268,7 @@ const Form1 = ({ ...Props }: Props) => {
             Company Names <span className="text-[#e60000]">*</span>
           </label>
           <Select
-          onValueChange={(value)=>{Props.handleSelectChange(value,"company")}}
+          onValueChange={(value)=>{handleSelectChange(value,"company")}}
           >
             <SelectTrigger className="dropdown">
               <SelectValue placeholder="Select" />
@@ -229,7 +288,7 @@ const Form1 = ({ ...Props }: Props) => {
           <label className="lable">
             Business Unit<span className="text-[#e60000]">*</span>
           </label>
-          <Select onValueChange={(value)=>{handleBusinessUnitChange(value),Props.handleSelectChange(value,"business_unit")}}>
+          <Select onValueChange={(value)=>{handleBusinessUnitChange(value),handleSelectChange(value,"business_unit")}}>
             <SelectTrigger className="dropdown">
               <SelectValue placeholder="Select" />
             </SelectTrigger>
@@ -249,7 +308,7 @@ const Form1 = ({ ...Props }: Props) => {
             Event requester<span className="text-[#e60000]">*</span>
           </label>
           <Select
-          onValueChange={(value)=>Props.handleSelectChange(value,"event_requestor")}
+          onValueChange={(value)=>handleSelectChange(value,"event_requestor")}
           >
             <SelectTrigger className="dropdown">
               <SelectValue placeholder="Select" />
@@ -271,7 +330,7 @@ const Form1 = ({ ...Props }: Props) => {
             event cost center<span className="text-[#e60000]">*</span>
           </label>
           <Select
-          onValueChange={(value)=>Props.handleSelectChange(value,"event_cost_center")}
+          onValueChange={(value)=>handleSelectChange(value,"event_cost_center")}
           >
             <SelectTrigger className="dropdown">
               <SelectValue placeholder="Select" />
@@ -292,7 +351,7 @@ const Form1 = ({ ...Props }: Props) => {
           <label className="lable">
             Budget<span className="text-[#e60000]">*</span>
           </label>
-          <Select onValueChange={(value)=>{handleBudgetChange(value),Props.handleSelectChange(value,"division_category")}}>
+          <Select onValueChange={(value)=>{handleBudgetChange(value),handleSelectChange(value,"division_category")}}>
             <SelectTrigger className="dropdown">
               <SelectValue placeholder="--Selected--" />
             </SelectTrigger>
@@ -313,7 +372,7 @@ const Form1 = ({ ...Props }: Props) => {
               Budget Sub Type<span className="text-[#e60000]">*</span>
             </label>
             <Select
-            onValueChange={(value)=>{Props.handleSelectChange(value,"division_sub_category")}}
+            onValueChange={(value)=>{handleSelectChange(value,"division_sub_category")}}
             >
               <SelectTrigger className="dropdown">
                 <SelectValue placeholder="--Selected--" />
@@ -337,7 +396,7 @@ const Form1 = ({ ...Props }: Props) => {
             City<span className="text-[#e60000]">*</span>
           </label>
           <Select
-          onValueChange={(value)=>{Props.handleSelectChange(value,"city")}}
+          onValueChange={(value)=>{handleSelectChange(value,"city")}}
           >
             <SelectTrigger className="dropdown">
               <SelectValue placeholder="Select" />
@@ -354,7 +413,7 @@ const Form1 = ({ ...Props }: Props) => {
             State<span className="text-[#e60000]">*</span>
           </label>
           <Select
-          onValueChange={(value)=>{Props.handleSelectChange(value,"state")}}
+          onValueChange={(value)=>{handleSelectChange(value,"state")}}
           >
             <SelectTrigger className="dropdown">
               <SelectValue placeholder="Select" />
@@ -375,7 +434,7 @@ const Form1 = ({ ...Props }: Props) => {
             Therapy<span className="text-[#e60000]">*</span>
           </label>
           <Select
-          onValueChange={(value)=>{Props.handleSelectChange(value,"therapy")}}
+          onValueChange={(value)=>{handleSelectChange(value,"therapy")}}
           >
             <SelectTrigger className="dropdown">
               <SelectValue placeholder="Select" />
@@ -395,7 +454,7 @@ const Form1 = ({ ...Props }: Props) => {
             Reporting Head<span className="text-[#e60000]">*</span>
           </label>
           <Select
-          onValueChange={(value)=>{Props.handleSelectChange(value,"reporting_head")}}
+          onValueChange={(value)=>{handleSelectChange(value,"reporting_head")}}
           >
             <SelectTrigger className="dropdown">
               <SelectValue placeholder="Select" />
@@ -412,7 +471,7 @@ const Form1 = ({ ...Props }: Props) => {
             Sub Type Of Activity<span className="text-[#e60000]">*</span>
           </label>
           <Select
-          onValueChange={(value)=>{Props.handleSelectChange(value,"sub_type_of_activity")}}
+          onValueChange={(value)=>{handleSelectChange(value,"sub_type_of_activity")}}
           >
             <SelectTrigger className="dropdown">
               <SelectValue placeholder="Select" />
@@ -435,7 +494,7 @@ const Form1 = ({ ...Props }: Props) => {
             Type Of Engagement<span className="text-[#e60000]">*</span>
           </label>
           <Select 
-          onValueChange={(value)=>{Props.handleSelectChange(value,"type_of_engagement"); setEngagementTypes(value)}}
+          onValueChange={(value)=>{handleSelectChange(value,"type_of_engagement"); setEngagementTypes(value)}}
           >
             <SelectTrigger className="dropdown">
               <SelectValue placeholder="Select" />
@@ -460,7 +519,7 @@ const Form1 = ({ ...Props }: Props) => {
             </label>
             <Textarea className='text-black shadow-md' placeholder='Type Here'
             name="faculty"
-            onChange={(e:React.ChangeEvent<HTMLTextAreaElement>)=>{Props.handlefieldChange(e)}}/>
+            onChange={(e:React.ChangeEvent<HTMLTextAreaElement>)=>{handlefieldChange(e)}}/>
           </div>
         <div className="flex flex-col gap-2">
             <label className="lable">
@@ -469,7 +528,7 @@ const Form1 = ({ ...Props }: Props) => {
             <Textarea className="text-black shadow-md"
           placeholder="Type Here"
           name="participants"
-          onChange={(e:React.ChangeEvent<HTMLTextAreaElement>)=>{Props.handlefieldChange(e)}}/>
+          onChange={(e:React.ChangeEvent<HTMLTextAreaElement>)=>{handlefieldChange(e)}}/>
         </div>
       </div>
       
@@ -489,7 +548,7 @@ const Form1 = ({ ...Props }: Props) => {
                             type="date"
                             placeholder="dd/mm/yy"
                             name="event_start_data"
-                            onChange={(e)=>{Props.handlefieldChange(e)}}
+                            onChange={(e)=>{handlefieldChange(e)}}
                         ></Input>
                     </div>
                     <div className="flex flex-col md:gap-2">
@@ -501,7 +560,7 @@ const Form1 = ({ ...Props }: Props) => {
                             type="date"
                             placeholder="dd/mm/yy"
                             name="event_end_date"
-                            onChange={(e)=>{Props.handlefieldChange(e)}}
+                            onChange={(e)=>{handlefieldChange(e)}}
                         ></Input>
                     </div>
                     <div className="flex flex-col md:gap-2">
@@ -509,7 +568,7 @@ const Form1 = ({ ...Props }: Props) => {
                             Training & Education Request Ref Number<span className="text-[#e60000]">*</span>
                         </label>
                         <Select 
-          onValueChange={(value)=>{Props.handleSelectChange(value,"training_ref_no")}}
+          onValueChange={(value)=>{handleSelectChange(value,"training_ref_no")}}
           >
             <SelectTrigger className="dropdown">
               <SelectValue placeholder="Select" />
@@ -541,7 +600,7 @@ const Form1 = ({ ...Props }: Props) => {
                         className="text-black shadow md:rounded-xl md:py-5"
                         placeholder="Type Here"
                         name="event_name"
-                        onChange={(e)=>{Props.handlefieldChange(e)}}
+                        onChange={(e)=>{handlefieldChange(e)}}
                     ></Input>
                 </div>
                 <div className="flex flex-col md:gap-2">
@@ -552,7 +611,7 @@ const Form1 = ({ ...Props }: Props) => {
                         className="text-black shadow md:rounded-xl md:py-5"
                         placeholder="Type Here"
                         name="event_venue"
-                        onChange={(e)=>{Props.handlefieldChange(e)}}
+                        onChange={(e)=>{handlefieldChange(e)}}
                     ></Input>
                 </div>
               </div>
@@ -578,7 +637,7 @@ const Form1 = ({ ...Props }: Props) => {
                             type="date"
                             placeholder="dd/mm/yy"
                             name="event_start_date"
-                            onChange={(e)=>{Props.handlefieldChange(e)}}
+                            onChange={(e)=>{handlefieldChange(e)}}
                         ></Input>
                     </div>
                     <div className="flex flex-col md:gap-2">
@@ -590,7 +649,7 @@ const Form1 = ({ ...Props }: Props) => {
                             type="date"
                             placeholder="dd/mm/yy"
                             name="event_end_date"
-                            onChange={(e)=>{Props.handlefieldChange(e)}}
+                            onChange={(e)=>{handlefieldChange(e)}}
                         ></Input>
                     </div>
                     <div className="flex flex-col md:gap-2">
@@ -601,7 +660,7 @@ const Form1 = ({ ...Props }: Props) => {
                             className="text-black shadow md:rounded-xl md:py-5"
                             placeholder="Type Here"
                             name="annual_plan"
-                            onChange={(e)=>{Props.handlefieldChange(e)}}
+                            onChange={(e)=>{handlefieldChange(e)}}
                         ></Input>
                     </div>
                 </div>
@@ -620,7 +679,7 @@ const Form1 = ({ ...Props }: Props) => {
                         className="text-black shadow md:rounded-xl md:py-5"
                         placeholder="Type Here"
                         name="service_type"
-                        onChange={(e)=>{Props.handlefieldChange(e)}}
+                        onChange={(e)=>{handlefieldChange(e)}}
                     ></Input>
                 </div>
               </div>
@@ -644,8 +703,8 @@ const Form1 = ({ ...Props }: Props) => {
                             className="text-black shadow md:rounded-xl md:py-5"
                             type="date"
                             placeholder="dd/mm/yy"
-                            name="start_date"
-                            onChange={(e)=>{Props.handlefieldChange(e)}}
+                            name="event_start_date"
+                            onChange={(e)=>{handlefieldChange(e)}}
                         ></Input>
                     </div>
                     <div className="flex flex-col md:gap-2">
@@ -656,8 +715,8 @@ const Form1 = ({ ...Props }: Props) => {
                             className="text-black shadow md:rounded-xl md:py-5"
                             type="date"
                             placeholder="dd/mm/yy"
-                            name="end_date"
-                            onChange={(e)=>{Props.handlefieldChange(e)}}
+                            name="event_end_date"
+                            onChange={(e)=>{handlefieldChange(e)}}
                         ></Input>
                     </div>
                     <div className="flex flex-col md:gap-2">
@@ -668,7 +727,7 @@ const Form1 = ({ ...Props }: Props) => {
                             className="text-black shadow md:rounded-xl md:py-5"
                             placeholder="Type Here"
                             name="annual_plan"
-                            onChange={(e)=>{Props.handlefieldChange(e)}}
+                            onChange={(e)=>{handlefieldChange(e)}}
                         ></Input>
                     </div>
                 </div>
@@ -692,8 +751,8 @@ const Form1 = ({ ...Props }: Props) => {
                             className="text-black shadow md:rounded-xl md:py-5"
                             type="date"
                             placeholder="dd/mm/yy"
-                            name="start_date"
-                            onChange={(e)=>{Props.handlefieldChange(e)}}
+                            name="event_start_date"
+                            onChange={(e)=>{handlefieldChange(e)}}
                         ></Input>
                     </div>
                     <div className="flex flex-col md:gap-2">
@@ -704,8 +763,8 @@ const Form1 = ({ ...Props }: Props) => {
                             className="text-black shadow md:rounded-xl md:py-5"
                             type="date"
                             placeholder="dd/mm/yy"
-                            name="end_date"
-                            onChange={(e)=>{Props.handlefieldChange(e)}}
+                            name="event_end_date"
+                            onChange={(e)=>{handlefieldChange(e)}}
                         ></Input>
                     </div>
                     <div className="flex flex-col md:gap-2">
@@ -716,7 +775,7 @@ const Form1 = ({ ...Props }: Props) => {
                             className="text-black shadow md:rounded-xl md:py-5"
                             placeholder="Type Here"
                             name="product_details"
-                            onChange={(e)=>{Props.handlefieldChange(e)}}
+                            onChange={(e)=>{handlefieldChange(e)}}
                         ></Input>
                     </div>
                 </div>
@@ -731,7 +790,7 @@ const Form1 = ({ ...Props }: Props) => {
           {" "}
           Save as Draft
         </Button>
-        <Button className='bg-[#4430bf] text-white text-md font-normal border' onClick={(e)=>Props.handleSubmit(e)}>Next</Button>
+        <Button className='bg-[#4430bf] text-white text-md font-normal border' onClick={(e)=>handleSubmit(e)}>Next</Button>
       </div>
     </div>)
   );
