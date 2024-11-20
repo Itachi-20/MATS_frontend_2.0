@@ -344,7 +344,7 @@ const page = () => {
               <div className="absolute z-50 flex inset-0 items-center justify-center bg-black bg-opacity-50 w-full">
 <div className="border-2 rounded-xl p-10 px-20 bg-white relative">
   <h1 className='text-black pb-8 font-semibold text-lg'>Occurance Date</h1>
-  <Input className='pb-4 text-black' type='date' onChange={(e)=>handleOccuranceDate(e)}></Input>
+  <Input className='pb-4 text-black' type='date'  onChange={(e)=>handleOccuranceDate(e)}></Input>
   <div className='flex justify-center gap-4 pt-4'>
   <Button className='bg-green-600 px-12 border-none py-1' onClick={()=>handlePostDocument()}>Submit</Button>
   </div>
