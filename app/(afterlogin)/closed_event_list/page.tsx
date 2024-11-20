@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 
-type CancelListTable = {
+type CloseEvenetListTable = {
   request_number: string;
   event_name: string;
   event_type: string;
@@ -35,7 +35,7 @@ type CancelListTable = {
 const CancelledList = () => {
    const router =  useRouter();
 
-  const cancelLists: CancelListTable[] = [
+  const closeLists: CloseEvenetListTable[] = [
     {
       request_number: "REQ001",
       event_name: "Annual Conference",
@@ -104,7 +104,7 @@ const CancelledList = () => {
                 
             <div className="flex gap-5">
                <Button className="rounded-[25px] border-[.2px] border-[#636363] bg-[#4430BF]  text-white text-[14px] flex space-x-2 px-[20px]">
-                    <span>Cancelled list</span>
+                    <span>Closed list</span>
                     <Image src={"/svg/cancelwhite.svg"} alt="add-Icon" width={20} height={20} />
                 </Button>
               <Select>
@@ -127,7 +127,7 @@ const CancelledList = () => {
                   <SelectItem value="system">System</SelectItem>
                 </SelectContent>
               </Select>
-              <Button className="text-black text-md font-normal bg-white hover:bg-white border rounded-[25px] px-8 py-5 shadow" onClick={()=>router.push('/cancel_event_list')}>
+              <Button className="text-black text-md font-normal bg-white hover:bg-white border rounded-[25px] px-8 py-5 shadow" onClick={()=>router.push('/close_event_list')}>
                 Back
               </Button>
             </div>
@@ -210,17 +210,17 @@ const CancelledList = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                  {cancelLists &&
-                    cancelLists.map((cancelList, index) => {
+                  {closeLists &&
+                    closeLists.map((closeList, index) => {
                       return (
                         <TableRow key={index} className="text-center text-nowrap">
-                          <TableCell>{cancelList.request_number}</TableCell>
-                          <TableCell>{cancelList.event_type}</TableCell>
-                          <TableCell>{cancelList.event_name}</TableCell>
-                          <TableCell>{cancelList.event_date}</TableCell>
-                          <TableCell>{cancelList.event_end_date}</TableCell>
-                          <TableCell>{cancelList.event_requestor}</TableCell>   
-                          <TableCell>{cancelList.event_venue}</TableCell>                  
+                          <TableCell>{closeList.request_number}</TableCell>
+                          <TableCell>{closeList.event_type}</TableCell>
+                          <TableCell>{closeList.event_name}</TableCell>
+                          <TableCell>{closeList.event_date}</TableCell>
+                          <TableCell>{closeList.event_end_date}</TableCell>
+                          <TableCell>{closeList.event_requestor}</TableCell>   
+                          <TableCell>{closeList.event_venue}</TableCell>                  
                           <TableCell className="sticky right-0 bg-[white] z-50 flex justify-end space-x-5 py-4 px-0 pl-6 !important border-l border-slate-200">                          
                               <Image src={"/svg/view.svg"} width={17} height={20} alt="view-svg" className="cursor-pointer"/>
                               <ToggleButton />

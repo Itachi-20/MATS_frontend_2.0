@@ -3,7 +3,6 @@ import React from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
-import ToggleButton from "@/components/toggle_button";
 import {
   Select,
   SelectContent,
@@ -21,8 +20,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import ToggleButton from "@/components/toggle_button";
 
-type CancelListTable = {
+type EventCloseListTable = {
   request_number: string;
   event_name: string;
   event_type: string;
@@ -32,10 +32,10 @@ type CancelListTable = {
   event_venue:string;
 };
 
-const CancelledList = () => {
-   const router =  useRouter();
+const EventCloselList = () => {
+  const router = useRouter()
 
-  const cancelLists: CancelListTable[] = [
+  const EventCloseLists: EventCloseListTable[] = [
     {
       request_number: "REQ001",
       event_name: "Annual Conference",
@@ -103,9 +103,9 @@ const CancelledList = () => {
                 <Image src="svg/search.svg"  alt="search-icon" width={23} height={23} className="absolute right-[63%] top-[15%]"/> 
                 
             <div className="flex gap-5">
-               <Button className="rounded-[25px] border-[.2px] border-[#636363] bg-[#4430BF]  text-white text-[14px] flex space-x-2 px-[20px]">
-                    <span>Cancelled list</span>
-                    <Image src={"/svg/cancelwhite.svg"} alt="add-Icon" width={20} height={20} />
+               <Button className="rounded-[25px] border-[.2px] border-slate-400 bg-[#FFF] text-[14px] flex space-x-2 px-[20px]" onClick={()=> router.push('/closed_event_list')}>
+                    <span>Closed list</span>
+                    <Image src={"/svg/cancel.svg"} alt="add-Icon" width={20} height={20} />
                 </Button>
               <Select>
                 <SelectTrigger className="text-black shadow focus-visible:ring-transparent rounded-[25px] gap-4 border border-slate-400 !important">
@@ -127,7 +127,7 @@ const CancelledList = () => {
                   <SelectItem value="system">System</SelectItem>
                 </SelectContent>
               </Select>
-              <Button className="text-black text-md font-normal bg-white hover:bg-white border rounded-[25px] px-8 py-5 shadow" onClick={()=>router.push('/cancel_event_list')}>
+              <Button className="text-black text-md font-normal bg-white hover:bg-white border rounded-[25px] px-8 py-5 shadow">
                 Back
               </Button>
             </div>
@@ -210,21 +210,21 @@ const CancelledList = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                  {cancelLists &&
-                    cancelLists.map((cancelList, index) => {
+                  {EventCloseLists &&
+                    EventCloseLists.map((EventCloseList, index) => {
                       return (
                         <TableRow key={index} className="text-center text-nowrap">
-                          <TableCell>{cancelList.request_number}</TableCell>
-                          <TableCell>{cancelList.event_type}</TableCell>
-                          <TableCell>{cancelList.event_name}</TableCell>
-                          <TableCell>{cancelList.event_date}</TableCell>
-                          <TableCell>{cancelList.event_end_date}</TableCell>
-                          <TableCell>{cancelList.event_requestor}</TableCell>   
-                          <TableCell>{cancelList.event_venue}</TableCell>                  
-                          <TableCell className="sticky right-0 bg-[white] z-50 flex justify-end space-x-5 py-4 px-0 pl-6 !important border-l border-slate-200">                          
+                          <TableCell>{EventCloseList.request_number}</TableCell>
+                          <TableCell>{EventCloseList.event_type}</TableCell>
+                          <TableCell>{EventCloseList.event_name}</TableCell>
+                          <TableCell>{EventCloseList.event_date}</TableCell>
+                          <TableCell>{EventCloseList.event_end_date}</TableCell>
+                          <TableCell>{EventCloseList.event_requestor}</TableCell>   
+                          <TableCell>{EventCloseList.event_venue}</TableCell>                      
+                          <TableCell className="sticky right-0 bg-[white] z-50 flex justify-end space-x-5 py-4 px-0 pl-6 !important border-l items-center border-slate-200">                          
                               <Image src={"/svg/view.svg"} width={17} height={20} alt="view-svg" className="cursor-pointer"/>
                               <ToggleButton />
-                            </TableCell>
+                          </TableCell>
                 </TableRow>
                       );
                     })}
@@ -236,4 +236,4 @@ const CancelledList = () => {
   );
 };
 
-export default CancelledList;
+export default EventCloselList;
