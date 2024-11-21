@@ -4,13 +4,13 @@ import Image from "next/image";
 import { useState } from "react";
 import Pagination from "@/components/pagination";
 import { useRouter } from "next/navigation";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, } from "@/components/ui/table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from "@/components/ui/select";
 
-type ApprovalMatrixTable = {
+type DivisionTable = {
     employee:string;
     type: string;
     name: string;
@@ -28,15 +28,33 @@ type ApprovalMatrixTable = {
     budget_sub_type: string;
 };
 
-export default function ApprovalMatrix() {
+
+
+export default function Division({initialValue}:{initialValue:string}) {
+
     const router = useRouter();
     const [currentPage, setCurrentPage] = useState(1);
-    const totalPages = 10;    
+    const totalPages = 10;  
+    const [isEditing, setIsEditing] = useState(false);
+    const [inputValue, setInputValue] = useState(initialValue);
+
+    const handleSave = () => {
+        console.log("Saved Value:", inputValue);
+        setIsEditing(false);
+      };
+    
+      const handleCancel = () => {
+        setInputValue(initialValue); // Reset to initial value
+        setIsEditing(false);
+      };
+
+
+
     const handlePageChange = (page: React.SetStateAction<number>) => {
         setCurrentPage(page);
       };
 
-    const ApprovalDetails: ApprovalMatrixTable[] = [
+    const DivisionDetails: DivisionTable[] = [
         {
             employee:"Sundar Ganesh",
             type: "Advance Payment",
@@ -153,7 +171,7 @@ export default function ApprovalMatrix() {
                 <Image src="svg/search.svg" alt="search-icon" width={23} height={23} className="absolute right-[63%] top-[15%]" />
 
                 <div className="flex gap-5">
-                    <div className="rounded-[25px] border-[.2px] border-slate-400 bg-[#FFF] text-[15px] font-normal flex space-x-3 items-center px-[30px] cursor-pointer" onClick={() => router.push('/approval_matrix/add_matrix')}>
+                    <div className="rounded-[25px] border-[.2px] border-slate-400 bg-[#FFF] text-[15px] font-normal flex space-x-3 items-center px-[30px] cursor-pointer" onClick={() => setIsEditing(true)}>
                        <span>Add</span><Image src={"/svg/addIcon.svg"} alt="add-Icon" width={13} height={13} />                        
                     </div>
                         <Select>
@@ -169,76 +187,38 @@ export default function ApprovalMatrix() {
                 </div>
             </div>
 
-          {/* start filter section ------------  */}
-            <div className="grid grid-cols-2 gap-5 py-4">
+            {isEditing && 
+                <div className="flex items-center space-x-3 py-5">
+                {/* Input Field */}
+                    <div className=" space-y-1 w-72">
+                        <Label className="text-nowrap">Division Name<span className="text-red-500">*</span></Label>
+                        <Input
+                            type="text"
+                            value={inputValue}
+                            onChange={(e) => setInputValue(e.target.value)}
+                            className="px-2 py-1 border rounded-md"
+                        />
 
-                <div className="flex space-x-14 items-center">
-                    <Label htmlFor="type">
-                      Region:
-                    </Label>
-                    <Select>
-                                <SelectTrigger className="text-black shadow-md rounded-[8px] gap-4!important">
-                                    <SelectValue placeholder="-Select-" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="pdf">Pdf</SelectItem>
-                                    <SelectItem value="excel">Excel</SelectItem>
-                                    <SelectItem value="print">Print</SelectItem>
-                                </SelectContent>
-                    </Select>
-                </div>
+                    </div>
+                    <div className="space-y-7 space-x-3">
+                        {/* Save Button */}
+                        <Button
+                            onClick={handleSave}
+                            className="px-6 py-2 text-sm text-white bg-blue-500 rounded-md hover:bg-blue-600"
+                        >
+                            Save
+                        </Button>
+                        {/* Cancel Button */}
+                        <Button
+                            onClick={handleCancel}
+                            className="px-6 py-2 text-sm text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300"
+                        >
+                            Close
+                        </Button>
 
-                <div className="flex space-x-6 items-center">
-                    <Label htmlFor="user">
-                    User:
-                    </Label>
-                    <Select>
-                                <SelectTrigger className="text-black shadow-md rounded-[8px] gap-4!important">
-                                    <SelectValue placeholder="-Select-" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="pdf">Pdf</SelectItem>
-                                    <SelectItem value="excel">Excel</SelectItem>
-                                    <SelectItem value="print">Print</SelectItem>
-                                </SelectContent>
-                    </Select>
+                    </div>
                 </div>
-
-                <div className="flex space-x-6 items-center">
-                    <Label htmlFor="department">
-                      Department:
-                    </Label>
-                    <Select>
-                                <SelectTrigger className="text-black shadow-md rounded-[8px] gap-4!important">
-                                    <SelectValue placeholder="-Select-" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="pdf">Pdf</SelectItem>
-                                    <SelectItem value="excel">Excel</SelectItem>
-                                    <SelectItem value="print">Print</SelectItem>
-                                </SelectContent>
-                    </Select>
-                </div>
-
-                <div className="flex space-x-6 items-center">
-                    <Label htmlFor="state">
-                    State:
-                    </Label>
-                    <Select>
-                                <SelectTrigger className="text-black shadow-md rounded-[8px] gap-4!important">
-                                    <SelectValue placeholder="-Select-" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="pdf">Pdf</SelectItem>
-                                    <SelectItem value="excel">Excel</SelectItem>
-                                    <SelectItem value="print">Print</SelectItem>
-                                </SelectContent>
-                    </Select>
-                </div>
-            </div>
-            <div className="flex justify-end mb-4">
-                <Button className="text-white bg-blue-400 px-6 rounded-[10px] font-medium">Serach</Button>
-            </div>
+                }
 
             <div className="border bg-white h-full p-4 rounded-[18px]">
                 <Table className={""}>
@@ -249,21 +229,21 @@ export default function ApprovalMatrix() {
                                     "text-center rounded-l-2xl text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                                 }
                             >
-                                Type
+                                Division
                             </TableHead>
                             <TableHead
                                 className={
                                     "text-center text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                                 }
                             >
-                                Name
+                                
                             </TableHead>
                             <TableHead
                                 className={
                                     "text-center text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                                 }
                             >
-                                Approver1
+                                {/* Approver1 */}
                             </TableHead>
 
                             <TableHead
@@ -271,7 +251,7 @@ export default function ApprovalMatrix() {
                                     "text-center text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                                 }
                             >
-                                Approver2
+                                {/* Approver2 */}
                             </TableHead>
 
                             <TableHead
@@ -279,7 +259,7 @@ export default function ApprovalMatrix() {
                                     "text-center text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                                 }
                             >
-                                Approver3
+                                {/* Approver3 */}
                             </TableHead>
 
                             <TableHead
@@ -287,56 +267,56 @@ export default function ApprovalMatrix() {
                                     "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                                 }
                             >
-                                Approver4
+                                {/* Approver4 */}
                             </TableHead>
                             <TableHead
                                 className={
                                     "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                                 }
                             >
-                                Approver5
+                                {/* Approver5 */}
                             </TableHead>
                             <TableHead
                                 className={
                                     "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                                 }
                             >
-                                Approver6
+                                {/* Approver6 */}
                             </TableHead>
                             <TableHead
                                 className={
                                     "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                                 }
                             >
-                                Approver7
+                                {/* Approver7 */}
                             </TableHead>
                             <TableHead
                                 className={
                                     "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                                 }
                             >
-                                Department
+                                {/* Department */}
                             </TableHead>
                             <TableHead
                                 className={
                                     "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                                 }
                             >
-                                User Division
+                                {/* User Division */}
                             </TableHead>
                             <TableHead
                                 className={
                                     "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                                 }
                             >
-                                EventDivision
+                                {/* EventDivision */}
                             </TableHead>
                             <TableHead
                                 className={
                                     "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                                 }
                             >
-                                BudgetType
+                                {/* BudgetType */}
                             </TableHead>
 
                             <TableHead
@@ -344,7 +324,7 @@ export default function ApprovalMatrix() {
                                     "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                                 }
                             >
-                                BudgetSubType
+                                {/* BudgetSubType */}
                             </TableHead>
 
                             <TableHead
@@ -357,32 +337,27 @@ export default function ApprovalMatrix() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {ApprovalDetails &&
-                            ApprovalDetails.map((ApprovalDetail, index) => {
+                        {DivisionDetails &&
+                            DivisionDetails.map((DivisionDetail, index) => {
                                 return (
                                     <>
-                                    
-                                        <TableRow className="min-w-full">
-                                          <TableCell className="w-full flex space-x-1"><span>Emplyee:</span> <span className="text-nowrap font-medium">{ApprovalDetail.employee}</span></TableCell>
-                                        </TableRow>      
-
                                         <TableRow key={index} className="text-center text-nowrap">
-                                        <TableCell>{ApprovalDetail.type}</TableCell>
-                                        <TableCell>{ApprovalDetail.name}</TableCell>
-                                        <TableCell>{ApprovalDetail.approver1}</TableCell>
-                                        <TableCell>{ApprovalDetail.approver2}</TableCell>
-                                        <TableCell>{ApprovalDetail.approver3}</TableCell>
-                                        <TableCell>{ApprovalDetail.approver4}</TableCell>
-                                        <TableCell>{ApprovalDetail.approver5}</TableCell>
-                                        <TableCell>{ApprovalDetail.approver6}</TableCell>
-                                        <TableCell>{ApprovalDetail.approver7}</TableCell>
-                                        <TableCell>{ApprovalDetail.department}</TableCell>
-                                        <TableCell>{ApprovalDetail.user_division}</TableCell>
-                                        <TableCell>{ApprovalDetail.event_division}</TableCell>
-                                        <TableCell>{ApprovalDetail.budget_type}</TableCell>
-                                        <TableCell>{ApprovalDetail.budget_sub_type}</TableCell>
-                                        <TableCell className="sticky right-0 bg-[white] z-50 flex space-x-5 items-center border-l border-slate-200">
-                                            <Image src={"/svg/editIcon.svg"} width={17} height={20} alt="view-svg" className="cursor-pointer" onClick={()=> router.push('/approval_matrix/add_matrix')}/>
+                                        <TableCell>{DivisionDetail.type}</TableCell>
+                                        <TableCell></TableCell>
+                                        <TableCell></TableCell>
+                                        <TableCell></TableCell>
+                                        <TableCell></TableCell>
+                                        <TableCell></TableCell>
+                                        <TableCell></TableCell>
+                                        <TableCell></TableCell>
+                                        <TableCell></TableCell>
+                                        <TableCell></TableCell>
+                                        <TableCell></TableCell>
+                                        <TableCell></TableCell>
+                                        <TableCell></TableCell>
+                                        <TableCell></TableCell>
+                                        <TableCell className="sticky right-0 bg-[white] z-50 flex space-x-5 items-center border-l border-slate-200 px-0 pl-20">
+                                            <Image src={"/svg/editIcon.svg"} width={17} height={20} alt="view-svg" className="cursor-pointer" onClick={() => setIsEditing(true)}/>
                                             <Image src={"/svg/delete.svg"} width={15} height={20} alt="delete-svg" className="cursor-pointer" />
                                         </TableCell>
                                     </TableRow>

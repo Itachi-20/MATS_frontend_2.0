@@ -61,7 +61,6 @@ export default function FinanceReport () {
     const totalPages = 10;    
     const handlePageChange = (page: React.SetStateAction<number>) => {
         setCurrentPage(page);
-        // Fetch your data for the new page here
       };
 
     const financeDatas: FinanceReportTable[] = [
