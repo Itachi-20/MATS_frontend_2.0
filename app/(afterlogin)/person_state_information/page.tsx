@@ -1,7 +1,10 @@
+'use client'
 import React from "react";
 import Image from "next/image";
+import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import Pagination from "@/components/pagination";
 import PersonStateInformationPopup from '@/components/person_state_popup'
 import {
   Select,
@@ -27,6 +30,13 @@ type PersonStateTable = {
 
 
 const PersonStateInformation = () => {
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = 10;    
+  const handlePageChange = (page: React.SetStateAction<number>) => {
+      setCurrentPage(page);
+      // Fetch your data for the new page here
+    };
 
   const PersonInfo: PersonStateTable[] = [
     {
@@ -195,6 +205,13 @@ const PersonStateInformation = () => {
               </TableBody>
             </Table>
           </div>
+          <div className="flex justify-end">
+             <Pagination
+              totalPages={totalPages}
+              currentPage={currentPage}
+              onPageChange={handlePageChange}
+             />
+            </div>
         </div>
     </>
   );

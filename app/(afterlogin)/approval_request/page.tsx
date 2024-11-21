@@ -1,8 +1,10 @@
 "use client";
 import React from "react";
+import { useState } from "react";
 import { useRouter } from 'next/navigation';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import Pagination from "@/components/pagination";
 import {Table, TableBody,TableCell,TableHead,TableHeader,TableRow,} from "@/components/ui/table";
 import {Select,SelectContent,SelectItem,SelectTrigger,SelectValue,} from "@/components/ui/select";
 
@@ -21,9 +23,12 @@ type EventTable = {
 
 export default function ApprovalRequestPage () {
   const router = useRouter();
-  // const handleClick = () => {
-  //   router.push("/approval_request/${request_no}")
-  // }
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = 10;    
+  const handlePageChange = (page: React.SetStateAction<number>) => {
+      setCurrentPage(page);
+      // Fetch your data for the new page here
+    };
 
   const events: EventTable[] = [
     {
@@ -235,6 +240,13 @@ export default function ApprovalRequestPage () {
               </TableBody>
             </Table>
           </div>
+          <div className="flex justify-end">
+             <Pagination
+              totalPages={totalPages}
+              currentPage={currentPage}
+              onPageChange={handlePageChange}
+             />
+            </div>
         </div>
   );
 };

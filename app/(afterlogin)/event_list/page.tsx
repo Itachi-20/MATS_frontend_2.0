@@ -6,6 +6,7 @@ import {useEffect,useState} from "react";
 import { useRouter } from 'next/navigation';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import Pagination from "@/components/pagination";
 import {Table, TableBody,TableCell,TableHead,TableHeader,TableRow,} from "@/components/ui/table";
 import {Select,SelectContent,SelectItem,SelectTrigger,SelectValue,} from "@/components/ui/select";
 
@@ -23,15 +24,16 @@ type EventTable = {
 };
 
 export default function EventList () {
+  const router = useRouter()
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = 10;    
+  const handlePageChange = (page: React.SetStateAction<number>) => {
+      setCurrentPage(page);
+      // Fetch your data for the new page here
+    };
 
-  const router = useRouter();
 
   const handleClick = (refno:string) => {
-
-    //  yadi new tab mein open kerna hai tab isko use karenge 
-    // const url = "/event_list/${id}"
-    // window.open(url, '_blank')
-    // agar same tab mein open kerna hai  to isko use krenge 
     router.push(`/event_list/${refno}`)
   }
 
@@ -66,7 +68,6 @@ export default function EventList () {
   fetchTableData();
   },[])
 
-  // console.log(tableData[0].name,"this is state data")
 
   return (
         <div className="p-7 w-full relative z-20 text-black">
@@ -205,6 +206,13 @@ export default function EventList () {
               </TableBody>
             </Table>
           </div>
+          <div className="flex justify-end">
+             <Pagination
+              totalPages={totalPages}
+              currentPage={currentPage}
+              onPageChange={handlePageChange}
+             />
+            </div>
         </div>
   );
 };

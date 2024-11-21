@@ -1,4 +1,5 @@
-"use client"
+"use client";
+import Pagination from '@/components/pagination';
 import React, { useState ,useEffect} from 'react'
 import {
     Select,
@@ -27,6 +28,13 @@ import {
 const table = ({...Props}:Props) => {
     const [tableData,setTableData] = useState(Props.tableData);
     const router = useRouter();
+
+    const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = 10;    
+  const handlePageChange = (page: React.SetStateAction<number>) => {
+      setCurrentPage(page);
+      // Fetch your data for the new page here
+    };
   return (
     <div className="p-7 w-full relative z-20 text-black">
           <div className="flex justify-between pb-5">
@@ -338,6 +346,13 @@ const table = ({...Props}:Props) => {
               </TableBody>
             </Table>
           </div>
+          <div className="flex justify-end">
+             <Pagination
+              totalPages={totalPages}
+              currentPage={currentPage}
+              onPageChange={handlePageChange}
+             />
+            </div>
         </div>
   )
 }

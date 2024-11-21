@@ -1,10 +1,8 @@
 'use client';
 import React from "react";
 import Image from "next/image";
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
-import ToggleButton from "@/components/toggle_button";
 import Pagination from "@/components/pagination";
 import {
   Select,
@@ -23,8 +21,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import ToggleButton from "@/components/toggle_button";
+import { useState } from "react";
 
-type CancelListTable = {
+type RejectListTable = {
   request_number: string;
   event_name: string;
   event_type: string;
@@ -34,16 +34,16 @@ type CancelListTable = {
   event_venue:string;
 };
 
-const CancelledList = () => {
-   const router = useRouter()
-   const [currentPage, setCurrentPage] = useState(1);
-   const totalPages = 10;    
-   const handlePageChange = (page: React.SetStateAction<number>) => {
-       setCurrentPage(page);
-       // Fetch your data for the new page here
-     };
+const RejectlList = () => {
+  const router = useRouter()
+  const [currentPage, setCurrentPage] = useState(1);
+    const totalPages = 10;    
+    const handlePageChange = (page: React.SetStateAction<number>) => {
+        setCurrentPage(page);
+        // Fetch your data for the new page here
+      };
 
-  const cancelLists: CancelListTable[] = [
+  const rejectLists: RejectListTable[] = [
     {
       request_number: "REQ001",
       event_name: "Annual Conference",
@@ -100,6 +100,7 @@ const CancelledList = () => {
     },
   ];
 
+
   return (
     <>
         <div className="p-7 w-full relative z-20 text-black">
@@ -111,9 +112,9 @@ const CancelledList = () => {
                 <Image src="svg/search.svg"  alt="search-icon" width={23} height={23} className="absolute right-[63%] top-[15%]"/> 
                 
             <div className="flex gap-5">
-               <Button className="rounded-[25px] border-[.2px] border-[#636363] bg-[#4430BF]  text-white text-[14px] flex space-x-2 px-[20px]">
-                    <span>Cancelled list</span>
-                    <Image src={"/svg/cancelwhite.svg"} alt="add-Icon" width={20} height={20} />
+               <Button className="rounded-[25px] border-[.2px] border-slate-400 bg-[#FFF] text-[14px] flex space-x-2 px-[20px]" onClick={()=> router.push('/rejected_list')}>
+                    <span>Rejected list</span>
+                    <Image src={"/svg/cancel.svg"} alt="add-Icon" width={20} height={20} />
                 </Button>
               <Select>
                 <SelectTrigger className="text-black shadow focus-visible:ring-transparent rounded-[25px] gap-4 border border-slate-400 !important">
@@ -135,7 +136,7 @@ const CancelledList = () => {
                   <SelectItem value="system">System</SelectItem>
                 </SelectContent>
               </Select>
-              <Button className="text-black text-md font-normal bg-white hover:bg-white border rounded-[25px] px-8 py-5 shadow" onClick={()=>router.push('/cancel_event_list')}>
+              <Button className="text-black text-md font-normal bg-white hover:bg-white border rounded-[25px] px-8 py-5 shadow">
                 Back
               </Button>
             </div>
@@ -218,21 +219,21 @@ const CancelledList = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                  {cancelLists &&
-                    cancelLists.map((cancelList, index) => {
+                  {rejectLists &&
+                    rejectLists.map((rejectList, index) => {
                       return (
                         <TableRow key={index} className="text-center text-nowrap">
-                          <TableCell>{cancelList.request_number}</TableCell>
-                          <TableCell>{cancelList.event_type}</TableCell>
-                          <TableCell>{cancelList.event_name}</TableCell>
-                          <TableCell>{cancelList.event_date}</TableCell>
-                          <TableCell>{cancelList.event_end_date}</TableCell>
-                          <TableCell>{cancelList.event_requestor}</TableCell>   
-                          <TableCell>{cancelList.event_venue}</TableCell>                  
-                          <TableCell className="sticky right-0 bg-[white] z-50 flex justify-end space-x-5 py-4 px-0 pl-6 !important border-l border-slate-200">                          
+                          <TableCell>{rejectList.request_number}</TableCell>
+                          <TableCell>{rejectList.event_type}</TableCell>
+                          <TableCell>{rejectList.event_name}</TableCell>
+                          <TableCell>{rejectList.event_date}</TableCell>
+                          <TableCell>{rejectList.event_end_date}</TableCell>
+                          <TableCell>{rejectList.event_requestor}</TableCell>   
+                          <TableCell>{rejectList.event_venue}</TableCell>                      
+                          <TableCell className="sticky right-0 bg-[white] z-50 flex justify-end space-x-5 py-4 px-0 pl-6 !important border-l items-center border-slate-200">                          
                               <Image src={"/svg/view.svg"} width={17} height={20} alt="view-svg" className="cursor-pointer"/>
                               <ToggleButton />
-                            </TableCell>
+                          </TableCell>
                 </TableRow>
                       );
                     })}
@@ -251,4 +252,4 @@ const CancelledList = () => {
   );
 };
 
-export default CancelledList;
+export default RejectlList;

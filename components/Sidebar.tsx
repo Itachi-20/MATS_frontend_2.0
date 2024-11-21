@@ -13,10 +13,13 @@ const Sidebar = () => {
     "Sponsorship Support",
     "Non Monetary Grant",
     "State Information",
-    'Person State Information',
-    
+    'Person State Information',    
   ];
 
+
+  const masterItems: string[] = [
+    "Approval Matrix",
+  ];
   const reportIcons: string[] = [
     "Event Finance Report",
     'Event Post Activity Approval Summary',
@@ -51,6 +54,7 @@ const Sidebar = () => {
           </h1>
         </div>
         <div className="flex flex-col text-black gap-4">
+
           {/* <div className="group" id="parent"> */}
           <div id="parent">
             <div className="flex py-2 gap-2 pl-2 hover:border hover:rounded-xl hover:bg-[#4430bf] group hover:text-white hover:cursor-pointer">
@@ -110,6 +114,29 @@ const Sidebar = () => {
                 })}
             </div>
           </div>
+
+           {/* START MASTER MANU  */}
+           <div id="parent">
+            <div className="flex py-2 gap-2 pl-2 hover:border hover:rounded-xl hover:bg-[#4430bf] group hover:text-white hover:cursor-pointer">
+              <Image src="/svg/masterIcon.svg" width={30}  height={30} alt="master-icon" />
+              <h1 className="pt-1">Master</h1>
+            </div>           
+            <div id="element" className="z-10" >
+                {masterItems &&
+                  masterItems.map((data,index) => { 
+                    return (
+                      <div key={index} className="child py-4 px-5 rounded-bl-xl text-black  border-l border-black ml-4 relative text-nowrap ">
+                       <Link href="/approval_matrix">
+                          <div className="absolute -bottom-5 hover:bg-white rounded-xl text-black hover:text-[#4430bf] text-[12px] px-1 py-2 cursor-pointer">
+                           {data} 
+                          </div>
+                      </Link>
+                      </div>
+                    );
+                  })}
+            </div>           
+          </div>
+          {/* END MASTER MANU  */}
           
           {/* START REPORT MANU  */}
            <div id="parent">

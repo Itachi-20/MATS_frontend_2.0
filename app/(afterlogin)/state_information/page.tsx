@@ -1,7 +1,10 @@
+'use client'
 import React from "react";
 import Image from "next/image";
+import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import Pagination from "@/components/pagination";
 import StateInformationPopup from "@/components/state_information_popup";
 
 import {
@@ -31,7 +34,12 @@ type StateInfoTable = {
 };
 
 const StateInformation = () => {
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = 10;    
+  const handlePageChange = (page: React.SetStateAction<number>) => {
+      setCurrentPage(page);
+      // Fetch your data for the new page here
+    };
   const StateInfos: StateInfoTable[] = [
     {
       company_name: "2346",
@@ -200,6 +208,13 @@ const StateInformation = () => {
               </TableBody>
             </Table>
           </div>
+          <div className="flex justify-end">
+             <Pagination
+              totalPages={totalPages}
+              currentPage={currentPage}
+              onPageChange={handlePageChange}
+             />
+            </div>
         </div>
 
   );

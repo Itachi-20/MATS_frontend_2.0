@@ -1,5 +1,7 @@
 'use client'
 import React from "react";
+import { useState } from "react";
+import Pagination from "@/components/pagination";
 import { Input } from "@/components/ui/input";
 import {
     Select,
@@ -39,6 +41,12 @@ type EventPostActivityApprovalSummaryTable = {
 
 type level = "Approved" | "Rejected" | "Pending";
 const Index = () => {
+    const [currentPage, setCurrentPage] = useState(1);
+    const totalPages = 10;    
+    const handlePageChange = (page: React.SetStateAction<number>) => {
+        setCurrentPage(page);
+        // Fetch your data for the new page here
+      };
    
     const eventPostActivityReports: EventPostActivityApprovalSummaryTable[] = [
         {
@@ -475,6 +483,13 @@ const Index = () => {
                         </TableBody>
                     </Table>
                 </div>
+                <div className="flex justify-end">
+             <Pagination
+              totalPages={totalPages}
+              currentPage={currentPage}
+              onPageChange={handlePageChange}
+             />
+            </div>
             </div>
     );
 };

@@ -6,6 +6,7 @@ const frappeAuthMiddleware = async (req, res, next) => {
     try {
         // Assuming user has a session cookie or token in headers
         const sessionId = req.cookies.get('sid').value || req.headers.get('x-frappe-session-id');
+        console.log("session id is :",sessionId)
         if (!sessionId) {
             return NextResponse.json({ message: 'Unauthorized. No session found.' },{status:401});
         }

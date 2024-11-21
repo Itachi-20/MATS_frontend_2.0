@@ -1,8 +1,10 @@
 'use client';
 import React from "react";
 import Image from "next/image";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
+import Pagination from "@/components/pagination";
 import {
   Select,
   SelectContent,
@@ -33,7 +35,13 @@ type EventCloseListTable = {
 };
 
 const EventCloselList = () => {
-  const router = useRouter()
+  const router = useRouter();
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = 10;    
+  const handlePageChange = (page: React.SetStateAction<number>) => {
+      setCurrentPage(page);
+      // Fetch your data for the new page here
+    };
 
   const EventCloseLists: EventCloseListTable[] = [
     {
@@ -231,6 +239,13 @@ const EventCloselList = () => {
               </TableBody>
             </Table>
           </div>
+          <div className="flex justify-end">
+             <Pagination
+              totalPages={totalPages}
+              currentPage={currentPage}
+              onPageChange={handlePageChange}
+             />
+            </div>
         </div>
     </>
   );
