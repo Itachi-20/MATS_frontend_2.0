@@ -7,6 +7,7 @@ import VendorDetails from "@/components/vendor_Details"
 import TotalExpense from "@/components/total_Expense"
 import Documents from "@/components/documents"
 import { useSearchParams } from 'next/navigation'
+import Comment_box from "@/components/approvalCommentBox/Comment_box";
 
 type EventEntry = {
   name: string;
@@ -173,9 +174,12 @@ type ActivityDocument = {
 const Index = () => {
 
   const [eventData,setEventData] = useState<EventEntry>();
+  const [isCommentbox,setIsCommentbox] = useState<boolean>();
+  const [comment,setComment] = useState<string>();
+  const [type,setType] = useState<string>();
   const param = useSearchParams()
 
-  const handleApprove = async(value:string)=>{
+  const handleApprove = async()=>{
     const refno = param.get("refno");
       try {
         const response = await fetch(
@@ -189,7 +193,7 @@ const Index = () => {
             body:JSON.stringify({
               name:refno,
               "remark": "Test Approve Pre Activity",
-              "action":value
+              "action":type
             })
           }
         );
@@ -235,6 +239,13 @@ const Index = () => {
     }
 };
 
+const handleDialog = ()=>{
+  setIsCommentbox((prev)=>!prev);
+}
+
+const handleComment = (value:string)=>{
+  setComment(value)
+}
 
 
 useEffect(()=>{
@@ -265,11 +276,23 @@ useEffect(()=>{
                 </div>
               </div>
               <div className="flex gap-4 text-white items-center">
-              <Button className="bg-[#5dbe74] hover:bg-[#5dbe74] px-6" onClick={()=>handleApprove("Approved")}>Approve</Button>
-              <Button className="bg-[#ff5757] hover:bg-[#ff5757] px-6" onClick={()=>handleApprove("Rejected")}>Reject</Button>
-              <Button className="bg-[#4430bf] hover:bg-[#4430bf] px-6" onClick={()=>handleApprove("Send Back")}>Send Back</Button>
+              <Button className="bg-[#5dbe74] hover:bg-[#5dbe74] px-6" onClick={()=>{handleDialog();setType("Approved")}}>Approve</Button>
+              <Button className="bg-[#ff5757] hover:bg-[#ff5757] px-6" onClick={()=>{handleDialog();setType("Rejected")}}>Reject</Button>
+              <Button className="bg-[#4430bf] hover:bg-[#4430bf] px-6" onClick={()=>{handleDialog();setType("Send Back")}}>Send Back</Button>
               </div>
             </div>
+
+            {
+              isCommentbox &&
+            <div className="absolute z-50 flex pt-10 items-center justify-center bg-black bg-opacity-50 w-full pr-20">
+              <Comment_box 
+              handleClose={handleDialog}
+              handleComment={handleComment}
+              Submitbutton = {handleApprove}
+              />
+              </div>
+        }
+    
           </div>
         <BasicDetails
         pathname=""
@@ -293,7 +316,8 @@ useEffect(()=>{
         eventData = {eventData}
         PageName=""
         />
-        </div>
+
+    </div>
     
   )
 }

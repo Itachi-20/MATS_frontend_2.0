@@ -1,105 +1,40 @@
-"use client";
 import React from "react";
-import { useRouter } from 'next/navigation';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {Table, TableBody,TableCell,TableHead,TableHeader,TableRow,} from "@/components/ui/table";
 import {Select,SelectContent,SelectItem,SelectTrigger,SelectValue,} from "@/components/ui/select";
+import {getTableData} from './utility'
+import { cookies } from "next/headers";
+import Link from "next/link";
 
-type EventTable = {
-  request_number: string;
-  event_name: string;
+type EventDetails = {
+  name: string;
   event_type: string;
-  event_date: string;
-  event_end_date:string;
+  event_name: string;
+  event_start_date: string; // Use Date if you plan to parse it as a Date object
+  event_end_date: string;   // Same as above
   event_requestor: string;
-  event_venue:string;
-  advance:string;
-  event_status:string;
-  post_activity_status:string;
+  event_venue: string;
+  current_stage: string;
+  total_amount: number;
 };
 
-export default function BudgetRequestPage () {
-  const router = useRouter();
 
-  const handleClick = () => {
-    router.push("/budget_request/${request_no}")
-  }
 
-  const events: EventTable[] = [
-    {
-      request_number: "REQ001",
-      event_name: "Annual Conference",
-      event_type: "Conference",
-      event_date: "2024-10-15",
-      event_end_date:"2024-11-20",
-      event_requestor: "John Doe",
-      event_venue:"Name 0001",
-      advance:"Request",
-      event_status:"Approved",
-      post_activity_status:"Not Uploaded"
-    },
-    {
-      request_number: "REQ002",
-      event_name: "Product Launch",
-      event_type: "Launch",
-      event_date: "2024-11-20",
-      event_end_date:"2024-11-20",
-      event_venue:"Name 0001",
-      event_requestor: "Jane Smith",
-      advance:"Request",
-      event_status:"Approved",
-      post_activity_status:"Not Uploaded"
-    },
-    {
-      request_number: "REQ003",
-      event_name: "Team Building Retreat",
-      event_type: "Workshop",
-      event_date: "2024-09-30",
-      event_end_date:"2024-11-20",
-      event_venue:"Name 0001",
-      event_requestor: "Mike Johnson",
-      advance:"Request",
-      event_status:"Approved",
-      post_activity_status:"Not Uploaded",
-    },
-    {
-      request_number: "REQ004",
-      event_name: "End of Year Gala",
-      event_type: "Gala",
-      event_date: "2024-12-31",
-      event_end_date:"2024-11-20",
-      event_venue:"Name 0001",
-      event_requestor: "Emily Davis",
-      advance:"Request",
-      post_activity_status:"Not Uploaded",
-      event_status:"Approved"
-    },
-    {
-      request_number: "REQ005",
-      event_name: "Marketing Workshop",
-      event_type: "Workshop",
-      event_date: "2024-10-10",
-      event_end_date:"2024-11-20",
-      event_venue:"Name 0001",
-      event_requestor: "Alex Brown",
-      advance:"Request",      
-      event_status:"Approved",
-      post_activity_status:"Not Uploaded"
-    },
-    {
-      request_number: "REQ006",
-      event_name: "Client Appreciation Event",
-      event_type: "Social",
-      event_date: "2024-09-15",
-      event_end_date:"2024-11-20",
-      event_venue:"Name 0001",
-      event_requestor: "Sara Miller",
-      advance:"Request",
-      event_status:"Approved",
-      post_activity_status:"Not Uploaded"
-    },
-  ];
+
+
+export default async function BudgetRequestPage () {
+  // const router = useRouter();
+
+  // const handleClick = () => {
+  //   router.push("/budget_request/${request_no}")
+  // }
+
+  
+const cookie = await cookies();
+
+  const tableData:EventDetails[] = await getTableData(cookie);
+  console.log(tableData,"this is tabledata")
  
   return (
         <div className="p-7 w-full relative z-20 text-black">
@@ -181,28 +116,6 @@ export default function BudgetRequestPage () {
                   >
                     Event Venue
                   </TableHead>
-                 
-                  <TableHead
-                    className={
-                      "text-center  text-[#625d5d] lg:text-[15px] sm:text-[12px] text-[11px] font-normal font-['Montserrat']"
-                    }
-                  >
-                    Advance 
-                  </TableHead>
-                  <TableHead
-                    className={
-                      "text-center  text-[#625d5d] lg:text-[15px] sm:text-[12px] text-[11px] font-normal font-['Montserrat']"
-                    }
-                  >
-                   Event Status
-                  </TableHead>
-                  <TableHead
-                    className={
-                      "text-center  text-[#625d5d] lg:text-[15px] sm:text-[12px] text-[11px] font-normal font-['Montserrat']"
-                    }
-                  >
-                    Post Activity Status
-                  </TableHead>
                 
                   <TableHead
                     className={
@@ -212,22 +125,21 @@ export default function BudgetRequestPage () {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                  {events &&
-                    events.map((data, index) => {
+                  {tableData &&
+                    tableData.map((data, index) => {
                       return (
                         <TableRow key={index} className="text-center text-nowrap lg:text-[16px] sm:text-[10px] text-[10px] font-light leading-normal font-['Poppins']">
-                          <TableCell>{data.request_number}</TableCell>
+                          <TableCell>{data.name}</TableCell>
                           <TableCell>{data.event_type}</TableCell>
                           <TableCell>{data.event_name}</TableCell>
-                          <TableCell>{data.event_date}</TableCell>
+                          <TableCell>{data.event_start_date}</TableCell>
                           <TableCell>{data.event_end_date}</TableCell>
                           <TableCell>{data.event_requestor}</TableCell>
-                          <TableCell>{data.event_venue}</TableCell>
-                          <TableCell>{data.advance}</TableCell>
-                          <TableCell>{data.event_status}</TableCell>
-                          <TableCell>{data.post_activity_status}</TableCell>      
+                          <TableCell>{data.event_venue}</TableCell>    
                           <TableCell className="sticky right-0 bg-[white] flex border-l items-center border-slate-200"> 
-                             <button className="rounded-[50px] lg:px-[14px] lg:py-[7px] sm:py-[3px] sm:px-[4px] px-[3px] py-[2px] border-[0.5px] border-[#0E4154] text-[#0E4154] lg:text-[12px] sm:text-[7px] text-[6px] font-light leading-normal" onClick={()=> router.push(`/travel_desk/${data.request_number}`)}>Add Expense</button>
+                            <Link href={`/travel_desk/${data.name}`}>
+                             <button className="rounded-[50px] lg:px-[14px] lg:py-[7px] sm:py-[3px] sm:px-[4px] px-[3px] py-[2px] border-[0.5px] border-[#0E4154] text-[#0E4154] lg:text-[12px] sm:text-[7px] text-[6px] font-light leading-normal">Take Action</button>
+                            </Link>
                           </TableCell>
                        </TableRow>
                       );

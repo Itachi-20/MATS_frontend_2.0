@@ -12,7 +12,7 @@ import { Label } from "@/components/ui/label"
 import { Input } from '@/components/ui/input';
 
 type CardItem = {
-    fileName: string;
+    name: string;
     url: string;
   };
   
@@ -50,12 +50,10 @@ const add_popup = ({ cardData,handleAdd }: props) => {
           console.log("No file to upload");
           return;  
         }
-          formdata.append("docname",documentType as string)
-          //formdata.append("activity_type",activityType);
-          //formdata.append("document_type",documentType)
+          formdata.append("repository_type",documentType as string)
         try {
           const response = await fetch(
-            `/api/training_and_education/fileUpload`,
+            `/api/documentRepositoryFileUpload/`,
             {
               method: "POST",
               headers: {

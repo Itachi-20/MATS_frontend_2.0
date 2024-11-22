@@ -9,6 +9,8 @@ import Documents from "@/components/documents"
 import Add_vendor from "@/components/add_vendor";
 import { usePathname } from 'next/navigation'
 import { useRouter } from 'next/navigation';
+import Comment_box from "@/components/approvalCommentBox/Comment_box";
+
 type EventEntry = {
   name: string;
   owner: string;
@@ -176,6 +178,8 @@ const Preview_Form = () => {
   const [addVendor, setAddVendor] = useState(false);
   const [preview_data, setPreviewData] = useState<EventEntry | null>(null);
   const [refNo, setRefNo] = useState<string | null>(localStorage.getItem("refno") ? localStorage.getItem("refno") : "");
+  const [isCommentbox,setIsCommentbox] = useState<boolean>();
+  const [comment,setComment] = useState<string>();
   const isAddVendor = () => {
     setAddVendor(prev => !prev)
   }
@@ -215,8 +219,7 @@ const Preview_Form = () => {
   console.log("preview_data", preview_data, refNo)
 
 
-  const handleFinalSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  const handleFinalSubmit = async () => {
     try {
       const response = await fetch(
         "/api/finalSubmit",
@@ -227,7 +230,8 @@ const Preview_Form = () => {
           },
           credentials: 'include',
           body: JSON.stringify({
-            name: refNo
+            name: refNo,
+            comment:comment
           })
         }
       );
@@ -245,6 +249,15 @@ const Preview_Form = () => {
       console.error("Error during Submission:", error);
     }
   };
+
+
+  const handleComment = (value:string)=>{
+    setComment(value)
+  }
+
+  const handleDialog = ()=>{
+    setIsCommentbox(prev=> !prev);
+  }
 
   return (
     <>
@@ -293,18 +306,21 @@ const Preview_Form = () => {
           <Button className="bg-white text-black border text-md font-normal">
             Back
           </Button>
-          <Button className={`bg-[#4430bf] text-white  font-normal border`} disabled={!isChecked} onClick={(e: React.MouseEvent<HTMLButtonElement>) => handleFinalSubmit(e)}>
+          <Button className={`bg-[#4430bf] text-white  font-normal border`} disabled={!isChecked} onClick={()=>handleDialog()}>
             Submit
           </Button>
         </div>
       </div>
       {
-
-        dialog &&
-        <Add_vendor
-          isAddVendor={isAddVendor}
-        />
-      }
+              isCommentbox &&
+        <div className="absolute z-50 flex pt-10 items-end justify-center bg-black bg-opacity-50 w-full h-full inset-0 pb-40">
+          <Comment_box 
+          handleClose={handleDialog}
+          handleComment={handleComment}
+          Submitbutton = {handleFinalSubmit}
+          />
+          </div>
+          }
     </>
   )
 }

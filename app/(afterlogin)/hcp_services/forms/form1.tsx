@@ -11,6 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useRouter } from "next/navigation";
+import {handleBudgetChange} from '../utility'
 
 type dropdownData = {
   company: {
@@ -192,37 +193,43 @@ const Form1 = ({ ...Props }: Props) => {
         };
 
 
-  const handleBudgetChange = async (value: string) => {
-    try {
-      const response = await fetch(
-        "/api/training_and_education/subtypeDropdown",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            budget: value,
-          }),
-        }
-      );
+  // const handleBudgetChange = async (value: string) => {
+  //   try {
+  //     const response = await fetch(
+  //       "/api/training_and_education/subtypeDropdown",
+  //       {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify({
+  //           budget: value,
+  //         }),
+  //       }
+  //     );
 
-      const data = await response.json();
-      setSubtypeActivity(data.data);
-      if (value == "National") {
-        setSubtypeActivityVisible(true);
-      } else {
-        setSubtypeActivityVisible(false);
-      }
+  //     const data = await response.json();
+  //     setSubtypeActivity(data.data);
+  //     if (value == "National") {
+  //       setSubtypeActivityVisible(true);
+  //     } else {
+  //       setSubtypeActivityVisible(false);
+  //     }
 
-      if (response.ok) {
-      } else {
-        console.log("Login failed");
-      }
-    } catch (error) {
-      console.error("Error during login:", error);
-    }
-  };
+  //     if (response.ok) {
+  //     } else {
+  //       console.log("Login failed");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error during login:", error);
+  //   }
+  // };
+
+  // const budget =\\ handleBudgetChange();
+
+  // const budget = await handleBudgetChange();
+
+
 
   const handleBusinessUnitChange = async (value: string) => {
     try {
@@ -262,7 +269,7 @@ console.log(formdata,"this is form data")
       <h1 className="text-black text-2xl font-normal uppercase pb-8">
         Basic Detail
       </h1>
-      <div className="grid grid-cols-2 gap-12 pb-8">
+      <div className="grid grid-cols-2 gap-6 pb-8">
         <div className="flex flex-col gap-2">
           <label className="lable">
             Company Names <span className="text-[#e60000]">*</span>
@@ -288,7 +295,7 @@ console.log(formdata,"this is form data")
           <label className="lable">
             Business Unit<span className="text-[#e60000]">*</span>
           </label>
-          <Select onValueChange={(value)=>{handleBusinessUnitChange(value),handleSelectChange(value,"business_unit")}}>
+          <Select onValueChange={(value)=>{handleBusinessUnitChange(value);handleSelectChange(value,"business_unit")}}>
             <SelectTrigger className="dropdown">
               <SelectValue placeholder="Select" />
             </SelectTrigger>
@@ -351,7 +358,11 @@ console.log(formdata,"this is form data")
           <label className="lable">
             Budget<span className="text-[#e60000]">*</span>
           </label>
-          <Select onValueChange={(value)=>{handleBudgetChange(value),handleSelectChange(value,"division_category")}}>
+          <Select onValueChange={async(value)=>{
+            const data:any = await handleBudgetChange(value);
+            setSubtypeActivity(data.subtypeActivity);
+            setSubtypeActivityVisible(data.SubtypeActivityVisible);
+            handleSelectChange(value,"division_category")}}>
             <SelectTrigger className="dropdown">
               <SelectValue placeholder="--Selected--" />
             </SelectTrigger>

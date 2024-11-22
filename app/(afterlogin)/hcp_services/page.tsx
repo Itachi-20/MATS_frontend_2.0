@@ -4,12 +4,8 @@ import Form2 from "./forms/form2";
 import Form3 from "./forms/form3";
 import Form4 from "./forms/form4";
 import Preview_Form from './forms/preview_form';
-import Addvendor from '@/components/add_vendor';
-import Adddocument from '@/components/add_document';
 import { AppWrapper } from '@/app/context/module';
-// import { useRouter } from 'next/navigation';
-// import { usePathname } from 'next/navigation';
-// import { useSearchParams } from 'next/navigation'
+import { dropdown,activityList} from "./utility";
 
 type dropdownData = {
   company: {
@@ -44,48 +40,6 @@ type dropdownData = {
   }[]
 }
 
-// type Compensation = {
-//   vendor_type: string;
-//   vendor_name: string;
-//   est_amount: number;
-//   gst_included?: number;
-// };
-
-// type Logistics = {
-//   vendor_type: string;
-//   est_amount: number;
-// };
-
-// type formData = {
-//   name: string | null;
-//   event_type: string;
-//   company: string;
-//   event_cost_center: string;
-//   state: string;
-//   city: string;
-//   event_start_date: string;
-//   event_end_date: string;
-//   bu_rational: string;
-//   faculty: string;
-//   participants: string;
-//   therapy: string;
-//   event_name: string;
-//   event_venue: string;
-//   comments: string;
-//   compensation: Compensation[];
-//   logistics: Logistics[];
-//   total_compensation_expense: number;
-//   total_logistics_expense: number;
-//   event_requestor: string;
-//   business_unit: string;
-//   division_category: string;
-//   division_sub_category: string;
-//   sub_type_of_activity: string;
-//   any_govt_hcp: string,
-//   no_of_hcp: number
-// };
-
-
 type activityDropdown = {
   activity:{
     name:string,
@@ -99,52 +53,9 @@ type activityDropdown = {
 }
 
 
-const fetchDropdown = async()=>{
-  try {
-    const response = await fetch("http://10.120.140.7:8001/api/method/matsapp.api.event.event.get_field_data", {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json",
-        },
-    });
-
-    if (response.ok) {
-      const data = await response.json();
-      return (data.data);
-    } else {
-        console.log('Login failed');
-    }
-} catch (error) {
-    console.error("Error during login:", error);
-}
-}
-
-
-const activityList = async () => {
-  try {
-      const response = await fetch("http://10.120.140.7:8001/api/method/matsapp.api.event.event.get_document_and_activity_type", {
-          method: "GET",
-          headers: {
-              "Content-Type": "application/json",
-          },
-          credentials:'include'
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        //setActivityDropdown(data.data);
-        return data.data;
-      } else {
-          console.log('Login failed');
-      }
-  } catch (error) {
-      console.error("Error during login:", error);
-  }
-};
-
-
 const index = async({...Props}:any) => {
-  const Dropdown:dropdownData = await fetchDropdown();
+  const dropdownData:dropdownData = await dropdown();
+  console.log(dropdownData,"this is dropdown")
   const actvityDropdown:activityDropdown = await activityList(); 
   const props =  await Props;
   const {forms} = props.searchParams;
@@ -162,15 +73,15 @@ const index = async({...Props}:any) => {
 
           forms == "1"?
           <Form1
-           dropdownData={Dropdown}
+           dropdownData={dropdownData}
           />:
           forms == "2"?
           <Form2
           />:
           forms == "3"?
           <Form3
-                   vendorType = {Dropdown && Dropdown.vendor_type}
-                   currency = {Dropdown && Dropdown.currency}
+                   vendorType = {dropdownData && dropdownData.vendor_type}
+                   currency = {dropdownData && dropdownData.currency}
           />:
           forms == "4"?
           <Form4

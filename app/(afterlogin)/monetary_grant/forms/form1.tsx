@@ -148,7 +148,7 @@ const Form1 = ({ ...Props }: Props) => {
       <h1 className="text-black text-2xl font-normal uppercase pb-8">
         Basic Detail
       </h1>
-      <div className="grid grid-cols-2 gap-12 pb-8">
+      <div className="grid grid-cols-2 gap-6 pb-8">
         <div className="flex flex-col gap-2">
           <label className="lable">
             Company Name <span className="text-[#e60000]">*</span>

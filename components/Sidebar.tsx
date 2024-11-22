@@ -18,6 +18,10 @@ const Sidebar = () => {
   const settingsItems: string[] = [
     "Change Password",
   ];
+  const reports: string[] = [
+    "Repository Document Type",
+    "Repository Document List"
+  ]
   return (
     <div  className="flex flex-col justify-between h-screen">
       <div className="pt-10 text-black flex  flex-col">
@@ -103,37 +107,33 @@ const Sidebar = () => {
                 })}
             </div>
           </div>
-          <div className="flex py-2 gap-2 pl-2 hover:border hover:rounded-xl hover:bg-[#4430bf] hover:text-white hover:cursor-pointer">
-            <svg
-              width="32"
-              height="32"
-              viewBox="0 0 32 32"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <g id="Interface / Chart_Line">
-                <path
-                  id="Vector"
-                  d="M28 26.6667H4V6.66675"
-                  stroke="#636363"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  id="Vector_2"
-                  opacity="0.4"
-                  d="M28 9.33325L17.3333 18.6666L12 13.3333L4 19.9999"
-                  stroke="#636363"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </g>
-            </svg>
-            <h1 className="pt-1">Reports</h1>
+          {/* START SETTING MANU  */}
+          <div id="parent">
+            <div className="flex py-2 gap-2 pl-2 hover:border hover:rounded-xl hover:bg-[#4430bf] group hover:text-white hover:cursor-pointer">
+              
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+<path d="M28 26.6665H4V6.6665" stroke="#636363" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path opacity="0.4" d="M28 9.3335L17.3333 18.6668L12 13.3335L4 20.0002" stroke="#636363" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+              <h1 className="pt-1">Reports</h1>
+            </div>           
+            <div id="element" className="z-10" >
+                {reports &&
+                  reports.map((data,index) => { 
+                    return (
+                      <div key={index} className="child py-4 px-5 rounded-bl-xl text-black  border-l border-black ml-4 relative text-nowrap">
+                       <Link href={data.toLowerCase().replaceAll(" ", "_").replace("&","and")}>
+                          <div className="absolute -bottom-9 hover:bg-white rounded-xl text-black hover:text-[#4430bf] text-[12px] px-1 my-5 py-2 cursor-pointer">
+                          {data} 
+                          </div>
+                      </Link>
+                      </div>
+                    );
+                  })}
+            </div>           
           </div>
-          
+          {/* END SETTING MANU  */}
+              
          {/* START SETTING MANU  */}
           <div id="parent">
             <div className="flex py-2 gap-2 pl-2 hover:border hover:rounded-xl hover:bg-[#4430bf] group hover:text-white hover:cursor-pointer">

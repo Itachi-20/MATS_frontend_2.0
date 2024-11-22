@@ -167,7 +167,7 @@ console.log(formdata,"this is form data")
       <h1 className='text-black text-2xl font-normal uppercase pb-8'>
         Hcp Details
       </h1>
-      <div className='grid grid-cols-2 gap-12'>
+      <div className='grid grid-cols-2 gap-6'>
         <div className='flex flex-col gap-2'>
           <label className='lable'>Hcp Name <span className='text-[#e60000]'>*</span></label>
           <Input className='dropdown' placeholder='Type Here'
