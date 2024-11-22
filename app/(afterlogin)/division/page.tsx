@@ -44,7 +44,7 @@ export default function Division({initialValue}:{initialValue:string}) {
       };
     
       const handleCancel = () => {
-        setInputValue(initialValue); // Reset to initial value
+        setInputValue(initialValue);
         setIsEditing(false);
       };
 
@@ -189,7 +189,6 @@ export default function Division({initialValue}:{initialValue:string}) {
 
             {isEditing && 
                 <div className="flex items-center space-x-3 py-5">
-                {/* Input Field */}
                     <div className=" space-y-1 w-72">
                         <Label className="text-nowrap">Division Name<span className="text-red-500">*</span></Label>
                         <Input
@@ -201,17 +200,15 @@ export default function Division({initialValue}:{initialValue:string}) {
 
                     </div>
                     <div className="space-y-7 space-x-3">
-                        {/* Save Button */}
                         <Button
                             onClick={handleSave}
-                            className="px-6 py-2 text-sm text-white bg-blue-500 rounded-md hover:bg-blue-600"
+                            className="px-7 py-2 text-sm text-white bg-blue-500 rounded-md"
                         >
                             Save
                         </Button>
-                        {/* Cancel Button */}
                         <Button
                             onClick={handleCancel}
-                            className="px-6 py-2 text-sm text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300"
+                            className="px-6 py-2 text-sm text-white bg-red-400 rounded-md"
                         >
                             Close
                         </Button>

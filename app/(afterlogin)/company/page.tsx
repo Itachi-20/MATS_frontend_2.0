@@ -69,29 +69,29 @@ export default function Company() {
                 </div>
             </div>
       
-            <div className="grid grid-cols-2 gap-5 pb-6">
-                <div className="space-y-1">
-                    <Label htmlFor="company_name">
-                        Company Name<span className="text-red-600">*</span>
-                    </Label>
-                    <Input
-                        type="text"
-                        name="company_name"
-                        id="service_name"
-                        placeholder="Company name"
-                    />
+             <div className="flex items-center space-x-3 py-5">
+                    <div className=" space-y-1 w-80">
+                        <Label className="text-nowrap">Company Name<span className="text-red-500">*</span></Label>
+                        <Input
+                            type="text"                        
+                            className="px-2 py-1 border rounded-md"
+                        />
+
+                    </div>
+                    <div className="space-y-7 space-x-3">
+                        <Button                           
+                            className="px-7 py-2 text-sm text-white bg-blue-500 rounded-md"
+                        >
+                            Save
+                        </Button>
+                        <Button
+                            className="px-6 py-2 text-sm text-white bg-red-400 rounded-md"
+                        >
+                            Close
+                        </Button>
+
+                    </div>
                 </div>
-                <div className="flex space-x-3 justify-end mt-7">
-                    <Button
-                        className="text-white bg-green-700 px-8 rounded-[10px] font-medium text-[16px]"
-                    >
-                        Save
-                    </Button>
-                    <Button className="text-white bg-red-400 px-7 rounded-[10px] font-medium text-[16px]">
-                        Close
-                    </Button>
-                </div>
-            </div>
           
             <div className="border bg-white h-full p-4 rounded-[18px]">
                 <Table className={""}>
