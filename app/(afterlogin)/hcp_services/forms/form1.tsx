@@ -584,6 +584,27 @@ console.log(formdata,"this is form data")
             </SelectContent>
           </Select>
                     </div>
+                    <div className="flex flex-col md:gap-2">
+                        <label className="text-black md:text-sm md:font-normal capitalize">
+                            Sponsorship Support Request Ref Number<span className="text-[#e60000]">*</span>
+                        </label>
+                        <Select 
+          onValueChange={(value)=>{handleSelectChange(value,"training_ref_no")}}
+          >
+            <SelectTrigger className="dropdown">
+              <SelectValue placeholder="Select" />
+            </SelectTrigger>
+            <SelectContent>
+              {
+                Props.dropdownData && Props.dropdownData.training_ref_no?.map((item,index)=>{
+                    return (
+                      <SelectItem key={index} value={item.name}>{item.name}</SelectItem>
+                    )
+                })
+              }
+            </SelectContent>
+          </Select>
+                    </div>
                 </div>
           </div>
 

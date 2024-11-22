@@ -101,7 +101,7 @@ type activityDropdown = {
 
 const fetchDropdown = async()=>{
   try {
-    const response = await fetch("http://10.120.140.7:8000/api/method/matsapp.api.event.event.get_field_data", {
+    const response = await fetch("http://10.120.140.7:8001/api/method/matsapp.api.event.event.get_field_data", {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -122,7 +122,7 @@ const fetchDropdown = async()=>{
 
 const activityList = async () => {
   try {
-      const response = await fetch("http://10.120.140.7:8000/api/method/matsapp.api.event.event.get_document_and_activity_type", {
+      const response = await fetch("http://10.120.140.7:8001/api/method/matsapp.api.event.event.get_document_and_activity_type", {
           method: "GET",
           headers: {
               "Content-Type": "application/json",

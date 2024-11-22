@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useState} from 'react'
 import { Button } from '@/components/ui/button';
 import {
     Select,
@@ -11,24 +11,74 @@ import { Label } from "@/components/ui/label"
 
 import { Input } from '@/components/ui/input';
 
-type CardData = {
-    title: string;
-    items: CardItem[];
-  };
-  
-  type CardItem = {
+type CardItem = {
     fileName: string;
     url: string;
   };
   
+  type CardData = {
+    name: string;
+    attachments: CardItem[];
+  };
 
 type props = {
-    cardData : CardData[];
+    cardData : CardData[] | undefined;
     handleAdd:()=> void;
   }
 
 const add_popup = ({ cardData,handleAdd }: props) => {
     console.log("cardData",cardData)
+
+    const [file,setFile] = useState<FileList | null>();
+    const [documentType,setDocumentType] = useState<string>();
+
+
+    const handleFileUpload = (e:React.ChangeEvent<HTMLInputElement>)=>{
+        const files = (e.target as HTMLInputElement).files;
+        setFile(files);
+      }
+
+
+    const FileUpload = async()=>{
+        const formdata = new FormData();
+    
+        if (file && file.length > 0) {
+          for (let i = 0; i < file.length; i++) {
+            formdata.append("file", file[i]); 
+          }
+        } else {
+          console.log("No file to upload");
+          return;  
+        }
+          formdata.append("docname",documentType as string)
+          //formdata.append("activity_type",activityType);
+          //formdata.append("document_type",documentType)
+        try {
+          const response = await fetch(
+            `/api/training_and_education/fileUpload`,
+            {
+              method: "POST",
+              headers: {
+                //"Content-Type": "multipart/form-data",
+              },
+              body:formdata,
+              credentials:'include'
+            }
+          );
+    
+          
+          if (response.ok) {
+            const data = await response.json();
+           
+          } else {
+            console.log("Login failed");
+          }
+        } catch (error) {
+          console.error("Error during login:", error);
+        }
+      }
+    
+
     return (
         <>
             <div className="absolute z-50 flex inset-0 items-center justify-center bg-black bg-opacity-50">
@@ -48,14 +98,16 @@ const add_popup = ({ cardData,handleAdd }: props) => {
                     <div className='grid grid-cols-2 gap-10 w-full items-center'>
                         <div>
                             <Label className='text-black'>Type <span className='text-red-500'>*</span></Label>
-                            <Select>
+                            <Select
+                            onValueChange={(value)=>setDocumentType(value)}
+                            >
                                 <SelectTrigger className="dropdown gap-4 mt-2 ">
                                     <SelectValue placeholder="-Select-" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    {cardData.map((card, index) => (
-                                        <SelectItem key={index} value={card.title}>
-                                            {card.title}
+                                    {cardData && cardData.map((card, index) => (
+                                        <SelectItem key={index} value={card.name}>
+                                            {card.name}
                                         </SelectItem>
                                     ))}
                                 </SelectContent>
@@ -83,7 +135,7 @@ const add_popup = ({ cardData,handleAdd }: props) => {
                                     </svg>
                                     <h1 className="mt-[2px]">{"Upload File"}</h1>
                                 </div>
-                                <Input type="file" id="file" className="hidden"></Input>
+                                <Input type="file" id="file" className="hidden" onChange={(e)=>handleFileUpload(e)}></Input>
                             </label>
                         </div>
                     </div>
@@ -91,7 +143,7 @@ const add_popup = ({ cardData,handleAdd }: props) => {
                         <Button className="bg-white text-black border text-md font-normal px-12 rounded-md hover:bg-white" onClick={handleAdd}>
                             Back
                         </Button>
-                        <Button className="bg-[#4430bf] text-white text-md font-normal border px-8 hover:bg-[#4430bf]">
+                        <Button className="bg-[#4430bf] text-white text-md font-normal border px-8 hover:bg-[#4430bf]" onClick={()=>FileUpload()}>
                             Add
                         </Button>
                     </div>

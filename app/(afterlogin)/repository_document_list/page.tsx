@@ -1,6 +1,6 @@
 
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from "@/components/ui/input";
 import {
@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/select";
 import Svg from '../../(afterlogin)/repository_document_list/svg';
 import AddPopup from './add_popup';
+import { useRouter } from 'next/navigation';
 
 // TypeScript types for card data
 type CardItem = {
@@ -20,70 +21,120 @@ type CardItem = {
 };
 
 type CardData = {
-  title: string;
-  items: CardItem[];
+  name: string;
+  attachments: CardItem[];
 };
 
 // Sample card data
-const cardData: CardData[] = [
-  {
-    title: "Training & Education",
-    items: [
-      { fileName: "Item 1", url: "url1" },
-      { fileName: "Item 2", url: "url2" },
-      { fileName: "Item 3", url: "url3" },
-      { fileName: "Item 4", url: "url4" },
-      { fileName: "Item 5", url: "url5" },
-    ],
-  },
-  {
-    title: "SOP,s",
-    items: [
-      { fileName: "Item A", url: "url1" },
-      { fileName: "Item B", url: "url2" },
-      { fileName: "Item C", url: "url3" },
-      { fileName: "Item D", url: "url4" },
-      { fileName: "Item E", url: "url5" },
-    ],
-  },
-  {
-    title: "HCP Services",
-    items: [
-      { fileName: "Item A", url: "url1" },
-      { fileName: "Item B", url: "url2" },
-      { fileName: "Item C", url: "url3" },
-      { fileName: "Item D", url: "url4" },
-      { fileName: "Item E", url: "url5" },
-    ],
-  },
-  {
-    title: "Closing Document",
-    items: [
-      { fileName: "Item A", url: "url1" },
-      { fileName: "Item B", url: "url2" },
-      { fileName: "Item C", url: "url3" },
-      { fileName: "Item D", url: "url4" },
-      { fileName: "Item E", url: "url5" },
-    ],
-  },
-  {
-    title: "Awareness Program",
-    items: [
-      { fileName: "Item A", url: "url1" },
-      { fileName: "Item B", url: "url2" },
-      { fileName: "Item C", url: "url3" },
-      { fileName: "Item D", url: "url4" },
-      { fileName: "Item E", url: "url5" },
-    ],
-  },
-];
+// const cardData: CardData[] = [
+//   {
+//     title: "Training & Education",
+//     items: [
+//       { fileName: "Item 1", url: "url1" },
+//       { fileName: "Item 2", url: "url2" },
+//       { fileName: "Item 3", url: "url3" },
+//       { fileName: "Item 4", url: "url4" },
+//       { fileName: "Item 5", url: "url5" },
+//     ],
+//   },
+//   {
+//     title: "SOP,s",
+//     items: [
+//       { fileName: "Item A", url: "url1" },
+//       { fileName: "Item B", url: "url2" },
+//       { fileName: "Item C", url: "url3" },
+//       { fileName: "Item D", url: "url4" },
+//       { fileName: "Item E", url: "url5" },
+//     ],
+//   },
+//   {
+//     title: "HCP Services",
+//     items: [
+//       { fileName: "Item A", url: "url1" },
+//       { fileName: "Item B", url: "url2" },
+//       { fileName: "Item C", url: "url3" },
+//       { fileName: "Item D", url: "url4" },
+//       { fileName: "Item E", url: "url5" },
+//     ],
+//   },
+//   {
+//     title: "Closing Document",
+//     items: [
+//       { fileName: "Item A", url: "url1" },
+//       { fileName: "Item B", url: "url2" },
+//       { fileName: "Item C", url: "url3" },
+//       { fileName: "Item D", url: "url4" },
+//       { fileName: "Item E", url: "url5" },
+//     ],
+//   },
+//   {
+//     title: "Awareness Program",
+//     items: [
+//       { fileName: "Item A", url: "url1" },
+//       { fileName: "Item B", url: "url2" },
+//       { fileName: "Item C", url: "url3" },
+//       { fileName: "Item D", url: "url4" },
+//       { fileName: "Item E", url: "url5" },
+//     ],
+//   },
+// ];
 
 const Page: React.FC = () => {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
-
+  const [cardData,setCardData] = useState<CardData[]>()
   const handleAdd = () => {
     setOpen(prevState => !prevState);
   };
+
+  const handleDelete = async(name:string)=>{
+    try {
+      const tableData = await fetch(
+        `api/documentRepositoryDelete/`,
+        {
+          method: "POST",
+          headers:{
+            "Content-Type": "application/json",
+          },
+          credentials:"include",
+          body:JSON.stringify({
+            name:name
+          })
+        }
+      );
+      if(tableData.ok){
+        const data = await tableData.json();
+        router.push("/repository_document_list");
+      }
+     
+    } catch (error) {
+      console.log(error,"something went wrong");
+    }
+  }
+
+
+  const fetchRepositoryFolder = async()=>{
+    try {
+      const response = await fetch(`api/documentRepositoryFolderList/`,{
+        method: "GET",
+        headers: {
+            'Content-Type': 'application/json',
+            //'Cookie': cookies as string 
+        },
+        credentials:'include',
+      })
+      if(response.ok){
+        const data = await response.json();
+        setCardData(data.message.data)
+      }
+    } catch (error) {
+      console.log(error,"this is error");
+    }
+  }
+
+  useEffect(()=>{
+    fetchRepositoryFolder();
+  },[])
 
   return (
     <>
@@ -110,9 +161,6 @@ const Page: React.FC = () => {
                 <SelectItem value="system">System</SelectItem>
               </SelectContent>
             </Select>
-            <Button className="text-md font-normal text-[#E60000] bg-white hover:bg-white border border-[#E60000] rounded-[25px] px-8 py-5 shadow">
-              Delete
-            </Button>
             <Button className="text-black text-md font-normal bg-white hover:bg-white border rounded-[25px] px-8 py-5 shadow">
               Back
             </Button>
@@ -120,13 +168,14 @@ const Page: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {cardData.map((card, index) => (
+          {cardData && cardData.map((card, index) => (
             <div key={index} className="border shadow-md rounded-2xl overflow-hidden relative group h-fit">
               <div className="flex justify-between py-14 px-6 items-center">
                 <h2 className="text-2xl transition-colors duration-300 ease-in-out group-hover:text-[#988AFF] text-wrap">
-                  {card.title}
+                  {card.name}
                 </h2>
-                <div>svg</div>
+                <div onClick={()=>handleDelete(card.name)} className='cursor-pointer'>
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#EA3323"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg></div>
               </div>
               <div className="absolute -top-8 -left-8 transition-transform duration-500 ease-in-out group-hover:translate-x-6 group-hover:translate-y-8">
                 <Svg />
@@ -134,14 +183,15 @@ const Page: React.FC = () => {
               {/* Expandable Content */}
               <div className="w-full bg-white pt-6 hidden group-hover:block transition-all duration-300 ease-in-out">
                 <ul className="px-6">
-                  {card.items.map((item, itemIndex) => (
+                  {card.attachments?.map((item, itemIndex) => (
                     <li
                       key={itemIndex}
                       className="flex justify-between text-[#606060] hover:text-black border-b py-1"
                     >
                       {item.fileName}
                       <a href={item.url} target="_blank" rel="noopener noreferrer">
-                        svg
+                        
+<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#EA3323"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg>
                       </a>
                     </li>
                   ))}
