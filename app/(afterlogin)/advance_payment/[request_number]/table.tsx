@@ -188,7 +188,7 @@ const TableComponent = ({ ...Props }: Props) => {
           <TableBody>
             
                 
-                {Props.tableData.advance_request.map((data, index) => (
+                {Props.tableData?.advance_request.map((data, index) => (
                 <TableRow className="text-center text-nowrap border-b">
                   {/* <TableCell className=''>{data.name}</TableCell>
                   <TableCell>{data.advance}</TableCell> */}
@@ -382,8 +382,8 @@ const TableComponent = ({ ...Props }: Props) => {
                     {
                       data?.is_approved == true ? (
                         data.status == "Advance Approved" ?  
-                        <button className="border rounded-full px-4 py-1 border-[#0e4154] text-[#0e4154]" onClick={() => router.push(`/advance_payment/${Props.refno}/${data.name}`)}>View</button>:
-                        <button className="border rounded-full px-4 py-1 border-[#0e4154] text-[#0e4154]" onClick={() => router.push(`/advance_payment/update_utr/${Props.refno}`)}>Update UTR</button>
+                        <button className="border rounded-full px-4 py-1 border-[#0e4154] text-[#0e4154]" onClick={() => router.push(`/advance_payment/update_utr/${Props.refno}/${data.name}`)}>Update UTR</button>:
+                        <button className="border rounded-full px-4 py-1 border-[#0e4154] text-[#0e4154]" onClick={() => router.push(`/advance_payment/${Props.refno}/${data.name}`)}>View</button> 
                       )
                      :
                       <button className="border rounded-full px-4 py-1 border-black text-black" onClick={() => router.push(`/advance_payment/${Props.refno}/${data.name}`)}>Take action</button>

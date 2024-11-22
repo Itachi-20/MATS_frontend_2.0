@@ -8,7 +8,7 @@ const page = async ({params}:any) => {
       const cookie = await cookies();
       const Cookie = cookie.toString();
       const tableData = await fetch(
-        `http://10.120.140.7:8000/api/method/matsapp.api.event.event.get_advance_expense_detail_list?name=${name}`,
+        `${process.env.FRAPPE_URL}/api/method/matsapp.api.event.event.get_advance_expense_detail_list?name=${name}`,
         {
           method: "GET",
           headers:{
@@ -33,6 +33,7 @@ const page = async ({params}:any) => {
   const role = cookie.get("role");
    console.log(role, request_number);
   const tableData = await fetchData(request_number);
+  console.log("tableData",tableData)
   return (
     <>
       <Table tableData={tableData} refno = {request_number} role={role?.value}/>

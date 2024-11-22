@@ -34,6 +34,7 @@ type ActualVendor = {
 type EventData = {
     name: string;
     event_date: string;
+    event_type:string;
     cost_centre: string;
     cost_code: string;
     cost_desc: string;
@@ -139,7 +140,7 @@ const page = () => {
             <div className='p-8  '>
                 <div className='text-black flex justify-between items-center'>
                     <div className='text-2xl font-semibold'>
-                        Training & Education
+                    {expensedata?.event_type}
                     </div>
                     <div className='flex'>
                         <button className="border rounded-sm px-6 py-1 border-black text-black">Back</button>

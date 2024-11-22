@@ -1,5 +1,5 @@
 'use client'
-import React,{useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Sidebar from "@/components/Sidebar";
 import Navbar from "@/components/Navbar";
@@ -32,7 +32,7 @@ type post_expense_approvers = {
     level5: string;
     level6: string;
     level7: string;
-    status:string;
+    status: string;
 }[];
 
 type EventTable = {
@@ -49,33 +49,35 @@ type EventTable = {
 };
 
 
-export default function Page(){
-    const [postExpenseApprovalList, setPostExpenseApprovalList] = useState<Array<EventTable>>(); 
+export default function Page() {
+    const [postExpenseApprovalList, setPostExpenseApprovalList] = useState<Array<EventTable>>();
     const router = useRouter();
     const PostExpenseApprovalList = async () => {
         try {
-          const response = await fetch("/api/advanceApproval/list", {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
-    
-          if (response.ok) {
-            const data = await response.json();
-            setPostExpenseApprovalList(data.message);
-          } else {
-            console.log('Error fetching data');
-          }
+            const response = await fetch("/api/advanceApproval/list", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setPostExpenseApprovalList(data.message);
+            } else {
+                console.log('Error fetching data');
+            }
         } catch (error) {
-          console.error("Error during login:", error);
+            console.error("Error during login:", error);
         }
-      };
+    };
 
-      useEffect(() => {
+    useEffect(() => {
         PostExpenseApprovalList();
-      }, [])
+    }, [])
 
+
+    console.log('postExpenseApprovalList', postExpenseApprovalList)
     return (
         <>
 
@@ -203,29 +205,42 @@ export default function Page(){
                                 >Action</TableHead>
                             </TableRow>
                         </TableHeader>
-                        <TableBody>
-                            {postExpenseApprovalList &&
-                                postExpenseApprovalList.map((data, index) => {
-                                    return (
-                                        <TableRow key={index} className="text-center text-nowrap">
-                                            <TableCell>{data.name}</TableCell>
-                                            
-                                            <TableCell>{data.event_name}</TableCell>
-                                            <TableCell>{data.event_type}</TableCell>
-                                            <TableCell>{data.event_start_date}</TableCell>
-                                            <TableCell>{data.total_expense ?? ""}</TableCell>
-                                            <TableCell>{data.event_requestor ?? ""}</TableCell>
-                                            <TableCell className="sticky right-0 bg-[white] z-50 ">
-                                                {
-                                                    "Not" == "Approved" ?
-                                                <button className="border rounded-full px-4 py-1 border-[#0E4154] text-[#0E4154]" onClick={() => router.push(`/advance_payment/update_utr/${data.name}`)} >Update UTR</button>
-                                                :<button className="border rounded-full px-4 py-1 border-[#0E4154] text-[#0E4154]" onClick={() => router.push(`/advance_payment/${data.name}`)} >Take Action</button>
-                                                }
-                                            </TableCell>
-                                        </TableRow>
-                                    );
-                                })}
-                        </TableBody>
+
+                        {
+                            postExpenseApprovalList ?
+                                <TableBody>
+                                    {postExpenseApprovalList &&
+                                        postExpenseApprovalList.map((data, index) => {
+                                            return (
+                                                <TableRow key={index} className="text-center text-nowrap">
+                                                    <TableCell>{data.name}</TableCell>
+
+                                                    <TableCell>{data.event_name}</TableCell>
+                                                    <TableCell>{data.event_type}</TableCell>
+                                                    <TableCell>{data.event_start_date}</TableCell>
+                                                    <TableCell>{data.total_expense ?? ""}</TableCell>
+                                                    <TableCell>{data.event_requestor ?? ""}</TableCell>
+                                                    <TableCell className="sticky right-0 bg-[white] z-50 ">
+                                                        {
+                                                            "Not" == "Approved" ?
+                                                                <button className="border rounded-full px-4 py-1 border-[#0E4154] text-[#0E4154]" onClick={() => router.push(`/advance_payment/update_utr/${data.name}`)} >Update UTR</button>
+                                                                : <button className="border rounded-full px-4 py-1 border-[#0E4154] text-[#0E4154]" onClick={() => router.push(`/advance_payment/${data.name}`)} >Take Action</button>
+                                                        }
+                                                    </TableCell>
+                                                </TableRow>
+                                            );
+                                        })}
+                                </TableBody>
+
+                                :
+                                <TableBody>
+                                    <TableRow className="text-center text-nowrap">
+                                        <TableCell className="" colSpan={7}>No Result</TableCell>
+                                    </TableRow>
+
+                                </TableBody>
+                        }
+
                     </Table>
                 </div>
             </div>
