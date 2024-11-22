@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 
 const Sidebar = () => {
   const router = useRouter();
+
   const moduleItems: string[] = [
     "Training & Education",
     "Awareness Program",
@@ -18,7 +19,6 @@ const Sidebar = () => {
     'Person State Information',    
   ];
 
-
   const masterItems: string[] = [
     "Division",
     "State",
@@ -29,6 +29,7 @@ const Sidebar = () => {
     "Person State",
     "therapy"
   ];
+
   const reportIcons: string[] = [
     "Event Finance Report",
     'Event Post Activity Approval Summary',
@@ -36,7 +37,9 @@ const Sidebar = () => {
 
   const settingsItems: string[] = [
     "Change Password",
+    "Company"
   ];
+  
   return (
     <div  className="flex flex-col justify-between h-screen">
       <div className="pt-10 text-black flex  flex-col">
@@ -130,7 +133,7 @@ const Sidebar = () => {
               <Image src="/svg/masterIcon.svg" width={30}  height={30} alt="master-icon" />
               <h1 className="pt-1">Master</h1>
             </div>           
-            <div id="element" className="z-10" >
+            <div id="element" className="z-10">
                 {masterItems &&
                   masterItems.map((data,index) => { 
                     return (
@@ -179,12 +182,10 @@ const Sidebar = () => {
                 {settingsItems &&
                   settingsItems.map((data,index) => { 
                     return (
-                      <div key={index} className="child py-4 px-5 rounded-bl-xl text-black  border-l border-black ml-4 relative text-nowrap ">
-                       <Link href="/change_password">
+                      <div key={index} className="child py-4 px-5 rounded-bl-xl text-black  border-l border-black ml-4 relative text-nowrap" onClick={() => router.push(data.toLowerCase().replaceAll(" ", "_"))}>
                           <div className="absolute -bottom-5 hover:bg-white rounded-xl text-black hover:text-[#4430bf] text-[12px] px-1 py-2 cursor-pointer">
-                          {data} 
+                           {data} 
                           </div>
-                      </Link>
                       </div>
                     );
                   })}
