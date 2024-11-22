@@ -2,10 +2,9 @@
 import React from "react";
 import Image from "next/image";
 import { useState } from "react";
-import Pagination from "@/components/pagination";
-import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import Pagination from "@/components/pagination";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, } from "@/components/ui/table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from "@/components/ui/select";
 
@@ -20,7 +19,6 @@ type CityTable = {
 
 export default function Division({ initialValue }: { initialValue: string }) {
 
-    const router = useRouter();
     const [currentPage, setCurrentPage] = useState(1);
     const totalPages = 10;
     const [isEditing, setIsEditing] = useState(false);

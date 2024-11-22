@@ -1,9 +1,11 @@
-'use client'
+'use client';
 import React from "react";
-import Image from "next/image";
 import Link from "next/link";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const Sidebar = () => {
+  const router = useRouter();
   const moduleItems: string[] = [
     "Training & Education",
     "Awareness Program",
@@ -18,7 +20,14 @@ const Sidebar = () => {
 
 
   const masterItems: string[] = [
+    "Division",
+    "State",
+    "City",
+    "Event Vendor",
+    "Event Cost Center",
     "Approval Matrix",
+    "Person State",
+    "therapy"
   ];
   const reportIcons: string[] = [
     "Event Finance Report",
@@ -125,12 +134,10 @@ const Sidebar = () => {
                 {masterItems &&
                   masterItems.map((data,index) => { 
                     return (
-                      <div key={index} className="child py-4 px-5 rounded-bl-xl text-black  border-l border-black ml-4 relative text-nowrap ">
-                       <Link href="/approval_matrix">
+                      <div key={index} className="child py-4 px-5 rounded-bl-xl text-black  border-l border-black ml-4 relative text-nowrap" onClick={() => router.push(data.toLowerCase().replaceAll(" ", "_"))}>
                           <div className="absolute -bottom-5 hover:bg-white rounded-xl text-black hover:text-[#4430bf] text-[12px] px-1 py-2 cursor-pointer">
                            {data} 
                           </div>
-                      </Link>
                       </div>
                     );
                   })}
