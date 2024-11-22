@@ -197,10 +197,15 @@ export default function EventCostCenter() {
                                     "text-center text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                                 }
                             >
-                                {/* Division */}
+                                isActive
                             </TableHead>
-
-                           
+                            <TableHead
+                                className={
+                                    "text-center text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                                }
+                            >
+                                {/* isActive */}
+                            </TableHead>
 
                             <TableHead
                                 className={
@@ -220,11 +225,10 @@ export default function EventCostCenter() {
                                         <TableCell>{EventCostCenterDetail.cost_center_hod}</TableCell>
                                         <TableCell>{EventCostCenterDetail.cost_center_code}</TableCell>
                                         <TableCell>{EventCostCenterDetail.description}</TableCell>
+                                        <TableCell><ToggleButton /></TableCell>
+
                                         <TableCell></TableCell>
                                         <TableCell className="sticky right-0 bg-[white] z-50 flex space-x-5 items-center justify-center border-l border-slate-200">
-                                            <span className="">
-                                              <ToggleButton />                                               
-                                            </span>
                                             <Image src={"/svg/editIcon.svg"} width={17} height={20} alt="view-svg" className="cursor-pointer" onClick={toggleEdit} />
                                             <Image src={"/svg/delete.svg"} width={15} height={20} alt="delete-svg" className="cursor-pointer" />
                                         </TableCell>

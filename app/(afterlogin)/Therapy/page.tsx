@@ -10,14 +10,13 @@ import ToggleButton from "@/components/toggle_button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, } from "@/components/ui/table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from "@/components/ui/select";
 
-type EventCostCenterTable = {
-    description:string;
-    cost_center_hod: string;
-    cost_center_code: number;
+type TherapyTable = {
+    service_name:string;
     division: string;
+   
 };
 
-export default function ApprovalMatrix() {
+export default function Therapy() {
 
     // const [isEditable, setIsEditable] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
@@ -31,36 +30,31 @@ export default function ApprovalMatrix() {
         setCurrentPage(page);
       };
 
-    const EventCostCenterDetails: EventCostCenterTable[] = [
+    const therapyDetails: TherapyTable[] = [
         {
-            description:"description is not available",
-            cost_center_hod: "Hod name",
-            cost_center_code: 78098765,
-            division: "Peripheral",
+            service_name:"TAVI",
+            division: "Cardiac Surgery",
+           
         },
         {
-            description:"description is not available",
-            cost_center_hod: "Hod name",
-            cost_center_code: 78098765,
-            division: "Peripheral",
+            service_name:"TAVI",
+            division: "Cardiac Surgery",
+           
         },
         {
-            description:"description is not available",
-            cost_center_hod: "Hod name",
-            cost_center_code: 78098765,
-            division: "Peripheral",
+            service_name:"TAVI",
+            division: "Cardiac Surgery",
+           
         },
         {
-            description:"description is not available",
-            cost_center_hod: "Hod name",
-            cost_center_code: 78098765,
-            division: "Peripheral",
+            service_name:"TAVI",
+            division: "Cardiac Surgery",
+           
         },
         {
-            description:"description is not available",
-            cost_center_hod: "Hod name",
-            cost_center_code: 78098765,
-            division: "Peripheral",
+            service_name:"TAVI",
+            division: "Cardiac Surgery",
+           
         },
       
     ];
@@ -74,9 +68,6 @@ export default function ApprovalMatrix() {
                 <Image src="svg/search.svg" alt="search-icon" width={23} height={23} className="absolute right-[63%] top-[15%]" />
 
                 <div className="flex gap-5">
-                    {/* <div className="rounded-[25px] border-[.2px] border-slate-400 bg-[#FFF] text-[15px] font-normal flex space-x-3 items-center px-[30px] cursor-pointer" onClick={() => router.push('/approval_matrix/add_matrix')}>
-                       <span>Add</span><Image src={"/svg/addIcon.svg"} alt="add-Icon" width={13} height={13} />                        
-                    </div> */}
                         <Select>
                             <SelectTrigger className="text-black shadow focus-visible:ring-transparent rounded-[25px] gap-4 border border-slate-400 !important">
                                 <SelectValue placeholder="Export" />
@@ -90,39 +81,25 @@ export default function ApprovalMatrix() {
                 </div>
             </div>
       
-            <div className="grid grid-cols-3 gap-5 pb-6">
+            <div className="grid grid-cols-2 gap-5 pb-6">
                 <div className="space-y-1">
-                    <Label htmlFor="description">
-                        Description<span className="text-red-600">*</span>
+                    <Label htmlFor="service_name">
+                        Therapy Name<span className="text-red-600">*</span>
                     </Label>
                     <Input
                         type="text"
-                        name="description"
-                        id="description"
-                        placeholder="Description"
-                    // disabled={!isEditable}
-                    />
-                </div>
-
-                <div className="space-y-1">
-                    <Label htmlFor="cchod">Cost Center HOD</Label>
-                    <Input
-                        type="text"
-                        name="cchod"
-                        id="cchod"
-                        placeholder="Cost Center HOD"
-                    // disabled={!isEditable}
+                        name="service_name"
+                        id="service_name"
+                        placeholder="Therapy name"
                     />
                 </div>
 
                 <div className="space-y-1">
                     <Label htmlFor="division_id">
-                        Division<span className="text-red-600">*</span>
+                        Division <span className="text-red-600">*</span>
                     </Label>
-                    <Select
-                    //   disabled={!isEditable}
-                    >
-                        <SelectTrigger className="text-black shadow-md rounded-[8px] gap-4 !important">
+                    <Select >
+                        <SelectTrigger className="text-slate-500 shadow-md rounded-[8px] gap-4 !important">
                             <SelectValue placeholder="-Select-" />
                         </SelectTrigger>
                         <SelectContent>
@@ -133,23 +110,9 @@ export default function ApprovalMatrix() {
                     </Select>
                 </div>
 
-                <div className="space-y-1">
-                    <Label htmlFor="cost_center_code">
-                        Cost Center Code <span className="text-red-600">*</span>
-                    </Label>
-                    <Input
-                        type="text"
-                        name="cost_center_code"
-                        id="cost_center_code"
-                        placeholder="Cost Center Code"
-                    // disabled={!isEditable}
-                    />
-                </div>
-
-                <div className="flex space-x-3 justify-end col-span-2 mt-7">
+                <div className="flex space-x-3 justify-end col-span-2 mt-3">
                     <Button
-                        className="text-white bg-green-400 px-8 rounded-[10px] font-medium text-[16px]"
-                    // disabled={!isEditable}
+                        className="text-white bg-green-700 px-8 rounded-[10px] font-medium text-[16px]"
                     >
                         Save
                     </Button>
@@ -168,21 +131,21 @@ export default function ApprovalMatrix() {
                                     "text-center rounded-l-2xl text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                                 }
                             >
-                                Description
+                                Service Name
                             </TableHead>
                             <TableHead
                                 className={
                                     "text-center text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                                 }
                             >
-                            Cost Center Hod
+                            Division
                             </TableHead>
                             <TableHead
                                 className={
                                     "text-center text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                                 }
                             >
-                            Cost Center Code
+                            {/* Cost Center Code */}
                             </TableHead>
 
                             <TableHead
@@ -190,7 +153,7 @@ export default function ApprovalMatrix() {
                                     "text-center text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                                 }
                             >
-                                Division
+                                {/* Division */}
                             </TableHead>
                             <TableHead
                                 className={
@@ -212,19 +175,16 @@ export default function ApprovalMatrix() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {EventCostCenterDetails &&
-                            EventCostCenterDetails.map((EventCostCenterDetail, index) => {
+                        {therapyDetails &&
+                            therapyDetails.map((therapyDetail, index) => {
                                 return (
                                       <TableRow key={index} className="text-center text-nowrap">
-                                        <TableCell>{EventCostCenterDetail.description}</TableCell>
-                                        <TableCell>{EventCostCenterDetail.cost_center_hod}</TableCell>
-                                        <TableCell>{EventCostCenterDetail.cost_center_code}</TableCell>
-                                        <TableCell>{EventCostCenterDetail.description}</TableCell>
+                                        <TableCell>{therapyDetail.service_name}</TableCell>
+                                        <TableCell>{therapyDetail.division}</TableCell>
+                                        <TableCell></TableCell>
+                                        <TableCell></TableCell>
                                         <TableCell></TableCell>
                                         <TableCell className="sticky right-0 bg-[white] z-50 flex space-x-5 items-center justify-center border-l border-slate-200">
-                                            <span className="">
-                                              <ToggleButton />                                               
-                                            </span>
                                             <Image src={"/svg/editIcon.svg"} width={17} height={20} alt="view-svg" className="cursor-pointer" onClick={toggleEdit} />
                                             <Image src={"/svg/delete.svg"} width={15} height={20} alt="delete-svg" className="cursor-pointer" />
                                         </TableCell>
