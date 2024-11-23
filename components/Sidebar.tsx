@@ -28,7 +28,8 @@ const Sidebar = () => {
     "Approval Matrix",
     "Person State",
     "Therapy",
-    "Department"
+    "Department",
+    "Designation",
   ];
 
   const reportIcons: string[] = [
