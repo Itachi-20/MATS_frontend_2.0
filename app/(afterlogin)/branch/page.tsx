@@ -8,12 +8,11 @@ import Pagination from "@/components/pagination";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, } from "@/components/ui/table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from "@/components/ui/select";
 
-type DesignationTable = {
-    designation_name: string;
-    visibility: string;
+type BranchTable = {
+    branch_name: string;
 };
 
-export default function Department({ initialValue }: { initialValue: string }) {
+export default function Branch({ initialValue }: { initialValue: string }) {
 
     const [currentPage, setCurrentPage] = useState(1);
     const totalPages = 10;
@@ -29,29 +28,31 @@ export default function Department({ initialValue }: { initialValue: string }) {
         setInputValue(initialValue);
         setIsEditing(false);
     };
+
     const handlePageChange = (page: React.SetStateAction<number>) => {
         setCurrentPage(page);
     };
 
-    const DesignationDetails: DesignationTable[] = [
+    const BranchDetails: BranchTable[] = [
         {
-            designation_name: "Zonal Sales Manager",
-            visibility: "Superior Admin",
+            branch_name: "Vapi(475)(12)",
         },
         {
-            designation_name: "Account Manager",
-            visibility: "Superior Admin",
-
+            branch_name: "VAPI(403)",
         },
         {
-            designation_name: "Zonal Sales Manager",
-            visibility: "Superior Admin",
-
+            branch_name: "VADODARA(0)",
         },
         {
-            designation_name: "Zonal Sales Manager",
-            visibility: "Superior Admin",
+            branch_name: "Surat(0)",
+        },
 
+        {
+            branch_name: "Software Division(0)",
+        },
+
+        {
+            branch_name: "Vapi(475)(12)",
         },
     ];
 
@@ -81,46 +82,29 @@ export default function Department({ initialValue }: { initialValue: string }) {
 
             {isEditing &&
                 <div className="grid grid-cols-2 space-x-5 items-center py-5">
+                    <div className="flex space-x-3">
+                        <div className="space-y-1 w-[50vh]">
+                            <label className="lable">
+                                Branch Name<span className="text-red-700">*</span>
+                            </label>
+                            <Input type="text" placeholder="Branch Name" name="designation_name" id="branch_name" required className="w-full " />
+                        </div>
+                        <div className="items-center flex space-x-3 mt-7">
+                            <Button
+                                onClick={handleSave}
+                                className="px-7 py-2 text-[16px] text-white bg-blue-500 rounded-md"
+                            >
+                                Save
+                            </Button>
+                            <Button
+                                onClick={handleCancel}
+                                className="px-6 py-2 text-[16px] text-white bg-red-400 rounded-md"
+                            >
+                                Close
+                            </Button>
 
-                    <div className="space-y-1 col-span-1">
-                        <label className="lable">
-                            Designation Name<span className="text-red-700"> *</span>
-                        </label>
-                        <Input type="text" placeholder="Designation name" name="designation_name" id="designation_name" required />
+                        </div>
                     </div>
-
-                    <div className="space-y-1 col-span-1">
-                        <label className="lable">
-                            Visibility<span className="text-red-600">*</span>
-                        </label>
-                        <Select>
-                            <SelectTrigger className="dropdown text-slate-400">
-                                <SelectValue placeholder="-Select-" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="uw1">User Wise</SelectItem>
-                                <SelectItem value="abc">abc</SelectItem>
-                                <SelectItem value="abcd">abcd</SelectItem>
-                            </SelectContent>
-                        </Select>
-                    </div>
-
-                    <div className="space-x-3 items-center flex col-span-3 justify-end mt-5">
-                        <Button
-                            onClick={handleSave}
-                            className="px-7 py-2 text-[16px] text-white bg-blue-500 rounded-md"
-                        >
-                            Save
-                        </Button>
-                        <Button
-                            onClick={handleCancel}
-                            className="px-6 py-2 text-[16px] text-white bg-red-400 rounded-md"
-                        >
-                            Close
-                        </Button>
-
-                    </div>
-
                 </div>
             }
 
@@ -133,22 +117,21 @@ export default function Department({ initialValue }: { initialValue: string }) {
                                     "text-center rounded-l-2xl text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                                 }
                             >
-                                Designation Name
+                                Branch Name
                             </TableHead>
                             <TableHead
                                 className={
                                     "text-center text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                                 }
                             >
-                                Visibility
-
+                                {/* TypeData    */}
                             </TableHead>
                             <TableHead
                                 className={
                                     "text-center text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                                 }
                             >
-
+                                {/* Visibility */}
                             </TableHead>
 
                             <TableHead
@@ -156,6 +139,7 @@ export default function Department({ initialValue }: { initialValue: string }) {
                                     "text-center text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                                 }
                             >
+                                {/* Level Value */}
                             </TableHead>
 
 
@@ -203,12 +187,12 @@ export default function Department({ initialValue }: { initialValue: string }) {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {DesignationDetails &&
-                            DesignationDetails.map((DesignationDetail, index) => {
+                        {BranchDetails &&
+                            BranchDetails.map((BranchDetail, index) => {
                                 return (
                                     <TableRow key={index} className="text-center text-nowrap">
-                                        <TableCell>{DesignationDetail.designation_name}</TableCell>
-                                        <TableCell>{DesignationDetail.visibility}</TableCell>
+                                        <TableCell>{BranchDetail.branch_name}</TableCell>
+                                        <TableCell></TableCell>
                                         <TableCell></TableCell>
                                         <TableCell></TableCell>
                                         <TableCell></TableCell>

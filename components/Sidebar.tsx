@@ -30,6 +30,7 @@ const Sidebar = () => {
     "Therapy",
     "Department",
     "Designation",
+    "Branch",
   ];
 
   const reportIcons: string[] = [
