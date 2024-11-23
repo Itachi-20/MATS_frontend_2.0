@@ -31,6 +31,7 @@ const Sidebar = () => {
     "Department",
     "Designation",
     "Branch",
+    "Role",
   ];
 
   const reportIcons: string[] = [
