@@ -5,9 +5,9 @@ import { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import UserRightsTable from '@/components/user_management_information/user_rights_table';
-import LoginInformation from '@/components/user_management_information/login_information';
-import CustomerInformation from '@/components/user_management_information/customer_information';
+import UserRightsTable from '@/components/user_management/user_rights_table';
+import LoginInformation from '@/components/user_management/login_information';
+import CustomerInformation from '@/components/user_management/customer_information';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from "@/components/ui/select";
 
 export default function UserManagementInformation() {

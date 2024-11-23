@@ -37,7 +37,8 @@ const Sidebar = () => {
 
   const settingsItems: string[] = [
     "Change Password",
-    "Company"
+    "Company",
+    "User Management",
   ];
   
   return (

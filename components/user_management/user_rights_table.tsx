@@ -209,7 +209,7 @@ const UserRightsTable = () => {
   };
 
   return (
-    <div className="p-7 w-full relative z-20 text-black space-y-4">
+    <div className="py-5 w-full relative z-20 text-black space-y-4">
 
       <div className='space-y-1 w-80'>
         <Label>Replicate User</Label>
