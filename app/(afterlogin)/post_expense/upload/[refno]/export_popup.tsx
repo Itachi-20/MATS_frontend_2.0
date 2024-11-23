@@ -40,10 +40,17 @@ const events: EventTable[] = [
     },
 ];
 
+type ImportFiles = {
+    name: string,
+    file_name: string,
+    file_url: string
+}
+
 type props = {
     handleExport: () => void;
+    data: ImportFiles[];
 }
-const popup = ({ handleExport }: props) => {
+const popup = ({ ...Props }: props) => {
     return (
 
         <>
@@ -85,13 +92,13 @@ const popup = ({ handleExport }: props) => {
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {events &&
-                                    events.map((data, index) => {
+                                {Props.data &&
+                                    Props.data.map((data, index) => {
                                         return (
                                             <TableRow key={index} className="text-center text-nowrap text-black">
-                                                <TableCell>{data.type}</TableCell>
-                                                <TableCell>{data.sub_type}</TableCell>
-                                                <TableCell>{data.document_name}</TableCell>
+                                                <TableCell>{data.name}</TableCell>
+                                                <TableCell>{data.file_name}</TableCell>
+                                                <TableCell>{data.file_url}</TableCell>
                                                 <TableCell className='sticky right-0 z-50 gap-3 bg-white mt-2 flex border-l'>
                                                     <Checkbox id='checkbox'/>
                                                 </TableCell>
@@ -102,7 +109,7 @@ const popup = ({ handleExport }: props) => {
                         </Table>
                     </div>
                     <div className="flex justify-end pt-5 gap-4 w-full">
-                        <Button className="bg-white text-black border text-md font-normal px-12 rounded-md hover:bg-white" onClick={handleExport}>
+                        <Button className="bg-white text-black border text-md font-normal px-12 rounded-md hover:bg-white" onClick={Props.handleExport}>
                             Back
                         </Button>
                         <Button className="bg-[#4430bf] text-white text-md font-normal border px-8 hover:bg-[#4430bf]">
