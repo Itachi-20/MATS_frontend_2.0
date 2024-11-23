@@ -27,7 +27,8 @@ const Sidebar = () => {
     "Event Cost Center",
     "Approval Matrix",
     "Person State",
-    "therapy"
+    "Therapy",
+    "Department"
   ];
 
   const reportIcons: string[] = [
