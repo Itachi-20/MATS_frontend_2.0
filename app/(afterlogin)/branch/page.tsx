@@ -15,7 +15,7 @@ type BranchTable = {
 export default function Branch({ initialValue }: { initialValue: string }) {
 
     const [currentPage, setCurrentPage] = useState(1);
-    const totalPages = 10;
+    const rolesPerPage = 6; 
     const [isEditing, setIsEditing] = useState(false);
     const [inputValue, setInputValue] = useState(initialValue);
 
@@ -27,10 +27,6 @@ export default function Branch({ initialValue }: { initialValue: string }) {
     const handleCancel = () => {
         setInputValue(initialValue);
         setIsEditing(false);
-    };
-
-    const handlePageChange = (page: React.SetStateAction<number>) => {
-        setCurrentPage(page);
     };
 
     const BranchDetails: BranchTable[] = [
@@ -54,8 +50,43 @@ export default function Branch({ initialValue }: { initialValue: string }) {
         {
             branch_name: "Vapi(475)(12)",
         },
+        {
+            branch_name: "Surat(0)",
+        },
+
+        {
+            branch_name: "Software Division(0)",
+        },
+
+        {
+            branch_name: "Vapi(475)(12)",
+        },
+        {
+            branch_name: "Software Division(0)",
+        },
+
+        {
+            branch_name: "Vapi(475)(12)",
+        },
+        {
+            branch_name: "Surat(0)",
+        },
+
+        {
+            branch_name: "Software Division(0)",
+        },
+
+        {
+            branch_name: "Vapi(475)(12)",
+        },
     ];
 
+    const totalPages = Math.ceil(BranchDetails.length / rolesPerPage);
+    // Get paginated roles
+    const paginatedRoles = BranchDetails.slice(
+    (currentPage - 1) * rolesPerPage,
+    currentPage * rolesPerPage
+   )
     return (
         <div className="p-7 w-full relative z-20 text-black">
 
@@ -187,8 +218,8 @@ export default function Branch({ initialValue }: { initialValue: string }) {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {BranchDetails &&
-                            BranchDetails.map((BranchDetail, index) => {
+                        {paginatedRoles &&
+                            paginatedRoles.map((BranchDetail, index) => {
                                 return (
                                     <TableRow key={index} className="text-center text-nowrap">
                                         <TableCell>{BranchDetail.branch_name}</TableCell>
@@ -214,7 +245,7 @@ export default function Branch({ initialValue }: { initialValue: string }) {
                 <Pagination
                     totalPages={totalPages}
                     currentPage={currentPage}
-                    onPageChange={handlePageChange}
+                    onPageChange={(page) => setCurrentPage(page)}
                 />
             </div>
         </div>

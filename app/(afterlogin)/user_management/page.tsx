@@ -2,6 +2,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -11,9 +12,8 @@ import CustomerInformation from '@/components/user_management/customer_informati
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from "@/components/ui/select";
 
 export default function UserManagementInformation() {
-
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState('basicDetails'); // Initial active tab
-
 
   return (
     <div className="p-7 w-full relative z-20 text-black">
@@ -129,44 +129,52 @@ export default function UserManagementInformation() {
               <Input type="text" name="last_name" id="last_name" required />
             </div>
 
-            <div className="flex flex-col gap-2">
+            <div className="space-y-1">
               <label className="lable">
                 Department Name<span className="text-[#e60000]">*</span>
               </label>
-              <Select>
-                <SelectTrigger className="dropdown ">
-                  <SelectValue placeholder="-Select-" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Department1">Department1</SelectItem>
-                  <SelectItem value="Department2">Department2</SelectItem>
-                  <SelectItem value="Department3">Department3</SelectItem>
-                  <SelectItem value="Department14">Department4</SelectItem>
-                </SelectContent>
-              </Select>
+              <div className='flex space-x-2'>
+                <Select>
+                  <SelectTrigger className="dropdown ">
+                    <SelectValue placeholder="-Select-" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Department1">Department1</SelectItem>
+                    <SelectItem value="Department2">Department2</SelectItem>
+                    <SelectItem value="Department3">Department3</SelectItem>
+                    <SelectItem value="Department14">Department4</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Button className='text-[16px] px-4 py-3 bg-blue-400 text-white' onClick={()=> router.push('/department')}>Add</Button>
+              </div>
             </div>
 
-            <div className="flex flex-col gap-2">
+            <div className="space-y-1">
               <label className="lable">
                 Designation<span className="text-[#e60000]">*</span>
               </label>
-              <Select>
-                <SelectTrigger className="dropdown ">
-                  <SelectValue placeholder="-Select-" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Department1">Department1</SelectItem>
-                  <SelectItem value="Department2">Department2</SelectItem>
-                  <SelectItem value="Department3">Department3</SelectItem>
-                  <SelectItem value="Department14">Department4</SelectItem>
-                </SelectContent>
-              </Select>
+              <div className='flex space-x-2'>
+                <Select>
+                  <SelectTrigger className="dropdown ">
+                    <SelectValue placeholder="-Select-" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Department1">Department1</SelectItem>
+                    <SelectItem value="Department2">Department2</SelectItem>
+                    <SelectItem value="Department3">Department3</SelectItem>
+                    <SelectItem value="Department14">Department4</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Button className='text-[16px] px-4 py-3 bg-blue-400 text-white' onClick={()=> router.push('/designation')}>Add</Button>
+              </div>
+
             </div>
 
-            <div className="flex flex-col gap-2">
+            <div className="space-y-1">
               <label className="lable">
                 Branch<span className="text-[#e60000]">*</span>
               </label>
+              <div className='flex space-x-2'>
               <Select>
                 <SelectTrigger className="dropdown ">
                   <SelectValue placeholder="-Select-" />
@@ -178,23 +186,32 @@ export default function UserManagementInformation() {
                   <SelectItem value="Department14">Department4</SelectItem>
                 </SelectContent>
               </Select>
+              <Button className='text-[16px] px-4 py-3 bg-blue-400 text-white' onClick={()=> router.push('/branch')}>Add</Button>
+
+              </div>
+
             </div>
 
-            <div className="flex flex-col gap-2">
+            <div className="space-y-1">
               <label className="lable">
                 Role<span className="text-[#e60000]">*</span>
               </label>
-              <Select>
-                <SelectTrigger className="dropdown ">
-                  <SelectValue placeholder="-Select-" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Department1">Department1</SelectItem>
-                  <SelectItem value="Department2">Department2</SelectItem>
-                  <SelectItem value="Department3">Department3</SelectItem>
-                  <SelectItem value="Department14">Department4</SelectItem>
-                </SelectContent>
-              </Select>
+              <div className='flex space-x-2'>
+                <Select>
+                  <SelectTrigger className="dropdown ">
+                    <SelectValue placeholder="-Select-" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Department1">Department1</SelectItem>
+                    <SelectItem value="Department2">Department2</SelectItem>
+                    <SelectItem value="Department3">Department3</SelectItem>
+                    <SelectItem value="Department14">Department4</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Button className='text-[16px] px-4 py-3 bg-blue-400 text-white' onClick={()=> router.push('/role')}>Add</Button>
+
+              </div>
+
             </div>
 
             <div className="flex flex-col gap-2">

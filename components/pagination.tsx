@@ -1,5 +1,4 @@
 import React from "react";
-import { useRouter } from "next/navigation";
 
 type PaginationProps = {
   totalPages: number;
@@ -8,12 +7,9 @@ type PaginationProps = {
 };
 
 const Pagination = ({ totalPages, currentPage, onPageChange }: PaginationProps) => {
-  const router = useRouter();
-
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) {
       onPageChange(page);
-      router.push(`?page=${page}`);
     }
   };
 

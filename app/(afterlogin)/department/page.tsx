@@ -15,7 +15,7 @@ type DepartmentTable = {
 export default function Department ({ initialValue }: { initialValue: string }) {
 
     const [currentPage, setCurrentPage] = useState(1);
-    const totalPages = 10;
+    const rolesPerPage = 6;
     const [isEditing, setIsEditing] = useState(false);
     const [inputValue, setInputValue] = useState(initialValue);
 
@@ -28,10 +28,7 @@ export default function Department ({ initialValue }: { initialValue: string }) 
         setInputValue(initialValue); 
         setIsEditing(false);
     };
-    const handlePageChange = (page: React.SetStateAction<number>) => {
-        setCurrentPage(page);
-    };
-
+    
     const DepartmentDetails: DepartmentTable[] = [
         {
             department_name: "Zonal Sales Manager",
@@ -52,6 +49,14 @@ export default function Department ({ initialValue }: { initialValue: string }) 
             department_name: "Zonal Sales Manager",
         },
     ];
+
+
+    const totalPages = Math.ceil(DepartmentDetails.length / rolesPerPage);
+    // Get paginated roles
+    const paginatedRoles = DepartmentDetails.slice(
+    (currentPage - 1) * rolesPerPage,
+    currentPage * rolesPerPage
+   )
 
     return (
 
@@ -83,7 +88,7 @@ export default function Department ({ initialValue }: { initialValue: string }) 
 
                     <div className="flex flex-col gap-2">
                         <label className="lable">
-                            Department Nmae<span className="text-red-700"> *</span>
+                            Department Name<span className="text-red-700"> *</span>
                         </label>
                         <Input type="text" placeholder="Department name"  name="department_name" id="department_name" />
                     </div>
@@ -209,8 +214,8 @@ export default function Department ({ initialValue }: { initialValue: string }) 
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {DepartmentDetails &&
-                            DepartmentDetails.map((DepartmentDetail, index) => {
+                        {paginatedRoles &&
+                            paginatedRoles.map((DepartmentDetail, index) => {
                                 return (
                                     <>
                                         <TableRow key={index} className="text-center text-nowrap">
@@ -238,7 +243,7 @@ export default function Department ({ initialValue }: { initialValue: string }) 
                 <Pagination
                     totalPages={totalPages}
                     currentPage={currentPage}
-                    onPageChange={handlePageChange}
+                    onPageChange={(page) => setCurrentPage(page)}
                 />
             </div>
         </div>

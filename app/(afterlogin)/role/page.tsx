@@ -15,7 +15,7 @@ type RoleTable = {
 export default function Role ({ initialValue }: { initialValue: string }) {
 
     const [currentPage, setCurrentPage] = useState(1);
-    const totalPages = 10;
+    const rolesPerPage = 6; 
     const [isEditing, setIsEditing] = useState(false);
     const [inputValue, setInputValue] = useState(initialValue);
 
@@ -55,7 +55,99 @@ export default function Role ({ initialValue }: { initialValue: string }) {
         {
             role_name: "Compliance2",
         },
+        {
+            role_name: "Account Team",
+        },
+        {
+            role_name: "accountant",
+        },
+        {
+            role_name: "admin",
+        },
+        {
+            role_name: "Co-ordinator",
+        },
+        {
+            role_name: "Co-ordinator",
+        },
+        {
+            role_name: "Compliance1",
+        },
+        {
+            role_name: "Compliance2",
+        },
+        {
+            role_name: "Account Team",
+        },
+        {
+            role_name: "accountant",
+        },
+        {
+            role_name: "admin",
+        },
+        {
+            role_name: "Co-ordinator",
+        },
+        {
+            role_name: "Co-ordinator",
+        },
+        {
+            role_name: "Compliance1",
+        },
+        {
+            role_name: "Compliance2",
+        },
+        {
+            role_name: "Account Team",
+        },
+        {
+            role_name: "accountant",
+        },
+        {
+            role_name: "admin",
+        },
+        {
+            role_name: "Co-ordinator",
+        },
+        {
+            role_name: "Co-ordinator",
+        },
+        {
+            role_name: "Compliance1",
+        },
+        {
+            role_name: "Compliance2",
+        },
+        {
+            role_name: "Account Team",
+        },
+        {
+            role_name: "accountant",
+        },
+        {
+            role_name: "admin",
+        },
+        {
+            role_name: "Co-ordinator",
+        },
+        {
+            role_name: "Co-ordinator",
+        },
+        {
+            role_name: "Compliance1",
+        },
+        {
+            role_name: "Compliance2",
+        },
     ];
+
+
+    const totalPages = Math.ceil(RoleDetails.length / rolesPerPage);
+    // Get paginated roles
+    const paginatedRoles = RoleDetails.slice(
+    (currentPage - 1) * rolesPerPage,
+    currentPage * rolesPerPage
+   )
 
     return (
         <div className="p-7 w-full relative z-20 text-black">
@@ -188,8 +280,8 @@ export default function Role ({ initialValue }: { initialValue: string }) {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {RoleDetails &&
-                            RoleDetails.map((RoleDetail, index) => {
+                        {paginatedRoles &&
+                            paginatedRoles.map((RoleDetail, index) => {
                                 return (
                                     <TableRow key={index} className="text-center text-nowrap">
                                         <TableCell>{RoleDetail.role_name}</TableCell>
@@ -215,7 +307,7 @@ export default function Role ({ initialValue }: { initialValue: string }) {
                 <Pagination
                     totalPages={totalPages}
                     currentPage={currentPage}
-                    onPageChange={handlePageChange}
+                    onPageChange={(page) => setCurrentPage(page)}
                 />
             </div>
         </div>
