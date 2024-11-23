@@ -29,10 +29,10 @@ const fetchData = async(name:any)=>{
   }
 
 
-  const Page = async ({ ...params}:any) => {
-    const { refno } = await params; 
-    console.log(params.searchParams.refno,"sdf-----------------------------------ghytfrdfcgvbhnjmhygtfrdfgv")
-    const tableData = await fetchData(params.searchParams.refno);
+  const Page = async ({params}:any) => {
+    // const { refno } = await params; 
+    console.log(params,"sdf-----------------------------------ghytfrdfcgvbhnjmhygtfrdfgv")
+    const tableData = await fetchData(params.refno);
   
     console.log(tableData, 'this is table data');
     return (

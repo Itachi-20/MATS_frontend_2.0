@@ -4,9 +4,9 @@ import Table from './table'
 import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import Comment_box from '@/components/Comment_box'
-import { useParams } from 'next/navigation'
+import { useParams, useSearchParams } from 'next/navigation'
 import { useRouter } from 'next/navigation';
-
+import { Textarea } from '@/components/ui/textarea'
 
 type File = {
     name: string;
@@ -19,7 +19,7 @@ type ActualVendor = {
     vendor_type: string;
     vendor_name: string;
     files: File[];
-    event_request_number:string
+    event_request_number: string
     status: string;
     advance: number;
     gst: string;
@@ -34,7 +34,7 @@ type ActualVendor = {
 type EventData = {
     name: string;
     event_date: string;
-    event_type:string;
+    event_type: string;
     cost_centre: string;
     cost_code: string;
     cost_desc: string;
@@ -45,6 +45,7 @@ type EventData = {
     sub_type_of_activity: string | null;
     event_requestor: string;
     total_compensation_expense: number;
+    event_conclusion: string;
     actual_vendors: ActualVendor[];
 };
 
@@ -59,7 +60,8 @@ const page = () => {
     const router = useRouter();
     const refno = useParams();
     console.log(refno.request_number, 'refno')
-
+    const view = useSearchParams().get('view')
+    console.log('view', view)
     const eventDataApi = async () => {
         console.log("inside event Data")
         try {
@@ -101,7 +103,7 @@ const page = () => {
 
     const handleApprove = async (remark: string) => {
 
-        console.log("refno.expense_name,action,remark",refno.expense_name,action,remark,)
+        console.log("refno.expense_name,action,remark", refno.expense_name, action, remark,)
         try {
             const response = await fetch(
                 "/api/advanceApproval/advanceExpenseApprove",
@@ -115,7 +117,7 @@ const page = () => {
                         "name": refno.expense_name,
                         "action": action,
                         "remark": remark,
-                        
+
                     })
                 }
             );
@@ -123,10 +125,10 @@ const page = () => {
             const data = await response.json();
 
             if (response.ok) {
-                
-        setTimeout(() => {
-              router.back();
-          }, 1000)
+
+                setTimeout(() => {
+                    router.push(`/advance_payment/${refno.request_number}`);
+                }, 1000)
             } else {
                 console.log("Login failed");
             }
@@ -140,10 +142,10 @@ const page = () => {
             <div className='p-8  '>
                 <div className='text-black flex justify-between items-center'>
                     <div className='text-2xl font-semibold'>
-                    {expensedata?.event_type}
+                        {expensedata?.event_type}
                     </div>
                     <div className='flex'>
-                        <button className="border rounded-sm px-6 py-1 border-black text-black">Back</button>
+                        <button className="border rounded-sm px-6 py-1 border-black text-black" onClick={() => router.push(`/advance_payment/${refno.request_number}`)}>Back</button>
                     </div>
                 </div>
                 <div className='border rounded-3xl mt-5 mb-14 p-2 text-black grid grid-cols-3'>
@@ -173,12 +175,34 @@ const page = () => {
 
                 </div>
 
+                <div className=" grid grid-cols-3 gap-4 pb-7">
+                    <div className='col-span-3 space-y-2'>
+                        <label htmlFor="event_conclusion" className="text-black md:text-sm md:font-normal capitalize">
+                            Event Conclusion
+                        </label>
+                        <Textarea
+                            className="text-black shadow md:rounded-xl md:py-2"
+                            //   placeholder="Type here ..."
+                            id='event_conclusion'
+                            name='event_conclusion'
+                            readOnly
+                            value={expensedata ? expensedata.event_conclusion : ''}
+                        ></Textarea>
+                    </div>
+                </div>
+
                 <Table expensetabledata={expensedata?.actual_vendors} />
 
                 <div className='flex justify-end gap-2 pt-8'>
-                    <Button className='bg-[#5DBE74] px-6' onClick={()=>handleOpen('Approved')}>Approve</Button>
-                    <Button className='bg-[#4430BF] px-6' onClick={()=>handleOpen('Send Back')}>Send Back</Button>
-                    <Button className='bg-[#FF5757] px-6'onClick={()=>handleOpen('Rejected')}>Reject</Button>
+                    {
+                        view == "view" ?
+                            <></>
+                            : <>
+                                <Button className='bg-[#5DBE74] px-6' onClick={() => handleOpen('Approved')}>Approve</Button>
+                                <Button className='bg-[#4430BF] px-6' onClick={() => handleOpen('Send Back')}>Send Back</Button>
+                                <Button className='bg-[#FF5757] px-6' onClick={() => handleOpen('Rejected')}>Reject</Button>
+                            </>
+                    }
 
                 </div>
             </div>

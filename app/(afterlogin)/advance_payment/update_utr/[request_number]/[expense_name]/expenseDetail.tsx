@@ -155,7 +155,7 @@ const ExpensePage = ({ ...Props }: Props) => {
   const refno = useParams();
   const [formdata, setFormData] = useState<FormData>(
     {
-      name: Props.expensedata?.actual_vendors[0].name,
+      name: Props?.expensedata?.actual_vendors[0].name,
       document_no: Props.expensedata?.actual_vendors[0].document_no,
       invoice_date: Props.expensedata?.actual_vendors[0].invoice_date,
       invoice_amount: Props.expensedata?.actual_vendors[0].invoice_amount,
@@ -191,6 +191,7 @@ const ExpensePage = ({ ...Props }: Props) => {
     console.log(formdata.company_name,"this is company name")
 
   const gldropdown = async (value: any) => {
+    formdata.gl_code = '';
     try {
       const response = await fetch("/api/advanceApproval/getGL", {
         method: "POST",

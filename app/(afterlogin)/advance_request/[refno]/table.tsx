@@ -24,6 +24,7 @@ import Link from 'next/link';
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation';
 import ViewDocument from '@/components/view_document'
+import DeletePopup from '@/components/deleteDialog'
 type TableData = {
   name: string;
   event_date: string;
@@ -106,6 +107,10 @@ const table = ({ tableData }: Props) => {
   const [fileList, setFileList] = useState<File[]>([]);
   const base_url = process.env.NEXT_PUBLIC_FRAPPE_URL;
   const router = useRouter();
+  const [deletename, setDeleteName] = useState<string | null>();
+  const [deletepopup, setDeletePopup] = useState(false);
+
+
   const handleFileUpload: any = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     setFileList(files);
@@ -164,7 +169,7 @@ const table = ({ tableData }: Props) => {
 
   const handlefieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    const numericValue = name === 'advance' ? (value ? parseFloat(value) : 0) : value;
+    const numericValue = name === 'advance' ? (value ? parseFloat(value) : '') : value;
     setVendorDetails(prev => ({ ...prev, [name]: numericValue }));
   }
   const handleConclusionChange = (newConclusion: string) => {
@@ -208,8 +213,9 @@ const table = ({ tableData }: Props) => {
         actual_vendors: [...prev.actual_vendors, newVendor],
       }));
 
-      setVendorDetails({ vendor_type: '', vendor_name: '', advance: 0, file: '' });
+      setVendorDetails({ vendor_type: '', vendor_name: '', advance:0, file: '' });
       setFile(null);
+      setFileList([]);
     } catch (error) {
       console.error('Error uploading file:', error);
       alert('Failed to upload file. Please try again.');
@@ -249,9 +255,47 @@ const table = ({ tableData }: Props) => {
     setFileData(file);
     setOpen(true)
   };
+
+  const handleDeleteDialog = async (name:string) => {
+    console.log('indise delete ')
+    setDeleteName(name);
+    setDeletePopup(true)
+ };
+
+ const handleDeleteVendor = async () => {
+  console.log("deletename", deletename)
+  try {
+    const response = await fetch(
+      "/api/deleteVendor",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          name : deletename
+        })
+      }
+    );
+    if (response.ok) {
+      // const data = await response.json();
+      console.log( " Successful Delete response data");
+      // setTimeout(() => {
+      //   router.;
+      // }, 1000)
+    } else {
+      console.log("submission failed");
+    }
+  } catch (error) {
+    console.error("Error during Submission:", error);
+  }
+};
+
   console.log(fileList, 'fileList------------------------------------------')
 
   console.log(tabledata, 'tabledata------------------------------------------')
+  console.log(vendorDetails,'vendorDetails------------------------------------')
   return (
     <>
 
@@ -316,8 +360,9 @@ const table = ({ tableData }: Props) => {
                   ...prev,
                   vendor_type: value,
                 }))
-                  ;
+                  
               }}
+              value={vendorDetails.vendor_type?? ''}
             >
               <SelectTrigger className="dropdown">
                 <SelectValue placeholder="Select" />
@@ -337,12 +382,13 @@ const table = ({ tableData }: Props) => {
             </label>
             <Select
               onValueChange={(value: string) => {
-                setCompansationVendorName(value);
+                // setCompansationVendorName(value);
                 setVendorDetails((prev) => ({
                   ...prev,
                   vendor_name: value, // Update vendor_name in the vendorDetails state
                 }));
               }}
+              value={vendorDetails.vendor_name?? ''}
             >
               <SelectTrigger className="dropdown">
                 <SelectValue placeholder="Select" />
@@ -368,6 +414,7 @@ const table = ({ tableData }: Props) => {
               type='number'
               name='advance'
               onChange={handlefieldChange}
+              value={vendorDetails.advance?? ''}
             ></Input>
           </div>
         </div>
@@ -478,13 +525,13 @@ const table = ({ tableData }: Props) => {
                 </TableHead>
                 <TableHead
                   className={
-                    "text-center rounded-r-2xl text-[#625d5d] text-[15px] font-normal font-['Montserrat'] sticky right-0 z-50 bg-[#E0E9FF]"
+                    "text-center rounded-r-2xl text-[#625d5d] text-[15px] font-normal font-['Montserrat'] sticky right-0 z-20 bg-[#E0E9FF]"
                   }
                 >Action</TableHead>
               </TableRow>
             </TableHeader>
             {
-              tabledata.actual_vendors.length > 0 ?
+              tabledata?.actual_vendors?.length > 0 ?
                 <TableBody>
                   {tabledata &&
                     tabledata.actual_vendors.map((data, index) => {
@@ -503,7 +550,7 @@ const table = ({ tableData }: Props) => {
                           <TableCell>{data.utr_number}</TableCell>
                           <TableCell>{data.payment_date}</TableCell>
 
-                          <TableCell className='sticky right-0 z-50 gap-3 w-[120px] bg-white mt-2 flex border-l'>
+                          <TableCell className='sticky right-0 z-20 gap-3 w-[120px] bg-white mt-2 flex border-l'>
                             {/* <Link
                               href={`${base_url}${data.file}`}
                               target="_blank"
@@ -512,10 +559,9 @@ const table = ({ tableData }: Props) => {
                             > */}
                             {/* <Image src={'/svg/view.svg'} alt='viewsvg' width={24} height={18} /> */}
                             <button onClick={() => handleSetFileData(data.file)}><Image src={'/svg/view.svg'} alt='viewsvg' width={24} height={18} /></button>
-
                             {/* </Link> */}
-                            <Image src={'/svg/editIcon.svg'} alt='editsvg' width={20} height={18} />
-                            <Image src={'/svg/delete.svg'} alt='deletesvg' width={20} height={18} />
+                            {/* <Image src={'/svg/editIcon.svg'} alt='editsvg' width={20} height={18} /> */}
+                            <button onClick={() => handleDeleteDialog(data.name)} ><Image src={'/svg/delete.svg'} alt='deletesvg' width={20} height={18} /></button>
                           </TableCell>
                         </TableRow>
                       );
@@ -539,6 +585,9 @@ const table = ({ tableData }: Props) => {
         open &&
         <ViewDocument setClose={setOpen} data={fileData} />
       }
+{
+  deletepopup && <DeletePopup setClose={setDeletePopup} handleSubmit={handleDeleteVendor} />
+}
 
     </>
 
