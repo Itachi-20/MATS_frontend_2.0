@@ -11,81 +11,77 @@ import {
   } from "@/components/ui/table";
   import Image from 'next/image';
 
-  type File = {
-    name: string;
-    file_name: string;
-    file_url: string;
-};
+    type DocumentRow = {
+        name: string;
+        file_name: string;
+        file_url: string;
+    };
 
-type ActualVendor = {
-    name: string;
-    creation: string;
-    modified: string;
-    modified_by: string;
-    owner: string;
-    docstatus: number;
-    idx: number;
-    vendor_type: string;
-    actual_amount: number;
-    status: string;
-    vendor_name: string;
-    advance: number;
-    budget_category: string;
-    est_amount: number;
-    gst_included: number;
-    gst: string;
-    parent: string;
-    parentfield: string;
-    parenttype: string;
-    occurrence_no: number;
-    attachment: string | null;
-    event_conclusion: string | null;
-    advance_expense_check: number;
-    post_expense_check: number;
-    document_no: string | null;
-    invoice_date: string | null;
-    invoice_amount: number;
-    division: string;
-    nature: string | null;
-    gl_code: string | null;
-    zone: string | null;
-    finance_remark: string | null;
-    posting_date: string | null;
-    basic_amount: number;
-    tds: number;
-    cost_center: string | null;
-    company_name: string | null | undefined;
-    utr_number: string | null;
-    state: string;
-    invoice_number: string | null;
-    finance_gst: string | null;
-    net_amount: number;
-    cc_name: string | null ;
-    gl_name: string | null;
-    payment_date: string | null;
-    city: string | null;
-    file: string | null;
-    narration: string | null;
-    travel_expense_check: number;
-    company_code: string;
-    state_code: string;
-    files: File[];
-};
+    type ActualVendor = {
+        name: string;
+        // creation: string;
+        // modified: string;
+        // modified_by: string;
+        // owner: string;
+        // docstatus: number;
+        // idx: number;
+        vendor_type: string;
+        actual_amount: number;
+        status: string;
+        vendor_name: string;
+        advance: number;
+        // budget_category: string;
+        // est_amount: number;
+        // gst_included: number;
+        gst: string;
+        // parent: string;
+        // parentfield: string;
+        // parenttype: string;
+        // occurrence_no: number;
+        // attachment: string | null;
+        // event_conclusion: string | null;
+        // advance_expense_check: number;
+        // post_expense_check: number;
+        document_no: string | null;
+        invoice_date: string | null;
+        invoice_amount: number;
+        division: string;
+        nature: string | null;
+        gl_code: string | null;
+        zone: string | null;
+        // finance_remark: string | null;
+        posting_date: string | null;
+        basic_amount: number;
+        tds: number;
+        cost_center: string | null;
+        company_name: string;
+        utr_number: string | null;
+        state: string;
+        invoice_number: string | null;
+        // finance_gst: string | null;
+        net_amount: number;
+        // cc_name: string | null;
+        // gl_name: string | null;
+        payment_date: string | null;
+        // city: string | null;
+        file: string | null;
+        // narration: string | null;
+    };
 
   type Props = {
     expensetabledata: ActualVendor[] | undefined; // Props includes the tableData field
-    handleSetFileData: (value:File[])=>void
+    
   };
 
 const table = ({ ...Props }: Props) => {
-//   const [fileData, setFileData] = useState<File[] | undefined>();
-//   const [open, setOpen] = useState(false);
+  const [fileData, setFileData] = useState<DocumentRow[] | undefined>();
+  const [open, setOpen] = useState(false);
 
-    // const handleSetFileData = async (file: any) => {
-    //     // console.log(file, 'file in setfile ')
-    //     setFileData(file);
-    //     setOpen(true)
-    // };
+    const handleSetFileData = async (file: any) => {
+        // console.log(file, 'file in setfile ')
+        setFileData(file);
+        setOpen(true)
+      };
   return (
         <Table className={""}>
           <TableHeader className={"bg-[#E0E9FF]"}>
@@ -204,7 +200,7 @@ const table = ({ ...Props }: Props) => {
                         {/* <TableCell>{data.utr_number}</TableCell>
                         <TableCell>{data.payment_date}</TableCell> */}
                         <TableCell className='sticky right-0 z-20 gap-3 w-[120px] bg-white mt-2 flex border-l'>
-                          <button onClick={() => Props.handleSetFileData(data.files)}><Image src={'/svg/view.svg'} alt='viewsvg' width={24} height={18} /></button>
+                          <button onClick={() => handleSetFileData(data.file)}><Image src={'/svg/view.svg'} alt='viewsvg' width={24} height={18} /></button>
                           {/* <Image src={'/svg/view.svg'} alt='viewsvg' width={24}  height={18}/> */}
                           <Image src={'/svg/editIcon.svg'} alt='editsvg' width={20} height={18} />
                           <Image src={'/svg/delete.svg'} alt='deletesvg' width={20} height={18} />
