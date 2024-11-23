@@ -10,51 +10,165 @@ import { useRouter } from 'next/navigation';
 import DialogBox from './dialogbox';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, } from "@/components/ui/table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from "@/components/ui/select";
+import FilePopup from '../components/travel_desk/filePopup'
 
-type EventTable = {
-    vendor_type: string;
-    vendor_name: string;
-    actual_amount: number;
-    gst: number;
-    total_amount: number;
-    // attachment: File;
-    remakrs: string
+
+type occurrence_history = {
+    occurrence_no:number,
+    actual_amount:number,
+    gst:number,
+    total_amount:number,
+    occurrence_date:string
 }
 
-export default function LogisticActualBudget() {
+type file = {
+    name:string,
+    file_name:string,
+    file_url:string
+}
+
+type travel_vendors = {
+    vendor_type:string,
+    vendor_name:string,
+    actual_amount:number,
+    gst:number,
+    total_amount:number,
+    upload_bill:number,
+    remarks:string
+    files:file[]
+  }
+
+  type vendorName = {
+    name:string,
+    vendor_name:string
+  }
+
+  type vendorType ={
+    name:string,
+    vendor_type:string
+    }
+type Props = {
+    travel_vendors:travel_vendors[]
+    vendor_type:vendorType[]
+    dropdown_gst:{
+        name:string
+    }[]
+    refno:string
+    occurrence_history:occurrence_history[]
+}
+
+
+export default function LogisticActualBudget({...Props}:Props) {
     const router = useRouter();
     const [fileName, setFileName] = useState();
-
-    const events: EventTable[] = [
-        {
-            vendor_type: "Stationary",
-            vendor_name: "Vendor Name q",
-            actual_amount: 20000,
-            gst: 20000,
-            total_amount: 30000,
-            //   attachemnt: ,
-            remakrs: "discription",
-        },
-        {
-            vendor_type: "Stationary",
-            vendor_name: "Vendor Name q",
-            actual_amount: 20000,
-            gst: 20000,
-            total_amount: 30000,
-            //   attachemnt: ,
-            remakrs: "discription",
-        }
-    ];
-
-    const handleFileChange: any = (e: any) => {
-        setFileName(e.target.files[0]?.name)
-    };
-
+    const [vendorName,setVendorName] = useState<vendorName[]>();
+    const [actualAmount,setActualAmount] = useState<number | any>();
+    const [totalAmount,setTotaAmount] = useState<number | any>();
+    const [gst,setgst] = useState<any>();
+    const [file,setFile] = useState<FileList | null>();
+    const [vendorname,setvendorname] = useState<string>();
+    const [vendorType,setVendorType] = useState<string>();
+    const [remark,setRemarks] = useState<string>();
+    const [isFilePopup,setIsFilePopup] = useState<boolean>()
+    const [fileData,setFileData] = useState<file[]>()
     const handleClick = () => {
-        //   router.push("/event_list/${id}")
+        //router.push("/event_list/${id}")
     }
 
+
+    const handleFilePopup = (data:file[])=>{
+        setFileData(data);
+    }
+
+    const handleClose = ()=>{
+        setIsFilePopup((prev)=>!prev)
+        setFileData([]);
+    }
+
+
+    const getVendorName = async(value:string)=>{
+        try {
+            const response = await fetch(`/api/training_and_education/vendorName?vendor_type=${value}`,{
+                method:"GET",
+                headers:{
+                    "Content-Type": "application/json",
+                },
+                credentials:"include"
+            })
+            if(response.ok){
+                const data = await response.json();
+                setVendorName(data.data);
+            }
+        } catch (error) {
+            console.log("server error:- ",error)
+        }
+    }
+
+    const handleTotalAmount = async(value:number)=>{
+        if(value == 0){
+            setTotaAmount(actualAmount);
+        }else{
+         const amount = actualAmount?actualAmount * (value / 100):0;
+         const totalAmount = amount + (actualAmount?actualAmount:0);
+         setTotaAmount(totalAmount);
+        }
+    }
+
+
+    const handleFileUpload = (e:React.ChangeEvent<HTMLInputElement>)=>{
+        const files = (e.target as HTMLInputElement).files;
+        setFile(files);
+      }
+
+      const handleAdd = async()=>{
+        const formdata = new FormData();
+    
+        if (file && file.length > 0) {
+          for (let i = 0; i < file.length; i++) {
+            formdata.append("file", file[i]); 
+          }
+        } else {
+          console.log("No file to upload");
+          return;  
+        }
+          formdata.append("name",Props.refno)
+          formdata.append("vendor_type",vendorType as string);
+          formdata.append("vendor_name",vendorname as string)
+          formdata.append("amount",actualAmount)
+          formdata.append("gst",gst)
+          formdata.append("total_amount",totalAmount as string)
+          formdata.append("remark",remark as string)
+        try {
+          const response = await fetch(
+            `/api/travel_desk/vendor_add/`,
+            {
+              method: "POST",
+              headers: {
+                //"Content-Type": "multipart/form-data",
+              },
+              body:formdata,
+              credentials:'include'
+            }
+          );
+    
+          
+          if(response.ok) {
+            setVendorType("");
+            setFile(null);
+            setRemarks("");
+            setActualAmount(0);
+            setgst(0);
+            setTotaAmount(0);
+          } else {
+            console.log("Login failed");
+          }
+        } catch (error) {
+          console.error("Error during login:", error);
+        }
+      }
+      console.log(file)
     return (
+        <>
         <div className="md:pb-8">
             <div className="flex md:gap-6 justify-between items-center">
                 <h1 className="text-black md:text-[30px] md:font-medium uppercase md:pb-4">
@@ -86,14 +200,27 @@ export default function LogisticActualBudget() {
                     <label className="text-black md:text-sm md:font-normal capitalize">
                         vendor type<span className="text-[#e60000]">*</span>
                     </label>
-                    <Select>
+                    <Select
+                    onValueChange={(value)=>{getVendorName(value); setVendorType(value)}}
+                    >
                         <SelectTrigger className="text-black w-34 shadow focus-visible:ring-transparent lg:text-sm lg:rounded-[25px] lg:gap-4 sm:rounded-[50px] rounded-[50px] sm:text-[9px] sm:gap-[10px] gap-[9px] text-[9px] sm:font-normal sm:leading-[10.97px]">
                             <SelectValue placeholder="-Select-" />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="v1">v1</SelectItem>
-                            <SelectItem value="v2">v2</SelectItem>
-                            <SelectItem value="v3">v3</SelectItem>
+                            {
+                                Props && Props.vendor_type?.filter((data,index)=>{
+                                    if(data.vendor_type == "Hotel" || data.vendor_type == "Travel" || data.vendor_type == "Food"){
+                                        return(
+                                            data
+                                        )
+                                    }
+                                })
+                                .map((item,index)=>{
+                                    return (
+                                        <SelectItem value={item.name}>{item.vendor_type}</SelectItem>
+                                    )
+                                })
+                            }
                         </SelectContent>
                     </Select>
                 </div>
@@ -102,11 +229,22 @@ export default function LogisticActualBudget() {
                     <label className="text-black md:text-sm md:font-normal capitalize">
                         Vendor Name<span className="text-[#e60000]">*</span>
                     </label>
-                    <Input
-                        className="text-black shadow md:rounded-xl md:py-5"
-                        placeholder="Type Here"
-                        readOnly={true}
-                    ></Input>
+                    <Select
+                     onValueChange={(value)=>setvendorname(value)}
+                    >
+                        <SelectTrigger className="text-black w-34 shadow focus-visible:ring-transparent lg:text-sm lg:rounded-[25px] lg:gap-4 sm:rounded-[50px] rounded-[50px] sm:text-[9px] sm:gap-[10px] gap-[9px] text-[9px] sm:font-normal sm:leading-[10.97px]">
+                            <SelectValue placeholder="-Select-" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {
+                                vendorName?.map((item,index)=>{
+                                    return (
+                                        <SelectItem value={item.name}>{item.vendor_name}</SelectItem>
+                                    )
+                                })
+                            }
+                        </SelectContent>
+                    </Select>
                 </div>
 
                 <div className="flex flex-col md:gap-2">
@@ -116,7 +254,8 @@ export default function LogisticActualBudget() {
                     <Input
                         className="text-black shadow md:rounded-xl md:py-5"
                         placeholder="Type Here"
-                        readOnly={true}
+                        type='number'
+                        onChange={(e)=>setActualAmount(e.target.valueAsNumber)}
                     ></Input>
                 </div>
 
@@ -124,14 +263,20 @@ export default function LogisticActualBudget() {
                     <label className="text-black md:text-sm md:font-normal capitalize">
                         GST<span className="text-[#e60000]">*</span>
                     </label>
-                    <Select>
+                    <Select
+                    onValueChange={async(value:any)=>{ await handleTotalAmount(value); setgst(value)}}
+                    >
                         <SelectTrigger className="text-black w-34 shadow focus-visible:ring-transparent lg:text-sm lg:rounded-[25px] lg:gap-4 sm:rounded-[50px] rounded-[50px] sm:text-[9px] sm:gap-[10px] gap-[9px] text-[9px] sm:font-normal sm:leading-[10.97px]">
                             <SelectValue placeholder="-Select-" />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="G1">G1</SelectItem>
-                            <SelectItem value="G22">G2</SelectItem>
-                            <SelectItem value="G43">G3</SelectItem>
+                        {
+                                Props && Props.dropdown_gst?.map((item,index)=>{
+                                    return (
+                                        <SelectItem value={item.name}>{item.name}</SelectItem>
+                                    )
+                                })
+                            }
                         </SelectContent>
                     </Select>
                 </div>
@@ -143,6 +288,7 @@ export default function LogisticActualBudget() {
                     <Input
                         className="text-black shadow md:rounded-xl md:py-5"
                         placeholder="No data"
+                        value={totalAmount}
                         readOnly={true}
                     ></Input>
                 </div>
@@ -157,7 +303,7 @@ export default function LogisticActualBudget() {
                                 <path id="Vector" d="M17.5143 0.500028C16.4161 0.49724 15.3281 0.700933 14.3134 1.09934C13.2986 1.49774 12.3771 2.08295 11.6022 2.82116L1.36236 12.537C1.04822 12.8344 0.871512 13.238 0.871094 13.659C0.870677 14.0801 1.04659 14.484 1.36013 14.782C1.67367 15.08 2.09915 15.2476 2.54298 15.248C2.98681 15.2484 3.41263 15.0815 3.72676 14.7841L13.971 5.06408C14.924 4.23299 16.1787 3.78337 17.4729 3.80915C18.7671 3.83494 20.0008 4.33414 20.9161 5.20247C21.8315 6.07079 22.3577 7.24106 22.3849 8.46879C22.4121 9.69651 21.9381 10.8867 21.062 11.7907L9.24445 23.0011C8.92762 23.2812 8.50856 23.4336 8.07557 23.4264C7.64258 23.4191 7.22945 23.2527 6.92323 22.9622C6.61701 22.6718 6.4416 22.2799 6.43396 21.8691C6.42632 21.4584 6.58705 21.0608 6.88227 20.7603L18.6999 9.54992C19.014 9.25221 19.1906 8.84832 19.1908 8.4271C19.191 8.00587 19.0148 7.60182 18.701 7.30383C18.3871 7.00584 17.9614 6.83832 17.5173 6.83812C17.0733 6.83793 16.6473 7.00507 16.3332 7.30278L4.51341 18.5174C3.6373 19.4214 3.16332 20.6116 3.19051 21.8393C3.21769 23.067 3.74393 24.2373 4.65929 25.1056C5.57465 25.974 6.8083 26.4732 8.10253 26.4989C9.39675 26.5247 10.6514 26.0751 11.6044 25.244L23.422 14.0337C24.2007 13.2992 24.8181 12.4256 25.2385 11.4633C25.6589 10.5009 25.8739 9.46908 25.8711 8.42741C25.8687 6.32562 24.9875 4.31056 23.4208 2.82438C21.8541 1.33819 19.7299 0.502267 17.5143 0.500028Z" fill="#4430BF" />
                             </svg>
                             <span className="text-[18px] font-medium text-[#4430BF] ">{fileName ? fileName : 'Attacments'}</span>
-                            <Input type="file" className="hidden" onChange={handleFileChange} />
+                            <Input type="file" className="hidden" onChange={(e)=>handleFileUpload(e)} multiple />
                         </label>
                     </div>
                 </div>
@@ -166,13 +312,13 @@ export default function LogisticActualBudget() {
                     <label className="lable">
                         Remarks
                     </label>
-                    <Textarea className='text-black shadow-md' placeholder='No Data' readOnly />
+                    <Textarea onChange={(e)=>setRemarks(e.target.value)} className='text-black shadow-md' placeholder='No Data' />
                 </div>
                 <div>
 
                 </div>
                 <div className='flex justify-end relative'>
-                    <button className='px-6 py-[6px] border-[1px] border-[#4430BF] text-[#4430BF] rounded-[5px] flex justify-end absolute bottom-0 text-[18px] font-normal leading-normal'>Add</button>
+                    <button className='px-6 py-[6px] border-[1px] border-[#4430BF] text-[#4430BF] rounded-[5px] flex justify-end absolute bottom-0 text-[18px] font-normal leading-normal'onClick={()=>handleAdd()}>Add</button>
                 </div>
             </div>
 
@@ -223,37 +369,30 @@ export default function LogisticActualBudget() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {events &&
-                            events.map((data, index) => {
+                        {Props &&
+                            Props.travel_vendors?.map((data, index) => {
                                 return (
-                                    <TableRow key={index} className="text-center text-nowrap lg:text-[16px] sm:text-[10px] text-[10px] font-light leading-normal font-['Poppins'] border-b border-slate-200">
+                                    <TableRow key={index} className="text-black text-center text-nowrap lg:text-[16px] sm:text-[10px] text-[10px] font-light leading-normal font-['Poppins'] border-b border-slate-200">
                                         <TableCell>{data.vendor_type}</TableCell>
                                         <TableCell>{data.vendor_name}</TableCell>
                                         <TableCell>{data.actual_amount}</TableCell>
                                         <TableCell>{data.gst}</TableCell>
                                         <TableCell>{data.total_amount}</TableCell>
-                                        <TableCell>{fileName}</TableCell>
-                                        <TableCell>{data.remakrs}</TableCell>
+                                        <TableCell>
+                                            
+                                                        
+                                        <div onClick={()=>{handleFilePopup(data.files);setIsFilePopup((prev)=>!prev)}} className='flex justify-center cursor-pointer'>
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#4430BF"><path d="M320-240h320v-80H320v80Zm0-160h320v-80H320v80ZM240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v480q0 33-23.5 56.5T720-80H240Zm280-520v-200H240v640h480v-440H520ZM240-800v200-200 640-640Z"/></svg></div>
+                                            
+                                        </TableCell>
+                                        <TableCell>{data.remarks}</TableCell>
                                         <TableCell className="sticky right-0 bg-white flex lg:space-x-7 sm:space-x-5 space-x-2 border-l justify-end mr-4 border-slate-200">
-                                            <Image src={"/svg/editIcon.svg"} width={17} height={20} alt="view-svg" className="cursor-pointer" onClick={handleClick} className="lg:w-[17px] lg:h-[20px] sm:w-[15px] sm:h-[18px] w-[14px] h-[16px] cursor-pointer" />
-                                            <Image src={"/svg/delete.svg"} width={15} height={20} alt="delete-svg" className="cursor-pointer mr-1" className="lg:w-[15px] lg:h-[20px] sm:w-[12px] sm:h-[17px] w-[8px] h-[13px] cursor-pointer" />
+                                            <Image src={"/svg/editIcon.svg"} width={17} height={20} alt="view-svg" className="cursor-pointer lg:w-[17px] lg:h-[20px] sm:w-[15px] sm:h-[18px] w-[14px] h-[16px]" onClick={handleClick} />
+                                            <Image src={"/svg/delete.svg"} width={15} height={20} alt="delete-svg" className="mr-1 lg:w-[15px] lg:h-[20px] sm:w-[12px] sm:h-[17px] w-[8px] h-[13px] cursor-pointer" />
                                         </TableCell>
                                     </TableRow>
                                 );
                             })}
-                                                       
-                          <TableRow> 
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>               
-                            <TableCell className='text-right'>Total</TableCell>               
-                            <TableCell className='flex justify-end text-4 font-medium leading-normal font-["Poppins"]'>
-                                <span className='font-normal px-5 py-[10px] bg-[#F5F5F5]'>40,000</span>
-                            </TableCell>                            
-                         </TableRow>
                     </TableBody>
                 </Table>
             </div>
@@ -307,13 +446,12 @@ export default function LogisticActualBudget() {
                            
                         </TableRow>
                     </TableHeader>
-                    <TableBody>
-                        {events &&
-                            events.map((data, index) => {
+                    <TableBody className='text-black'>
+                        {Props && Props.occurrence_history?.map((data, index) => {
                                 return (
                                     <TableRow key={index} className="text-center text-nowrap lg:text-[16px] sm:text-[10px] text-[10px] font-light leading-normal font-['Poppins'] border-b border-slate-200">
-                                        <TableCell>{data.vendor_type}</TableCell>
-                                        <TableCell>{data.vendor_name}</TableCell>
+                                        <TableCell>{data.occurrence_no}</TableCell>
+                                        <TableCell>{data.occurrence_date}</TableCell>
                                         <TableCell>{data.actual_amount}</TableCell>
                                         <TableCell>{data.gst}</TableCell>
                                         <TableCell>{data.total_amount}</TableCell>
@@ -324,21 +462,18 @@ export default function LogisticActualBudget() {
                                     </TableRow>
                                 );
                             })}
-                                                       
-                          <TableRow>                             
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>               
-                            <TableCell className='text-right'>Total</TableCell>               
-                            <TableCell className='flex justify-end text-4 font-medium leading-normal font-["Poppins"]'>
-                                <span className='font-normal px-5 py-[10px] bg-[#F5F5F5]'>40,000</span>
-                            </TableCell>                            
-                         </TableRow>
                     </TableBody>
                 </Table>
             </div>
            </div>
         </div>
+        {
+            isFilePopup && 
+            <FilePopup
+            handleClose={handleClose}
+            data = {fileData}
+            />
+        }
+        </>
     )
 }
