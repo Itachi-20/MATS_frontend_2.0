@@ -70,7 +70,7 @@ export default function Company() {
             </div>
       
              <div className="flex items-center space-x-3 py-5">
-                    <div className=" space-y-1 w-80">
+                    <div className=" space-y-1 w-">
                         <Label className="text-nowrap">Company Name<span className="text-red-500">*</span></Label>
                         <Input
                             type="text"                        

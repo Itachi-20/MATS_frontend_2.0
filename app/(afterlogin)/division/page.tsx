@@ -2,11 +2,10 @@
 import React from "react";
 import Image from "next/image";
 import { useState } from "react";
-import Pagination from "@/components/pagination";
-import { useRouter } from "next/navigation";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import Pagination from "@/components/pagination";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, } from "@/components/ui/table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from "@/components/ui/select";
 
@@ -28,11 +27,8 @@ type DivisionTable = {
     budget_sub_type: string;
 };
 
-
-
 export default function Division({initialValue}:{initialValue:string}) {
 
-    const router = useRouter();
     const [currentPage, setCurrentPage] = useState(1);
     const totalPages = 10;  
     const [isEditing, setIsEditing] = useState(false);
@@ -47,8 +43,6 @@ export default function Division({initialValue}:{initialValue:string}) {
         setInputValue(initialValue);
         setIsEditing(false);
       };
-
-
 
     const handlePageChange = (page: React.SetStateAction<number>) => {
         setCurrentPage(page);
@@ -218,7 +212,7 @@ export default function Division({initialValue}:{initialValue:string}) {
                 }
 
             <div className="border bg-white h-full p-4 rounded-[18px]">
-                <Table className={""}>
+                <Table>
                     <TableHeader className={"bg-[#E0E9FF]"}>
                         <TableRow className={"text-nowrap rounded-r-2xl"}>
                             <TableHead
