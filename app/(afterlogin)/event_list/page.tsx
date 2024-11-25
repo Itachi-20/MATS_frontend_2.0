@@ -191,7 +191,7 @@ export default function EventList () {
                           <TableCell>{data.event_end_date}</TableCell>
                           <TableCell>{data.event_requestor}</TableCell>
                           <TableCell>{data.event_venue}</TableCell>
-                          <TableCell><Link rel="noopener noreferrer" className="text-blue-600 underline" href={`/advance_payment/upload_advance_request/${data.name}`}>Request</Link></TableCell>
+                          <TableCell><Link rel="noopener noreferrer" className="bg-[#F0EDFF] text-[#4430BF] text-md rounded-md font-normal p-2 hover:underline" href={`/advance_request/${data.name}`}>Request</Link></TableCell>
                           <TableCell >{data.event_status}</TableCell>
                           <TableCell >{data.post_activity_status}</TableCell>                        
                           <TableCell className="sticky right-0 bg-[white] z-50 flex space-x-8 border-l border-slate-200 "> 
