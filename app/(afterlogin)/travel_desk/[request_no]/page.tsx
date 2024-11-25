@@ -75,6 +75,7 @@ type dropdown = {
 export default async function BudgetRequestDetail({...Props})  {
   const {request_no} = await Props.params;
   const cookie = await cookies();
+  const role = cookie.get("role")?.value;
   const data:travel_desk_data = await travel_desk_data(cookie,request_no);
   const dropdown:dropdown = await dropdownData(cookie);
   return (
@@ -91,6 +92,7 @@ export default async function BudgetRequestDetail({...Props})  {
         dropdown_gst = {dropdown?.gst}
         refno = {request_no}
         occurrence_history={data.occurrence_history}
+        role = {role}
         />
     </div>
   )}

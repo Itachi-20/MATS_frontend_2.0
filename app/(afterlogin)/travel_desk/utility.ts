@@ -1,4 +1,4 @@
-export const getTableData = async(cookie:string)=>{
+export const getTableData = async(cookie:any)=>{
     try {
         const response = await fetch(`${process.env.FRAPPE_URL}/api/method/matsapp.api.event.event.get_travel_expense_list`,{
             method:"GET",
@@ -19,7 +19,7 @@ export const getTableData = async(cookie:string)=>{
 }
 
 
-export const travel_desk_data = async(cookie:string,refno:string)=>{
+export const travel_desk_data = async(cookie:any,refno:string)=>{
     try {
         const response = await fetch(`${process.env.FRAPPE_URL}/api/method/matsapp.api.utils.utils.get_travel_expense_request_data?name=${refno}`,{
             method:"GET",
@@ -39,7 +39,7 @@ export const travel_desk_data = async(cookie:string,refno:string)=>{
 }
 
 
-export const dropdownData = async(cookie:string)=>{
+export const dropdownData = async(cookie:any)=>{
     try {
         const response = await fetch(`${process.env.FRAPPE_URL}/api/method/matsapp.api.event.event.get_field_data`,{
             method:"GET",

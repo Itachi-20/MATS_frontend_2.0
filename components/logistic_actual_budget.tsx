@@ -55,6 +55,7 @@ type Props = {
     }[]
     refno:string
     occurrence_history:occurrence_history[]
+    role:string | undefined
 }
 
 
@@ -166,6 +167,31 @@ export default function LogisticActualBudget({...Props}:Props) {
           console.error("Error during login:", error);
         }
       }
+      console.log(Props.refno)
+      const handleSubmit = async(type:string)=>{
+        try {
+            const response = await fetch(`/api/travel_desk/submit/`,{
+                method:"POST",
+                headers:{
+                    'Content-Type':"application/json"
+                },
+                credentials:"include",
+                body:JSON.stringify({
+                    name:Props.refno,
+                    action:type
+                })
+
+            })
+            if(response.ok){
+                console.log(await response.json());
+                console.log("successfully submited");
+            }
+        } catch (error) {
+            console.log(error)
+        }
+      }
+
+
       console.log(file)
     return (
         <>
@@ -398,15 +424,21 @@ export default function LogisticActualBudget({...Props}:Props) {
             </div>
 
             <div className="flex justify-end pt-20 gap-4">
-                <Button className="bg-white text-black border rounded-[8px] text-lg leading-normal font-normal px-[50px] py-[10px] font-['Poppins']">
+                <Button onClick={()=>{handleSubmit("Draft")}} className={`${Props.role == "Event Accounts"?"hidden":""} bg-white text-black border rounded-[8px] text-lg leading-normal font-normal px-[50px] py-[10px] font-['Poppins']`}>
                     Save as Draft
                 </Button>
                 <Link href="/">
-                    <Button className="bg-white text-black border rounded-[8px] text-lg leading-normal font-normal px-[50px] py-[10px] font-['Poppins']">
+                    <Button className={`bg-white text-black border rounded-[8px] text-lg leading-normal font-normal px-[50px] py-[10px] font-['Poppins']`}>
                         Back
                     </Button>
                 </Link>
-                <DialogBox button={"Submit"} msg={"Submitted Successfully"} />
+                <Button onClick={()=>handleSubmit("Submit")} className={`${Props.role == "Event Accounts"?"hidden":""} bg-white text-black border rounded-[8px] text-lg leading-normal font-normal px-[50px] py-[10px] font-['Poppins']`}>
+                    Submit
+                </Button>
+                <Button onClick={()=>handleSubmit("Approve")} className={`${Props.role == "Event Accounts"?"":"hidden"} bg-white text-black border rounded-[8px] text-lg leading-normal font-normal px-[50px] py-[10px] font-['Poppins']`}>
+                    Approve
+                </Button>
+                {/* <DialogBox button={"Submit"} msg={"Submitted Successfully"} /> */}
                 
             </div>
            <div>
@@ -456,8 +488,8 @@ export default function LogisticActualBudget({...Props}:Props) {
                                         <TableCell>{data.gst}</TableCell>
                                         <TableCell>{data.total_amount}</TableCell>
                                         <TableCell className="sticky right-0 bg-white flex lg:space-x-7 sm:space-x-5 space-x-2 border-l justify-end mr-4 border-slate-200">
-                                            <Image src={"/svg/editIcon.svg"} width={17} height={20} alt="view-svg" className="cursor-pointer" onClick={handleClick} className="lg:w-[17px] lg:h-[20px] sm:w-[15px] sm:h-[18px] w-[14px] h-[16px] cursor-pointer" />
-                                            <Image src={"/svg/view.svg"} width={15} height={20} alt="delete-svg" className="cursor-pointer mr-1" className="lg:w-[15px] lg:h-[20px] sm:w-[12px] sm:h-[17px] w-[8px] h-[13px] cursor-pointer" />
+                                            <Image src={"/svg/editIcon.svg"} width={17} height={20} alt="view-svg" onClick={handleClick} className="lg:w-[17px] lg:h-[20px] sm:w-[15px] sm:h-[18px] w-[14px] h-[16px] cursor-pointer" />
+                                            <Image src={"/svg/view.svg"} width={15} height={20} alt="delete-svg" className="lg:w-[15px] lg:h-[20px] mr-1 sm:w-[12px] sm:h-[17px] w-[8px] h-[13px] cursor-pointer" />
                                         </TableCell>
                                     </TableRow>
                                 );
