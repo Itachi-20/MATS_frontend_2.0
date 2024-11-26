@@ -185,15 +185,16 @@ export default function EventList () {
                       return (
                         <TableRow key={index} className="text-center text-nowrap">
                           <TableCell>{data.name}</TableCell>
-                          <TableCell>{data.event_type}</TableCell>
                           <TableCell>{data.event_name}</TableCell>
+                          <TableCell>{data.event_type}</TableCell>
                           <TableCell>{data.event_start_date}</TableCell>
                           <TableCell>{data.event_end_date}</TableCell>
                           <TableCell>{data.event_requestor}</TableCell>
                           <TableCell>{data.event_venue}</TableCell>
                           <TableCell>{data.advance}</TableCell>
-                          <TableCell >{data.event_status}</TableCell>
-                          <TableCell >{data.post_activity_status}</TableCell>                        
+                          <TableCell>{data.event_status}</TableCell>
+                          {/* <TableCell>{data.post_activity_status}</TableCell>*/}
+                          <TableCell><Button className="border hover:bg-[#E0E9FF]" onClick={()=>router.push(`/post_expense/upload/${data.name}`)}>request</Button></TableCell>
                           <TableCell className="sticky right-0 bg-[white] z-50 flex space-x-8 border-l border-slate-200 "> 
                               <Image src={"/svg/view.svg"} width={17} height={20} alt="view-svg" className="cursor-pointer" onClick={()=>handleClick(data.name)} />                        
                           </TableCell>

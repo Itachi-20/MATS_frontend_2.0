@@ -239,17 +239,21 @@ const page = () => {
     const [open, setOpen] = useState(false);
     const [successprop, setSuccessprop] = useState(false);
 
+    const handleSuccessProp = async()=>{
+        setCommentBox(false);
+        setSuccessprop(!successprop);
+        setTimeout(()=>{router.push('/post_expense_approval/')},1000);
+    }
     const handleSetFileData = async (file: any) => {
         // console.log(file, 'file in setfile ')
         setFileData(file);
         setOpen(true)
     };
-
     const eventDataApi = async () => {
         console.log("inside event Data")
         try {
             const response = await fetch(
-                "/api/postExpenseApprovalData",
+                "/api/postExpenseApproval/postExpenseApprovalData",
                 {
                     method: "POST",
                     headers: {
@@ -304,7 +308,6 @@ const page = () => {
             console.error("Error during login:", error);
         }
     };
-
     const dropdownDataApi = async () => {
         console.log("inside event Data")
         try {
@@ -331,7 +334,6 @@ const page = () => {
             console.error("Error during login:", error);
         }
     };
-    
     const handleApproveRejectSendBack = async (remark:string) => {
         if(formdata){formdata.action = action;}
         if(formdata){formdata.remark = remark;}
@@ -354,7 +356,7 @@ const page = () => {
           );
           if (response.ok) {
             const data = await response.json();
-            setSuccessprop(true);
+            handleSuccessProp();
             console.log(data, "response data");
           } else {
             console.log("submission failed");
@@ -362,17 +364,14 @@ const page = () => {
         } catch (error) {
           console.error("Error during Submission:", error);
         }
-      };
-      
-      const handlefieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }) as FormData);
-      }
-      
+    };
+    const handlefieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }) as FormData);
+    }
     const handleSelectChange = (value: string, name: string) => {
         setFormData((prev) => ({ ...prev, [name]: value }) as FormData);
     };
-
     const handleOpen = (value: string) => {
         setAction(value)
         setCommentBox(prev => !prev)
@@ -449,7 +448,7 @@ const page = () => {
             </div>
             {opencommentbox && <Comment_box handleClose={handleOpen} handleApproveRejectSendBack={handleApproveRejectSendBack} />}
             {open &&<ViewDoc setClose={setOpen} data={fileData}/>}
-            {successprop && <SuccessProp setClose={setSuccessprop} pathname='/post_expense_approval/'/>}
+            {successprop && <SuccessProp setClose={setSuccessprop} title={"Post Expense Approval"}/>}
         </>
     )
 }

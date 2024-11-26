@@ -2,15 +2,15 @@ import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {
     try {
-        const body = await req.json();
+        const formData = await req.formData();
         const cookies = req.headers.get("cookie")
         const response = await fetch(`${process.env.FRAPPE_URL}/api/method/matsapp.api.utils.utils.post_expense_request`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
+                // 'Content-Type': 'application/json',
                 'Cookie': cookies as string 
             },
-            body:JSON.stringify(body),
+            body:formData,
             credentials:'include'
         });
 

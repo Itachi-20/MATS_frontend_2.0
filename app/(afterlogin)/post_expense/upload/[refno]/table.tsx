@@ -24,12 +24,14 @@ import Link from 'next/link';
 import UploadExport from "./export_popup";
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation';
-import ViewDocument from '@/components/viewDocument'
+import ViewDocument from '@/components/viewDocument';
+import { useParams } from 'next/navigation';
+import Ondeleteprop from '@/components/onDeleteProp';
 
 type ImportFiles = {
-    name: string,
-    file_name: string,
-    file_url: string
+  name: string,
+  file_name: string,
+  file_url: string
 }
 
 type TableData = {
@@ -88,7 +90,7 @@ type VendorData = {
   vendor_type: string;
   vendor_name: string;
   advance: number;
-  file: string;
+  file: File | null;
 };
 type DocumentRow = {
   name: string,
@@ -101,6 +103,8 @@ const table = ({ tableData }: Props) => {
 
   const [open, setOpen] = useState(false);
   const [exportopen, setExportOpen] = useState(false);
+  const [isDeletePropOpen, setIsDeletePropOpen] = useState(false);
+  const [deleteRecordname, setDeleteRecordname] = useState('');
   const [compansationVendorName, setCompansationVendorName] = useState("");
   const [dropdownData, setDropdownData] = useState<dropdownData | null>(null);
   const [vendorName, setVendorName] = useState<vendorName | null>(null);
@@ -109,15 +113,44 @@ const table = ({ tableData }: Props) => {
     vendor_type: '',
     vendor_name: '',
     advance: 0,
-    file: '',
+    file: null,
   });
   const [file, setFile] = useState<FileList | null>();
   const [fileData, setFileData] = useState<DocumentRow[] | undefined>();
   const [fileList, setFileList] = useState<File[]>([]);
   const base_url = process.env.NEXT_PUBLIC_FRAPPE_URL;
   const router = useRouter();
+  const params = useParams();
 
-  const handleRecordDeletion = async(name:string) => {
+  const fetchData = async()=>{
+    console.log("inside fetchData")
+    try {
+      const cookie = document.cookie;
+      const Cookie = cookie.toString();
+      const tableData = await fetch(
+        `/api/postExpense/fetchData`,
+        {
+          method: "POST",
+          headers:{
+            "Content-Type": "application/json",
+            "Cookie":Cookie
+          },
+          body:JSON.stringify({name:params.refno})
+        }
+      );
+      if(tableData.ok){
+        const data = await tableData.json();
+        console.log("data ",data)
+        setTableData(data.data)
+        return data.data
+      }
+      
+    } catch (error) {
+      console.log(error,"something went wrong");
+    }
+  }
+
+  const handleRecordDeletion = async () => {
     try {
       const response = await fetch(
         "/api/postExpense/deleteRecord",
@@ -128,29 +161,35 @@ const table = ({ tableData }: Props) => {
           },
           credentials: 'include',
           body: JSON.stringify({
-            name: name
+            name: deleteRecordname
           })
         }
       );
       if (response.ok) {
-        console.log("SUccessfull deletion")
+        setIsDeletePropOpen(false);
+        console.log("respoonse ok delete")
+        fetchData()
+        console.log("Successfull deletion")
       } else {
+        setIsDeletePropOpen(false)
         console.log("submission failed");
       }
     } catch (error) {
+      setIsDeletePropOpen(false)
       console.error("Error during Submission:", error);
     }
   }
-
   const handleExport = () => {
     setExportOpen(prevState => !prevState);
-};
-
-  const handleFileUpload: any = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []);
-    setFileList(files);
   };
+  const handleFileUpload: any = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = (e.target as HTMLInputElement).files;
+    setFile(files);
+    const filelist = Array.from(e.target.files || []);
+    setFileList(filelist);
 
+
+  };
   const handleVendorTypeChangeApi = async (value: string) => {
     try {
       const response = await fetch(
@@ -176,7 +215,6 @@ const table = ({ tableData }: Props) => {
       console.error("Error during login:", error);
     }
   };
-
   const dropdown = async () => {
 
     try {
@@ -200,6 +238,7 @@ const table = ({ tableData }: Props) => {
 
   useEffect(() => {
     dropdown();
+    fetchData()
   }, [])
 
   const handlefieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -213,7 +252,6 @@ const table = ({ tableData }: Props) => {
       event_conclusion: newConclusion,
     }));
   };
-
   const addVendor = async () => {
     console.log("fileList", fileList);
     if (!fileList) {
@@ -222,34 +260,43 @@ const table = ({ tableData }: Props) => {
     }
 
     const formData = new FormData();
-    if (fileList && fileList.length > 0) {
-      for (let i = 0; i < fileList.length; i++) {
-        formData.append("file", fileList[i]);
+    formData.append("vendor_type", vendorDetails.vendor_type)
+    formData.append("vendor_name", vendorDetails.vendor_name)
+    formData.append("advance", vendorDetails.advance as any)
+    formData.append("name", params.refno as any)
+    if (file && file.length > 0) {
+      for (let i = 0; i < file.length; i++) {
+        formData.append("file", file[i]);
       }
     } else {
       console.log("No file to upload");
       return;
     }
+    formData.append("vendor_type", vendorDetails.vendor_type);
+    formData.append("vendor_name", vendorDetails.vendor_name);
+    // formData.append("advance",vendorDetails.advance);
     try {
 
-      const response = await fetch('/api/multipleFileUpload', { method: 'POST', body: formData });
+      const response = await fetch('/api/postExpense/postExpenseRequest', {
+        method: "POST",
+        headers: {
+          // "Content-Type": "application/json",
+        },
+        credentials: 'include',
+        body: formData
+      });
 
       if (!response.ok) {
         throw new Error('File upload failed');
       }
 
       const data = await response.json();
-      const file = data.message.files;
-      console.log("response data upload add", data)
-      const newVendor = { ...vendorDetails, file: file };
+      const file = data.message;
 
-      setTableData(prev => ({
-        ...prev,
-        actual_vendors: [...prev.actual_vendors, newVendor],
-      }));
-
-      setVendorDetails({ vendor_type: '', vendor_name: '', advance: 0, file: '' });
+      fetchData();
+      setVendorDetails({ vendor_type: '', vendor_name: '', advance: 0, file: null });
       setFile(null);
+      setFileList([]);
     } catch (error) {
       console.error('Error uploading file:', error);
       alert('Failed to upload file. Please try again.');
@@ -257,10 +304,11 @@ const table = ({ tableData }: Props) => {
   };
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    console.log("formdata before submit", tabledata)
+    console.log("formdata before submit", tabledata);
+
     try {
       const response = await fetch(
-        "/api/postExpenseRequest",
+        "/api/postExpense/postExpenseRequest",
         {
           method: "POST",
           headers: {
@@ -283,12 +331,16 @@ const table = ({ tableData }: Props) => {
       console.error("Error during Submission:", error);
     }
   };
-
   const handleSetFileData = async (file: any) => {
     console.log(file, 'file in setfile ')
     setFileData(file);
     setOpen(true)
   };
+
+ const handleDeletePopup  = async(name : any) =>{
+  setDeleteRecordname(name)
+  setIsDeletePropOpen(true)
+ }
   console.log(fileList, 'fileList------------------------------------------')
 
   console.log(tabledata, 'tabledata------------------------------------------')
@@ -413,10 +465,6 @@ const table = ({ tableData }: Props) => {
         </div>
 
         <div className='flex justify-end gap-2 pb-7'>
-        <Button className='text-[#4430BF] bg-[#F0EDFF] gap-2' onClick={handleExport}>
-                        <Image src={'/svg/import.svg'} alt='importsvg' width={20} height={20} />
-                        Import Document
-                    </Button>
           <label className="flex items-center gap-2 px-2 bg-[#F0EDFF] rounded-md shadow-sm cursor-pointer border-[1px]">
             <Image src={'/svg/download.svg'} alt='downloadsvg' width={20} height={20} />
             <span className="font-medium text-[#4430BF]">
@@ -521,14 +569,14 @@ const table = ({ tableData }: Props) => {
                 </TableHead>
                 <TableHead
                   className={
-                    "text-center rounded-r-2xl text-[#625d5d] text-[15px] font-normal font-['Montserrat'] sticky right-0 z-50 bg-[#E0E9FF]"
+                    "text-center rounded-r-2xl text-[#625d5d] text-[15px] font-normal font-['Montserrat'] sticky right-0 z-20 bg-[#E0E9FF]"
                   }
                 >Action</TableHead>
               </TableRow>
             </TableHeader>
             {
               tabledata.actual_vendors &&
-              tabledata.actual_vendors.length > 0 ?
+                tabledata.actual_vendors.length > 0 ?
                 <TableBody>
                   {tabledata &&
                     tabledata.actual_vendors.map((data, index) => {
@@ -547,19 +595,15 @@ const table = ({ tableData }: Props) => {
                           <TableCell>{data.utr_number}</TableCell>
                           <TableCell>{data.payment_date}</TableCell>
 
-                          <TableCell className='sticky right-0 z-50 gap-3 w-[120px] bg-white mt-2 flex border-l'>
-                            {/* <Link
-                              href={`${base_url}${data.file}`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-blue-600 underline"
-                            > */}
-                            {/* <Image src={'/svg/view.svg'} alt='viewsvg' width={24} height={18} /> */}
-                            <Button onClick={() => handleSetFileData(data.file)}>View</Button>
-
-                            {/* </Link> */}
+                          <TableCell className='sticky right-0 z-20 gap-4 w-[120px] bg-white mt-2 flex border-l'>
+                            <div className='p-0' onClick={() => handleSetFileData(data.files)}>
+                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
+                                <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
+                                <path fillRule="evenodd" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 0 1 0-1.113ZM17.25 12a5.25 5.25 0 1 1-10.5 0 5.25 5.25 0 0 1 10.5 0Z" clipRule="evenodd" />
+                              </svg>
+                            </div>
                             <Image src={'/svg/editIcon.svg'} alt='editsvg' width={20} height={18} />
-                            <Image src={'/svg/delete.svg'} alt='deletesvg' width={20} height={18} onClick={()=>handleRecordDeletion(data.name)}/>
+                            <Image src={'/svg/delete.svg'} alt='deletesvg' width={20} height={18} onClick={() => {handleDeletePopup(data.name)}} />
                           </TableCell>
                         </TableRow>
                       );
@@ -576,14 +620,15 @@ const table = ({ tableData }: Props) => {
         </div>
 
         <div className='flex justify-end gap-2 pt-8'>
-          <Button className='bg-[#4430BF] px-10' onClick={handleSubmit}>Submit</Button>
+          <Button className='bg-[#4430BF] px-10 text-white' onClick={handleSubmit}>Submit</Button>
         </div>
       </div>
       {
         open &&
         <ViewDocument setClose={setOpen} data={fileData} />
       }
-      {exportopen && <UploadExport handleExport={handleExport} data={tabledata.import_files}/>}
+      {exportopen && <UploadExport handleExport={handleExport} data={tabledata.import_files} />}
+      {isDeletePropOpen && <Ondeleteprop setClose={setIsDeletePropOpen} handleDelete={handleRecordDeletion}/>}
     </>
 
   )

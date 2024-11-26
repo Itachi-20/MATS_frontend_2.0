@@ -235,7 +235,7 @@ const page = () => {
         console.log("inside event Data")
         try {
             const response = await fetch(
-                "/api/postExpenseApprovalData",
+                "/api/postExpenseApproval/postExpenseApprovalData",
                 {
                     method: "POST",
                     headers: {

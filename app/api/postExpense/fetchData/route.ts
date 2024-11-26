@@ -6,9 +6,9 @@ export async function POST(req: Request) {
         const cookies = req.headers.get("cookie")
         const name = body.name;
         console.log("name in body ",name)
-        const response = await fetch(`${process.env.FRAPPE_URL}/api/method/matsapp.api.utils.utils.delete_event_records?name=${name}`, {
+        const response = await fetch(`${process.env.FRAPPE_URL}/api/method/matsapp.api.event.event.get_post_expense_request_data?name=${name}`, {
             // const response = await fetch(`${process.env.FRAPPE_URL}/api/resource/Child Vendor/${name}`, {
-            method: 'DELETE',
+            method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
                 'Cookie': cookies as string 
