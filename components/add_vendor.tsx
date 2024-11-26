@@ -11,6 +11,18 @@ import {
 import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
 import AttachmentSvg from '@/public/svg/attachment.svg';
+type formData = {
+  name: string;
+  vendor_type: string;
+  vendor_name: string;
+  remark: string;
+  pan_number: string;
+  vendor_code: string;
+  email: string;
+  contact_number: string;
+  document:Document[];
+};
+
 type Props = {
   isAddVendor: () => void
   isAddDocument: () => void
@@ -18,7 +30,7 @@ type Props = {
     name: string,
     vendor_type: string
   }[] | null,
-  formdata:number,
+  formdata:{} | formData ,
   handlefieldChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
   handleSelectChange: (value: string, name: string) => void;
   handleSubmit: (e: React.MouseEvent<HTMLButtonElement>) => void

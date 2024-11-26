@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {Table, TableBody,TableCell,TableHead,TableHeader,TableRow,} from "@/components/ui/table";
 import {Select,SelectContent,SelectItem,SelectTrigger,SelectValue,} from "@/components/ui/select";
-
+import Link from "next/link";
 type EventTable = {
   name: string;
   event_name: string;
@@ -191,7 +191,7 @@ export default function EventList () {
                           <TableCell>{data.event_end_date}</TableCell>
                           <TableCell>{data.event_requestor}</TableCell>
                           <TableCell>{data.event_venue}</TableCell>
-                          <TableCell>{data.advance}</TableCell>
+                          <TableCell><Link rel="noopener noreferrer" className="bg-[#F0EDFF] text-[#4430BF] text-md rounded-md font-normal p-2 hover:underline" href={`/advance_request/${data.name}`}>Request</Link></TableCell>
                           <TableCell >{data.event_status}</TableCell>
                           <TableCell >{data.post_activity_status}</TableCell>                        
                           <TableCell className="sticky right-0 bg-[white] z-50 flex space-x-8 border-l border-slate-200 "> 

@@ -2,16 +2,16 @@ import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {
     try {
-        const formData = await req.formData();
-        console.log("body in advance request 32456789867565345678654356789654356789654",formData)
+        const body = await req.json();
         const cookies = req.headers.get("cookie")
-        const response = await fetch(`${process.env.FRAPPE_URL}/api/method/matsapp.api.utils.utils.advance_request`, {
-            method: 'POST',
+        const name = body.name;
+        const req_no = body.req_no;
+        const response = await fetch(`${process.env.FRAPPE_URL}/api/method/matsapp.api.utils.utils.get_advance_request_data?name=${req_no}&expense_name=${name}`, {
+            method: 'GET',
             headers: {
-                // 'Content-Type': 'application/json',
+                'Content-Type': 'application/json',
                 'Cookie': cookies as string 
             },
-            body:formData,
             credentials:'include'
         });
 
