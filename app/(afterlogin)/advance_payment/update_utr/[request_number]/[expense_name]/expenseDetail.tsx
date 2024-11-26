@@ -153,6 +153,7 @@ const ExpensePage = ({ ...Props }: Props) => {
   const [action, setAction] = useState('')
   const router = useRouter();
   const refno = useParams();
+  console.log(refno.request_number)
   const [formdata, setFormData] = useState<FormData>(
     {
       name: Props?.expensedata?.actual_vendors[0].name,
@@ -243,7 +244,7 @@ const ExpensePage = ({ ...Props }: Props) => {
       if (response.ok) {
 
         setTimeout(() => {
-          router.push(`/event_list`);
+          router.push(`/advance_payment/${refno.request_number}`);
         }, 1000)
       } else {
         console.log("Login failed");

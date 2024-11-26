@@ -307,11 +307,13 @@ useEffect(()=>{
         />
         {
           isCommentbox &&
+          <div className="absolute z-50 flex pt-10 items-start justify-center bg-black bg-opacity-50 w-full h-full inset-0 pb-40">
         <Comment_box 
         handleClose={handleDialog}
         handleComment={handleComment}
         Submitbutton = {handleApprove}
         />
+        </div>
         }
         </div>
     
