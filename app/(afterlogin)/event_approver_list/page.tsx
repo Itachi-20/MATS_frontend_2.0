@@ -29,7 +29,7 @@ type preactivity_approvers = {
     const cookie = await cookies();
     const Cookie = cookie.toString();
     const tableData = await fetch(
-      `http://10.120.140.7:8000/api/method/matsapp.api.event.event.get_event_list?activity=Pre Activity`,
+      `${process.env.FRAPPE_URL}/api/method/matsapp.api.event.event.get_pre_activity_list`,
       {
         method: "GET",
         headers:{
@@ -40,7 +40,7 @@ type preactivity_approvers = {
     );
     if(tableData.ok){
       const data = await tableData.json();
-      return data.message
+      return data.data.events
     }
     
   } catch (error) {
