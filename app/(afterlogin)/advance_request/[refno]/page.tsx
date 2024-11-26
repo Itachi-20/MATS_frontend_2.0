@@ -1,18 +1,6 @@
 
 import React from 'react'
 import Table from './table'
-import { Button } from '@/components/ui/button'
-import { Textarea } from '@/components/ui/textarea'
-import { Input } from '@/components/ui/input'
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
-import Image from 'next/image'
-import { useState } from 'react'
 import { cookies } from 'next/headers'
 const fetchData = async(name:any)=>{
     console.log("name",name)
@@ -20,7 +8,7 @@ const fetchData = async(name:any)=>{
       const cookie = await cookies();
       const Cookie = cookie.toString();
       const tableData = await fetch(
-        `http://10.120.140.7:8000/api/method/matsapp.api.utils.utils.get_advance_request_data?name=${name}`,
+        `${process.env.FRAPPE_URL}/api/method/matsapp.api.utils.utils.get_advance_request_data?name=${name}`,
         {
           method: "GET",
           headers:{
@@ -41,10 +29,10 @@ const fetchData = async(name:any)=>{
   }
 
 
-  const Page = async ({ ...params}:any) => {
-    const { refno } = await params; // Destructure `refno` from params
-    console.log(params.searchParams.refno,"sdfghytfrdfcgvbhnjmhygtfrdfgv")
-    const tableData = await fetchData(params.searchParams.refno); // Pass `refno` dynamically
+  const Page = async ({params}:any) => {
+    // const { refno } = await params; 
+    console.log(params,"sdf-----------------------------------ghytfrdfcgvbhnjmhygtfrdfgv")
+    const tableData = await fetchData(params.refno);
   
     console.log(tableData, 'this is table data');
     return (

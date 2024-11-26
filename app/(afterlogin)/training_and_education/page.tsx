@@ -205,17 +205,6 @@ const index = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // // const router = useRouter();
-  // const nextForm = (): void => {
-  //   setForm(prev => prev + 1);
-  //   // router.push("/modules#form_top")
-  // }
-
-  // const prevForm = () => {
-  //   setForm(prev => prev - 1);
-  //   // router.push("/modules#form_top")
-  // }
-
   const isAddVendor = () => {
     setAddVendor(prev => !prev)
   }
@@ -381,7 +370,7 @@ const index = () => {
           addDocument &&
           <Adddocument isAddDocument={isAddDocument} />
         } */}
-        {
+        {/* {
           addVendor &&
           <Addvendor
             isAddVendor={isAddVendor} //isAddDocument={isAddDocument}
@@ -391,7 +380,7 @@ const index = () => {
         {
           addDocument &&
           <Adddocument isAddDocument={isAddDocument} />
-        }
+        } */}
       </AppWrapper>
     </>
   )

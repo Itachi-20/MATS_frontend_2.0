@@ -9,6 +9,7 @@ import Documents from "@/components/documents"
 import Add_vendor from "@/components/add_vendor";
 import { usePathname } from 'next/navigation'
 import { useRouter } from 'next/navigation';
+import Comment_box from "@/components/approvalCommentBox/Comment_box";
 
 type EventEntry = {
   name: string;
@@ -69,6 +70,13 @@ type EventEntry = {
   advance_approvers: any[]; // Empty array, can be customized later
   city:string
   reporting_head:string
+  requesting_hospital_name:string 
+  ship_to:string 
+  bill_to:string 
+  organization_name:string
+  any_additional_expense:string 
+  product_details:string 
+  type_of_engagement:string
 }
 
 type Compensation = {
@@ -177,6 +185,8 @@ const Preview_Form = ({...Props}:Props) => {
   const pathname = usePathname();
   const router = useRouter()
   const [dialog,setDialog] = useState(false);
+  const [isCommentbox,setIsCommentbox] = useState<boolean>();
+  const [comment,setComment] = useState<string>();
   const [addVendor,setAddVendor] = useState(false);
   const [preview_data, setPreviewData] = useState<EventEntry | null>(null);
   const [refNo, setRefNo] = useState<string | null>(localStorage.getItem("refno") ? localStorage.getItem("refno") : "");
@@ -184,7 +194,7 @@ const Preview_Form = ({...Props}:Props) => {
     setAddVendor(prev => !prev)
   }
   const handleDialog = ()=>{
-    setDialog(prev=> !prev);
+    setIsCommentbox(prev=> !prev);
   }
 
   const [isChecked, setIsChecked] = useState<boolean>(false);
@@ -223,8 +233,7 @@ const Preview_Form = ({...Props}:Props) => {
   console.log("preview_data", preview_data, refNo)
 
 
-  const handleFinalSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  const handleFinalSubmit = async () => {
     try {
       const response = await fetch(
         "/api/finalSubmit",
@@ -235,7 +244,8 @@ const Preview_Form = ({...Props}:Props) => {
           },
           credentials: 'include',
           body: JSON.stringify({
-            name: refNo
+            name: refNo,
+            comment:comment
           })
         }
       );
@@ -253,6 +263,12 @@ const Preview_Form = ({...Props}:Props) => {
       console.error("Error during Submission:", error);
     }
   };
+
+  
+  const handleComment = (value:string)=>{
+    setComment(value)
+  }
+  
   
 
   return (
@@ -282,7 +298,7 @@ const Preview_Form = ({...Props}:Props) => {
          eventData={preview_data}
         />
         
-            <div className="flex md:pb-8 gap-3">
+            <div className="flex md:pb-8 gap-3 relative">
             <input
             type="checkbox"
             onChange={handleCheckboxChange}
@@ -292,6 +308,7 @@ const Preview_Form = ({...Props}:Props) => {
             <label className="text-black md:text-sm md:font-normal capitalize">
             I hereby declare that all details filled by me are correct and genuine.<span className="text-[#e60000]">*</span>
                 </label>
+               
             </div>
 
             <div className="flex justify-end pt-5 gap-4">
@@ -301,18 +318,21 @@ const Preview_Form = ({...Props}:Props) => {
               <Button className="bg-white text-black border text-md font-normal">
                 Back
               </Button>
-              <Button className={`bg-[#4430bf] text-white  font-normal border`} disabled={!isChecked} onClick={(e: React.MouseEvent<HTMLButtonElement>) => handleFinalSubmit(e)}>
+              <Button className={`bg-[#4430bf] text-white  font-normal border`} disabled={!isChecked} onClick={()=>handleDialog()}>
                 Submit
               </Button>
             </div>
         </div>
         {
-
-          dialog && 
-          <Add_vendor
-          isAddVendor={isAddVendor}
+            isCommentbox &&
+            <div className="absolute z-50 flex pt-10 items-end justify-center bg-black bg-opacity-50 w-full h-full inset-0 pb-40">
+          <Comment_box 
+          handleClose={handleDialog}
+          handleComment={handleComment}
+          Submitbutton = {handleFinalSubmit}
           />
-        }
+          </div>
+          }
       </>
   )
 }

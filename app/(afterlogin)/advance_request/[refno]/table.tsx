@@ -22,8 +22,11 @@ import {
 } from "@/components/ui/select";
 import Link from 'next/link';
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation';
-
+import { useRouter, useParams } from 'next/navigation';
+import ViewDocument from '@/components/view_document'
+import DeletePopup from '@/components/deleteDialog'
+import { Toaster, toast } from 'sonner'
+import SubmitPopup from '@/components/successProp'
 type TableData = {
   name: string;
   event_date: string;
@@ -37,6 +40,7 @@ type TableData = {
   event_requestor: string;
   total_compensation_expense: number;
   event_conclusion: string;
+  is_declared: boolean;
   actual_vendors: Array<any>; // Replace `any` with a specific type if needed
 };
 
@@ -75,45 +79,49 @@ type vendorName = {
   vendor_name: string
 }[]
 
-type formData = {
-  name: string;
-  event_date: string;
-  cost_centre: string | null;
-  business_unit: string;
-  event_name: string | null;
-  sub_type_of_activity: string | null;
-  event_requestor: string;
-  total_compensation_expense: number;
-  actual_vendors: Array<any>
-};
 type VendorData = {
   vendor_type: string;
   vendor_name: string;
   advance: number;
-  file: string;
+  file: File | null;
 };
-
+type DocumentRow = {
+  file_name: string;
+  // createdDate: string;
+  // createdBy: string;
+  name: string;
+  file_url: string;
+};
 const table = ({ tableData }: Props) => {
 
   const [open, setOpen] = useState(false);
-  const [compansationVendorType, setCompansationVendorType] = useState("");
-  const [compansationVendorName, setCompansationVendorName] = useState("");
+  const [eventconclusion, setEventConclusion] = useState("");
+  const [loading, setLoading] = useState(false)
   const [dropdownData, setDropdownData] = useState<dropdownData | null>(null);
   const [vendorName, setVendorName] = useState<vendorName | null>(null);
-  const [tabledata, setTableData] = useState(tableData)
+  const [tabledata, setTableData] = useState<TableData>()
   const [vendorDetails, setVendorDetails] = useState<VendorData>({
     vendor_type: '',
     vendor_name: '',
     advance: 0,
-    file: '',
+    file: null,
   });
-  const [file, setFile] = useState<File | null>(null)
-  const [fileName, setFileName] = useState();
+  const [file, setFile] = useState<FileList | null>();
+  const [fileData, setFileData] = useState<DocumentRow[] | undefined>();
+  const [fileList, setFileList] = useState<File[]>([]);
   const base_url = process.env.NEXT_PUBLIC_FRAPPE_URL;
   const router = useRouter();
-  const handleFileChange: any = (e: any) => {
-    setFile(e.target.files[0])
-    setFileName(e.target.files[0]?.name)
+  const [deletename, setDeleteName] = useState<string | null>();
+  const [deletepopup, setDeletePopup] = useState(false);
+  const [submitpop, setSubmitPopup] = useState(false);
+  const req_no = useParams()
+  const handleFileUpload: any = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = (e.target as HTMLInputElement).files;
+    setFile(files);
+    const filelist = Array.from(e.target.files || []);
+    setFileList(filelist);
+
+
   };
 
   const handleVendorTypeChangeApi = async (value: string) => {
@@ -142,6 +150,35 @@ const table = ({ tableData }: Props) => {
     }
   };
 
+  const EventData = async () => {
+    try {
+      const response = await fetch("/api/getAdvanceRequestData", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          name: req_no.refno
+        })
+      });
+
+      const data = await response.json();
+      console.log("data respomse event data", data)
+      setTableData(data.data);
+      if (response.ok) {
+      } else {
+        console.log('Login failed');
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
+    }
+  };
+
+  useEffect(() => {
+    EventData();
+  }, [])
+
   const dropdown = async () => {
 
     try {
@@ -169,81 +206,199 @@ const table = ({ tableData }: Props) => {
 
   const handlefieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    const numericValue = name === 'advance' ? (value ? parseFloat(value) : 0) : value;
+    const numericValue = name === 'advance' ? (value ? parseFloat(value) : '') : value;
     setVendorDetails(prev => ({ ...prev, [name]: numericValue }));
   }
   const handleConclusionChange = (newConclusion: string) => {
-    setTableData(prev => ({
-      ...prev,
-      event_conclusion: newConclusion,
-    }));
+    setEventConclusion(
+      newConclusion,
+    );
   };
 
+  // const addVendor = async () => {
+  //   const formData = new FormData();
+  //   formData.append("vendor_type", vendorDetails.vendor_type)
+  //   formData.append("vendor_name", vendorDetails.vendor_name)
+  //   formData.append("advance", vendorDetails.advance as any)
+  //   formData.append("name", req_no.refno as any)
+  //   if (file && file.length > 0) {
+  //     for (let i = 0; i < file.length; i++) {
+  //       formData.append("file", file[i]);
+  //     }
+  //   } else {
+  //     toast.warning('No file to Upload')
+  //     console.log("No file to upload");
+  //     return;
+  //   }
+  //   try {
+  //     const response = await fetch('/api/advanceRequest',
+  //       {
+  //         method: "POST",
+  //         headers: {
+  //           // "Content-Type": "application/json",
+  //         },
+  //         credentials: 'include',
+  //         body:
+  //           formData
+
+  //       });
+  //     if (!response.ok) {
+  //       throw new Error('advance Request failed');
+  //     }
+  //     const data = await response.json();
+  //     const file = data.message;
+  //     setTimeout(() => {
+  //      EventData()
+  //     }, 500)
+  //     toast.success('Vendor has been Added')
+  //     setVendorDetails({ vendor_type: '', vendor_name: '', advance: 0, file: null });
+  //     setFile(null);
+  //     setFileList([]);
+  //     EventData()
+  //   } catch (error) {
+  //     toast.error(`${error}`)
+  //     console.error('Error Submitting Data:', error);
+  //   }
+  // };
   const addVendor = async () => {
-    console.log("file", file);
-    if (!file) {
-      alert('Please upload a file');
+    const formData = new FormData();
+    formData.append("vendor_type", vendorDetails.vendor_type);
+    formData.append("vendor_name", vendorDetails.vendor_name);
+    formData.append("advance", vendorDetails.advance as any);
+    formData.append("name", req_no.refno as any);
+
+    if (file && file.length > 0) {
+      for (let i = 0; i < file.length; i++) {
+        formData.append("file", file[i]);
+      }
+    } else {
+      toast.warning("No file to Upload");
+      console.log("No file to upload");
       return;
     }
 
-    try {
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append("is_private", "1");
+    const apiCallPromise = new Promise(async (resolve, reject) => {
+      try {
+        const response = await fetch('/api/advanceRequest', {
+          method: "POST",
+          credentials: 'include',
+          body: formData,
+        });
 
-      const response = await fetch('/api/fileUpload', { method: 'POST', body: formData });
+        if (!response.ok) {
+          throw new Error('Advance request failed');
+        }
 
-      if (!response.ok) {
-        throw new Error('File upload failed');
+        const data = await response.json();
+        resolve(data); // Resolve with the response data
+      } catch (error) {
+        reject(error); // Reject with the error
       }
+    });
 
-      const data = await response.json();
-      const fileUrl = data.message.file_url;
-
-      const newVendor = { ...vendorDetails, file: fileUrl };
-
-      setTableData(prev => ({
-        ...prev,
-        actual_vendors: [...prev.actual_vendors, newVendor],
-      }));
-
-      setVendorDetails({ vendor_type: '', vendor_name: '', advance: 0, file: '' });
-      setFile(null);
-    } catch (error) {
-      console.error('Error uploading file:', error);
-      alert('Failed to upload file. Please try again.');
-    }
+    // Use toast.promise to handle loading, success, and error
+    toast.promise(apiCallPromise, {
+      loading: 'Submitting vendor details...',
+      success: (data) => {
+        // On success, update UI or state as needed
+        // const file = data;
+        setTimeout(() => {
+          EventData();
+        }, 500);
+        setVendorDetails({ vendor_type: '', vendor_name: '', advance: 0, file: null });
+        setFile(null);
+        setFileList([]);
+        // EventData();
+        return 'Vendor has been added successfully!';
+      },
+      error: (error) => `Failed to add vendor: ${error.message || error}`,
+    });
   };
+
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    setSubmitPopup(true)
+    setTimeout(() => {
+      router.push(`/event_list`);
+    }, 2000)
     e.preventDefault();
-    console.log("formdata before submit", tabledata)
+    // console.log("formdata before submit",)
+    // try {
+    //   const response = await fetch(
+    //     "/api/advanceRequest",
+    //     {
+    //       method: "POST",
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //       },
+    //       credentials: 'include',
+    //       body: JSON.stringify(tabledata)
+    //     }
+    //   );
+    //   if (response.ok) {
+    //     setDeletePopup(true)
+    //     const data = await response.json();
+    //     console.log(data, "response data");
+    //     setTimeout(() => {
+    //       router.push(`/event_list`);
+    //     }, 3000)
+    //     // setTimeout(() => {
+    //     //   router.push(`/event_list`);
+    //     // }, 1000)
+    //   } else {
+    //     console.log("submission failed");
+    //   }
+    // } catch (error) {
+    //   console.error("Error during Submission:", error);
+    // }
+  };
+
+  const handleSetFileData = async (file: any) => {
+    console.log(file, 'file in setfile ')
+    setFileData(file);
+    setOpen(true)
+  };
+
+  const handleDeleteDialog = async (name: string) => {
+    console.log('indise delete ')
+    setDeleteName(name);
+    setDeletePopup(true)
+  };
+
+  const handleDeleteVendor = async () => {
+    setLoading(true)
+    console.log("deletename", deletename)
     try {
       const response = await fetch(
-        "/api/advanceRequest",
+        "/api/deleteVendor",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           credentials: 'include',
-          body: JSON.stringify(tabledata)
+          body: JSON.stringify({
+            name: deletename
+          })
         }
       );
       if (response.ok) {
-        const data = await response.json();
-        console.log(data, "response data");
+        setLoading(false)
+        // const data = await response.json();
+        setDeletePopup(false)
+        console.log(" Successful Delete response data");
         setTimeout(() => {
-            router.push(`/event_list`);
-          }, 1000)
+          toast.success("Vendor Deleted Successfully");
+        }, 1000)
+        EventData();
+
       } else {
         console.log("submission failed");
       }
     } catch (error) {
+      setLoading(false)
       console.error("Error during Submission:", error);
     }
   };
-
-  console.log(tabledata, 'tabledata------------------------------------------')
   return (
     <>
 
@@ -276,13 +431,14 @@ const table = ({ tableData }: Props) => {
           <div className='grid-cols-1 px-6'>
             <ul className=''>
               <li className='border-b p-2'>Business Unit :<span className='font-semibold px-1'>{tableData ? tableData.business_unit : ''}</span></li>
-              <li className='border-b p-2'>Sub Type Af activity :<span className='font-semibold px-1'>{tableData ? tableData.sub_type_of_activity : ''}</span></li>
+              <li className='border-b p-2'>Sub Type Of activity :<span className='font-semibold px-1'>{tableData ? tableData.sub_type_of_activity : ''}</span></li>
               <li className='border-b p-2'>Total Estimated Expense :<span className='font-semibold px-1'>{tableData ? tableData.total_compensation_expense : ''}</span></li>
             </ul>
           </div>
 
         </div>
-
+        {/* {!tabledata.is_declared &&
+          <> */}
         <div className=" grid grid-cols-3 gap-4 pb-7">
           <div className='col-span-3 space-y-2'>
             <label htmlFor="event_conclusion" className="text-black md:text-sm md:font-normal capitalize">
@@ -308,8 +464,9 @@ const table = ({ tableData }: Props) => {
                   ...prev,
                   vendor_type: value,
                 }))
-                  ;
+
               }}
+              value={vendorDetails.vendor_type ?? ''}
             >
               <SelectTrigger className="dropdown">
                 <SelectValue placeholder="Select" />
@@ -329,12 +486,13 @@ const table = ({ tableData }: Props) => {
             </label>
             <Select
               onValueChange={(value: string) => {
-                setCompansationVendorName(value);
+                // setCompansationVendorName(value);
                 setVendorDetails((prev) => ({
                   ...prev,
                   vendor_name: value, // Update vendor_name in the vendorDetails state
                 }));
               }}
+              value={vendorDetails.vendor_name ?? ''}
             >
               <SelectTrigger className="dropdown">
                 <SelectValue placeholder="Select" />
@@ -360,6 +518,7 @@ const table = ({ tableData }: Props) => {
               type='number'
               name='advance'
               onChange={handlefieldChange}
+              value={vendorDetails.advance ?? ''}
             ></Input>
           </div>
         </div>
@@ -368,11 +527,17 @@ const table = ({ tableData }: Props) => {
 
           <label className="flex items-center gap-2 px-2 bg-[#F0EDFF] rounded-md shadow-sm cursor-pointer border-[1px]">
             <Image src={'/svg/download.svg'} alt='downloadsvg' width={20} height={20} />
-            <span className="font-medium text-[#4430BF] ">{fileName ? fileName : ' Receipt/Bill'}</span>
-            <Input type="file" className="hidden" onChange={handleFileChange} />
+            <span className="font-medium text-[#4430BF]">
+              {fileList.length > 0
+                ? fileList.map((file) => file.name).join(", ")
+                : "Receipt/Bill"}
+            </span>
+            <Input type="file" className="hidden" onChange={(e) => { handleFileUpload(e) }} id="file" multiple />
           </label>
-          <Button className="border border-[#4430bf] text-[#4430bf] text-[18px]" onClick={addVendor} >Add</Button>
+          <Button className="border border-[#4430bf] text-[#4430bf] text-[18px]" onClick={() => addVendor()}>Add</Button>
         </div>
+        {/* </>
+        } */}
         <div className="border bg-white h-full p-4 rounded-[18px]">
           <Table className={""}>
             <TableHeader className={"bg-[#E0E9FF]"}>
@@ -466,60 +631,79 @@ const table = ({ tableData }: Props) => {
                 </TableHead>
                 <TableHead
                   className={
-                    "text-center rounded-r-2xl text-[#625d5d] text-[15px] font-normal font-['Montserrat'] sticky right-0 z-50 bg-[#E0E9FF]"
+                    "text-center rounded-r-2xl text-[#625d5d] text-[15px] font-normal font-['Montserrat'] sticky right-0 z-20 bg-[#E0E9FF]"
                   }
                 >Action</TableHead>
               </TableRow>
             </TableHeader>
-            {
-              tabledata.actual_vendors.length > 0 ?
-                <TableBody>
-                  {tabledata &&
-                    tabledata.actual_vendors.map((data, index) => {
-                      return (
-                        <TableRow key={index} className="text-center text-nowrap text-black">
-                          <TableCell>{data.event_request_number}</TableCell>
-                          <TableCell>{data.vendor_type}</TableCell>
-                          <TableCell>{data.vendor_code}</TableCell>
-                          <TableCell>{data.vendor_name}</TableCell>
-                          <TableCell>{data.billable_amount}</TableCell>
-                          <TableCell>{data.status}</TableCell>
-                          <TableCell>{data.gst}</TableCell>
-                          <TableCell>{data.invoice_amount}</TableCell>
-                          <TableCell>{data.tds}</TableCell>
-                          <TableCell>{data.net_amount}</TableCell>
-                          <TableCell>{data.utr_number}</TableCell>
-                          <TableCell>{data.payment_date}</TableCell>
-                          <TableCell className='sticky right-0 z-50 gap-3 w-[120px] bg-white mt-2 flex border-l'>
-                            <Link
+            {tabledata &&
+              tabledata?.actual_vendors?.length > 0 ?
+              <TableBody>
+                {tabledata &&
+                  tabledata.actual_vendors.map((data, index) => {
+                    return (
+                      <TableRow key={index} className="text-center text-nowrap text-black">
+                        <TableCell>{data.event_request_number}</TableCell>
+                        <TableCell>{data.vendor_type}</TableCell>
+                        <TableCell>{data.vendor_code}</TableCell>
+                        <TableCell>{data.vendor_name}</TableCell>
+                        <TableCell>{data.billable_amount}</TableCell>
+                        <TableCell>{data.status}</TableCell>
+                        <TableCell>{data.gst}</TableCell>
+                        <TableCell>{data.invoice_amount}</TableCell>
+                        <TableCell>{data.tds}</TableCell>
+                        <TableCell>{data.net_amount}</TableCell>
+                        <TableCell>{data.utr_number}</TableCell>
+                        <TableCell>{data.payment_date}</TableCell>
+
+                        <TableCell className='sticky right-0 z-20 gap-3 w-[120px] bg-white mt-2 flex border-l'>
+                          {/* <Link
                               href={`${base_url}${data.file}`}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="text-blue-600 underline"
-                            >
-                              <Image src={'/svg/view.svg'} alt='viewsvg' width={24} height={18} />
-                            </Link>
-                            <Image src={'/svg/editIcon.svg'} alt='editsvg' width={20} height={18} />
-                            <Image src={'/svg/delete.svg'} alt='deletesvg' width={20} height={18} />
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
-                </TableBody>
-                :
-                <TableBody>
-                  <TableRow className="text-center text-black text-nowrap ">
-                    <TableCell colSpan={9}>No Results</TableCell>
-                  </TableRow>
-                </TableBody>
+                            > */}
+                          {/* <Image src={'/svg/view.svg'} alt='viewsvg' width={24} height={18} /> */}
+                          <button onClick={() => handleSetFileData(data.files)}><Image src={'/svg/view.svg'} alt='viewsvg' width={24} height={18} /></button>
+                          {/* </Link> */}
+                          {/* <Image src={'/svg/editIcon.svg'} alt='editsvg' width={20} height={18} /> */}
+                          {/* {
+                              !tabledata.is_declared && */}
+                          <button onClick={() => handleDeleteDialog(data.name)} ><Image src={'/svg/delete.svg'} alt='deletesvg' width={20} height={18} /></button>
+                          {/* } */}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+              </TableBody>
+              :
+              <TableBody>
+                <TableRow key={''} className="text-center text-black text-nowrap ">
+                  <TableCell colSpan={9}>No Results</TableCell>
+                </TableRow>
+              </TableBody>
             }
           </Table>
         </div>
 
+        {/* {  !tableData.is_declared && */}
         <div className='flex justify-end gap-2 pt-8'>
           <Button className='bg-[#4430BF] px-10' onClick={handleSubmit}>Submit</Button>
         </div>
+        {/* } */}
       </div>
+      <Toaster richColors position="top-right" />
+      {
+        open &&
+        <ViewDocument setClose={setOpen} data={fileData} />
+      }
+      {
+        deletepopup && <DeletePopup setClose={setDeletePopup} handleSubmit={handleDeleteVendor} Loading={loading} />
+      }
+
+      {
+        submitpop && <SubmitPopup title={'Event'} />
+      }
 
     </>
 

@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+"use client"
+import React, { useState,useEffect } from 'react'
   import { Button } from "@/components/ui/button";
   import {
     Table,
@@ -17,7 +18,48 @@ import React, { useState } from 'react'
     SelectTrigger,
     SelectValue,
   } from "@/components/ui/select";
-import { Item } from '@radix-ui/react-select';
+import { useRouter } from 'next/navigation';
+
+type Compensation = {
+  vendor_type: string;
+  vendor_name: string;
+  est_amount: number;
+  gst_included?: number;
+};
+
+type Logistics = {
+  vendor_type: string;
+  est_amount: number;
+};
+
+type formData = {
+  name: string | null;
+  event_type: string;
+  company: string;
+  event_cost_center: string;
+  state: string;
+  city: string;
+  event_start_date: string;
+  event_end_date: string;
+  bu_rational: string;
+  faculty: string;
+  participants: string;
+  therapy: string;
+  event_name: string;
+  event_venue: string;
+  comments: string;
+  compensation: Compensation[];
+  logistics: Logistics[];
+  total_compensation_expense: number;
+  total_logistics_expense: number;
+  event_requestor: string;
+  business_unit: string;
+  division_category: string;
+  division_sub_category: string;
+  sub_type_of_activity: string;
+  any_govt_hcp: string,
+  no_of_hcp: number
+};
 
   type activityDropdown = {
     activity:{
@@ -33,17 +75,61 @@ import { Item } from '@radix-ui/react-select';
 
   type Props = {
     activityDropdown:activityDropdown| null
-    handleSubmit:(e:React.MouseEvent<HTMLButtonElement, MouseEvent>)=>void
 }
 const form4 = ({...Props}:Props) => {
+  const router = useRouter();
   const [file,setFile] = useState<FileList | null>();
   const [activityType,setActivityType] = useState("");
   const [refno,setRefno] = useState(localStorage.getItem("refno")?localStorage.getItem("refno"):"");
   const [documentType,setDocumentType] = useState("");
+  const [formdata, setFormData] = useState<formData | {}>({});
+  const [refNo,setRefNo] = useState<string | null>(localStorage.getItem("refno")?localStorage.getItem("refno"):"");
   const handleFileUpload = (e:React.ChangeEvent<HTMLInputElement>)=>{
     const files = (e.target as HTMLInputElement).files;
     setFile(files);
   }
+
+  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    const updatedFormData = {
+        ...formdata
+
+    };
+
+    try {
+      const response = await fetch(
+        "/api/training_and_education/handleSubmit",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: 'include',
+          body: JSON.stringify(updatedFormData)
+        }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data, "response data");
+        localStorage.setItem("refno", data.message);
+
+        setTimeout(() => {
+          router.push(`/hcp_services?forms=5`);
+        }, 1000)
+      } else {
+        console.log("submission failed");
+      }
+    } catch (error) {
+      console.error("Error during Submission:", error);
+    }
+  };
+
+  useEffect(() => {
+    setFormData({ ...formdata, name: refNo })
+  }, [refNo])
+
+console.log(formdata,"this is form data")
 
   const FileUpload = async()=>{
     const formdata = new FormData();
@@ -96,7 +182,7 @@ const form4 = ({...Props}:Props) => {
       <h1 className="text-black text-2xl font-normal uppercase pb-8">
         Documents
       </h1>
-      <div className="grid grid-cols-3 gap-12 pb-7 text-black">
+      <div className="grid grid-cols-3 gap-6 pb-7 text-black">
         <div className="flex flex-col gap-2">
           <label className="lable">
             Document Type <span className="text-[#e60000]">*</span>
@@ -315,7 +401,7 @@ const form4 = ({...Props}:Props) => {
         <Button className="bg-white text-black border text-md font-normal">
           Back
         </Button>
-        <Button className="bg-[#4430bf] text-white text-md font-normal border" onClick={(e)=>Props.handleSubmit(e)}>
+        <Button className="bg-[#4430bf] text-white text-md font-normal border" onClick={(e)=>handleSubmit(e)}>
           Next
         </Button>
       </div>

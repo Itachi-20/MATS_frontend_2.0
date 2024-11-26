@@ -285,13 +285,11 @@ const page = () => {
       }
       {
         viewDocument &&
-        <ViewDocument isViewDocument={isViewDocument} />
+        <ViewDocument setClose={isViewDocument}  />
       }
 
       {
         addVendor &&
-       
-
           <Addvendor
             isAddVendor={isAddVendor}
             isAddDocument={isAddDocument}

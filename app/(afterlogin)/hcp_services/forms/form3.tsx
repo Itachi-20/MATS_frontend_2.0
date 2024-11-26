@@ -1,3 +1,4 @@
+"use client"
 import React, { useEffect, useState } from 'react'
 import { Input } from "@/components/ui/input";
 import {
@@ -17,21 +18,48 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Checkbox } from '@/components/ui/checkbox';
+import { useRouter } from 'next/navigation';
+
+
+
+type formData = {
+  name: string | null;
+  event_type: string;
+  company: string;
+  event_cost_center: string;
+  state: string;
+  city: string;
+  event_start_date: string;
+  event_end_date: string;
+  bu_rational: string;
+  faculty: string;
+  participants: string;
+  therapy: string;
+  event_name: string;
+  event_venue: string;
+  comments: string;
+  compensation: Compensation[];
+  logistics: Logistics[];
+  total_compensation_expense: number;
+  total_logistics_expense: number;
+  event_requestor: string;
+  business_unit: string;
+  division_category: string;
+  division_sub_category: string;
+  sub_type_of_activity: string;
+  any_govt_hcp: string,
+  no_of_hcp: number
+};
+
+
 type Props = {
-    isAddVendor: ()=>void,
     vendorType:{
       name:string,
       vendor_type:string
     }[] | null,
     currency:{
       name:string
-    }[] | null,
-    handlefieldChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>)=>void;
-    handleSelectChange: (value:string,name:string)=>void;
-    handleSubmit:(e: React.MouseEvent<HTMLButtonElement>)=>void
-    setFormData:(value:any)=>void
-    logisticsBudget:Logistics[]
+    }[] | null
 }
 type Budget = "logistics" | "compensation" | "";
 
@@ -67,13 +95,75 @@ const Form3 = ({...Props}:Props) => {
   const [totalCompansationAmount,setTotalCompansationAmount] = useState(0);
   const [totalEstimatedAmount,setTotalEstimatedAmount] = useState(0);
 
+  const router = useRouter();
+  const [formdata, setFormData] = useState<formData | {}>({});
+  const [refNo,setRefNo] = useState<string | null>(localStorage.getItem("refno")?localStorage.getItem("refno"):"");
+
+  const handleSelectChange = (value: string, name: string) => {
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handlefieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+      const { name, value } = e.target;
+      setFormData(prev => ({ ...prev, [name]: value }));
+    }
+
+    const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+       e.preventDefault();
+   
+       const updatedFormData = {
+           ...formdata
+   
+       };
+       
+       updatedFormData.event_type = "HCP Services"
+       if(refNo){
+         updatedFormData.name = refNo;
+       }
+   
+   
+       try {
+         const response = await fetch(
+           "/api/training_and_education/handleSubmit",
+           {
+             method: "POST",
+             headers: {
+               "Content-Type": "application/json",
+             },
+             credentials: 'include',
+             body: JSON.stringify(updatedFormData)
+           }
+         );
+         if (response.ok) {
+           const data = await response.json();
+           console.log(data, "response data");
+           localStorage.setItem("refno", data.message);
+           setRefNo(data.message);
+   
+           setTimeout(() => {
+             router.push(`/hcp_services?forms=4`);
+           }, 1000)
+         } else {
+           console.log("submission failed");
+         }
+       } catch (error) {
+         console.error("Error during Submission:", error);
+       }
+     };
+
+     useEffect(() => {
+      setFormData({ ...formdata, name: refNo })
+    }, [refNo])
+
+console.log(formdata,"this is form data")
+
   const handleLogisticsAdd = ()=>{
     if(logisticVendorType&&logisticAmount>0){
       const newObject:Logistics = {vendor_type:logisticVendorType,est_amount:logisticAmount};
       setLogisticBudget(prevRows=>{
        const updatedRecords =  [...prevRows,newObject]
        console.log(updatedRecords)
-       Props.setFormData((prev: any)=>({...prev,logistics:updatedRecords}))
+        setFormData((prev: any)=>({...prev,logistics:updatedRecords}))
        return updatedRecords
       }
       )
@@ -88,7 +178,7 @@ const Form3 = ({...Props}:Props) => {
       setCompansationBudget(prevRows=>{
        const updatedRecords =  [...prevRows,newObject]
        console.log(updatedRecords)
-       Props.setFormData((prev: any)=>({...prev,compensation:updatedRecords}))
+       setFormData((prev: any)=>({...prev,compensation:updatedRecords}))
        return updatedRecords
       }
       )
@@ -178,7 +268,7 @@ const Form3 = ({...Props}:Props) => {
       <h1 className="text-black text-2xl font-normal uppercase pb-8">
         Budget Details
       </h1>
-      <div className="grid grid-cols-3 gap-12">
+      <div className="grid grid-cols-3 gap-6">
       <div className="flex flex-col gap-2">
           <label className="lable">
             Budget Type<span className="text-[#e60000]">*</span>
@@ -322,7 +412,7 @@ const Form3 = ({...Props}:Props) => {
           fill="#635E5E"
         />
       </svg>
-      <Button className="bg-white text-black border text-md font-normal rounded-xl pl-10 py-2 hover:bg-white" onClick={Props.isAddVendor}>
+      <Button className="bg-white text-black border text-md font-normal rounded-xl pl-10 py-2 hover:bg-white">
         Add New Vendor
       </Button>
     </div>
@@ -495,7 +585,7 @@ const Form3 = ({...Props}:Props) => {
             type='number'
             disabled
             value={totalLogisticAmount + totalCompansationAmount}
-            onChange={(e)=>Props.handlefieldChange(e)}
+            onChange={(e)=>handlefieldChange(e)}
           ></Input>
         </div>
         <div className="flex flex-col col-span-1 gap-2">
@@ -503,7 +593,7 @@ const Form3 = ({...Props}:Props) => {
             Currency<span className="text-[#e60000]">*</span>
           </label>
           <Select
-          onValueChange={(value:string)=>{Props.handleSelectChange(value,"currency")}}
+          onValueChange={(value:string)=>{handleSelectChange(value,"currency")}}
           >
             <SelectTrigger className="dropdown">
               <SelectValue placeholder="Select" />
@@ -528,7 +618,7 @@ const Form3 = ({...Props}:Props) => {
         <Button className="bg-white text-black border text-md font-normal hover:bg-white">
           Back
         </Button>
-        <Button className="bg-[#4430bf] text-white text-md font-normal border hover:bg-[#4430bf]" onClick={(e: React.MouseEvent<HTMLButtonElement>)=>Props.handleSubmit(e)}>
+        <Button className="bg-[#4430bf] text-white text-md font-normal border hover:bg-[#4430bf]" onClick={(e: React.MouseEvent<HTMLButtonElement>)=>handleSubmit(e)}>
           Next
         </Button>
       </div>

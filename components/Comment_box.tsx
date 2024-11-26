@@ -4,9 +4,9 @@ import { Button } from "./ui/button";
 import { useState } from "react";
 type props = {
   handleClose: (value:string) => void;
-  handleApproveRejectSendBack:(value:string)=> void
+  handleSubmit:(value:string)=> void
 }
-const Comment_box = ({ handleClose, handleApproveRejectSendBack }: props) => {
+const Comment_box = ({ handleClose,handleSubmit }: props) => {
   const [remarks, setRemarks] = useState<string>("");
   return (
     <div className="absolute z-50 flex inset-0 items-center justify-center bg-black bg-opacity-50">
@@ -21,7 +21,7 @@ const Comment_box = ({ handleClose, handleApproveRejectSendBack }: props) => {
               <Button className="bg-white text-black border text-md font-normal px-12 rounded-md hover:bg-white" onClick={()=>handleClose('')}>
                 Back
               </Button>
-              <Button className="bg-[#5DBE74] text-white text-md font-normal border px-8 hover:bg-[#5DBE74]" onClick={()=>handleApproveRejectSendBack(remarks)}>
+              <Button className="bg-[#5DBE74] text-white text-md font-normal border px-8 hover:bg-[#5DBE74]" onClick={()=>handleSubmit(remarks)}>
                 Approve
               </Button>
             </div>

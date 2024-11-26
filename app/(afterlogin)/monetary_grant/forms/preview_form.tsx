@@ -70,7 +70,7 @@ type EventEntry = {
   post_activity_approvers: any[]; // Empty array, can be customized later
   occurrence_status: OccurrenceStatus[];
   logistics: Logistics[];
-  documents: Document[];
+  documents: ActivityDocument[];
   advance_approvers: any[]; // Empty array, can be customized later
   city: string
   reporting_head:string;
@@ -78,6 +78,9 @@ type EventEntry = {
   ship_to:string;
   bill_to:string;
   organization_name:string;
+  any_additional_expense:string
+  product_details:string
+  type_of_engagement:string
 }
 
 type Compensation = {
@@ -163,23 +166,22 @@ type Logistics = {
   doctype: string;
 }
 
-type Document = {
+
+type File = {
+  url: string;
   name: string;
-  owner: string;
-  creation: string;
-  modified: string;
-  modified_by: string;
-  docstatus: number;
-  idx: number;
+  file_name:string
+};
+
+type DocumentDetails = {
+  type: string;
+  file: File[];
+};
+
+type ActivityDocument = {
   activity_type: string;
-  occurrence_no: number;
-  document_type: string;
-  file: string;
-  parent: string;
-  parentfield: string;
-  parenttype: string;
-  doctype: string;
-}
+  document: DocumentDetails[];
+};
 
 const Preview_Form = ({...Props}:Props) => {
   const pathname = usePathname();
@@ -286,7 +288,7 @@ const Preview_Form = ({...Props}:Props) => {
 
         <Documents
           eventData={preview_data}
-          PageName={'nahi pata'}
+          PageName={''}
         />
         
         <div className="flex md:pb-8 gap-3">

@@ -178,7 +178,7 @@ const Form3 = ({...Props}:Props) => {
       <h1 className="text-black text-2xl font-normal uppercase pb-8">
         Budget Details
       </h1>
-      <div className="grid grid-cols-3 gap-12">
+      <div className="grid grid-cols-3 gap-6">
       <div className="flex flex-col gap-2">
           <label className="lable">
             Budget Type<span className="text-[#e60000]">*</span>
@@ -244,7 +244,7 @@ const Form3 = ({...Props}:Props) => {
       </div>
       : budgetType == "compensation"?
       <div>
-      <div className="grid grid-cols-4 gap-12">
+      <div className="grid grid-cols-4 gap-6">
       <div className="flex flex-col gap-2">
         <label className="lable">
           vendor type<span className="text-[#e60000]">*</span>

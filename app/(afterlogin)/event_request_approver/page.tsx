@@ -7,7 +7,7 @@ import VendorDetails from "@/components/vendor_Details"
 import TotalExpense from "@/components/total_Expense"
 import Documents from "@/components/documents"
 import { useSearchParams } from 'next/navigation'
-
+import Comment_box from "@/components/approvalCommentBox/Comment_box";
 type EventEntry = {
   name: string;
   owner: string;
@@ -173,9 +173,12 @@ type ActivityDocument = {
 const Index = () => {
 
   const [eventData,setEventData] = useState<EventEntry>();
+  const [isCommentbox,setIsCommentbox] = useState<boolean>();
+  const [comment,setComment] = useState<string>();
+  const [type,setType] = useState<string>();
   const param = useSearchParams()
 
-  const handleApprove = async(value:string)=>{
+  const handleApprove = async()=>{
     const refno = param.get("refno");
       try {
         const response = await fetch(
@@ -188,14 +191,13 @@ const Index = () => {
             credentials:'include',
             body:JSON.stringify({
               name:refno,
-              "remark": "Test Approve Pre Activity",
-              "action":value
+              "remark": comment,
+              "action":type
             })
           }
         );
   
-        const data = await response.json();
-  
+        
         if (response.ok) {
         } else {
           console.log("Login failed");
@@ -235,7 +237,13 @@ const Index = () => {
     }
 };
 
+const handleDialog = ()=>{
+  setIsCommentbox((prev)=>!prev);
+}
 
+const handleComment = (value:string)=>{
+  setComment(value)
+}
 
 useEffect(()=>{
   eventDataApi();
@@ -244,10 +252,11 @@ useEffect(()=>{
   return (
 
 
-        <div className="md:px-7 md:pb-7 md:pt-4 w-full relative z-20 text-black">
+        <div className={`md:px-7 md:pb-7 md:pt-4 w-full relative z-20 text-black`}>
           <div className="pb-5">
-            <div className="flex justify-between">
-            <h1 className=" md:text-[30px] md:font-medium capitalize md:pb-4"> Training and Education</h1>
+            <div className="flex justify-between pb-4">
+            {/* <h1 className=" md:text-[30px] md:font-medium capitalize md:pb-4"> Training and Education</h1> */}
+            <div></div>
             <div className="flex gap-4 bg-white">
             <Button className="border border-[#4430bf] text-[#4430bf] px-6">Audit Trail</Button>
               <Button className="bg-white text-black border px-8 hover:bg-white">Back</Button>
@@ -265,9 +274,12 @@ useEffect(()=>{
                 </div>
               </div>
               <div className="flex gap-4 text-white items-center">
-              <Button className="bg-[#5dbe74] hover:bg-[#5dbe74] px-6" onClick={()=>handleApprove("Approved")}>Approve</Button>
+              {/* <Button className="bg-[#5dbe74] hover:bg-[#5dbe74] px-6" onClick={()=>handleApprove("Approved")}>Approve</Button>
               <Button className="bg-[#ff5757] hover:bg-[#ff5757] px-6" onClick={()=>handleApprove("Rejected")}>Reject</Button>
-              <Button className="bg-[#4430bf] hover:bg-[#4430bf] px-6" onClick={()=>handleApprove("Send Back")}>Send Back</Button>
+              <Button className="bg-[#4430bf] hover:bg-[#4430bf] px-6" onClick={()=>handleApprove("Send Back")}>Send Back</Button> */}
+              <Button className="bg-[#5dbe74] hover:bg-[#5dbe74] px-6" onClick={()=>{handleDialog();setType("Approved")}}>Approve</Button>
+              <Button className="bg-[#ff5757] hover:bg-[#ff5757] px-6" onClick={()=>{handleDialog();setType("Rejected")}}>Reject</Button>
+              <Button className="bg-[#4430bf] hover:bg-[#4430bf] px-6" onClick={()=>{handleDialog();setType("Send Back")}}>Send Back</Button>
               </div>
             </div>
           </div>
@@ -293,6 +305,14 @@ useEffect(()=>{
         eventData = {eventData}
         PageName=""
         />
+        {
+          isCommentbox &&
+        <Comment_box 
+        handleClose={handleDialog}
+        handleComment={handleComment}
+        Submitbutton = {handleApprove}
+        />
+        }
         </div>
     
   )

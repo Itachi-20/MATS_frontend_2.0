@@ -21,6 +21,46 @@ const page = () => {
     setOpen(prevState => !prevState);
   };
 
+  const [type,setType] = useState<string | undefined>();
+  const [name,setName] = useState<string | undefined>();
+  const [documentName,setDocumentName] = useState<string>()
+
+
+  const handleSave = async()=>{
+    try {
+      let body = {};
+      if(type == "edit"){
+        body = {
+          repository_type:documentName,
+          name:name,
+        }
+      }else{
+        body = {
+          repository_type:documentName
+        }
+      }
+
+      const response = await fetch("api/documentRepository/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: 'include',
+          body: JSON.stringify(body)
+        }
+      )
+
+      if(response.ok){
+        console.log("successfully submited");
+      }else{
+        console.log("failed");
+      }
+    } catch (error) {
+      console.log("error in submission")
+    }
+  }
+
   return (
     <>
       <div className='p-7 w-full relative z-20 text-black'>
@@ -30,7 +70,7 @@ const page = () => {
             placeholder="Search"
           />
           <div className="flex gap-5">
-            <Button className='text-black text-md font-normal bg-white hover:bg-white border rounded-[25px] px-8 py-5 shadow' onClick={handleAdd}>Add New <span className='p-2 text-lg'>+</span></Button>
+            <Button className='text-black text-md font-normal bg-white hover:bg-white border rounded-[25px] px-8 py-5 shadow' onClick={()=>{handleAdd();setType("edit")}}>Add New <span className='p-2 text-lg'>+</span></Button>
             <Select>
               <SelectTrigger className="dropdown rounded-[25px] gap-4">
                 <SelectValue placeholder="Export" />
@@ -82,11 +122,11 @@ const page = () => {
             </div>
           </div>
         </div>
-        <Table />
+        <Table handleAdd={handleAdd} setName={setName}setType={setType}/>
       </div>
 
 
-      {open && <AddPopup handleAdd={handleAdd}/>}
+      {open && <AddPopup handleAdd={handleAdd} type={type} setType={setType} name={name} handleSave={handleSave} setDocumentName={setDocumentName}/>}
     </>
   )
 }
