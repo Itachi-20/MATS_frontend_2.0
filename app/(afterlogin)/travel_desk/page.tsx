@@ -34,7 +34,7 @@ export default async function BudgetRequestPage () {
 const cookie = await cookies();
 
   const tableData:EventDetails[] = await getTableData(cookie);
-  console.log(tableData,"this is tabledata")
+  console.log(tableData && tableData,"this is tabledata")
  
   return (
         <div className="p-7 w-full relative z-20 text-black">
