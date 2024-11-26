@@ -234,6 +234,8 @@ const Fields = ({ ...Props }: Props) => {
   //   handleCostCenter(Props?.formdata?.cc_name);
   // },[Props?.formdata?.cc_name]);
  
+  console.log("Print", Props.expenseData);
+
   return (
 
     <>

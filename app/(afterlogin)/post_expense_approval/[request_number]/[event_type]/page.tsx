@@ -148,6 +148,7 @@ import SuccessProp from '@/components/success_prop';
         narration: string;
         isClosed: boolean;
     };
+    
 
 const page = () => {
     // const defaultFormData: FormData = {
@@ -220,6 +221,7 @@ const page = () => {
     //     actual_vendors: [],
     //     import_files: [],
     // }
+    
     const [dropdown, setDropdown] = useState<DropdownData>();
     const [opencommentbox, setCommentBox] = useState(false);
     
@@ -233,11 +235,13 @@ const page = () => {
     const view = targetView.get('view');
     const targetRole = document.cookie.split("; ").find(role => role.startsWith("role=")) ?? "";
     const role = targetRole.split("=")[1];
-    console.log("helllllllllllllllllloooooooooooooooo", view);
+   
 
     const [fileData, setFileData] = useState<File[]>();
     const [open, setOpen] = useState(false);
     const [successprop, setSuccessprop] = useState(false);
+
+    console.log(expensedata?.actual_vendors[0]?.status);
 
     const handleSuccessProp = async()=>{
         setCommentBox(false);
@@ -271,35 +275,35 @@ const page = () => {
                 const data = await response.json();
                 setExpenseData(data.data);
                 setFormData((prev)=>({...prev,
-                    name: data.data.actual_vendors[0].name,
-                    document_no: data.data.actual_vendors[0].document_no,
-                    posting_date: data.data.actual_vendors[0].posting_date,
-                    invoice_number: data.data.actual_vendors[0].invoice_number,
-                    date: data.data.event_date,
-                    basic_amount: data.data.actual_vendors[0].basic_amount,
-                    gst: data.data.actual_vendors[0].gst,
-                    invoice_amount: data.data.actual_vendors[0].invoice_amount,
-                    tds: data.data.actual_vendors[0].tds,
-                    net_amount: data.data.actual_vendors[0].net_amount,
-                    division: data.data.actual_vendors[0].division,
-                    cost_center: data.data.actual_vendors[0].cost_center,
-                    cc_name: data.data.actual_vendors[0].cc_name,
-                    nature: data.data.actual_vendors[0].nature,
-                    company_name: data.data.actual_vendors[0].company_code,
-                    gl_name: data.data.actual_vendors[0].gl_name,
-                    gl_code: data.data.actual_vendors[0].gl_code,
-                    // utr_number: data.data.actual_vendors[0].utr_number,
-                    // payment_date: data.data.actual_vendors[0].payment_date,
-                    zone: data.data.actual_vendors[0].zone,
-                    state: data.data.actual_vendors[0].state_code,
-                    city: data.data.actual_vendors[0].city,
+                    name: data.data?.actual_vendors[0]?.name,
+                    document_no: data.data?.actual_vendors[0]?.document_no,
+                    posting_date: data.data?.actual_vendors[0]?.posting_date,
+                    invoice_number: data.data?.actual_vendors[0]?.invoice_number,
+                    date: data.data?.event_date,
+                    basic_amount: data.data?.actual_vendors[0]?.basic_amount,
+                    gst: data.data?.actual_vendors[0]?.gst,
+                    invoice_amount: data.data?.actual_vendors[0]?.invoice_amount,
+                    tds: data.data?.actual_vendors[0]?.tds,
+                    net_amount: data.data?.actual_vendors[0]?.net_amount,
+                    division: data.data?.actual_vendors[0]?.division,
+                    cost_center: data.data?.actual_vendors[0]?.cost_center,
+                    cc_name: data.data?.actual_vendors[0]?.cc_name,
+                    nature: data.data?.actual_vendors[0]?.nature,
+                    company_name: data.data?.actual_vendors[0]?.company_code,
+                    gl_name: data.data?.actual_vendors[0]?.gl_name,
+                    gl_code: data.data?.actual_vendors[0]?.gl_code,
+                    // utr_number: data.data?.actual_vendors[0]?.utr_number,
+                    // payment_date: data.data?.actual_vendors[0]?.payment_date,
+                    zone: data.data?.actual_vendors[0]?.zone,
+                    state: data.data?.actual_vendors[0]?.state_code,
+                    city: data.data?.actual_vendors[0]?.city,
                     action:'',
                     remark:'',
-                    narration: data.data.actual_vendors[0].narration,
+                    narration: data.data.actual_vendors[0]?.narration,
                     isClosed: false
                 }))
 
-                console.log(data.data.actual_vendors[0].name, 'formdata is set')
+                console.log(data.data?.actual_vendors[0]?.name, 'formdata is set')
 
             } else {
                 console.log("Login failed");
@@ -438,13 +442,14 @@ const page = () => {
                         />
                     }
                 </div>
-
-                <div className='flex justify-end gap-2 pt-8'>
-                    <Button className={`${view == 'view' ?'cursor-not-allowed':''} bg-[#5DBE74] px-6`} disabled={view == 'view' ? true : false} onClick={()=>handleOpen('Approved')} >Approve</Button>
-                    <Button className={`${view == 'view' ?'cursor-not-allowed':''} bg-[#4430BF] px-6`} disabled={view == 'view' ? true : false} onClick={()=>handleOpen('Send Back')}>Send Back</Button>
-                    <Button className={`${view == 'view' ?'cursor-not-allowed':''} bg-[#FF5757] px-6`} disabled={view == 'view' ? true : false} onClick={()=>handleOpen('Rejected')}>Reject</Button>
-
-                </div>
+                {
+                    expensedata?.actual_vendors[0]?.status == "Post Expense Approved" &&
+                    <div className='flex justify-end gap-2 pt-8'>
+                        <Button className={`${expensedata?.actual_vendors[0].status == "Post Expense Approved" ?'cursor-not-allowed':''} bg-[#5DBE74] px-6`} disabled={expensedata?.actual_vendors[0].status == "Post Expense Approved" ? true : false} onClick={()=>handleOpen('Approved')} >Approve</Button>
+                        <Button className={`${expensedata?.actual_vendors[0].status == "Post Expense Approved" ?'cursor-not-allowed':''} bg-[#4430BF] px-6`} disabled={expensedata?.actual_vendors[0].status == "Post Expense Approved" ? true : false} onClick={()=>handleOpen('Send Back')}>Send Back</Button>
+                        <Button className={`${expensedata?.actual_vendors[0].status == "Post Expense Approved" ?'cursor-not-allowed':''} bg-[#FF5757] px-6`} disabled={expensedata?.actual_vendors[0].status == "Post Expense Approved" ? true : false} onClick={()=>handleOpen('Rejected')}>Reject</Button>
+                    </div>
+                }
             </div>
             {opencommentbox && <Comment_box handleClose={handleOpen} handleApproveRejectSendBack={handleApproveRejectSendBack} />}
             {open &&<ViewDoc setClose={setOpen} data={fileData}/>}
