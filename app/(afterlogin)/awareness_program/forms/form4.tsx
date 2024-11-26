@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import { Button } from "@/components/ui/button";
+import Documents from "@/components/documents"
 import {
   Table,
   TableBody,
@@ -40,6 +41,7 @@ const form4 = ({ ...Props }: Props) => {
   const [activityType, setActivityType] = useState("");
   const [refno, setRefno] = useState(localStorage.getItem("refno") ? localStorage.getItem("refno") : "");
   const [documentType, setDocumentType] = useState("");
+  const [preview_data, setPreviewData] = useState<any>(null);
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = (e.target as HTMLInputElement).files;
     setFile(files);
@@ -88,6 +90,34 @@ const form4 = ({ ...Props }: Props) => {
   const handleActivityTypeChange = (value: string) => {
     setActivityType(value);
   }
+
+  const PreviewData = async () => {
+    try {
+      const response = await fetch("/api/previewData", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          name :refno
+        })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setPreviewData(data.data);
+        console.log(data, "PreviewData")
+      } else {
+        console.log('Login failed');
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
+    }
+  };
+  useEffect(() => {
+    PreviewData();
+  }, [])
 
   console.log(file, "this is files");
   return (
@@ -177,7 +207,7 @@ const form4 = ({ ...Props }: Props) => {
           </Button>
         </div>
       </div>
-      <div className="border border-[#848484] p-4 rounded-2xl w-full grid grid-cols-2 gap-4 bg-white">
+      {/* <div className="border border-[#848484] p-4 rounded-2xl w-full grid grid-cols-2 gap-4 bg-white">
         <div className="col-span-1 flex flex-col gap-3">
           <h1 className="text-black pl-4">
             Document type:{" "}
@@ -306,7 +336,11 @@ const form4 = ({ ...Props }: Props) => {
             </TableBody>
           </Table>
         </div>
-      </div>
+      </div> */}
+      <Documents
+      eventData={preview_data}
+      PageName={''}
+      />
       <div className="flex justify-end pt-5 gap-4">
         <Button className="bg-white text-black border text-md font-normal">
           {" "}

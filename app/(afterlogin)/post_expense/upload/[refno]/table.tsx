@@ -89,7 +89,7 @@ type vendorName = {
 type VendorData = {
   vendor_type: string;
   vendor_name: string;
-  advance: number;
+  amount: number;
   file: File | null;
 };
 type DocumentRow = {
@@ -112,7 +112,7 @@ const table = ({ tableData }: Props) => {
   const [vendorDetails, setVendorDetails] = useState<VendorData>({
     vendor_type: '',
     vendor_name: '',
-    advance: 0,
+    amount: 0,
     file: null,
   });
   const [file, setFile] = useState<FileList | null>();
@@ -243,7 +243,7 @@ const table = ({ tableData }: Props) => {
 
   const handlefieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    const numericValue = name === 'advance' ? (value ? parseFloat(value) : 0) : value;
+    const numericValue = name === 'amount' ? (value ? parseFloat(value) : 0) : value;
     setVendorDetails(prev => ({ ...prev, [name]: numericValue }));
   }
   const handleConclusionChange = (newConclusion: string) => {
@@ -262,7 +262,7 @@ const table = ({ tableData }: Props) => {
     const formData = new FormData();
     formData.append("vendor_type", vendorDetails.vendor_type)
     formData.append("vendor_name", vendorDetails.vendor_name)
-    formData.append("advance", vendorDetails.advance as any)
+    formData.append("amount", vendorDetails.amount as any)
     formData.append("name", params.refno as any)
     if (file && file.length > 0) {
       for (let i = 0; i < file.length; i++) {
@@ -272,9 +272,6 @@ const table = ({ tableData }: Props) => {
       console.log("No file to upload");
       return;
     }
-    formData.append("vendor_type", vendorDetails.vendor_type);
-    formData.append("vendor_name", vendorDetails.vendor_name);
-    // formData.append("advance",vendorDetails.advance);
     try {
 
       const response = await fetch('/api/postExpense/postExpenseRequest', {
@@ -294,7 +291,7 @@ const table = ({ tableData }: Props) => {
       const file = data.message;
 
       fetchData();
-      setVendorDetails({ vendor_type: '', vendor_name: '', advance: 0, file: null });
+      setVendorDetails({ vendor_type: '', vendor_name: '', amount: 0, file: null });
       setFile(null);
       setFileList([]);
     } catch (error) {
@@ -304,32 +301,33 @@ const table = ({ tableData }: Props) => {
   };
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    console.log("formdata before submit", tabledata);
+    // console.log("formdata before submit", tabledata);
 
-    try {
-      const response = await fetch(
-        "/api/postExpense/postExpenseRequest",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: 'include',
-          body: JSON.stringify(tabledata)
-        }
-      );
-      if (response.ok) {
-        const data = await response.json();
-        console.log(data, "response data");
-        setTimeout(() => {
+    // try {
+    //   const response = await fetch(
+    //     "/api/postExpense/postExpenseRequest",
+    //     {
+    //       method: "POST",
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //       },
+    //       credentials: 'include',
+    //       body: JSON.stringify(tabledata)
+    //     }
+    //   );
+    //   if (response.ok) {
+    //     const data = await response.json();
+    //     console.log(data, "response data");
+    //     setTimeout(() => {
           router.push(`/event_list`);
-        }, 1000)
-      } else {
-        console.log("submission failed");
-      }
-    } catch (error) {
-      console.error("Error during Submission:", error);
-    }
+    //     }, 1000)
+    //   } else {
+    //     console.log("submission failed");
+    //   }
+    // } catch (error) {
+    //   console.error("Error during Submission:", error);
+    // }
+    
   };
   const handleSetFileData = async (file: any) => {
     console.log(file, 'file in setfile ')
@@ -458,7 +456,7 @@ const table = ({ tableData }: Props) => {
               className="text-black shadow"
               placeholder="Type Here"
               type='number'
-              name='advance'
+              name='amount'
               onChange={handlefieldChange}
             ></Input>
           </div>

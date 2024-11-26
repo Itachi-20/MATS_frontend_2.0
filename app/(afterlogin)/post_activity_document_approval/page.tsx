@@ -6,7 +6,7 @@ import EventDetails from "@/components/event_Details"
 import VendorDetails from "@/components/vendor_Details"
 import TotalExpense from "@/components/total_Expense"
 import Documents from "@/components/documents"
-import { useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Comment_box from "@/components/approvalCommentBox/Comment_box";
 
 type EventEntry = {
@@ -172,7 +172,7 @@ type ActivityDocument = {
 
 
 const Index = () => {
-
+  const router = useRouter();
   const [eventData,setEventData] = useState<EventEntry>();
   const [isCommentbox,setIsCommentbox] = useState<boolean>();
   const [comment,setComment] = useState<string>();
@@ -198,9 +198,10 @@ const Index = () => {
           }
         );
   
-        const data = await response.json();
+        //const data = await response.json();
   
         if (response.ok) {
+          router.push("/post_activity_document_approval_list");
         } else {
           console.log("Login failed");
         }
