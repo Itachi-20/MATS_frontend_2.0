@@ -475,13 +475,13 @@ const TableComponent = ({ ...Props }: Props) => {
                         data.status == "Post Expense Approved" && Props.role == "Event%20Finance" ?  
                         <button className="border rounded-full px-4 py-1 border-[#0e4154] text-[#0e4154]" onClick={() => router.push(`/post_expense_approval/update_utr/${Props.refno}/${data.name}`)}>update utr</button>
                         :
-                        <button className="border rounded-full px-4 py-1 border-[#0e4154] text-[#0e4154]" onClick={() => router.push(`/post_expense_approval/${Props.refno}/${data.name}?view=view`)}>view</button>
+                        <button className="border rounded-full px-4 py-1 border-[#0e4154] text-[#0e4154]" onClick={() => router.push(`/post_expense_approval/${Props.refno}/${data.name}`)}>view</button>
                       )
                      :
                       ( Props.role != "Event%20Requestor" ?
                        <button className="border rounded-full px-4 py-1 border-black text-black" onClick={() => router.push(`/post_expense_approval/${Props.refno}/${data.name}`)}>take action</button>
                        :
-                       <button className="border rounded-full px-4 py-1 border-[#0e4154] text-[#0e4154]" onClick={() => router.push(`/post_expense_approval/${Props.refno}/${data.name}?view=view`)}>view</button>
+                       <button className="border rounded-full px-4 py-1 border-[#0e4154] text-[#0e4154]" onClick={() => router.push(`/post_expense_approval/${Props.refno}/${data.name}`)}>view</button>
                       )
                     }
                     </div>
