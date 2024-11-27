@@ -452,7 +452,7 @@ const table = ({ tableData }: Props) => {
 
         </div>
 
-        {
+        { !tableData.post_expense_approved &&
           <div className=" grid grid-cols-3 gap-4 pb-7">
             <div className='col-span-3 space-y-2'>
               <label htmlFor="event_conclusion" className="text-black md:text-sm md:font-normal capitalize">
@@ -534,18 +534,21 @@ const table = ({ tableData }: Props) => {
           </div>
         }
 
-        <div className='flex justify-end gap-2 pb-7'>
-          <label className="flex items-center gap-2 px-2 bg-[#F0EDFF] rounded-md shadow-sm cursor-pointer border-[1px]">
-            <Image src={'/svg/download.svg'} alt='downloadsvg' width={20} height={20} />
-            <span className="font-medium text-[#4430BF]">
-              {fileList.length > 0
-                ? fileList.map((file) => file.name).join(", ")
-                : "Receipt/Bill"}
-            </span>
-            <Input type="file" className="hidden" onChange={(e) => { handleFileUpload(e) }} id="file" multiple readOnly={isLoading ? true:false}/>
-          </label>
-          <Button className="border border-[#4430bf] text-[#4430bf] text-[18px]" disabled={isLoading ? true:false} onClick={addVendor} >{isLoading ? 'Adding...':'Add'}</Button>
-        </div>
+        {
+          !tableData.post_expense_approved && 
+          <div className='flex justify-end gap-2 pb-7'>
+            <label className="flex items-center gap-2 px-2 bg-[#F0EDFF] rounded-md shadow-sm cursor-pointer border-[1px]">
+              <Image src={'/svg/download.svg'} alt='downloadsvg' width={20} height={20} />
+              <span className="font-medium text-[#4430BF]">
+                {fileList.length > 0
+                  ? fileList.map((file) => file.name).join(", ")
+                  : "Receipt/Bill"}
+              </span>
+              <Input type="file" className="hidden" onChange={(e) => { handleFileUpload(e) }} id="file" multiple readOnly={isLoading ? true:false}/>
+            </label>
+            <Button className="border border-[#4430bf] text-[#4430bf] text-[18px]" disabled={isLoading ? true:false} onClick={addVendor} >{isLoading ? 'Adding...':'Add'}</Button>
+          </div>
+        }
         <div className="border bg-white h-full p-4 rounded-[18px]">
           <Table className={""}>
             <TableHeader className={"bg-[#E0E9FF]"}>
@@ -688,10 +691,12 @@ const table = ({ tableData }: Props) => {
             }
           </Table>
         </div>
-
-        <div className='flex justify-end gap-2 pt-8'>
-          <Button className='bg-[#4430BF] px-10 text-white' onClick={handleSubmit}>Submit</Button>
-        </div>
+        {
+          !tableData.post_expense_approved && 
+          <div className='flex justify-end gap-2 pt-8'>
+            <Button className='bg-[#4430BF] px-10 text-white' onClick={handleSubmit}>Submit</Button>
+          </div>
+        }
       </div>
       {
         open &&
