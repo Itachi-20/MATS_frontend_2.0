@@ -16,6 +16,7 @@ export default function Department ({ initialValue }: { initialValue: string }) 
 
     const [currentPage, setCurrentPage] = useState(1);
     const rolesPerPage = 6;
+    
     const [isEditing, setIsEditing] = useState(false);
     const [inputValue, setInputValue] = useState(initialValue);
 

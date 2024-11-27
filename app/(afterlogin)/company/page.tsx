@@ -17,14 +17,45 @@ type CompanyTable = {
 export default function Company() {
 
     const [currentPage, setCurrentPage] = useState(1);
-    const totalPages = 10; 
-
-    const handlePageChange = (page: React.SetStateAction<number>) => {
-        setCurrentPage(page);
-      };
-
+    const rolesPerPage = 6; 
     const CompanyDetails: CompanyTable[] = [
         {
+            company_name:"company name",
+        },
+        {
+            company_name:"company name",
+        },
+        {
+            company_name:"company name",
+        },
+        {
+            company_name:"company name",
+        },{
+            company_name:"company name",
+        },
+        {
+            company_name:"company name",
+        },{
+            company_name:"company name",
+        },
+        {
+            company_name:"company name",
+        },{
+            company_name:"company name",
+        },
+        {
+            company_name:"company name",
+        },{
+            company_name:"company name",
+        },
+        {
+            company_name:"company name",
+        },{
+            company_name:"company name",
+        },
+        {
+            company_name:"company name",
+        },{
             company_name:"company name",
         },
         {
@@ -45,6 +76,13 @@ export default function Company() {
         
       
     ];
+
+    const totalPages = Math.ceil(CompanyDetails.length / rolesPerPage);
+    // Get paginated roles
+    const CompanyTableDetails = CompanyDetails.slice(
+    (currentPage - 1) * rolesPerPage,
+    currentPage * rolesPerPage
+    )
 
     return (
 
@@ -146,8 +184,8 @@ export default function Company() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {CompanyDetails &&
-                            CompanyDetails.map((CompanyDetail, index) => {
+                        {CompanyTableDetails &&
+                            CompanyTableDetails.map((CompanyDetail, index) => {
                                 return (
                                       <TableRow key={index} className="text-center text-nowrap">
                                         <TableCell>{CompanyDetail.company_name}</TableCell>
@@ -166,11 +204,11 @@ export default function Company() {
                 </Table>
             </div>
             <div className="flex justify-end">
-             <Pagination
-              totalPages={totalPages}
-              currentPage={currentPage}
-              onPageChange={handlePageChange}
-             />
+                <Pagination
+                    totalPages={totalPages}
+                    currentPage={currentPage}
+                    onPageChange={(page) => setCurrentPage(page)}
+                />
             </div>
         </div>
 

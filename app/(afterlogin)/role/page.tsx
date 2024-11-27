@@ -29,9 +29,6 @@ export default function Role ({ initialValue }: { initialValue: string }) {
         setIsEditing(false);
     };
 
-    const handlePageChange = (page: React.SetStateAction<number>) => {
-        setCurrentPage(page);
-    };
 
     const RoleDetails: RoleTable[] = [
         {

@@ -16,7 +16,6 @@ import {
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -32,11 +31,7 @@ type PersonStateTable = {
 const PersonStateInformation = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = 10;    
-  const handlePageChange = (page: React.SetStateAction<number>) => {
-      setCurrentPage(page);
-      // Fetch your data for the new page here
-    };
+  const rolesPerPage = 6;
 
   const PersonInfo: PersonStateTable[] = [
     {
@@ -49,6 +44,133 @@ const PersonStateInformation = () => {
     state_name: "Lorem ipsum",
 
   },
+  {
+    person_name: "2346",
+    state_name: "Lorem ipsum",
+
+  },
+  {
+  person_name: "2346",
+  state_name: "Lorem ipsum",
+
+}, {
+  person_name: "2346",
+  state_name: "Lorem ipsum",
+
+},
+{
+person_name: "2346",
+state_name: "Lorem ipsum",
+
+}, {
+  person_name: "2346",
+  state_name: "Lorem ipsum",
+
+},
+{
+person_name: "2346",
+state_name: "Lorem ipsum",
+
+}, {
+  person_name: "2346",
+  state_name: "Lorem ipsum",
+
+},
+{
+person_name: "2346",
+state_name: "Lorem ipsum",
+
+}, {
+  person_name: "2346",
+  state_name: "Lorem ipsum",
+
+},
+{
+person_name: "2346",
+state_name: "Lorem ipsum",
+
+}, {
+  person_name: "2346",
+  state_name: "Lorem ipsum",
+
+},
+{
+person_name: "2346",
+state_name: "Lorem ipsum",
+
+}, {
+  person_name: "2346",
+  state_name: "Lorem ipsum",
+
+},
+{
+person_name: "2346",
+state_name: "Lorem ipsum",
+
+}, {
+  person_name: "2346",
+  state_name: "Lorem ipsum",
+
+},
+{
+person_name: "2346",
+state_name: "Lorem ipsum",
+
+}, {
+  person_name: "2346",
+  state_name: "Lorem ipsum",
+
+},
+{
+person_name: "2346",
+state_name: "Lorem ipsum",
+
+}, {
+      person_name: "2346",
+      state_name: "Lorem ipsum",
+
+    },
+    {
+    person_name: "2346",
+    state_name: "Lorem ipsum",
+
+  }, {
+      person_name: "2346",
+      state_name: "Lorem ipsum",
+
+    },
+    {
+    person_name: "2346",
+    state_name: "Lorem ipsum",
+
+  }, {
+    person_name: "2346",
+    state_name: "Lorem ipsum",
+
+  },
+  {
+  person_name: "2346",
+  state_name: "Lorem ipsum",
+
+}, {
+  person_name: "2346",
+  state_name: "Lorem ipsum",
+
+},
+{
+person_name: "2346",
+state_name: "Lorem ipsum",
+
+}, {
+  person_name: "2346",
+  state_name: "Lorem ipsum",
+
+},
+{
+person_name: "2346",
+state_name: "Lorem ipsum",
+
+},
   {
     person_name: "2346",
     state_name: "Lorem ipsum",
@@ -69,6 +191,15 @@ const PersonStateInformation = () => {
 
   },
   ];
+
+
+  
+  const totalPages = Math.ceil(PersonInfo.length / rolesPerPage);
+  // Get paginated roles
+  const PersonTableInfo = PersonInfo.slice(
+  (currentPage - 1) * rolesPerPage,
+  currentPage * rolesPerPage
+ )
 
   return (
     <>
@@ -182,8 +313,8 @@ const PersonStateInformation = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                  {PersonInfo &&
-                    PersonInfo.map((person, index) => {
+                  {PersonTableInfo &&
+                    PersonTableInfo.map((person, index) => {
                       return (
                         <TableRow key={index} className="text-center text-nowrap">
                           <TableCell>{person.person_name}</TableCell>
@@ -206,11 +337,11 @@ const PersonStateInformation = () => {
             </Table>
           </div>
           <div className="flex justify-end">
-             <Pagination
-              totalPages={totalPages}
-              currentPage={currentPage}
-              onPageChange={handlePageChange}
-             />
+                <Pagination
+                    totalPages={totalPages}
+                    currentPage={currentPage}
+                    onPageChange={(page) => setCurrentPage(page)}
+                />
             </div>
         </div>
     </>

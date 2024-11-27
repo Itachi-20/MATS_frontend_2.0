@@ -6,7 +6,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import Pagination from "@/components/pagination";
-import ToggleButton from "@/components/toggle_button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, } from "@/components/ui/table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from "@/components/ui/select";
 
@@ -18,20 +17,48 @@ type TherapyTable = {
 
 export default function Therapy() {
 
-    // const [isEditable, setIsEditable] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
-    const totalPages = 10; 
+  const rolesPerPage = 6;
 
     const toggleEdit = () => {
         setIsEditable((prev) => !prev);
       };
 
-    const handlePageChange = (page: React.SetStateAction<number>) => {
-        setCurrentPage(page);
-      };
-
     const therapyDetails: TherapyTable[] = [
         {
+            service_name:"TAVI",
+            division: "Cardiac Surgery",
+           
+        },
+        {
+            service_name:"TAVI",
+            division: "Cardiac Surgery",
+           
+        }, {
+            service_name:"TAVI",
+            division: "Cardiac Surgery",
+           
+        }, {
+            service_name:"TAVI",
+            division: "Cardiac Surgery",
+           
+        }, {
+            service_name:"TAVI",
+            division: "Cardiac Surgery",
+           
+        }, {
+            service_name:"TAVI",
+            division: "Cardiac Surgery",
+           
+        }, {
+            service_name:"TAVI",
+            division: "Cardiac Surgery",
+           
+        }, {
+            service_name:"TAVI",
+            division: "Cardiac Surgery",
+           
+        }, {
             service_name:"TAVI",
             division: "Cardiac Surgery",
            
@@ -58,6 +85,14 @@ export default function Therapy() {
         },
       
     ];
+
+
+    const totalPages = Math.ceil(therapyDetails.length / rolesPerPage);
+  // Get paginated roles
+  const therapyTableDetails = therapyDetails.slice(
+  (currentPage - 1) * rolesPerPage,
+  currentPage * rolesPerPage
+ )
 
     return (
 
@@ -175,8 +210,8 @@ export default function Therapy() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {therapyDetails &&
-                            therapyDetails.map((therapyDetail, index) => {
+                        {therapyTableDetails &&
+                            therapyTableDetails.map((therapyDetail, index) => {
                                 return (
                                       <TableRow key={index} className="text-center text-nowrap">
                                         <TableCell>{therapyDetail.service_name}</TableCell>
@@ -195,11 +230,11 @@ export default function Therapy() {
                 </Table>
             </div>
             <div className="flex justify-end">
-             <Pagination
-              totalPages={totalPages}
-              currentPage={currentPage}
-              onPageChange={handlePageChange}
-             />
+                <Pagination
+                    totalPages={totalPages}
+                    currentPage={currentPage}
+                    onPageChange={(page) => setCurrentPage(page)}
+                />
             </div>
         </div>
 

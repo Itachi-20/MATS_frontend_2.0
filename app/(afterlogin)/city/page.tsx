@@ -20,7 +20,7 @@ type CityTable = {
 export default function Division({ initialValue }: { initialValue: string }) {
 
     const [currentPage, setCurrentPage] = useState(1);
-    const totalPages = 10;
+    const rolesPerPage = 6;   
     const [isEditing, setIsEditing] = useState(false);
     const [inputValue, setInputValue] = useState(initialValue);
 
@@ -33,12 +33,258 @@ export default function Division({ initialValue }: { initialValue: string }) {
         setInputValue(initialValue); // Reset to initial value
         setIsEditing(false);
     };
-    const handlePageChange = (page: React.SetStateAction<number>) => {
-        setCurrentPage(page);
-    };
+   
 
     const CityDetails: CityTable[] = [
         {
+            country_name: "India",
+            region_name: "Central",
+            state_name: "A Sundar Ganesh",
+            city_type: "Sivanesan M",
+            city_name: "Chandan Sharma",
+        },
+        {
+            country_name: "India",
+            region_name: "Central",
+            state_name: "A Sundar Ganesh",
+            city_type: "Sivanesan M",
+            city_name: "Chandan Sharma",
+        },
+        {
+            country_name: "India",
+            region_name: "Central",
+            state_name: "A Sundar Ganesh",
+            city_type: "Sivanesan M",
+            city_name: "Chandan Sharma",
+        },
+        {
+            country_name: "India",
+            region_name: "Central",
+            state_name: "A Sundar Ganesh",
+            city_type: "Sivanesan M",
+            city_name: "Chandan Sharma",
+        }, {
+            country_name: "India",
+            region_name: "Central",
+            state_name: "A Sundar Ganesh",
+            city_type: "Sivanesan M",
+            city_name: "Chandan Sharma",
+        },
+        {
+            country_name: "India",
+            region_name: "Central",
+            state_name: "A Sundar Ganesh",
+            city_type: "Sivanesan M",
+            city_name: "Chandan Sharma",
+        }, {
+            country_name: "India",
+            region_name: "Central",
+            state_name: "A Sundar Ganesh",
+            city_type: "Sivanesan M",
+            city_name: "Chandan Sharma",
+        },
+        {
+            country_name: "India",
+            region_name: "Central",
+            state_name: "A Sundar Ganesh",
+            city_type: "Sivanesan M",
+            city_name: "Chandan Sharma",
+        }, {
+            country_name: "India",
+            region_name: "Central",
+            state_name: "A Sundar Ganesh",
+            city_type: "Sivanesan M",
+            city_name: "Chandan Sharma",
+        },
+        {
+            country_name: "India",
+            region_name: "Central",
+            state_name: "A Sundar Ganesh",
+            city_type: "Sivanesan M",
+            city_name: "Chandan Sharma",
+        }, {
+            country_name: "India",
+            region_name: "Central",
+            state_name: "A Sundar Ganesh",
+            city_type: "Sivanesan M",
+            city_name: "Chandan Sharma",
+        },
+        {
+            country_name: "India",
+            region_name: "Central",
+            state_name: "A Sundar Ganesh",
+            city_type: "Sivanesan M",
+            city_name: "Chandan Sharma",
+        }, {
+            country_name: "India",
+            region_name: "Central",
+            state_name: "A Sundar Ganesh",
+            city_type: "Sivanesan M",
+            city_name: "Chandan Sharma",
+        },
+        {
+            country_name: "India",
+            region_name: "Central",
+            state_name: "A Sundar Ganesh",
+            city_type: "Sivanesan M",
+            city_name: "Chandan Sharma",
+        }, {
+            country_name: "India",
+            region_name: "Central",
+            state_name: "A Sundar Ganesh",
+            city_type: "Sivanesan M",
+            city_name: "Chandan Sharma",
+        },
+        {
+            country_name: "India",
+            region_name: "Central",
+            state_name: "A Sundar Ganesh",
+            city_type: "Sivanesan M",
+            city_name: "Chandan Sharma",
+        }, {
+            country_name: "India",
+            region_name: "Central",
+            state_name: "A Sundar Ganesh",
+            city_type: "Sivanesan M",
+            city_name: "Chandan Sharma",
+        },
+        {
+            country_name: "India",
+            region_name: "Central",
+            state_name: "A Sundar Ganesh",
+            city_type: "Sivanesan M",
+            city_name: "Chandan Sharma",
+        }, {
+            country_name: "India",
+            region_name: "Central",
+            state_name: "A Sundar Ganesh",
+            city_type: "Sivanesan M",
+            city_name: "Chandan Sharma",
+        },
+        {
+            country_name: "India",
+            region_name: "Central",
+            state_name: "A Sundar Ganesh",
+            city_type: "Sivanesan M",
+            city_name: "Chandan Sharma",
+        }, {
+            country_name: "India",
+            region_name: "Central",
+            state_name: "A Sundar Ganesh",
+            city_type: "Sivanesan M",
+            city_name: "Chandan Sharma",
+        },
+        {
+            country_name: "India",
+            region_name: "Central",
+            state_name: "A Sundar Ganesh",
+            city_type: "Sivanesan M",
+            city_name: "Chandan Sharma",
+        }, {
+            country_name: "India",
+            region_name: "Central",
+            state_name: "A Sundar Ganesh",
+            city_type: "Sivanesan M",
+            city_name: "Chandan Sharma",
+        },
+        {
+            country_name: "India",
+            region_name: "Central",
+            state_name: "A Sundar Ganesh",
+            city_type: "Sivanesan M",
+            city_name: "Chandan Sharma",
+        }, {
+            country_name: "India",
+            region_name: "Central",
+            state_name: "A Sundar Ganesh",
+            city_type: "Sivanesan M",
+            city_name: "Chandan Sharma",
+        },
+        {
+            country_name: "India",
+            region_name: "Central",
+            state_name: "A Sundar Ganesh",
+            city_type: "Sivanesan M",
+            city_name: "Chandan Sharma",
+        }, {
+            country_name: "India",
+            region_name: "Central",
+            state_name: "A Sundar Ganesh",
+            city_type: "Sivanesan M",
+            city_name: "Chandan Sharma",
+        },
+        {
+            country_name: "India",
+            region_name: "Central",
+            state_name: "A Sundar Ganesh",
+            city_type: "Sivanesan M",
+            city_name: "Chandan Sharma",
+        }, {
+            country_name: "India",
+            region_name: "Central",
+            state_name: "A Sundar Ganesh",
+            city_type: "Sivanesan M",
+            city_name: "Chandan Sharma",
+        },
+        {
+            country_name: "India",
+            region_name: "Central",
+            state_name: "A Sundar Ganesh",
+            city_type: "Sivanesan M",
+            city_name: "Chandan Sharma",
+        }, {
+            country_name: "India",
+            region_name: "Central",
+            state_name: "A Sundar Ganesh",
+            city_type: "Sivanesan M",
+            city_name: "Chandan Sharma",
+        },
+        {
+            country_name: "India",
+            region_name: "Central",
+            state_name: "A Sundar Ganesh",
+            city_type: "Sivanesan M",
+            city_name: "Chandan Sharma",
+        }, {
+            country_name: "India",
+            region_name: "Central",
+            state_name: "A Sundar Ganesh",
+            city_type: "Sivanesan M",
+            city_name: "Chandan Sharma",
+        },
+        {
+            country_name: "India",
+            region_name: "Central",
+            state_name: "A Sundar Ganesh",
+            city_type: "Sivanesan M",
+            city_name: "Chandan Sharma",
+        }, {
+            country_name: "India",
+            region_name: "Central",
+            state_name: "A Sundar Ganesh",
+            city_type: "Sivanesan M",
+            city_name: "Chandan Sharma",
+        },
+        {
+            country_name: "India",
+            region_name: "Central",
+            state_name: "A Sundar Ganesh",
+            city_type: "Sivanesan M",
+            city_name: "Chandan Sharma",
+        }, {
+            country_name: "India",
+            region_name: "Central",
+            state_name: "A Sundar Ganesh",
+            city_type: "Sivanesan M",
+            city_name: "Chandan Sharma",
+        },
+        {
+            country_name: "India",
+            region_name: "Central",
+            state_name: "A Sundar Ganesh",
+            city_type: "Sivanesan M",
+            city_name: "Chandan Sharma",
+        }, {
             country_name: "India",
             region_name: "Central",
             state_name: "A Sundar Ganesh",
@@ -75,6 +321,12 @@ export default function Division({ initialValue }: { initialValue: string }) {
         },
     ];
 
+    const totalPages = Math.ceil(CityDetails.length / rolesPerPage);
+  // Get paginated roles
+  const CityTableDetails = CityDetails.slice(
+  (currentPage - 1) * rolesPerPage,
+  currentPage * rolesPerPage
+  )
     return (
 
         <div className="p-7 w-full relative z-20 text-black">
@@ -248,8 +500,8 @@ export default function Division({ initialValue }: { initialValue: string }) {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {CityDetails &&
-                            CityDetails.map((CityDetail, index) => {
+                        {CityTableDetails &&
+                            CityTableDetails.map((CityDetail, index) => {
                                 return (
                                     <>
                                         <TableRow key={index} className="text-center text-nowrap">
@@ -273,7 +525,7 @@ export default function Division({ initialValue }: { initialValue: string }) {
                 <Pagination
                     totalPages={totalPages}
                     currentPage={currentPage}
-                    onPageChange={handlePageChange}
+                    onPageChange={(page) => setCurrentPage(page)}
                 />
             </div>
         </div>

@@ -54,14 +54,221 @@ type FinanceReportTable = {
 
 export default function FinanceReport () {
   const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = 10;    
-  const handlePageChange = (page: React.SetStateAction<number>) => {
-      setCurrentPage(page);
-      // Fetch your data for the new page here
-    };
+  const rolesPerPage = 6;
 
-    const financeDatas: FinanceReportTable[] = [
+    const financeReportDatas: FinanceReportTable[] = [
         {
+            request_number:"Lorem ipsum",
+            event_type: "type-1",
+            event_date: "11/11/23",
+            event_end_date:"11/11/23",
+            vendor_code: 217317,
+            vendor_name:"abc",
+            total_expense:3300,
+            region:"Name 0001",
+            expense_status:"Name 0001",
+            evenet_requester: "Name 0001",
+            created_by:"Name 0001",
+            date:"11/11/23",
+            pre_activity_approved_by_final_approver:"Name 0001",
+            post_activity_approved_by_final_approver:"Name 0001",
+            post_activity_approved_by_finance:"Name 0001",
+            pre_activity_approved_by_finance:"Name 0001",
+            document_number:127621,
+            posting_date:'11/11/23',
+            invoice_number:'abc123',
+            date2:"11/11/23",
+            basic_amount:127112,
+            division:"division",
+            gl_number:"125cc",
+            gl_name:"glname",
+            cost_center:'tewtew',
+            cc_name:'Name 0001',
+            nature:'Name 0001',
+            company_name:'Name 0001',
+            gst:'Name 0001',
+            invoice_amount:2165327,
+            invoice_documnet:'ffff',
+            tds:'asfhsa',
+            net_amount:1265126,
+            utr:'asdjujsad',
+            payment_date:"11/11/23",
+            budget:52517172,
+            therapy:'asghsa',
+            zone:'asghas',
+            state:"uttar pradesh",
+            city:'lukhnow',
+            narration:'remarks'
+          },
+          {
+            request_number:"Lorem ipsum",
+            event_type: "type-1",
+            event_date: "11/11/23",
+            event_end_date:"11/11/23",
+            vendor_code: 217317,
+            vendor_name:"abc",
+            total_expense:3300,
+            region:"Name 0001",
+            expense_status:"Name 0001",
+            evenet_requester: "Name 0001",
+            created_by:"Name 0001",
+            date:"11/11/23",
+            pre_activity_approved_by_final_approver:"Name 0001",
+            post_activity_approved_by_final_approver:"Name 0001",
+            post_activity_approved_by_finance:"Name 0001",
+            pre_activity_approved_by_finance:"Name 0001",
+            document_number:127621,
+            posting_date:'11/11/23',
+            invoice_number:'abc123',
+            date2:"11/11/23",
+            basic_amount:127112,
+            division:"division",
+            gl_number:"125cc",
+            gl_name:"glname",
+            cost_center:'tewtew',
+            cc_name:'Name 0001',
+            nature:'Name 0001',
+            company_name:'Name 0001',
+            gst:'Name 0001',
+            invoice_amount:2165327,
+            invoice_documnet:'ffff',
+            tds:'asfhsa',
+            net_amount:1265126,
+            utr:'asdjujsad',
+            payment_date:"11/11/23",
+            budget:52517172,
+            therapy:'asghsa',
+            zone:'asghas',
+            state:"uttar pradesh",
+            city:'lukhnow',
+            narration:'remarks'
+          }, {
+            request_number:"Lorem ipsum",
+            event_type: "type-1",
+            event_date: "11/11/23",
+            event_end_date:"11/11/23",
+            vendor_code: 217317,
+            vendor_name:"abc",
+            total_expense:3300,
+            region:"Name 0001",
+            expense_status:"Name 0001",
+            evenet_requester: "Name 0001",
+            created_by:"Name 0001",
+            date:"11/11/23",
+            pre_activity_approved_by_final_approver:"Name 0001",
+            post_activity_approved_by_final_approver:"Name 0001",
+            post_activity_approved_by_finance:"Name 0001",
+            pre_activity_approved_by_finance:"Name 0001",
+            document_number:127621,
+            posting_date:'11/11/23',
+            invoice_number:'abc123',
+            date2:"11/11/23",
+            basic_amount:127112,
+            division:"division",
+            gl_number:"125cc",
+            gl_name:"glname",
+            cost_center:'tewtew',
+            cc_name:'Name 0001',
+            nature:'Name 0001',
+            company_name:'Name 0001',
+            gst:'Name 0001',
+            invoice_amount:2165327,
+            invoice_documnet:'ffff',
+            tds:'asfhsa',
+            net_amount:1265126,
+            utr:'asdjujsad',
+            payment_date:"11/11/23",
+            budget:52517172,
+            therapy:'asghsa',
+            zone:'asghas',
+            state:"uttar pradesh",
+            city:'lukhnow',
+            narration:'remarks'
+          }, {
+            request_number:"Lorem ipsum",
+            event_type: "type-1",
+            event_date: "11/11/23",
+            event_end_date:"11/11/23",
+            vendor_code: 217317,
+            vendor_name:"abc",
+            total_expense:3300,
+            region:"Name 0001",
+            expense_status:"Name 0001",
+            evenet_requester: "Name 0001",
+            created_by:"Name 0001",
+            date:"11/11/23",
+            pre_activity_approved_by_final_approver:"Name 0001",
+            post_activity_approved_by_final_approver:"Name 0001",
+            post_activity_approved_by_finance:"Name 0001",
+            pre_activity_approved_by_finance:"Name 0001",
+            document_number:127621,
+            posting_date:'11/11/23',
+            invoice_number:'abc123',
+            date2:"11/11/23",
+            basic_amount:127112,
+            division:"division",
+            gl_number:"125cc",
+            gl_name:"glname",
+            cost_center:'tewtew',
+            cc_name:'Name 0001',
+            nature:'Name 0001',
+            company_name:'Name 0001',
+            gst:'Name 0001',
+            invoice_amount:2165327,
+            invoice_documnet:'ffff',
+            tds:'asfhsa',
+            net_amount:1265126,
+            utr:'asdjujsad',
+            payment_date:"11/11/23",
+            budget:52517172,
+            therapy:'asghsa',
+            zone:'asghas',
+            state:"uttar pradesh",
+            city:'lukhnow',
+            narration:'remarks'
+          }, {
+            request_number:"Lorem ipsum",
+            event_type: "type-1",
+            event_date: "11/11/23",
+            event_end_date:"11/11/23",
+            vendor_code: 217317,
+            vendor_name:"abc",
+            total_expense:3300,
+            region:"Name 0001",
+            expense_status:"Name 0001",
+            evenet_requester: "Name 0001",
+            created_by:"Name 0001",
+            date:"11/11/23",
+            pre_activity_approved_by_final_approver:"Name 0001",
+            post_activity_approved_by_final_approver:"Name 0001",
+            post_activity_approved_by_finance:"Name 0001",
+            pre_activity_approved_by_finance:"Name 0001",
+            document_number:127621,
+            posting_date:'11/11/23',
+            invoice_number:'abc123',
+            date2:"11/11/23",
+            basic_amount:127112,
+            division:"division",
+            gl_number:"125cc",
+            gl_name:"glname",
+            cost_center:'tewtew',
+            cc_name:'Name 0001',
+            nature:'Name 0001',
+            company_name:'Name 0001',
+            gst:'Name 0001',
+            invoice_amount:2165327,
+            invoice_documnet:'ffff',
+            tds:'asfhsa',
+            net_amount:1265126,
+            utr:'asdjujsad',
+            payment_date:"11/11/23",
+            budget:52517172,
+            therapy:'asghsa',
+            zone:'asghas',
+            state:"uttar pradesh",
+            city:'lukhnow',
+            narration:'remarks'
+          }, {
             request_number:"Lorem ipsum",
             event_type: "type-1",
             event_date: "11/11/23",
@@ -320,6 +527,14 @@ export default function FinanceReport () {
             narration:'remarks'
           },
     ]
+
+
+    const totalPages = Math.ceil(financeReportDatas.length / rolesPerPage);
+    // Get paginated roles
+    const financeReportTableDatas = financeReportDatas.slice(
+    (currentPage - 1) * rolesPerPage,
+    currentPage * rolesPerPage
+   )
  
 
   return (
@@ -670,8 +885,8 @@ export default function FinanceReport () {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                  {financeDatas &&
-                    financeDatas.map((financeData, index) => {
+                  {financeReportTableDatas &&
+                    financeReportTableDatas.map((financeData, index) => {
                       return (
                         <TableRow key={index} className="text-center text-nowrap">
                           <TableCell>{financeData.request_number}</TableCell>
@@ -725,11 +940,11 @@ export default function FinanceReport () {
             </Table>
           </div>
           <div className="flex justify-end">
-             <Pagination
-              totalPages={totalPages}
-              currentPage={currentPage}
-              onPageChange={handlePageChange}
-             />
+                <Pagination
+                    totalPages={totalPages}
+                    currentPage={currentPage}
+                    onPageChange={(page) => setCurrentPage(page)}
+                />
             </div>
         </div>
   );

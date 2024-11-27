@@ -21,18 +21,62 @@ export default function EventCostCenter() {
 
     // const [isEditable, setIsEditable] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
-    const totalPages = 10; 
+    const rolesPerPage = 6;
 
     const toggleEdit = () => {
         setIsEditable((prev) => !prev);
       };
 
-    const handlePageChange = (page: React.SetStateAction<number>) => {
-        setCurrentPage(page);
-      };
+   
 
     const EventCostCenterDetails: EventCostCenterTable[] = [
         {
+            description:"description is not available",
+            cost_center_hod: "Hod name",
+            cost_center_code: 78098765,
+            division: "Peripheral",
+        },
+        {
+            description:"description is not available",
+            cost_center_hod: "Hod name",
+            cost_center_code: 78098765,
+            division: "Peripheral",
+        },{
+            description:"description is not available",
+            cost_center_hod: "Hod name",
+            cost_center_code: 78098765,
+            division: "Peripheral",
+        },{
+            description:"description is not available",
+            cost_center_hod: "Hod name",
+            cost_center_code: 78098765,
+            division: "Peripheral",
+        },{
+            description:"description is not available",
+            cost_center_hod: "Hod name",
+            cost_center_code: 78098765,
+            division: "Peripheral",
+        },{
+            description:"description is not available",
+            cost_center_hod: "Hod name",
+            cost_center_code: 78098765,
+            division: "Peripheral",
+        },{
+            description:"description is not available",
+            cost_center_hod: "Hod name",
+            cost_center_code: 78098765,
+            division: "Peripheral",
+        },{
+            description:"description is not available",
+            cost_center_hod: "Hod name",
+            cost_center_code: 78098765,
+            division: "Peripheral",
+        },{
+            description:"description is not available",
+            cost_center_hod: "Hod name",
+            cost_center_code: 78098765,
+            division: "Peripheral",
+        },{
             description:"description is not available",
             cost_center_hod: "Hod name",
             cost_center_code: 78098765,
@@ -64,6 +108,14 @@ export default function EventCostCenter() {
         },
       
     ];
+
+    
+    const totalPages = Math.ceil(EventCostCenterDetails.length / rolesPerPage);
+    // Get paginated roles
+    const EventCostCenterTableDetails = EventCostCenterDetails.slice(
+    (currentPage - 1) * rolesPerPage,
+    currentPage * rolesPerPage
+   )
 
     return (
 
@@ -217,8 +269,8 @@ export default function EventCostCenter() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {EventCostCenterDetails &&
-                            EventCostCenterDetails.map((EventCostCenterDetail, index) => {
+                        {EventCostCenterTableDetails &&
+                            EventCostCenterTableDetails.map((EventCostCenterDetail, index) => {
                                 return (
                                       <TableRow key={index} className="text-center text-nowrap">
                                         <TableCell>{EventCostCenterDetail.description}</TableCell>
@@ -239,11 +291,11 @@ export default function EventCostCenter() {
                 </Table>
             </div>
             <div className="flex justify-end">
-             <Pagination
-              totalPages={totalPages}
-              currentPage={currentPage}
-              onPageChange={handlePageChange}
-             />
+                <Pagination
+                    totalPages={totalPages}
+                    currentPage={currentPage}
+                    onPageChange={(page) => setCurrentPage(page)}
+                />
             </div>
         </div>
 

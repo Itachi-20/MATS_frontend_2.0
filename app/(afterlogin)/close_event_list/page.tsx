@@ -15,7 +15,6 @@ import {
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -37,14 +36,123 @@ type EventCloseListTable = {
 const EventCloselList = () => {
   const router = useRouter();
   const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = 10;    
-  const handlePageChange = (page: React.SetStateAction<number>) => {
-      setCurrentPage(page);
-      // Fetch your data for the new page here
-    };
+    const rolesPerPage = 6;    
 
   const EventCloseLists: EventCloseListTable[] = [
     {
+      request_number: "REQ001",
+      event_name: "Annual Conference",
+      event_type: "Conference",
+      event_date: "2024-10-15",
+      event_end_date:"2024-11-20",
+      event_requestor: "John Doe",
+      event_venue:"Name 0001",
+    },
+    {
+      request_number: "REQ001",
+      event_name: "Annual Conference",
+      event_type: "Conference",
+      event_date: "2024-10-15",
+      event_end_date:"2024-11-20",
+      event_requestor: "John Doe",
+      event_venue:"Name 0001",
+    }, {
+      request_number: "REQ001",
+      event_name: "Annual Conference",
+      event_type: "Conference",
+      event_date: "2024-10-15",
+      event_end_date:"2024-11-20",
+      event_requestor: "John Doe",
+      event_venue:"Name 0001",
+    }, {
+      request_number: "REQ001",
+      event_name: "Annual Conference",
+      event_type: "Conference",
+      event_date: "2024-10-15",
+      event_end_date:"2024-11-20",
+      event_requestor: "John Doe",
+      event_venue:"Name 0001",
+    }, {
+      request_number: "REQ001",
+      event_name: "Annual Conference",
+      event_type: "Conference",
+      event_date: "2024-10-15",
+      event_end_date:"2024-11-20",
+      event_requestor: "John Doe",
+      event_venue:"Name 0001",
+    }, {
+      request_number: "REQ001",
+      event_name: "Annual Conference",
+      event_type: "Conference",
+      event_date: "2024-10-15",
+      event_end_date:"2024-11-20",
+      event_requestor: "John Doe",
+      event_venue:"Name 0001",
+    }, {
+      request_number: "REQ001",
+      event_name: "Annual Conference",
+      event_type: "Conference",
+      event_date: "2024-10-15",
+      event_end_date:"2024-11-20",
+      event_requestor: "John Doe",
+      event_venue:"Name 0001",
+    }, {
+      request_number: "REQ001",
+      event_name: "Annual Conference",
+      event_type: "Conference",
+      event_date: "2024-10-15",
+      event_end_date:"2024-11-20",
+      event_requestor: "John Doe",
+      event_venue:"Name 0001",
+    }, {
+      request_number: "REQ001",
+      event_name: "Annual Conference",
+      event_type: "Conference",
+      event_date: "2024-10-15",
+      event_end_date:"2024-11-20",
+      event_requestor: "John Doe",
+      event_venue:"Name 0001",
+    }, {
+      request_number: "REQ001",
+      event_name: "Annual Conference",
+      event_type: "Conference",
+      event_date: "2024-10-15",
+      event_end_date:"2024-11-20",
+      event_requestor: "John Doe",
+      event_venue:"Name 0001",
+    }, {
+      request_number: "REQ001",
+      event_name: "Annual Conference",
+      event_type: "Conference",
+      event_date: "2024-10-15",
+      event_end_date:"2024-11-20",
+      event_requestor: "John Doe",
+      event_venue:"Name 0001",
+    }, {
+      request_number: "REQ001",
+      event_name: "Annual Conference",
+      event_type: "Conference",
+      event_date: "2024-10-15",
+      event_end_date:"2024-11-20",
+      event_requestor: "John Doe",
+      event_venue:"Name 0001",
+    }, {
+      request_number: "REQ001",
+      event_name: "Annual Conference",
+      event_type: "Conference",
+      event_date: "2024-10-15",
+      event_end_date:"2024-11-20",
+      event_requestor: "John Doe",
+      event_venue:"Name 0001",
+    }, {
+      request_number: "REQ001",
+      event_name: "Annual Conference",
+      event_type: "Conference",
+      event_date: "2024-10-15",
+      event_end_date:"2024-11-20",
+      event_requestor: "John Doe",
+      event_venue:"Name 0001",
+    }, {
       request_number: "REQ001",
       event_name: "Annual Conference",
       event_type: "Conference",
@@ -99,6 +207,13 @@ const EventCloselList = () => {
       event_venue:"Name 0001",
     },
   ];
+
+  const totalPages = Math.ceil(EventCloseLists.length / rolesPerPage);
+  // Get paginated roles
+  const EventCloseTableLists = EventCloseLists.slice(
+  (currentPage - 1) * rolesPerPage,
+  currentPage * rolesPerPage
+ )
 
   return (
     <>
@@ -218,8 +333,8 @@ const EventCloselList = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                  {EventCloseLists &&
-                    EventCloseLists.map((EventCloseList, index) => {
+                  {EventCloseTableLists &&
+                    EventCloseTableLists.map((EventCloseList, index) => {
                       return (
                         <TableRow key={index} className="text-center text-nowrap">
                           <TableCell>{EventCloseList.request_number}</TableCell>
@@ -240,11 +355,11 @@ const EventCloselList = () => {
             </Table>
           </div>
           <div className="flex justify-end">
-             <Pagination
-              totalPages={totalPages}
-              currentPage={currentPage}
-              onPageChange={handlePageChange}
-             />
+                <Pagination
+                    totalPages={totalPages}
+                    currentPage={currentPage}
+                    onPageChange={(page) => setCurrentPage(page)}
+                />
             </div>
         </div>
     </>

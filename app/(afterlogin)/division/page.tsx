@@ -10,27 +10,14 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, } from "
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from "@/components/ui/select";
 
 type DivisionTable = {
-    employee:string;
-    type: string;
-    name: string;
-    approver1: string;
-    approver2: string;
-    approver3: string;
-    approver4: string;
-    approver5: string;
-    approver6: string;
-    approver7: string;
-    department: string;
-    user_division: string;
-    event_division: string;
-    budget_type: string;
-    budget_sub_type: string;
+    division:string;
+   
 };
 
 export default function Division({initialValue}:{initialValue:string}) {
 
     const [currentPage, setCurrentPage] = useState(1);
-    const totalPages = 10;  
+    const rolesPerPage = 6; 
     const [isEditing, setIsEditing] = useState(false);
     const [inputValue, setInputValue] = useState(initialValue);
 
@@ -44,117 +31,63 @@ export default function Division({initialValue}:{initialValue:string}) {
         setIsEditing(false);
       };
 
-    const handlePageChange = (page: React.SetStateAction<number>) => {
-        setCurrentPage(page);
-      };
-
     const DivisionDetails: DivisionTable[] = [
         {
-            employee:"Sundar Ganesh",
-            type: "Advance Payment",
-            name: "A Sundar Ganesh",
-            approver1: "Sivanesan M",
-            approver2: "Chandan Sharma",
-            approver3: "Nikita Suhasaria",
-            approver4: "Nikita Suhasaria",
-            approver5: "Chandan Sharma",
-            approver6: "Chandan Sharma",
-            approver7: "Chandan Sharma",
-            department: "Sales - Healthcare (Joints)",
-            user_division: "Orthopedics",
-            event_division: "Healthcare",
-            budget_type: "budget type",
-            budget_sub_type: "sub_type"
+            division:"asghsadghsaghd",
+        
         },
         {
-            employee:"Sundar Ganesh",
-
-            type: "Advance Payment",
-            name: "A Sundar Ganesh",
-            approver1: "Sivanesan M",
-            approver2: "Chandan Sharma",
-            approver3: "Nikita Suhasaria",
-            approver4: "Nikita Suhasaria",
-            approver5: "Chandan Sharma",
-            approver6: "Chandan Sharma",
-            approver7: "Chandan Sharma",
-            department: "Sales - Healthcare (Joints)",
-            user_division: "Orthopedics",
-            event_division: "Healthcare",
-            budget_type: "budget type",
-            budget_sub_type: "sub_type"
+            division:"asghsadghsaghd",
+        
+        }, {
+            division:"asghsadghsaghd",
+        
+        }, {
+            division:"asghsadghsaghd",
+        
+        }, {
+            division:"asghsadghsaghd",
+        
+        }, {
+            division:"asghsadghsaghd",
+        
+        }, {
+            division:"asghsadghsaghd",
+        
+        }, {
+            division:"asghsadghsaghd",
+        
+        }, {
+            division:"asghsadghsaghd",
+        
+        }, {
+            division:"asghsadghsaghd",
+        
+        }, {
+            division:"asghsadghsaghd",
+        
+        }, {
+            division:"asghsadghsaghd",
+        
+        }, {
+            division:"asghsadghsaghd",
+        
+        }, {
+            division:"asghsadghsaghd",
+        
+        }, {
+            division:"asghsadghsaghd",
+        
         },
-        {
-            employee:"Sundar Ganesh",
-
-            type: "Advance Payment",
-            name: "A Sundar Ganesh",
-            approver1: "Sivanesan M",
-            approver2: "Chandan Sharma",
-            approver3: "Nikita Suhasaria",
-            approver4: "Nikita Suhasaria",
-            approver5: "Chandan Sharma",
-            approver6: "Chandan Sharma",
-            approver7: "Chandan Sharma",
-            department: "Sales - Healthcare (Joints)",
-            user_division: "Orthopedics",
-            event_division: "Healthcare",
-            budget_type: "budget type",
-            budget_sub_type: "sub_type"
-        },
-        {
-            employee:"Sundar Ganesh",
-
-            type: "Advance Payment",
-            name: "A Sundar Ganesh",
-            approver1: "Sivanesan M",
-            approver2: "Chandan Sharma",
-            approver3: "Nikita Suhasaria",
-            approver4: "Nikita Suhasaria",
-            approver5: "Chandan Sharma",
-            approver6: "Chandan Sharma",
-            approver7: "Chandan Sharma",
-            department: "Sales - Healthcare (Joints)",
-            user_division: "Orthopedics",
-            event_division: "Healthcare",
-            budget_type: "budget type",
-            budget_sub_type: "sub_type"
-        },
-        {
-            employee:"Sundar Ganesh",
-            type: "Advance Payment",
-            name: "A Sundar Ganesh",
-            approver1: "Sivanesan M",
-            approver2: "Chandan Sharma",
-            approver3: "Nikita Suhasaria",
-            approver4: "Nikita Suhasaria",
-            approver5: "Chandan Sharma",
-            approver6: "Chandan Sharma",
-            approver7: "Chandan Sharma",
-            department: "Sales - Healthcare (Joints)",
-            user_division: "Orthopedics",
-            event_division: "Healthcare",
-            budget_type: "budget type",
-            budget_sub_type: "sub_type"
-        },
-        {
-            employee:"Sundar Ganesh",
-            type: "Advance Payment",
-            name: "A Sundar Ganesh",
-            approver1: "Sivanesan M",
-            approver2: "Chandan Sharma",
-            approver3: "Nikita Suhasaria",
-            approver4: "Nikita Suhasaria",
-            approver5: "Chandan Sharma",
-            approver6: "Chandan Sharma",
-            approver7: "Chandan Sharma",
-            department: "Sales - Healthcare (Joints)",
-            user_division: "Orthopedics",
-            event_division: "Healthcare",
-            budget_type: "budget type",
-            budget_sub_type: "sub_type"
-        },
+       
     ];
+
+    const totalPages = Math.ceil(DivisionDetails.length / rolesPerPage);
+    // Get paginated roles
+    const DivisionDetail = DivisionDetails.slice(
+    (currentPage - 1) * rolesPerPage,
+    currentPage * rolesPerPage
+   )
 
     return (
 
@@ -328,12 +261,12 @@ export default function Division({initialValue}:{initialValue:string}) {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {DivisionDetails &&
-                            DivisionDetails.map((DivisionDetail, index) => {
+                        {DivisionDetail &&
+                            DivisionDetail.map((DivisionDetail, index) => {
                                 return (
                                     <>
                                         <TableRow key={index} className="text-center text-nowrap">
-                                        <TableCell>{DivisionDetail.type}</TableCell>
+                                        <TableCell>{DivisionDetail.division}</TableCell>
                                         <TableCell></TableCell>
                                         <TableCell></TableCell>
                                         <TableCell></TableCell>
@@ -359,11 +292,11 @@ export default function Division({initialValue}:{initialValue:string}) {
                 </Table>
             </div>
             <div className="flex justify-end">
-             <Pagination
-              totalPages={totalPages}
-              currentPage={currentPage}
-              onPageChange={handlePageChange}
-             />
+                <Pagination
+                    totalPages={totalPages}
+                    currentPage={currentPage}
+                    onPageChange={(page) => setCurrentPage(page)}
+                />
             </div>
         </div>
 

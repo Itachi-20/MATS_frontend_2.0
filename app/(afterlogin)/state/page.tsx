@@ -17,7 +17,6 @@ import {
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -35,12 +34,54 @@ type StateInfoTable = {
 
 const StateInformation = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = 10;    
-  const handlePageChange = (page: React.SetStateAction<number>) => {
-      setCurrentPage(page);
-      // Fetch your data for the new page here
-    };
+  const rolesPerPage = 6;   
+ 
   const StateInfos: StateInfoTable[] = [
+    {
+      company_name: "2346",
+      region_name: "HCP Services",
+      state_name: "Lorem ipsum",
+      bussiness_place: "11/11/23",
+      hcn_code:"HCN-123",
+      gst_register_company: "Requester 1",
+     
+    },
+    {
+      company_name: "2346",
+      region_name: "HCP Services",
+      state_name: "Lorem ipsum",
+      bussiness_place: "11/11/23",
+      hcn_code:"HCN-123",
+      gst_register_company: "Requester 1",
+     
+    },
+    {
+      company_name: "2346",
+      region_name: "HCP Services",
+      state_name: "Lorem ipsum",
+      bussiness_place: "11/11/23",
+      hcn_code:"HCN-123",
+      gst_register_company: "Requester 1",
+     
+    },
+    {
+      company_name: "2346",
+      region_name: "HCP Services",
+      state_name: "Lorem ipsum",
+      bussiness_place: "11/11/23",
+      hcn_code:"HCN-123",
+      gst_register_company: "Requester 1",
+     
+    },
+    {
+      company_name: "2346",
+      region_name: "HCP Services",
+      state_name: "Lorem ipsum",
+      bussiness_place: "11/11/23",
+      hcn_code:"HCN-123",
+      gst_register_company: "Requester 1",
+     
+    },
     {
       company_name: "2346",
       region_name: "HCP Services",
@@ -96,6 +137,13 @@ const StateInformation = () => {
        
       },
   ];
+
+  const totalPages = Math.ceil(StateInfos.length / rolesPerPage);
+    // Get paginated roles
+    const StateInfosDetails = StateInfos.slice(
+    (currentPage - 1) * rolesPerPage,
+    currentPage * rolesPerPage
+   )
 
   return (
     
@@ -188,8 +236,8 @@ const StateInformation = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                  {StateInfos &&
-                    StateInfos.map((stateInfo, index) => {
+                  {StateInfosDetails &&
+                    StateInfosDetails.map((stateInfo, index) => {
                       return (
                         <TableRow key={index} className="text-center text-nowrap">
                           <TableCell>{stateInfo.company_name}</TableCell>
@@ -209,11 +257,11 @@ const StateInformation = () => {
             </Table>
           </div>
           <div className="flex justify-end">
-             <Pagination
-              totalPages={totalPages}
-              currentPage={currentPage}
-              onPageChange={handlePageChange}
-             />
+                <Pagination
+                    totalPages={totalPages}
+                    currentPage={currentPage}
+                    onPageChange={(page) => setCurrentPage(page)}
+                />
             </div>
         </div>
 

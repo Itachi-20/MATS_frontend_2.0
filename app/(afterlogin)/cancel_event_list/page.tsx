@@ -15,7 +15,6 @@ import {
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -37,70 +36,183 @@ type CancelListTable = {
 const CancelList = () => {
   const router = useRouter()
   const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = 10;    
-  const handlePageChange = (page: React.SetStateAction<number>) => {
-      setCurrentPage(page);
-      // Fetch your data for the new page here
-    };
+  const rolesPerPage = 6;  
 
+   const cancelLists: CancelListTable[] = [
+    {
+      request_number: "REQ001",
+      event_name: "Annual Conference",
+      event_type: "Conference",
+      event_date: "2024-10-15",
+      event_end_date:"2024-11-20",
+      event_requestor: "John Doe",
+      event_venue:"Name 0001",
+    },
+    {
+      request_number: "REQ001",
+      event_name: "Annual Conference",
+      event_type: "Conference",
+      event_date: "2024-10-15",
+      event_end_date:"2024-11-20",
+      event_requestor: "John Doe",
+      event_venue:"Name 0001",
+    }, {
+      request_number: "REQ001",
+      event_name: "Annual Conference",
+      event_type: "Conference",
+      event_date: "2024-10-15",
+      event_end_date:"2024-11-20",
+      event_requestor: "John Doe",
+      event_venue:"Name 0001",
+    }, {
+      request_number: "REQ001",
+      event_name: "Annual Conference",
+      event_type: "Conference",
+      event_date: "2024-10-15",
+      event_end_date:"2024-11-20",
+      event_requestor: "John Doe",
+      event_venue:"Name 0001",
+    }, {
+      request_number: "REQ001",
+      event_name: "Annual Conference",
+      event_type: "Conference",
+      event_date: "2024-10-15",
+      event_end_date:"2024-11-20",
+      event_requestor: "John Doe",
+      event_venue:"Name 0001",
+    }, {
+      request_number: "REQ001",
+      event_name: "Annual Conference",
+      event_type: "Conference",
+      event_date: "2024-10-15",
+      event_end_date:"2024-11-20",
+      event_requestor: "John Doe",
+      event_venue:"Name 0001",
+    }, {
+      request_number: "REQ001",
+      event_name: "Annual Conference",
+      event_type: "Conference",
+      event_date: "2024-10-15",
+      event_end_date:"2024-11-20",
+      event_requestor: "John Doe",
+      event_venue:"Name 0001",
+    }, {
+      request_number: "REQ001",
+      event_name: "Annual Conference",
+      event_type: "Conference",
+      event_date: "2024-10-15",
+      event_end_date:"2024-11-20",
+      event_requestor: "John Doe",
+      event_venue:"Name 0001",},
+      {
+        request_number: "REQ001",
+        event_name: "Annual Conference",
+        event_type: "Conference",
+        event_date: "2024-10-15",
+        event_end_date:"2024-11-20",
+        event_requestor: "John Doe",
+        event_venue:"Name 0001",
+      }, {
+        request_number: "REQ001",
+        event_name: "Annual Conference",
+        event_type: "Conference",
+        event_date: "2024-10-15",
+        event_end_date:"2024-11-20",
+        event_requestor: "John Doe",
+        event_venue:"Name 0001",
+      }, {
+        request_number: "REQ001",
+        event_name: "Annual Conference",
+        event_type: "Conference",
+        event_date: "2024-10-15",
+        event_end_date:"2024-11-20",
+        event_requestor: "John Doe",
+        event_venue:"Name 0001",
+      }, {
+        request_number: "REQ001",
+        event_name: "Annual Conference",
+        event_type: "Conference",
+        event_date: "2024-10-15",
+        event_end_date:"2024-11-20",
+        event_requestor: "John Doe",
+        event_venue:"Name 0001",
+      },{      request_number: "REQ001",
+      event_name: "Annual Conference",
+      event_type: "Conference",
+      event_date: "2024-10-15",
+      event_end_date:"2024-11-20",
+      event_requestor: "John Doe",
+      event_venue:"Name 0001",
+    },{
+      request_number: "REQ001",
+      event_name: "Annual Conference",
+      event_type: "Conference",
+      event_date: "2024-10-15",
+      event_end_date:"2024-11-20",
+      event_requestor: "John Doe",
+      event_venue:"Name 0001",
+    },{
+      request_number: "REQ001",
+      event_name: "Annual Conference",
+      event_type: "Conference",
+      event_date: "2024-10-15",
+      event_end_date:"2024-11-20",
+      event_requestor: "John Doe",
+      event_venue:"Name 0001",
+    },
+    {
+      request_number: "REQ001",
+      event_name: "Annual Conference",
+      event_type: "Conference",
+      event_date: "2024-10-15",
+      event_end_date:"2024-11-20",
+      event_requestor: "John Doe",
+      event_venue:"Name 0001",
+    },
+    {
+      request_number: "REQ001",
+      event_name: "Annual Conference",
+      event_type: "Conference",
+      event_date: "2024-10-15",
+      event_end_date:"2024-11-20",
+      event_requestor: "John Doe",
+      event_venue:"Name 0001",
+    },
+    {
+      request_number: "REQ001",
+      event_name: "Annual Conference",
+      event_type: "Conference",
+      event_date: "2024-10-15",
+      event_end_date:"2024-11-20",
+      event_requestor: "John Doe",
+      event_venue:"Name 0001",
+    },
+    {
+      request_number: "REQ001",
+      event_name: "Annual Conference",
+      event_type: "Conference",
+      event_date: "2024-10-15",
+      event_end_date:"2024-11-20",
+      event_requestor: "John Doe",
+      event_venue:"Name 0001",
+    },
+    {
+      request_number: "REQ001",
+      event_name: "Annual Conference",
+      event_type: "Conference",
+      event_date: "2024-10-15",
+      event_end_date:"2024-11-20",
+      event_requestor: "John Doe",
+      event_venue:"Name 0001",
+    },
+    ];
 
-  const cancelLists: CancelListTable[] = [
-    {
-      request_number: "REQ001",
-      event_name: "Annual Conference",
-      event_type: "Conference",
-      event_date: "2024-10-15",
-      event_end_date:"2024-11-20",
-      event_requestor: "John Doe",
-      event_venue:"Name 0001",
-    },
-    {
-      request_number: "REQ001",
-      event_name: "Annual Conference",
-      event_type: "Conference",
-      event_date: "2024-10-15",
-      event_end_date:"2024-11-20",
-      event_requestor: "John Doe",
-      event_venue:"Name 0001",
-    },
-    {
-      request_number: "REQ001",
-      event_name: "Annual Conference",
-      event_type: "Conference",
-      event_date: "2024-10-15",
-      event_end_date:"2024-11-20",
-      event_requestor: "John Doe",
-      event_venue:"Name 0001",
-    },
-    {
-      request_number: "REQ001",
-      event_name: "Annual Conference",
-      event_type: "Conference",
-      event_date: "2024-10-15",
-      event_end_date:"2024-11-20",
-      event_requestor: "John Doe",
-      event_venue:"Name 0001",
-    },
-    {
-      request_number: "REQ001",
-      event_name: "Annual Conference",
-      event_type: "Conference",
-      event_date: "2024-10-15",
-      event_end_date:"2024-11-20",
-      event_requestor: "John Doe",
-      event_venue:"Name 0001",
-    },
-    {
-      request_number: "REQ001",
-      event_name: "Annual Conference",
-      event_type: "Conference",
-      event_date: "2024-10-15",
-      event_end_date:"2024-11-20",
-      event_requestor: "John Doe",
-      event_venue:"Name 0001",
-    },
-  ];
-
+  const totalPages = Math.ceil(cancelLists.length / rolesPerPage);
+  // Get paginated roles
+  const cancelInfoLists = cancelLists.slice(
+  (currentPage - 1) * rolesPerPage,
+  currentPage * rolesPerPage
+ )
   return (
     <>
         <div className="p-7 w-full relative z-20 text-black">
@@ -219,8 +331,8 @@ const CancelList = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                  {cancelLists &&
-                    cancelLists.map((cancelList, index) => {
+                  {cancelInfoLists &&
+                    cancelInfoLists.map((cancelList, index) => {
                       return (
                         <TableRow key={index} className="text-center text-nowrap">
                           <TableCell>{cancelList.request_number}</TableCell>
@@ -241,11 +353,11 @@ const CancelList = () => {
             </Table>
           </div>
           <div className="flex justify-end">
-             <Pagination
-              totalPages={totalPages}
-              currentPage={currentPage}
-              onPageChange={handlePageChange}
-             />
+                <Pagination
+                    totalPages={totalPages}
+                    currentPage={currentPage}
+                    onPageChange={(page) => setCurrentPage(page)}
+                />
             </div>
         </div>
     </>
