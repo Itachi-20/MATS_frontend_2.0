@@ -30,7 +30,7 @@ const Ondeleteprop = ({ ...Props }: props) => {
           </svg>
           <div className="space-x-4">
             <Button className="bg-white text-black border text-md font-normal px-12 rounded-md" onClick={() => { Props.setClose(false);}}>
-                no
+                No
             </Button>
             <Button className="bg-white text-black border text-md font-normal px-12 rounded-md hover:bg-red-500 hover:text-white" onClick={() => { Props.handleDelete()}}>
                 Yes, I'm sure

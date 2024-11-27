@@ -203,11 +203,11 @@ const table = ({ ...Props }: Props) => {
                         <TableCell>{data.net_amount}</TableCell>
                         {/* <TableCell>{data.utr_number}</TableCell>
                         <TableCell>{data.payment_date}</TableCell> */}
-                        <TableCell className='sticky right-0 z-20 gap-3 w-[120px] bg-white mt-2 flex border-l'>
+                        <TableCell className='sticky right-0 z-20 w-[120px] bg-white mt-2 flex justify-center border-l'>
                           <button onClick={() => Props.handleSetFileData(data.files)}><Image src={'/svg/view.svg'} alt='viewsvg' width={24} height={18} /></button>
                           {/* <Image src={'/svg/view.svg'} alt='viewsvg' width={24}  height={18}/> */}
-                          <Image src={'/svg/editIcon.svg'} alt='editsvg' width={20} height={18} />
-                          <Image src={'/svg/delete.svg'} alt='deletesvg' width={20} height={18} />
+                            {/* <Image src={'/svg/editIcon.svg'} alt='editsvg' width={20} height={18} />
+                            <Image src={'/svg/delete.svg'} alt='deletesvg' width={20} height={18} /> */}
                         </TableCell>
                       </TableRow>
                     );
