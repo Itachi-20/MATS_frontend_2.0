@@ -42,7 +42,6 @@ const table = ({ ...Props }: Props) => {
   const [open, setOpen] = useState(false);
   const [fileData, setFileData] = useState<DocumentRow[] | undefined>();
   const handleSetFileData = async (file: any) => {
-    console.log(file, 'file in setfile ')
     setFileData(file);
     setOpen(true)
   };

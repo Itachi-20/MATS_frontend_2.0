@@ -20,7 +20,6 @@ const page = async ({params}:any) => {
       );
       if(tableData.ok){
         const data = await tableData.json();
-        console.log("data ",data)
         return data.data
       }
       
@@ -45,7 +44,6 @@ const page = async ({params}:any) => {
       );
       if(tableData.ok){
         const data = await tableData.json();
-        console.log("data ",data)
         return data.message
       }
       
@@ -55,7 +53,6 @@ const page = async ({params}:any) => {
   }
   
   const {request_number,expense_name} = await params; 
-   console.log( request_number,expense_name);
   const tableData = await fetchData(params.request_number,params.expense_name);
   const Dropdown = await fetchDropData();
   return (

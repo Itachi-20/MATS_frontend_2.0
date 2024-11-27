@@ -1,4 +1,4 @@
-
+'use server'
 import React from 'react'
 import Table from './table'
 import { cookies } from 'next/headers'
@@ -19,7 +19,6 @@ const fetchData = async(name:any)=>{
       );
       if(tableData.ok){
         const data = await tableData.json();
-        console.log("data ",data)
         return data.data
       }
       
@@ -30,11 +29,8 @@ const fetchData = async(name:any)=>{
 
 
   const Page = async ({params}:any) => {
-    // const { refno } = await params; 
-    console.log(params,"sdf-----------------------------------ghytfrdfcgvbhnjmhygtfrdfgv")
-    const tableData = await fetchData(params.refno);
-  
-    console.log(tableData, 'this is table data');
+    const refno = await params
+    const tableData = await fetchData(refno.refno);
     return (
         <>
            <Table tableData={tableData} />
