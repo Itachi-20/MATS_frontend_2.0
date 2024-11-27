@@ -52,6 +52,7 @@ type EventTable = {
 export default function Page() {
     const [postExpenseApprovalList, setPostExpenseApprovalList] = useState<Array<EventTable>>();
     const router = useRouter();
+    
     const PostExpenseApprovalList = async () => {
         try {
             const response = await fetch("/api/advanceApproval/list", {
@@ -208,7 +209,7 @@ export default function Page() {
                             postExpenseApprovalList ?
                                 <TableBody>
                                     {postExpenseApprovalList &&
-                                        postExpenseApprovalList.map((data, index) => {
+                                        postExpenseApprovalList?.map((data, index) => {
                                             return (
                                                 <TableRow key={index} className="text-center text-nowrap">
                                                     <TableCell>{data.name}</TableCell>
