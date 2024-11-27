@@ -27,6 +27,7 @@ import ViewDocument from '@/components/view_document'
 import DeletePopup from '@/components/deleteDialog'
 import { Toaster, toast } from 'sonner'
 import SubmitPopup from '@/components/successProp'
+import SimpleFileUpload from '@/components/multiple_file_upload'
 type TableData = {
   name: string;
   event_date: string;
@@ -92,6 +93,7 @@ type DocumentRow = {
   name: string;
   file_url: string;
 };
+
 const table = ({ tableData }: Props) => {
 
   const [open, setOpen] = useState(false);
@@ -106,23 +108,15 @@ const table = ({ tableData }: Props) => {
     advance: 0,
     file: null,
   });
-  const [file, setFile] = useState<FileList | null>();
   const [fileData, setFileData] = useState<DocumentRow[] | undefined>();
   const [fileList, setFileList] = useState<File[]>([]);
+  const [uploadedFiles, setUploadedFiles] = useState< FileList | null>()
   const base_url = process.env.NEXT_PUBLIC_FRAPPE_URL;
   const router = useRouter();
   const [deletename, setDeleteName] = useState<string | null>();
   const [deletepopup, setDeletePopup] = useState(false);
   const [submitpop, setSubmitPopup] = useState(false);
   const req_no = useParams()
-  const handleFileUpload: any = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = (e.target as HTMLInputElement).files;
-    setFile(files);
-    const filelist = Array.from(e.target.files || []);
-    setFileList(filelist);
-
-
-  };
 
   const handleVendorTypeChangeApi = async (value: string) => {
     try {
@@ -215,51 +209,6 @@ const table = ({ tableData }: Props) => {
     );
   };
 
-  // const addVendor = async () => {
-  //   const formData = new FormData();
-  //   formData.append("vendor_type", vendorDetails.vendor_type)
-  //   formData.append("vendor_name", vendorDetails.vendor_name)
-  //   formData.append("advance", vendorDetails.advance as any)
-  //   formData.append("name", req_no.refno as any)
-  //   if (file && file.length > 0) {
-  //     for (let i = 0; i < file.length; i++) {
-  //       formData.append("file", file[i]);
-  //     }
-  //   } else {
-  //     toast.warning('No file to Upload')
-  //     console.log("No file to upload");
-  //     return;
-  //   }
-  //   try {
-  //     const response = await fetch('/api/advanceRequest',
-  //       {
-  //         method: "POST",
-  //         headers: {
-  //           // "Content-Type": "application/json",
-  //         },
-  //         credentials: 'include',
-  //         body:
-  //           formData
-
-  //       });
-  //     if (!response.ok) {
-  //       throw new Error('advance Request failed');
-  //     }
-  //     const data = await response.json();
-  //     const file = data.message;
-  //     setTimeout(() => {
-  //      EventData()
-  //     }, 500)
-  //     toast.success('Vendor has been Added')
-  //     setVendorDetails({ vendor_type: '', vendor_name: '', advance: 0, file: null });
-  //     setFile(null);
-  //     setFileList([]);
-  //     EventData()
-  //   } catch (error) {
-  //     toast.error(`${error}`)
-  //     console.error('Error Submitting Data:', error);
-  //   }
-  // };
   const addVendor = async () => {
     const formData = new FormData();
     formData.append("vendor_type", vendorDetails.vendor_type);
@@ -267,9 +216,9 @@ const table = ({ tableData }: Props) => {
     formData.append("advance", vendorDetails.advance as any);
     formData.append("name", req_no.refno as any);
 
-    if (file && file.length > 0) {
-      for (let i = 0; i < file.length; i++) {
-        formData.append("file", file[i]);
+    if (uploadedFiles && uploadedFiles.length > 0) {
+      for (let i = 0; i < uploadedFiles.length; i++) {
+        formData.append("file", uploadedFiles[i]);
       }
     } else {
       toast.warning("No file to Upload");
@@ -295,8 +244,6 @@ const table = ({ tableData }: Props) => {
         reject(error); // Reject with the error
       }
     });
-
-    // Use toast.promise to handle loading, success, and error
     toast.promise(apiCallPromise, {
       loading: 'Submitting vendor details...',
       success: (data) => {
@@ -306,7 +253,7 @@ const table = ({ tableData }: Props) => {
           EventData();
         }, 500);
         setVendorDetails({ vendor_type: '', vendor_name: '', advance: 0, file: null });
-        setFile(null);
+        setUploadedFiles(null);
         setFileList([]);
         // EventData();
         return 'Vendor has been added successfully!';
@@ -399,6 +346,15 @@ const table = ({ tableData }: Props) => {
       console.error("Error during Submission:", error);
     }
   };
+
+
+
+
+  const handleNext = (fileList: FileList | null) => {
+    setUploadedFiles(fileList)
+    const filelists = Array.from(fileList || []);
+    setFileList(filelists);
+  }
   return (
     <>
 
@@ -524,16 +480,13 @@ const table = ({ tableData }: Props) => {
         </div>
 
         <div className='flex justify-end gap-2 pb-7'>
+          <h1 className="text-2xl font-bold">
+            {fileList.length > 0
+              ? `${fileList.length} file${fileList.length !== 1 ? 's' : ''} selected`
+              : "Upload Your Receipts/Bills"}
+          </h1>
+          <SimpleFileUpload onNext={handleNext} />
 
-          <label className="flex items-center gap-2 px-2 bg-[#F0EDFF] rounded-md shadow-sm cursor-pointer border-[1px]">
-            <Image src={'/svg/download.svg'} alt='downloadsvg' width={20} height={20} />
-            <span className="font-medium text-[#4430BF]">
-              {fileList.length > 0
-                ? fileList.map((file) => file.name).join(", ")
-                : "Receipt/Bill"}
-            </span>
-            <Input type="file" className="hidden" onChange={(e) => { handleFileUpload(e) }} id="file" multiple />
-          </label>
           <Button className="border border-[#4430bf] text-[#4430bf] text-[18px]" onClick={() => addVendor()}>Add</Button>
         </div>
         {/* </>

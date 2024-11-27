@@ -61,12 +61,7 @@ type Props = {
 
 const TableComponent = ({ ...Props }: Props) => {
   const router = useRouter();
-  // const [data, setData] = useState<Data>();
-  // const [occurence, setOccurence] = useState<Occurence[]>();
-  // const [postExpense, setPostExpense] = useState<AdvanceRequest[]>();
-  // console.log("Reffffffffffffffffnooooooooooooo", Props.tableData.occurence[0].advance_request[0].is_approved)
-console.log(Props.role,'roleeeeeeeeeeeeeeeeeeeeeeeeeeeee')
-
+console.log('Props.tableData',Props.tableData)
   return (
     <div className='p-7 w-full relative z-20 text-black'>
       <div className="flex justify-between pb-5">
@@ -393,12 +388,12 @@ console.log(Props.role,'roleeeeeeeeeeeeeeeeeeeeeeeeeeeee')
                     {
                       data?.is_approved == true ? (
                         data.status == "Advance Approved" && Props.role == "Event Finance" ?
-                          <button className="border rounded-full px-4 py-1 border-[#0e4154] text-[#0e4154]" onClick={() => router.push(`/advance_payment/update_utr/${Props.refno}/${data.name}`)}>Update UTR</button>
+                          <button className="border rounded-full px-4 py-1 border-[#0e4154] text-[#0e4154]" onClick={() => router.push(`/update_utr/${Props.refno}/${data.name}`)}>Update UTR</button>
                           :
                           <button className="border rounded-full px-4 py-1 border-[#0e4154] text-[#0e4154]" onClick={() => router.push(`/advance_payment/${Props.refno}/${data.name}?view=view`)}>View</button>
                       )
                         :
-                        (Props.role != "Event Requestor" ?
+                        (Props.role != "Event Requestor" && data.status != "Advance Closed" ?
                           <button className="border rounded-full px-4 py-1 border-black text-black" onClick={() => router.push(`/advance_payment/${Props.refno}/${data.name}`)}>Take Action</button>
                           :
                           <button className="border rounded-full px-4 py-1 border-[#0e4154] text-[#0e4154]" onClick={() => router.push(`/advance_payment/${Props.refno}/${data.name}?view=view`)}>View</button>

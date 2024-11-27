@@ -31,9 +31,7 @@ const page = async ({params}:any) => {
   const {request_number} = await params; 
   const cookie = await cookies();
   const role = cookie.get("role");
-   console.log(role, request_number);
   const tableData = await fetchData(request_number);
-  console.log("tableData",tableData)
   return (
     <>
       <Table tableData={tableData} refno = {request_number} role={role?.value}/>
