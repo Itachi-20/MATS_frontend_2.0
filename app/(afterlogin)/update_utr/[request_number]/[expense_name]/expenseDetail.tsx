@@ -188,8 +188,6 @@ const ExpensePage = ({ ...Props }: Props) => {
   const [glName, setGLName] = useState<string>();
   const [glcode, setGLCode] = useState<string>();
 
-    console.log(formdata.company_name,"this is company name")
-
   const gldropdown = async (value: any) => {
     formdata.gl_code = '';
     try {
@@ -207,7 +205,6 @@ const ExpensePage = ({ ...Props }: Props) => {
 
       const data = await response.json();
       setGLDropdownData(data.data);
-      console.log("data response gl code ", data.message)
       if (response.ok) {
       } else {
         console.log('Login failed');
@@ -222,7 +219,6 @@ const ExpensePage = ({ ...Props }: Props) => {
   }, [formdata.company_name])
 
   const handleSubmit = async () => {
-    console.log("formdata in api", formdata)
     try {
       const response = await fetch(
         "/api/advanceApproval/advanceSubmit",
@@ -239,11 +235,9 @@ const ExpensePage = ({ ...Props }: Props) => {
       );
 
       const data = await response.json();
-      console.log(data, 'data')
       if (response.ok) {
-
         setTimeout(() => {
-          router.push(`/event_list`);
+          router.push(`/advance_payment/${refno.request_number}`);
         }, 1000)
       } else {
         console.log("Login failed");
@@ -254,7 +248,6 @@ const ExpensePage = ({ ...Props }: Props) => {
   };
   const handleFieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    console.log("Field changed:", name, "Value:", value);
     setFormData(prev => ({ ...prev, [name]: value }));
   }
 
@@ -266,19 +259,7 @@ const ExpensePage = ({ ...Props }: Props) => {
     setGLName(code);
   }
 
-  const handleGLChange = async(value: string) => {
-     setGLName(value);
-    await handleGLCode();
-    console.log("after handle gl code")
-  }
-
-  // useEffect(() => {
-  //   handleGLChange(formdata.gl_name);
-  // }, [formdata.gl_name])
-
-
   const handleGLCode = async () => {
-    console.log("inside handle gl code ")
     // gldropdowndata?.map((item, index) => {
     //   if (item.name == glName) {
     //     console.log("item.gl_code",item.gl_code)
@@ -290,13 +271,10 @@ const ExpensePage = ({ ...Props }: Props) => {
   }
 
   const handleGlname = async(value:any) =>{
-    // setParticularGlCode(glCodeDropdown?.filter((item)=>item.name == value));
     const parglcode = gldropdowndata?.filter((item)=>item.name == value);
-    // console.log(arr,"::::::::::::::::::::::;;",value);
     formdata.gl_code = parglcode[0]?.gl_code;
  
   }
-  console.log(gldropdowndata,formdata.gl_name,formdata.gl_code,formdata, "gldropdowndata,glName,glcode,formdata")
   return (
 
     <>
@@ -490,29 +468,6 @@ const ExpensePage = ({ ...Props }: Props) => {
               </SelectContent>
             </Select>
           </div>
-          {/* <div className='grid-cols-1 space-y-2'>
-            <label htmlFor="gl_name" className="text-black md:text-sm md:font-normal capitalize">
-              GL Name<span className="text-[#e60000] ">*</span>
-            </label>
-            <Select
-              onValueChange={async(value) => { await handleGLChange(value)}}
-              // value={ Props.expensedata?.actual_vendors[0].gl_name?Props.expensedata?.actual_vendors[0].gl_name:formdata.gl_name}
-            >
-              <SelectTrigger className="dropdown">
-                <SelectValue  />
-              </SelectTrigger>
-              <SelectContent>
-                {gldropdowndata &&
-                  gldropdowndata.map((item, index) => {
-                    return (
-                      <SelectItem value={item.name}>
-                        {item.name}
-                      </SelectItem>
-                    );
-                  })}
-              </SelectContent>
-            </Select>
-          </div> */}
           <div className='grid-cols-1 space-y-2'>
             <label htmlFor="gl_name" className="text-black md:text-sm md:font-normal capitalize">
               GL Name<span className="text-[#e60000] ">*</span>

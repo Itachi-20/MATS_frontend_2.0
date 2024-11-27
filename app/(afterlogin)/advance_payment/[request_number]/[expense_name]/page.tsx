@@ -59,11 +59,9 @@ const page = () => {
     const [expensedata, setExpenseData] = useState<EventData | null>(null);
     const router = useRouter();
     const refno = useParams();
-    console.log(refno.request_number, 'refno')
     const view = useSearchParams().get('view')
-    console.log('view', view)
+    console.log("expensedata",expensedata)
     const eventDataApi = async () => {
-        console.log("inside event Data")
         try {
             const response = await fetch(
                 "/api/expenseData",
@@ -83,7 +81,6 @@ const page = () => {
             if (response.ok) {
                 const data = await response.json();
                 setExpenseData(data.data);
-                console.log(data, 'data')
 
             } else {
                 console.log("Login failed");
@@ -102,8 +99,6 @@ const page = () => {
     }
 
     const handleApprove = async (remark: string) => {
-
-        console.log("refno.expense_name,action,remark", refno.expense_name, action, remark,)
         try {
             const response = await fetch(
                 "/api/advanceApproval/advanceExpenseApprove",

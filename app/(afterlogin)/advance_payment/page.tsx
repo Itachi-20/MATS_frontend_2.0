@@ -76,8 +76,6 @@ export default function Page() {
         PostExpenseApprovalList();
     }, [])
 
-
-    console.log('postExpenseApprovalList', postExpenseApprovalList)
     return (
         <>
 
@@ -221,11 +219,12 @@ export default function Page() {
                                                     <TableCell>{data.total_expense ?? ""}</TableCell>
                                                     <TableCell>{data.event_requestor ?? ""}</TableCell>
                                                     <TableCell className="sticky right-0 bg-[white] z-50 ">
-                                                        {
-                                                            "Not" == "Approved" ?
-                                                                <button className="border rounded-full px-4 py-1 border-[#0E4154] text-[#0E4154]" onClick={() => router.push(`/advance_payment/update_utr/${data.name}`)} >Update UTR</button>
-                                                                : <button className="border rounded-full px-4 py-1 border-[#0E4154] text-[#0E4154]" onClick={() => router.push(`/advance_payment/${data.name}`)} >Take Action</button>
-                                                        }
+                                                        {/* { */}
+                                                            {/* "Not" == "Approved" ? */}
+                                                                {/* // <button className="border rounded-full px-4 py-1 border-[#0E4154] text-[#0E4154]" onClick={() => router.push(`/advance_payment/update_utr/${data.name}`)} >Update UTR</button> */}
+                                                                {/* : */}
+                                                                 <button className="border rounded-full px-4 py-1 border-[#0E4154] text-[#0E4154]" onClick={() => router.push(`/advance_payment/${data.name}`)} >Take Action</button>
+                                                        {/* } */}
                                                     </TableCell>
                                                 </TableRow>
                                             );
