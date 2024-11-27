@@ -184,6 +184,28 @@ type Props = {
 
 const Documents = ({PageName,...Props}:Props) => {
   console.log(Props.eventData?.documents,"this is documents")
+
+  const handleDelete = async (name:String)=>{
+    try {
+      const response = await fetch(`api/training_and_education/fileDelete/`,{
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+            //'Cookie': cookies as string 
+        },
+        credentials:'include',
+        body:JSON.stringify({
+          name:name
+        })
+      })
+      if(response.ok){
+        console.log("successfully deleted");
+      }
+    } catch (error) {
+      console.log(error,"this is error");
+    }
+  }
+
   return (
     <div className="md:pb-8">
       <div className="flex gap-5">
@@ -206,13 +228,13 @@ const Documents = ({PageName,...Props}:Props) => {
             <Table>
               <TableHeader>
                 <TableRow className="text-black">
-                  <TableHead className={"bg-[#E0E9FF] rounded-2xl text-[15px] w-[50%]"}
+                  <TableHead className={"bg-[#E0E9FF] rounded-l-2xl text-[15px] w-[50%] pr-10"}
                   >
                     Supporting Document
                   </TableHead>
-                  <TableHead className={"bg-[#E0E9FF] rounded-2xl text-[15px] w-[50%] divide-x-2"}
+                  <TableHead className={"bg-[#E0E9FF] text-[15px] rounded-r-2xl w-[50%] divide-x-2"}
                   >
-                    Supporting Document
+                   Documents
                     
                   </TableHead>
                 </TableRow>
@@ -226,12 +248,14 @@ const Documents = ({PageName,...Props}:Props) => {
                   <TableCell>{item2.file?.map((item3,index)=>{
                     return (
                       <div className='flex justify-between'>
-                      <div className='pb-2'>{item3.file_name}</div>
-                      <div>
+                      <div className=''>{item3.file_name}</div>
+                      <div className='flex gap-5 items-center'>
                         <Link rel="stylesheet" href={item3.url}>
                       <Image src={"/svg/view.svg"} width={20} height={20}  alt='view-document' className='cursor-pointer' />
                         </Link>
-                      
+                        <div onClick={()=>{handleDelete(item3.name)}}>
+                      <Image src={"/svg/delete.svg"} width={20} height={20}  alt='view-document' className='cursor-pointer' />
+                        </div>
                       </div>
                       </div>
                     )

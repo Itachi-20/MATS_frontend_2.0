@@ -18,7 +18,7 @@ const Form = () => {
 
   const handlePasswordChange = async ()=>{
     try {
-      const response = await fetch(``,{
+      const response = await fetch(`api/passwordChange/`,{
         method:"POST",
         
           headers:{
