@@ -102,6 +102,7 @@ type DocumentRow = {
 const table = ({ tableData }: Props) => {
 
   const [open, setOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [exportopen, setExportOpen] = useState(false);
   const [isDeletePropOpen, setIsDeletePropOpen] = useState(false);
   const [deleteRecordname, setDeleteRecordname] = useState('');
@@ -272,8 +273,8 @@ const table = ({ tableData }: Props) => {
       console.log("No file to upload");
       return;
     }
+    setIsLoading(true);
     try {
-
       const response = await fetch('/api/postExpense/postExpenseRequest', {
         method: "POST",
         headers: {
@@ -284,6 +285,7 @@ const table = ({ tableData }: Props) => {
       });
 
       if (!response.ok) {
+        setIsLoading(false);
         throw new Error('File upload failed');
       }
 
@@ -294,7 +296,9 @@ const table = ({ tableData }: Props) => {
       setVendorDetails({ vendor_type: '', vendor_name: '', amount: 0, file: null });
       setFile(null);
       setFileList([]);
+      setIsLoading(false);
     } catch (error) {
+      setIsLoading(false);
       console.error('Error uploading file:', error);
       alert('Failed to upload file. Please try again.');
     }
@@ -329,6 +333,7 @@ const table = ({ tableData }: Props) => {
     // }
     
   };
+
   const handleSetFileData = async (file: any) => {
     console.log(file, 'file in setfile ')
     setFileData(file);
@@ -339,9 +344,7 @@ const table = ({ tableData }: Props) => {
   setDeleteRecordname(name)
   setIsDeletePropOpen(true)
  }
-  console.log(fileList, 'fileList------------------------------------------')
 
-  console.log(tabledata, 'tabledata------------------------------------------')
   return (
     <>
 
@@ -470,9 +473,9 @@ const table = ({ tableData }: Props) => {
                 ? fileList.map((file) => file.name).join(", ")
                 : "Receipt/Bill"}
             </span>
-            <Input type="file" className="hidden" onChange={(e) => { handleFileUpload(e) }} id="file" multiple />
+            <Input type="file" className="hidden" onChange={(e) => { handleFileUpload(e) }} id="file" multiple readOnly={isLoading ? true:false}/>
           </label>
-          <Button className="border border-[#4430bf] text-[#4430bf] text-[18px]" onClick={addVendor} >Add</Button>
+          <Button className="border border-[#4430bf] text-[#4430bf] text-[18px]" disabled={isLoading ? true:false} onClick={addVendor} >{isLoading ? 'Adding...':'Add'}</Button>
         </div>
         <div className="border bg-white h-full p-4 rounded-[18px]">
           <Table className={""}>
@@ -601,7 +604,7 @@ const table = ({ tableData }: Props) => {
                               </svg>
                             </div>
                             <Image src={'/svg/editIcon.svg'} alt='editsvg' width={20} height={18} />
-                            <Image src={'/svg/delete.svg'} alt='deletesvg' width={20} height={18} onClick={() => {handleDeletePopup(data.name)}} />
+                            <Image className='hover:cursor-pointer hover:opacity-60' src={'/svg/delete.svg'} alt='deletesvg' width={20} height={18} onClick={() => {handleDeletePopup(data.name)}} />
                           </TableCell>
                         </TableRow>
                       );
