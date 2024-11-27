@@ -18,8 +18,22 @@ type EventTable = {
   event_requestor: string;
   event_venue:string;
   advance:string;
-  event_status:string;
+  status:string;
+  occurrence_no:number;
   post_activity_status:string;
+  advance_request_approved:boolean
+  advance_request_submitted:boolean
+  current_stage:string
+  is_declared:boolean
+  post_activity_approved:boolean
+  post_activity_submitted:boolean
+  post_expense_approved:boolean
+  post_expense_submitted:boolean
+  preactivity_approved:boolean
+  preactivity_status:string
+  preactivity_submitted:boolean
+  travel_expense_approved:boolean
+  travel_expense_submitted:boolean
 };
 
 export default function EventList () {
@@ -162,6 +176,20 @@ export default function EventList () {
                       "text-center  text-[#625d5d] lg:text-[15px] sm:text-[12px] text-[11px] font-normal font-['Montserrat']"
                     }
                   >
+                    Post Expense 
+                  </TableHead>
+                  <TableHead
+                    className={
+                      "text-center  text-[#625d5d] lg:text-[15px] sm:text-[12px] text-[11px] font-normal font-['Montserrat']"
+                    }
+                  >
+                   Occurence No.
+                  </TableHead>
+                  <TableHead
+                    className={
+                      "text-center  text-[#625d5d] lg:text-[15px] sm:text-[12px] text-[11px] font-normal font-['Montserrat']"
+                    }
+                  >
                    Event Status
                   </TableHead>
                   <TableHead
@@ -191,12 +219,25 @@ export default function EventList () {
                           <TableCell>{data.event_end_date}</TableCell>
                           <TableCell>{data.event_requestor}</TableCell>
                           <TableCell>{data.event_venue}</TableCell>
-
                           <TableCell><Link rel="noopener noreferrer" className="bg-[#F0EDFF] text-[#4430BF] text-md rounded-md font-normal p-2 hover:underline" href={`/advance_request/${data.name}`}>Request</Link></TableCell>
-                          <TableCell>{data.event_status}</TableCell>
-                          {/* <TableCell>{data.post_activity_status}</TableCell>*/}
-                          <TableCell><Button className="border hover:bg-[#E0E9FF]" onClick={()=>router.push(`/post_expense/${data.name}`)}>request</Button></TableCell>
-                          <TableCell className="sticky right-0 bg-[white] z-50 flex space-x-8 border-l border-slate-200 "> 
+                          <TableCell>
+                            {
+                              data.post_activity_approved ?
+                              (
+                                !data.post_expense_submitted ?
+                                <Button className="bg-[#F0EDFF] w-[75px] text-[#4430BF] text-sm  rounded-md font-semibold hover:underline capitalize" onClick={()=>router.push(`/post_expense/${data.name}`)}>request</Button> :
+                                <Button className="bg-[#F0EDFF] w-[75px] text-[#4430BF] text-sm  rounded-md font-semibold hover:underline capitalize" onClick={()=>router.push(`/post_expense/${data.name}`)}>view</Button> 
+
+                              ) : (
+                              <Button className="bg-[#F0EDFF] w-[75px] text-[#4430BF] text-sm  rounded-md font-semibold hover:underline capitalize" disabled>request</Button>
+                              )
+                              
+                            }
+                          </TableCell>
+                          <TableCell>{data.occurrence_no}</TableCell>
+                          <TableCell>{data.status}</TableCell>
+                          <TableCell></TableCell>
+                          <TableCell className="sticky right-0 bg-[white] z-50 flex space-x-8 border-l border-slate-200 justify-center items-center mt-4 hover:opacity-60"> 
                               <Image src={"/svg/view.svg"} width={17} height={20} alt="view-svg" className="cursor-pointer" onClick={()=>handleClick(data.name)} />                        
                           </TableCell>
                           

@@ -453,7 +453,7 @@ const page = () => {
             </div>
             {opencommentbox && <Comment_box handleClose={handleOpen} handleSubmit={handleApproveRejectSendBack} />}
             {open &&<ViewDoc setClose={setOpen} data={fileData}/>}
-            {successprop && <SuccessProp setClose={setSuccessprop} title={"Post Expense Approval"}/>}
+            {successprop && <SuccessProp title={"Post Expense Approval"}/>}
         </>
     )
 }
