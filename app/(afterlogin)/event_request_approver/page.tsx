@@ -6,7 +6,7 @@ import EventDetails from "@/components/event_Details"
 import VendorDetails from "@/components/vendor_Details"
 import TotalExpense from "@/components/total_Expense"
 import Documents from "@/components/documents"
-import { useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Comment_box from "@/components/approvalCommentBox/Comment_box";
 type EventEntry = {
   name: string;
@@ -171,7 +171,7 @@ type ActivityDocument = {
 
 
 const Index = () => {
-
+  const router = useRouter();
   const [eventData,setEventData] = useState<EventEntry>();
   const [isCommentbox,setIsCommentbox] = useState<boolean>();
   const [comment,setComment] = useState<string>();
@@ -199,6 +199,7 @@ const Index = () => {
   
         
         if (response.ok) {
+          router.push("/event_approver_list")
         } else {
           console.log("Login failed");
         }
@@ -307,11 +308,13 @@ useEffect(()=>{
         />
         {
           isCommentbox &&
+          <div className="absolute z-50 flex pt-10 items-start justify-center bg-black bg-opacity-50 w-full h-full inset-0 pb-40">
         <Comment_box 
         handleClose={handleDialog}
         handleComment={handleComment}
         Submitbutton = {handleApprove}
         />
+        </div>
         }
         </div>
     

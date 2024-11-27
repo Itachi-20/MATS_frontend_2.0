@@ -153,6 +153,7 @@ const ExpensePage = ({ ...Props }: Props) => {
   const [action, setAction] = useState('')
   const router = useRouter();
   const refno = useParams();
+  console.log(refno.request_number)
   const [formdata, setFormData] = useState<FormData>(
     {
       name: Props?.expensedata?.actual_vendors[0].name,
