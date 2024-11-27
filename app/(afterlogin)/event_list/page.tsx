@@ -219,7 +219,7 @@ export default function EventList () {
                           <TableCell>{data.event_end_date}</TableCell>
                           <TableCell>{data.event_requestor}</TableCell>
                           <TableCell>{data.event_venue}</TableCell>
-                          <TableCell><Link rel="noopener noreferrer" className="bg-[#F0EDFF] text-[#4430BF] text-md rounded-md font-normal p-2 hover:underline" href={`/advance_request/${data.name}`}>Request</Link></TableCell>
+                          <TableCell><Button className={`bg-[#F0EDFF] w-[75px] text-[#4430BF] text-sm  rounded-md font-semibold  hover:underline`} disabled={!data.preactivity_approved} onClick={()=>router.push(`/advance_request/${data.name}`)}>{data.advance_request_submitted ?'View':"Request"}</Button></TableCell>
                           <TableCell>
                             {
                               data.post_activity_approved ?

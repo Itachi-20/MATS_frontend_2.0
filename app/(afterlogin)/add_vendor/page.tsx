@@ -141,11 +141,11 @@ const router = useRouter()
     };
     const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length > 0) {
-            setFile(e.target.files); // Save the file(s)
-            setFileName(e.target.files[0]?.name); // Set the name of the first file
+            setFile(e.target.files); 
+            setFileName(e.target.files[0]?.name); 
         } else {
-            setFile(null); // Clear file if no file selected
-            setFileName(null); // Clear file name
+            setFile(null); 
+            setFileName(null);
         }
     };
 
@@ -176,10 +176,8 @@ const router = useRouter()
             });
 
             if (response.ok) {
-                const data = await response.json(); // Parse JSON response
+                const data = await response.json();
                 console.log("Upload successful:", data.message.file_name);
-
-                // Create a new document entry
                 const newDocument: DocumentRow = {
                     document_type,
                     is_private: "1",
@@ -196,7 +194,9 @@ const router = useRouter()
                 const updatedDocumentRows = [...documentRows, newDocument];
                 setDocumentRows(updatedDocumentRows);
                 setFile(null);
-                setDocumentType(null);
+                setFileName(null);
+                setDocumentType('');
+                
             } else {
                 alert("File upload failed. Please try again.");
             }
@@ -310,9 +310,11 @@ const router = useRouter()
                                 <label className="text-black text-sm font-normal capitalize">
                                     Type<span className="text-[#e60000]">*</span>
                                 </label>
-                                <Select onValueChange={handleTypeChange}>
+                                <Select onValueChange={handleTypeChange}
+                                value={document_type ? document_type : ''}
+                                >
                                     <SelectTrigger className="text-black shadow">
-                                        <SelectValue placeholder={document_type ? document_type : 'Select'} />
+                                        <SelectValue placeholder={'Select'} />
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectItem value="Cancelled Cheque">Cancelled Cheque</SelectItem>
@@ -331,7 +333,7 @@ const router = useRouter()
                                 >
                                     Do you have filled document?
                                     <span className="font-semibold"> Upload here</span>
-                                    <div className="bg-[#efedff] mt-2 py-[7px] flex gap-5 pl-5 rounded-md shadow-md mr-10">
+                                    <div className="bg-[#efedff] mt-2 py-[7px] flex items-center gap-5 pl-5 rounded-md shadow-md mr-10">
                                         <svg
                                             width="25"
                                             height="26"
@@ -345,7 +347,8 @@ const router = useRouter()
                                                 fill="#4430BF"
                                             />
                                         </svg>
-                                        <h1 className="mt-[2px]">{fileName ? fileName : ' Receipt/Bill'}</h1>
+                                        {/* <h1 className="mt-[2px]">{fileName ? fileName : ' Receipt/Bill'}</h1> */}
+                                        <span className="font-medium truncate max-w-[200px]">{fileName ? fileName : ' Receipt/Bill'}</span>
                                     </div>
                                     <Input type="file" onChange={(e) => { handleFileUpload(e) }} id="file" className="hidden"></Input>
                                 </label>
@@ -379,7 +382,7 @@ const router = useRouter()
                                             <TableCell className="text-center">{row.fileName}</TableCell>
                                             <TableCell className="text-center">{row.createdDate}</TableCell>
                                             <TableCell className="text-center">{row.createdBy}</TableCell>
-                                            <TableCell className="text-center flex gap-2">
+                                            <TableCell className="text-center  flex justify-center gap-2">
 
 
                                                 <Link
