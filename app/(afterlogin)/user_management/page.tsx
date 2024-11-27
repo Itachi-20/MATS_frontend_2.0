@@ -13,7 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from "
 
 export default function UserManagementInformation() {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState('basicDetails'); // Initial active tab
+  const [activeTab, setActiveTab] = useState('basicDetails'); 
 
   return (
     <div className="p-7 w-full relative z-20 text-black">
@@ -45,7 +45,7 @@ export default function UserManagementInformation() {
         {/* Basic Details Tab */}
         <TabsTrigger
           value="basicDetails"
-          onClick={() => setActiveTab('basicDetails')} // Update active tab
+          onClick={() => setActiveTab('basicDetails')} 
           className={`w-full text-start text-black text-[20px] font-medium leading-normal border-r-[1px] border-slate-400 ${
             activeTab === 'basicDetails' ? ' text-black' : ''
           }`}
@@ -88,52 +88,90 @@ export default function UserManagementInformation() {
         </TabsList>
 
         <TabsContent value="basicDetails" className='py-5 space-y-10'>
-          <div className='grid grid-cols-3 gap-6'>
+            <div className='grid grid-cols-3 gap-6'>
 
-            <div className="flex flex-col gap-2">
-              <label className="lable" htmlFor="emp_code">
-                Employee Code<span className="text-[#e60000]">*</span>
-              </label>
-              <Input type="text" name="emp_code" id="emp_code" />
-            </div>
-
-            <div className="flex space-x-2 items-center">
-              <div className='mt-6'>
-                <Select>
-                  <SelectTrigger className="dropdown ">
-                    <SelectValue placeholder="Mr." />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="mr">Mr.</SelectItem>
-                    <SelectItem value="miss">Miss.</SelectItem>
-                    <SelectItem value="dr">Dr.</SelectItem>
-                    <SelectItem value="mrs">Mrs.</SelectItem>
-
-
-                  </SelectContent>
-                </Select>
-
-              </div>
-              <div className='w-full space-y-1'>
+              <div className="flex flex-col gap-2">
                 <label className="lable" htmlFor="emp_code">
-                  First Name<span className="text-[#e60000]">*</span>
+                  Employee Code<span className="text-[#e60000]">*</span>
                 </label>
                 <Input type="text" name="emp_code" id="emp_code" />
               </div>
-            </div>
 
-            <div className="flex flex-col gap-2">
-              <label className="lable" htmlFor="last_name">
-                Last Name<span className="text-[#e60000]">*</span>
-              </label>
-              <Input type="text" name="last_name" id="last_name" required />
-            </div>
+              <div className="flex space-x-2 items-center">
+                <div className='mt-6'>
+                  <Select>
+                    <SelectTrigger className="dropdown ">
+                      <SelectValue placeholder="Mr." />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="mr">Mr.</SelectItem>
+                      <SelectItem value="miss">Miss.</SelectItem>
+                      <SelectItem value="dr">Dr.</SelectItem>
+                      <SelectItem value="mrs">Mrs.</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className='w-full space-y-1'>
+                  <label className="lable" htmlFor="emp_code">
+                    First Name<span className="text-[#e60000]">*</span>
+                  </label>
+                  <Input type="text" name="emp_code" id="emp_code" />
+                </div>
+              </div>
 
-            <div className="space-y-1">
-              <label className="lable">
-                Department Name<span className="text-[#e60000]">*</span>
-              </label>
-              <div className='flex space-x-2'>
+              <div className="flex flex-col gap-2">
+                <label className="lable" htmlFor="last_name">
+                  Last Name<span className="text-[#e60000]">*</span>
+                </label>
+                <Input type="text" name="last_name" id="last_name" required />
+              </div>
+
+              <div className="space-y-1">
+                <label className="lable">
+                  Department Name<span className="text-[#e60000]">*</span>
+                </label>
+                <div className='flex space-x-2'>
+                  <Select>
+                    <SelectTrigger className="dropdown ">
+                      <SelectValue placeholder="-Select-" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Department1">Department1</SelectItem>
+                      <SelectItem value="Department2">Department2</SelectItem>
+                      <SelectItem value="Department3">Department3</SelectItem>
+                      <SelectItem value="Department14">Department4</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Button className='text-[16px] px-4 py-3 bg-blue-400 text-white' onClick={()=> router.push('/department')}>Add</Button>
+                </div>
+              </div>
+
+              <div className="space-y-1">
+                <label className="lable">
+                  Designation<span className="text-[#e60000]">*</span>
+                </label>
+                <div className='flex space-x-2'>
+                  <Select>
+                    <SelectTrigger className="dropdown ">
+                      <SelectValue placeholder="-Select-" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Department1">Department1</SelectItem>
+                      <SelectItem value="Department2">Department2</SelectItem>
+                      <SelectItem value="Department3">Department3</SelectItem>
+                      <SelectItem value="Department14">Department4</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Button className='text-[16px] px-4 py-3 bg-blue-400 text-white' onClick={()=> router.push('/designation')}>Add</Button>
+                </div>
+
+              </div>
+
+              <div className="space-y-1">
+                <label className="lable">
+                  Branch<span className="text-[#e60000]">*</span>
+                </label>
+                <div className='flex space-x-2'>
                 <Select>
                   <SelectTrigger className="dropdown ">
                     <SelectValue placeholder="-Select-" />
@@ -145,15 +183,38 @@ export default function UserManagementInformation() {
                     <SelectItem value="Department14">Department4</SelectItem>
                   </SelectContent>
                 </Select>
-                <Button className='text-[16px] px-4 py-3 bg-blue-400 text-white' onClick={()=> router.push('/department')}>Add</Button>
-              </div>
-            </div>
+                <Button className='text-[16px] px-4 py-3 bg-blue-400 text-white' onClick={()=> router.push('/branch')}>Add</Button>
 
-            <div className="space-y-1">
-              <label className="lable">
-                Designation<span className="text-[#e60000]">*</span>
-              </label>
-              <div className='flex space-x-2'>
+                </div>
+
+              </div>
+
+              <div className="space-y-1">
+                <label className="lable">
+                  Role<span className="text-[#e60000]">*</span>
+                </label>
+                <div className='flex space-x-2'>
+                  <Select>
+                    <SelectTrigger className="dropdown ">
+                      <SelectValue placeholder="-Select-" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Department1">Department1</SelectItem>
+                      <SelectItem value="Department2">Department2</SelectItem>
+                      <SelectItem value="Department3">Department3</SelectItem>
+                      <SelectItem value="Department14">Department4</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Button className='text-[16px] px-4 py-3 bg-blue-400 text-white' onClick={()=> router.push('/role')}>Add</Button>
+
+                </div>
+
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <label className="lable">
+                  Grade<span className="text-[#e60000]">*</span>
+                </label>
                 <Select>
                   <SelectTrigger className="dropdown ">
                     <SelectValue placeholder="-Select-" />
@@ -165,38 +226,12 @@ export default function UserManagementInformation() {
                     <SelectItem value="Department14">Department4</SelectItem>
                   </SelectContent>
                 </Select>
-                <Button className='text-[16px] px-4 py-3 bg-blue-400 text-white' onClick={()=> router.push('/designation')}>Add</Button>
               </div>
 
-            </div>
-
-            <div className="space-y-1">
-              <label className="lable">
-                Branch<span className="text-[#e60000]">*</span>
-              </label>
-              <div className='flex space-x-2'>
-              <Select>
-                <SelectTrigger className="dropdown ">
-                  <SelectValue placeholder="-Select-" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Department1">Department1</SelectItem>
-                  <SelectItem value="Department2">Department2</SelectItem>
-                  <SelectItem value="Department3">Department3</SelectItem>
-                  <SelectItem value="Department14">Department4</SelectItem>
-                </SelectContent>
-              </Select>
-              <Button className='text-[16px] px-4 py-3 bg-blue-400 text-white' onClick={()=> router.push('/branch')}>Add</Button>
-
-              </div>
-
-            </div>
-
-            <div className="space-y-1">
-              <label className="lable">
-                Role<span className="text-[#e60000]">*</span>
-              </label>
-              <div className='flex space-x-2'>
+              <div className="flex flex-col gap-2">
+                <label className="lable">
+                  Group
+                </label>
                 <Select>
                   <SelectTrigger className="dropdown ">
                     <SelectValue placeholder="-Select-" />
@@ -208,198 +243,160 @@ export default function UserManagementInformation() {
                     <SelectItem value="Department14">Department4</SelectItem>
                   </SelectContent>
                 </Select>
-                <Button className='text-[16px] px-4 py-3 bg-blue-400 text-white' onClick={()=> router.push('/role')}>Add</Button>
-
               </div>
 
-            </div>
+              <div className="flex flex-col gap-2">
+                <label className="lable">
+                  Weekoff<span className="text-[#e60000]">*</span>
+                </label>
+                <Select>
+                  <SelectTrigger className="dropdown ">
+                    <SelectValue placeholder="Sunday" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Department1">Sunday</SelectItem>
+                    <SelectItem value="Department2">Monday</SelectItem>
+                    <SelectItem value="Department3">Tuesday</SelectItem>
+                    <SelectItem value="Department14">Wednesday</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
 
-            <div className="flex flex-col gap-2">
-              <label className="lable">
-                Grade<span className="text-[#e60000]">*</span>
-              </label>
-              <Select>
-                <SelectTrigger className="dropdown ">
-                  <SelectValue placeholder="-Select-" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Department1">Department1</SelectItem>
-                  <SelectItem value="Department2">Department2</SelectItem>
-                  <SelectItem value="Department3">Department3</SelectItem>
-                  <SelectItem value="Department14">Department4</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+              <div className="flex flex-col gap-2">
+                <label className="lable">
+                  Base Town<span className="text-[#e60000]">*</span>
+                </label>
+                <Select>
+                  <SelectTrigger className="dropdown ">
+                    <SelectValue placeholder="-Select-" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="abc">abc</SelectItem>
+                    <SelectItem value="bc">bc</SelectItem>
+                    <SelectItem value="bcs">bcs</SelectItem>
+                    <SelectItem value="sdsa">sdsa</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
 
-            <div className="flex flex-col gap-2">
-              <label className="lable">
-                Group
-              </label>
-              <Select>
-                <SelectTrigger className="dropdown ">
-                  <SelectValue placeholder="-Select-" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Department1">Department1</SelectItem>
-                  <SelectItem value="Department2">Department2</SelectItem>
-                  <SelectItem value="Department3">Department3</SelectItem>
-                  <SelectItem value="Department14">Department4</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+              <div className="flex flex-col gap-2">
+                <label className="lable" htmlFor="emp_code">
+                  Date of Joining<span className="text-[#e60000]">*</span>
+                </label>
+                <Input type="date" name="date" id="date" />
+              </div>
 
-            <div className="flex flex-col gap-2">
-              <label className="lable">
-                Weekoff<span className="text-[#e60000]">*</span>
-              </label>
-              <Select>
-                <SelectTrigger className="dropdown ">
-                  <SelectValue placeholder="Sunday" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Department1">Sunday</SelectItem>
-                  <SelectItem value="Department2">Monday</SelectItem>
-                  <SelectItem value="Department3">Tuesday</SelectItem>
-                  <SelectItem value="Department14">Wednesday</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+              <div className="flex flex-col gap-2">
+                <label className="lable" htmlFor="dob">
+                  Date of Birth
+                </label>
+                <Input type="date" name="dob" id="dob" />
+              </div>
 
-            <div className="flex flex-col gap-2">
-              <label className="lable">
-                Base Town<span className="text-[#e60000]">*</span>
-              </label>
-              <Select>
-                <SelectTrigger className="dropdown ">
-                  <SelectValue placeholder="-Select-" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="abc">abc</SelectItem>
-                  <SelectItem value="bc">bc</SelectItem>
-                  <SelectItem value="bcs">bcs</SelectItem>
-                  <SelectItem value="sdsa">sdsa</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+              <div className="flex flex-col gap-2">
+                <label className="lable">
+                  Nationality
+                </label>
+                <Select>
+                  <SelectTrigger className="dropdown ">
+                    <SelectValue placeholder="-Select-" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="abc">abc</SelectItem>
+                    <SelectItem value="bc">bc</SelectItem>
+                    <SelectItem value="bcs">bcs</SelectItem>
+                    <SelectItem value="sdsa">sdsa</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
 
-            <div className="flex flex-col gap-2">
-              <label className="lable" htmlFor="emp_code">
-                Date of Joining<span className="text-[#e60000]">*</span>
-              </label>
-              <Input type="date" name="date" id="date" />
-            </div>
+              <div className="flex flex-col gap-2">
+                <label className="lable" htmlFor="sap_vendor_code">
+                  SAP Vendor Code<span className="text-[#e60000]">*</span>
+                </label>
+                <Input type="text" name="sap_vendor_code" id="sap_vendor_code" placeholder='SAP Vendor Code' />
+              </div>
 
-            <div className="flex flex-col gap-2">
-              <label className="lable" htmlFor="emp_code">
-                Date of Birth
-              </label>
-              <Input type="date" name="date" id="date" />
-            </div>
+              <div className="flex flex-col gap-2">
+                <label className="lable">
+                  Region<span className="text-[#e60000]">*</span>
+                </label>
+                <Select>
+                  <SelectTrigger className="dropdown ">
+                    <SelectValue placeholder="-Select-" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="abc">abc</SelectItem>
+                    <SelectItem value="bc">bc</SelectItem>
+                    <SelectItem value="bcs">bcs</SelectItem>
+                    <SelectItem value="sdsa">sdsa</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
 
-            <div className="flex flex-col gap-2">
-              <label className="lable">
-                Nationality
-              </label>
-              <Select>
-                <SelectTrigger className="dropdown ">
-                  <SelectValue placeholder="-Select-" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="abc">abc</SelectItem>
-                  <SelectItem value="bc">bc</SelectItem>
-                  <SelectItem value="bcs">bcs</SelectItem>
-                  <SelectItem value="sdsa">sdsa</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+              <div className="flex flex-col gap-2">
+                <label className="lable">
+                  Division
+                </label>
+                <Select>
+                  <SelectTrigger className="dropdown ">
+                    <SelectValue placeholder="-Select-" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="abc">abc</SelectItem>
+                    <SelectItem value="bc">bc</SelectItem>
+                    <SelectItem value="bcs">bcs</SelectItem>
+                    <SelectItem value="sdsa">sdsa</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
 
-            <div className="flex flex-col gap-2">
-              <label className="lable" htmlFor="sap_vendor_code">
-                SAP Vendor Code<span className="text-[#e60000]">*</span>
-              </label>
-              <Input type="text" name="sap_vendor_code" id="sap_vendor_code" placeholder='SAP Vendor Code' />
-            </div>
+              <div className="flex flex-col gap-2">
+                <label className="lable">
+                  Customer Zone
+                </label>
+                <Select>
+                  <SelectTrigger className="dropdown ">
+                    <SelectValue placeholder="-Select-" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="abc">abc</SelectItem>
+                    <SelectItem value="bc">bc</SelectItem>
+                    <SelectItem value="bcs">bcs</SelectItem>
+                    <SelectItem value="sdsa">None Selected</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
 
-            <div className="flex flex-col gap-2">
-              <label className="lable">
-                Region<span className="text-[#e60000]">*</span>
-              </label>
-              <Select>
-                <SelectTrigger className="dropdown ">
-                  <SelectValue placeholder="-Select-" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="abc">abc</SelectItem>
-                  <SelectItem value="bc">bc</SelectItem>
-                  <SelectItem value="bcs">bcs</SelectItem>
-                  <SelectItem value="sdsa">sdsa</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+              <div className="flex flex-col gap-2">
+                <label className="lable">
+                  Payroll Company
+                </label>
+                <Select>
+                  <SelectTrigger className="dropdown ">
+                    <SelectValue placeholder="-Select-" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="abc">abc</SelectItem>
+                    <SelectItem value="bc">bc</SelectItem>
+                    <SelectItem value="bcs">bcs</SelectItem>
+                    <SelectItem value="sdsa">sdsa</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
 
-            <div className="flex flex-col gap-2">
-              <label className="lable">
-                Division
-              </label>
-              <Select>
-                <SelectTrigger className="dropdown ">
-                  <SelectValue placeholder="-Select-" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="abc">abc</SelectItem>
-                  <SelectItem value="bc">bc</SelectItem>
-                  <SelectItem value="bcs">bcs</SelectItem>
-                  <SelectItem value="sdsa">sdsa</SelectItem>
-                </SelectContent>
-              </Select>
+              <div className="flex flex-col gap-2">
+                <label className="lable" htmlFor="cost_center">
+                  Cost Center
+                </label>
+                <Input type="number" name="cost_center" id="cost_center" placeholder='0' />
+              </div>
             </div>
-
-            <div className="flex flex-col gap-2">
-              <label className="lable">
-                Customer Zone
-              </label>
-              <Select>
-                <SelectTrigger className="dropdown ">
-                  <SelectValue placeholder="-Select-" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="abc">abc</SelectItem>
-                  <SelectItem value="bc">bc</SelectItem>
-                  <SelectItem value="bcs">bcs</SelectItem>
-                  <SelectItem value="sdsa">None Selected</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <label className="lable">
-                Payroll Company
-              </label>
-              <Select>
-                <SelectTrigger className="dropdown ">
-                  <SelectValue placeholder="-Select-" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="abc">abc</SelectItem>
-                  <SelectItem value="bc">bc</SelectItem>
-                  <SelectItem value="bcs">bcs</SelectItem>
-                  <SelectItem value="sdsa">sdsa</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <label className="lable" htmlFor="cost_center">
-                Cost Center
-              </label>
-              <Input type="number" name="cost_center" id="cost_center" placeholder='0' />
-            </div>
-          </div>
-         <CustomerInformation />
-         <LoginInformation />
+            <CustomerInformation />
+            <LoginInformation />
         </TabsContent>
         <TabsContent value="userRights">
-          <UserRightsTable />
+             <UserRightsTable />
         </TabsContent>
       </Tabs>
 

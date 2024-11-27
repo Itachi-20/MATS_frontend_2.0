@@ -16,21 +16,13 @@ import {
 type Menu = {
   menu_name: string;
   sub_module_name: string;
-  add: number;
-  edit: number;
-  view: number;
-  delete: number;
-  export: number;
-  all: number;
 };
 
-// Module type defines the structure of each module
 type Module = {
   module_name: string;
   menus: Menu[];
 };
 
-// Root type for the entire JSON structure
 type ModulesData = {
   modules: Module[];
 };
@@ -38,7 +30,8 @@ type ModulesData = {
 const UserRightsTable = () => {
 
   const [searchTerm, setSearchTerm] = useState("");
-  const [isOpen, setIsOpen] = useState(false); // Dropdown open state
+  const [isOpen, setIsOpen] = useState(false); 
+
   const [options] = useState([
     { value: "sundar", label: "Sundar Ganesh" },
     { value: "mukesh", label: "Mukesh Rao" },
@@ -59,25 +52,10 @@ const UserRightsTable = () => {
           {
             menu_name: "Dashboard",
             sub_module_name: "Admin Panel",
-            add: 1,
-            edit: 1,
-            view: 1,
-            delete: 0,
-            export: 1,
-            all: 1,
-
-          },
+             },
           {
             menu_name: "User Management",
             sub_module_name: "Role Assignment",
-
-            add: 1,
-            edit: 0,
-            view: 1,
-            delete: 1,
-            export: 0,
-            all: 0,
-
           },
         ],
       },
@@ -87,13 +65,6 @@ const UserRightsTable = () => {
           {
             menu_name: "Reports",
             sub_module_name: "Invoice Summary",
-            add: 0,
-            edit: 1,
-            view: 1,
-            delete: 0,
-            export: 1,
-            all: 1,
-
           },
         ],
       },
@@ -103,13 +74,6 @@ const UserRightsTable = () => {
           {
             menu_name: " ",
             sub_module_name: "Channel/Class",
-            add: 0,
-            edit: 1,
-            view: 1,
-            delete: 0,
-            export: 1,
-            all: 1,
-
           },
         ],
       },
@@ -119,13 +83,6 @@ const UserRightsTable = () => {
           {
             menu_name: "",
             sub_module_name: "City",
-            add: 0,
-            edit: 1,
-            view: 1,
-            delete: 0,
-            export: 1,
-            all: 1,
-
           },
         ],
       },
@@ -135,72 +92,28 @@ const UserRightsTable = () => {
           {
             menu_name: "",
             sub_module_name: "All",
-            add: 1,
-            edit: 1,
-            view: 1,
-            delete: 0,
-            export: 1,
-            all: 1,
-
-          },
+             },
           {
             menu_name: "",
             sub_module_name: "ClientWindowGrid",
-
-            add: 1,
-            edit: 0,
-            view: 1,
-            delete: 1,
-            export: 0,
-            all: 0,
 
           },
           {
             menu_name: "",
             sub_module_name: "ClientAssignee",
-
-            add: 1,
-            edit: 0,
-            view: 1,
-            delete: 1,
-            export: 0,
-            all: 0,
-
           },
           {
             menu_name: "",
             sub_module_name: "Client Contact Detail",
 
-            add: 1,
-            edit: 0,
-            view: 1,
-            delete: 1,
-            export: 0,
-            all: 0,
-
           },
           {
             menu_name: "",
             sub_module_name: "Client Contact Detail",
-
-            add: 1,
-            edit: 0,
-            view: 1,
-            delete: 1,
-            export: 0,
-            all: 0,
-
           },
           {
             menu_name: "",
             sub_module_name: "Client Contact Detail",
-
-            add: 1,
-            edit: 0,
-            view: 1,
-            delete: 1,
-            export: 0,
-            all: 0,
 
           },
         ],
