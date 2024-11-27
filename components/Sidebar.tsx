@@ -14,6 +14,7 @@ const Sidebar = () => {
     "Patient Support",
     "Sponsorship Support",
     "Non Monetary Grant",
+    "Event List"
   ];
   const settingsItems: string[] = [
     "Change Password",
@@ -25,26 +26,17 @@ const Sidebar = () => {
   return (
     <div  className="flex flex-col justify-between h-screen">
       <div className="pt-10 text-black flex  flex-col">
-        <div className="flex gap-3 pl-1">
-          <svg
-            className="mt-3 "
-            width="40"
-            height="40"
-            viewBox="0 0 40 40"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <circle
-              id="Ellipse 35"
-              cx="20"
-              cy="20"
-              r="15"
-              stroke="black"
-              strokeWidth="10"
-            />
-          </svg>
-          <h1 className="text-black text-[40px] font-semibold pb-6">
-            Mats
+        <div className="flex items-start justify-start gap-1 pl-1 pb-2">
+          <div className="">
+<svg width="40" height="100" viewBox="0 0 143 145" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="98" cy="13" r="13" fill="#5291CD" />
+                <circle cx="45" cy="13" r="13" fill="#FCBB2D" />
+                <path d="M38 144.5V41.5001H49.5V59.0001C58.0236 43.8083 65.0459 39.0847 82.5 39.0001V52.0001C63.7404 51.5761 57.9145 57.934 53.6565 69.9362C51.6683 75.5405 51 81.517 51 87.4636V144.5H38Z" fill="#5291CD" />
+                <path d="M92 144.5V41H104V144.5H92Z" fill="#6193B5" />
+              </svg>
+          </div>
+          <h1 className="text-black text-[40px] font-semibold pt-6">
+            MATS
           </h1>
         </div>
         <div className="flex flex-col text-black gap-4">
@@ -99,7 +91,7 @@ const Sidebar = () => {
                 moduleItems.map((data,index) => { 
                   return (
                     <div key={index} className="child py-4 px-5 rounded-bl-xl text-black  border-l border-black ml-4 relative text-nowrap" onClick={()=>router.push(data.toLowerCase().replaceAll(" ", "_").replace("&","and") + "?forms=1")}>
-                      <div className="absolute -bottom-5 hover:bg-white rounded-xl text-black hover:text-[#4430bf] text-[12px] px-1 py-2 cursor-pointer">
+                      <div className="absolute -bottom-5 hover:bg-white rounded-xl text-black hover:text-[#4430bf] text-[12px] px-1 py-4 cursor-pointer">
                         {data}
                       </div>
                     </div>

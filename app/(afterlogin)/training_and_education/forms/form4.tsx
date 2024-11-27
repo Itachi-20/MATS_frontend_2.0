@@ -40,6 +40,7 @@ const form4 = ({...Props}:Props) => {
   const [activityType,setActivityType] = useState("");
   const [refno,setRefno] = useState(localStorage.getItem("refno")?localStorage.getItem("refno"):"");
   const [documentType,setDocumentType] = useState("");
+  
   const handleFileUpload = (e:React.ChangeEvent<HTMLInputElement>)=>{
     const files = (e.target as HTMLInputElement).files;
     setFile(files);
