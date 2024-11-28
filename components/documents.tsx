@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/table";
 import page from '@/app/(afterlogin)/advance_payment/[request_number]/page';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 interface DocumentsProps {
   PageName: string; 
@@ -184,6 +185,7 @@ type Props = {
 
 const Documents = ({PageName,...Props}:Props) => {
   console.log(Props.eventData?.documents,"this is documents")
+  const router = useRouter();
 
   const handleDelete = async (name:String)=>{
     try {
@@ -200,6 +202,7 @@ const Documents = ({PageName,...Props}:Props) => {
       })
       if(response.ok){
         console.log("successfully deleted");
+        window.location.reload()
       }
     } catch (error) {
       console.log(error,"this is error");
@@ -253,7 +256,7 @@ const Documents = ({PageName,...Props}:Props) => {
                         <Link rel="stylesheet" href={item3.url}>
                       <Image src={"/svg/view.svg"} width={20} height={20}  alt='view-document' className='cursor-pointer' />
                         </Link>
-                        <div onClick={()=>{handleDelete(item3.name)}}>
+                        <div onClick={async()=>{await handleDelete(item3.name)}}>
                       <Image src={"/svg/delete.svg"} width={20} height={20}  alt='view-document' className='cursor-pointer' />
                         </div>
                       </div>

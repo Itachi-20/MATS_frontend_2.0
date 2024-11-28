@@ -3,26 +3,83 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-
+import { useCookies } from 'next-client-cookies';
 const Sidebar = () => {
   const router = useRouter();   
-  const moduleItems: string[] = [
-    "Training & Education",
-    "Awareness Program",
-    "Monetary Grant",
-    "HCP Services",
-    "Patient Support",
-    "Sponsorship Support",
-    "Non Monetary Grant",
-    "Event List"
+  const cookie = useCookies();
+  const role = cookie.get("role");
+  let requestorModuleItems = {};
+  requestorModuleItems = {
+    modules:[{
+      module:"Training & Education",
+      route:"/training_and_education"
+    },{
+      module:"Awareness Program",
+      route:"/awareness_program"
+    },{
+      
+      module:"Monetary Grant",
+      route:"/monetary_grant"
+    },{
+      module:"HCP Services",
+      route:"/hcp_services"
+    },{
+      module:"Patient Support",
+      route:"/patient_support"
+    },{
+      module:"Sponsorship Support",
+      route:"/sponsorship_support"
+    },{
+      module:"Non Monetary Grant",
+      route:"/non_monetary_grant"
+    },{
+      
+      module:"Event List",
+      route:"/event_list"
+    }
+  ],
+  reports:[
+    {
+      name:"Document Repository Type",
+      route:"/repository_document_type"
+    },{
+      name:"Document Repository List",
+      route:"/repository_document_list"
+    }
+  ],
+  settings:[{
+    name:"Change Password",
+    route:"/change_password"
+  }],
+}
+
+  const AproverModuleItems = [{
+    module:"Event Request Approval",
+    route:"/event_approval_list"
+  },{
+    module:"Post Document Approval",
+    route:"/post_activity_document_approval_list/"
+  },{
+    module:"Monetary Grant",
+    route:"/monetary_grant"
+  },{
+    module:"HCP Services",
+    route:"/hcp_services"
+  },{
+    module:"Patient Support",
+    route:"/patient_support"
+  },{
+    module:"Sponsorship Support",
+    route:"/sponsorship_support"
+  },{
+    module:"Non Monetary Grant",
+    route:"/non_monetary_grant"
+  },{
+
+    module:"Event List",
+    route:"/event_list"
+  }
   ];
-  const settingsItems: string[] = [
-    "Change Password",
-  ];
-  const reports: string[] = [
-    "Repository Document Type",
-    "Repository Document List"
-  ]
   return (
     <div  className="flex flex-col justify-between h-screen">
       <div className="pt-10 text-black flex  flex-col">
@@ -87,12 +144,12 @@ const Sidebar = () => {
             </div>
             <div id="element" className="z-10" >
             {/* <div className="hidden group-hover:block duration-100 delay-100 transition-all" id="element"> */}
-              {moduleItems &&
-                moduleItems.map((data,index) => { 
+              {requestorModuleItems &&
+                requestorModuleItems.modules?.map((data,index) => { 
                   return (
-                    <div key={index} className="child py-4 px-5 rounded-bl-xl text-black  border-l border-black ml-4 relative text-nowrap" onClick={()=>router.push(data.toLowerCase().replaceAll(" ", "_").replace("&","and") + "?forms=1")}>
-                      <div className="absolute -bottom-5 hover:bg-white rounded-xl text-black hover:text-[#4430bf] text-[12px] px-1 py-4 cursor-pointer">
-                        {data}
+                    <div key={index} className="child py-4 px-5 rounded-bl-xl text-black  border-l border-black ml-4 relative text-nowrap" onClick={()=>router.push(data.route + "?forms=1")}>
+                      <div className="absolute -bottom-5 hover:bg-white rounded-xl text-black hover:text-[#4430bf] text-[12px] px-1 py-3 cursor-pointer">
+                        {data.module}
                       </div>
                     </div>
                   );
@@ -110,13 +167,13 @@ const Sidebar = () => {
               <h1 className="pt-1">Reports</h1>
             </div>           
             <div id="element" className="z-10" >
-                {reports &&
-                  reports.map((data,index) => { 
+                {requestorModuleItems &&
+                  requestorModuleItems.reports?.map((data,index) => { 
                     return (
                       <div key={index} className="child py-4 px-5 rounded-bl-xl text-black  border-l border-black ml-4 relative text-nowrap">
-                       <Link href={data.toLowerCase().replaceAll(" ", "_").replace("&","and")}>
+                       <Link href={data.route}>
                           <div className="absolute -bottom-9 hover:bg-white rounded-xl text-black hover:text-[#4430bf] text-[12px] px-1 my-5 py-2 cursor-pointer">
-                          {data} 
+                          {data.name} 
                           </div>
                       </Link>
                       </div>
@@ -133,13 +190,13 @@ const Sidebar = () => {
               <h1 className="pt-1">Settings</h1>
             </div>           
             <div id="element" className="z-10" >
-                {settingsItems &&
-                  settingsItems.map((data,index) => { 
+                {requestorModuleItems &&
+                  requestorModuleItems.settings?.map((data,index) => { 
                     return (
                       <div key={index} className="child py-4 px-5 rounded-bl-xl text-black  border-l border-black ml-4 relative text-nowrap ">
-                       <Link href="/change_password">
+                       <Link href={data.route}>
                           <div className="absolute -bottom-5 hover:bg-white rounded-xl text-black hover:text-[#4430bf] text-[12px] px-1 py-2 cursor-pointer">
-                          {data} 
+                          {data.name} 
                           </div>
                       </Link>
                       </div>
