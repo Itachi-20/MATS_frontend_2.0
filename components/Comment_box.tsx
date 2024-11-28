@@ -22,7 +22,7 @@ const Comment_box = ({ handleClose,handleSubmit }: props) => {
                 Back
               </Button>
               <Button className="bg-[#5DBE74] text-white text-md font-normal border px-8 hover:bg-[#5DBE74]" onClick={()=>handleSubmit(remarks)}>
-                Approve
+                Submit
               </Button>
             </div>
         </div>

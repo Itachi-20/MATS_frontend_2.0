@@ -1,3 +1,4 @@
+'use client'
 import React from 'react'
 import { Input } from "@/components/ui/input";
 import {
@@ -17,7 +18,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "../../context/AuthContext";
 const details = () => {
+  const { role, name,userid, clearAuthData } = useAuth();
   return (
     <div className="px-7 pb-7 pt-4 w-full relative z-20 flex flex-col justify-stretch">
           <div className="flex justify-between pb-6">
@@ -25,6 +28,10 @@ const details = () => {
               <h1 className="text-black text-[20px] font-semibold">
                 Today&apos;s Requests
               </h1>
+
+              <p className='text-red-500'>Role: {role}</p>
+      <p className='text-red-500'>Name: {name}</p>
+      <p className='text-red-500'>userid: {userid}</p>
               <h1 className="text-[#737791] text-[17px] font-normal pb-4 pl-1">
                 Request Summary
               </h1>

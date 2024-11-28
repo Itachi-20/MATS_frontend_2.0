@@ -109,8 +109,8 @@ const table = ({ tableData }: Props) => {
     file: null,
   });
   const [fileData, setFileData] = useState<DocumentRow[] | undefined>();
-  const [fileList, setFileList] = useState<File[]>([]);
   const [uploadedFiles, setUploadedFiles] = useState< FileList | null>()
+  const [files, setFiles] = useState<File[]>([]);
   const base_url = process.env.NEXT_PUBLIC_FRAPPE_URL;
   const router = useRouter();
   const [deletename, setDeleteName] = useState<string | null>();
@@ -252,7 +252,7 @@ const table = ({ tableData }: Props) => {
         }, 500);
         setVendorDetails({ vendor_type: '', vendor_name: '', advance: 0, file: null });
         setUploadedFiles(null);
-        setFileList([]);
+        setFiles([]);
         return 'Vendor has been added successfully!';
       },
       error: (error) => `Failed to add vendor: ${error.message || error}`,
@@ -349,8 +349,6 @@ const table = ({ tableData }: Props) => {
 
   const handleNext = (fileList: FileList | null) => {
     setUploadedFiles(fileList)
-    const filelists = Array.from(fileList || []);
-    setFileList(filelists);
   }
   return (
     <>
@@ -390,7 +388,7 @@ const table = ({ tableData }: Props) => {
           </div>
 
         </div>
-        {!tableData.is_declared &&
+        {!tableData?.is_declared &&
           <>
         <div className=" grid grid-cols-3 gap-4 pb-7">
           <div className='col-span-3 space-y-2'>
@@ -477,12 +475,8 @@ const table = ({ tableData }: Props) => {
         </div>
 
         <div className='flex justify-end gap-2 pb-7'>
-          <h1 className="text-2xl font-bold">
-            {fileList.length > 0
-              ? `${fileList.length} file${fileList.length !== 1 ? 's' : ''} selected`
-              : "Upload Your Receipts/Bills"}
-          </h1>
-          <SimpleFileUpload onNext={handleNext} buttonText={'Receipts/Bills'} />
+          {/* <SimpleFileUpload onNext={handleNext} buttonText={'Receipts/Bills'} /> */}
+          <SimpleFileUpload files={files} setFiles={setFiles} onNext={handleNext} buttonText={'Receipts/Bills'} />
 
           <Button className="border border-[#4430bf] text-[#4430bf] text-[18px]" onClick={() => addVendor()}>Add</Button>
         </div>
@@ -590,7 +584,7 @@ const table = ({ tableData }: Props) => {
               tabledata?.actual_vendors?.length > 0 ?
               <TableBody>
                 {tabledata &&
-                  tabledata.actual_vendors.map((data, index) => {
+                  tabledata?.actual_vendors.map((data, index) => {
                     return (
                       <TableRow key={index} className="text-center text-nowrap text-black">
                         <TableCell>{data.parent}</TableCell>
@@ -636,7 +630,7 @@ const table = ({ tableData }: Props) => {
           </Table>
         </div>
 
-        {  !tableData.is_declared &&
+        {  !tableData?.is_declared &&
         <div className='flex justify-end gap-2 pt-8'>
           <Button className='bg-[#4430BF] px-10' onClick={handleSubmit}>Submit</Button>
         </div>
