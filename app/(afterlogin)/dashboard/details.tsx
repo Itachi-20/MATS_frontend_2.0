@@ -28,10 +28,6 @@ const details = () => {
               <h1 className="text-black text-[20px] font-semibold">
                 Today&apos;s Requests
               </h1>
-
-              <p className='text-red-500'>Role: {role}</p>
-      <p className='text-red-500'>Name: {name}</p>
-      <p className='text-red-500'>userid: {userid}</p>
               <h1 className="text-[#737791] text-[17px] font-normal pb-4 pl-1">
                 Request Summary
               </h1>
