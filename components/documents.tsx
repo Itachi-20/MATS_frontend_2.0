@@ -180,7 +180,8 @@ type ActivityDocument = {
 
 type Props = {
   eventData:EventEntry | undefined | null
-  PageName:string
+  PageName:string,
+  fetchFile:()=>void
 }
 
 const Documents = ({PageName,...Props}:Props) => {
@@ -202,7 +203,7 @@ const Documents = ({PageName,...Props}:Props) => {
       })
       if(response.ok){
         console.log("successfully deleted");
-        window.location.reload()
+        Props.fetchFile();
       }
     } catch (error) {
       console.log(error,"this is error");

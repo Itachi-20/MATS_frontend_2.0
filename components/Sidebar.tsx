@@ -3,12 +3,31 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useCookies } from 'next-client-cookies';
+
+type modules = {
+  module:string,
+  route:string
+}
+type reports = {
+  name:string,
+  route:string
+}
+
+type settings = {
+  name:string,
+  route:string
+}
+
+type sidebarItems = {
+  modules:modules[],
+  reports:reports[],
+  settings:settings[]
+}
+
+
 const Sidebar = () => {
-  const router = useRouter();   
-  const cookie = useCookies();
-  const role = cookie.get("role");
-  let requestorModuleItems = {};
+  const router = useRouter();
+  let requestorModuleItems:sidebarItems;
   requestorModuleItems = {
     modules:[{
       module:"Training & Education",

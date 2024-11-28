@@ -1,6 +1,7 @@
 import React, { useState,useEffect } from 'react'
 import { Button } from "@/components/ui/button";
 import Documents from "@/components/documents"
+import SimpleFileUpload from "@/components/multiple_file_upload";
 import {
   Table,
   TableBody,
@@ -42,6 +43,8 @@ const form4 = ({ ...Props }: Props) => {
   const [refno, setRefno] = useState(localStorage.getItem("refno") ? localStorage.getItem("refno") : "");
   const [documentType, setDocumentType] = useState("");
   const [preview_data, setPreviewData] = useState<any>(null);
+  const [uploadedFiles, setUploadedFiles] = useState<FileList | null>(); //added state 1
+  const [fileList, setFileList] = useState<File[]>([]); //added state 2
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = (e.target as HTMLInputElement).files;
     setFile(files);
@@ -50,16 +53,16 @@ const form4 = ({ ...Props }: Props) => {
   const FileUpload = async () => {
     const formdata = new FormData();
 
-    if (file && file.length > 0) {
-      for (let i = 0; i < file.length; i++) {
-        formdata.append("file", file[i]);
+    if (uploadedFiles && uploadedFiles.length > 0) {
+      for (let i = 0; i < uploadedFiles.length; i++) {
+        formdata.append("file", uploadedFiles[i]);
       }
     } else {
       console.log("No file to upload");
       return;
     }
     formdata.append("docname", refno as string)
-    formdata.append("activity_type", activityType);
+    formdata.append("activity_type", "Pre Activity");
     formdata.append("document_type", documentType)
     try {
       const response = await fetch(
@@ -90,6 +93,12 @@ const form4 = ({ ...Props }: Props) => {
   const handleActivityTypeChange = (value: string) => {
     setActivityType(value);
   }
+
+  const handleNext = (fileList: FileList | null) => {
+    setUploadedFiles(fileList);
+    const filelists = Array.from(fileList || []);
+    setFileList(filelists);
+  };
 
   const PreviewData = async () => {
     try {
@@ -132,10 +141,10 @@ const form4 = ({ ...Props }: Props) => {
             Document Type <span className="text-[#e60000]">*</span>
           </label>
           <Select
-            onValueChange={(value) => handleActivityTypeChange(value)}
+            onValueChange={(value) => handleActivityTypeChange(value)} disabled
           >
             <SelectTrigger className="dropdown">
-              <SelectValue placeholder="Select" />
+              <SelectValue placeholder="Pre Activity" />
             </SelectTrigger>
             <SelectContent>
               {
@@ -164,7 +173,7 @@ const form4 = ({ ...Props }: Props) => {
             <SelectContent>
               {
                 Props.activityDropdown && Props.activityDropdown.document.filter((item, index) => {
-                  if (item.activity_type == activityType) {
+                  if (item.activity_type == "Pre Activity") {
                     return item
                   }
                 }).map((item, index) => {
@@ -177,7 +186,7 @@ const form4 = ({ ...Props }: Props) => {
             </SelectContent>
           </Select>
         </div>
-        <div className="flex justify-around col-span-1 text-nowrap">
+        {/* <div className="flex justify-around col-span-1 text-nowrap">
           <label
             htmlFor="file"
             className="lable hover:cursor-pointer "
@@ -203,6 +212,27 @@ const form4 = ({ ...Props }: Props) => {
             <Input type="file" onChange={(e) => { handleFileUpload(e) }} id="file" className="hidden" multiple></Input>
           </label>
           <Button className="bg-white text-black border text-md font-normal" onClick={() => FileUpload()}>
+            Add
+          </Button>
+        </div> */}
+        <div className="flex items-end gap-6 col-span-1 text-nowrap">
+          <div className="flex flex-col gap-3">
+            {/* <h1 className="text-2xl font-bold">
+              {fileList.length > 0
+                ? `${fileList.length} file${
+                    fileList.length !== 1 ? "s" : ""
+                  } selected`
+                : ""}
+            </h1> */}
+             <label className="text-black text-sm font-normal capitalize">
+            Upload Files<span className="text-[#e60000]">*</span>
+          </label>
+            <SimpleFileUpload onNext={handleNext} buttonText="Upload Here" />
+          </div>
+          <Button
+            className="bg-white text-black border text-md font-normal"
+            onClick={() => FileUpload()}
+          >
             Add
           </Button>
         </div>
@@ -340,6 +370,7 @@ const form4 = ({ ...Props }: Props) => {
       <Documents
       eventData={preview_data}
       PageName={''}
+      fetchFile={PreviewData}
       />
       <div className="flex justify-end pt-5 gap-4">
         <Button className="bg-white text-black border text-md font-normal">
