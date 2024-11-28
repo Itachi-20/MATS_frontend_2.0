@@ -79,7 +79,7 @@ const form4 = ({ ...Props }: Props) => {
 
 
       if (response.ok) {
-        const data = await response.json();
+        PreviewData();
 
       } else {
         console.log("Login failed");
@@ -127,6 +127,9 @@ const form4 = ({ ...Props }: Props) => {
   useEffect(() => {
     PreviewData();
   }, [])
+
+  useEffect(()=>{
+  },[preview_data])
 
   console.log(file, "this is files");
   return (

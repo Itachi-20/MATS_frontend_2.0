@@ -273,7 +273,7 @@ const Preview_Form = ({...Props}:Props) => {
 
   return (
       <>
-        <div className="md:px-7 md:pb-7 md:pt-4 w-full relative z-20">
+        <div className="md:px-7 md:pb-7 md:pt-4 w-full z-20">
             
         <BasicDetails
         pathname=""
@@ -325,7 +325,7 @@ const Preview_Form = ({...Props}:Props) => {
         </div>
         {
             isCommentbox &&
-            <div className="absolute z-50 flex pt-10 items-end justify-center bg-black bg-opacity-50 w-full h-full inset-0 pb-40">
+            <div className=" absolute z-50 flex pt-10 items-end justify-center bg-black bg-opacity-50 w-full h-full inset-0 pb-40">
           <Comment_box 
           handleClose={handleDialog}
           handleComment={handleComment}

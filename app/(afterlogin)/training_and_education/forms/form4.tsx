@@ -78,7 +78,7 @@ const form4 = ({ ...Props }: Props) => {
       });
 
       if (response.ok) {
-        const data = await response.json();
+        PreviewData();
       } else {
         console.log("Login failed");
       }
@@ -119,7 +119,6 @@ const form4 = ({ ...Props }: Props) => {
     PreviewData();
   }, []);
   useEffect(()=>{
-
   },[preview_data])
 
   const handleNext = (fileList: FileList | null) => {
