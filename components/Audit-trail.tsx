@@ -13,13 +13,13 @@ import {
     TableRow,
 } from "@/components/ui/table";
 
-interface AuditTrailProps {
+type AuditTrailProps =  {
     PageName: string;
     data: Data[];
 }
 
-const AuditTrail: React.FC<AuditTrailProps> = (props ) => {
-
+const AuditTrail = ({...props} ):AuditTrailProps => {
+    console.log(props.data.documents,"this is data")
     const PageName = props.PageName;
 
     const [isOpen, setIsOpen] = useState(false);
@@ -159,7 +159,7 @@ const AuditTrail: React.FC<AuditTrailProps> = (props ) => {
     return (
         <>
             <div className="p-6 space-y-10">
-                <div>
+                {/* <div>
                     {PageName === "eventListPage" ? (
                     <div>
                             <div className="flex justify-between">
@@ -243,7 +243,7 @@ const AuditTrail: React.FC<AuditTrailProps> = (props ) => {
                             </div>
                         </div>
                     )}
-                </div>
+                </div> */}
                 <div className="space-y-2">
                     <h1 className="md:text-[30px] md:font-normal leading-[45px]">AUDIT TRAIL</h1>
                     <div className="border rounded-xl py-4 px-3 overflow-y-auto">
@@ -263,13 +263,13 @@ const AuditTrail: React.FC<AuditTrailProps> = (props ) => {
                             </TableHeader>
                             <TableBody className="">
                                 {
-                                    data && data.map((item, index) => {
+                                  props.data &&    props.data.documents?.map((item, index) => {
                                         return (
                                             <>
                                                 <TableRow className={`${expandedRow === index ? 'border-b-0' : ''}`}>
                                                     <TableCell className={"text-[#625d5d] text-[15px] font-normal text-center"}>
                                                         <span className="">
-                                                            {item.request_number}
+                                                            {item.name}
                                                         </span>
                                                     </TableCell>
                                                     <TableCell className={"text-[#625d5d] text-[15px] font-normal text-center flex flex-col"}>
@@ -282,7 +282,7 @@ const AuditTrail: React.FC<AuditTrailProps> = (props ) => {
                                                     </TableCell>
                                                     <TableCell className={"text-[#625d5d] text-[15px] font-normal text-center"}>
                                                         <span className="">
-                                                            {item.event_date}
+                                                            {item.event_start_date}
                                                         </span>
                                                     </TableCell>
                                                     <TableCell className={"text-[#625d5d] text-[15px] font-normal text-center"}>
@@ -292,7 +292,7 @@ const AuditTrail: React.FC<AuditTrailProps> = (props ) => {
                                                     </TableCell>
                                                     <TableCell className={"text-[#625d5d] text-[15px] font-normal text-center"}>
                                                         <span className="">
-                                                            {item.type_of_activity}
+                                                            {item.sub_type_of_activity}
                                                         </span>
                                                     </TableCell>
                                                     <TableCell className={"text-[#625d5d] text-[15px] font-normal text-center"}>
@@ -317,13 +317,13 @@ const AuditTrail: React.FC<AuditTrailProps> = (props ) => {
                                                     expandedRow === index && (
                                                         <TableRow className="">
                                                             <TableCell colSpan={7} className={"text-[#625d5d] text-[15px] font-normal text-center"}>
-                                                                {timeline && timeline.map((item, index: number) => (
+                                                                {item.logs && item.logs.map((item, index: number) => (
                                                                     <div className={`grid grid-cols-5 ${index ? 'mt-5' : ''}`}>
                                                                         <div className="col-span-1">
                                                                             <div className="flex flex-col space-y-1 ">
                                                                                 <div className="flex items-center space-x-5">
                                                                                     <div>
-                                                                                        <div className={`${timeline.length - 1 != index ? 'before:h-10' : ''} before:absolute before:w-0.5 before:bg-[#988AFF]`}></div>
+                                                                                        <div className={`${item.length - 1 != index ? 'before:h-10' : ''} before:absolute before:w-0.5 before:bg-[#988AFF]`}></div>
                                                                                         <div className="ml-0.5">
                                                                                             <svg xmlns="http://www.w3.org/2000/svg" width="10" height="6" viewBox="0 0 10 6" fill="none">
                                                                                                 <g filter="url(#filter0_ii_652_29226)">
@@ -357,7 +357,7 @@ const AuditTrail: React.FC<AuditTrailProps> = (props ) => {
                                                                                     <div className="space-x-2">
                                                                                         <span className="font-bold">
 
-                                                                                            {item.date}
+                                                                                            {item.timestamp}
                                                                                         </span>
                                                                                         <span>
                                                                                             {item.time}
@@ -367,7 +367,7 @@ const AuditTrail: React.FC<AuditTrailProps> = (props ) => {
                                                                             </div>
                                                                         </div>
                                                                         <p className="col-span-4 text-left">
-                                                                            {item.description}
+                                                                            {item.changes}
                                                                         </p>
                                                                     </div>
                                                                 ))
