@@ -247,15 +247,12 @@ const table = ({ tableData }: Props) => {
     toast.promise(apiCallPromise, {
       loading: 'Submitting vendor details...',
       success: (data) => {
-        // On success, update UI or state as needed
-        // const file = data;
         setTimeout(() => {
           EventData();
         }, 500);
         setVendorDetails({ vendor_type: '', vendor_name: '', advance: 0, file: null });
         setUploadedFiles(null);
         setFileList([]);
-        // EventData();
         return 'Vendor has been added successfully!';
       },
       error: (error) => `Failed to add vendor: ${error.message || error}`,
@@ -364,7 +361,7 @@ const table = ({ tableData }: Props) => {
             Training & Education
           </div>
           <div className='flex gap-4'>
-            <Button className="border rounded-sm px-6 py-1 border-black text-black">Back</Button>
+            <Button className="border rounded-sm px-6 py-1 border-black text-black" onClick={()=>router.push(`/event_list`)}>Back</Button>
           </div>
         </div>
         <div className='border rounded-3xl mt-5 mb-7 p-2 text-black grid grid-cols-3'>
@@ -393,8 +390,8 @@ const table = ({ tableData }: Props) => {
           </div>
 
         </div>
-        {/* {!tabledata.is_declared &&
-          <> */}
+        {!tableData.is_declared &&
+          <>
         <div className=" grid grid-cols-3 gap-4 pb-7">
           <div className='col-span-3 space-y-2'>
             <label htmlFor="event_conclusion" className="text-black md:text-sm md:font-normal capitalize">
@@ -485,12 +482,12 @@ const table = ({ tableData }: Props) => {
               ? `${fileList.length} file${fileList.length !== 1 ? 's' : ''} selected`
               : "Upload Your Receipts/Bills"}
           </h1>
-          <SimpleFileUpload onNext={handleNext} />
+          <SimpleFileUpload onNext={handleNext} buttonText={'Receipts/Bills'} />
 
           <Button className="border border-[#4430bf] text-[#4430bf] text-[18px]" onClick={() => addVendor()}>Add</Button>
         </div>
-        {/* </>
-        } */}
+        </>
+        }
         <div className="border bg-white h-full p-4 rounded-[18px]">
           <Table className={""}>
             <TableHeader className={"bg-[#E0E9FF]"}>
@@ -596,7 +593,7 @@ const table = ({ tableData }: Props) => {
                   tabledata.actual_vendors.map((data, index) => {
                     return (
                       <TableRow key={index} className="text-center text-nowrap text-black">
-                        <TableCell>{data.event_request_number}</TableCell>
+                        <TableCell>{data.parent}</TableCell>
                         <TableCell>{data.vendor_type}</TableCell>
                         <TableCell>{data.vendor_code}</TableCell>
                         <TableCell>{data.vendor_name}</TableCell>
@@ -609,7 +606,7 @@ const table = ({ tableData }: Props) => {
                         <TableCell>{data.utr_number}</TableCell>
                         <TableCell>{data.payment_date}</TableCell>
 
-                        <TableCell className='sticky right-0 z-20 gap-3 w-[120px] bg-white mt-2 flex border-l'>
+                        <TableCell className='sticky right-0 z-20 gap-3 w-[120px] bg-white mt-2 flex justify-center border-l'>
                           {/* <Link
                               href={`${base_url}${data.file}`}
                               target="_blank"
@@ -620,10 +617,10 @@ const table = ({ tableData }: Props) => {
                           <button onClick={() => handleSetFileData(data.files)}><Image src={'/svg/view.svg'} alt='viewsvg' width={24} height={18} /></button>
                           {/* </Link> */}
                           {/* <Image src={'/svg/editIcon.svg'} alt='editsvg' width={20} height={18} /> */}
-                          {/* {
-                              !tabledata.is_declared && */}
+                          {
+                              !tableData.is_declared &&
                           <button onClick={() => handleDeleteDialog(data.name)} ><Image src={'/svg/delete.svg'} alt='deletesvg' width={20} height={18} /></button>
-                          {/* } */}
+                          }
                         </TableCell>
                       </TableRow>
                     );
@@ -639,11 +636,11 @@ const table = ({ tableData }: Props) => {
           </Table>
         </div>
 
-        {/* {  !tableData.is_declared && */}
+        {  !tableData.is_declared &&
         <div className='flex justify-end gap-2 pt-8'>
           <Button className='bg-[#4430BF] px-10' onClick={handleSubmit}>Submit</Button>
         </div>
-        {/* } */}
+         } 
       </div>
       <Toaster richColors position="top-right" />
       {

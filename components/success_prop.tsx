@@ -4,7 +4,6 @@ import { Button } from "./ui/button";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 type props = {
-  setClose: React.Dispatch<React.SetStateAction<boolean>>
   title:string;
 }
 const SuccessProp = ({ ...Props }: props) => {
@@ -29,7 +28,7 @@ const SuccessProp = ({ ...Props }: props) => {
               dur="6s"
               repeatCount="indefinite" />
           </svg>
-          <Button className="bg-white text-black border text-md font-normal px-12 rounded-md hover:bg-white" onClick={() => { Props.setClose(false);}}>
+          <Button className="bg-white text-black border text-md font-normal px-12 rounded-md hover:bg-white">
             Redirecting to {Props.title} List
           </Button>
 
