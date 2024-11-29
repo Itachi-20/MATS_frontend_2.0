@@ -4,47 +4,115 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
+type modules = {
+  module:string,
+  route:string
+}
+type reports = {
+  name:string,
+  route:string
+}
+
+type settings = {
+  name:string,
+  route:string
+}
+
+type sidebarItems = {
+  modules:modules[],
+  reports:reports[],
+  settings:settings[]
+}
+
+
 const Sidebar = () => {
-  const router = useRouter();   
-  const moduleItems: string[] = [
-    "Training & Education",
-    "Awareness Program",
-    "Monetary Grant",
-    "HCP Services",
-    "Patient Support",
-    "Sponsorship Support",
-    "Non Monetary Grant",
+  const router = useRouter();
+  let requestorModuleItems:sidebarItems;
+  requestorModuleItems = {
+    modules:[{
+      module:"Training & Education",
+      route:"/training_and_education"
+    },{
+      module:"Awareness Program",
+      route:"/awareness_program"
+    },{
+      
+      module:"Monetary Grant",
+      route:"/monetary_grant"
+    },{
+      module:"HCP Services",
+      route:"/hcp_services"
+    },{
+      module:"Patient Support",
+      route:"/patient_support"
+    },{
+      module:"Sponsorship Support",
+      route:"/sponsorship_support"
+    },{
+      module:"Non Monetary Grant",
+      route:"/non_monetary_grant"
+    },{
+      
+      module:"Event List",
+      route:"/event_list"
+    }
+  ],
+  reports:[
+    {
+      name:"Document Repository Type",
+      route:"/repository_document_type"
+    },{
+      name:"Document Repository List",
+      route:"/repository_document_list"
+    }
+  ],
+  settings:[{
+    name:"Change Password",
+    route:"/change_password"
+  }],
+}
+
+  const AproverModuleItems = [{
+    module:"Event Request Approval",
+    route:"/event_approval_list"
+  },{
+    module:"Post Document Approval",
+    route:"/post_activity_document_approval_list/"
+  },{
+    module:"Monetary Grant",
+    route:"/monetary_grant"
+  },{
+    module:"HCP Services",
+    route:"/hcp_services"
+  },{
+    module:"Patient Support",
+    route:"/patient_support"
+  },{
+    module:"Sponsorship Support",
+    route:"/sponsorship_support"
+  },{
+    module:"Non Monetary Grant",
+    route:"/non_monetary_grant"
+  },{
+
+    module:"Event List",
+    route:"/event_list"
+  }
   ];
-  const settingsItems: string[] = [
-    "Change Password",
-  ];
-  const reports: string[] = [
-    "Repository Document Type",
-    "Repository Document List"
-  ]
   return (
     <div  className="flex flex-col justify-between h-screen">
       <div className="pt-10 text-black flex  flex-col">
-        <div className="flex gap-3 pl-1">
-          <svg
-            className="mt-3 "
-            width="40"
-            height="40"
-            viewBox="0 0 40 40"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <circle
-              id="Ellipse 35"
-              cx="20"
-              cy="20"
-              r="15"
-              stroke="black"
-              strokeWidth="10"
-            />
-          </svg>
-          <h1 className="text-black text-[40px] font-semibold pb-6">
-            Mats
+        <div className="flex items-start justify-start gap-1 pl-1 pb-2">
+          <div className="">
+<svg width="40" height="100" viewBox="0 0 143 145" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="98" cy="13" r="13" fill="#5291CD" />
+                <circle cx="45" cy="13" r="13" fill="#FCBB2D" />
+                <path d="M38 144.5V41.5001H49.5V59.0001C58.0236 43.8083 65.0459 39.0847 82.5 39.0001V52.0001C63.7404 51.5761 57.9145 57.934 53.6565 69.9362C51.6683 75.5405 51 81.517 51 87.4636V144.5H38Z" fill="#5291CD" />
+                <path d="M92 144.5V41H104V144.5H92Z" fill="#6193B5" />
+              </svg>
+          </div>
+          <h1 className="text-black text-[40px] font-semibold pt-6">
+            MATS
           </h1>
         </div>
         <div className="flex flex-col text-black gap-4">
@@ -95,12 +163,12 @@ const Sidebar = () => {
             </div>
             <div id="element" className="z-10" >
             {/* <div className="hidden group-hover:block duration-100 delay-100 transition-all" id="element"> */}
-              {moduleItems &&
-                moduleItems.map((data,index) => { 
+              {requestorModuleItems &&
+                requestorModuleItems.modules?.map((data,index) => { 
                   return (
-                    <div key={index} className="child py-4 px-5 rounded-bl-xl text-black  border-l border-black ml-4 relative text-nowrap" onClick={()=>router.push(data.toLowerCase().replaceAll(" ", "_").replace("&","and") + "?forms=1")}>
-                      <div className="absolute -bottom-5 hover:bg-white rounded-xl text-black hover:text-[#4430bf] text-[12px] px-1 py-2 cursor-pointer">
-                        {data}
+                    <div key={index} className="child py-4 px-5 rounded-bl-xl text-black  border-l border-black ml-4 relative text-nowrap" onClick={()=>router.replace(data.route + "?forms=1")}>
+                      <div className="absolute -bottom-5 hover:bg-white rounded-xl text-black hover:text-[#4430bf] text-[12px] px-1 py-3 cursor-pointer">
+                        {data.module}
                       </div>
                     </div>
                   );
@@ -118,13 +186,13 @@ const Sidebar = () => {
               <h1 className="pt-1">Reports</h1>
             </div>           
             <div id="element" className="z-10" >
-                {reports &&
-                  reports.map((data,index) => { 
+                {requestorModuleItems &&
+                  requestorModuleItems.reports?.map((data,index) => { 
                     return (
                       <div key={index} className="child py-4 px-5 rounded-bl-xl text-black  border-l border-black ml-4 relative text-nowrap">
-                       <Link href={data.toLowerCase().replaceAll(" ", "_").replace("&","and")}>
+                       <Link href={data.route}>
                           <div className="absolute -bottom-9 hover:bg-white rounded-xl text-black hover:text-[#4430bf] text-[12px] px-1 my-5 py-2 cursor-pointer">
-                          {data} 
+                          {data.name} 
                           </div>
                       </Link>
                       </div>
@@ -141,13 +209,13 @@ const Sidebar = () => {
               <h1 className="pt-1">Settings</h1>
             </div>           
             <div id="element" className="z-10" >
-                {settingsItems &&
-                  settingsItems.map((data,index) => { 
+                {requestorModuleItems &&
+                  requestorModuleItems.settings?.map((data,index) => { 
                     return (
                       <div key={index} className="child py-4 px-5 rounded-bl-xl text-black  border-l border-black ml-4 relative text-nowrap ">
-                       <Link href="/change_password">
+                       <Link href={data.route}>
                           <div className="absolute -bottom-5 hover:bg-white rounded-xl text-black hover:text-[#4430bf] text-[12px] px-1 py-2 cursor-pointer">
-                          {data} 
+                          {data.name} 
                           </div>
                       </Link>
                       </div>

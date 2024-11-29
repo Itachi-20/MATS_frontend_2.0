@@ -1,5 +1,5 @@
 "use client"
-import React from 'react'
+import React, { useState } from 'react'
 import { Input } from "@/components/ui/input"
 import {
   Select,
@@ -18,7 +18,7 @@ type Props = {
 }
 
 const Form2 = ({ ...Props }: Props) => {
-
+  const [engagementHCP,setEngagementHCP] = useState<any>();
   return (
     // </div>
     (<div>
@@ -60,7 +60,7 @@ const Form2 = ({ ...Props }: Props) => {
         <div className='flex flex-col gap-2'>
           <label className='lable'>engagement of any government hCP’s?<span className='text-[#e60000]'>*</span></label>
           <Select
-            onValueChange={(value) => Props.handleSelectChange(value, "any_govt_hcp")}
+            onValueChange={(value) => {setEngagementHCP(value);Props.handleSelectChange(value, "any_govt_hcp");}}
           >
             <SelectTrigger className="dropdown">
               <SelectValue placeholder="Theme" />
@@ -74,9 +74,10 @@ const Form2 = ({ ...Props }: Props) => {
         </div>
         <div className='flex flex-col gap-2'>
           <label className='lable'>Total number of government hCP’s<span className='text-[#e60000]'>*</span></label>
-          <Input className='dropdown' placeholder='Type Here'
+          <Input className={`dropdown ${engagementHCP?"":"cursor-not-allowed"}`} placeholder='Type Here'
             name='no_of_hcp'
             type='number'
+            disabled = {engagementHCP == "Yes"?false:true}
             onChange={(e) => Props.handlefieldChange(e)}
           ></Input>
         </div>

@@ -443,7 +443,7 @@ const page = () => {
                     }
                 </div>
                 {
-                    expensedata?.actual_vendors[0]?.status != "Post Expense Approved" &&
+                    !(expensedata?.actual_vendors[0]?.status == "Post Expense Approved" || expensedata?.actual_vendors[0]?.status == "Post Expense Closed") &&
                     <div className='flex justify-end gap-2 pt-8'>
                         <Button className={`${expensedata?.actual_vendors[0].status == "Post Expense Approved" ?'cursor-not-allowed':''} bg-[#5DBE74] px-6`} disabled={expensedata?.actual_vendors[0].status == "Post Expense Approved" ? true : false} onClick={()=>handleOpen('Approved')} >Approve</Button>
                         <Button className={`${expensedata?.actual_vendors[0].status == "Post Expense Approved" ?'cursor-not-allowed':''} bg-[#4430BF] px-6`} disabled={expensedata?.actual_vendors[0].status == "Post Expense Approved" ? true : false} onClick={()=>handleOpen('Send Back')}>Send Back</Button>
@@ -453,7 +453,7 @@ const page = () => {
             </div>
             {opencommentbox && <Comment_box handleClose={handleOpen} handleSubmit={handleApproveRejectSendBack} />}
             {open &&<ViewDoc setClose={setOpen} data={fileData}/>}
-            {successprop && <SuccessProp setClose={setSuccessprop} title={"Post Expense Approval"}/>}
+            {successprop && <SuccessProp title={"Post Expense Approval"}/>}
         </>
     )
 }

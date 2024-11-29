@@ -73,7 +73,7 @@ body {
 
 /* When hovering over the parent element (group in Tailwind), the target element becomes visible */
 #parent:hover #element {
-  height: 230px;
+  height: 250px;
   max-height: max-content;
 }
 #parent:hover .child {

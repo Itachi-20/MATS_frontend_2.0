@@ -18,6 +18,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Checkbox } from '@/components/ui/checkbox';
+import { useRouter } from 'next/navigation';
 type Props = {
     isAddVendor: ()=>void,
     vendorType:{
@@ -66,7 +67,7 @@ const Form3 = ({...Props}:Props) => {
   const [totalLogisticAmount,setTotalLogisticAmount] = useState(0);
   const [totalCompansationAmount,setTotalCompansationAmount] = useState(0);
   const [totalEstimatedAmount,setTotalEstimatedAmount] = useState(0);
-
+  const router = useRouter();
   const handleLogisticsAdd = ()=>{
     if(logisticVendorType&&logisticAmount>0){
       const newObject:Logistics = {vendor_type:logisticVendorType,est_amount:logisticAmount};
@@ -322,7 +323,7 @@ const Form3 = ({...Props}:Props) => {
           fill="#635E5E"
         />
       </svg>
-      <Button className="bg-white text-black border text-md font-normal rounded-xl pl-10 py-2 hover:bg-white" onClick={Props.isAddVendor}>
+      <Button className="bg-white text-black border text-md font-normal rounded-xl pl-10 py-2 hover:bg-white" onClick={()=>{router.push("/add_vendor")}}>
         Add New Vendor
       </Button>
     </div>
@@ -503,7 +504,7 @@ const Form3 = ({...Props}:Props) => {
             Currency<span className="text-[#e60000]">*</span>
           </label>
           <Select
-          onValueChange={(value:string)=>{Props.handleSelectChange(value,"currency")}}
+          onValueChange={(value:string)=>{Props.handleSelectChange("INR","currency")}}
           >
             <SelectTrigger className="dropdown">
               <SelectValue placeholder="Select" />

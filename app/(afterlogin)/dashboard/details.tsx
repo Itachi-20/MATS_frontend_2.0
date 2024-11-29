@@ -65,7 +65,7 @@ const details = () => {
                   </div>
                   <h1 className="text-[#151d48] text-xl font-semibold">1K</h1>
                   <h1 className="text-[#415165] text-base font-semibold pt-2">
-                    Total Requests
+                    Total Events
                   </h1>
                   <h1 className="text-[#4078ec] text-xs font-medium">
                     +8% from yesterday
@@ -98,7 +98,7 @@ const details = () => {
                   </div>
                   <h1 className="text-[#151d48] text-xl font-semibold">300</h1>
                   <h1 className="text-[#415165] text-base font-semibold pt-2">
-                    Total Requests
+                    Total Approved
                   </h1>
                   <h1 className="text-[#4078ec] text-xs font-medium">
                     +8% from yesterday
@@ -133,7 +133,7 @@ const details = () => {
                   </div>
                   <h1 className="text-[#151d48] text-xl font-semibold">5</h1>
                   <h1 className="text-[#415165] text-base font-semibold pt-2">
-                    Total Requests
+                    Events Save as Draft
                   </h1>
                   <h1 className="text-[#4078ec] text-xs font-medium">
                     +8% from yesterday
