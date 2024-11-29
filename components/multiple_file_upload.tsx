@@ -11,12 +11,14 @@ import { X, FileText } from 'lucide-react'
 
 interface SimpleFileUploadProps {
     onNext: (fileList: FileList | null) => void;
+    files: File[]
+    setFiles: React.Dispatch<React.SetStateAction<File[]>>
     buttonText:string
 
 }
 
-export default function SimpleFileUpload({ onNext,buttonText }: SimpleFileUploadProps) {
-    const [files, setFiles] = useState<File[]>([])
+export default function SimpleFileUpload({ onNext,buttonText,files,setFiles }: SimpleFileUploadProps) {
+    // const [files, setFiles] = useState<File[]>([])
     const [isOpen, setIsOpen] = useState(false)
     const [originalFiles, setOriginalFiles] = useState<FileList | null>(null)
 
@@ -39,14 +41,14 @@ export default function SimpleFileUpload({ onNext,buttonText }: SimpleFileUpload
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
-                <label className="flex items-center gap-2 px-2 py-1 bg-[#F0EDFF] rounded-md shadow-sm cursor-pointer border-[1px] border-[#4430BF]/20 hover:bg-[#E8E3FF] transition-colors">
+                <button className="flex items-center gap-2 px-2 py-1 bg-[#F0EDFF] rounded-md shadow-sm cursor-pointer border-[1px] border-[#4430BF]/20 hover:bg-[#E8E3FF] transition-colors">
                     <Image src={'/svg/download.svg'} alt='downloadsvg' width={20} height={20} />
                     <span className="font-medium text-[#4430BF]">
                         {files.length > 0
                             ? `${files.length} file${files.length > 1 ? 's' : ''} selected`
                             : buttonText}
                     </span>
-                </label>
+                </button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>

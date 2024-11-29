@@ -14,6 +14,7 @@ import {
 import { useParams } from 'next/navigation'
 import { useRouter } from 'next/navigation';
 import Table from './table';
+import SubmitPopup from '@/components/success_prop'
 type EventTable = {
   name: string;
   event_date: string;
@@ -188,7 +189,7 @@ const ExpensePage = ({ ...Props }: Props) => {
   const [gldropdowndata, setGLDropdownData] = useState<GLdropdown[] | []>([])
   const [glName, setGLName] = useState<string>();
   const [glcode, setGLCode] = useState<string>();
-
+  const [submitpop, setSubmitPopup] = useState(false);
   const gldropdown = async (value: any) => {
     formdata.gl_code = '';
     try {
@@ -237,9 +238,10 @@ const ExpensePage = ({ ...Props }: Props) => {
 
       const data = await response.json();
       if (response.ok) {
+        setSubmitPopup(true)
         setTimeout(() => {
           router.push(`/advance_payment/${refno.request_number}`);
-        }, 1000)
+        }, 2000)
       } else {
         console.log("Login failed");
       }
@@ -551,6 +553,9 @@ const ExpensePage = ({ ...Props }: Props) => {
           <Button className='bg-[#5DBE74] px-6' onClick={() => handleSubmit()}>Submit</Button>
         </div>
       </div>
+      {
+        submitpop && <SubmitPopup title={'Advance'} />
+      }
 
     </>
 

@@ -4,6 +4,8 @@ import Navbar from "@/components/Navbar";
 import Image from "next/image";
 import Details from '@/app/(afterlogin)/dashboard/details'
 const Index = () => {
+
+
   return (
     // <div className="h-screen bg-[#EBEBF6] grid grid-cols-6 relative overflow-hidden">
 
