@@ -14,7 +14,8 @@ interface SimpleFileUploadProps {
     files: File[]
     setFiles: React.Dispatch<React.SetStateAction<File[]>>
     buttonText:string
-
+    files: File[]
+    setFiles: React.Dispatch<React.SetStateAction<File[]>>
 }
 
 export default function SimpleFileUpload({ onNext,buttonText,files,setFiles }: SimpleFileUploadProps) {
@@ -44,7 +45,7 @@ export default function SimpleFileUpload({ onNext,buttonText,files,setFiles }: S
                 <button className="flex items-center gap-2 px-2 py-1 bg-[#F0EDFF] rounded-md shadow-sm cursor-pointer border-[1px] border-[#4430BF]/20 hover:bg-[#E8E3FF] transition-colors">
                     <Image src={'/svg/download.svg'} alt='downloadsvg' width={20} height={20} />
                     <span className="font-medium text-[#4430BF]">
-                        {files.length > 0
+                        {files && files.length > 0
                             ? `${files.length} file${files.length > 1 ? 's' : ''} selected`
                             : buttonText}
                     </span>
@@ -68,7 +69,7 @@ export default function SimpleFileUpload({ onNext,buttonText,files,setFiles }: S
                             multiple
                         />
                     </div>
-                    {files.length > 0 && (
+                    {files && files.length > 0 && (
                         <ScrollArea className="max-h-[200px] w-full text-black rounded-md border p-4">
                             {files.map((file, index) => (
                                 <div key={index} className="flex items-center justify-between bg-gray-100 p-2 mb-2 rounded">
@@ -93,10 +94,10 @@ export default function SimpleFileUpload({ onNext,buttonText,files,setFiles }: S
                 </div>
                 <Button
                     className="border border-[#4430bf] text-[#FFF] px-6 bg-[#4430BF] text-[16px]"
-                    disabled={files.length === 0}
+                    disabled={files?.length === 0}
                     onClick={handleNext}
                 >
-                    Upload {files.length} file{files.length !== 1 ? 's' : ''}
+                    Upload {files?.length} file{files?.length !== 1 ? 's' : ''}
                 </Button>
             </DialogContent>
         </Dialog>

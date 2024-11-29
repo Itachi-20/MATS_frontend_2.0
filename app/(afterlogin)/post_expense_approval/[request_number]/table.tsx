@@ -473,7 +473,7 @@ const TableComponent = ({ ...Props }: Props) => {
                     {
                       data?.is_approved == true ? (
                         data.status == "Post Expense Approved" && Props.role == "Event%20Finance" ?  
-                        <button className="border rounded-full px-4 py-1 border-[#0e4154] text-[#0e4154]" onClick={() => router.push(`/post_expense_approval/update_utr/${Props.refno}/${data.name}`)}>update utr</button>
+                        <button className="border rounded-full px-4 py-1 border-[#0e4154] text-[#0e4154]" onClick={() => router.push(`/post_expense_approval_update_utr/${Props.refno}/${data.name}`)}>update utr</button>
                         :
                         <button className="border rounded-full px-4 py-1 border-[#0e4154] text-[#0e4154]" onClick={() => router.push(`/post_expense_approval/${Props.refno}/${data.name}`)}>view</button>
                       )

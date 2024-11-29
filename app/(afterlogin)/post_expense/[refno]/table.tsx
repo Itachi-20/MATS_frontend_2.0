@@ -28,6 +28,8 @@ import ViewDocument from '@/components/viewDocument';
 import { useParams } from 'next/navigation';
 import Ondeleteprop from '@/components/onDeleteProp';
 import Successprop from '@/components/success_prop';
+import SimpleFileUpload from '@/components/multiple_file_upload';
+import { Toaster, toast } from 'sonner'
 import SuccessProp from '@/components/success_prop';
 
 type ImportFiles = {
@@ -88,6 +90,35 @@ type Actual_vendors = {
   zone: string
 }
 
+type TravelVendors = {
+  actual_amount: number,
+  advance: number,
+  advance_expense_check: boolean,
+  basic_amount: number,
+  budget_category: string,
+  est_amount: number,
+  event_conclusion: string,
+  gst: "12",
+  gst_included: boolean,
+  idx: number,
+  invoice_amount: number,
+  modified: string,
+  modified_by: string,
+  name: string,
+  net_amount: number,
+  occurrence_no: number,
+  owner: string,
+  parent: string,
+  parentfield: string,
+  parenttype: string,
+  post_expense_check: boolean,
+  status: string,
+  tds: number,
+  travel_expense_check: boolean,
+  vendor_name: string,
+  vendor_type: string
+}
+
 type TableData = {
   actual_vendors: Actual_vendors[],
   business_unit: string,
@@ -114,7 +145,8 @@ type TableData = {
   post_expense_submitted: boolean,
   post_expense_approved: boolean,
   travel_expense_submitted: boolean,
-  travel_expense_approved: boolean
+  travel_expense_approved: boolean,
+  travel_vendors: TravelVendors[];
 };
 
 type Props = {
@@ -186,6 +218,8 @@ const table = ({ tableData }: Props) => {
   const [file, setFile] = useState<FileList | null>();
   const [fileData, setFileData] = useState<DocumentRow[] | undefined>();
   const [fileList, setFileList] = useState<File[]>([]);
+  const [files, setFiles] = useState<File[]>([]);
+  const [uploadedFiles, setUploadedFiles] = useState< FileList | null>()
   const base_url = process.env.NEXT_PUBLIC_FRAPPE_URL;
   const router = useRouter();
   const params = useParams();
@@ -332,43 +366,81 @@ const table = ({ tableData }: Props) => {
     formData.append("vendor_name", vendorDetails.vendor_name)
     formData.append("amount", vendorDetails.amount as any)
     formData.append("name", params.refno as any)
-    if (file && file.length > 0) {
-      for (let i = 0; i < file.length; i++) {
-        formData.append("file", file[i]);
+
+    if (uploadedFiles && uploadedFiles.length > 0) {
+      for (let i = 0; i < uploadedFiles.length; i++) {
+        formData.append("file", uploadedFiles[i]);
       }
     } else {
+      toast.warning("No file to Upload");
       console.log("No file to upload");
       return;
     }
     setIsLoading(true);
-    try {
-      const response = await fetch('/api/postExpense/postExpenseRequest', {
-        method: "POST",
-        headers: {
-          // "Content-Type": "application/json",
-        },
-        credentials: 'include',
-        body: formData
-      });
 
-      if (!response.ok) {
-        setIsLoading(false);
-        throw new Error('File upload failed');
+    const apiCallPromise = new Promise(async (resolve, reject) => {
+      try {
+        const response = await fetch('/api/postExpense/postExpenseRequest', {
+          method: "POST",
+          credentials: 'include',
+          body: formData,
+        });
+
+        if (!response.ok) {
+          setIsLoading(false);
+          throw new Error('Post Expense request failed');
+        }
+
+        const data = await response.json();
+        resolve(data); // Resolve with the response data
+      } catch (error) {
+        reject(error); // Reject with the error
       }
+    });
+    toast.promise(apiCallPromise, {
+      loading: 'Submitting vendor details...',
+      success: () => {
+        setVendorDetails({ vendor_type: '', vendor_name: '', amount: 0, file: null });
+        setTimeout(() => {
+          fetchData();
+        }, 500);
+        setUploadedFiles(null);
+        setFileList([]);
+        setFiles([]);
+        setIsLoading(false);
+        return 'Vendor has been added successfully!';
+      },
+      error: (error) => `Failed to add vendor: ${error.message || error}`,
+    });
 
-      const data = await response.json();
-      const file = data.message;
+    // try {
+    //   const response = await fetch('/api/postExpense/postExpenseRequest', {
+    //     method: "POST",
+    //     headers: {
+    //       // "Content-Type": "application/json",
+    //     },
+    //     credentials: 'include',
+    //     body: formData
+    //   });
 
-      fetchData();
-      setVendorDetails({ vendor_type: '', vendor_name: '', amount: 0, file: null });
-      setFile(null);
-      setFileList([]);
-      setIsLoading(false);
-    } catch (error) {
-      setIsLoading(false);
-      console.error('Error uploading file:', error);
-      alert('Failed to upload file. Please try again.');
-    }
+    //   if (!response.ok) {
+    //     setIsLoading(false);
+    //     throw new Error('File upload failed');
+    //   }
+
+    //   const data = await response.json();
+    //   const file = data.message;
+
+    //   fetchData();
+    //   setVendorDetails({ vendor_type: '', vendor_name: '', amount: 0, file: null });
+    //   setFile(null);
+    //   setFileList([]);
+    //   setIsLoading(false);
+    // } catch (error) {
+    //   setIsLoading(false);
+    //   console.error('Error uploading file:', error);
+    //   alert('Failed to upload file. Please try again.');
+    // }
   };
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -408,14 +480,18 @@ const table = ({ tableData }: Props) => {
     setFileData(file);
     setOpen(true)
   };
- const handleDeletePopup  = async(name : any) =>{
-  setDeleteRecordname(name)
-  setIsDeletePropOpen(true)
- }
+  const handleNext = (fileList: FileList | null) => {
+    setUploadedFiles(fileList)
+    const filelists = Array.from(fileList || []);
+    setFileList(filelists);
+  }
+  const handleDeletePopup  = async(name : any) =>{
+    setDeleteRecordname(name)
+    setIsDeletePropOpen(true)
+  }
 
   return (
     <>
-
       <div className='p-8  '>
         <div className='text-black flex justify-between items-center'>
           <div className='text-2xl font-semibold'>
@@ -452,7 +528,7 @@ const table = ({ tableData }: Props) => {
 
         </div>
 
-        { !tableData.post_expense_approved &&
+        { !tableData?.post_expense_approved &&
           <div className=" grid grid-cols-3 gap-4 pb-7">
             <div className='col-span-3 space-y-2'>
               <label htmlFor="event_conclusion" className="text-black md:text-sm md:font-normal capitalize">
@@ -512,7 +588,7 @@ const table = ({ tableData }: Props) => {
                   {
                     vendorName && vendorName.map((item, index) => {
                       return (
-                        <SelectItem value={item.name}>{item.vendor_name}</SelectItem>
+                        <SelectItem value={item.name}>{item.vendor_name ?? "name not defined"}</SelectItem>
                       )
                     })
                   }
@@ -537,18 +613,12 @@ const table = ({ tableData }: Props) => {
         {
           !tableData.post_expense_approved && 
           <div className='flex justify-end gap-2 pb-7'>
-            <label className="flex items-center gap-2 px-2 bg-[#F0EDFF] rounded-md shadow-sm cursor-pointer border-[1px]">
-              <Image src={'/svg/download.svg'} alt='downloadsvg' width={20} height={20} />
-              <span className="font-medium text-[#4430BF]">
-                {fileList.length > 0
-                  ? fileList.map((file) => file.name).join(", ")
-                  : "Receipt/Bill"}
-              </span>
-              <Input type="file" className="hidden" onChange={(e) => { handleFileUpload(e) }} id="file" multiple readOnly={isLoading ? true:false}/>
-            </label>
+            <SimpleFileUpload files={files} setFiles={setFiles} onNext={handleNext} buttonText={'Receipts/Bills'} />
             <Button className="border border-[#4430bf] text-[#4430bf] text-[18px]" disabled={isLoading ? true:false} onClick={addVendor} >{isLoading ? 'Adding...':'Add'}</Button>
           </div>
         }
+
+        <h3 className='mb-3'>Compensation</h3>
         <div className="border bg-white h-full p-4 rounded-[18px]">
           <Table className={""}>
             <TableHeader className={"bg-[#E0E9FF]"}>
@@ -691,6 +761,155 @@ const table = ({ tableData }: Props) => {
             }
           </Table>
         </div>
+
+        {
+          tableData.travel_vendors.length > 0 &&
+          <>
+            <h3 className='mb-3'>Compensation</h3>
+            <div className="border bg-white h-full p-4 rounded-[18px]">
+              <Table className={""}>
+                <TableHeader className={"bg-[#E0E9FF]"}>
+                  <TableRow className={"text-nowrap rounded-r-2xl border-none"}>
+                    <TableHead
+                      className={
+                        "text-center rounded-l-2xl text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                      }
+                    >
+                      Event Request Number
+                    </TableHead>
+                    <TableHead
+                      className={
+                        "text-center text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                      }
+                    >
+                      Vendor Type
+                    </TableHead>
+                    <TableHead
+                      className={
+                        "text-center text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                      }
+                    >
+                      Vendor Code
+                    </TableHead>
+    
+                    <TableHead
+                      className={
+                        "text-center text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                      }
+                    >
+                      Vendor Name
+                    </TableHead>
+    
+                    <TableHead
+                      className={
+                        "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                      }
+                    >
+                      Billable Amount
+                    </TableHead>
+                    <TableHead
+                      className={
+                        "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                      }
+                    >
+                      Status
+                    </TableHead>
+                    <TableHead
+                      className={
+                        "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                      }
+                    >
+                      GST
+                    </TableHead>
+    
+                    <TableHead
+                      className={
+                        "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                      }
+                    >
+                      Invoice Amount
+                    </TableHead>
+                    <TableHead
+                      className={
+                        "text-center text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                      }
+                    >
+                      TDS
+                    </TableHead>
+                    <TableHead
+                      className={
+                        "text-center text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                      }
+                    >
+                      Net Amount
+                    </TableHead>
+                    {/* <TableHead
+                      className={
+                        "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                      }
+                    >
+                      UTR Number
+                    </TableHead>
+                    <TableHead
+                      className={
+                        "text-center text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                      }
+                    >
+                      Payment Date
+                    </TableHead> */}
+                    <TableHead
+                      className={
+                        "text-center rounded-r-2xl text-[#625d5d] text-[15px] font-normal font-['Montserrat'] sticky right-0 z-20 bg-[#E0E9FF]"
+                      }
+                    >Action</TableHead>
+                  </TableRow>
+                </TableHeader>
+                {
+                  tabledata.travel_vendors &&
+                    tabledata.travel_vendors.length > 0 ?
+                    <TableBody>
+                      {tabledata &&
+                        tabledata.travel_vendors.map((data, index) => {
+                          return (
+                            <TableRow key={index} className="text-center text-nowrap text-black">
+                              <TableCell>{data.parent ?? "-"}</TableCell>
+                              <TableCell>{data.vendor_type ?? "-"}</TableCell>
+                              <TableCell>{data.vendor_code ?? "-"}</TableCell>
+                              <TableCell>{data.vendor_name ?? "-"}</TableCell>
+                              <TableCell>{data.est_amount ?? "-"}</TableCell>
+                              <TableCell>{data.status ?? "-"}</TableCell>
+                              <TableCell>{data.gst ?? "-"}</TableCell>
+                              <TableCell>{data.invoice_amount ?? "-"}</TableCell>
+                              <TableCell>{data.tds ?? "-"}</TableCell>
+                              <TableCell>{data.net_amount ?? "-"}</TableCell>
+                              {/* <TableCell>{data.utr_number ?? "-"}</TableCell>
+                              <TableCell>{data.payment_date ?? "-"}</TableCell> */}
+    
+                              <TableCell className='sticky right-0 z-20 gap-4 w-[120px] bg-white mt-2 flex border-l justify-center mb-2'>
+                                <div className='p-0 cursor-pointer hover:opacity-60' onClick={() => handleSetFileData(data.files)}>
+                                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
+                                    <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
+                                    <path fillRule="evenodd" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 0 1 0-1.113ZM17.25 12a5.25 5.25 0 1 1-10.5 0 5.25 5.25 0 0 1 10.5 0Z" clipRule="evenodd" />
+                                  </svg>
+                                </div>
+                                {/* <Image src={'/svg/editIcon.svg'} alt='editsvg' width={20} height={18} /> */}
+                              </TableCell>
+                            </TableRow>
+                          );
+                        })}
+                    </TableBody>
+                    :
+                    <TableBody>
+                      <TableRow className="text-center text-black text-nowrap ">
+                        <TableCell colSpan={9}>No Results</TableCell>
+                      </TableRow>
+                    </TableBody>
+                }
+              </Table>
+            </div>
+          </>
+        }
+
         {
           !tableData.post_expense_approved && 
           <div className='flex justify-end gap-2 pt-8'>
@@ -705,6 +924,7 @@ const table = ({ tableData }: Props) => {
       {exportopen && <UploadExport handleExport={handleExport} data={tabledata.import_files} />}
       {isDeletePropOpen && <Ondeleteprop setClose={setIsDeletePropOpen} handleDelete={handleRecordDeletion}/>}
       {successProp && <SuccessProp title={"Post Expense Approval"}/>}
+      <Toaster richColors position="top-right"/>
     </>
 
   )

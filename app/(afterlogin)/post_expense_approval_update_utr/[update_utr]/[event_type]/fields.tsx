@@ -1,5 +1,16 @@
 import React, { useEffect } from 'react'
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import Image from 'next/image';
 import ViewDocument from '@/components/view_document'
+import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { Input } from "@/components/ui/input";
 import {
@@ -26,7 +37,7 @@ type DocumentRow = {
 type DropdownData = {
   company: {
     name: string;
-    company_name: "string";
+    company_name: string;
   }[];
   division: {
     name: string;
@@ -69,46 +80,54 @@ type Glcode = {
 
 }
 
+type ActualVendor = {
+  status: string;
+};
+
 type EventData = {
   event_type: string;
+  actual_vendors: ActualVendor[];
 }
 
 type FormData = {
-  name: string | null;
-  document_no: string | null;
-  posting_date: string | null;
-  invoice_number: string | null;
-  date: string | null;
-  basic_amount: number | null;
-  gst: string | null;
-  invoice_amount: number | null;
-  tds: number | null;
-  net_amount: number | null;
+  name: string;
+  document_no: string;
+  posting_date: string;
+  invoice_number: string;
+  date: string;
+  basic_amount: number;
+  gst: string;
+  invoice_amount: number;
+  tds: number;
+  net_amount: number;
   division: string;
-  cost_center:string | null;
-  cc_name: string | null;
-  nature: string | null;
-  company_name: string | undefined;
-  gl_name: string | null;
-  gl_code: string | null;
-  utr_number: string | null;
-  payment_date: string | null;
-  zone: string | null;
+  cost_center: string;
+  cc_name: string;
+  nature: string;
+  company_name: string;
+  gl_name: string;
+  gl_code: string;
+  utr_number: number;
+  payment_date: string;
+  zone: string;
   state: string;
-  city: string | null;
-  narration: string | null;
+  city: string;
+  action: string;
+  remark: string;
+  narration: string;
   isClosed: boolean;
 };
 
-type ccname = { name: string | null; cost_center_description: string | null; }
+type ccname = { name: string; cost_center_description: string; }
 
 type Props = {
-  dropdown: DropdownData | undefined;
-  expenseData: EventData | null;
+  dropdown: DropdownData;
+  expenseData: EventData;
   formdata: FormData;
   handlefieldChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>)=>void
   handleSelectChange:(value: string, name: string)=>void
-  handleSubmit: (e: React.MouseEvent<HTMLButtonElement>)=>void
+  view: string | null;
+  // handleSubmit: (e: React.MouseEvent<HTMLButtonElement>)=>void
 };
 
 const Fields = ({ ...Props }: Props) => {
@@ -121,8 +140,8 @@ const Fields = ({ ...Props }: Props) => {
   const [eventCostCenter, setEventCostCenter] =
     useState<eventCostCenter | null >(null);
 
-  const [filtercity, setFiltercity] = useState<city[]|undefined>();
-
+  const [filtercity, setFiltercity] = useState<city[]>();
+  
   const handleglcode = async (value:any) => {
     try {
         const response = await fetch(
@@ -144,7 +163,7 @@ const Fields = ({ ...Props }: Props) => {
             const data = await response.json();
             // console.log("@@@@@@@data", data);
             // console.log("@@@@@@@eventtype", Props?.expenseData?.event_type);
-            setGlCodeDropdown(data.data);
+            setGlCodeDropdown(data && data.data);
             // Props.formdata.gl_code = "";
             // console.log(data, 'data')
 
@@ -175,7 +194,7 @@ const Fields = ({ ...Props }: Props) => {
       
       if (response.ok) {
         const data = await response.json();
-        setEventCostCenter(data.data);
+        setEventCostCenter(data && data.data);
       } else {
         console.log("Login failed");
       }
@@ -191,49 +210,40 @@ const Fields = ({ ...Props }: Props) => {
     
   };
 
-  const handleSetFileData = async (file: any) => {
-    // console.log(file, 'file in setfile ')
-    setFileData(file);
-    setOpen(true)
-  };
-
   const handleGlname = async(value:any) =>{
-    // setParticularGlCode(glCodeDropdown?.filter((item)=>item.name == value));
-    const particula_glcode = glCodeDropdown?.filter((item)=>item.name == value) ?? [];
-    // console.log(arr,"::::::::::::::::::::::;;",value);
-    Props.formdata.gl_code = particula_glcode[0].gl_code;
+    const parglcode = glCodeDropdown?.filter((item)=>item.name == value) ?? [];
+    Props.formdata.gl_code = parglcode[0]?.gl_code;
   
   }
 
   const handleCostCenter = async(value:any) => {
-    console.log("::::::::::::::::",value)
     const ccname = eventCostCenter?.cost_center.filter(item=>item.name == value) ?? [];
-    // setCcName(eventCostCenter?.cost_center.filter(item=>item.name == value));
-  //  if(ccName){
-     Props.formdata.cc_name = ccname && ccname[0]?.cost_center_description;
+    Props.formdata.cc_name = ccname[0]?.cost_center_description;
   //  }
   }
 
   useEffect(()=>{
-    // console.log("In side useEFFECT", Props.formdata.company_name)
     handleglcode(Props.formdata?.company_name);
   },[Props?.formdata?.company_name]);
 
   useEffect(()=>{
-    // console.log("In side useEFFECT", Props?.formdata?.company_name)
-    handleDivisionChange(Props.formdata?.division);
+    handleDivisionChange( Props.formdata?.division);
   },[Props?.formdata?.division]);
 
   useEffect(()=>{
-    // console.log("In side useEFFECT", Props?.formdata?.company_name)
     handleStateChange(Props.formdata?.state);
   },[Props?.formdata?.state]);
 
   // useEffect(()=>{
   //   // console.log("In side useEFFECT", Props?.formdata?.company_name)
-  //   handleCostCenter(Props?.formdata?.cc_name);
-  // },[Props?.formdata?.cc_name]);
+  //   handleCostCenter(Props?.formdata?.cost_center);
+  // },[Props?.formdata?.cost_center]);
+  useEffect(()=>{
+    handleStateChange("Gujarat");
+  },[])
  
+  console.log("Print", Props.expenseData);
+
   return (
 
     <>
@@ -251,6 +261,7 @@ const Fields = ({ ...Props }: Props) => {
               id='document_no'
               name='document_no'
               onChange={(e)=>Props.handlefieldChange(e)}
+              readOnly={Props.expenseData?.actual_vendors[0]?.status == "Post Expense Closed" ? true : false}
             ></Input>
           </div>
           <div className='grid-cols-1 space-y-2'>
@@ -265,6 +276,7 @@ const Fields = ({ ...Props }: Props) => {
               id='posting_date'
               name='posting_date'
               onChange={(e)=>Props.handlefieldChange(e)}
+              readOnly={Props.expenseData?.actual_vendors[0]?.status == "Post Expense Closed" ? true : false}
             ></Input>
           </div>
           <div className='grid-cols-1 space-y-2'>
@@ -279,6 +291,7 @@ const Fields = ({ ...Props }: Props) => {
               id='invoice_number'
               name='invoice_number'
               onChange={(e)=>Props.handlefieldChange(e)}
+              readOnly={Props.expenseData?.actual_vendors[0]?.status == "Post Expense Closed" ? true : false}
             ></Input>
           </div>
           <div className='grid-cols-1 space-y-2'>
@@ -293,6 +306,7 @@ const Fields = ({ ...Props }: Props) => {
               id='date'
               name='date'
               onChange={(e)=>Props.handlefieldChange(e)}
+              readOnly={Props.expenseData?.actual_vendors[0]?.status == "Post Expense Closed" ? true : false}
             ></Input>
           </div>
           <div className='grid-cols-1 space-y-2'>
@@ -307,6 +321,7 @@ const Fields = ({ ...Props }: Props) => {
               id='date'
               name='basic_amount'
               onChange={(e)=>Props.handlefieldChange(e)}
+              readOnly={Props.expenseData?.actual_vendors[0]?.status == "Post Expense Closed" ? true : false}
             ></Input>
           </div>
           <div className='grid-cols-1 space-y-2'>
@@ -321,6 +336,7 @@ const Fields = ({ ...Props }: Props) => {
               id='gst'
               name='gst'
               onChange={(e)=>Props.handlefieldChange(e)}
+              readOnly={Props.expenseData?.actual_vendors[0]?.status == "Post Expense Closed" ? true : false}
             ></Input>
           </div>
           <div className='grid-cols-1 space-y-2'>
@@ -335,6 +351,7 @@ const Fields = ({ ...Props }: Props) => {
               id='invoice_amount'
               name='invoice_amount'
               onChange={(e)=>Props.handlefieldChange(e)}
+              readOnly={Props.expenseData?.actual_vendors[0]?.status == "Post Expense Closed" ? true : false}
             ></Input>
           </div>
           <div className='grid-cols-1 space-y-2'>
@@ -349,6 +366,7 @@ const Fields = ({ ...Props }: Props) => {
               id='tds'
               name='tds'
               onChange={(e)=>Props.handlefieldChange(e)}
+              readOnly={Props.expenseData?.actual_vendors[0]?.status == "Post Expense Closed" ? true : false}
             ></Input>
           </div>
           <div className='grid-cols-1 space-y-2'>
@@ -363,6 +381,7 @@ const Fields = ({ ...Props }: Props) => {
               id='net_amount'
               name='net_amount'
               onChange={(e)=>Props.handlefieldChange(e)}
+              readOnly={Props.expenseData?.actual_vendors[0]?.status == "Post Expense Closed" ? true : false}
             ></Input>
           </div>
 
@@ -374,7 +393,7 @@ const Fields = ({ ...Props }: Props) => {
             <Select 
               onValueChange={(value) => {handleDivisionChange(value); Props.handleSelectChange(value, "division")}} 
               value={Props.formdata?.division ?? ""}
-              
+              disabled={Props.expenseData?.actual_vendors[0]?.status == "Post Expense Closed" ? true : false}
               >
               <SelectTrigger className="dropdown rounded-sm gap-4">
                 <SelectValue placeholder="-Select-" />
@@ -396,6 +415,7 @@ const Fields = ({ ...Props }: Props) => {
             <Select 
               value={Props.formdata?.cost_center ?? ""}
               onValueChange={(value) =>  { handleCostCenter(value); Props.handleSelectChange(value, "cost_center");}}
+              disabled={Props.expenseData?.actual_vendors[0]?.status == "Post Expense Closed" ? true : false}
             >
               <SelectTrigger className="dropdown rounded-sm gap-4">
                 <SelectValue placeholder="-Select-" />
@@ -440,6 +460,8 @@ const Fields = ({ ...Props }: Props) => {
               id='nature'
               name='nature'
               onChange={(e)=>Props.handlefieldChange(e)}
+              readOnly={Props.expenseData?.actual_vendors[0]?.status == "Post Expense Closed" ? true : false}
+
             ></Input>
           </div>
           <div className='grid-cols-1 space-y-2'>
@@ -448,7 +470,10 @@ const Fields = ({ ...Props }: Props) => {
             </label>
             <Select 
               value={Props.formdata?.company_name}
-              onValueChange={(value) => {handleglcode(value); Props.handleSelectChange(value, "company_name");}}>
+              onValueChange={(value) => {handleglcode(value); Props.handleSelectChange(value, "company_name");}}
+              disabled={Props.expenseData?.actual_vendors[0]?.status == "Post Expense Closed" ? true : false}
+            >
+              
               <SelectTrigger className="dropdown rounded-sm gap-4">
                 <SelectValue placeholder="-Select-" />
               </SelectTrigger>
@@ -467,14 +492,17 @@ const Fields = ({ ...Props }: Props) => {
             </label>
             <Select 
               value={Props.formdata?.gl_name ?? ""}
-              onValueChange={(value) => {handleGlname(value); Props.handleSelectChange(value, "gl_name"); }}>
+              onValueChange={(value) => {handleGlname(value); Props.handleSelectChange(value, "gl_name"); }}
+              disabled={Props.expenseData?.actual_vendors[0]?.status == "Post Expense Closed" ? true : false}
+              >
+              
               <SelectTrigger className="dropdown rounded-sm gap-4">
                 <SelectValue placeholder="-Select-" />
               </SelectTrigger>
               <SelectContent>
                 {
                   glCodeDropdown?.map((data, index) => (
-                    <SelectItem key={index} value={data.name}>-{data.gl_name}-</SelectItem>
+                    <SelectItem key={index} value={data.name}>-{data.name}-</SelectItem>
                   ))
                 }
               </SelectContent>
@@ -507,6 +535,7 @@ const Fields = ({ ...Props }: Props) => {
               id='utr_number'
               name='utr_number'
               onChange={(e)=>Props.handlefieldChange(e)}
+              readOnly={Props.expenseData?.actual_vendors[0]?.status == "Post Expense Closed" ? true : false}
             ></Input>
           </div>
           <div className='grid-cols-1 space-y-2'>
@@ -521,6 +550,7 @@ const Fields = ({ ...Props }: Props) => {
               id='payment_date'
               name='payment_date'
               onChange={(e)=>Props.handlefieldChange(e)}
+              readOnly={Props.expenseData?.actual_vendors[0]?.status == "Post Expense Closed" ? true : false}
             ></Input>
           </div>
           <div className='grid-cols-1 space-y-2'>
@@ -529,7 +559,9 @@ const Fields = ({ ...Props }: Props) => {
             </label>
             <Select 
             value={Props.formdata?.zone ?? ""}
-            onValueChange={(value) => Props.handleSelectChange(value, "zone")}>
+            onValueChange={(value) => Props.handleSelectChange(value, "zone")}
+            disabled={Props.expenseData?.actual_vendors[0]?.status == "Post Expense Closed" ? true : false}
+            >
               <SelectTrigger className="dropdown rounded-sm gap-4">
                 <SelectValue placeholder="-Select-" />
               </SelectTrigger>
@@ -548,7 +580,9 @@ const Fields = ({ ...Props }: Props) => {
             </label>
             <Select 
             value={Props.formdata?.state ?? ""}
-            onValueChange={(value) => {handleStateChange(value); Props.handleSelectChange(value, "state");}}>
+            onValueChange={(value) => {handleStateChange(value); Props.handleSelectChange(value, "state");}}
+            disabled={Props.expenseData?.actual_vendors[0]?.status == "Post Expense Closed" ? true : false}
+            >
               <SelectTrigger className="dropdown rounded-sm gap-4">
                 <SelectValue placeholder="-Select-" />
               </SelectTrigger>
@@ -568,6 +602,7 @@ const Fields = ({ ...Props }: Props) => {
             <Select
               value={Props.formdata?.city ?? ""}
               onValueChange={(value) =>  Props.handleSelectChange(value, "city")}
+              disabled={Props.expenseData?.actual_vendors[0]?.status == "Post Expense Closed" ? true : false}
             >
               <SelectTrigger className="dropdown rounded-sm gap-4">
                 <SelectValue placeholder="-Select-" />
@@ -592,6 +627,7 @@ const Fields = ({ ...Props }: Props) => {
               id='narration'
               name='narration'
               onChange={(e)=>Props.handlefieldChange(e)}
+              readOnly={Props.expenseData?.actual_vendors[0]?.status == "Post Expense Closed" ? true : false}
             ></Textarea>
           </div>
         </div>
