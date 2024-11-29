@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 import {
     Table,
@@ -10,6 +10,8 @@ import {
     TableRow,
   } from "@/components/ui/table";
   import Image from 'next/image';
+  import { useAuth } from "@/app/context/AuthContext";
+  import { Input } from '@/components/ui/input';
 
   type File = {
     name: string;
@@ -29,6 +31,7 @@ type ActualVendor = {
     actual_amount: number;
     status: string;
     vendor_name: string;
+    vendor_code:string
     advance: number;
     budget_category: string;
     est_amount: number;
@@ -72,20 +75,137 @@ type ActualVendor = {
     files: File[];
 };
 
+type EventData = {
+  name: string;
+  reporting_head: string;
+  event_date: string;
+  cost_center: string;
+  cost_code: string;
+  cost_desc: string;
+  cost_hod: string;
+  business_unit: string;
+  event_name: string;
+  event_type: string;
+  sub_type_of_activity: string | null;
+  event_requestor: string;
+  total_compensation_expense: number;
+  actual_vendors: ActualVendor[];
+  // import_files: ImportFile[];
+}
+
+  type FormData = {
+    "vendor_name":string,
+    "vendor_type":string,
+    "vendor_code":string,
+    "name":string
+  }
+
   type Props = {
-    expensetabledata: ActualVendor[] | undefined; // Props includes the tableData field
+    // expensetabledata: ActualVendor[]; // Props includes the tableData field
     handleSetFileData: (value:File[])=>void
+    refno:any
   };
 
 const table = ({ ...Props }: Props) => {
 //   const [fileData, setFileData] = useState<File[] | undefined>();
-//   const [open, setOpen] = useState(false);
-
+    const { role, name,userid, clearAuthData } = useAuth();
+    const [editable, setEditable] = useState(false);
+    const [expenseData, setExpenseData] = useState<EventData>();
+    const [formData, setFormData] = useState<FormData>();
     // const handleSetFileData = async (file: any) => {
     //     // console.log(file, 'file in setfile ')
     //     setFileData(file);
     //     setOpen(true)
     // };
+
+    const AddVendorCode = async () => {
+      console.log("inside event Data")
+      try {
+          const response = await fetch(
+              "/api/postExpenseApproval/addVendorCode",
+              {
+                  method: "POST",
+                  headers: {
+                      "Content-Type": "application/json",
+                  },
+                  credentials: 'include',
+                  body:JSON.stringify(formData)
+                
+              }
+          );
+
+          if (response.ok) {
+              console.log("SUCCEESSSSSSSSS");
+          } else {
+              console.log("failed");
+          }
+      } catch (error) {
+          console.error("Error during vendor code insertion:", error);
+      }
+  };
+
+    const handleCheckBox = (e:React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+      setEditable(e.target.checked);
+      if(e.target.checked){
+        AddVendorCode();
+        console.log(formData,"+++++++++++++++++++++++");
+      }
+    }
+
+    const handlefieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+      const { name, value } = e.target;
+      setFormData(prev => ({ ...prev, [name]: value }) as FormData);
+    }
+
+    const eventDataApi = async () => {
+      console.log("inside event Data")
+      try {
+          const response = await fetch(
+              "/api/postExpenseApproval/postExpenseApprovalData",
+              {
+                  method: "POST",
+                  headers: {
+                      "Content-Type": "application/json",
+                  },
+                  credentials: 'include',
+                  body: JSON.stringify({
+                      name: Props.refno.event_type,
+                      req_no: Props.refno.request_number
+                  })
+              }
+          );
+
+          if (response.ok) {
+            console.log("HELLLLLO")
+              const data = await response.json();
+              setExpenseData(data.data);
+              setFormData({
+                "vendor_name": data.data?.actual_vendors?.[0]?.vendor_name ?? "",
+                "vendor_type": data.data?.actual_vendors?.[0]?.vendor_type ?? "",
+                "vendor_code": "",
+                "name": data.data?.actual_vendors?.[0]?.name ?? ""
+              });
+              console.log(data.data?.actual_vendors[0]?.name, 'formdata is set')
+
+          } else {
+              console.log("Login failed");
+          }
+      } catch (error) {
+          console.error("Error during login:", error);
+      }
+  };
+
+    // useEffect(()=>{
+    //   formData.vendor_type = Props.expensetabledata?.[0]?.vendor_type;
+    //   formData.name =  Props.expensetabledata?.[0]?.name;
+    //   formData.vendor_name =  Props.expensetabledata?.[0]?.vendor_name;
+    // },[formData.vendor_code]);
+
+    useEffect(()=>{
+      eventDataApi();
+    },[])
+    
+
   return (
         <Table className={""}>
           <TableHeader className={"bg-[#E0E9FF]"}>
@@ -104,13 +224,13 @@ const table = ({ ...Props }: Props) => {
               >
                 Vendor Type
               </TableHead>
-              {/* <TableHead
+              <TableHead
             className={
               "text-center text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
             }
           >
             Vendor Code
-          </TableHead> */}
+          </TableHead>
 
               <TableHead
                 className={
@@ -163,7 +283,7 @@ const table = ({ ...Props }: Props) => {
               >
                 Net Amount
               </TableHead>
-              {/* <TableHead
+              <TableHead
                 className={
                   "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                 }
@@ -176,7 +296,7 @@ const table = ({ ...Props }: Props) => {
                 }
               >
                 Payment Date
-              </TableHead>*/}
+              </TableHead>
               <TableHead
                 className={
                   "text-center rounded-r-2xl text-[#625d5d] text-[15px] font-normal font-['Montserrat'] sticky right-0 z-20 bg-[#E0E9FF]"
@@ -185,15 +305,41 @@ const table = ({ ...Props }: Props) => {
             </TableRow>
           </TableHeader>
           {
-            Props.expensetabledata ?
+            expenseData ?
               <TableBody>
-                {Props?.expensetabledata &&
-                  Props?.expensetabledata?.map((data, index) => {
+                {expenseData &&
+                  expenseData?.actual_vendors.map((data, index) => {
                     return (
                       <TableRow key={index} className="text-center text-nowrap text-black">
                         <TableCell>{data.name}</TableCell>
                         <TableCell>{data.vendor_type}</TableCell>
-                        {/* <TableCell>{data.vendor_code}</TableCell> */}
+                        <TableCell className={data && data.vendor_code ? '' : 'flex items-center space-x-2'}>
+                          {
+                            data.vendor_code ? data.vendor_code :
+                            role == 'Event Finance' ?
+                            <>
+                            <Input
+                              type='text'
+                              // value={Props.formdata?.invoice_number ?? 0}
+                              className="text-black shadow md:rounded-sm md:py-1 w-[100px]"
+                              placeholder="Type here ..."
+                              id='vendor_code'
+                              name='vendor_code'
+                              onChange={(e)=>handlefieldChange(e)}
+                              readOnly={editable ? true : false}
+                            ></Input>
+                            <div className='rounded-full'>
+                            <Input 
+                              type='checkbox' 
+                              className='w-5 h-5' 
+                              onChange={(e)=>{handleCheckBox(e)}}
+                              // disabled={data.status == "Post Expense Approved" || data?.status == "Post Expense Closed" ? true : false}
+                            ></Input>
+                            </div>
+                            </>:'-'
+                          }
+                          
+                        </TableCell>
                         <TableCell>{data.vendor_name}</TableCell>
                         <TableCell>{data.advance}</TableCell>
                         <TableCell>{data.status}</TableCell>
@@ -201,8 +347,8 @@ const table = ({ ...Props }: Props) => {
                         <TableCell>{data.invoice_amount}</TableCell>
                         <TableCell>{data.tds}</TableCell>
                         <TableCell>{data.net_amount}</TableCell>
-                        {/* <TableCell>{data.utr_number}</TableCell>
-                        <TableCell>{data.payment_date}</TableCell> */}
+                        <TableCell>{data.utr_number}</TableCell>
+                        <TableCell>{data.payment_date}</TableCell>
                         <TableCell className='sticky right-0 z-20 w-[120px] bg-white mt-2 flex justify-center border-l'>
                           <button onClick={() => Props.handleSetFileData(data.files)}><Image src={'/svg/view.svg'} alt='viewsvg' width={24} height={18} /></button>
                           {/* <Image src={'/svg/view.svg'} alt='viewsvg' width={24}  height={18}/> */}

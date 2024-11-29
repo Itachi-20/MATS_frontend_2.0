@@ -92,39 +92,40 @@ const form4 = ({...Props}:Props) => {
   
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+    // e.preventDefault();
 
-    const updatedFormData = {
-        ...formdata
+    // const updatedFormData = {
+    //     ...formdata
 
-    };
+    // };
 
-    try {
-      const response = await fetch(
-        "/api/training_and_education/handleSubmit",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: 'include',
-          body: JSON.stringify(updatedFormData)
-        }
-      );
-      if (response.ok) {
-        const data = await response.json();
-        console.log(data, "response data");
-        localStorage.setItem("refno", data.message);
+    // try {
+    //   const response = await fetch(
+    //     "/api/training_and_education/handleSubmit",
+    //     {
+    //       method: "POST",
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //       },
+    //       credentials: 'include',
+    //       body: JSON.stringify(updatedFormData)
+    //     }
+    //   );
+    //   if (response.ok) {
+    //     const data = await response.json();
+    //     console.log(data, "response data");
+    //     localStorage.setItem("refno", data.message);
 
-        setTimeout(() => {
-          router.push(`/hcp_services?forms=5`);
-        }, 1000)
-      } else {
-        console.log("submission failed");
-      }
-    } catch (error) {
-      console.error("Error during Submission:", error);
-    }
+    //     setTimeout(() => {
+    //       router.push(`/hcp_services?forms=5`);
+    //     }, 1000)
+    //   } else {
+    //     console.log("submission failed");
+    //   }
+    // } catch (error) {
+    //   console.error("Error during Submission:", error);
+    // }
+    router.push("/hcp_services?forms=5")
   };
 
   const handleNext = (fileList: FileList | null) => {

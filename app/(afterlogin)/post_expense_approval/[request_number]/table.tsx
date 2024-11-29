@@ -142,7 +142,6 @@ const TableComponent = ({ ...Props }: Props) => {
   // const [data, setData] = useState<Data>();
   // const [occurence, setOccurence] = useState<Occurence[]>();
   // const [postExpense, setPostExpense] = useState<AdvanceRequest[]>();
-  console.log("Reffffffffffffffffnooooooooooooo", Props.tableData);
 
 
   return (
@@ -472,7 +471,7 @@ const TableComponent = ({ ...Props }: Props) => {
                     <div className="">
                     {
                       data?.is_approved == true ? (
-                        data.status == "Post Expense Approved" && Props.role == "Event%20Finance" ?  
+                        (data.status == "Post Expense Approved" && Props.role == "Event Finance") ?  
                         <button className="border rounded-full px-4 py-1 border-[#0e4154] text-[#0e4154]" onClick={() => router.push(`/post_expense_approval_update_utr/${Props.refno}/${data.name}`)}>update utr</button>
                         :
                         <button className="border rounded-full px-4 py-1 border-[#0e4154] text-[#0e4154]" onClick={() => router.push(`/post_expense_approval/${Props.refno}/${data.name}`)}>view</button>

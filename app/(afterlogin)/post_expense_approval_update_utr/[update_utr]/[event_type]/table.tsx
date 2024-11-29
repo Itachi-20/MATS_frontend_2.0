@@ -17,6 +17,12 @@ import {
         file_url: string;
     };
 
+    type File = {
+      name: string;
+      file_name: string;
+      file_url: string;
+  };
+
     type ActualVendor = {
         name: string;
         // creation: string;
@@ -25,6 +31,7 @@ import {
         // owner: string;
         // docstatus: number;
         // idx: number;
+        vendor_code:string,
         vendor_type: string;
         actual_amount: number;
         status: string;
@@ -65,12 +72,13 @@ import {
         payment_date: string | null;
         // city: string | null;
         file: string | null;
+        files: File[];
         // narration: string | null;
     };
 
   type Props = {
     expensetabledata: ActualVendor[] | undefined; // Props includes the tableData field
-    
+    handleSetFileData: (value:File[])=>void
   };
 
 const table = ({ ...Props }: Props) => {
@@ -100,13 +108,13 @@ const table = ({ ...Props }: Props) => {
               >
                 Vendor Type
               </TableHead>
-              {/* <TableHead
+              <TableHead
             className={
               "text-center text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
             }
           >
             Vendor Code
-          </TableHead> */}
+          </TableHead>
 
               <TableHead
                 className={
@@ -159,7 +167,7 @@ const table = ({ ...Props }: Props) => {
               >
                 Net Amount
               </TableHead>
-              {/* <TableHead
+              <TableHead
                 className={
                   "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                 }
@@ -172,7 +180,7 @@ const table = ({ ...Props }: Props) => {
                 }
               >
                 Payment Date
-              </TableHead>*/}
+              </TableHead>
               <TableHead
                 className={
                   "text-center rounded-r-2xl text-[#625d5d] text-[15px] font-normal font-['Montserrat'] sticky right-0 z-20 bg-[#E0E9FF]"
@@ -189,7 +197,7 @@ const table = ({ ...Props }: Props) => {
                       <TableRow key={index} className="text-center text-nowrap text-black">
                         <TableCell>{data.name}</TableCell>
                         <TableCell>{data.vendor_type}</TableCell>
-                        {/* <TableCell>{data.vendor_code}</TableCell> */}
+                        <TableCell>{data.vendor_code ?? "-"}</TableCell>
                         <TableCell>{data.vendor_name}</TableCell>
                         <TableCell>{data.advance}</TableCell>
                         <TableCell>{data.status}</TableCell>
@@ -197,13 +205,13 @@ const table = ({ ...Props }: Props) => {
                         <TableCell>{data.invoice_amount}</TableCell>
                         <TableCell>{data.tds}</TableCell>
                         <TableCell>{data.net_amount}</TableCell>
-                        {/* <TableCell>{data.utr_number}</TableCell>
-                        <TableCell>{data.payment_date}</TableCell> */}
-                        <TableCell className='sticky right-0 z-20 gap-3 w-[120px] bg-white mt-2 flex border-l'>
-                          <button onClick={() => handleSetFileData(data.file)}><Image src={'/svg/view.svg'} alt='viewsvg' width={24} height={18} /></button>
+                        <TableCell>{data.utr_number ?? "-"}</TableCell>
+                        <TableCell>{data.payment_date ?? "-"}</TableCell>
+                        <TableCell className='sticky right-0 z-20 gap-3 w-[120px] bg-white mt-2 flex justify-center border-l'>
+                          <button onClick={() => Props.handleSetFileData(data.files)}><Image src={'/svg/view.svg'} alt='viewsvg' width={24} height={18} /></button>
                           {/* <Image src={'/svg/view.svg'} alt='viewsvg' width={24}  height={18}/> */}
-                          <Image src={'/svg/editIcon.svg'} alt='editsvg' width={20} height={18} />
-                          <Image src={'/svg/delete.svg'} alt='deletesvg' width={20} height={18} />
+                          {/* <Image src={'/svg/editIcon.svg'} alt='editsvg' width={20} height={18} />
+                          <Image src={'/svg/delete.svg'} alt='deletesvg' width={20} height={18} /> */}
                         </TableCell>
                       </TableRow>
                     );
