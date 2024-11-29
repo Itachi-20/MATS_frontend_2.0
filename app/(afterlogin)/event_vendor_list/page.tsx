@@ -17,6 +17,7 @@ import Adddocument from '@/components/add_document';
 import Addvendor from '@/components/add_vendor';
 import { View } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { toast, Toaster } from 'sonner';
 
 type dropdownData = {
   company: {
@@ -104,6 +105,7 @@ const page = () => {
   const [particularVendorData, setParticularVendorData] = useState<particularVendorData | undefined>();
   const [dropdownData, setDropdownData] = useState<dropdownData | null>(null);
   const [addVendor, setAddVendor] = useState(false);
+  const [deletevendorname,setDeleteVendorName]=useState()
   const [formdata, setFormData] = useState<formData | {}>({});
   const router = useRouter()
   const isViewVendor = () => {
@@ -230,6 +232,36 @@ const page = () => {
     isAddDocument();
   };
 
+  const handleDeleteVendor = async (name:any) => {
+    console.log("deletename", name)
+    try {
+      const response = await fetch(
+        "/api/deleteVendorFromMaster",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: 'include',
+          body: JSON.stringify({
+            name: name
+          })
+        }
+      );
+      if (response.ok) {
+        console.log(" Successful Delete response data");
+        toast.success("Vendor Deleted Successfully");
+        setTimeout(() => {
+          VendorList()
+        }, 1000)
+        
+      } else {
+        console.log("submission failed");
+      }
+    } catch (error) {
+      console.error("Error during Submission:", error);
+    }
+  };
   console.log(formdata, "this is form data");
   return (
     <>
@@ -273,7 +305,7 @@ const page = () => {
             </Button>
           </div>
         </div>
-        <Table  vendorData={vendorData}  isViewDocument={isViewDocument} />
+        <Table  vendorData={vendorData}  isViewDocument={isViewDocument}  handleDeleteVendor={handleDeleteVendor} />
       </div>
       {/* {
         viewVendor &&
@@ -303,6 +335,7 @@ const page = () => {
    
 
       } */}
+      <Toaster richColors position="top-right" />
     </>
   )
 }

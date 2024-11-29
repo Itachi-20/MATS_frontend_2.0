@@ -9,7 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useRouter } from 'next/navigation';
-
+import { Toaster, toast } from 'sonner'
 type EventTable = {
   name: string;
   vendor_type: string;
@@ -36,10 +36,12 @@ type particularVendorData ={
 
 type Props = {
   vendorData: EventTable | undefined;
+  handleDeleteVendor:(value:string)=>void;
   isViewDocument: React.Dispatch<React.SetStateAction<boolean>>
 };
 const table = ({ ...Props }: Props) => {
   const router = useRouter()
+
   return (
     <div className="border bg-white h-full p-4 rounded-[18px]">
       <Table className={""}>
@@ -162,7 +164,7 @@ const table = ({ ...Props }: Props) => {
                         </g>
                       </svg>
                     </div>
-                    <div className="hover:cursor-pointer"onClick={() => router.push(`/add_vendor?refno=${data.name}`)}>
+                    <div className="hover:cursor-pointer" onClick={() => Props.handleDeleteVendor(data.name)}>
                       <svg
                         width="18"
                         height="20"
@@ -178,12 +180,13 @@ const table = ({ ...Props }: Props) => {
                         />
                       </svg>
                     </div>
-                  </TableCell>
+                  </TableCell>  
                 </TableRow>
               );
             })}
         </TableBody>
       </Table>
+      <Toaster richColors position="top-right" />
     </div>
   )
 }
