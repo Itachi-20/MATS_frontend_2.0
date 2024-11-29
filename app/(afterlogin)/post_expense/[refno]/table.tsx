@@ -492,7 +492,7 @@ const table = ({ tableData }: Props) => {
 
   return (
     <>
-      <div className='p-8  '>
+      <div className='p-8'>
         <div className='text-black flex justify-between items-center'>
           <div className='text-2xl font-semibold'>
             Training & Education
@@ -618,8 +618,8 @@ const table = ({ tableData }: Props) => {
           </div>
         }
 
-        <h3 className='mb-3'>Compensation</h3>
-        <div className="border bg-white h-full p-4 rounded-[18px]">
+        <h3 className='text-2xl font-semibold'>Compensation</h3>
+        <div className="border bg-white h-full p-4 rounded-[18px] my-6">
           <Table className={""}>
             <TableHeader className={"bg-[#E0E9FF]"}>
               <TableRow className={"text-nowrap rounded-r-2xl border-none"}>
@@ -765,8 +765,8 @@ const table = ({ tableData }: Props) => {
         {
           tableData.travel_vendors.length > 0 &&
           <>
-            <h3 className='mb-3'>Compensation</h3>
-            <div className="border bg-white h-full p-4 rounded-[18px]">
+            <h3 className='text-2xl font-semibold'>Travel Desk</h3>
+            <div className="border bg-white h-full p-4 rounded-[18px] my-6">
               <Table className={""}>
                 <TableHeader className={"bg-[#E0E9FF]"}>
                   <TableRow className={"text-nowrap rounded-r-2xl border-none"}>

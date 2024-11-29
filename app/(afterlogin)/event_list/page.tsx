@@ -209,7 +209,7 @@ export default function EventList () {
               </TableHeader>
               <TableBody>
                   {tableData &&
-                    tableData.map((data, index) => {
+                    tableData?.map((data, index) => {
                       return (
                         <TableRow key={index} className="text-center text-nowrap">
                           <TableCell>{data.name}</TableCell>
