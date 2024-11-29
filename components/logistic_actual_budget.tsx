@@ -11,6 +11,7 @@ import DialogBox from './dialogbox';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, } from "@/components/ui/table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from "@/components/ui/select";
 import FilePopup from '../components/travel_desk/filePopup'
+import { useAuth } from "../app/context/AuthContext";
 
 
 type occurrence_history = {
@@ -72,9 +73,7 @@ export default function LogisticActualBudget({...Props}:Props) {
     const [remark,setRemarks] = useState<string>();
     const [isFilePopup,setIsFilePopup] = useState<boolean>()
     const [fileData,setFileData] = useState<file[]>()
-    const handleClick = () => {
-        //router.push("/event_list/${id}")
-    }
+    const { role, name, userid, clearAuthData } = useAuth();
 
 
     const handleFilePopup = (data:file[])=>{
@@ -197,6 +196,9 @@ export default function LogisticActualBudget({...Props}:Props) {
     return (
         <>
         <div className="md:pb-8">
+            {
+                role == "Event Travel" && 
+                <>
             <div className="flex md:gap-6 justify-between items-center">
                 <h1 className="text-black md:text-[30px] md:font-medium uppercase md:pb-4">
                     LOGISTICS Actual BUDGET
@@ -212,12 +214,12 @@ export default function LogisticActualBudget({...Props}:Props) {
                     </button>
                     {/* <button className='flex space-x-[10px] border-[1px] border-[#E5E5E5] rounded-[8px] items-center py-[6px] px-6'>
                         <svg width="14" height="17" viewBox="0 0 14 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path id="Vector" d="M12.5394 9.64286H8.06739V15.3571C8.06739 15.6602 7.97316 15.9509 7.80542 16.1653C7.63769 16.3796 7.41019 16.5 7.17298 16.5C6.93577 16.5 6.70827 16.3796 6.54054 16.1653C6.3728 15.9509 6.27857 15.6602 6.27857 15.3571V9.64286H1.80652C1.56931 9.64286 1.34181 9.52245 1.17408 9.30812C1.00634 9.09379 0.912109 8.8031 0.912109 8.5C0.912109 8.1969 1.00634 7.90621 1.17408 7.69188C1.34181 7.47755 1.56931 7.35714 1.80652 7.35714H6.27857V1.64286C6.27857 1.33975 6.3728 1.04906 6.54054 0.834735C6.70827 0.620407 6.93577 0.5 7.17298 0.5C7.41019 0.5 7.63769 0.620407 7.80542 0.834735C7.97316 1.04906 8.06739 1.33975 8.06739 1.64286V7.35714H12.5394C12.7767 7.35714 13.0041 7.47755 13.1719 7.69188C13.3396 7.90621 13.4338 8.1969 13.4338 8.5C13.4338 8.8031 13.3396 9.09379 13.1719 9.30812C13.0041 9.52245 12.7767 9.64286 12.5394 9.64286Z" fill="#635E5E" />
+                        <path id="Vector" d="M12.5394 9.64286H8.06739V15.3571C8.06739 15.6602 7.97316 15.9509 7.80542 16.1653C7.63769 16.3796 7.41019 16.5 7.17298 16.5C6.93577 16.5 6.70827 16.3796 6.54054 16.1653C6.3728 15.9509 6.27857 15.6602 6.27857 15.3571V9.64286H1.80652C1.56931 9.64286 1.34181 9.52245 1.17408 9.30812C1.00634 9.09379 0.912109 8.8031 0.912109 8.5C0.912109 8.1969 1.00634 7.90621 1.17408 7.69188C1.34181 7.47755 1.56931 7.35714 1.80652 7.35714H6.27857V1.64286C6.27857 1.33975 6.3728 1.04906 6.54054 0.834735C6.70827 0.620407 6.93577 0.5 7.17298 0.5C7.41019 0.5 7.63769 0.620407 7.80542 0.834735C7.97316 1.04906 8.06739 1.33975 8.06739 1.64286V7.35714H12.5394C12.7767 7.35714 13.0041 7.47755 13.1719 7.69188C13.3396 7.90621 13.4338 8.1969 13.4338 8.5C13.4338 8.8031 13.3396 9.09379 13.1719 9.30812C13.0041 9.52245 12.7767 9.64286 12.5394 9.64286Z" fill="#635E5E" />
                         </svg>
                         <span className='text-[18px] font-normal leading-normal text-[#000]'>
-                            Add vendor
+                        Add vendor
                         </span>
-                    </button> */}
+                        </button> */}
                 </div>
             </div>
 
@@ -258,7 +260,7 @@ export default function LogisticActualBudget({...Props}:Props) {
                     </label>
                     <Select
                      onValueChange={(value)=>setvendorname(value)}
-                    >
+                     >
                         <SelectTrigger className="text-black w-34 shadow focus-visible:ring-transparent lg:text-sm lg:rounded-[25px] lg:gap-4 sm:rounded-[50px] rounded-[50px] sm:text-[9px] sm:gap-[10px] gap-[9px] text-[9px] sm:font-normal sm:leading-[10.97px]">
                             <SelectValue placeholder="-Select-" />
                         </SelectTrigger>
@@ -283,7 +285,7 @@ export default function LogisticActualBudget({...Props}:Props) {
                         placeholder="Type Here"
                         type='number'
                         onChange={(e)=>setActualAmount(e.target.valueAsNumber)}
-                    ></Input>
+                        ></Input>
                 </div>
 
                 <div className="flex flex-col md:gap-2">
@@ -317,7 +319,7 @@ export default function LogisticActualBudget({...Props}:Props) {
                         placeholder="No data"
                         value={totalAmount}
                         readOnly={true}
-                    ></Input>
+                        ></Input>
                 </div>
 
                 <div className="flex flex-col gap-2">
@@ -348,7 +350,8 @@ export default function LogisticActualBudget({...Props}:Props) {
                     <button className='px-6 py-[6px] border-[1px] border-[#4430BF] text-[#4430BF] rounded-[5px] flex justify-end absolute bottom-0 text-[18px] font-normal leading-normal'onClick={()=>handleAdd()}>Add</button>
                 </div>
             </div>
-
+                        </>
+            }
             <div className="border bg-white h-full p-4 mt-[50px] rounded-[18px]">
                 <Table >
                     <TableHeader className={"bg-[#E0E9FF]"}>
@@ -414,7 +417,6 @@ export default function LogisticActualBudget({...Props}:Props) {
                                         </TableCell>
                                         <TableCell>{data.remarks}</TableCell>
                                         <TableCell className="sticky right-0 bg-white flex lg:space-x-7 sm:space-x-5 space-x-2 border-l justify-end mr-4 border-slate-200">
-                                            <Image src={"/svg/editIcon.svg"} width={17} height={20} alt="view-svg" className="cursor-pointer lg:w-[17px] lg:h-[20px] sm:w-[15px] sm:h-[18px] w-[14px] h-[16px]" onClick={handleClick} />
                                             <Image src={"/svg/delete.svg"} width={15} height={20} alt="delete-svg" className="mr-1 lg:w-[15px] lg:h-[20px] sm:w-[12px] sm:h-[17px] w-[8px] h-[13px] cursor-pointer" />
                                         </TableCell>
                                     </TableRow>
@@ -489,7 +491,6 @@ export default function LogisticActualBudget({...Props}:Props) {
                                         <TableCell>{data.gst}</TableCell>
                                         <TableCell>{data.total_amount}</TableCell>
                                         <TableCell className="sticky right-0 bg-white flex lg:space-x-7 sm:space-x-5 space-x-2 border-l justify-end mr-4 border-slate-200">
-                                            <Image src={"/svg/editIcon.svg"} width={17} height={20} alt="view-svg" onClick={handleClick} className="lg:w-[17px] lg:h-[20px] sm:w-[15px] sm:h-[18px] w-[14px] h-[16px] cursor-pointer" />
                                             <Image src={"/svg/view.svg"} width={15} height={20} alt="delete-svg" className="lg:w-[15px] lg:h-[20px] mr-1 sm:w-[12px] sm:h-[17px] w-[8px] h-[13px] cursor-pointer" />
                                         </TableCell>
                                     </TableRow>
