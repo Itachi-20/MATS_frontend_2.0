@@ -14,8 +14,8 @@ interface SimpleFileUploadProps {
     files: File[]
     setFiles: React.Dispatch<React.SetStateAction<File[]>>
     buttonText:string
-    files: File[]
-    setFiles: React.Dispatch<React.SetStateAction<File[]>>
+    // files: File[]
+    // setFiles: React.Dispatch<React.SetStateAction<File[]>>
 }
 
 export default function SimpleFileUpload({ onNext,buttonText,files,setFiles }: SimpleFileUploadProps) {
