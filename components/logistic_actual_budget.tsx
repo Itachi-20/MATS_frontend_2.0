@@ -208,7 +208,6 @@ export default function LogisticActualBudget({...Props}:Props) {
             })
             if(response.ok){
                 const data = await response.json();
-                console.log("inside api console",data)
                 setTravelVendorData(data.data.travel_vendors)
             }
         } catch (error) {

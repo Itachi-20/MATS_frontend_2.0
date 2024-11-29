@@ -2,8 +2,9 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { useAuth } from "../app/context/AuthContext";
+import Cookies from "js-cookie";
 type modules = {
   module:string,
   route:string
@@ -17,11 +18,16 @@ type settings = {
   name:string,
   route:string
 }
+type masters = {
+  name:string,
+  route:string
+}
 
 type sidebarItems = {
   modules:modules[],
   reports:reports[],
-  settings:settings[]
+  settings:settings[],
+  masters:masters[]
 }
 
 
@@ -60,6 +66,7 @@ const Sidebar = () => {
         route:"/event_list"
       }
     ],
+    masters:[],
     reports:[
       {
         name:"Document Repository Type",
@@ -88,6 +95,7 @@ const Sidebar = () => {
         route:"/post_activity_document_approval_list"
       }
     ],
+    masters:[],
     reports:[
       {
         name:"Audit Trail",
@@ -102,8 +110,139 @@ const Sidebar = () => {
       route:"/change_password"
     }],
   }
+  }else if(role == "Event Compliance"){
+    moduleItems = {
+      modules:[{
+        module:"Event Request Approval",
+        route:"/event_approver_list"
+      },{
+        
+        module:"Post Document Approval",
+        route:"/post_activity_document_approval_list"
+      }
+    ],
+    reports:[
+      {
+        name:"Audit Trail",
+        route:"/audit_trail"
+      },{
+        name:"Event Summary Repost",
+        route:"/event_summary_report"
+      }
+    ],
+    masters:[
+      {
+        name:"Document Repository Type",
+        route:"/repository_document_type"
+      },{
+        name:"Document Repository List",
+        route:"/repository_document_list"
+      }
+    ],
+    settings:[{
+      name:"Change Password",
+      route:"/change_password"
+    }],
+  }
+  }else if(role == "Event Finance"){
+    moduleItems = {
+      modules:[{
+        module:"Advance Approval",
+        route:"/advance_payment"
+      },{
+        
+        module:"Post Expense Approval",
+        route:"/post_expense_approval"
+      }
+    ],
+    reports:[
+      {
+        name:"Audit Trail",
+        route:"/audit_trail"
+      },{
+        name:"Event Summary Repost",
+        route:"/event_summary_report"
+      }
+    ],
+    masters:[
+      {
+        name:"Event Vendor",
+        route:"/event_vendor_list"
+      },{
+        name:"Document Repository List",
+        route:"/repository_document_list"
+      },
+      {
+        name:"Document Repository Type",
+        route:"/repository_document_Type"
+      }
+    ],
+    settings:[{
+      name:"Change Password",
+      route:"/change_password"
+    }],
+  }
+  }else if(role == "Event Travel"){
+    moduleItems = {
+      modules:[{
+        module:"Travel Expense",
+        route:"/travel_desk"
+      }
+    ],
+    reports:[
+      {
+        name:"Event Summary Repost",
+        route:"/event_summary_report"
+      }
+    ],
+    masters:[],
+    settings:[{
+      name:"Change Password",
+      route:"/change_password"
+    }],
+  }
+  }else if(role == "Event Accounts"){
+    moduleItems = {
+      modules:[{
+        module:"Account Approval",
+        route:"/travel_desk"
+      }
+    ],
+    reports:[
+      {
+        name:"Event Summary Repost",
+        route:"/event_summary_report"
+      }
+    ],
+    masters:[],
+    settings:[{
+      name:"Change Password",
+      route:"/change_password"
+    }],
+  }
   }
 
+  const handleLogout = async()=>{
+    try {
+      const response = await fetch(`/api/logout/`,{
+          method:"POST",
+          headers:{
+              "Content-Type": "application/json",
+          },
+          credentials:"include",
+      })
+      if(response.ok){
+        Cookies.remove("full_name")
+        Cookies.remove("role")
+        Cookies.remove("system_user")
+        Cookies.remove("user_id")
+        Cookies.remove("user_image")
+        router.push("/")
+      }
+  } catch (error) {
+      console.log("server error:- ",error)
+  }
+  }
   
   return (
     <div  className="flex flex-col justify-between h-screen">
@@ -208,6 +347,68 @@ const Sidebar = () => {
           </div>
           {/* END SETTING MANU  */}
               
+          {
+              (role == "Event Compliance" || role == "Event Finance") && 
+              <div id="parent">
+            <div className="flex py-2 gap-2 pl-2 hover:border hover:rounded-xl hover:bg-[#4430bf] group hover:text-white hover:cursor-pointer">
+            <svg
+                width="32"
+                height="32"
+                viewBox="0 0 32 32"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <g id="Graph 1">
+                  <mask
+                    id="mask0_1630_2781"
+                    //maskType="luminance"
+                    maskUnits="userSpaceOnUse"
+                    x="0"
+                    y="0"
+                    width="32"
+                    height="32"
+                  >
+                    <rect
+                      id="Graph 1 (Background/Mask)"
+                      width="32"
+                      height="32"
+                      fill="white"
+                    />
+                  </mask>
+                  <g mask="url(#mask0_1630_2781)">
+                    <path
+                      id="Vector"
+                      d="M13.6702 7.8457L14.0414 13.3656L14.2257 16.14C14.2277 16.4254 14.2723 16.7088 14.3586 16.9812C14.5811 17.51 15.1166 17.846 15.6991 17.8226L24.5754 17.2419C24.9598 17.2356 25.331 17.3794 25.6073 17.6416C25.8375 17.8602 25.9862 18.146 26.0331 18.4535L26.0489 18.6402C25.6815 23.7264 21.9459 27.9688 16.8702 29.0639C11.7944 30.159 6.58947 27.8456 4.08127 23.3798C3.35818 22.0823 2.90652 20.6563 2.75283 19.1852C2.68863 18.7498 2.66036 18.3099 2.6683 17.8699C2.66036 12.4169 6.54362 7.70253 11.9794 6.56601C12.6337 6.46413 13.275 6.81048 13.5374 7.40729C13.6053 7.5455 13.6501 7.69353 13.6702 7.8457Z"
+                      fill="#636363"
+                    />
+                    <path
+                      id="Vector_2"
+                      opacity="0.4"
+                      d="M29.3337 13.0829L29.3244 13.1263L29.2975 13.1895L29.3012 13.363C29.2873 13.5928 29.1985 13.8138 29.0457 13.9925C28.8864 14.1785 28.6688 14.3052 28.4292 14.3544L28.2831 14.3744L18.042 15.038C17.7013 15.0716 17.3621 14.9617 17.1089 14.7358C16.8977 14.5474 16.7628 14.2933 16.7247 14.0194L16.0373 3.79325C16.0253 3.75868 16.0253 3.7212 16.0373 3.68661C16.0467 3.40473 16.1708 3.13829 16.3819 2.94681C16.5928 2.75533 16.8733 2.65477 17.1604 2.6676C23.2403 2.82228 28.3501 7.19422 29.3337 13.0829Z"
+                      fill="#636363"
+                    />
+                  </g>
+                </g>
+              </svg>
+              <h1 className="pt-1">Masters</h1>
+            </div>           
+            <div id="element" className="z-10" >
+                {moduleItems &&
+                  moduleItems.masters?.map((data,index) => { 
+                    return (
+                      <div key={index} className="child py-4 px-5 rounded-bl-xl text-black  border-l border-black ml-4 relative text-nowrap ">
+                       <Link href={data.route}>
+                          <div className="absolute -bottom-5 hover:bg-white rounded-xl text-black hover:text-[#4430bf] text-[12px] px-1 py-2 cursor-pointer">
+                          {data.name} 
+                          </div>
+                      </Link>
+                      </div>
+                    );
+                  })}
+            </div>           
+          </div>
+            }
+
          {/* START SETTING MANU  */}
           <div id="parent">
             <div className="flex py-2 gap-2 pl-2 hover:border hover:rounded-xl hover:bg-[#4430bf] group hover:text-white hover:cursor-pointer">
@@ -230,10 +431,10 @@ const Sidebar = () => {
             </div>           
           </div>
           {/* END SETTING MANU  */}
-
+            
         </div>
       </div>
-      <div className="pb-24 flex gap-3 pl-3">
+      <div className="pb-24 flex gap-3 pl-3 cursor-pointer" onClick={()=>{handleLogout()}}>
         <svg
           width="32"
           height="32"
@@ -253,7 +454,7 @@ const Sidebar = () => {
             </g>
           </g>
         </svg>
-        <div className="mt-[0.5px] text-[#636363] text-lg font-normal font-Poppins">
+        <div className="mt-[0.5px] text-[#636363] text-lg font-normal font-Poppins cursor-pointer">
           Sign Out
         </div>
       </div>
