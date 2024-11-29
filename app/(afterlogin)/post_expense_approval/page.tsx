@@ -466,7 +466,7 @@ const Index = () => {
                                             <TableCell className="sticky right-0 bg-[white] z-50 ">
                                                 {
                                                     data.level_1 == "Approved" ?
-                                                <button className="border rounded-full px-4 py-1 border-[#0E4154] text-[#0E4154]" onClick={() => router.push(`/post_expense_approval/update_utr/${data.request_number}`)} >Update UTR</button>
+                                                <button className="border rounded-full px-4 py-1 border-[#0E4154] text-[#0E4154]" onClick={() => router.push(`/post_expense_approval_update_utr/${data.request_number}`)} >Update UTR</button>
                                                 :<button className="border rounded-full px-4 py-1 border-[#0E4154] text-[#0E4154]" onClick={() => router.push(`/post_expense_approval/${data.request_number}`)} >Take Action</button>
                                                 }
                                             </TableCell>
@@ -616,7 +616,7 @@ const Index = () => {
                                             <TableCell className="sticky right-0 bg-[white] z-50 ">
                                                 {
                                                     "Not" == "Approved" ?
-                                                <button className="border rounded-full px-4 py-1 border-[#0E4154] text-[#0E4154]" onClick={() => router.push(`/post_expense_approval/update_utr/${data.name}`)} >Update UTR</button>
+                                                <button className="border rounded-full px-4 py-1 border-[#0E4154] text-[#0E4154]" onClick={() => router.push(`/post_expense_approval_update_utr/${data.name}`)} >Update UTR</button>
                                                 :<button className="border rounded-full px-4 py-1 border-[#0E4154] text-[#0E4154]" onClick={() => router.push(`/post_expense_approval/${data.name}`)} >Take Action</button>
                                                 }
                                             </TableCell>

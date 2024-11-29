@@ -204,7 +204,7 @@ export default function EventList () {
                     className={
                       "text-center rounded-r-2xl text-[#625d5d] lg:text-[15px] sm:text-[12px] text-[11px] font-normal font-['Montserrat'] sticky right-0 bg-[#E0E9FF]"
                     }
-                  >Action</TableHead>
+                  >View</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -222,7 +222,7 @@ export default function EventList () {
                           <TableCell><Button className={`bg-[#F0EDFF] w-[75px] text-[#4430BF] text-sm  rounded-md font-semibold  hover:underline`} disabled={!data.preactivity_approved} onClick={()=>router.push(`/advance_request/${data.name}`)}>{data.advance_request_submitted ?'View':"Request"}</Button></TableCell>
                           <TableCell>
                             {
-                              data.post_activity_approved ?
+                              data.post_activity_submitted ?
                               (
                                 !data.post_expense_submitted ?
                                 <Button className="bg-[#F0EDFF] w-[75px] text-[#4430BF] text-sm  rounded-md font-semibold hover:underline capitalize" onClick={()=>router.push(`/post_expense/${data.name}`)}>request</Button> :
