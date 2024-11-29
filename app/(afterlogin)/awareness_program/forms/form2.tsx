@@ -1,4 +1,4 @@
-import React from 'react'
+import {useState} from 'react'
 import { Input } from "@/components/ui/input"
 import {
   Select,
@@ -9,14 +9,34 @@ import {
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
+import { Toaster, toast } from 'sonner'
 type Props = {
   handlefieldChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
   handleSelectChange: (value: string, name: string) => void;
   handleSubmit: (e: React.MouseEvent<HTMLButtonElement>) => void
 }
 const Form2 = ({ ...Props }: Props) => {
+
+  const [eventStartDate,setEventStartDate] = useState<any>();
+  const handleEventStartDateValidate = (e:React.ChangeEvent<HTMLInputElement>)=>{
+    const currentDate = Date.now()
+    if(e.target.valueAsNumber < currentDate){
+      toast.error("Please Enter Valid Start Date");
+    }
+    setEventStartDate(e.target.value)
+    Props.handlefieldChange(e);
+}
+
+  const handleEventEndDateValidate = (e:React.ChangeEvent<HTMLInputElement>)=>{
+    const currentDate = Date.now()
+    if(e.target.valueAsNumber < currentDate || e.target.valueAsNumber < eventStartDate){
+      toast.error("Please Enter Valid End Date");
+    }
+    Props.handlefieldChange(e);
+  }
+
   return (
-    // </div>
+<>
     (<div>
       <h1 className='text-black text-2xl font-normal uppercase pb-8'>
         Basic Detail
@@ -42,14 +62,14 @@ const Form2 = ({ ...Props }: Props) => {
           <label className='lable'>Program Start Date<span className='text-[#e60000]'>*</span></label>
           <input type='date' className='dropdown h-10 rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm'
             name='event_start_date'
-            onChange={(e) => Props.handlefieldChange(e)}
+            onChange={(e) => handleEventStartDateValidate(e)}
           ></input>
         </div>
         <div className='flex flex-col gap-2'>
           <label className='lable'>Program End Date<span className='text-[#e60000]'>*</span></label>
           <input type='date' className=' dropdown h-10 rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm'
             name='event_end_date'
-            onChange={(e) => Props.handlefieldChange(e)}
+            onChange={(e) => handleEventEndDateValidate(e)}
           ></input>
         </div>
         <div className='flex flex-col gap-2'>
@@ -105,7 +125,10 @@ const Form2 = ({ ...Props }: Props) => {
         {/* <Button className='bg-white text-black border text-md font-normal' onClick={Props.prevForm}>Back</Button>
         <Button className='bg-[#4430bf] text-white text-md font-normal border'onClick={Props.nextForm}>Next</Button> */}
       </div>
-    </div>)
+    </div>
+    <Toaster richColors position="bottom-right" /> 
+  )
+    </> 
   );
 }
 

@@ -39,6 +39,7 @@ type logistics = {
   total_amount:number,
   upload_bill:number,
   remarks:string
+  est_amount:number
 }
 
 type  travel_desk_data = {
