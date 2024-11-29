@@ -16,6 +16,7 @@ type travel_vendors = {
     total_amount:number,
     upload_bill:number,
     remarks:string
+    est_amount:number
 }
     type Props = {
     travelData:travel_vendors[]
@@ -87,7 +88,7 @@ const LogisticBudget = ({...Props}:Props) => {
                                 return (
                         <TableRow className="text-black text-center">
                             <TableCell>{item.vendor_type}</TableCell>
-                            <TableCell>{item.actual_amount}</TableCell>
+                            <TableCell>{item.est_amount}</TableCell>
                 
                         </TableRow>
                                 )

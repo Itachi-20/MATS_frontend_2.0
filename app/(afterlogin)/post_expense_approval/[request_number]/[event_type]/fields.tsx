@@ -107,8 +107,8 @@ type FormData = {
   company_name: string;
   gl_name: string;
   gl_code: string;
-  // utr_number: number;
-  // payment_date: string;
+  utr_number: number;
+  payment_date: string;
   zone: string;
   state: string;
   city: string;
@@ -523,7 +523,7 @@ const Fields = ({ ...Props }: Props) => {
               readOnly
             ></Input>
           </div>
-          {/* <div className='grid-cols-1 space-y-2'>
+          <div className='grid-cols-1 space-y-2'>
             <label htmlFor="utr_number" className="text-black md:text-sm md:font-normal capitalize">
               UTR Number<span className="text-[#e60000] ">*</span>
             </label>
@@ -535,6 +535,7 @@ const Fields = ({ ...Props }: Props) => {
               id='utr_number'
               name='utr_number'
               onChange={(e)=>Props.handlefieldChange(e)}
+              readOnly={Props.expenseData?.actual_vendors[0]?.status == "Post Expense Approved" || Props.expenseData?.actual_vendors[0]?.status == "Post Expense Closed" ? true : false}
             ></Input>
           </div>
           <div className='grid-cols-1 space-y-2'>
@@ -549,8 +550,9 @@ const Fields = ({ ...Props }: Props) => {
               id='payment_date'
               name='payment_date'
               onChange={(e)=>Props.handlefieldChange(e)}
+              readOnly={Props.expenseData?.actual_vendors[0]?.status == "Post Expense Approved" || Props.expenseData?.actual_vendors[0]?.status == "Post Expense Closed" ? true : false}
             ></Input>
-          </div> */}
+          </div>
           <div className='grid-cols-1 space-y-2'>
             <label htmlFor="zone" className="text-black md:text-sm md:font-normal capitalize">
               Zone<span className="text-[#e60000] ">*</span>

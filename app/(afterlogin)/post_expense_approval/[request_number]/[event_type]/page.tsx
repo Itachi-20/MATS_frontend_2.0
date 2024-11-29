@@ -29,6 +29,7 @@ import SuccessProp from '@/components/success_prop';
         actual_amount: number;
         status: string;
         vendor_name: string;
+        vendor_code: string;
         advance: number;
         budget_category: string;
         est_amount: number;
@@ -138,8 +139,8 @@ import SuccessProp from '@/components/success_prop';
         company_name: string;
         gl_name: string;
         gl_code: string;
-        // utr_number: number;
-        // payment_date: string;
+        utr_number: number;
+        payment_date: string;
         zone: string;
         state: string;
         city: string;
@@ -292,8 +293,8 @@ const page = () => {
                     company_name: data.data?.actual_vendors[0]?.company_code,
                     gl_name: data.data?.actual_vendors[0]?.gl_name,
                     gl_code: data.data?.actual_vendors[0]?.gl_code,
-                    // utr_number: data.data?.actual_vendors[0]?.utr_number,
-                    // payment_date: data.data?.actual_vendors[0]?.payment_date,
+                    utr_number: data.data?.actual_vendors[0]?.utr_number,
+                    payment_date: data.data?.actual_vendors[0]?.payment_date,
                     zone: data.data?.actual_vendors[0]?.zone,
                     state: data.data?.actual_vendors[0]?.state_code,
                     city: data.data?.actual_vendors[0]?.city,
@@ -426,8 +427,9 @@ const page = () => {
                 
                 <div className='border bg-white h-full p-4 rounded-[18px]'>
                     <TableComponent
-                        expensetabledata={expensedata?.actual_vendors}
+                        // expensetabledata={expensedata?.actual_vendors}
                         handleSetFileData={handleSetFileData}
+                        refno={refno}
                     />
                     {
                         role == "Event%20Finance" &&
@@ -445,9 +447,9 @@ const page = () => {
                 {
                     !(expensedata?.actual_vendors[0]?.status == "Post Expense Approved" || expensedata?.actual_vendors[0]?.status == "Post Expense Closed") &&
                     <div className='flex justify-end gap-2 pt-8'>
-                        <Button className={`${expensedata?.actual_vendors[0].status == "Post Expense Approved" ?'cursor-not-allowed':''} bg-[#5DBE74] px-6`} disabled={expensedata?.actual_vendors[0].status == "Post Expense Approved" ? true : false} onClick={()=>handleOpen('Approved')} >Approve</Button>
-                        <Button className={`${expensedata?.actual_vendors[0].status == "Post Expense Approved" ?'cursor-not-allowed':''} bg-[#4430BF] px-6`} disabled={expensedata?.actual_vendors[0].status == "Post Expense Approved" ? true : false} onClick={()=>handleOpen('Send Back')}>Send Back</Button>
-                        <Button className={`${expensedata?.actual_vendors[0].status == "Post Expense Approved" ?'cursor-not-allowed':''} bg-[#FF5757] px-6`} disabled={expensedata?.actual_vendors[0].status == "Post Expense Approved" ? true : false} onClick={()=>handleOpen('Rejected')}>Reject</Button>
+                        <Button className={`${expensedata?.actual_vendors[0]?.status == "Post Expense Approved" ?'cursor-not-allowed':''} bg-[#5DBE74] px-6`} disabled={expensedata?.actual_vendors[0]?.status == "Post Expense Approved" ? true : false} onClick={()=>handleOpen('Approved')} >Approve</Button>
+                        <Button className={`${expensedata?.actual_vendors[0]?.status == "Post Expense Approved" ?'cursor-not-allowed':''} bg-[#4430BF] px-6`} disabled={expensedata?.actual_vendors[0]?.status == "Post Expense Approved" ? true : false} onClick={()=>handleOpen('Send Back')}>Send Back</Button>
+                        <Button className={`${expensedata?.actual_vendors[0]?.status == "Post Expense Approved" ?'cursor-not-allowed':''} bg-[#FF5757] px-6`} disabled={expensedata?.actual_vendors[0]?.status == "Post Expense Approved" ? true : false} onClick={()=>handleOpen('Rejected')}>Reject</Button>
                     </div>
                 }
             </div>

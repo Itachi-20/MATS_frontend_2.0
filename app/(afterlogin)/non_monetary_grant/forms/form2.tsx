@@ -1,5 +1,6 @@
 "use client"
 import React from 'react'
+import { useState } from 'react'
 import { Input } from "@/components/ui/input"
 import {
   Select,
@@ -12,6 +13,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import { useContext } from 'react';
 import { AppContext } from '@/app/context/module'
+import { Toaster, toast } from 'sonner'
 type Props = {
   handlefieldChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>)=>void;
   handleSelectChange: (value:string,name:string)=>void;
@@ -19,15 +21,25 @@ type Props = {
   handleBackButton: (e: React.MouseEvent<HTMLButtonElement>)=>void
 }
 const Form2 = ({ ...Props }: Props) => {
-  const appContext = useContext(AppContext);
-  if (!appContext) {
-    throw new Error("SomeComponent must be used within an AppWrapper");
-  }
+  const [eventStartDate,setEventStartDate] = useState<any>();
+  const handleEventStartDateValidate = (e:React.ChangeEvent<HTMLInputElement>)=>{
+    const currentDate = Date.now()
+    if(e.target.valueAsNumber < currentDate){
+      toast.error("Please Enter Valid Start Date");
+    }
+    setEventStartDate(e.target.value)
+    Props.handlefieldChange(e);
+}
 
-  const { user } = appContext;
-  console.log(user, "this is user");
+  const handleEventEndDateValidate = (e:React.ChangeEvent<HTMLInputElement>)=>{
+    const currentDate = Date.now()
+    if(e.target.valueAsNumber < currentDate || e.target.valueAsNumber < eventStartDate){
+      toast.error("Please Enter Valid End Date");
+    }
+    Props.handlefieldChange(e);
+  }
   return (
-    // </div>
+    <>
     (<div>
       <h1 className='text-black text-2xl font-normal uppercase pb-8'>
         Equipment Grant Details
@@ -46,7 +58,7 @@ const Form2 = ({ ...Props }: Props) => {
           <label className='lable'>Event Start Date<span className='text-[#e60000]'>*</span></label>
           <Input type='date' className='dropdown h-10 rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm'
             name='event_start_date'
-            onChange={(e)=>Props.handlefieldChange(e)}
+            onChange={(e)=>handleEventStartDateValidate(e)}
           ></Input>
         </div>
 
@@ -54,7 +66,7 @@ const Form2 = ({ ...Props }: Props) => {
           <label className='lable'>Event End Date<span className='text-[#e60000]'>*</span></label>
           <Input type='date' className=' dropdown h-10 rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm'
             name='event_end_date'
-            onChange={(e)=>Props.handlefieldChange(e)}
+            onChange={(e)=>handleEventEndDateValidate(e)}
           ></Input>
         </div>
 
@@ -79,6 +91,8 @@ const Form2 = ({ ...Props }: Props) => {
         <Button className='bg-[#4430bf] text-white text-md font-normal border' onClick={Props.handleSubmit}>Next</Button>
       </div>
     </div>)
+    <Toaster richColors position="bottom-right" />
+    </>
   );
 }
 
