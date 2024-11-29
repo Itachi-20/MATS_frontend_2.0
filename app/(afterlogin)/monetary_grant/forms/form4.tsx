@@ -40,24 +40,21 @@ import {
 }
 const form4 = ({...Props}:Props) => {
   const router = useRouter();
-  const [file,setFile] = useState<FileList | null>();
+  
   const [activityType,setActivityType] = useState("");
   const [refno,setRefno] = useState(localStorage.getItem("refno")?localStorage.getItem("refno"):"");
   const [documentType,setDocumentType] = useState("");
   const [preview_data, setPreviewData] = useState<any>(null);
   const [uploadedFiles, setUploadedFiles] = useState<FileList | null>(); //added state 1
   const [fileList, setFileList] = useState<File[]>([]); //added state 2
-  const handleFileUpload = (e:React.ChangeEvent<HTMLInputElement>)=>{
-    const files = (e.target as HTMLInputElement).files;
-    setFile(files);
-  }
+  const [files, setFiles] = useState<File[]>([]);
 
   const FileUpload = async()=>{
     const formdata = new FormData();
 
-    if (file && file.length > 0) {
-      for (let i = 0; i < file.length; i++) {
-        formdata.append("file", file[i]); 
+    if (uploadedFiles && uploadedFiles.length > 0) {
+      for (let i = 0; i < uploadedFiles.length; i++) {
+        formdata.append("file", uploadedFiles[i]); 
       }
     } else {
       console.log("No file to upload");
@@ -81,7 +78,7 @@ const form4 = ({...Props}:Props) => {
 
       
       if (response.ok) {
-        const data = await response.json();
+        PreviewData();
        
       } else {
         console.log("Login failed");
@@ -123,8 +120,6 @@ const form4 = ({...Props}:Props) => {
 
   const handleNext = (fileList: FileList | null) => {
     setUploadedFiles(fileList);
-    const filelists = Array.from(fileList || []);
-    setFileList(filelists);
   };
 
 
@@ -135,8 +130,6 @@ const form4 = ({...Props}:Props) => {
 
   },[preview_data])
 
-
-  console.log(file,"this is files");
 
   return (
     // </div>
@@ -217,7 +210,7 @@ const form4 = ({...Props}:Props) => {
              <label className="text-black text-sm font-normal capitalize">
             Upload Files<span className="text-[#e60000]">*</span>
           </label>
-            <SimpleFileUpload onNext={handleNext} buttonText="Upload Here" />
+          <SimpleFileUpload files={files} setFiles={setFiles} onNext={handleNext} buttonText={'Upload Here'} />
           </div>
           <Button
             className="bg-white text-black border text-md font-normal"
