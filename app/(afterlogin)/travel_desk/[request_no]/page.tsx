@@ -29,6 +29,7 @@ type travel_vendors = {
   upload_bill:number,
   remarks:string
   files:file[]
+  name:string
 }
 
 type logistics = {

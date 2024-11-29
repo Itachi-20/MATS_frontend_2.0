@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
@@ -12,7 +12,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, } from "
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from "@/components/ui/select";
 import FilePopup from '../components/travel_desk/filePopup'
 import { useAuth } from "../app/context/AuthContext";
-
+import SimpleFileUpload from "@/components/multiple_file_upload";
 
 type occurrence_history = {
     occurrence_no:number,
@@ -37,6 +37,7 @@ type travel_vendors = {
     upload_bill:number,
     remarks:string
     files:file[]
+    name:string
   }
 
   type vendorName = {
@@ -73,8 +74,14 @@ export default function LogisticActualBudget({...Props}:Props) {
     const [remark,setRemarks] = useState<string>();
     const [isFilePopup,setIsFilePopup] = useState<boolean>()
     const [fileData,setFileData] = useState<file[]>()
+    const [TravelVendorData,setTravelVendorData] = useState(Props.travel_vendors);
     const { role, name, userid, clearAuthData } = useAuth();
 
+    const [files, setFiles] = useState<File[]>([]);
+  const [uploadedFiles, setUploadedFiles] = useState<FileList | null>(); //added state 1
+  const [fileList, setFileList] = useState<File[]>([]); //added state 2
+
+    console.log(TravelVendorData,"this is the useefec api data")
 
     const handleFilePopup = (data:file[])=>{
         setFileData(data);
@@ -114,18 +121,12 @@ export default function LogisticActualBudget({...Props}:Props) {
         }
     }
 
-
-    const handleFileUpload = (e:React.ChangeEvent<HTMLInputElement>)=>{
-        const files = (e.target as HTMLInputElement).files;
-        setFile(files);
-      }
-
       const handleAdd = async()=>{
         const formdata = new FormData();
     
-        if (file && file.length > 0) {
-          for (let i = 0; i < file.length; i++) {
-            formdata.append("file", file[i]); 
+        if (uploadedFiles && uploadedFiles.length > 0) {
+          for (let i = 0; i < uploadedFiles.length; i++) {
+            formdata.append("file", uploadedFiles[i]); 
           }
         } else {
           console.log("No file to upload");
@@ -159,6 +160,7 @@ export default function LogisticActualBudget({...Props}:Props) {
             setActualAmount(0);
             setgst(0);
             setTotaAmount(0);
+            travel_desk_data();
           } else {
             console.log("Login failed");
           }
@@ -184,7 +186,7 @@ export default function LogisticActualBudget({...Props}:Props) {
             if(response.ok){
                 console.log(await response.json());
                 console.log("successfully submited");
-                router.push("/travel_desk")
+                
             }
         } catch (error) {
             console.log(error)
@@ -192,7 +194,56 @@ export default function LogisticActualBudget({...Props}:Props) {
       }
 
 
-      console.log(file)
+     const travel_desk_data = async()=>{
+        try {
+            const response = await fetch(`/api/travel_desk/getVendorData/`,{
+                method:"POST",
+                headers:{
+                    "Content-Type": "application/json",
+                },
+                credentials:"include",
+                body:JSON.stringify({
+                    name:Props.refno
+                })
+            })
+            if(response.ok){
+                const data = await response.json();
+                console.log("inside api console",data)
+                setTravelVendorData(data.data.travel_vendors)
+            }
+        } catch (error) {
+            console.log("server error:- ",error)
+        }
+    }
+
+    const deleteData = async(name:string)=>{
+        try {
+            const response = await fetch(`/api/deleteVendor/`,{
+                method:"POST",
+                headers:{
+                    "Content-Type": "application/json",
+                },
+                credentials:"include",
+                body:JSON.stringify({
+                    name:name
+                })
+            })
+            if(response.ok){
+                console.log("successfully deleted");
+                travel_desk_data();
+            }
+        } catch (error) {
+            console.log("server error:- ",error)
+        }
+    }
+
+
+    const handleNext = (fileList: FileList | null) => {
+        setUploadedFiles(fileList);
+      };
+
+    useEffect(()=>{
+    },[TravelVendorData])
     return (
         <>
         <div className="md:pb-8">
@@ -322,20 +373,22 @@ export default function LogisticActualBudget({...Props}:Props) {
                         ></Input>
                 </div>
 
-                <div className="flex flex-col gap-2">
-                    <label className="lable">
-                        Upload Bill
-                    </label>
-                    <div className="flex items-center space-x-4">
-                        <label className="flex items-center py-2 px-16 space-x-[80px] bg-white rounded-md shadow-sm cursor-pointer border-[1px] border-[#4430BF]">
-                            <svg width="25" height="26" viewBox="0 0 26 27" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path id="Vector" d="M17.5143 0.500028C16.4161 0.49724 15.3281 0.700933 14.3134 1.09934C13.2986 1.49774 12.3771 2.08295 11.6022 2.82116L1.36236 12.537C1.04822 12.8344 0.871512 13.238 0.871094 13.659C0.870677 14.0801 1.04659 14.484 1.36013 14.782C1.67367 15.08 2.09915 15.2476 2.54298 15.248C2.98681 15.2484 3.41263 15.0815 3.72676 14.7841L13.971 5.06408C14.924 4.23299 16.1787 3.78337 17.4729 3.80915C18.7671 3.83494 20.0008 4.33414 20.9161 5.20247C21.8315 6.07079 22.3577 7.24106 22.3849 8.46879C22.4121 9.69651 21.9381 10.8867 21.062 11.7907L9.24445 23.0011C8.92762 23.2812 8.50856 23.4336 8.07557 23.4264C7.64258 23.4191 7.22945 23.2527 6.92323 22.9622C6.61701 22.6718 6.4416 22.2799 6.43396 21.8691C6.42632 21.4584 6.58705 21.0608 6.88227 20.7603L18.6999 9.54992C19.014 9.25221 19.1906 8.84832 19.1908 8.4271C19.191 8.00587 19.0148 7.60182 18.701 7.30383C18.3871 7.00584 17.9614 6.83832 17.5173 6.83812C17.0733 6.83793 16.6473 7.00507 16.3332 7.30278L4.51341 18.5174C3.6373 19.4214 3.16332 20.6116 3.19051 21.8393C3.21769 23.067 3.74393 24.2373 4.65929 25.1056C5.57465 25.974 6.8083 26.4732 8.10253 26.4989C9.39675 26.5247 10.6514 26.0751 11.6044 25.244L23.422 14.0337C24.2007 13.2992 24.8181 12.4256 25.2385 11.4633C25.6589 10.5009 25.8739 9.46908 25.8711 8.42741C25.8687 6.32562 24.9875 4.31056 23.4208 2.82438C21.8541 1.33819 19.7299 0.502267 17.5143 0.500028Z" fill="#4430BF" />
-                            </svg>
-                            <span className="text-[18px] font-medium text-[#4430BF] ">{fileName ? fileName : 'Attachment'}</span>
-                            <Input type="file" className="hidden" onChange={(e)=>handleFileUpload(e)} multiple />
-                        </label>
-                    </div>
-                </div>
+                
+                            <div className="flex flex-col gap-3">
+            {/* <h1 className="text-2xl font-bold">
+              {fileList.length > 0
+                ? `${fileList.length} file${
+                    fileList.length !== 1 ? "s" : ""
+                  } selected`
+                : ""}
+            </h1> */}
+             <label className="text-black text-sm font-normal capitalize">
+            Upload Files<span className="text-[#e60000]">*</span>
+          </label>
+          <SimpleFileUpload files={files} setFiles={setFiles} onNext={handleNext} buttonText={'Upload Here'} />
+          </div>
+                        
+               
 
                 <div className="flex flex-col gap-2">
                     <label className="lable">
@@ -399,8 +452,8 @@ export default function LogisticActualBudget({...Props}:Props) {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {Props &&
-                            Props.travel_vendors?.map((data, index) => {
+                        {TravelVendorData &&
+                            TravelVendorData?.map((data, index) => {
                                 return (
                                     <TableRow key={index} className="text-black text-center text-nowrap lg:text-[16px] sm:text-[10px] text-[10px] font-light leading-normal font-['Poppins'] border-b border-slate-200">
                                         <TableCell>{data.vendor_type}</TableCell>
@@ -417,7 +470,7 @@ export default function LogisticActualBudget({...Props}:Props) {
                                         </TableCell>
                                         <TableCell>{data.remarks}</TableCell>
                                         <TableCell className="sticky right-0 bg-white flex lg:space-x-7 sm:space-x-5 space-x-2 border-l justify-end mr-4 border-slate-200">
-                                            <Image src={"/svg/delete.svg"} width={15} height={20} alt="delete-svg" className="mr-1 lg:w-[15px] lg:h-[20px] sm:w-[12px] sm:h-[17px] w-[8px] h-[13px] cursor-pointer" />
+                                            <Image onClick={()=>deleteData(data.name)} src={"/svg/delete.svg"} width={15} height={20} alt="delete-svg" className="mr-1 lg:w-[15px] lg:h-[20px] sm:w-[12px] sm:h-[17px] w-[8px] h-[13px] cursor-pointer" />
                                         </TableCell>
                                     </TableRow>
                                 );
