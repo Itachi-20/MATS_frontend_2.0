@@ -126,7 +126,6 @@ const form4 = ({ ...Props }: Props) => {
     const filelists = Array.from(fileList || []);
     setFileList(filelists);
   };
-
   console.log(file, "this is files");
   return (
     // </div>
