@@ -397,13 +397,10 @@ const table = ({ ...Props }: Props) => {
 
             <TableHead
               className={
-                "sticky right-0 z-50 bg-[#E0E9FF] border-l-2 border-gray-450 shadow-2xl rounded-r-2xl"
+                "sticky right-0 z-50 bg-[#E0E9FF] border-l-2 border-gray-450 shadow-2xl rounded-r-2xl  text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
               }
-              // className={
-              //   "sticky right-0 bg-[white] z-10 border-l-2 border-red-400 shadow-2xl"
-              // }
             >
-              
+              View
             </TableHead>
             
 

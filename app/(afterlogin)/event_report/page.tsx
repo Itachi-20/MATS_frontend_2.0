@@ -9,7 +9,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import Table from "@/app/(afterlogin)/event_summary_report/table";
+import Table from "@/app/(afterlogin)/event_report/table";
 import { useState } from 'react';
 import Addvendor from '@/components/add_vendor';
 import Adddocument from '@/components/add_document';

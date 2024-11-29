@@ -273,22 +273,22 @@ const page = () => {
             </Button>
           </div>
         </div>
-        <Table isViewVendor={isViewVendor} vendorData={vendorData} vendorInfo={setParticularVendorData} isViewDocument={isViewDocument} />
+        <Table  vendorData={vendorData}  isViewDocument={isViewDocument} />
       </div>
-      {
+      {/* {
         viewVendor &&
         <Viewvendor isViewVendor={isViewVendor} isAddDocument={isAddDocument} isViewDocument={isViewDocument} vendorInfo={particularVendorData} />
-      }
-      {
+      } */}
+      {/* {
         addDocument &&
         <Adddocument isAddDocument={isAddDocument} onSubmit={handleAddDocumentSubmit} />
-      }
-      {
+      } */}
+      {/* {
         viewDocument &&
         <ViewDocument setClose={isViewDocument}  />
-      }
+      } */}
 
-      {
+      {/* {
         addVendor &&
           <Addvendor
             isAddVendor={isAddVendor}
@@ -302,7 +302,7 @@ const page = () => {
           />
    
 
-      }
+      } */}
     </>
   )
 }
