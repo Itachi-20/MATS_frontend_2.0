@@ -155,7 +155,7 @@ const table = ({ ...Props }: Props) => {
               Props?.expensetabledata?.map((data, index) => {
                 return (
                   <TableRow key={index} className="text-center text-nowrap text-black">
-                    <TableCell>{data.event_request_number}</TableCell>
+                    <TableCell>{data.parent}</TableCell>
                     <TableCell>{data.vendor_type}</TableCell>
                     {/* <TableCell>{data.vendor_code}</TableCell> */}
                     <TableCell>{data.vendor_name}</TableCell>

@@ -65,7 +65,7 @@ const form4 = ({ ...Props }: Props) => {
       return;
     }
     formdata.append("docname", refno as string);
-    formdata.append("activity_type", activityType);
+    formdata.append("activity_type", "Pre Activity");
     formdata.append("document_type", documentType);
     try {
       const response = await fetch(`/api/training_and_education/fileUpload`, {
@@ -78,8 +78,7 @@ const form4 = ({ ...Props }: Props) => {
       });
 
       if (response.ok) {
-        const data = await response.json();
-        router.refresh();
+        PreviewData();
       } else {
         console.log("Login failed");
       }
@@ -119,13 +118,14 @@ const form4 = ({ ...Props }: Props) => {
   useEffect(() => {
     PreviewData();
   }, []);
+  useEffect(()=>{
+  },[preview_data])
 
   const handleNext = (fileList: FileList | null) => {
     setUploadedFiles(fileList);
     const filelists = Array.from(fileList || []);
     setFileList(filelists);
   };
-
   console.log(file, "this is files");
   return (
     // </div>
@@ -138,9 +138,9 @@ const form4 = ({ ...Props }: Props) => {
           <label className="lable">
             Document Type <span className="text-[#e60000]">*</span>
           </label>
-          <Select onValueChange={(value) => handleActivityTypeChange(value)}>
+          <Select onValueChange={(value) => handleActivityTypeChange(value)} disabled>
             <SelectTrigger className="dropdown">
-              <SelectValue placeholder="Select" />
+              <SelectValue placeholder="Pre Activity" />
             </SelectTrigger>
             <SelectContent>
               {Props.activityDropdown &&
@@ -166,7 +166,7 @@ const form4 = ({ ...Props }: Props) => {
               {Props.activityDropdown &&
                 Props.activityDropdown.document
                   .filter((item, index) => {
-                    if (item.activity_type == activityType) {
+                    if (item.activity_type == "Pre Activity") {
                       return item;
                     }
                   })
@@ -202,7 +202,7 @@ const form4 = ({ ...Props }: Props) => {
           </Button>
         </div>
       </div>
-      <Documents eventData={preview_data} PageName={""} />
+      <Documents eventData={preview_data} PageName={""} fetchFile = {PreviewData} />
       <div className="flex justify-end pt-5 gap-4">
         <Button className="bg-white text-black border text-md font-normal">
           {" "}

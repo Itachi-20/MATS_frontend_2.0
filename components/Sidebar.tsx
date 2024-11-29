@@ -3,12 +3,31 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useCookies } from 'next-client-cookies';
+
+type modules = {
+  module:string,
+  route:string
+}
+type reports = {
+  name:string,
+  route:string
+}
+
+type settings = {
+  name:string,
+  route:string
+}
+
+type sidebarItems = {
+  modules:modules[],
+  reports:reports[],
+  settings:settings[]
+}
+
+
 const Sidebar = () => {
-  const router = useRouter();   
-  const cookie = useCookies();
-  const role = cookie.get("role");
-  let requestorModuleItems = {};
+  const router = useRouter();
+  let requestorModuleItems:sidebarItems;
   requestorModuleItems = {
     modules:[{
       module:"Training & Education",
@@ -147,7 +166,7 @@ const Sidebar = () => {
               {requestorModuleItems &&
                 requestorModuleItems.modules?.map((data,index) => { 
                   return (
-                    <div key={index} className="child py-4 px-5 rounded-bl-xl text-black  border-l border-black ml-4 relative text-nowrap" onClick={()=>router.push(data.route + "?forms=1")}>
+                    <div key={index} className="child py-4 px-5 rounded-bl-xl text-black  border-l border-black ml-4 relative text-nowrap" onClick={()=>router.replace(data.route + "?forms=1")}>
                       <div className="absolute -bottom-5 hover:bg-white rounded-xl text-black hover:text-[#4430bf] text-[12px] px-1 py-3 cursor-pointer">
                         {data.module}
                       </div>

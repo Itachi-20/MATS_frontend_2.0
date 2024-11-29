@@ -10,6 +10,7 @@ import SponsorshipDetails from "@/components/sponsorship_details";
 import OtherDetails from "@/components/other_details";
 import { usePathname } from 'next/navigation'
 import { useRouter } from 'next/navigation';
+import Comment_box from "@/components/approvalCommentBox/Comment_box";  
 
 type EventEntry = {
   name: string;
@@ -184,12 +185,14 @@ const Preview_Form = ({...Props}:Props) => {
   const [dialog,setDialog] = useState(false);
   const [addVendor,setAddVendor] = useState(false);
   const [preview_data, setPreviewData] = useState<EventEntry | null >(null);
+  const [comment,setComment] = useState<string>();
+  const [isCommentbox,setIsCommentbox] = useState<boolean>();
   const [refNo, setRefNo] = useState<string | null>(localStorage.getItem("refno") ? localStorage.getItem("refno") : "");
   const isAddVendor = ()=>{
     setAddVendor(prev => !prev)
   }
   const handleDialog = ()=>{
-    setDialog(prev=> !prev);
+    setIsCommentbox(prev=> !prev);
   }
 
   const [isChecked, setIsChecked] = useState<boolean>(false);
@@ -228,8 +231,7 @@ const Preview_Form = ({...Props}:Props) => {
   console.log("preview_data", preview_data, refNo)
 
 
-  const handleFinalSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  const handleFinalSubmit = async () => {
     try {
       const response = await fetch(
         "/api/finalSubmit",
@@ -240,7 +242,8 @@ const Preview_Form = ({...Props}:Props) => {
           },
           credentials: 'include',
           body: JSON.stringify({
-            name: refNo
+            name: refNo,
+            comment:comment
           })
         }
       );
@@ -258,6 +261,11 @@ const Preview_Form = ({...Props}:Props) => {
       console.error("Error during Submission:", error);
     }
   };
+
+
+  const handleComment = (value:string)=>{
+    setComment(value)
+  }
   return (
       <>
         <div className="md:px-7 md:pb-7 md:pt-4 w-full relative z-20">
@@ -310,18 +318,21 @@ const Preview_Form = ({...Props}:Props) => {
               <Button className="bg-white text-black border text-md font-normal">
                 Back
               </Button>
-              <Button className={`bg-[#4430bf] text-white  font-normal border`} disabled={!isChecked} onClick={(e: React.MouseEvent<HTMLButtonElement>) => handleFinalSubmit(e)}>
+              <Button className={`bg-[#4430bf] text-white  font-normal border`} disabled={!isChecked} onClick={()=>handleDialog()}>
                 Submit
               </Button>
             </div>
         </div>
         {
-
-          dialog && 
-          <Add_vendor
-          isAddVendor={isAddVendor}
+            isCommentbox &&
+            <div className=" absolute z-50 flex pt-10 items-end justify-center bg-black bg-opacity-50 w-full h-full inset-0 pb-40">
+          <Comment_box 
+          handleClose={handleDialog}
+          handleComment={handleComment}
+          Submitbutton = {handleFinalSubmit}
           />
-        }
+          </div>
+          }
       </>
   )
 }

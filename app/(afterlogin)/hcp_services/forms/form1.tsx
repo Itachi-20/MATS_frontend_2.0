@@ -181,9 +181,9 @@ const Form1 = ({ ...Props }: Props) => {
               localStorage.setItem("refno", data.message);
               setRefNo(data.message);
       
-              setTimeout(() => {
+              
                 router.push(`/hcp_services?forms=2`);
-              }, 1000)
+              
             } else {
               console.log("submission failed");
             }

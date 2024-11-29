@@ -1,3 +1,4 @@
+'use client'
 import React from 'react'
 import { Input } from "@/components/ui/input";
 import {
@@ -17,7 +18,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "../../context/AuthContext";
 const details = () => {
+  const { role, name,userid, clearAuthData } = useAuth();
   return (
     <div className="px-7 pb-7 pt-4 w-full relative z-20 flex flex-col justify-stretch">
           <div className="flex justify-between pb-6">
