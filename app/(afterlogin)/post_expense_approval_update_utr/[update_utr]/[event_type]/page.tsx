@@ -7,7 +7,10 @@ import { Button } from '@/components/ui/button'
 import Comment_box from '@/components/Comment_box'
 import { useParams } from 'next/navigation'
 import { useRouter } from 'next/navigation';
-import { Table } from 'lucide-react'
+import { Table } from 'lucide-react';
+import ViewDoc from "@/components/viewDocument";
+import SuccessProp from '@/components/success_prop';
+
 
 type File = {
     name: string;
@@ -225,11 +228,19 @@ const page = () => {
     const [expensedata, setExpenseData] = useState<EventData>();
     // const [eventCostCenter, setEventCostCenter] =
     // useState<eventCostCenter | null>(null);
+    const [successprop, setSuccessprop] = useState(false);
     const [formdata, setFormData] = useState<FormData>();
+    const [fileData, setFileData] = useState<File[]>();
     
     const router = useRouter();
     const refno = useParams();
     console.log(refno, 'refno')
+
+    const handleSuccessProp = async()=>{
+        setOpen(false);
+        setSuccessprop(!successprop);
+        setTimeout(()=>{router.push('/post_expense_approval/')},1000);
+    }
 
     const eventDataApi = async () => {
         console.log("inside event Data")
@@ -317,10 +328,11 @@ const page = () => {
     };
     
     const handleSubmit = async () => {
+        console.log("Hello")
         const updatedFormData = {
             ...formdata
         };
-      
+        setIsSubmitting(true);
         try {
           const response = await fetch(
             "/api/postExpenseApproval/finalSubmissionUpdateUTR",
@@ -333,17 +345,11 @@ const page = () => {
               body: JSON.stringify(updatedFormData)
             }
           );
-          setIsSubmitting(true);
           if (response.ok) {
-          setIsSubmitting(false);
-
+            setIsSubmitting(false);
+            handleSuccessProp();
             const data = await response.json();
             console.log(data, "response data");
-            // localStorage.setItem("refno", data.message);
-            
-      
-            
-       
           } else {
           setIsSubmitting(false);
 
@@ -360,6 +366,11 @@ const page = () => {
         setFormData(prev => ({ ...prev, [name]: value }) as FormData);
       }
       
+      const handleSetFileData = async (file: any) => {
+        // console.log(file, 'file in setfile ')
+        setFileData(file);
+        setOpen(true)
+    };
       
       const handleSelectChange = (value: string, name: string) => {
         setFormData((prev) => ({ ...prev, [name]: value }) as FormData);
@@ -411,6 +422,8 @@ const page = () => {
                 <div className='border bg-white h-full p-4 rounded-[18px]'>
                     <TableComponent
                         expensetabledata={expensedata?.actual_vendors}
+                        handleSetFileData={handleSetFileData}
+
                     />
 
                     <Fields
@@ -424,14 +437,19 @@ const page = () => {
                     />
                 </div>
 
-                <div className='flex justify-end gap-2 pt-8'>
-                    {/* <Button className='bg-[#5DBE74] px-6' onClick={()=>handleOpen('Approved')}>Submit</Button> */}
-                    <Button className='bg-[#5DBE74] px-6 ' onClick={()=>handleSubmit}>{isSubmitting ?"loading...":"Submit"}</Button>
-                    {/* <Button className='bg-[#4430BF] px-6' onClick={()=>handleOpen('Send Back')}>Send Back</Button>
-                    <Button className='bg-[#FF5757] px-6'onClick={()=>handleOpen('Rejected')}>Reject</Button> */}
+                {
+                    expensedata?.actual_vendors[0]?.status != "Post Expense Closed" &&
+                    <div className='flex justify-end gap-2 pt-8'>
+                        {/* <Button className='bg-[#5DBE74] px-6' onClick={()=>handleOpen('Approved')}>Submit</Button> */}
+                        <Button className='bg-[#5DBE74] px-6 text-white' onClick={()=>handleSubmit()}>{isSubmitting ? 'loading...':'Submit'}</Button>
+                        {/* <Button className='bg-[#4430BF] px-6' onClick={()=>handleOpen('Send Back')}>Send Back</Button>
+                        <Button className='bg-[#FF5757] px-6'onClick={()=>handleOpen('Rejected')}>Reject</Button> */}
 
-                </div>
+                    </div>
+                }
             </div>
+            {open &&<ViewDoc setClose={setOpen} data={fileData}/>}
+            {successprop && <SuccessProp title={"Post Expense Approval"}/>}
             {/* {opencommentbox && <Comment_box handleClose={handleOpen} handleSubmit={handleSubmit} />} */}
         </>
     )
