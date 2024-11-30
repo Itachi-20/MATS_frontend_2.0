@@ -65,8 +65,9 @@ type EventEntry = {
   logistics: Logistics[];
   documents: ActivityDocument[];
   advance_approvers: any[]; // Empty array, can be customized later
-  city:string
-  reporting_head:string
+  city: string
+  reporting_head: string
+  is_approved: boolean;
 }
 
 type Compensation = {
@@ -155,7 +156,7 @@ type Logistics = {
 type File = {
   url: string;
   name: string;
-  file_name:string
+  file_name: string
 };
 
 type DocumentDetails = {
@@ -172,43 +173,43 @@ type ActivityDocument = {
 
 const Index = () => {
   const router = useRouter();
-  const [eventData,setEventData] = useState<EventEntry>();
-  const [isCommentbox,setIsCommentbox] = useState<boolean>();
-  const [comment,setComment] = useState<string>();
-  const [type,setType] = useState<string>();
+  const [eventData, setEventData] = useState<EventEntry>();
+  const [isCommentbox, setIsCommentbox] = useState<boolean>();
+  const [comment, setComment] = useState<string>();
+  const [type, setType] = useState<string>();
   const param = useSearchParams()
 
-  const handleApprove = async()=>{
+  const handleApprove = async () => {
     const refno = param.get("refno");
-      try {
-        const response = await fetch(
-          "/api/eventRequestApprove/Approve",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            credentials:'include',
-            body:JSON.stringify({
-              name:refno,
-              "remark": comment,
-              "action":type
-            })
-          }
-        );
-  
-        
-        if (response.ok) {
-          router.push("/event_approver_list")
-        } else {
-          console.log("Login failed");
+    try {
+      const response = await fetch(
+        "/api/eventRequestApprove/Approve",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: 'include',
+          body: JSON.stringify({
+            name: refno,
+            "remark": comment,
+            "action": type
+          })
         }
-      } catch (error) {
-        console.error("Error during login:", error);
+      );
+
+
+      if (response.ok) {
+        router.push("/event_approver_list")
+      } else {
+        console.log("Login failed");
       }
+    } catch (error) {
+      console.error("Error during login:", error);
+    }
   };
 
-  const eventDataApi = async()=>{
+  const eventDataApi = async () => {
     console.log("inside event Data")
     try {
       const response = await fetch(
@@ -218,9 +219,9 @@ const Index = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          credentials:'include',
-          body:JSON.stringify({
-            name:param.get("refno")
+          credentials: 'include',
+          body: JSON.stringify({
+            name: param.get("refno")
           })
         }
       );
@@ -228,96 +229,101 @@ const Index = () => {
       if (response.ok) {
         const data = await response.json();
         setEventData(data.data);
-        
-        
+
+
       } else {
         console.log("Login failed");
       }
     } catch (error) {
       console.error("Error during login:", error);
     }
-};
+  };
 
-const handleDialog = ()=>{
-  setIsCommentbox((prev)=>!prev);
-}
+  const handleDialog = () => {
+    setIsCommentbox((prev) => !prev);
+  }
 
-const handleComment = (value:string)=>{
-  setComment(value)
-}
+  const handleComment = (value: string) => {
+    setComment(value)
+  }
 
-useEffect(()=>{
-  eventDataApi();
-},[])
-
+  useEffect(() => {
+    eventDataApi();
+  }, [])
+  console.log('eventData---------------------------------------', eventData?.is_approved)
   return (
 
 
-        <div className={`md:px-7 md:pb-7 md:pt-4 w-full relative z-20 text-black`}>
-          <div className="pb-5">
-            <div className="flex justify-between pb-4">
-            {/* <h1 className=" md:text-[30px] md:font-medium capitalize md:pb-4"> Training and Education</h1> */}
-            <div></div>
-            <div className="flex gap-4 bg-white">
+    <div className={`md:px-7 md:pb-7 md:pt-4 w-full relative z-20 text-black`}>
+      <div className="pb-5">
+        <div className="flex justify-between pb-4">
+          {/* <h1 className=" md:text-[30px] md:font-medium capitalize md:pb-4"> Training and Education</h1> */}
+          <div></div>
+          <div className="flex gap-4 bg-white">
             <Button className="border border-[#4430bf] text-[#4430bf] px-6">Audit Trail</Button>
-              <Button className="bg-white text-black border px-8 hover:bg-white">Back</Button>
+            <Button className="bg-white text-black border px-8 hover:bg-white">Back</Button>
+          </div>
+        </div>
+        <div className="flex border rounded-xl justify-between p-3 bg-white gap-4">
+          <div className="grid grid-cols-2 w-full gap-4">
+            <div className="col-span-1">
+              <h1 className="bg-[#ecf2ff] px-2 rounded-xl text-center">Request Number</h1>
+              <h1 className="text-center">{eventData && eventData.name}</h1>
             </div>
-              </div>
-            <div className="flex border rounded-xl justify-between p-3 bg-white gap-4">
-              <div className="grid grid-cols-2 w-full gap-4">
-              <div className="col-span-1">
-                <h1 className="bg-[#ecf2ff] px-2 rounded-xl text-center">Request Number</h1>
-                <h1 className="text-center">{eventData && eventData.name}</h1>
-                </div>
-              <div className="col-span-1">
-                <h1 className="bg-[#ecf2ff] px-2 rounded-xl text-center">Request Date</h1>
-                <h1 className="text-center">{eventData?.modified.substring(0,10)}</h1>
-                </div>
-              </div>
-              <div className="flex gap-4 text-white items-center">
-              {/* <Button className="bg-[#5dbe74] hover:bg-[#5dbe74] px-6" onClick={()=>handleApprove("Approved")}>Approve</Button>
-              <Button className="bg-[#ff5757] hover:bg-[#ff5757] px-6" onClick={()=>handleApprove("Rejected")}>Reject</Button>
-              <Button className="bg-[#4430bf] hover:bg-[#4430bf] px-6" onClick={()=>handleApprove("Send Back")}>Send Back</Button> */}
-              <Button className="bg-[#5dbe74] hover:bg-[#5dbe74] px-6" onClick={()=>{handleDialog();setType("Approved")}}>Approve</Button>
-              <Button className="bg-[#ff5757] hover:bg-[#ff5757] px-6" onClick={()=>{handleDialog();setType("Rejected")}}>Reject</Button>
-              <Button className="bg-[#4430bf] hover:bg-[#4430bf] px-6" onClick={()=>{handleDialog();setType("Send Back")}}>Send Back</Button>
-              </div>
+            <div className="col-span-1">
+              <h1 className="bg-[#ecf2ff] px-2 rounded-xl text-center">Request Date</h1>
+              <h1 className="text-center">{eventData?.modified.substring(0, 10)}</h1>
             </div>
           </div>
-        <BasicDetails
+          <div className="flex gap-4 text-white items-center">
+            {/* <Button className="bg-[#5dbe74] hover:bg-[#5dbe74] px-6" onClick={()=>handleApprove("Approved")}>Approve</Button>
+              <Button className="bg-[#ff5757] hover:bg-[#ff5757] px-6" onClick={()=>handleApprove("Rejected")}>Reject</Button>
+              <Button className="bg-[#4430bf] hover:bg-[#4430bf] px-6" onClick={()=>handleApprove("Send Back")}>Send Back</Button> */}
+            {
+              !(eventData && eventData?.is_approved) &&
+              <>
+                <Button className="bg-[#5dbe74] hover:bg-[#5dbe74] px-6" onClick={() => { handleDialog(); setType("Approved") }}>Approve</Button>
+                <Button className="bg-[#ff5757] hover:bg-[#ff5757] px-6" onClick={() => { handleDialog(); setType("Rejected") }}>Reject</Button>
+                <Button className="bg-[#4430bf] hover:bg-[#4430bf] px-6" onClick={() => { handleDialog(); setType("Send Back") }}>Send Back</Button>
+              </>
+            }
+          </div>
+        </div>
+      </div>
+      <BasicDetails
         pathname=""
-        eventData = {eventData}
-        />
+        eventData={eventData}
+      />
 
-        <EventDetails
+      <EventDetails
         pathname=""
-        eventData = {eventData}
-        />
+        eventData={eventData}
+      />
 
-        <VendorDetails
-        eventData = {eventData}
-        />
+      <VendorDetails
+        eventData={eventData}
+      />
 
-        <TotalExpense
-        eventData = {eventData}
-        />
-            
-        <Documents
-        eventData = {eventData}
+      <TotalExpense
+        eventData={eventData}
+      />
+
+      <Documents
+        eventData={eventData}
         PageName=""
-        />
-        {
-          isCommentbox &&
-          <div className="absolute z-50 flex pt-10 items-start justify-center bg-black bg-opacity-50 w-full h-full inset-0 pb-40">
-        <Comment_box 
-        handleClose={handleDialog}
-        handleComment={handleComment}
-        Submitbutton = {handleApprove}
-        />
+      />
+      {
+        isCommentbox &&
+        <div className="absolute z-50 flex pt-10 items-start justify-center bg-black bg-opacity-50 w-full h-full inset-0 pb-40">
+          <Comment_box
+            handleClose={handleDialog}
+            handleComment={handleComment}
+            Submitbutton={handleApprove}
+          />
         </div>
-        }
-        </div>
-    
+      }
+    </div>
+
   )
 }
 
