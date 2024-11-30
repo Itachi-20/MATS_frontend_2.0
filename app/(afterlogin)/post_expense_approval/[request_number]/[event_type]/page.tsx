@@ -434,13 +434,13 @@ const page = () => {
                     {
                         role == "Event%20Finance" &&
                         <Fields
-                            dropdown={dropdown}
+                            dropdown={dropdown as DropdownData}
                             handlefieldChange={handlefieldChange}
                             handleSelectChange={handleSelectChange}
                             // handleApproveRejectSendBack={handleApproveRejectSendBack}
                             view={view}   
-                            formdata={formdata}
-                            expenseData={expensedata} 
+                            formdata={formdata as FormData}
+                            expenseData={expensedata as EventData} 
                         />
                     }
                 </div>

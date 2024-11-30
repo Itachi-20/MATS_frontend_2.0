@@ -77,7 +77,7 @@ import {
     };
 
   type Props = {
-    expensetabledata: ActualVendor[] | undefined; // Props includes the tableData field
+    expensetabledata: ActualVendor[]; // Props includes the tableData field
     handleSetFileData: (value:File[])=>void
   };
 

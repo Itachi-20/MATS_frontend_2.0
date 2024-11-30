@@ -205,7 +205,6 @@ const Fields = ({ ...Props }: Props) => {
   
 
   const handleStateChange = async (value: string) => {
-    // console.log("++++++++", value)
     setFiltercity(Props.dropdown?.city.filter(item=>item.state == value));
     
   };
@@ -239,7 +238,7 @@ const Fields = ({ ...Props }: Props) => {
   //   handleCostCenter(Props?.formdata?.cost_center);
   // },[Props?.formdata?.cost_center]);
   useEffect(()=>{
-    handleStateChange("Gujarat");
+    handleStateChange(Props?.formdata?.state);
   },[])
  
   console.log("Print", Props.expenseData);
