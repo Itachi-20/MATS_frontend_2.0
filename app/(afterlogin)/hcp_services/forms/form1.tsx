@@ -11,7 +11,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useRouter } from "next/navigation";
-import {handleBudgetChange} from '../utility'
 import {Previewdata} from '@/app/(afterlogin)/hcp_services/page'
 
 type dropdownData = {
@@ -221,6 +220,38 @@ const Form1 = ({ ...Props }: Props) => {
     }
   };
 
+  const handleBudgetChange = async (value: string) => {
+    try {
+      const response = await fetch(
+        "/api/training_and_education/subtypeDropdown",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            budget: value,
+          }),
+        }
+      );
+
+      const data = await response.json();
+      setSubtypeActivity(data.data);
+      if (value == "National") {
+        setSubtypeActivityVisible(true);
+      } else {
+        setSubtypeActivityVisible(false);
+      }
+
+      if (response.ok) {
+      } else {
+        console.log("Login failed");
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
+    }
+  };
+
   useEffect(() => {
        setFormData({ ...formdata, name: refNo })
      }, [refNo])
@@ -259,7 +290,7 @@ console.log(formdata,"this is form data")
           <label className="lable">
             Business Unit<span className="text-[#e60000]">*</span>
           </label>
-          <Select onValueChange={(value)=>{handleBusinessUnitChange(value);handleSelectChange(value,"business_unit")}}
+          <Select onValueChange={(value)=>{handleBusinessUnitChange(value);handleSelectChange(value,"business_unit");setBusinessUnit(value)}}
             defaultValue={Props.previewData?.business_unit?Props.previewData.business_unit:""}
             >
             <SelectTrigger className="dropdown">
@@ -331,11 +362,7 @@ console.log(formdata,"this is form data")
           <label className="lable">
             Budget<span className="text-[#e60000]">*</span>
           </label>
-          <Select onValueChange={async(value)=>{
-            const data:any = await handleBudgetChange(value);
-            setSubtypeActivity(data.subtypeActivity);
-            setSubtypeActivityVisible(data.SubtypeActivityVisible);
-            handleSelectChange(value,"division_category")}}
+          <Select onValueChange={(value)=>{handleBudgetChange(value),handleSelectChange(value,"division_category"); setBudget(value)}}
               defaultValue={Props.previewData?.division_category?Props.previewData.division_category:""}>
             <SelectTrigger className="dropdown">
               <SelectValue placeholder="--Selected--" />
