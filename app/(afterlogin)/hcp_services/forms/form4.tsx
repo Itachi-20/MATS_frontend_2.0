@@ -196,6 +196,7 @@ console.log(formdata,"this is form data")
           </label>
           <Select
           onValueChange={(value)=>handleActivityTypeChange(value)}
+          disabled
             >
               <SelectTrigger className="dropdown">
                 <SelectValue placeholder="Pre Activity" />

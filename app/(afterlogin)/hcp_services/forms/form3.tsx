@@ -187,6 +187,8 @@ console.log(formdata,"this is form data")
       )
       setCompansationVendorType('');
       setCompansationAmount(0);
+      setCompansationVendorName('');
+      setCompansation_is_GST(0);
     }
   }
 
@@ -316,6 +318,7 @@ console.log(formdata,"this is form data")
           </label>
           <Select
           onValueChange={(value:string)=>{setLogisticVendorType(value)}}
+          value={logisticVendorType?logisticVendorType:""}
           >
             <SelectTrigger className="dropdown">
               <SelectValue placeholder="Select" />
@@ -343,6 +346,7 @@ console.log(formdata,"this is form data")
             placeholder="Type Here"
             type='number'
             onChange={handleAmountChange}
+            value={logisticAmount?logisticAmount:0}
           ></Input>
         </div>
         <div className="flex justify-end pt-7">
@@ -362,6 +366,7 @@ console.log(formdata,"this is form data")
         </label>
         <Select 
         onValueChange={(value)=>{handleVendorTypeChangeApi(value); setCompansationVendorType(value)}}
+        value={compansationVendorType?compansationVendorType:""}
         >
           <SelectTrigger className="dropdown">
             <SelectValue placeholder="Select" />
@@ -381,6 +386,7 @@ console.log(formdata,"this is form data")
         </label>
         <Select
         onValueChange={(value:string)=>{setCompansationVendorName(value)}}
+        value={compansationVendorName?compansationVendorName:""}
         >
           <SelectTrigger className="dropdown">
             <SelectValue placeholder="Select" />
@@ -405,6 +411,7 @@ console.log(formdata,"this is form data")
           placeholder="Type Here"
           type='number'
           onChange={(e)=>handleCompensationChange(e)}
+          value={compansationAmount?compansationAmount:""}
         ></Input>
       </div>
       <div className="flex flex-col gap-5 items-center">
@@ -414,6 +421,7 @@ console.log(formdata,"this is form data")
         <Input className='text-black w-5 h-5'
         type='checkbox'
         onChange={(e)=>handle_is_GST(e)}
+        value={compansation_is_GST?compansation_is_GST:0}
         />
       </div>
     </div>
