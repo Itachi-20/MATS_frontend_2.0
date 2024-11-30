@@ -189,6 +189,24 @@ console.log(formdata,"this is form data")
       setCompansationAmount(0);
     }
   }
+
+  const handleCompensationDelete = (indexToDelete: number) => {
+    setCompansationBudget((prevRows) => {
+      const updatedRecords = prevRows?.filter((_, index) => index !== indexToDelete) || [];
+      setFormData((prev: any) => ({ ...prev, compensation: updatedRecords }));
+      return updatedRecords;
+    });
+  };
+
+
+  const handleLogisticDelete = (indexToDelete: number) => {
+    setLogisticBudget((prevRows) => {
+      const updatedRecords = prevRows?.filter((_, index) => index !== indexToDelete) || [];
+      setFormData((prev: any) => ({ ...prev, logistics: updatedRecords }));
+      return updatedRecords;
+    });
+  };
+
   useEffect(()=>{
     totalLogisticAmountCalculation();
   },[logisticsBudget])
@@ -463,7 +481,7 @@ console.log(formdata,"this is form data")
               <><TableCell>{item.vendor_type}</TableCell><TableCell>{item.est_amount}</TableCell>
               <TableCell>
                 <div className="flex justify-around">
-                  <div className="hover:cursor-pointer">
+                  <div onClick={()=>{handleLogisticDelete(index)}} className="hover:cursor-pointer">
                     <svg
                       width="18"
                       height="20"
@@ -546,7 +564,7 @@ console.log(formdata,"this is form data")
               </TableCell>
               <TableCell>
                 <div className="flex justify-around">
-                  <div className="hover:cursor-pointer">
+                  <div className="hover:cursor-pointer" onClick={()=>handleCompensationDelete(index)}>
                     <svg
                       width="18"
                       height="20"
