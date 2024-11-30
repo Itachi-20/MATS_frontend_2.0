@@ -93,7 +93,7 @@ const form4 = ({...Props}:Props) => {
   
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    router.push(`/hcp_services?forms=5&refno=${Props.refno}`)
+    router.replace(`/hcp_services?forms=5&refno=${Props.refno}`)
   };
 
   const handleNext = (fileList: FileList | null) => {

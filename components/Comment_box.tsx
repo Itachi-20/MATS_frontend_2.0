@@ -2,11 +2,13 @@ import React from "react";
 import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
 import { useState } from "react";
+import { useAuth } from "../app/context/AuthContext";
 type props = {
   handleClose: (value: string) => void;
   handleSubmit: (value: string) => void
 }
 const Comment_box = ({ handleClose, handleSubmit }: props) => {
+  const {role,userid,name} = useAuth();
   const [remarks, setRemarks] = useState<string>("");
   return (
     <div className="absolute z-50 flex inset-0 items-center justify-center bg-black bg-opacity-50">
@@ -23,7 +25,7 @@ const Comment_box = ({ handleClose, handleSubmit }: props) => {
             Back
           </Button>
           <Button className="bg-[#5DBE74] text-white text-md font-normal border px-8 hover:bg-[#5DBE74]" onClick={() => handleSubmit(remarks)}>
-            Submit
+            {role == "Event Approver"?"Approve":"Submit"}
           </Button>
         </div>
 
