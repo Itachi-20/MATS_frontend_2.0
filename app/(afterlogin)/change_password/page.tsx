@@ -80,14 +80,16 @@ const handlePasswordChange = async ()=>{
         body:JSON.stringify(formdata),
         credentials:"include"
     })
+    console.log("response",response)
     if(response.ok){
       toast.success(`Password changed Successfully`);
     }
     if (!response.ok) {
-      if (response.status === 401) {
-        console.error('Unauthorized access.');
-        toast.error(response.statusText);
-      } 
+      toast.error(response.statusText);
+      //  if (response.status === 401) {
+      //   console.error('Unauthorized access.');
+      //   toast.error(response.statusText);
+      // }
     }
   } catch (error) {
     console.error('Error updating password:', error);

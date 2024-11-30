@@ -8,7 +8,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {Table, TableBody,TableCell,TableHead,TableHeader,TableRow,} from "@/components/ui/table";
 import {Select,SelectContent,SelectItem,SelectTrigger,SelectValue,} from "@/components/ui/select";
-import Link from "next/link";
 type EventTable = {
   name: string;
   event_name: string;
@@ -39,13 +38,28 @@ type EventTable = {
 export default function EventList () {
 
   const router = useRouter();
-  const handleClick = (refno:string) => {
-
-    //  yadi new tab mein open kerna hai tab isko use karenge 
-    // const url = "/event_list/${id}"
-    // window.open(url, '_blank')
-    // agar same tab mein open kerna hai  to isko use krenge 
-    router.push(`/event_list/${refno}`)
+  const handleClick = (refno:string, status:string,eventType:string) => {
+    console.log(eventType,"function event type")
+    if(status == "Draft"){
+      localStorage.setItem("refno",refno);
+      if(eventType == "Training and Education"){
+        router.push(`/training_and_education?forms=1&refno=${refno}`)
+      }else if(eventType == "Awareness Program"){
+        router.push(`/awareness_program?forms=1&refno=${refno}`)
+      }else if(eventType == "HCP Services"){
+        router.push(`/hcp_services?forms=1&refno=${refno}`)
+      }else if(eventType == "Monetary Grant"){
+        router.push(`/monetary_grant?forms=1&refno=${refno}`)
+      }else if(eventType == "Non Monetary Grant"){
+        router.push(`/non_monetary_grant?forms=1&refno=${refno}`)
+      }else if(eventType == "Patient Support"){
+        router.push(`/patient_support?forms=1&refno=${refno}`)
+      }else if(eventType == "Sponsorship Support"){
+        router.push(`/sponsorship_support?forms=1&refno=${refno}`)
+      }
+    }else{
+      router.push(`/event_list/${refno}`)
+    }
   }
 
   const [tableData,setTableData] = useState<EventTable[]>()
@@ -79,7 +93,6 @@ export default function EventList () {
   fetchTableData();
   },[])
 
-  console.log(tableData,"this is state data")
 
   return (
         <div className="p-7 w-full relative z-20 text-black">
@@ -197,7 +210,7 @@ export default function EventList () {
                       "text-center  text-[#625d5d] lg:text-[15px] sm:text-[12px] text-[11px] font-normal font-['Montserrat']"
                     }
                   >
-                    Post Activity Status
+                    Status
                   </TableHead>
                 
                   <TableHead
@@ -236,9 +249,9 @@ export default function EventList () {
                           </TableCell>
                           <TableCell>{data.occurrence_no}</TableCell>
                           <TableCell>{data.status}</TableCell>
-                          <TableCell></TableCell>
-                          <TableCell className="sticky right-0 bg-[white] z-50 flex space-x-8 border-l border-slate-200 justify-center items-center mt-4 hover:opacity-60"> 
-                              <Image src={"/svg/view.svg"} width={17} height={20} alt="view-svg" className="cursor-pointer" onClick={()=>handleClick(data.name)} />                        
+                        <TableCell>{data.brief_status}</TableCell>
+                          <TableCell className="sticky right-0 bg-[white] z-30 flex space-x-8 border-l border-slate-200 justify-center items-center mt-4"> 
+                              <Image src={"/svg/view.svg"} width={17} height={20} alt="view-svg" className="cursor-pointer" onClick={()=>{handleClick(data.name,data.status,data.event_type)}} />                        
                           </TableCell>
                           
                        </TableRow>

@@ -74,7 +74,7 @@ type dropdown = {
 }
 
 
-export default async function BudgetRequestDetail({...Props})  {
+export default async function BudgetRequestDetail({...Props}:any)  {
   const {request_no} = await Props.params;
   const cookie = await cookies();
   const role = cookie.get("role")?.value;

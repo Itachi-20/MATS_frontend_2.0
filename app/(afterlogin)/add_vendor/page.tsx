@@ -55,10 +55,10 @@ type dropdownData = {
 type DocumentRow = {
     document_type: string;
     is_private: string;
-    fileName: string;
-    createdDate: string;
-    createdBy: string;
-    file: string; // Assuming `file` is a URL to the file
+    filename: string;
+    creation: string;
+    owner: string;
+    file: string; 
 };
 type formData = {
     name: string;
@@ -86,7 +86,7 @@ const page = () => {
     const [vendorcheck, setVendorCheck] = useState<boolean>()
     const [error, setError] = useState<string | null>()
     const [checkpopup, setCheckPopup] = useState(false)
-    const [formdata, setFormData] = useState<formData | {}>({ document: [] ,  });
+    const [formdata, setFormData] = useState<formData>();
     const base_url = process.env.NEXT_PUBLIC_FRAPPE_URL;
     const router = useRouter()
     const view = useSearchParams().get('view')
@@ -133,7 +133,7 @@ const page = () => {
             setFormData((prevState) => ({
                 ...prevState,
                 name: refno, 
-              }));
+              })as formData);
             setDocumentRows(data.data?.document)
             if (response.ok) {
             } else {
@@ -148,7 +148,7 @@ const page = () => {
     }, [refno])
 
     useEffect(() => {
-        setFormData({ ...formdata })
+        setFormData({ ...formdata } as formData)
     }, [])
 
     const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -172,12 +172,7 @@ const page = () => {
                 setTimeout(() => {
                     router.push(`/event_vendor_list`);
                 }, 1000)
-                if(refno){
-                    toast.success('Vendor Updated Successfully')
-                }
-                else{
-                    toast.success('Vendor Added Successfully')
-                }
+                    toast.success(data.message)
             } else {
                 console.log("submission failed");
             }
@@ -187,10 +182,10 @@ const page = () => {
     };
     const handlefieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
+        setFormData(prev => ({ ...prev, [name]: value }) as formData);
     }
     const handleSelectChange = (value: string, name: string) => {
-        setFormData((prev) => ({ ...prev, [name]: value }));
+        setFormData((prev) => ({ ...prev, [name]: value }) as formData);
     };
     const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length > 0) {
@@ -231,9 +226,9 @@ const page = () => {
                 const newDocument: DocumentRow = {
                     document_type,
                     is_private: "1",
-                    fileName: data.message.file_name,
-                    createdDate: data.message.creation,
-                    createdBy: data.message.modified_by,
+                    filename: data.message.file_name,
+                    creation: data.message.creation,
+                    owner: data.message.modified_by,
                     file: data.message.file_url,
                 };
                 console.log("newDocument",newDocument)
@@ -243,8 +238,8 @@ const page = () => {
                 // }));
                 setFormData((prevFormData) => ({
                     ...prevFormData,
-                    document: Array.isArray(prevFormData.document) ? [...prevFormData.document, newDocument] : [newDocument],
-                  }));
+                    document: Array.isArray(prevFormData?.document) ? [...prevFormData.document, newDocument] : [newDocument],
+                  })as formData);
                 // const updatedDocumentRows = [...documentRows , newDocument];
                 const updatedDocumentRows = [...(Array.isArray(documentRows) ? documentRows : []), newDocument];
 
@@ -262,16 +257,18 @@ const page = () => {
     };
     const handlePanfieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
-        if (role == 'Event Requestor'){
+        setFormData(prev => ({ ...prev, [name]: value })as formData);
+        
             checkvendor(e);
             setVendorCheck(false)
+            if (role == 'Event Requestor'){
             setFormData((prevState) => ({
                 ...prevState,
                 pan_check: false,  // Adding or updating the refno field
-              }));
+              }) as formData);
+            }
             setError('')
-        }
+        
     }
 
     const checkvendor = async (e: any) => {
@@ -295,10 +292,12 @@ const page = () => {
                     if (data.data.length > 0) {
                         setError('PAN Already exists')
                         setVendorCheck(true);
+                        if (role == 'Event Requestor'){
                         setFormData((prevState) => ({
                             ...prevState,
-                            pan_check:true ,  // Adding or updating the refno field
-                          }));
+                            pan_check:true ,
+                          })as formData);
+                        }
                     }
                 } else {
                     console.log('Login failed');
@@ -313,7 +312,7 @@ const page = () => {
     const handlecheckpopup = async () => {
         setCheckPopup(true)
     };
-    console.log('vendorcheck',vendorcheck)
+    console.log('formdata',formdata)
     return (
         <>
             <div className='p-7 w-full relative z-20 text-black'>
@@ -513,9 +512,9 @@ const page = () => {
                                     {documentRows && documentRows.map((row, index) => (
                                         <TableRow key={index}>
                                             <TableCell className="text-center ">{row.document_type}</TableCell>
-                                            <TableCell className="text-center">{row.fileName}</TableCell>
-                                            <TableCell className="text-center">{row.createdDate}</TableCell>
-                                            <TableCell className="text-center">{row.createdBy}</TableCell>
+                                            <TableCell className="text-center">{row.filename}</TableCell>
+                                            <TableCell className="text-center">{row.creation.substring(0,10)}</TableCell>
+                                            <TableCell className="text-center">{row.owner}</TableCell>
                                             <TableCell className="text-center  flex justify-center gap-2">
 
 
@@ -545,9 +544,9 @@ const page = () => {
                     <div className="flex justify-end pt-5 gap-4">
                         {view != "view" &&
                             <>
-                                <Button className="bg-white text-black border text-md font-normal hover:bg-white" >
-                                    Back
-                                </Button>
+                                 {/* <Button className="bg-white text-black border text-md font-normal hover:bg-white" >
+                                   Back
+                                </Button> */}
                                 <Button className="bg-[#4430bf] text-white text-md font-normal border hover:bg-[#4430bf]" onClick={handleSubmit}>
                                     Submit
                                 </Button>

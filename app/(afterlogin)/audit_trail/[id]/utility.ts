@@ -1,7 +1,7 @@
-export const fetchData = async(cookie:any)=>{
+export const fetchData = async(cookie:any,refno:any)=>{
     try {
       const Data = await fetch(
-        `${process.env.FRAPPE_URL}/api/method/matsapp.api.audit.get_audit_log.get_audit_logs?doctype=Event Entry&limit_start=10`,
+        `${process.env.FRAPPE_URL}/api/method/matsapp.api.audit.get_audit_log.get_audit_logs?doctype=Event Entry&&docname=${refno ? refno : ''}&limit_start=10`,
         {
           method: "GET",
           headers:{
