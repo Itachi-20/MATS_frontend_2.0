@@ -107,6 +107,10 @@ const Form2 = ({...Props}:Props) => {
   const router = useRouter();
   const [formdata, setFormData] = useState<formData | {}>({});
   const [refNo,setRefNo] = useState<string | null>(localStorage.getItem("refno")?localStorage.getItem("refno"):"");
+  const [hcpValue,setHCPValue] = useState<string>()
+  const handleAnyHCPChange = (value:string)=>{
+    setHCPValue(value);
+  }
 
   const handleSelectChange = (value: string, name: string) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -194,7 +198,7 @@ console.log(formdata,"this is form data")
         <div className='flex flex-col gap-2'>
           <label className='lable'>engagement of any government hCP’s?<span className='text-[#e60000]'>*</span></label>
           <Select
-          onValueChange={(value)=>{handleSelectChange(value,"any_govt_hcp")}}
+          onValueChange={(value)=>{handleSelectChange(value,"any_govt_hcp"); handleAnyHCPChange(value)}}
           defaultValue={Props.previewData?.any_govt_hcp?Props.previewData.any_govt_hcp:""}
           >
             <SelectTrigger className="dropdown">
@@ -209,10 +213,11 @@ console.log(formdata,"this is form data")
         </div>
         <div className='flex flex-col gap-2'>
           <label className='lable'>Total number of government hCP’s<span className='text-[#e60000]'>*</span></label>
-          <input type='input' 
+          <input type='number' 
           name='no_of_hcp'
           onChange={(e)=>{handlefieldChange(e)}}
           defaultValue={Props.previewData?.no_of_hcp?Props.previewData.no_of_hcp:""}
+          disabled={hcpValue == "No"?true:false}
           className='dropdown h-10 rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm'></input>
 
 

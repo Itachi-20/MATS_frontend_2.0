@@ -151,7 +151,7 @@ console.log(formdata,"this is form data")
       return;  
     }
       formdata.append("docname",refno as string)
-      formdata.append("activity_type",activityType);
+      formdata.append("activity_type","Pre Activity");
       formdata.append("document_type",documentType)
     try {
       const response = await fetch(
@@ -198,7 +198,7 @@ console.log(formdata,"this is form data")
           onValueChange={(value)=>handleActivityTypeChange(value)}
             >
               <SelectTrigger className="dropdown">
-                <SelectValue placeholder="Select" />
+                <SelectValue placeholder="Pre Activity" />
               </SelectTrigger>
               <SelectContent>
                 {
