@@ -19,7 +19,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useRouter } from 'next/navigation';
-
+import {Previewdata} from '@/app/(afterlogin)/hcp_services/page'
 
 
 type formData = {
@@ -60,6 +60,8 @@ type Props = {
     currency:{
       name:string
     }[] | null
+    previewData:Previewdata | null | undefined
+    refno:string | undefined;
 }
 type Budget = "logistics" | "compensation" | "";
 
@@ -70,7 +72,7 @@ type vendorName ={
 
 type Compensation = {
   vendor_type: string;
-  vendor_name: string;
+  vendor_name: string | null;
   est_amount: number;
   gst_included?: number;
 };
@@ -85,16 +87,16 @@ const Form3 = ({...Props}:Props) => {
   const [vendorName,setVendorName] = useState<vendorName | null>(null);
   const [logisticVendorType,setLogisticVendorType] = useState("");
   const [logisticAmount,setLogisticAmount] = useState(0);
-  const [logisticsBudget,setLogisticBudget] = useState<Logistics[]>([]);
+  const [logisticsBudget,setLogisticBudget] = useState<Logistics[] | undefined>(Props.previewData?.logistics);
   const [compansationVendorName,setCompansationVendorName] = useState("");
   const [compansationVendorType,setCompansationVendorType] = useState("");
   const [compansationAmount,setCompansationAmount] = useState(0);
   const [compansation_is_GST,setCompansation_is_GST] = useState(0);
-  const [compansationBudget,setCompansationBudget] = useState<Compensation[]>([]);
+  const [compansationBudget,setCompansationBudget] = useState<Compensation[] | undefined>(Props.previewData?.compensation);
   const [totalLogisticAmount,setTotalLogisticAmount] = useState(0);
   const [totalCompansationAmount,setTotalCompansationAmount] = useState(0);
   const [totalEstimatedAmount,setTotalEstimatedAmount] = useState(0);
-
+  
   const router = useRouter();
   const [formdata, setFormData] = useState<formData | {}>({});
   const [refNo,setRefNo] = useState<string | null>(localStorage.getItem("refno")?localStorage.getItem("refno"):"");
@@ -141,7 +143,7 @@ const Form3 = ({...Props}:Props) => {
            setRefNo(data.message);
    
            setTimeout(() => {
-             router.push(`/hcp_services?forms=4`);
+             router.push(`/hcp_services?forms=4&refno=${Props.refno}`);
            }, 1000)
          } else {
            console.log("submission failed");
@@ -152,8 +154,9 @@ const Form3 = ({...Props}:Props) => {
      };
 
      useEffect(() => {
-      setFormData({ ...formdata, name: refNo })
-    }, [refNo])
+      setFormData({...formdata,name:Props.refno?Props.refno:localStorage.getItem("refno")})
+      Props.refno
+    }, [])
 
 console.log(formdata,"this is form data")
 
@@ -161,7 +164,7 @@ console.log(formdata,"this is form data")
     if(logisticVendorType&&logisticAmount>0){
       const newObject:Logistics = {vendor_type:logisticVendorType,est_amount:logisticAmount};
       setLogisticBudget(prevRows=>{
-       const updatedRecords =  [...prevRows,newObject]
+       const updatedRecords = prevRows && [...prevRows,newObject]
        console.log(updatedRecords)
         setFormData((prev: any)=>({...prev,logistics:updatedRecords}))
        return updatedRecords
@@ -176,7 +179,7 @@ console.log(formdata,"this is form data")
     if(compansationVendorType&&compansationAmount>0){
       const newObject:Compensation = {vendor_type:compansationVendorType,est_amount:compansationAmount,gst_included:compansation_is_GST,vendor_name:compansationVendorName};
       setCompansationBudget(prevRows=>{
-       const updatedRecords =  [...prevRows,newObject]
+       const updatedRecords = prevRows && [...prevRows,newObject]
        console.log(updatedRecords)
        setFormData((prev: any)=>({...prev,compensation:updatedRecords}))
        return updatedRecords
@@ -594,6 +597,7 @@ console.log(formdata,"this is form data")
           </label>
           <Select
           onValueChange={(value:string)=>{handleSelectChange(value,"currency")}}
+          defaultValue={Props.previewData?Props.previewData.currency:"INR"}
           >
             <SelectTrigger className="dropdown">
               <SelectValue placeholder="Select" />

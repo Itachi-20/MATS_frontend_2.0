@@ -257,7 +257,7 @@ const Documents = ({PageName,...Props}:Props) => {
                         <Link rel="stylesheet" href={item3.url}>
                       <Image src={"/svg/view.svg"} width={20} height={20}  alt='view-document' className='cursor-pointer' />
                         </Link>
-                        <div onClick={async()=>{await handleDelete(item3.name)}}>
+                        <div className={`${Props.eventData && Props.eventData.preactivity_submitted == 1?"hidden":""}`} onClick={async()=>{await handleDelete(item3.name)}}>
                       <Image src={"/svg/delete.svg"} width={20} height={20}  alt='view-document' className='cursor-pointer' />
                         </div>
                       </div>
