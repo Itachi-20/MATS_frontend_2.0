@@ -77,6 +77,7 @@ type formData = {
 
   type Props = {
     activityDropdown:activityDropdown| null
+    refno:string | null
 }
 const form4 = ({...Props}:Props) => {
   const router = useRouter();
@@ -92,40 +93,7 @@ const form4 = ({...Props}:Props) => {
   
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    // e.preventDefault();
-
-    // const updatedFormData = {
-    //     ...formdata
-
-    // };
-
-    // try {
-    //   const response = await fetch(
-    //     "/api/training_and_education/handleSubmit",
-    //     {
-    //       method: "POST",
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //       },
-    //       credentials: 'include',
-    //       body: JSON.stringify(updatedFormData)
-    //     }
-    //   );
-    //   if (response.ok) {
-    //     const data = await response.json();
-    //     console.log(data, "response data");
-    //     localStorage.setItem("refno", data.message);
-
-    //     setTimeout(() => {
-    //       router.push(`/hcp_services?forms=5`);
-    //     }, 1000)
-    //   } else {
-    //     console.log("submission failed");
-    //   }
-    // } catch (error) {
-    //   console.error("Error during Submission:", error);
-    // }
-    router.push("/hcp_services?forms=5")
+    router.push(`/hcp_services?forms=5&refno=${Props.refno}`)
   };
 
   const handleNext = (fileList: FileList | null) => {

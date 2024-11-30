@@ -82,29 +82,56 @@ export const handleBudgetChange = async (value: string) => {
     }
   };
 
-//   const handleBusinessUnitChange = async (value: string) => {
-//     try {
-//       const response = await fetch(
-//         "/api/training_and_education/eventCostCenterDropdown",
-//         {
-//           method: "POST",
-//           headers: {
-//             "Content-Type": "application/json",
-//           },
-//           body: JSON.stringify({
-//             division: value,
-//           }),
-//         }
-//       );
+  export const PreviewData = async (refno:string,cookie:any) => {
+    try {
+      const response = await fetch(`${process.env.FRAPPE_URL}/api/method/matsapp.api.event.event.get_event_data?name=${refno}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          'Cookie':cookie
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          name :refno
+        })
+      });
 
-//       const data = await response.json();
-//       setEventCostCenter(data.data);
+      if (response.ok) {
+        const data = await response.json();
+        return data.data;
+      } else {
+        console.log('failed',response.status);
+      }
+    } catch (error) {
+      console.error("Error during fetching:", error);
+    }
+  };
 
-//       if (response.ok) {
-//       } else {
-//         console.log("Login failed");
-//       }
-//     } catch (error) {
-//       console.error("Error during login:", error);
-//     }
-//   };
+ export const handleBusinessUnitChange = async (value: string,cookie:any) => {
+    try {
+      const response = await fetch(
+        `${process.env.FRAPPE_URL}/api/method/matsapp.api.event.event.get_division_based_data?division=${value}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Cookie":cookie
+          },
+          body: JSON.stringify({
+            division: value,
+          }),
+        }
+      );
+
+      
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data.data,"this is utility event cost");
+        return data.data;
+      } else {
+        console.log("Login failed");
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
+    }
+  };

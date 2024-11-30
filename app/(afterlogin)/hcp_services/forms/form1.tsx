@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useRouter } from "next/navigation";
 import {handleBudgetChange} from '../utility'
+import {Previewdata} from '@/app/(afterlogin)/hcp_services/page'
 
 type dropdownData = {
   company: {
@@ -123,9 +124,8 @@ type subtypeActivity = {
 
 type Props = {
   dropdownData: dropdownData | null;
-  // handlefieldChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>)=>void;
-  // handleSelectChange: (value:string,name:string)=>void;
-  // handleSubmit:(e: React.MouseEvent<HTMLButtonElement>)=>void
+  previewData:Previewdata | null;
+  eventCostCenter:eventCostCenter | null;
 };
 const Form1 = ({ ...Props }: Props) => {
   const router = useRouter();
@@ -182,7 +182,7 @@ const Form1 = ({ ...Props }: Props) => {
               setRefNo(data.message);
       
               
-                router.push(`/hcp_services?forms=2`);
+                router.push(`/hcp_services?forms=2&refno=${data.message}`);
               
             } else {
               console.log("submission failed");
@@ -191,43 +191,6 @@ const Form1 = ({ ...Props }: Props) => {
             console.error("Error during Submission:", error);
           }
         };
-
-
-  // const handleBudgetChange = async (value: string) => {
-  //   try {
-  //     const response = await fetch(
-  //       "/api/training_and_education/subtypeDropdown",
-  //       {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify({
-  //           budget: value,
-  //         }),
-  //       }
-  //     );
-
-  //     const data = await response.json();
-  //     setSubtypeActivity(data.data);
-  //     if (value == "National") {
-  //       setSubtypeActivityVisible(true);
-  //     } else {
-  //       setSubtypeActivityVisible(false);
-  //     }
-
-  //     if (response.ok) {
-  //     } else {
-  //       console.log("Login failed");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error during login:", error);
-  //   }
-  // };
-
-  // const budget =\\ handleBudgetChange();
-
-  // const budget = await handleBudgetChange();
 
 
 
@@ -276,6 +239,7 @@ console.log(formdata,"this is form data")
           </label>
           <Select
           onValueChange={(value)=>{handleSelectChange(value,"company")}}
+          defaultValue={Props.previewData?.company?Props.previewData.company:""}
           >
             <SelectTrigger className="dropdown">
               <SelectValue placeholder="Select" />
@@ -295,7 +259,9 @@ console.log(formdata,"this is form data")
           <label className="lable">
             Business Unit<span className="text-[#e60000]">*</span>
           </label>
-          <Select onValueChange={(value)=>{handleBusinessUnitChange(value);handleSelectChange(value,"business_unit")}}>
+          <Select onValueChange={(value)=>{handleBusinessUnitChange(value);handleSelectChange(value,"business_unit")}}
+            defaultValue={Props.previewData?.business_unit?Props.previewData.business_unit:""}
+            >
             <SelectTrigger className="dropdown">
               <SelectValue placeholder="Select" />
             </SelectTrigger>
@@ -316,6 +282,7 @@ console.log(formdata,"this is form data")
           </label>
           <Select
           onValueChange={(value)=>handleSelectChange(value,"event_requestor")}
+          defaultValue={Props.previewData?.event_requestor?Props.previewData.event_requestor:""}
           >
             <SelectTrigger className="dropdown">
               <SelectValue placeholder="Select" />
@@ -338,18 +305,24 @@ console.log(formdata,"this is form data")
           </label>
           <Select
           onValueChange={(value)=>handleSelectChange(value,"event_cost_center")}
+          defaultValue={Props.previewData?.event_cost_center?Props.previewData.event_cost_center:""}
           >
             <SelectTrigger className="dropdown">
               <SelectValue placeholder="Select" />
             </SelectTrigger>
             <SelectContent>
-            {eventCostCenter &&
-                  eventCostCenter.cost_center.map((item, index) => {
+            { Props.eventCostCenter?Props.eventCostCenter.cost_center.map((item, index) => {
                     return (
                       <SelectItem value={item.name}>
                         {item.cost_center_description}
                       </SelectItem>
                     );
+                  }): eventCostCenter && eventCostCenter.cost_center.map((item,index)=>{
+                    return (
+                      <SelectItem value={item.name}>
+                        {item.cost_center_description}
+                      </SelectItem>
+                    )
                   })}
             </SelectContent>
           </Select>
@@ -362,16 +335,24 @@ console.log(formdata,"this is form data")
             const data:any = await handleBudgetChange(value);
             setSubtypeActivity(data.subtypeActivity);
             setSubtypeActivityVisible(data.SubtypeActivityVisible);
-            handleSelectChange(value,"division_category")}}>
+            handleSelectChange(value,"division_category")}}
+              defaultValue={Props.previewData?.division_category?Props.previewData.division_category:""}>
             <SelectTrigger className="dropdown">
               <SelectValue placeholder="--Selected--" />
             </SelectTrigger>
             <SelectContent>
-            {eventCostCenter &&
-                  eventCostCenter.division_category.map((item, index) => {
+            { Props.eventCostCenter?Props.eventCostCenter.division_category.map((item, index) => {
                     return (
-                      <SelectItem value={item.name}>{item.category}</SelectItem>
+                      <SelectItem value={item.name}>
+                        {item.category}
+                      </SelectItem>
                     );
+                  }): eventCostCenter && eventCostCenter.division_category.map((item,index)=>{
+                    return (
+                      <SelectItem value={item.name}>
+                        {item.category}
+                      </SelectItem>
+                    )
                   })}
             </SelectContent>
           </Select>
@@ -384,6 +365,7 @@ console.log(formdata,"this is form data")
             </label>
             <Select
             onValueChange={(value)=>{handleSelectChange(value,"division_sub_category")}}
+            defaultValue={Props.previewData?.division_sub_category?Props.previewData.division_sub_category:""}
             >
               <SelectTrigger className="dropdown">
                 <SelectValue placeholder="--Selected--" />
@@ -408,6 +390,7 @@ console.log(formdata,"this is form data")
           </label>
           <Select
           onValueChange={(value)=>{handleSelectChange(value,"city")}}
+          defaultValue={Props.previewData?.city?Props.previewData.city:""}
           >
             <SelectTrigger className="dropdown">
               <SelectValue placeholder="Select" />
@@ -425,6 +408,7 @@ console.log(formdata,"this is form data")
           </label>
           <Select
           onValueChange={(value)=>{handleSelectChange(value,"state")}}
+          defaultValue={Props.previewData?.state?Props.previewData.state:""}
           >
             <SelectTrigger className="dropdown">
               <SelectValue placeholder="Select" />
@@ -446,16 +430,24 @@ console.log(formdata,"this is form data")
           </label>
           <Select
           onValueChange={(value)=>{handleSelectChange(value,"therapy")}}
+          defaultValue={Props.previewData?.therapy?Props.previewData.therapy:""}
           >
             <SelectTrigger className="dropdown">
               <SelectValue placeholder="Select" />
             </SelectTrigger>
             <SelectContent>
-            {eventCostCenter &&
-                  eventCostCenter.therapy.map((item, index) => {
+            { Props.eventCostCenter?Props.eventCostCenter.therapy.map((item, index) => {
                     return (
-                      <SelectItem value={item.name}>{item.therapy}</SelectItem>
+                      <SelectItem value={item.name}>
+                        {item.therapy}
+                      </SelectItem>
                     );
+                  }): eventCostCenter && eventCostCenter.therapy.map((item,index)=>{
+                    return (
+                      <SelectItem value={item.name}>
+                        {item.therapy}
+                      </SelectItem>
+                    )
                   })}
             </SelectContent>
           </Select>
@@ -466,6 +458,7 @@ console.log(formdata,"this is form data")
           </label>
           <Select
           onValueChange={(value)=>{handleSelectChange(value,"reporting_head")}}
+          defaultValue={Props.previewData?.reporting_head?Props.previewData.reporting_head:""}
           >
             <SelectTrigger className="dropdown">
               <SelectValue placeholder="Select" />
@@ -483,6 +476,7 @@ console.log(formdata,"this is form data")
           </label>
           <Select
           onValueChange={(value)=>{handleSelectChange(value,"sub_type_of_activity")}}
+          defaultValue={Props.previewData?.sub_type_of_activity?Props.previewData.sub_type_of_activity:""}
           >
             <SelectTrigger className="dropdown">
               <SelectValue placeholder="Select" />
@@ -506,6 +500,7 @@ console.log(formdata,"this is form data")
           </label>
           <Select 
           onValueChange={(value)=>{handleSelectChange(value,"type_of_engagement"); setEngagementTypes(value)}}
+          defaultValue={Props.previewData?.type_of_engagement?Props.previewData.type_of_engagement:""}
           >
             <SelectTrigger className="dropdown">
               <SelectValue placeholder="Select" />
@@ -530,7 +525,9 @@ console.log(formdata,"this is form data")
             </label>
             <Textarea className='text-black shadow-md' placeholder='Type Here'
             name="faculty"
-            onChange={(e:React.ChangeEvent<HTMLTextAreaElement>)=>{handlefieldChange(e)}}/>
+            onChange={(e:React.ChangeEvent<HTMLTextAreaElement>)=>{handlefieldChange(e)}}
+            defaultValue={Props.previewData?.faculty?Props.previewData.faculty:""}
+            />
           </div>
         <div className="flex flex-col gap-2">
             <label className="lable">
@@ -539,11 +536,13 @@ console.log(formdata,"this is form data")
             <Textarea className="text-black shadow-md"
           placeholder="Type Here"
           name="participants"
-          onChange={(e:React.ChangeEvent<HTMLTextAreaElement>)=>{handlefieldChange(e)}}/>
+          onChange={(e:React.ChangeEvent<HTMLTextAreaElement>)=>{handlefieldChange(e)}}
+          defaultValue={Props.previewData?.participants?Props.previewData.participants:""}
+          />
         </div>
       </div>
       
-      { engagementTypes == "One Time" &&
+      { (engagementTypes == "One Time" || Props.previewData?.type_of_engagement == "One Time") &&
         <>
           <div className="py-8">
               <h1 className="text-black text-2xl font-normal uppercase pb-8">
@@ -558,8 +557,9 @@ console.log(formdata,"this is form data")
                             className="text-black shadow md:rounded-xl md:py-5"
                             type="date"
                             placeholder="dd/mm/yy"
-                            name="event_start_data"
+                            name="event_start_date"
                             onChange={(e)=>{handlefieldChange(e)}}
+                            defaultValue={Props.previewData?.event_start_date?Props.previewData.event_start_date:""}
                         ></Input>
                     </div>
                     <div className="flex flex-col md:gap-2">
@@ -572,6 +572,7 @@ console.log(formdata,"this is form data")
                             placeholder="dd/mm/yy"
                             name="event_end_date"
                             onChange={(e)=>{handlefieldChange(e)}}
+                            defaultValue={Props.previewData?.event_end_date?Props.previewData.event_end_date:""}
                         ></Input>
                     </div>
                     <div className="flex flex-col md:gap-2">
@@ -580,6 +581,7 @@ console.log(formdata,"this is form data")
                         </label>
                         <Select 
           onValueChange={(value)=>{handleSelectChange(value,"training_ref_no")}}
+          defaultValue={Props.previewData?.training_ref_no?Props.previewData.training_ref_no:""}
           >
             <SelectTrigger className="dropdown">
               <SelectValue placeholder="Select" />
@@ -600,7 +602,8 @@ console.log(formdata,"this is form data")
                             Sponsorship Support Request Ref Number<span className="text-[#e60000]">*</span>
                         </label>
                         <Select 
-          onValueChange={(value)=>{handleSelectChange(value,"training_ref_no")}}
+          onValueChange={(value)=>{handleSelectChange(value,"sponsorship_ref_no")}}
+          defaultValue={Props.previewData?.sponsorship_ref_no?Props.previewData.sponsorship_ref_no:""}
           >
             <SelectTrigger className="dropdown">
               <SelectValue placeholder="Select" />
@@ -633,6 +636,7 @@ console.log(formdata,"this is form data")
                         placeholder="Type Here"
                         name="event_name"
                         onChange={(e)=>{handlefieldChange(e)}}
+                        defaultValue={Props.previewData?.event_name?Props.previewData.event_name:""}
                     ></Input>
                 </div>
                 <div className="flex flex-col md:gap-2">
@@ -644,6 +648,7 @@ console.log(formdata,"this is form data")
                         placeholder="Type Here"
                         name="event_venue"
                         onChange={(e)=>{handlefieldChange(e)}}
+                        defaultValue={Props.previewData?.event_venue?Props.previewData.event_venue:""}
                     ></Input>
                 </div>
               </div>
@@ -653,7 +658,7 @@ console.log(formdata,"this is form data")
       }
 
 
-      { engagementTypes && engagementTypes == "MSA" &&
+      { (engagementTypes == "MSA" || Props.previewData?.type_of_engagement == "MSA") &&
         <>
           <div className="py-8">
               <h1 className="text-black text-2xl font-normal uppercase pb-8">
@@ -670,6 +675,7 @@ console.log(formdata,"this is form data")
                             placeholder="dd/mm/yy"
                             name="event_start_date"
                             onChange={(e)=>{handlefieldChange(e)}}
+                            defaultValue={Props.previewData?.event_start_date?Props.previewData.event_start_date:""}
                         ></Input>
                     </div>
                     <div className="flex flex-col md:gap-2">
@@ -682,6 +688,7 @@ console.log(formdata,"this is form data")
                             placeholder="dd/mm/yy"
                             name="event_end_date"
                             onChange={(e)=>{handlefieldChange(e)}}
+                            defaultValue={Props.previewData?.event_end_date?Props.previewData.event_end_date:""}
                         ></Input>
                     </div>
                     <div className="flex flex-col md:gap-2">
@@ -693,6 +700,7 @@ console.log(formdata,"this is form data")
                             placeholder="Type Here"
                             name="annual_plan"
                             onChange={(e)=>{handlefieldChange(e)}}
+                            defaultValue={Props.previewData?.annual_plan?Props.previewData.annual_plan:""}
                         ></Input>
                     </div>
                 </div>
@@ -712,6 +720,7 @@ console.log(formdata,"this is form data")
                         placeholder="Type Here"
                         name="service_type"
                         onChange={(e)=>{handlefieldChange(e)}}
+                        defaultValue={Props.previewData?.service_type?Props.previewData.service_type:""}
                     ></Input>
                 </div>
               </div>
@@ -720,7 +729,7 @@ console.log(formdata,"this is form data")
         
       }
 
-      { engagementTypes == "Scientific Advisory Consultancy Agreement" &&
+      { (engagementTypes == "Scientific Advisory Consultancy Agreement" || Props.previewData?.type_of_engagement == "Scientific Advisory Consultancy Agreement") &&
         <>
           <div className="py-8">
               <h1 className="text-black text-2xl font-normal uppercase pb-8">
@@ -737,6 +746,7 @@ console.log(formdata,"this is form data")
                             placeholder="dd/mm/yy"
                             name="event_start_date"
                             onChange={(e)=>{handlefieldChange(e)}}
+                            defaultValue={Props.previewData?.event_start_date?Props.previewData.event_start_date:""}
                         ></Input>
                     </div>
                     <div className="flex flex-col md:gap-2">
@@ -749,6 +759,7 @@ console.log(formdata,"this is form data")
                             placeholder="dd/mm/yy"
                             name="event_end_date"
                             onChange={(e)=>{handlefieldChange(e)}}
+                            defaultValue={Props.previewData?.event_end_date?Props.previewData.event_end_date:""}
                         ></Input>
                     </div>
                     <div className="flex flex-col md:gap-2">
@@ -760,6 +771,7 @@ console.log(formdata,"this is form data")
                             placeholder="Type Here"
                             name="annual_plan"
                             onChange={(e)=>{handlefieldChange(e)}}
+                            defaultValue={Props.previewData?.annual_plan?Props.previewData.annual_plan:""}
                         ></Input>
                     </div>
                 </div>
@@ -768,7 +780,7 @@ console.log(formdata,"this is form data")
         
       }
 
-      { engagementTypes && (engagementTypes == "Royalty Agreement" || engagementTypes == "Product development And Royalty Agreement" || engagementTypes == "Product Development Agreement" || engagementTypes == "Product feedback Agreement") &&
+      {  (engagementTypes == "Royalty Agreement" || engagementTypes == "Product development And Royalty Agreement" || engagementTypes == "Product Development Agreement" || engagementTypes == "Product feedback Agreement" || Props.previewData?.type_of_engagement == "Royalty Agreement" || Props.previewData?.type_of_engagement == "Product development And Royalty Agreement" || Props.previewData?.type_of_engagement == "Product Development Agreement" || Props.previewData?.type_of_engagement == "Product feedback Agreement") &&
         <>
           <div className="py-8">
               <h1 className="text-black text-2xl font-normal uppercase pb-8">
@@ -785,6 +797,7 @@ console.log(formdata,"this is form data")
                             placeholder="dd/mm/yy"
                             name="event_start_date"
                             onChange={(e)=>{handlefieldChange(e)}}
+                            defaultValue={Props.previewData?.event_start_date?Props.previewData?.event_start_date:""}
                         ></Input>
                     </div>
                     <div className="flex flex-col md:gap-2">
@@ -797,6 +810,7 @@ console.log(formdata,"this is form data")
                             placeholder="dd/mm/yy"
                             name="event_end_date"
                             onChange={(e)=>{handlefieldChange(e)}}
+                            defaultValue={Props.previewData?.event_end_date?Props.previewData.event_end_date:""}
                         ></Input>
                     </div>
                     <div className="flex flex-col md:gap-2">
@@ -808,6 +822,7 @@ console.log(formdata,"this is form data")
                             placeholder="Type Here"
                             name="product_details"
                             onChange={(e)=>{handlefieldChange(e)}}
+                            defaultValue={Props.previewData?.product_details?Props.previewData.product_details:""}
                         ></Input>
                     </div>
                 </div>

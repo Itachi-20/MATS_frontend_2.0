@@ -76,7 +76,7 @@ export default function LogisticActualBudget({...Props}:Props) {
     const [fileData,setFileData] = useState<file[]>()
     const [TravelVendorData,setTravelVendorData] = useState(Props.travel_vendors);
     const { role, name, userid, clearAuthData } = useAuth();
-
+    console.log(TravelVendorData,"88888888888888")
     const [files, setFiles] = useState<File[]>([]);
   const [uploadedFiles, setUploadedFiles] = useState<FileList | null>(); //added state 1
   const [fileList, setFileList] = useState<File[]>([]); //added state 2
@@ -186,6 +186,7 @@ export default function LogisticActualBudget({...Props}:Props) {
             if(response.ok){
                 console.log(await response.json());
                 console.log("successfully submited");
+                router.push("/travel_desk")
                 
             }
         } catch (error) {

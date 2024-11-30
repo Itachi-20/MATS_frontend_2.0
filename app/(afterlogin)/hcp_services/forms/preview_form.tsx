@@ -13,31 +13,32 @@ import Add_vendor from "@/components/add_vendor";
 import { usePathname } from 'next/navigation'
 import { useRouter } from 'next/navigation';
 import Comment_box from "@/components/approvalCommentBox/Comment_box";  
+import {Previewdata} from '@/app/(afterlogin)/hcp_services/page'
 
 type EventEntry = {
-  name: string;
-  owner: string;
-  creation: string;
-  modified: string;
-  modified_by: string;
-  docstatus: number;
+  name: string | null;
+  owner: string | null;
+  creation: string | null;
+  modified: string | null;
+  modified_by: string | null;
+  docstatus: string | null;
   idx: number;
-  event_type: string;
-  company: string;
-  event_cost_center: string;
+  event_type: string | null;
+  company: string | null;
+  event_cost_center: string | null;
   state: string;
-  sub_type_of_activity: string;
+  sub_type_of_activity: string | null;
   business_unit: string;
   division_category: string;
   therapy: string;
   event_requestor: string;
-  division_sub_category: string;
+  division_sub_category: string | null;
   status: string;
   current_stage: string;
-  event_name: string;
+  event_name: string | null;
   event_start_date: string;
   any_govt_hcp: string;
-  comments: string;
+  comments: string | null;
   faculty: string;
   event_venue: string;
   event_end_date: string;
@@ -177,56 +178,19 @@ type ActivityDocument = {
   document: DocumentDetails[];
 };
 
+type Props = {
+  previewData:Previewdata | null
+}
 
-const Preview_Form = () => {
+const Preview_Form = ({...Props}:Props) => {
   const pathname = usePathname();
   const router = useRouter()
   const [dialog,setDialog] = useState(false);
   const [addVendor,setAddVendor] = useState(false);
-  const [preview_data, setPreviewData] = useState<EventEntry | null | undefined>(null);
+  const [preview_data, setPreviewData] = useState<Previewdata | null | undefined>(Props.previewData);
   const [comment,setComment] = useState<string>();
   const [isCommentbox,setIsCommentbox] = useState<boolean>();
   const [refNo, setRefNo] = useState<string | null>(localStorage.getItem("refno") ? localStorage.getItem("refno") : "");
-  const isAddVendor = ()=>{
-    setAddVendor(prev => !prev)
-  }
-  const handleDialog = ()=>{
-    setIsCommentbox(prev=> !prev);
-  }
-
-  const [isChecked, setIsChecked] = useState<boolean>(false);
-
-  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setIsChecked(e.target.checked);
-  };
-  const PreviewData = async () => {
-    try {
-      const response = await fetch("/api/previewData", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: 'include',
-        body: JSON.stringify({
-          name: refNo
-        })
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setPreviewData(data.data);
-      } else {
-        console.log('Login failed');
-      }
-    } catch (error) {
-      console.error("Error during login:", error);
-    }
-  };
-  useEffect(() => {
-    PreviewData();
-  }, [])
-
-  console.log("preview_data", preview_data, refNo)
 
 
   const handleFinalSubmit = async () => {
@@ -260,10 +224,6 @@ const Preview_Form = () => {
     }
   };
 
-  const handleComment = (value:string)=>{
-    setComment(value)
-  }
-
   return (
       <>
         <div className="md:px-7 md:pb-7 md:pt-4 w-full relative z-20">
@@ -296,16 +256,7 @@ const Preview_Form = () => {
         eventData={preview_data}
         />
         
-            <div className="flex items-center md:pb-8 gap-3">
-            <input
-            type="checkbox"
-            onChange={handleCheckboxChange}
-            checked={isChecked}
-            className="checkbox"
-          />
-            <label className="text-black md:text-sm md:font-normal">
-              I hereby declare that all details filled by me are correct and genuine.<span className="text-[#e60000]">*</span>
-                </label>
+            
             </div>
 
             <div className="flex justify-end pt-5 gap-4">
@@ -315,21 +266,11 @@ const Preview_Form = () => {
               <Button className="bg-white text-black border text-md font-normal">
                 Back
               </Button>
-              <Button className={`bg-[#4430bf] text-white  font-normal border`} disabled={!isChecked} onClick={()=>handleDialog()}>
+              <Button className={`bg-[#4430bf] text-white  font-normal border`} onClick={()=>handleFinalSubmit()}>
                 Submit
               </Button>
             </div>
-        </div>
-        {
-            isCommentbox &&
-            <div className=" absolute z-50 flex pt-10 items-end justify-center bg-black bg-opacity-50 w-full h-full inset-0 pb-40">
-          <Comment_box 
-          handleClose={handleDialog}
-          handleComment={handleComment}
-          Submitbutton = {handleFinalSubmit}
-          />
-          </div>
-          }
+        
       </>
   )
 }
