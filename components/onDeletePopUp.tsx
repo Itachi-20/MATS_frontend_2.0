@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 type props = {
   setClose: React.Dispatch<React.SetStateAction<boolean>>
   handleDelete: ()=>void
+  text:string
 }
 const Ondeleteprop = ({ ...Props }: props) => {
   return (

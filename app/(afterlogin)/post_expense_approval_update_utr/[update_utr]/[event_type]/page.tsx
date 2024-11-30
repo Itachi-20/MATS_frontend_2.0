@@ -30,6 +30,7 @@ type File = {
     actual_amount: number;
     status: string;
     vendor_name: string;
+    vendor_code: string;
     advance: number;
     budget_category: string;
     est_amount: number;
@@ -39,34 +40,34 @@ type File = {
     parentfield: string;
     parenttype: string;
     occurrence_no: number;
-    attachment: string | null;
-    event_conclusion: string | null;
+    attachment: string;
+    event_conclusion: string;
     advance_expense_check: number;
     post_expense_check: number;
-    document_no: string | null;
-    invoice_date: string | null;
+    document_no: string;
+    invoice_date: string;
     invoice_amount: number;
     division: string;
-    nature: string | null;
-    gl_code: string | null;
-    zone: string | null;
-    finance_remark: string | null;
-    posting_date: string | null;
+    nature: string;
+    gl_code: string;
+    zone: string;
+    finance_remark: string;
+    posting_date: string;
     basic_amount: number;
     tds: number;
-    cost_center: string | null;
-    company_name: string | null | undefined;
-    utr_number: string | null;
+    cost_center: string;
+    company_name: string ;
+    utr_number: string;
     state: string;
-    invoice_number: string | null;
-    finance_gst: string | null;
+    invoice_number: string;
+    finance_gst: string;
     net_amount: number;
-    cc_name: string | null ;
-    gl_name: string | null;
-    payment_date: string | null;
-    city: string | null;
-    file: string | null;
-    narration: string | null;
+    cc_name: string ;
+    gl_name: string;
+    payment_date: string;
+    city: string;
+    file: string;
+    narration: string;
     travel_expense_check: number;
     company_code: string;
     state_code: string;
@@ -147,79 +148,11 @@ type FormData = {
     city: string;
     narration: string;
     isClosed: boolean;
+    action:string;
+    remark:string;
   };
 
 const page = () => {
-
-    // const defaultFormData: FormData = {
-    //     name: "",
-    //     document_no: "",
-    //     posting_date: "",
-    //     invoice_number: "",
-    //     date: "",
-    //     basic_amount: 0,
-    //     gst: "",
-    //     invoice_amount: 0,
-    //     tds: 0,
-    //     net_amount: 0,
-    //     division: "",
-    //     cost_center: "",
-    //     cc_name: "",
-    //     nature: "",
-    //     company_name: "",
-    //     gl_name: "",
-    //     gl_code: "",
-    //     utr_number: 0,
-    //     payment_date: "",
-    //     zone: "",
-    //     state: "",
-    //     city: "",
-    //     narration: "",
-    //     isClosed: true,
-    // };
-
-    // const defaultDropdown: DropdownData ={
-    //     company:[{
-    //     name: "",
-    //     company_name: "",
-    //     }],
-    //     division: [{
-    //     name: "",
-    //     division_name: "",
-    //     }],
-    //     city:[{
-    //         name: "",
-    //         city: "",
-    //         state: "",
-    //     }],
-    //     state:[{
-    //     name: "",
-    //     state: "",
-    //     }],
-    //     zone:[{
-    //         name: "",
-    //         zone: "",
-    //     }],
-    // };
-
-    // const defaultEventdata: EventData = {
-    //     name: "",
-    //     reporting_head: "",
-    //     event_date: "",
-    //     cost_center: "",
-    //     cost_code: "",
-    //     cost_desc: "",
-    //     cost_hod: "",
-    //     business_unit: "",
-    //     event_name: "",
-    //     event_type: "",
-    //     sub_type_of_activity: "",
-    //     event_requestor: "",
-    //     total_compensation_expense: 0,
-    //     actual_vendors: [],
-    //     import_files: [],
-    // }
-
     const [open, setOpen] = useState(false);
     const [dropdown, setDropdown] = useState<DropdownData>();
     const [opencommentbox, setCommentBox] = useState(false)
@@ -287,6 +220,8 @@ const page = () => {
                     state: data.data.actual_vendors[0].state_code,
                     city: data.data.actual_vendors[0].city,
                     narration: data.data.actual_vendors[0].narration,
+                    action:"",
+                    remark:"",
                     isClosed: true
                 }))
 
@@ -421,19 +356,19 @@ const page = () => {
                 
                 <div className='border bg-white h-full p-4 rounded-[18px]'>
                     <TableComponent
-                        expensetabledata={expensedata?.actual_vendors}
+                        expensetabledata={expensedata?.actual_vendors as ActualVendor[]}
                         handleSetFileData={handleSetFileData}
 
                     />
 
                     <Fields
-                        dropdown={dropdown}
+                        dropdown={dropdown as DropdownData}
                         handlefieldChange={handlefieldChange}
                         handleSelectChange={handleSelectChange}
-                        handleSubmit={handleSubmit}   
-                        formdata={formdata}
-                        setFormData = {setFormData}
-                        expenseData={expensedata} 
+                        // handleSubmit={handleSubmit}   
+                        formdata={formdata as FormData}
+                        // setFormData = {setFormData}
+                        expenseData={expensedata as EventData} 
                     />
                 </div>
 

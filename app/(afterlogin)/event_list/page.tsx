@@ -238,11 +238,11 @@ export default function EventList () {
                               data.post_activity_submitted ?
                               (
                                 !data.post_expense_submitted ?
-                                <Button className="bg-[#F0EDFF] w-[75px] text-[#4430BF] text-sm  rounded-md font-semibold hover:underline capitalize" onClick={()=>router.push(`/post_expense/${data.name}`)}>request</Button> :
-                                <Button className="bg-[#F0EDFF] w-[75px] text-[#4430BF] text-sm  rounded-md font-semibold hover:underline capitalize" onClick={()=>router.push(`/post_expense/${data.name}`)}>view</Button> 
+                                <Button className="bg-[#F0EDFF] w-[75px] text-[#4430BF] text-sm  rounded-md font-semibold hover:underline capitalize" onClick={()=>router.push(`/post_expense/${data.name}`)}>Request</Button> :
+                                <Button className="bg-[#F0EDFF] w-[75px] text-[#4430BF] text-sm  rounded-md font-semibold hover:underline capitalize" onClick={()=>router.push(`/post_expense/${data.name}`)}>View</Button> 
 
                               ) : (
-                              <Button className="bg-[#F0EDFF] w-[75px] text-[#4430BF] text-sm  rounded-md font-semibold hover:underline capitalize" disabled>request</Button>
+                              <Button className="bg-[#F0EDFF] w-[75px] text-[#4430BF] text-sm  rounded-md font-semibold hover:underline capitalize" disabled>Request</Button>
                               )
                               
                             }

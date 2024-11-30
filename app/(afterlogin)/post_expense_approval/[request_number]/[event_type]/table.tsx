@@ -144,7 +144,7 @@ const table = ({ ...Props }: Props) => {
       }
   };
 
-    const handleCheckBox = (e:React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const handleCheckBox = (e:React.ChangeEvent<HTMLInputElement>) => {
       setEditable(e.target.checked);
       if(e.target.checked){
         AddVendorCode();
