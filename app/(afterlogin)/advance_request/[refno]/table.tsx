@@ -88,9 +88,10 @@ type VendorData = {
 };
 type DocumentRow = {
   file_name: string;
-  // createdDate: string;
-  // createdBy: string;
-  name: string;
+  created_date:string;
+  // created_by:string;
+  // name: string;
+  name:string;
   file_url: string;
 };
 
@@ -343,9 +344,6 @@ const table = ({ tableData }: Props) => {
       console.error("Error during Submission:", error);
     }
   };
-
-
-
 
   const handleNext = (fileList: FileList | null) => {
     setUploadedFiles(fileList)
@@ -642,7 +640,7 @@ const table = ({ tableData }: Props) => {
         <ViewDocument setClose={setOpen} data={fileData} />
       }
       {
-        deletepopup && <DeletePopup setClose={setDeletePopup} handleSubmit={handleDeleteVendor} Loading={loading} />
+        deletepopup && <DeletePopup setClose={setDeletePopup} handleSubmit={handleDeleteVendor} Loading={loading} text={'Are You Sure Want To Delete ?'}/>
       }
 
       {

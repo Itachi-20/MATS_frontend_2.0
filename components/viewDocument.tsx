@@ -19,19 +19,19 @@ import {
 } from "@/components/ui/table";
 import Link from "next/link";
 type DocumentRow = {
-    file_name: string;
-    name:string;
-    file_url: string;
-  };
+  file_name: string;
+  name: string;
+  file_url: string;
+};
 
 type Props = {
-//   onSubmit: (document: DocumentRow[]) => void;
-data:DocumentRow[] | undefined;
-setClose: React.Dispatch<React.SetStateAction<boolean>>
+  //   onSubmit: (document: DocumentRow[]) => void;
+  data: DocumentRow[] | undefined;
+  setClose: React.Dispatch<React.SetStateAction<boolean>>
 };
 
 const AddDocument = ({ ...Props }: Props) => {
-//   const base_url = process.env.NEXT_PUBLIC_FRAPPE_URL;
+  //   const base_url = process.env.NEXT_PUBLIC_FRAPPE_URL;
 
   return (
     <div className="absolute z-50 flex inset-0 items-center justify-center bg-black bg-opacity-50">
@@ -41,23 +41,23 @@ const AddDocument = ({ ...Props }: Props) => {
         </h1>
 
         {/* Document Table */}
-        <div className="border rounded-lg">
-          <Table>
+        <div className="border rounded-2xl">
+          <Table className="w-full table-fixed">
             <TableHeader className="bg-[#E0E9FF] sticky top-0 z-10">
-              <TableRow className="text-nowrap text-[#625d5d] text-[15px] font-normal">
-                <TableHead className="text-center rounded-l-2xl py-3">Document Name</TableHead>
-                <TableHead className="text-center rounded-r-2xl py-3">Download</TableHead>
+              <TableRow className="text-[#625d5d] text-[15px] font-normal">
+                <TableHead colSpan={3} className="text-center rounded-tl-2xl py-3">Document Name</TableHead>
+                <TableHead colSpan={3} className="text-center rounded-tr-2xl py-3">Download</TableHead>
               </TableRow>
             </TableHeader>
           </Table>
           <div className="max-h-[300px] overflow-y-auto">
-            <Table>
+            <Table className="w-full table-fixed">
               {Props.data && Props.data.length > 0 ? (
                 <TableBody className="text-black">
                   {Props.data.map((row, index) => (
                     <TableRow key={index}>
-                      <TableCell className="text-center">{row.file_name}</TableCell>
-                      <TableCell className="text-center">
+                      <TableCell colSpan={3} className="text-center truncate py-3">{row.file_name}</TableCell>
+                      <TableCell colSpan={3} className="text-center py-3">
                         <Link
                           href={row.file_url}
                           target="_blank"
@@ -73,7 +73,7 @@ const AddDocument = ({ ...Props }: Props) => {
               ) : (
                 <TableBody>
                   <TableRow>
-                    <TableCell colSpan={2} className="text-center text-black py-4">
+                    <TableCell colSpan={6} className="text-center py-4">
                       No Results.
                     </TableCell>
                   </TableRow>
@@ -82,6 +82,8 @@ const AddDocument = ({ ...Props }: Props) => {
             </Table>
           </div>
         </div>
+
+
 
         {/* Action Buttons */}
         <div data-state="close" className="flex justify-end mt-4 gap-4">

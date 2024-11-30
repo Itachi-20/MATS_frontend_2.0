@@ -295,7 +295,7 @@ const ExpensePage = ({ ...Props }: Props) => {
                                 <Input type="file" className="hidden" onChange={handleFileChange} />
                             </label> */}
             </div>
-            <Button className='bg-white  shadow text-black px-6'>Back</Button>
+            <Button className='bg-white  shadow text-black px-6' onClick={()=>router.push(`/advance_payment/${refno.request_number}`)}>Back</Button>
           </div>
         </div>
         <div className='border rounded-3xl mt-5 mb-14 p-2 text-black grid grid-cols-3'>

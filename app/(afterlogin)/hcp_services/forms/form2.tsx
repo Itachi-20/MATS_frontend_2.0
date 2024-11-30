@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button"
 import { useContext } from 'react';
 import { AppContext } from '@/app/context/module'
 import { useRouter } from 'next/navigation'
+import {Previewdata} from '@/app/(afterlogin)/hcp_services/page'
 
 type dropdownData = {
   company: {
@@ -98,8 +99,11 @@ type activityDropdown = {
   }[]
 }
 
-
-const Form2 = () => {
+type Props = {
+  previewData:Previewdata | null;
+  refno:string | undefined;
+}
+const Form2 = ({...Props}:Props) => {
   const router = useRouter();
   const [formdata, setFormData] = useState<formData | {}>({});
   const [refNo,setRefNo] = useState<string | null>(localStorage.getItem("refno")?localStorage.getItem("refno"):"");
@@ -146,7 +150,7 @@ const Form2 = () => {
            setRefNo(data.message);
    
            setTimeout(() => {
-             router.push(`/hcp_services?forms=3`);
+             router.push(`/hcp_services?forms=3&refno=${data.message}`);
            }, 1000)
          } else {
            console.log("submission failed");
@@ -157,8 +161,8 @@ const Form2 = () => {
      };
 
      useEffect(() => {
-      setFormData({ ...formdata, name: refNo })
-    }, [refNo])
+      setFormData({ ...formdata, name: Props.refno?Props.refno:localStorage.getItem("refno") })
+    }, [])
 
 console.log(formdata,"this is form data")
   return (
@@ -173,6 +177,7 @@ console.log(formdata,"this is form data")
           <Input className='dropdown' placeholder='Type Here'
           name='hcp_name'
           onChange={(e)=>{handlefieldChange(e)}}
+          defaultValue={Props.previewData?.hcp_name?Props.previewData.hcp_name:""}
           ></Input>
 
         </div>
@@ -181,6 +186,7 @@ console.log(formdata,"this is form data")
           <input type='text' 
           name='hospital_affiliation'
           onChange={(e)=>{handlefieldChange(e)}}
+          defaultValue={Props.previewData?.hospital_affiliation?Props.previewData.hospital_affiliation:""}
           className='dropdown h-10 rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm'></input>
 
         </div>
@@ -189,6 +195,7 @@ console.log(formdata,"this is form data")
           <label className='lable'>engagement of any government hCP’s?<span className='text-[#e60000]'>*</span></label>
           <Select
           onValueChange={(value)=>{handleSelectChange(value,"any_govt_hcp")}}
+          defaultValue={Props.previewData?.any_govt_hcp?Props.previewData.any_govt_hcp:""}
           >
             <SelectTrigger className="dropdown">
               <SelectValue placeholder="Select" />
@@ -205,6 +212,7 @@ console.log(formdata,"this is form data")
           <input type='input' 
           name='no_of_hcp'
           onChange={(e)=>{handlefieldChange(e)}}
+          defaultValue={Props.previewData?.no_of_hcp?Props.previewData.no_of_hcp:""}
           className='dropdown h-10 rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm'></input>
 
 
@@ -215,6 +223,7 @@ console.log(formdata,"this is form data")
           <Textarea className='text-black shadow-md' placeholder='Type Here'
           name='bu_rational'
           onChange={(e)=>{handlefieldChange(e)}}
+          defaultValue={Props.previewData?.bu_rational?Props.previewData.bu_rational:""}
           />
         </div>
         

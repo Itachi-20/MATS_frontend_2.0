@@ -22,6 +22,8 @@ type DocumentRow = {
     file_name: string;
     name:string;
     file_url: string;
+    // created_date:string;
+    // created_by:string;
   };
 
 type Props = {
@@ -56,8 +58,8 @@ const AddDocument = ({ ...Props }: Props) => {
               {Props.data && Props.data.map((row, index) => (
                 <TableRow key={index}>
                   <TableCell className="text-center">{row.file_name}</TableCell>
-                  {/* <TableCell className="text-center">{row.createdDate}</TableCell>
-                  <TableCell className="text-center">{row.createdBy}</TableCell> */}
+                  {/* <TableCell className="text-center">{row.created_date}</TableCell>
+                  <TableCell className="text-center">{row.created_by}</TableCell> */}
                   <TableCell className="text-center">
 
                     {/* <Link href={row.downloadLink} target="_blank" rel="noopener noreferrer">
