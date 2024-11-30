@@ -11,10 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import Table from "@/app/(afterlogin)/event_vendor_list/table";
 import { useState, useEffect } from 'react';
-import Viewvendor from '@/components/view_vendor';
-import ViewDocument from '@/components/view_document';
-import Adddocument from '@/components/add_document';
-import Addvendor from '@/components/add_vendor';
+import DeletePopup from '@/components/deleteDialog'
 import { View } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { toast, Toaster } from 'sonner';
@@ -54,6 +51,7 @@ type EventTable = {
   vendor_code: string;
   email: string;
   contact_number: string;
+  status:string;
 }[];
 
 type particularVendorData = {
@@ -107,6 +105,9 @@ const page = () => {
   const [addVendor, setAddVendor] = useState(false);
   const [deletevendorname,setDeleteVendorName]=useState()
   const [formdata, setFormData] = useState<formData | {}>({});
+  const [deletepopup, setDeletePopup] = useState(false);
+  const [deletename, setDeleteName] = useState<string | null>();
+  const [loading, setLoading] = useState(false)
   const router = useRouter()
   const isViewVendor = () => {
     setViewVendor(prev => !prev)
@@ -138,10 +139,6 @@ const page = () => {
       console.error("Error during login:", error);
     }
   };
-
-  const isAddVendor = () => {
-    setAddVendor(prev => !prev)
-  }
 
   const dropdown = async () => {
 
@@ -176,64 +173,9 @@ const page = () => {
     setFormData({ ...formdata})
   }, [])
 
-
-
-  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-
-    try {
-      const response = await fetch(
-        "/api/addVendor",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: 'include',
-          body: JSON.stringify(formdata)
-        }
-      );
-      if (response.ok) {
-        const data = await response.json();
-        console.log(data, "response data");
-        
-      } else {
-        console.log("submission failed");
-      }
-    } catch (error) {
-      console.error("Error during Submission:", error);
-    }
-  };
-  const handlefieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  }
-  const handleSelectChange = (value: string, name: string) => {
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-  const handleAddDocumentSubmit = (documentData : any) => {
-    // Map over the incoming data and include additional fields if necessary
-    const updatedDocumentData = documentData.map((doc : any) => ({
-      document_type: doc.document_type,
-      is_private:doc.is_private,
-      fileName: doc.fileName,
-      createdDate: new Date().toISOString(), // Override or add createdDate with current timestamp
-      createdBy: doc.createdBy, // Ensure createdBy has a value
-      file: doc.downloadLink,
-    }));
-  
-    // Update the form data or state
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      document: updatedDocumentData, // Include the documents in the formData
-    }));
-  
-    // Close the AddDocument modal
-    isAddDocument();
-  };
-
-  const handleDeleteVendor = async (name:any) => {
-    console.log("deletename", name)
+  const handleDeleteVendor = async () => {
+    console.log("deletename", deletename)
+    setLoading(true)
     try {
       const response = await fetch(
         "/api/deleteVendorFromMaster",
@@ -244,23 +186,35 @@ const page = () => {
           },
           credentials: 'include',
           body: JSON.stringify({
-            name: name
+            name: deletename
           })
         }
       );
       if (response.ok) {
-        console.log(" Successful Delete response data");
-        toast.success("Vendor Deleted Successfully");
-        setTimeout(() => {
+        setLoading(false)
+        setDeletePopup(false)
+        console.log(response);
+        // toast.success("Vendor Deleted Successfully");
+        // setTimeout(() => {
           VendorList()
+        // }, 1000)
+        setTimeout(() => {
+          toast.success("Vendor Deleted Successfully");
         }, 1000)
-        
       } else {
+        setLoading(false)
         console.log("submission failed");
       }
     } catch (error) {
+      setLoading(false)
       console.error("Error during Submission:", error);
     }
+  };
+
+  const handleDeleteDialog = async (name: string) => {
+    console.log('indise delete ',name)
+    setDeleteName(name);
+    setDeletePopup(true)
   };
   console.log(formdata, "this is form data");
   return (
@@ -305,36 +259,12 @@ const page = () => {
             </Button>
           </div>
         </div>
-        <Table  vendorData={vendorData}  isViewDocument={isViewDocument}  handleDeleteVendor={handleDeleteVendor} />
+        <Table  vendorData={vendorData}  isViewDocument={isViewDocument}  handleDeleteVendor={handleDeleteDialog} />
       </div>
-      {/* {
-        viewVendor &&
-        <Viewvendor isViewVendor={isViewVendor} isAddDocument={isAddDocument} isViewDocument={isViewDocument} vendorInfo={particularVendorData} />
-      } */}
-      {/* {
-        addDocument &&
-        <Adddocument isAddDocument={isAddDocument} onSubmit={handleAddDocumentSubmit} />
-      } */}
-      {/* {
-        viewDocument &&
-        <ViewDocument setClose={isViewDocument}  />
-      } */}
+      {
+        deletepopup && <DeletePopup setClose={setDeletePopup} handleSubmit={handleDeleteVendor} Loading={loading} text={'Are you sure want to delete this Vendor?'} />
+      }
 
-      {/* {
-        addVendor &&
-          <Addvendor
-            isAddVendor={isAddVendor}
-            isAddDocument={isAddDocument}
-            vendorType={dropdownData && dropdownData.vendor_type}
-            handlefieldChange={handlefieldChange}
-            handleSelectChange={handleSelectChange}
-            handleSubmit={handleSubmit}
-            formdata={formdata}
-            // setFormData={setFormData}
-          />
-   
-
-      } */}
       <Toaster richColors position="top-right" />
     </>
   )

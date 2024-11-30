@@ -9,7 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Image from 'next/image';
-import ViewDocument from '@/components/view_document'
+import ViewDocument from '@/components/viewDocument'
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 type DocumentRow = {
@@ -155,7 +155,7 @@ const table = ({ ...Props }: Props) => {
               Props?.expensetabledata?.map((data, index) => {
                 return (
                   <TableRow key={index} className="text-center text-nowrap text-black">
-                    <TableCell>{data.event_request_number}</TableCell>
+                    <TableCell>{data.parent}</TableCell>
                     <TableCell>{data.vendor_type}</TableCell>
                     {/* <TableCell>{data.vendor_code}</TableCell> */}
                     <TableCell>{data.vendor_name}</TableCell>
@@ -167,11 +167,11 @@ const table = ({ ...Props }: Props) => {
                     <TableCell>{data.net_amount}</TableCell>
                     <TableCell>{data.utr_number}</TableCell>
                     <TableCell>{data.payment_date}</TableCell>
-                    <TableCell className='sticky right-0 z-20 gap-3 w-[120px] bg-white mt-2 flex border-l'>
+                    <TableCell className='sticky right-0 z-20 gap-3 w-[120px] bg-white mt-2 flex justify-center items-center border-l'>
                       <button onClick={() => handleSetFileData(data.files)}><Image src={'/svg/view.svg'} alt='viewsvg' width={24} height={18} /></button>
                       {/* <Image src={'/svg/view.svg'} alt='viewsvg' width={24}  height={18}/> */}
-                      <Image src={'/svg/editIcon.svg'} alt='editsvg' width={20} height={18} />
-                      <Image src={'/svg/delete.svg'} alt='deletesvg' width={20} height={18} />
+                      {/* <Image src={'/svg/editIcon.svg'} alt='editsvg' width={20} height={18} /> */}
+                      {/* <Image src={'/svg/delete.svg'} alt='deletesvg' width={20} height={18} /> */}
                     </TableCell>
                   </TableRow>
                 );

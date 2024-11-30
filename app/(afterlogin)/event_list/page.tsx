@@ -79,7 +79,6 @@ export default function EventList () {
   fetchTableData();
   },[])
 
-  console.log(tableData,"this is state data")
 
   return (
         <div className="p-7 w-full relative z-20 text-black">
@@ -237,7 +236,7 @@ export default function EventList () {
                           <TableCell>{data.occurrence_no}</TableCell>
                           <TableCell>{data.status}</TableCell>
                           <TableCell></TableCell>
-                          <TableCell className="sticky right-0 bg-[white] z-50 flex space-x-8 border-l border-slate-200 justify-center items-center mt-4 hover:opacity-60"> 
+                          <TableCell className="sticky right-0 bg-[white] z-30 flex space-x-8 border-l border-slate-200 justify-center items-center mt-4"> 
                               <Image src={"/svg/view.svg"} width={17} height={20} alt="view-svg" className="cursor-pointer" onClick={()=>handleClick(data.name)} />                        
                           </TableCell>
                           

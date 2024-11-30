@@ -3,6 +3,7 @@ import { ChangeEvent, useState } from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useAuth } from "../../context/AuthContext";
+import { Loader } from "lucide-react";
 import Cookies from "js-cookie";
 type formData = {
   user: string,
@@ -13,13 +14,15 @@ const Index = () => {
   const router = useRouter();
   const [formData, setFormData] = useState<formData | {}>();
   const { setAuthData } = useAuth();
+  const [loading, setLoading] = useState<boolean>(false);
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }))
   }
 
   const handleSubmit = async () => {
-
+    if (loading) return
+    setLoading(true)
     try {
       const response = await fetch("/api/sign-in", {
         method: "POST",
@@ -42,6 +45,8 @@ console.log(savedRole,savedName,savedid,'savedid')
       }
     } catch (error) {
       console.error("Error during login:", error);
+    }finally {
+      setLoading(false)
     }
   };
   return (
@@ -77,19 +82,28 @@ console.log(savedRole,savedName,savedid,'savedid')
             onChange={(e) => { handleOnChange(e) }}
             required
           />
-          <h1 className="text-sm text-[#4b4b4b] font-normal pl-2 hover:cursor-pointer">
+          {/* <h1 className="text-sm text-[#4b4b4b] font-normal pl-2 hover:cursor-pointer">
             Forgot Password ?
-          </h1>
+          </h1> */}
         </div>
-        <div className="flex justify-center gap-5 pb-4">
-          <button className="px-[35px] py-2 border border-[#000000] rounded-[50px]" onClick={handleSubmit}>
-            Login
+        <div className="flex justify-center gap-5 pb-4 px-20">
+          <button className="px-[35px] w-full py-2  rounded-[50px] text-white bg-black hover:bg-opacity-60" disabled={loading} onClick={handleSubmit}>
+          {loading ? (
+                    <>
+                    <div className='flex items-center justify-center'>
+                      <Loader className=" mr-2 h-4 w-4 animate-spin" />
+                      Login ...
+                    </div>
+                    </>
+                  ) : (
+                    "Login"
+                  )}
           </button>
-          <button className="px-[35px] py-2  rounded-[50px] bg-black text-white">
+          {/* <button className="px-[35px] py-2  rounded-[50px] bg-black text-white">
             Sign Up
-          </button>
+          </button> */}
         </div>
-        <div>
+        {/* <div>
           <div className='text-center text-[#848484] text-xs font-normal font-montserrat pb-[12px]'>
             Privacy Policy | Contact
           </div>
@@ -97,7 +111,7 @@ console.log(savedRole,savedName,savedid,'savedid')
             <span className="font-bold">&#169; </span>2024 Meril Life Sciences
             Private Limited. All Rights Reserved
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   )

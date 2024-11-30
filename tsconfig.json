@@ -36,5 +36,6 @@
 , "app/(afterlogin)/repository_document_list"  ],
   "exclude": [
     "node_modules"
-  ]
+  ],
+  
 }

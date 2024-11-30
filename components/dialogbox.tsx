@@ -1,3 +1,4 @@
+'use client'
 import React from 'react';
 import CorrectSign from "@/public/svg/arrow";
 import { Button } from "@/components/ui/button";

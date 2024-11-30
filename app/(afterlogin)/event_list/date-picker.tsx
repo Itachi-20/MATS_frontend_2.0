@@ -8,12 +8,6 @@ export default function DateRangePicker() {
   const [endDate, setEndDate] = useState('');
   const [isPickerOpen, setIsPickerOpen] = useState(false);
 
-  // Date format function
-  const formatDate = (date:any) => {
-    if (!date) return '';
-    const options = { day: 'numeric', month: 'short', year: 'numeric' };
-    return new Date(date).toLocaleDateString('en-GB', options);
-  };
 
   // Toggle Date Picker
   const togglePicker = () => {

@@ -12,50 +12,15 @@ type Data = {
         "status":string
 }
 
-export default async function AuditTrailPage (){    
+export default async function AuditTrailPage ({params}:any){    
 
-  // const data : Data[] = [     
-  //   {
-  //       "request_number": "5620",
-  //       "event_name": "TAVI Workshop",
-  //       "event_type": "Training and Education",
-  //       "event_date": "11-11-2024",
-  //       "event_venue": "Hhhh",
-  //       "type_of_activity": "Activity",
-  //       "status": "Active"
-  //   },
-  // ]   
-
-  // const fetchData = async()=>{
-  //   try {
-  //     const Data = await fetch(
-  //       `/api/eventList`,
-  //       {
-  //         method: "POST",
-  //         headers:{
-  //           "Content-Type": "application/json",
-  //         },
-  //         credentials:'include',
-  //         body:JSON.stringify({
-  //           activity:"Pre Activity"
-  //         })
-  //       }
-  //     );
-  //     if(Data.ok){
-  //       const data = await Data.json();
-  //       setTableData(data.message)
-  //     }
-      
-  //   } catch (error) {
-  //     console.log(error,"something went wrong");
-  //   }
-  // }
+  const refno = await params
   const cookie = await cookies();
-  const data = await fetchData(cookie);
+  const data = await fetchData(cookie,refno.id);
   return (
-    <>
-     <AuditTrail PageName={"eventListPage"} data={data}/>
-    </>
+    <div>
+     <AuditTrail PageName={"eventListPage"} data={data.documents}/>
+     </div>
   )
 }
 

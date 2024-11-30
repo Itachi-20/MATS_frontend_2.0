@@ -107,7 +107,7 @@ const table = ({ ...Props }: Props) => {
             </TableHead>
             <TableHead
               className={
-                "text-center rounded-r-2xl"
+                "text-center rounded-r-2xl sticky right-0 z-30 bg-[#E0E9FF]"
               }
             >
               Action 
@@ -120,14 +120,14 @@ const table = ({ ...Props }: Props) => {
               return (
                 <TableRow key={index} className="text-center text-nowrap">
                   <TableCell>{data.vendor_type}</TableCell>
-                  <TableCell>{data.vendor_code}</TableCell>
                   <TableCell>{data.vendor_name}</TableCell>
+                  <TableCell>{data.vendor_code}</TableCell>
                   <TableCell>{data.remark}</TableCell>
                   <TableCell>{data.pan_number}</TableCell>
                   <TableCell>{data.email}</TableCell>
                   <TableCell>{data.contact_number}</TableCell>
                   <TableCell>{data.status}</TableCell>
-                  <TableCell className="flex space-x-6 items-center justify-center border-l-2">
+                  <TableCell className="flex space-x-6 items-center justify-center border-l-2 sticky right-0 bg-[white] z-30">
                     {/* <div className="hover:cursor-pointer" onClick={() => router.push(`/add_vendor?refno=${data.name}&view=view`)}>
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
                         <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
