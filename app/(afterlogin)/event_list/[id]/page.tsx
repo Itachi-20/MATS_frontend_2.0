@@ -241,7 +241,7 @@ useEffect(()=>{
               </div>
               <div className="col-span-1 ">
                 <h1 className="bg-[#ecf2ff] px-2 rounded-xl text-center">Request Date</h1>
-                <h1 className="text-center">11/11/24</h1>
+                <h1 className="text-center">{eventData?.modified.substring(0,10)}</h1>
               </div>
               <div className="col-span-1 flex justify-center">
               <Button className={`bg-[#4430bf] text-white border  px-8 hover:bg-[#4430bf] ${eventData && (eventData.executed == 1 || eventData.post_activity_approved == 1)?"":"hidden"} `} onClick={()=>router.push(`/post_document_activity?refno=${refno}`)}>Post Document</Button>
