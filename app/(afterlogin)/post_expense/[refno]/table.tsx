@@ -26,11 +26,12 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation';
 import ViewDocument from '@/components/viewDocument';
 import { useParams } from 'next/navigation';
-import Ondeleteprop from '@/components/onDeleteProp';
+import Ondeleteprop from '@/components/deleteDialog';
 import Successprop from '@/components/success_prop';
 import SimpleFileUpload from '@/components/multiple_file_upload';
 import { Toaster, toast } from 'sonner'
 import SuccessProp from '@/components/success_prop';
+import { useAuth } from "@/app/context/AuthContext";
 
 type ImportFiles = {
   name: string,
@@ -198,7 +199,7 @@ type DocumentRow = {
   file_url: string;
 };
 const table = ({ tableData }: Props) => {
-
+  const { role, name,userid, clearAuthData } = useAuth();
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [successProp, setSuccessProp] = useState(false);
@@ -444,32 +445,7 @@ const table = ({ tableData }: Props) => {
   };
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    // console.log("formdata before submit", tabledata);
-
-    // try {
-    //   const response = await fetch(
-    //     "/api/postExpense/postExpenseRequest",
-    //     {
-    //       method: "POST",
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //       },
-    //       credentials: 'include',
-    //       body: JSON.stringify(tabledata)
-    //     }
-    //   );
-    //   if (response.ok) {
-    //     const data = await response.json();
-    //     console.log(data, "response data");
-    //     setTimeout(() => {
-          router.push(`/event_list`);
-    //     }, 1000)
-    //   } else {
-    //     console.log("submission failed");
-    //   }
-    // } catch (error) {
-    //   console.error("Error during Submission:", error);
-    // }
+    router.push(`/event_list`);
     setSuccessProp(true);
     setTimeout(() => {
       setSuccessProp(false);
@@ -498,7 +474,7 @@ const table = ({ tableData }: Props) => {
             Training & Education
           </div>
           <div className='flex gap-4'>
-            <Button className="border rounded-sm px-6 py-1 border-black text-black">Back</Button>
+            <Button className="border rounded-sm px-6 py-1 border-black text-black hover:opacity-60" onClick={()=>{router.push("/event_list")}}>Back</Button>
           </div>
         </div>
         <div className='border rounded-3xl mt-5 mb-7 p-2 text-black grid grid-cols-3'>
@@ -712,7 +688,7 @@ const table = ({ tableData }: Props) => {
                 </TableHead>
                 <TableHead
                   className={
-                    "text-center rounded-r-2xl text-[#625d5d] text-[15px] font-normal font-['Montserrat'] sticky right-0 z-20 bg-[#E0E9FF]"
+                    "text-center rounded-r-2xl text-[#625d5d] text-[15px] font-normal font-['Montserrat'] sticky right-0 z-20 bg-[#E0E9FF] shadow"
                   }
                 >Action</TableHead>
               </TableRow>
@@ -745,8 +721,10 @@ const table = ({ tableData }: Props) => {
                                 <path fillRule="evenodd" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 0 1 0-1.113ZM17.25 12a5.25 5.25 0 1 1-10.5 0 5.25 5.25 0 0 1 10.5 0Z" clipRule="evenodd" />
                               </svg>
                             </div>
-                            {/* <Image src={'/svg/editIcon.svg'} alt='editsvg' width={20} height={18} /> */}
+                            {
+                              !(data?.status == "Post Expense Approved" || data?.status == "Post Expense Closed")&& role=="Event Requester" && 
                             <Image className='hover:cursor-pointer hover:opacity-60' src={'/svg/delete.svg'} alt='deletesvg' width={20} height={18} onClick={() => {handleDeletePopup(data.name)}} />
+                            }
                           </TableCell>
                         </TableRow>
                       );
@@ -922,7 +900,7 @@ const table = ({ tableData }: Props) => {
         <ViewDocument setClose={setOpen} data={fileData} />
       }
       {exportopen && <UploadExport handleExport={handleExport} data={tabledata.import_files} />}
-      {isDeletePropOpen && <Ondeleteprop setClose={setIsDeletePropOpen} handleDelete={handleRecordDeletion}/>}
+      {isDeletePropOpen && <Ondeleteprop setClose={setIsDeletePropOpen} handleSubmit={handleRecordDeletion} Loading={isLoading} text={"Are you sure you want to close this event?"}/>}
       {successProp && <SuccessProp title={"Post Expense Approval"}/>}
       <Toaster richColors position="top-right"/>
     </>

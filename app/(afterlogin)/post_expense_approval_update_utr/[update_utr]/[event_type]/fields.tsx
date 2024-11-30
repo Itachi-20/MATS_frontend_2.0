@@ -82,6 +82,7 @@ type Glcode = {
 
 type ActualVendor = {
   status: string;
+  is_approved: boolean;
 };
 
 type EventData = {

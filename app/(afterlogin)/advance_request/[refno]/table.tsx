@@ -11,8 +11,8 @@ import {
 } from "@/components/ui/table";
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
-import { Textarea } from '@/components/ui/textarea'
-import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
@@ -23,11 +23,11 @@ import {
 import Link from 'next/link';
 import { useState, useEffect } from 'react'
 import { useRouter, useParams } from 'next/navigation';
-import ViewDocument from '@/components/view_document'
-import DeletePopup from '@/components/deleteDialog'
-import { Toaster, toast } from 'sonner'
-import SubmitPopup from '@/components/successProp'
-import SimpleFileUpload from '@/components/multiple_file_upload'
+import ViewDocument from '@/components/view_document';
+import DeletePopup from '@/components/deleteDialog';
+import { Toaster, toast } from 'sonner';
+import SubmitPopup from '@/components/successProp';
+import SimpleFileUpload from '@/components/multiple_file_upload';
 type TableData = {
   name: string;
   event_date: string;
@@ -73,12 +73,12 @@ type dropdownData = {
   currency: {
     name: string
   }[]
-}
+};
 
 type vendorName = {
   name: string,
   vendor_name: string
-}[]
+}[];
 
 type VendorData = {
   vendor_type: string;

@@ -82,6 +82,7 @@ type Glcode = {
 
 type ActualVendor = {
   status: string;
+  is_approved: boolean;
 };
 
 type EventData = {
@@ -260,7 +261,7 @@ const Fields = ({ ...Props }: Props) => {
               id='document_no'
               name='document_no'
               onChange={(e)=>Props.handlefieldChange(e)}
-              readOnly={Props.expenseData?.actual_vendors[0]?.status == "Post Expense Approved" || Props.expenseData?.actual_vendors[0]?.status == "Post Expense Closed" ? true : false}
+              readOnly={Props?.expenseData?.actual_vendors[0]?.is_approved ? true : false}
             ></Input>
           </div>
           <div className='grid-cols-1 space-y-2'>
@@ -275,7 +276,7 @@ const Fields = ({ ...Props }: Props) => {
               id='posting_date'
               name='posting_date'
               onChange={(e)=>Props.handlefieldChange(e)}
-              readOnly={Props.expenseData?.actual_vendors[0]?.status == "Post Expense Approved" || Props.expenseData?.actual_vendors[0]?.status == "Post Expense Closed" ? true : false}
+              readOnly={Props?.expenseData?.actual_vendors[0]?.is_approved ? true : false}
             ></Input>
           </div>
           <div className='grid-cols-1 space-y-2'>
@@ -290,7 +291,7 @@ const Fields = ({ ...Props }: Props) => {
               id='invoice_number'
               name='invoice_number'
               onChange={(e)=>Props.handlefieldChange(e)}
-              readOnly={Props.expenseData?.actual_vendors[0]?.status == "Post Expense Approved" || Props.expenseData?.actual_vendors[0]?.status == "Post Expense Closed" ? true : false}
+              readOnly={Props?.expenseData?.actual_vendors[0]?.is_approved ? true : false}
             ></Input>
           </div>
           <div className='grid-cols-1 space-y-2'>
@@ -305,7 +306,7 @@ const Fields = ({ ...Props }: Props) => {
               id='date'
               name='date'
               onChange={(e)=>Props.handlefieldChange(e)}
-              readOnly={Props.expenseData?.actual_vendors[0]?.status == "Post Expense Approved" || Props.expenseData?.actual_vendors[0]?.status == "Post Expense Closed" ? true : false}
+              readOnly={Props?.expenseData?.actual_vendors[0]?.is_approved ? true : false}
             ></Input>
           </div>
           <div className='grid-cols-1 space-y-2'>
@@ -320,7 +321,7 @@ const Fields = ({ ...Props }: Props) => {
               id='date'
               name='basic_amount'
               onChange={(e)=>Props.handlefieldChange(e)}
-              readOnly={Props.expenseData?.actual_vendors[0]?.status == "Post Expense Approved" || Props.expenseData?.actual_vendors[0]?.status == "Post Expense Closed" ? true : false}
+              readOnly={Props?.expenseData?.actual_vendors[0]?.is_approved ? true : false}
             ></Input>
           </div>
           <div className='grid-cols-1 space-y-2'>
@@ -335,7 +336,7 @@ const Fields = ({ ...Props }: Props) => {
               id='gst'
               name='gst'
               onChange={(e)=>Props.handlefieldChange(e)}
-              readOnly={Props.expenseData?.actual_vendors[0]?.status == "Post Expense Approved" || Props.expenseData?.actual_vendors[0]?.status == "Post Expense Closed" ? true : false}
+              readOnly={Props?.expenseData?.actual_vendors[0]?.is_approved ? true : false}
             ></Input>
           </div>
           <div className='grid-cols-1 space-y-2'>
@@ -350,7 +351,7 @@ const Fields = ({ ...Props }: Props) => {
               id='invoice_amount'
               name='invoice_amount'
               onChange={(e)=>Props.handlefieldChange(e)}
-              readOnly={Props.expenseData?.actual_vendors[0]?.status == "Post Expense Approved" || Props.expenseData?.actual_vendors[0]?.status == "Post Expense Closed" ? true : false}
+              readOnly={Props?.expenseData?.actual_vendors[0]?.is_approved ? true : false}
             ></Input>
           </div>
           <div className='grid-cols-1 space-y-2'>
@@ -365,7 +366,7 @@ const Fields = ({ ...Props }: Props) => {
               id='tds'
               name='tds'
               onChange={(e)=>Props.handlefieldChange(e)}
-              readOnly={Props.expenseData?.actual_vendors[0]?.status == "Post Expense Approved" || Props.expenseData?.actual_vendors[0]?.status == "Post Expense Closed" ? true : false}
+              readOnly={Props?.expenseData?.actual_vendors[0]?.is_approved ? true : false}
             ></Input>
           </div>
           <div className='grid-cols-1 space-y-2'>
@@ -380,7 +381,7 @@ const Fields = ({ ...Props }: Props) => {
               id='net_amount'
               name='net_amount'
               onChange={(e)=>Props.handlefieldChange(e)}
-              readOnly={Props.expenseData?.actual_vendors[0]?.status == "Post Expense Approved" || Props.expenseData?.actual_vendors[0]?.status == "Post Expense Closed" ? true : false}
+              readOnly={Props?.expenseData?.actual_vendors[0]?.is_approved ? true : false}
             ></Input>
           </div>
 
@@ -392,7 +393,7 @@ const Fields = ({ ...Props }: Props) => {
             <Select 
               onValueChange={(value) => {handleDivisionChange(value); Props.handleSelectChange(value, "division")}} 
               value={Props.formdata?.division ?? ""}
-              disabled={Props.expenseData?.actual_vendors[0]?.status == "Post Expense Approved" || Props.expenseData?.actual_vendors[0]?.status == "Post Expense Closed" ? true : false}
+              disabled={Props?.expenseData?.actual_vendors[0]?.is_approved ? true : false}
               >
               <SelectTrigger className="dropdown rounded-sm gap-4">
                 <SelectValue placeholder="-Select-" />
@@ -400,7 +401,7 @@ const Fields = ({ ...Props }: Props) => {
               <SelectContent>
                 {
                   Props.dropdown?.division.map((data, index) => (
-                    <SelectItem key={index} value={data.name}>-{data.name}-</SelectItem>
+                    <SelectItem key={index} value={data.name}>{data.name}</SelectItem>
                   ))
                 }
 
@@ -414,7 +415,7 @@ const Fields = ({ ...Props }: Props) => {
             <Select 
               value={Props.formdata?.cost_center ?? ""}
               onValueChange={(value) =>  { handleCostCenter(value); Props.handleSelectChange(value, "cost_center");}}
-              disabled={Props.expenseData?.actual_vendors[0]?.status == "Post Expense Approved" || Props.expenseData?.actual_vendors[0]?.status == "Post Expense Closed" ? true : false}
+              disabled={Props?.expenseData?.actual_vendors[0]?.is_approved ? true : false}
             >
               <SelectTrigger className="dropdown rounded-sm gap-4">
                 <SelectValue placeholder="-Select-" />
@@ -459,7 +460,7 @@ const Fields = ({ ...Props }: Props) => {
               id='nature'
               name='nature'
               onChange={(e)=>Props.handlefieldChange(e)}
-              readOnly={Props.expenseData?.actual_vendors[0]?.status == "Post Expense Approved" || Props.expenseData?.actual_vendors[0]?.status == "Post Expense Closed" ? true : false}
+              readOnly={Props?.expenseData?.actual_vendors[0]?.is_approved ? true : false}
 
             ></Input>
           </div>
@@ -470,7 +471,7 @@ const Fields = ({ ...Props }: Props) => {
             <Select 
               value={Props.formdata?.company_name}
               onValueChange={(value) => {handleglcode(value); Props.handleSelectChange(value, "company_name");}}
-              disabled={Props.expenseData?.actual_vendors[0]?.status == "Post Expense Approved" || Props.expenseData?.actual_vendors[0]?.status == "Post Expense Closed" ? true : false}
+              disabled={Props?.expenseData?.actual_vendors[0]?.is_approved ? true : false}
             >
               
               <SelectTrigger className="dropdown rounded-sm gap-4">
@@ -479,7 +480,7 @@ const Fields = ({ ...Props }: Props) => {
               <SelectContent>
                 {
                   Props.dropdown?.company.map((data, index) => (
-                    <SelectItem key={index} value={data.name}>-{data.company_name}-</SelectItem>
+                    <SelectItem key={index} value={data.name}>{data.company_name}</SelectItem>
                   ))
                 }
               </SelectContent>
@@ -492,7 +493,7 @@ const Fields = ({ ...Props }: Props) => {
             <Select 
               value={Props.formdata?.gl_name ?? ""}
               onValueChange={(value) => {handleGlname(value); Props.handleSelectChange(value, "gl_name"); }}
-              disabled={Props.expenseData?.actual_vendors[0]?.status == "Post Expense Approved" || Props.expenseData?.actual_vendors[0]?.status == "Post Expense Closed" ? true : false}
+              disabled={Props?.expenseData?.actual_vendors[0]?.is_approved ? true : false}
               >
               
               <SelectTrigger className="dropdown rounded-sm gap-4">
@@ -501,7 +502,7 @@ const Fields = ({ ...Props }: Props) => {
               <SelectContent>
                 {
                   glCodeDropdown?.map((data, index) => (
-                    <SelectItem key={index} value={data.name}>-{data.name}-</SelectItem>
+                    <SelectItem key={index} value={data.name}>{data.name}</SelectItem>
                   ))
                 }
               </SelectContent>
@@ -534,7 +535,7 @@ const Fields = ({ ...Props }: Props) => {
               id='utr_number'
               name='utr_number'
               onChange={(e)=>Props.handlefieldChange(e)}
-              readOnly={Props.expenseData?.actual_vendors[0]?.status == "Post Expense Approved" || Props.expenseData?.actual_vendors[0]?.status == "Post Expense Closed" ? true : false}
+              readOnly={Props?.expenseData?.actual_vendors[0]?.is_approved ? true : false}
             ></Input>
           </div>
           <div className='grid-cols-1 space-y-2'>
@@ -549,7 +550,7 @@ const Fields = ({ ...Props }: Props) => {
               id='payment_date'
               name='payment_date'
               onChange={(e)=>Props.handlefieldChange(e)}
-              readOnly={Props.expenseData?.actual_vendors[0]?.status == "Post Expense Approved" || Props.expenseData?.actual_vendors[0]?.status == "Post Expense Closed" ? true : false}
+              readOnly={Props?.expenseData?.actual_vendors[0]?.is_approved ? true : false}
             ></Input>
           </div>
           <div className='grid-cols-1 space-y-2'>
@@ -559,7 +560,7 @@ const Fields = ({ ...Props }: Props) => {
             <Select 
             value={Props.formdata?.zone ?? ""}
             onValueChange={(value) => Props.handleSelectChange(value, "zone")}
-            disabled={Props.expenseData?.actual_vendors[0]?.status == "Post Expense Approved" || Props.expenseData?.actual_vendors[0]?.status == "Post Expense Closed" ? true : false}
+            disabled={Props?.expenseData?.actual_vendors[0]?.is_approved ? true : false}
             >
               <SelectTrigger className="dropdown rounded-sm gap-4">
                 <SelectValue placeholder="-Select-" />
@@ -567,7 +568,7 @@ const Fields = ({ ...Props }: Props) => {
               <SelectContent>
                 {
                   Props.dropdown?.zone.map((data, index) => (
-                    <SelectItem key={index} value={data.name}>-{data.zone}-</SelectItem>
+                    <SelectItem key={index} value={data.name}>{data.zone}</SelectItem>
                   ))
                 }
               </SelectContent>
@@ -580,7 +581,7 @@ const Fields = ({ ...Props }: Props) => {
             <Select 
             value={Props.formdata?.state ?? ""}
             onValueChange={(value) => {handleStateChange(value); Props.handleSelectChange(value, "state");}}
-            disabled={Props.expenseData?.actual_vendors[0]?.status == "Post Expense Approved" || Props.expenseData?.actual_vendors[0]?.status == "Post Expense Closed" ? true : false}
+            disabled={Props?.expenseData?.actual_vendors[0]?.is_approved ? true : false}
             >
               <SelectTrigger className="dropdown rounded-sm gap-4">
                 <SelectValue placeholder="-Select-" />
@@ -588,7 +589,7 @@ const Fields = ({ ...Props }: Props) => {
               <SelectContent>
                 {
                   Props.dropdown?.state.map((data, index) => (
-                    <SelectItem key={index} value={data.name}>-{data.state}-</SelectItem>
+                    <SelectItem key={index} value={data.name}>{data.state}</SelectItem>
                   ))
                 }
               </SelectContent>
@@ -601,7 +602,7 @@ const Fields = ({ ...Props }: Props) => {
             <Select
               value={Props.formdata?.city ?? ""}
               onValueChange={(value) =>  Props.handleSelectChange(value, "city")}
-              disabled={Props.expenseData?.actual_vendors[0]?.status == "Post Expense Approved" || Props.expenseData?.actual_vendors[0]?.status == "Post Expense Closed" ? true : false}
+              disabled={Props?.expenseData?.actual_vendors[0]?.is_approved ? true : false}
             >
               <SelectTrigger className="dropdown rounded-sm gap-4">
                 <SelectValue placeholder="-Select-" />
@@ -626,7 +627,7 @@ const Fields = ({ ...Props }: Props) => {
               id='narration'
               name='narration'
               onChange={(e)=>Props.handlefieldChange(e)}
-              readOnly={Props.expenseData?.actual_vendors[0]?.status == "Post Expense Approved" || Props.expenseData?.actual_vendors[0]?.status == "Post Expense Closed" ? true : false}
+              readOnly={Props?.expenseData?.actual_vendors[0]?.is_approved ? true : false}
             ></Textarea>
           </div>
         </div>
