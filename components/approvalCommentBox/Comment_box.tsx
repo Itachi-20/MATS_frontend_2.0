@@ -1,6 +1,7 @@
 import React from "react";
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
+import { useAuth } from "../../app/context/AuthContext";
 
 type props = {
   handleClose: () => void;
@@ -8,6 +9,7 @@ type props = {
   Submitbutton:()=>void;
 }
 const Comment_box = ({ handleClose,handleComment,Submitbutton }: props) => {
+  const {role,userid,name} = useAuth();
   return (
     // <div className="absolute z-50 flex pt-10 items-center justify-center bg-black bg-opacity-50">
         <div className="bg-white rounded-xl border p-7 md:max-w-[600px] md:max-h-[350px] h-full w-full gap-8 text-black md:text-md font-light flex flex-col items-center">
@@ -19,7 +21,7 @@ const Comment_box = ({ handleClose,handleComment,Submitbutton }: props) => {
                 Back
               </Button>
               <Button className="bg-[#5DBE74] text-white text-md font-normal border px-8 hover:bg-[#5DBE74]" onClick={()=>Submitbutton()}>
-                Submit
+                {role == "Event Approver"?"Approve":"Submit"}
               </Button>
             </div>
         </div>
