@@ -278,6 +278,7 @@ const DocumentDetails = ({...Props}:Props) => {
       
       if (response.ok) {
         const data = await response.json();
+        PreviewData();
        
       } else {
         console.log("Login failed");

@@ -224,9 +224,17 @@ const Preview_Form = ({...Props}:Props) => {
     }
   };
 
+  const handleComment = (value:string)=>{
+    setComment(value)
+  }
+
+  const handleDialog = ()=>{
+    setIsCommentbox(prev=> !prev);
+  }
+
   return (
       <>
-        <div className="md:px-7 md:pb-7 md:pt-4 w-full relative z-20">
+        <div className="md:px-7 md:pb-7 md:pt-4 w-full z-20">
             
         <BasicDetails
         pathname=""
@@ -266,10 +274,21 @@ const Preview_Form = ({...Props}:Props) => {
               <Button className="bg-white text-black border text-md font-normal">
                 Back
               </Button>
-              <Button className={`bg-[#4430bf] text-white  font-normal border`} onClick={()=>handleFinalSubmit()}>
+              <Button className={`bg-[#4430bf] text-white  font-normal border`} onClick={()=>handleDialog()}>
                 Submit
               </Button>
             </div>
+
+            {
+            isCommentbox &&
+            <div className=" absolute z-50 flex pt-10 items-end justify-center bg-black bg-opacity-50 w-full h-full inset-0 pb-40">
+          <Comment_box 
+          handleClose={handleDialog}
+          handleComment={handleComment}
+          Submitbutton = {handleFinalSubmit}
+          />
+          </div>
+          }
         
       </>
   )

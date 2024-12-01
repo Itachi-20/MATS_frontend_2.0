@@ -254,7 +254,7 @@ const Documents = ({PageName,...Props}:Props) => {
                       <div className='flex justify-between'>
                       <div className=''>{item3.file_name}</div>
                       <div className='flex gap-5 items-center'>
-                        <Link rel="stylesheet" href={item3.url}>
+                        <Link rel="stylesheet" href={item3.url} target='blank'>
                       <Image src={"/svg/view.svg"} width={20} height={20}  alt='view-document' className='cursor-pointer' />
                         </Link>
                         <div className={`${Props.eventData && Props.eventData.preactivity_submitted == 1?"hidden":""}`} onClick={async()=>{await handleDelete(item3.name)}}>

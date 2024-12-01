@@ -187,8 +187,28 @@ console.log(formdata,"this is form data")
       )
       setCompansationVendorType('');
       setCompansationAmount(0);
+      setCompansationVendorName('');
+      setCompansation_is_GST(0);
     }
   }
+
+  const handleCompensationDelete = (indexToDelete: number) => {
+    setCompansationBudget((prevRows) => {
+      const updatedRecords = prevRows?.filter((_, index) => index !== indexToDelete) || [];
+      setFormData((prev: any) => ({ ...prev, compensation: updatedRecords }));
+      return updatedRecords;
+    });
+  };
+
+
+  const handleLogisticDelete = (indexToDelete: number) => {
+    setLogisticBudget((prevRows) => {
+      const updatedRecords = prevRows?.filter((_, index) => index !== indexToDelete) || [];
+      setFormData((prev: any) => ({ ...prev, logistics: updatedRecords }));
+      return updatedRecords;
+    });
+  };
+
   useEffect(()=>{
     totalLogisticAmountCalculation();
   },[logisticsBudget])
@@ -298,6 +318,7 @@ console.log(formdata,"this is form data")
           </label>
           <Select
           onValueChange={(value:string)=>{setLogisticVendorType(value)}}
+          value={logisticVendorType?logisticVendorType:""}
           >
             <SelectTrigger className="dropdown">
               <SelectValue placeholder="Select" />
@@ -325,6 +346,7 @@ console.log(formdata,"this is form data")
             placeholder="Type Here"
             type='number'
             onChange={handleAmountChange}
+            value={logisticAmount?logisticAmount:0}
           ></Input>
         </div>
         <div className="flex justify-end pt-7">
@@ -344,6 +366,7 @@ console.log(formdata,"this is form data")
         </label>
         <Select 
         onValueChange={(value)=>{handleVendorTypeChangeApi(value); setCompansationVendorType(value)}}
+        value={compansationVendorType?compansationVendorType:""}
         >
           <SelectTrigger className="dropdown">
             <SelectValue placeholder="Select" />
@@ -363,6 +386,7 @@ console.log(formdata,"this is form data")
         </label>
         <Select
         onValueChange={(value:string)=>{setCompansationVendorName(value)}}
+        value={compansationVendorName?compansationVendorName:""}
         >
           <SelectTrigger className="dropdown">
             <SelectValue placeholder="Select" />
@@ -387,6 +411,7 @@ console.log(formdata,"this is form data")
           placeholder="Type Here"
           type='number'
           onChange={(e)=>handleCompensationChange(e)}
+          value={compansationAmount?compansationAmount:""}
         ></Input>
       </div>
       <div className="flex flex-col gap-5 items-center">
@@ -396,6 +421,7 @@ console.log(formdata,"this is form data")
         <Input className='text-black w-5 h-5'
         type='checkbox'
         onChange={(e)=>handle_is_GST(e)}
+        value={compansation_is_GST?compansation_is_GST:0}
         />
       </div>
     </div>
@@ -463,7 +489,7 @@ console.log(formdata,"this is form data")
               <><TableCell>{item.vendor_type}</TableCell><TableCell>{item.est_amount}</TableCell>
               <TableCell>
                 <div className="flex justify-around">
-                  <div className="hover:cursor-pointer">
+                  <div onClick={()=>{handleLogisticDelete(index)}} className="hover:cursor-pointer">
                     <svg
                       width="18"
                       height="20"
@@ -546,7 +572,7 @@ console.log(formdata,"this is form data")
               </TableCell>
               <TableCell>
                 <div className="flex justify-around">
-                  <div className="hover:cursor-pointer">
+                  <div className="hover:cursor-pointer" onClick={()=>handleCompensationDelete(index)}>
                     <svg
                       width="18"
                       height="20"
