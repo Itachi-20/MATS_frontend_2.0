@@ -102,6 +102,7 @@ const table = ({ tableData }: Props) => {
   const [loading, setLoading] = useState(false)
   const [dropdownData, setDropdownData] = useState<dropdownData | null>(null);
   const [vendorName, setVendorName] = useState<vendorName | null>(null);
+  // const [advance_amount, setAdvanceAmount] = useState<number | null>(null);
   const [tabledata, setTableData] = useState<TableData>()
   const [vendorDetails, setVendorDetails] = useState<VendorData>({
     vendor_type: '',
@@ -136,6 +137,35 @@ const table = ({ tableData }: Props) => {
       if (response.ok) {
         const data = await response.json();
         setVendorName(data.data)
+        console.log(data, "vendor name api");
+      } else {
+        console.log("Login failed");
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
+    }
+  };
+
+  const handleAdvaneAmountApi = async (value: string) => {
+    try {
+      const response = await fetch(
+        `/api/training_and_education/vendorName?vendor_name=${value}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          "credentials": 'include'
+        }
+      );
+
+
+      if (response.ok) {
+        const data = await response.json();
+        setVendorDetails((prev) => ({
+          ...prev,
+          advance: data.data, // Update vendor_name in the vendorDetails state
+        }))
         console.log(data, "vendor name api");
       } else {
         console.log("Login failed");
@@ -435,7 +465,7 @@ const table = ({ tableData }: Props) => {
             </label>
             <Select
               onValueChange={(value: string) => {
-                // setCompansationVendorName(value);
+                handleAdvaneAmountApi(value);
                 setVendorDetails((prev) => ({
                   ...prev,
                   vendor_name: value, // Update vendor_name in the vendorDetails state

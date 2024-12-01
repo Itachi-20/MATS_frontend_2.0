@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox"
-import BasicDetails from "@/components/basic_Details"
-import EventDetails from "@/components/event_Details"
-import VendorDetails from "@/components/vendor_Details"
-import TotalExpense from "@/components/total_Expense"
-import Documents from "@/components/documents"
+import BasicDetails from "@/components/training_and_education/basic_detail"
+import EventDetails from "@/components/training_and_education/event_detail"
+import VendorDetails from "@/components/training_and_education/vendor_detail"
+import TotalExpense from "@/components/training_and_education/total_expense"
+import Documents from "@/components/training_and_education/documents"
 import Add_vendor from "@/components/add_vendor";
 import { usePathname } from 'next/navigation'
 import { useRouter } from 'next/navigation';
@@ -300,9 +300,9 @@ const Preview_Form = () => {
         </div>
 
         <div className="flex justify-end pt-5 gap-4">
-          <Button className="bg-white text-black border text-md font-normal">
+          {/* <Button className="bg-white text-black border text-md font-normal">
             Save as Draft
-          </Button>
+          </Button> */}
           <Button className="bg-white text-black border text-md font-normal">
             Back
           </Button>

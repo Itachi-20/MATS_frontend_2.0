@@ -33,6 +33,7 @@ type EventTable = {
   preactivity_submitted:boolean
   travel_expense_approved:boolean
   travel_expense_submitted:boolean
+  brief_status:string;
 };
 
 export default function EventList () {
@@ -151,7 +152,7 @@ export default function EventList () {
                     Event Type
                   </TableHead>
                   <TableHead className={"text-center text-[#625d5d] lg:text-[15px] sm:text-[12px] text-[11px] font-normal font-['Montserrat']"} >
-                    Event Date
+                    Event Start Date
                   </TableHead>
                   <TableHead
                     className={

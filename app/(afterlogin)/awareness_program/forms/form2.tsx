@@ -119,7 +119,7 @@ const Form2 = ({ ...Props }: Props) => {
         </div>
       </div>
       <div className='flex justify-end pt-5 gap-4'>
-        <Button className='bg-white text-black border text-md font-normal'> Save as Draft</Button>
+        {/* <Button className='bg-white text-black border text-md font-normal'> Save as Draft</Button> */}
         <Button className='bg-white text-black border text-md font-normal' >Back</Button>
         <Button className='bg-[#4430bf] text-white text-md font-normal border'onClick={(e: React.MouseEvent<HTMLButtonElement>)=>Props.handleSubmit(e)}>Next</Button>
         {/* <Button className='bg-white text-black border text-md font-normal' onClick={Props.prevForm}>Back</Button>

@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/table";
 import { useRouter } from 'next/navigation';
 import {Previewdata} from '@/app/(afterlogin)/hcp_services/page'
-
+import { Toaster, toast } from 'sonner'
 
 type formData = {
   name: string | null;
@@ -61,7 +61,7 @@ type Props = {
       name:string
     }[] | null
     previewData:Previewdata | null | undefined
-    refno:string | undefined;
+    refno:string ;
 }
 type Budget = "logistics" | "compensation" | "";
 
@@ -99,7 +99,7 @@ const Form3 = ({...Props}:Props) => {
   
   const router = useRouter();
   const [formdata, setFormData] = useState<formData | {}>({});
-  const [refNo,setRefNo] = useState<string | null>(localStorage.getItem("refno")?localStorage.getItem("refno"):"");
+  const [refNo,setRefNo] = useState<string | null>(Props.refno);
 
   const handleSelectChange = (value: string, name: string) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -346,7 +346,7 @@ console.log(formdata,"this is form data")
             placeholder="Type Here"
             type='number'
             onChange={handleAmountChange}
-            value={logisticAmount?logisticAmount:0}
+            value={logisticAmount?logisticAmount:''}
           ></Input>
         </div>
         <div className="flex justify-end pt-7">
@@ -441,7 +441,7 @@ console.log(formdata,"this is form data")
           fill="#635E5E"
         />
       </svg>
-      <Button className="bg-white text-black border text-md font-normal rounded-xl pl-10 py-2 hover:bg-white">
+      <Button className="bg-white text-black border text-md font-normal rounded-xl pl-10 py-2 hover:bg-white" onClick={()=>router.push(`/add_vendor`)}>
         Add New Vendor
       </Button>
     </div>
@@ -641,16 +641,19 @@ console.log(formdata,"this is form data")
         </div>
       </div>
       <div className="flex justify-end pt-5 gap-4">
-        <Button className="bg-white text-black border text-md font-normal hover:bg-white">
+        {/* <Button className="bg-white text-black border text-md font-normal hover:bg-white">
           {" "}
           Save as Draft
-        </Button>
-        <Button className="bg-white text-black border text-md font-normal hover:bg-white">
+        </Button> */}
+        <Button className="bg-white text-black border text-md font-normal hover:bg-white" onClick={()=>router.push(`/hcp_services?forms=2&refno=${Props.refno}`)}>
           Back
         </Button>
         <Button className="bg-[#4430bf] text-white text-md font-normal border hover:bg-[#4430bf]" onClick={(e: React.MouseEvent<HTMLButtonElement>)=>handleSubmit(e)}>
           Next
         </Button>
+
+        <Toaster richColors position="top-right" />
+
       </div>
     </div>)
   );

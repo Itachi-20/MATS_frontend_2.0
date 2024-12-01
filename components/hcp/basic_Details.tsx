@@ -64,6 +64,8 @@ type EventEntry = {
   reporting_head:string
   type_of_engagement:string
   product_details:string
+  annual_plan:number;
+  service_type:string;
 }
 
 type Compensation = {
@@ -173,7 +175,7 @@ type Props = {
 }
 
 const Basic_Details = ({ ...Props }: Props) => {
-  console.log(Props.eventData, "this is pathname")
+  console.log("Props.sub_type_of_activity",Props.eventData?.event_start_date)
   return (
     <div className="md:pb-8">
       <div className="flex md:gap-6" >
@@ -304,7 +306,7 @@ const Basic_Details = ({ ...Props }: Props) => {
             readOnly={true}
             value={Props.eventData?.sub_type_of_activity}
           ></Input>
-        </div>
+        </div>  
 
         <div className="flex flex-col gap-2">
           <label className="lable">
@@ -335,6 +337,7 @@ const Basic_Details = ({ ...Props }: Props) => {
                             type="date"
                             placeholder="dd/mm/yy"
                             name="event_start_date"
+                            value={Props.eventData?.event_start_date?Props.eventData.event_start_date:''}
                             readOnly 
                         ></Input>
                     </div>
@@ -347,6 +350,7 @@ const Basic_Details = ({ ...Props }: Props) => {
                             type="date"
                             placeholder="dd/mm/yy"
                             name="event_end_date"
+                            value={Props.eventData?.event_end_date?Props.eventData.event_end_date:''}
                             readOnly
                         ></Input>
                     </div>
@@ -358,6 +362,7 @@ const Basic_Details = ({ ...Props }: Props) => {
                             className="text-black shadow md:rounded-xl md:py-5"
                             placeholder="Type Here"
                             name="annual_plan"
+                            value={Props.eventData?.annual_plan?Props.eventData?.annual_plan:''}
                             readOnly
                         ></Input>
                     </div>
@@ -382,6 +387,90 @@ const Basic_Details = ({ ...Props }: Props) => {
                 </div>
               </div>
           </div>
+        </>
+        
+      }
+        { Props.eventData && Props.eventData.type_of_engagement && Props.eventData.type_of_engagement == "One Time" &&
+        <>
+          <div className="py-8">
+              <h1 className="text-black text-2xl font-normal uppercase pb-8">
+                Sub Type Details
+              </h1>
+              <div className="grid md:grid-cols-2 md:gap-6">
+                    <div className="flex flex-col md:gap-2">
+                        <label className="text-black md:text-sm md:font-normal capitalize">
+                            Start Date<span className="text-[#e60000]">*</span>
+                        </label>
+                        <Input
+                            className="text-black shadow md:rounded-xl md:py-5"
+                            type="date"
+                            placeholder="dd/mm/yy"
+                            name="event_start_date"
+                            value={Props.eventData?.event_start_date?Props.eventData?.event_start_date:''}
+                            readOnly 
+                        ></Input>
+                    </div>
+                    <div className="flex flex-col md:gap-2">
+                        <label className="text-black md:text-sm md:font-normal capitalize">
+                            End Date<span className="text-[#e60000]">*</span>
+                        </label>
+                        <Input
+                            className="text-black shadow md:rounded-xl md:py-5"
+                            type="date"
+                            placeholder="dd/mm/yy"
+                            name="event_end_date"
+                            value={Props.eventData?.event_end_date?Props.eventData?.event_end_date:''}
+                            readOnly
+                        ></Input>
+                    </div>
+                    <div className="flex flex-col md:gap-2">
+                        <label className="text-black md:text-sm md:font-normal capitalize">
+                        Training & Education Request Ref Number<span className="text-[#e60000]">*</span>
+                        </label>
+                        <Input
+                            className="text-black shadow md:rounded-xl md:py-5"
+                            placeholder="Type Here"
+                            name="training_ref_no"
+                            value={Props.eventData?.training_ref_no?Props.eventData?.training_ref_no:''}
+                            readOnly
+                        ></Input>
+                    </div>
+                    <div className="flex flex-col md:gap-2">
+                        <label className="text-black md:text-sm md:font-normal capitalize">
+                        Sponsorship Support Request Ref Number <span className="text-[#e60000]">*</span>
+                        </label>
+                        <Input
+                            className="text-black shadow md:rounded-xl md:py-5"
+                            placeholder="Type Here"
+                            name="sponsorship_ref_no"
+                            value={Props.eventData?.sponsorship_ref_no?Props.eventData?.sponsorship_ref_no:''}
+                            readOnly
+                        ></Input>
+                    </div>
+                </div>
+          </div>
+{/* {
+ Props.eventData && Props.eventData.type_of_engagement && Props.eventData.type_of_engagement == "MSA" &&
+          <div className="py-8">
+              <h1 className="text-black text-2xl font-normal uppercase pb-8">
+                MSA Details
+              </h1>
+              <div className="grid md:grid-cols-2 md:gap-6">
+                <div className="flex flex-col md:gap-2">
+                    <label className="text-black md:text-sm md:font-normal capitalize">
+                        Service Type<span className="text-[#e60000]">*</span>
+                    </label>
+                    <Input
+                        className="text-black shadow md:rounded-xl md:py-5"
+                        placeholder="Type Here"
+                        name="service_type"
+                        value={Props.eventData?.service_type?Props.eventData?.service_type:''}
+                        readOnly
+                    ></Input>
+                </div>
+              </div>
+          </div>
+} */}
         </>
         
       }

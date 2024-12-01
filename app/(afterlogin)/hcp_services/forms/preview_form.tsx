@@ -1,5 +1,5 @@
 "use client"
-import React,{useState,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox"
 import BasicDetails from "@/components/hcp/basic_Details"
@@ -12,8 +12,9 @@ import Documents from "@/components/documents"
 import Add_vendor from "@/components/add_vendor";
 import { usePathname } from 'next/navigation'
 import { useRouter } from 'next/navigation';
-import Comment_box from "@/components/approvalCommentBox/Comment_box";  
-import {Previewdata} from '@/app/(afterlogin)/hcp_services/page'
+import Comment_box from "@/components/approvalCommentBox/Comment_box";
+import { Previewdata } from '@/app/(afterlogin)/hcp_services/page'
+import Hcp_Details from "@/components/hcp/hcp_detail";
 
 type EventEntry = {
   name: string | null;
@@ -72,11 +73,11 @@ type EventEntry = {
   logistics: Logistics[];
   documents: ActivityDocument[];
   advance_approvers: any[]; // Empty array, can be customized later
-  city:string
-  reporting_head:string
-  type_of_engagement:string
-  product_details:string
-  any_additional_expense:string
+  city: string
+  reporting_head: string
+  type_of_engagement: string
+  product_details: string
+  any_additional_expense: string
 }
 
 type Compensation = {
@@ -165,7 +166,7 @@ type Logistics = {
 type File = {
   url: string;
   name: string;
-  file_name:string
+  file_name: string
 };
 
 type DocumentDetails = {
@@ -179,18 +180,19 @@ type ActivityDocument = {
 };
 
 type Props = {
-  previewData:Previewdata | null
+  previewData: Previewdata | null;
+  refno: string | null;
 }
 
-const Preview_Form = ({...Props}:Props) => {
+const Preview_Form = ({ ...Props }: Props) => {
   const pathname = usePathname();
   const router = useRouter()
-  const [dialog,setDialog] = useState(false);
-  const [addVendor,setAddVendor] = useState(false);
+  const [dialog, setDialog] = useState(false);
+  const [addVendor, setAddVendor] = useState(false);
   const [preview_data, setPreviewData] = useState<Previewdata | null | undefined>(Props.previewData);
-  const [comment,setComment] = useState<string>();
-  const [isCommentbox,setIsCommentbox] = useState<boolean>();
-  const [refNo, setRefNo] = useState<string | null>(localStorage.getItem("refno") ? localStorage.getItem("refno") : "");
+  const [comment, setComment] = useState<string>();
+  const [isCommentbox, setIsCommentbox] = useState<boolean>();
+  const [refNo, setRefNo] = useState<string | null>(Props.refno);
 
 
   const handleFinalSubmit = async () => {
@@ -205,7 +207,7 @@ const Preview_Form = ({...Props}:Props) => {
           credentials: 'include',
           body: JSON.stringify({
             name: refNo,
-            comment:comment
+            comment: comment
           })
         }
       );
@@ -224,73 +226,75 @@ const Preview_Form = ({...Props}:Props) => {
     }
   };
 
-  const handleComment = (value:string)=>{
+  const handleComment = (value: string) => {
     setComment(value)
   }
 
-  const handleDialog = ()=>{
-    setIsCommentbox(prev=> !prev);
+  const handleDialog = () => {
+    setIsCommentbox(prev => !prev);
   }
+  console.log(preview_data,'preview_data')
 
   return (
-      <>
-        <div className="md:px-7 md:pb-7 md:pt-4 w-full z-20">
-            
+    <>
+      <div className="md:px-7 md:pb-7 md:pt-4 w-full z-20">
         <BasicDetails
-        pathname=""
-        eventData={preview_data}
+          pathname=""
+          eventData={preview_data}
         />
 
         <EventDetails
-        pathname=""
-        eventData={preview_data}
+          pathname=""
+          eventData={preview_data}
         />
-
+        <Hcp_Details
+          pathname=""
+          eventData={preview_data}
+        />
         <LogisticsBudget
-        pathname=""
-        eventData={preview_data}
+          pathname=""
+          eventData={preview_data}
         />
         <CompensationBudget
-        pathname=""
-        eventData={preview_data}
+          pathname=""
+          eventData={preview_data}
         />
 
         <TotalExpense
-        eventData={preview_data}
+          eventData={preview_data}
         />
-            
+
         <Documents
-        PageName=""
-        eventData={preview_data}
+          PageName=""
+          eventData={preview_data}
         />
-        
-            
-            </div>
 
-            <div className="flex justify-end pt-5 gap-4">
-              <Button className="bg-white text-black border text-md font-normal">
-                Save as Draft
-              </Button>
-              <Button className="bg-white text-black border text-md font-normal">
-                Back
-              </Button>
-              <Button className={`bg-[#4430bf] text-white  font-normal border`} onClick={()=>handleDialog()}>
-                Submit
-              </Button>
-            </div>
+      </div>
 
-            {
-            isCommentbox &&
-            <div className=" absolute z-50 flex pt-10 items-end justify-center bg-black bg-opacity-50 w-full h-full inset-0 pb-40">
-          <Comment_box 
-          handleClose={handleDialog}
-          handleComment={handleComment}
-          Submitbutton = {handleFinalSubmit}
+      <div className="flex justify-end pt-5 gap-4">
+        {/* <Button className="bg-white text-black border text-md font-normal">
+          Save as Draft
+        </Button> */}
+        <Button className="bg-white text-black border text-md font-normal" onClick={()=>router.push(`/hcp_services?forms=4&refno=${Props.refno}`)}>
+          Back
+        </Button>
+        <Button className={`bg-[#4430bf] text-white  font-normal border`} onClick={() => handleDialog()}>
+          Submit
+        </Button>
+      </div>
+
+
+      {isCommentbox &&
+        <div className=" absolute z-50 flex pt-10 items-end justify-center bg-black bg-opacity-50 w-full h-full inset-0 pb-40">
+          <Comment_box
+            handleClose={handleDialog}
+            handleComment={handleComment}
+            Submitbutton={handleFinalSubmit}
           />
-          </div>
-          }
-        
-      </>
+        </div>
+      }
+    </>
+
   )
 }
 

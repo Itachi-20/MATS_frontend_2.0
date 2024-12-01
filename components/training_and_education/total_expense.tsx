@@ -1,21 +1,5 @@
 import React from 'react'
-import Image from 'next/image';
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import page from '@/app/(afterlogin)/advance_payment/[request_number]/page';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { Toaster, toast } from 'sonner'
-interface DocumentsProps {
-  PageName: string; 
-}
+import { Input } from '@/components/ui/input'
 
 type EventEntry = {
   name: string;
@@ -76,7 +60,9 @@ type EventEntry = {
   advance_approvers: any[]; // Empty array, can be customized later
   city:string
   reporting_head:string
-  preactivity_submitted:number;
+  any_additional_expense:string
+  product_details:string
+  type_of_engagement:string
 }
 
 type Compensation = {
@@ -179,112 +165,48 @@ type ActivityDocument = {
 };
 
 
+
 type Props = {
   eventData:EventEntry | undefined | null
-  PageName:string,
-  fetchFile:()=>void
 }
 
-const Documents = ({PageName,...Props}:Props) => {
-  console.log(Props.eventData?.documents,"this is documents")
-  const router = useRouter();
-
-  const handleDelete = async (name:String)=>{
-    try {
-      const response = await fetch(`api/training_and_education/fileDelete/`,{
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-            //'Cookie': cookies as string 
-        },
-        credentials:'include',
-        body:JSON.stringify({
-          name:name
-        })
-      })
-      if(response.ok){
-        toast.success('Deleted Successfully')
-        console.log("successfully deleted");
-        Props.fetchFile();
-      }
-    } catch (error) {
-      console.log(error,"this is error");
-    }
-  }
-
+const total_Expense = ({...Props}:Props) => {
   return (
     <div className="md:pb-8">
       <div className="flex gap-5">
         <h1 className="text-black md:text-[30px] md:font-medium uppercase md:pb-4">
-          Documents
+          total expense
         </h1>
       </div>
+      <div className="grid md:grid-cols-3 md:gap-6">
+        <div className="flex flex-col md:gap-2">
+          <label className="text-black md:text-sm md:font-normal capitalize">
+            total estimated expense<span className="text-[#e60000]">*</span>
+          </label>
+          <Input
+            className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
+            placeholder="Type Here"
+            readOnly={true}
+            value={Props.eventData?.total_estimated_expense}
+          ></Input>
+        </div>
+        <div className="flex flex-col md:gap-2">
+          <label className="text-black md:text-sm md:font-normal capitalize">
+            currency<span className="text-[#e60000]">*</span>
+          </label>
+          <div className="grid md:grid-cols-2">
 
-
-      {
-        Props.eventData && Props.eventData.documents?.map((item,index)=>{
-          return (
-      <div className='border border-[#848484] p-4 rounded-2xl w-full mb-8'>
-        <h1 className="text-black pl-4 pb-4">
-          Document type:{" "}
-          <span className="font-semibold">{item.activity_type}</span>
-        </h1>
-        <div className="bg-white">
-          <div className="flex flex-col">
-            <Table>
-              <TableHeader>
-                <TableRow className="text-black">
-                  <TableHead className={"bg-[#E0E9FF] rounded-l-2xl text-[15px] w-[50%] pr-10"}
-                  >
-                    Supporting Document
-                  </TableHead>
-                  <TableHead className={"bg-[#E0E9FF] text-[15px] rounded-r-2xl w-[50%] divide-x-2"}
-                  >
-                   Documents
-                    
-                  </TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {
-                  item && item.document?.map((item2,index)=>{
-                    return (
-                <TableRow className="text-black divide-x-2">
-                  <TableCell>{item2.type}</TableCell>
-                  <TableCell>{item2.file?.map((item3,index)=>{
-                    return (
-                      <div className='flex justify-between'>
-                      <div className=''>{item3.file_name}</div>
-                      <div className='flex gap-5 items-center'>
-                        <Link rel="stylesheet" href={item3.url} target='blank'>
-                      <Image src={"/svg/view.svg"} width={20} height={20}  alt='view-document' className='cursor-pointer' />
-                        </Link>
-                        <div className={`${Props.eventData && Props.eventData.preactivity_submitted == 1 ?"hidden":""}`} onClick={async()=>{await handleDelete(item3.name)}}>
-                      <Image src={"/svg/delete.svg"} width={20} height={20}  alt='view-document' className='cursor-pointer' />
-                        </div>
-                      </div>
-                      </div>
-                    )
-                  })}</TableCell>
-                </TableRow>
-                    )
-                  })
-                }
-                <TableRow className="text-black">
-                  
-                </TableRow>
-              </TableBody>
-            </Table>
+            <Input
+              className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
+              placeholder="Type Here"
+              readOnly={true}
+              value={Props.eventData?.currency}
+            ></Input>
           </div>
         </div>
-        <Toaster richColors position="top-right" />
-
       </div>
-      )
-    })
-  }
     </div>
   )
 }
 
-export default Documents
+export default total_Expense
