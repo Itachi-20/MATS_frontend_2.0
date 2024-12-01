@@ -111,42 +111,39 @@ const Form3 = ({...Props}:Props) => {
     if (refNo) {
       updatedFormData.name = refNo;
     }
-
-console.log(updatedFormData);
-    // try {
-    //   const response = await fetch(
-    //     "/api/training_and_education/handleSubmit",
-    //     {
-    //       method: "POST",
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //       },
-    //       credentials: 'include',
-    //       body: JSON.stringify(updatedFormData)
-    //     }
-    //   );
-    //   if (response.ok) {
-    //     const data = await response.json();
-    //     console.log(data, "response data");
-    //     setRefNo(data.message);
-    //     setTimeout(() => {
-    //       router.push(`/awareness_program?forms=4&refno=${data.message}`)
-    //     }, 1000)
-    //   } else {
-    //     console.log("submission failed");
-    //   }
-    // } catch (error) {
-    //   console.error("Error during Submission:", error);
-    // }
+    try {
+      const response = await fetch(
+        "/api/training_and_education/handleSubmit",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: 'include',
+          body: JSON.stringify(updatedFormData)
+        }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data, "response data");
+        setRefNo(data.message);
+        setTimeout(() => {
+          router.push(`/awareness_program?forms=4&refno=${data.message}`)
+        }, 1000)
+      } else {
+        console.log("submission failed");
+      }
+    } catch (error) {
+      console.error("Error during Submission:", error);
+    }
   };
   const handlefieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }) as formData);
-  }
+  };
   const handleSelectChange = (value: string, name: string) => {
     setFormData((prev) => ({ ...prev, [name]: value }) as formData);
   };
-
   const handleLogisticsAdd = ()=>{
     if(logisticVendorType&&logisticAmount>0){
       const newObject:Logistics = {vendor_type:logisticVendorType,est_amount:logisticAmount};
@@ -160,8 +157,7 @@ console.log(updatedFormData);
       setLogisticVendorType('');
       setLogisticAmount(0);
     }
-  }
-
+  };
   const handleCompensationAdd = ()=>{
     if(compansationVendorType&&compansationAmount>0){
       const newObject:Compensation = {vendor_type:compansationVendorType,est_amount:compansationAmount,gst_included:compansation_is_GST,vendor_name:compansationVendorName};
@@ -177,9 +173,7 @@ console.log(updatedFormData);
       setCompansationVendorName('');
       setCompansation_is_GST(0);
     }
-  }
-
-
+  };
   const handleCompensationDelete = (indexToDelete: number) => {
     setCompansationBudget((prevRows) => {
       const updatedRecords = prevRows?.filter((_, index) => index !== indexToDelete) || [];
@@ -187,8 +181,6 @@ console.log(updatedFormData);
       return updatedRecords;
     });
   };
-
-
   const handleLogisticDelete = (indexToDelete: number) => {
     setLogisticBudget((prevRows) => {
       const updatedRecords = prevRows?.filter((_, index) => index !== indexToDelete) || [];
@@ -267,7 +259,6 @@ console.log(updatedFormData);
     }
   }
 
-  console.log();
   return (
     // </div>
     (<div>
@@ -435,7 +426,7 @@ console.log(updatedFormData);
         Logistics Budget
       </h1>
       <div className="border mb-8 border-[#848484] p-7 rounded-[50px] w-full mr-4  bg-white">
-        <Table ref={null} className={""}>
+        <Table className={""}>
           <TableHeader className={"bg-[#E0E9FF]"}>
             <TableRow className={""}>
               <TableHead
@@ -488,17 +479,17 @@ console.log(updatedFormData);
               </>
             </TableRow>
               ))}
+          </TableBody>
+        </Table>
                 <div className='text-black pt-3 text-[16px]'>
                   Total Amount :- {totalLogisticAmount}
                 </div>
-          </TableBody>
-        </Table>
       </div>
       <h1 className="text-black text-2xl font-normal uppercase pb-8">
         Compensation Budget
       </h1>
       <div className="border border-[#848484] p-7 rounded-[50px] w-full mr-4  bg-white">
-        <Table ref={null} className={""}>
+        <Table className={""}>
           <TableHeader className={"bg-[#E0E9FF]"}>
             <TableRow className={""}>
               <TableHead
@@ -570,11 +561,11 @@ console.log(updatedFormData);
               </TableCell>
             </TableRow>
                       ))}
+          </TableBody>
+        </Table>
                       <div className='text-black pt-3 font-poppins text-[16px]'>
                   Total Amount :- {totalCompansationAmount}
                 </div>
-          </TableBody>
-        </Table>
       </div>
       <h1 className="text-black text-2xl font-normal uppercase py-8">
         Expense Details

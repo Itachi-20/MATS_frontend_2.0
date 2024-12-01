@@ -27,11 +27,7 @@ export default function SimpleFileUpload({ onNext,buttonText,files,setFiles}: Si
         const selectedFiles = e.target.files
         setOriginalFiles(selectedFiles)
         const filelist = Array.from(e.target.files || []);
-        setFiles(prevFiles => {
-            const existingFileNames = new Set(prevFiles.map(file => file.name));
-            const uniqueFiles = filelist.filter(file => !existingFileNames.has(file.name));
-            return [...prevFiles, ...uniqueFiles];
-          });
+        setFiles(prevFiles => [...prevFiles, ...filelist])
     }, [])
 
     const handleNext = useCallback(() => {
