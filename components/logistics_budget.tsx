@@ -254,6 +254,10 @@ const LogisticBudget = ({...Props}:Props) => {
                         }
                     </TableBody>
                 </Table>
+
+                <p className='text-black'>
+                    Total Amount : {Props.eventData?.total_logistics_expense?Props.eventData?.total_logistics_expense:''}
+                </p>
             </div>
         </div>
     )

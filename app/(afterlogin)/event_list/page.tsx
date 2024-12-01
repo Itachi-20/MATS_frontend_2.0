@@ -33,6 +33,7 @@ type EventTable = {
   preactivity_submitted:boolean
   travel_expense_approved:boolean
   travel_expense_submitted:boolean
+  brief_status:string;
 };
 
 export default function EventList () {

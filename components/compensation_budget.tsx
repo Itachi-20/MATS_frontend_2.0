@@ -257,6 +257,10 @@ const total_Expense = ({...Props}:Props) => {
                         }
                     </TableBody>
                 </Table>
+
+                <p className='text-black'>
+                    Total Amount : {Props.eventData?.total_compensation_expense?Props.eventData?.total_compensation_expense:''}
+                </p>
             </div>
         </div>
     )

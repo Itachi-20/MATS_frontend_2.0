@@ -180,7 +180,8 @@ type ActivityDocument = {
 };
 
 type Props = {
-  previewData: Previewdata | null
+  previewData: Previewdata | null;
+  refno: string | null;
 }
 
 const Preview_Form = ({ ...Props }: Props) => {
@@ -191,7 +192,7 @@ const Preview_Form = ({ ...Props }: Props) => {
   const [preview_data, setPreviewData] = useState<Previewdata | null | undefined>(Props.previewData);
   const [comment, setComment] = useState<string>();
   const [isCommentbox, setIsCommentbox] = useState<boolean>();
-  const [refNo, setRefNo] = useState<string | null>(localStorage.getItem("refno") ? localStorage.getItem("refno") : "");
+  const [refNo, setRefNo] = useState<string | null>(Props.refno);
 
 
   const handleFinalSubmit = async () => {
@@ -282,18 +283,17 @@ const Preview_Form = ({ ...Props }: Props) => {
       </div>
 
 
-            { isCommentbox &&
-      <div className=" absolute z-50 flex pt-10 items-end justify-center bg-black bg-opacity-50 w-full h-full inset-0 pb-40">
-        <Comment_box
-          handleClose={handleDialog}
-          handleComment={handleComment}
-          Submitbutton={handleFinalSubmit}
+      {isCommentbox &&
+        <div className=" absolute z-50 flex pt-10 items-end justify-center bg-black bg-opacity-50 w-full h-full inset-0 pb-40">
+          <Comment_box
+            handleClose={handleDialog}
+            handleComment={handleComment}
+            Submitbutton={handleFinalSubmit}
           />
-      </div>
-  }
-        
-  </>
-      
+        </div>
+      }
+    </>
+
   )
 }
 
