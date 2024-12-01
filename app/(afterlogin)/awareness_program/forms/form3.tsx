@@ -112,32 +112,32 @@ const Form3 = ({...Props}:Props) => {
       updatedFormData.name = refNo;
     }
 
-
-    try {
-      const response = await fetch(
-        "/api/training_and_education/handleSubmit",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: 'include',
-          body: JSON.stringify(updatedFormData)
-        }
-      );
-      if (response.ok) {
-        const data = await response.json();
-        console.log(data, "response data");
-        setRefNo(data.message);
-        setTimeout(() => {
-          router.push(`/awareness_program?forms=4&refno=${data.message}`)
-        }, 1000)
-      } else {
-        console.log("submission failed");
-      }
-    } catch (error) {
-      console.error("Error during Submission:", error);
-    }
+console.log(updatedFormData);
+    // try {
+    //   const response = await fetch(
+    //     "/api/training_and_education/handleSubmit",
+    //     {
+    //       method: "POST",
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //       },
+    //       credentials: 'include',
+    //       body: JSON.stringify(updatedFormData)
+    //     }
+    //   );
+    //   if (response.ok) {
+    //     const data = await response.json();
+    //     console.log(data, "response data");
+    //     setRefNo(data.message);
+    //     setTimeout(() => {
+    //       router.push(`/awareness_program?forms=4&refno=${data.message}`)
+    //     }, 1000)
+    //   } else {
+    //     console.log("submission failed");
+    //   }
+    // } catch (error) {
+    //   console.error("Error during Submission:", error);
+    // }
   };
   const handlefieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -267,6 +267,7 @@ const Form3 = ({...Props}:Props) => {
     }
   }
 
+  console.log();
   return (
     // </div>
     (<div>

@@ -177,6 +177,7 @@ type Props = {
 }
 
 const vendor_Details = ({ ...Props }: Props) => {
+  console.log("Props.eventData?.total_compensation_expense",Props.eventData?.total_compensation_expense)
   return (
     <div className="pb-8">
       <div className="flex gap-6">
@@ -223,6 +224,9 @@ const vendor_Details = ({ ...Props }: Props) => {
             })}
           </TableBody>
         </Table>
+        <div className='text-black pt-3 text-[16px]'>
+                  Total Amount :- {Props.eventData?.total_logistics_expense}
+                </div>
       </div>
 
       <div className="border border-[#848484] p-7 rounded-[50px] w-full mr-4  bg-white">
@@ -282,6 +286,9 @@ const vendor_Details = ({ ...Props }: Props) => {
               })}
           </TableBody>
         </Table>
+        <div className='text-black pt-3 text-[16px]'>
+                  Total Amount :- {Props.eventData?.total_compensation_expense}
+                </div>
       </div>
     </div>
   )

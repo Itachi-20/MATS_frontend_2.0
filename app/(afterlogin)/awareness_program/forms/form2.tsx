@@ -133,7 +133,7 @@ const Form2 = ({ ...Props }: Props) => {
     <>
       <div>
         <h1 className='text-black text-2xl font-normal uppercase pb-8'>
-          Basic Detail
+          Program Detail
         </h1>
         <div className='grid grid-cols-2 gap-6'>
           <div className='flex flex-col gap-2'>
