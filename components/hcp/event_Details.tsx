@@ -263,7 +263,7 @@ const event_Details = ({ ...Props }: Props) => {
           </>
         }
 
-        { pathname.substring(1) != 'sponsorship_program' || pathname.substring(1) != 'non_monetary_grant' &&
+        { pathname.substring(1) != 'sponsorship_program' && pathname.substring(1) != 'non_monetary_grant' && Props.eventData?.event_type != "HCP Services" &&
           <div className="flex flex-col md:gap-2">
             <label className="text-black md:text-sm md:font-normal capitalize">
               {Props.pathname == "/assesment_program" ? "Program Start Date" : "Event Date"}<span className="text-[#e60000]">*</span>
@@ -301,7 +301,7 @@ const event_Details = ({ ...Props }: Props) => {
           </div>
         }
 
-        { (pathname.substring(1) != 'sponsorship_program' && pathname.substring(1) != 'non_monetary_grant' && pathname.substring(1) != 'non_monetary_grant' && pathname.substring(1) != 'hcp_services') &&
+        { (pathname.substring(1) != 'sponsorship_program' && pathname.substring(1) != 'non_monetary_grant' && pathname.substring(1) != 'non_monetary_grant' && pathname.substring(1) != 'hcp_services' && Props.eventData?.event_type != "HCP Services") &&
           <>
             <div className="flex flex-col md:gap-2">
               <label className="text-black md:text-sm md:font-normal capitalize">
@@ -314,7 +314,7 @@ const event_Details = ({ ...Props }: Props) => {
                 value={Props.eventData?.any_govt_hcp}
               ></Input>
             </div>
-            { Props.eventData?.any_govt_hcp == "Yes" &&
+            { (Props.eventData?.any_govt_hcp == "Yes" && Props.eventData?.event_type !='HCP Services') &&
               <div className="flex flex-col md:gap-2">
                 <label className="text-black md:text-sm md:font-normal capitalize">
                   Total Number of government HCP’s<span className="text-[#e60000]">*</span>
@@ -330,7 +330,7 @@ const event_Details = ({ ...Props }: Props) => {
           </> 
         }
         {
-pathname.substring(1) != 'hcp_services' &&
+pathname.substring(1) != 'hcp_services' && Props.eventData?.event_type !='HCP Services' &&
         <div className="flex flex-col md:gap-2">
           <label className="text-black md:text-sm md:font-normal capitalize">
             BU rational<span className="text-[#e60000]">*</span>
@@ -343,7 +343,7 @@ pathname.substring(1) != 'hcp_services' &&
           ></Input>
         </div>
         }
-        {(pathname.substring(1) != 'sponsorship_program' && pathname.substring(1) != 'patient_support') && pathname.substring(1) != 'hcp_services' ?
+        {(pathname.substring(1) != 'sponsorship_program' && pathname.substring(1) != 'patient_support') && pathname.substring(1) != 'hcp_services' &&  Props.eventData?.event_type != "HCP Services" ?
           <div className="flex flex-col md:gap-2">
             <label className="text-black md:text-sm md:font-normal capitalize">
               Comments<span className="text-[#e60000]">*</span>

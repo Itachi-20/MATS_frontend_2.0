@@ -41,7 +41,7 @@ const router = useRouter();
         <AlertDialogHeader className='space-y-[40px]'>
           <AlertDialogTitle className='text-center text-[20px] text font-["Poppins"] font-light leading-normal text-black'>{msg}</AlertDialogTitle>
           <AlertDialogDescription className='flex justify-center'>
-         { msg == "Are you sure you wanted to execute the event?" || msg == "Next Occurrence date" ? 
+         { msg == "Are you sure you want to execute the event?" || msg == "Next Occurrence date" ? 
            (
             <div className='flex flex-col space-y-4 w-full'>
                   {msg == "Next Occurrence date" && <Input type='date'></Input>}

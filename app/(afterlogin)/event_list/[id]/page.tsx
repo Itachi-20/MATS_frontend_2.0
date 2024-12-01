@@ -6,8 +6,12 @@ import { useRouter } from 'next/navigation';
 import Documents from "@/components/documents";
 import { Button } from "@/components/ui/button";
 import EventDetails from "@/components/event_Details";
+import EventDetails2 from "@/components/hcp/event_Details";
 import TotalExpense from "@/components/total_Expense";
 import BasicDetails from "@/components/basic_Details";
+import VendorDetails from "@/components/vendor_Details";
+import HCPDetils from "@/components/hcp/hcp_detail";
+import BasicDetails2 from "@/components/hcp/basic_Details";
 import LogisticBudget from "@/components/logistics_budget";
 import CompensationBudget from "@/components/compensation_budget";
 import { useParams } from 'next/navigation'
@@ -261,6 +265,7 @@ useEffect(()=>{
             eventData={eventData}
           />
           :
+          
           <BasicDetails2
             pathname=""
             eventData={eventData}

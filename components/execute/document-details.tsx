@@ -288,6 +288,7 @@ const DocumentDetails = ({...Props}:Props) => {
     }
   }
 
+
   const [isChecked,setIsChecked] = useState<boolean>();
   const [isAddVendor,setIsAddVendor] = useState<boolean>();
 
@@ -317,6 +318,9 @@ const DocumentDetails = ({...Props}:Props) => {
     }
   };
 
+  useEffect(() => {
+    FileUpload();
+  }, []);
   useEffect(() => {
     PreviewData();
   }, []);
@@ -492,7 +496,7 @@ console.log(Props.data,"this is data")
                   })
                 }
                 <TableRow className="text-black">
-                  
+                  <TableCell></TableCell>
                 </TableRow>
               </TableBody>
             </Table>
