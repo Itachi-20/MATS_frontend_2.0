@@ -98,7 +98,7 @@ const Form3 = ({ ...Props }: Props) => {
   const [totalEstimatedAmount, setTotalEstimatedAmount] = useState(0);
 
   const router = useRouter();
-  const [formdata, setFormData] = useState<formData | {}>(Props.previewData);
+  const [formdata, setFormData] = useState<formData | {}>();
   const [refNo, setRefNo] = useState<string | null>(Props.refno);
 
   const handleSelectChange = (value: string, name: string) => {
