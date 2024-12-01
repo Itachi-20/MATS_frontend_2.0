@@ -38,6 +38,9 @@ type dropdownData = {
   training_ref_no:{
     name:string
   }[]
+  sponsorship_ref_no:{
+    name:string
+  }[]
 }
 
 type activityDropdown = {
@@ -282,7 +285,6 @@ const index = async({...Props}:any) => {
     eventCostCenter = await handleBusinessUnitChange(previewdata.business_unit,cookie);
   }
   console.log(previewdata?.any_govt_hcp,"this is preview data")
-  console.log(eventCostCenter,"this is cost center")
   return (
         <>
         <AppWrapper>

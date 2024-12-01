@@ -180,20 +180,20 @@ const event_Details = ({ ...Props }: Props) => {
     <div className="md:pb-8">
       <div className="flex gap-6">
         <h1 className="text-black md:text-[30px] md:font-medium uppercase md:pb-4">
-          {pathname.substring(1) == 'monetary_grant' || pathname.substring(1) == 'non_monetary_grant' || pathname.substring(1) == 'hcp_services' ? 'organisation Details' : 'event Details'}
+          {pathname.substring(1) == 'monetary_grant' || pathname.substring(1) == 'non_monetary_grant' ? 'organisation Details' : 'event Details'}
         </h1>
         
       </div>
       <div className="grid md:grid-cols-3 md:gap-6">
         <div className={`flex flex-col md:gap-2 ${pathname == "/patient_support" ? 'hidden':''}`}>
           <label className="text-black md:text-sm md:font-normal capitalize">
-            {pathname == ("/assesment_program") ? "Program Name" : (pathname == "/non_monetary_grant") || (pathname == "/monetary_grant") || pathname.substring(1) == 'hcp_services' ? "Organisation Name" : "Event Name"}<span className="text-[#e60000]">*</span>
+            {pathname == ("/assesment_program") ? "Program Name" : (pathname == "/non_monetary_grant") || (pathname == "/monetary_grant")  ? "Organisation Name" : "Event Name"}<span className="text-[#e60000]">*</span>
           </label>
           <Input
             className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
             placeholder="Type Here"
             readOnly={true}
-            value={pathname.substring(1) == "monetary_grant" ? Props.eventData?.organization_name : Props.eventData?.event_name}
+            value={pathname.substring(1) == "monetary_grant"  ? Props.eventData?.organization_name : Props.eventData?.event_name}
           ></Input>
         </div>
         { 
@@ -301,7 +301,7 @@ const event_Details = ({ ...Props }: Props) => {
           </div>
         }
 
-        { (pathname.substring(1) != 'sponsorship_program' && pathname.substring(1) != 'non_monetary_grant') &&
+        { (pathname.substring(1) != 'sponsorship_program' && pathname.substring(1) != 'non_monetary_grant' && pathname.substring(1) != 'non_monetary_grant' && pathname.substring(1) != 'hcp_services') &&
           <>
             <div className="flex flex-col md:gap-2">
               <label className="text-black md:text-sm md:font-normal capitalize">
@@ -329,6 +329,8 @@ const event_Details = ({ ...Props }: Props) => {
             }
           </> 
         }
+        {
+pathname.substring(1) != 'hcp_services' &&
         <div className="flex flex-col md:gap-2">
           <label className="text-black md:text-sm md:font-normal capitalize">
             BU rational<span className="text-[#e60000]">*</span>
@@ -340,7 +342,8 @@ const event_Details = ({ ...Props }: Props) => {
             value={Props.eventData?.bu_rational}
           ></Input>
         </div>
-        {(pathname.substring(1) != 'sponsorship_program' && pathname.substring(1) != 'patient_support') ?
+        }
+        {(pathname.substring(1) != 'sponsorship_program' && pathname.substring(1) != 'patient_support') && pathname.substring(1) != 'hcp_services' ?
           <div className="flex flex-col md:gap-2">
             <label className="text-black md:text-sm md:font-normal capitalize">
               Comments<span className="text-[#e60000]">*</span>
