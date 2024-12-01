@@ -279,7 +279,7 @@ const Form1 = ({ ...Props }: Props) => {
               </SelectContent>
             </Select>
           </div>
-        <div className="flex flex-col gap-2">
+        {/* <div className="flex flex-col gap-2">
           <label className="lable">
             City<span className="text-[#e60000]">*</span>
           </label>
@@ -288,17 +288,17 @@ const Form1 = ({ ...Props }: Props) => {
                 <SelectValue placeholder="Select" />
               </SelectTrigger>
               <SelectContent>
-              {/* {Props.dropdownData &&
+              {Props.dropdownData &&
                   Props.dropdownData.state.map((item, index) => {
                     return (
                       <SelectItem value={item.name}>
                         {item.state}
                       </SelectItem>
                     );
-                  })} */}
+                  })}
               </SelectContent>
             </Select>
-        </div>
+        </div> */}
         <div className="flex flex-col gap-2">
           <label className="lable">
             State<span className="text-[#e60000]">*</span>
@@ -341,7 +341,7 @@ const Form1 = ({ ...Props }: Props) => {
               </SelectContent>
             </Select>
         </div>
-        <div className="flex flex-col gap-2">
+        {/* <div className="flex flex-col gap-2">
           <label className="lable">
             Reporting Head<span className="text-[#e60000]">*</span>
           </label>
@@ -354,7 +354,7 @@ const Form1 = ({ ...Props }: Props) => {
               <SelectItem value="vignesh.yadavar@merillife.com">Vignesh</SelectItem>
             </SelectContent>
           </Select>
-        </div>
+        </div> */}
         <div className="flex flex-col gap-2">
           <label className="lable">
             Sub Type Of Activity<span className="text-[#e60000]">*</span>

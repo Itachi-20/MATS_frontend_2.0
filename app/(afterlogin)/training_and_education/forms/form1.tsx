@@ -305,7 +305,7 @@ const Form1 = ({ ...Props }: Props) => {
               </SelectContent>
             </Select>
           </div>
-          <div className="flex flex-col gap-2">
+          {/* <div className="flex flex-col gap-2">
             <label className="lable">
               Reporting Head<span className="text-[#e60000]">*</span>
             </label>
@@ -319,7 +319,7 @@ const Form1 = ({ ...Props }: Props) => {
                 <SelectItem value="system">System</SelectItem>
               </SelectContent>
             </Select>
-          </div>
+          </div> */}
           <div className="flex flex-col md:gap-2">
                         <label className="text-black md:text-sm md:font-normal capitalize">
                             HCP Services Request Ref Number<span className="text-[#e60000]">*</span>
