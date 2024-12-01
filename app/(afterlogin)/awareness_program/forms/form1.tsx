@@ -120,7 +120,6 @@ const Form1 = ({ ...Props }: Props) => {
   const [subtypeActivityVisible, setSubtypeActivityVisible] = useState(false);
   const [engagementTypes, setEngagementTypes] = useState("");  
   const [formData, setFormData] = useState<formData>(); 
-  const [refNo,setRefNo] = useState<string | null>(localStorage.getItem("refno")?localStorage.getItem("refno"):"");
   console
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -232,9 +231,9 @@ const Form1 = ({ ...Props }: Props) => {
   useEffect(()=>{
     handleBudgetChange(budget);
   },[])
+
   return (
-    // </div>
-    (<div>
+    <div>
       <h1 className="text-black text-2xl font-normal uppercase pb-8">
         Basic Detail
       </h1>
@@ -495,7 +494,7 @@ const Form1 = ({ ...Props }: Props) => {
         </Button>*/}
         <Button className='bg-[#4430bf] text-white text-md font-normal border' onClick={(e: React.MouseEvent<HTMLButtonElement>)=>handleSubmit(e)}>Next</Button>
       </div>
-    </div>)
+    </div>
   );
 };
 

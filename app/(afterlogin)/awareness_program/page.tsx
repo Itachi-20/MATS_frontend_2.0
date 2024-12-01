@@ -5,12 +5,7 @@ import Form2 from "@/app/(afterlogin)/awareness_program/forms/form2";
 import Form3 from "@/app/(afterlogin)/awareness_program/forms/form3";
 import Form4 from "@/app/(afterlogin)/awareness_program/forms/form4";
 import Preview_Form from './forms/preview_form';
-import Adddocument from '@/components/add_document';
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react'
-import { usePathname } from 'next/navigation'
-import { AppWrapper } from '@/app/context/module'
-import { useSearchParams } from 'next/navigation'
+import { AppWrapper } from '@/app/context/module';
 import { activityList, dropdown, PreviewData, handleBusinessUnitChange } from './utility';
 import { cookies } from "next/headers";
 import { Previewdata } from '../hcp_services/page';
@@ -44,19 +39,16 @@ type dropdownData = {
     name: string
   }[]
 }
-
 export type Compensation = {
   vendor_type: string;
   vendor_name: string;
   est_amount: number;
   gst_included?: number;
 };
-
 export type Logistics = {
   vendor_type: string;
   est_amount: number;
 };
-
 export type formData = {
   name: string | null;
   event_type: string;
@@ -85,7 +77,6 @@ export type formData = {
   any_govt_hcp: string,
   no_of_hcp: number
 };
-
 type activityDropdown = {
   activity: {
     name: string,
@@ -103,19 +94,19 @@ const Index = async ({...Props}:any) => {
   const {forms,refno} = await props.searchParams;
   const activityDropdown:activityDropdown = await activityList();
   const dropdownData:dropdownData =await dropdown();
-  // const [logisticsBudget, setLogisticBudget] = useState<Logistics[]>([]);
 
   let eventype: { [key: string]: string } = {};
   const cookie = await cookies()
   let previewdata:  Previewdata | null = null;
   let eventCostCenter = null;
+  console.log(refno,cookie);
   if(refno){
     previewdata =  await PreviewData(refno,cookie);
   }
   if(previewdata && previewdata.business_unit){
     eventCostCenter = await handleBusinessUnitChange(previewdata.business_unit,cookie);
   }
-
+  console.log("Preview data", previewdata);
   return (
     <>
         <AppWrapper>
@@ -129,7 +120,6 @@ const Index = async ({...Props}:any) => {
         {
           forms == "1" ?
             <Form1
-              // nextForm = {nextForm}
               eventCostCenter={eventCostCenter}
               previewData = {previewdata}
               dropdownData={dropdownData}
@@ -161,6 +151,16 @@ const Index = async ({...Props}:any) => {
         }
       </div>
       </AppWrapper>
+      {/* {
+              isCommentbox &&
+        <div className="absolute z-50 flex pt-10 items-end justify-center bg-black bg-opacity-50 w-full h-full inset-0 pb-40">
+          <Comment_box 
+          handleClose={handleDialog}
+          handleComment={handleComment}
+          Submitbutton = {handleFinalSubmit}
+          />
+          </div>
+          } */}
     </>
   )
 }

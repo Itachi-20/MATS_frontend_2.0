@@ -96,7 +96,7 @@ const form4 = ({ ...Props }: Props) => {
   const [files, setFiles] = useState<File[]>([]);
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    router.replace(`/hcp_services?forms=5&refno=${Props.refNo}`)
+    router.replace(`/awareness_program?forms=5&refno=${Props.refNo}`)
   };
   const FileUpload = async () => {
     const formdata = new FormData();
