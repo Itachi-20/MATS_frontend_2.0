@@ -35,7 +35,7 @@ const fetchData = async(name:any)=>{
     console.log(tableData,'tableData')
     return (
         <>
-           <Table tableData={tableData} />
+           <Table tableData={tableData}  refno={refno.refno}/>
         </>
     )
 }

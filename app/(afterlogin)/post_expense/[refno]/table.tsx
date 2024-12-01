@@ -118,6 +118,8 @@ type TravelVendors = {
   travel_expense_check: boolean,
   vendor_name: string,
   vendor_type: string
+  vendor_code:string
+  files:File;
 }
 
 type TableData = {
@@ -323,22 +325,26 @@ const table = ({ tableData }: Props) => {
     console.log("inside amount api venser name ")
     try {
       const response = await fetch(
-        `/api/training_and_education/vendorName?vendor_name=${value}`,
+        `/api/postExpense/getExpenseAmount`,
         {
-          method: "GET",
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          "credentials": 'include'
+          "credentials": 'include',
+          body: JSON.stringify({
+            name:tableData.name ,
+            vendor_name:value
+        }),
         }
       );
       if (response.ok) {
         const data = await response.json();
         setVendorDetails((prev) => ({
           ...prev,
-          amount: data.data, // Update vendor_name in the vendorDetails state
+          amount: data.data?.est_amount, // Update vendor_name in the vendorDetails state
         }))
-        console.log(data, "vendor name api");
+        console.log(data, "-----------vendor name api------------------");
       } else {
         console.log("Login failed");
       }
@@ -496,6 +502,7 @@ const table = ({ tableData }: Props) => {
     setIsDeletePropOpen(true)
   }
 
+  console.log(vendorDetails,'vendorDetails')
   return (
     <>
       <div className='p-8'>
@@ -553,6 +560,7 @@ const table = ({ tableData }: Props) => {
                 Vendor Type<span className="text-[#e60000] ">*</span>
               </label>
               <Select
+              value={vendorDetails.vendor_type ?? ''}
                 onValueChange={(value) => {
                   handleVendorTypeChangeApi(value);
                   setVendorDetails((prev) => ({
@@ -579,6 +587,7 @@ const table = ({ tableData }: Props) => {
                 Vendor Name<span className="text-[#e60000] ">*</span>
               </label>
               <Select
+              value={vendorDetails.vendor_name ?? ''}
                 onValueChange={(value: string) => {
                   handleAdvaneAmountApi(value);
                   setVendorDetails((prev) => ({
@@ -736,7 +745,7 @@ const table = ({ tableData }: Props) => {
                           <TableCell>{data.vendor_type ?? "-"}</TableCell>
                           <TableCell>{data.vendor_code ?? "-"}</TableCell>
                           <TableCell>{data.vendor_name ?? "-"}</TableCell>
-                          <TableCell>{data.est_amount ?? "-"}</TableCell>
+                          <TableCell>{data.actual_amount ?? "-"}</TableCell>
                           <TableCell>{data.status ?? "-"}</TableCell>
                           <TableCell>{data.gst ?? "-"}</TableCell>
                           <TableCell>{data.invoice_amount ?? "-"}</TableCell>
@@ -885,7 +894,7 @@ const table = ({ tableData }: Props) => {
                               <TableCell>{data.vendor_type ?? "-"}</TableCell>
                               <TableCell>{data.vendor_code ?? "-"}</TableCell>
                               <TableCell>{data.vendor_name ?? "-"}</TableCell>
-                              <TableCell>{data.est_amount ?? "-"}</TableCell>
+                              <TableCell>{data.actual_amount ?? "-"}</TableCell>
                               <TableCell>{data.status ?? "-"}</TableCell>
                               <TableCell>{data.gst ?? "-"}</TableCell>
                               <TableCell>{data.invoice_amount ?? "-"}</TableCell>

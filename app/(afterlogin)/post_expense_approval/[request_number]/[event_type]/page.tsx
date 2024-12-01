@@ -440,13 +440,14 @@ const page = () => {
                             handleSelectChange={handleSelectChange}
                             // handleApproveRejectSendBack={handleApproveRejectSendBack}
                             view={view}   
+                            role={role}
                             formdata={formdata as FormData}
                             expenseData={expensedata as EventData} 
                         />
                     }
                 </div>
                 {
-                    !(expensedata?.actual_vendors[0]?.is_approved) && (role == "Event Finance" || role == "Event Approver") &&
+                    !(expensedata?.actual_vendors[0]?.is_approved) && (role == "Event%20Finance" || role == "Event%20Approver") &&
                     <div className='flex justify-end gap-2 pt-8'>
                         <Button className={`${expensedata?.actual_vendors[0]?.status == "Post Expense Approved" ?'cursor-not-allowed':''} bg-[#5DBE74] px-6`} disabled={expensedata?.actual_vendors[0]?.status == "Post Expense Approved" ? true : false} onClick={()=>handleOpen('Approved')} >Approve</Button>
                         <Button className={`${expensedata?.actual_vendors[0]?.status == "Post Expense Approved" ?'cursor-not-allowed':''} bg-[#4430BF] px-6`} disabled={expensedata?.actual_vendors[0]?.status == "Post Expense Approved" ? true : false} onClick={()=>handleOpen('Send Back')}>Send Back</Button>

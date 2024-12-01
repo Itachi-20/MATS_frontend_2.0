@@ -128,6 +128,7 @@ type Props = {
   handlefieldChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>)=>void
   handleSelectChange:(value: string, name: string)=>void
   view: string | null;
+  role:string;
   // handleSubmit: (e: React.MouseEvent<HTMLButtonElement>)=>void
 };
 
@@ -523,36 +524,41 @@ const Fields = ({ ...Props }: Props) => {
               readOnly
             ></Input>
           </div>
-          <div className='grid-cols-1 space-y-2'>
-            <label htmlFor="utr_number" className="text-black md:text-sm md:font-normal capitalize">
-              UTR Number<span className="text-[#e60000] ">*</span>
-            </label>
-            <Input
-              type='text'
-              value={Props.formdata?.utr_number ?? ""}
-              className="text-black shadow md:rounded-sm md:py-1"
-              placeholder="Type here ..."
-              id='utr_number'
-              name='utr_number'
-              onChange={(e)=>Props.handlefieldChange(e)}
-              readOnly={Props?.expenseData?.actual_vendors[0]?.is_approved ? true : false}
-            ></Input>
-          </div>
-          <div className='grid-cols-1 space-y-2'>
-            <label htmlFor="payment_date" className="text-black md:text-sm md:font-normal capitalize">
-              Payment Date<span className="text-[#e60000] ">*</span>
-            </label>
-            <Input
-              type='date'
-              value={Props.formdata?.payment_date ?? ""}
-              className="text-black shadow md:rounded-sm md:py-1"
-              placeholder="Type here ..."
-              id='payment_date'
-              name='payment_date'
-              onChange={(e)=>Props.handlefieldChange(e)}
-              readOnly={Props?.expenseData?.actual_vendors[0]?.is_approved ? true : false}
-            ></Input>
-          </div>
+          
+          {/* { Props.role = "Event%20Finance" &&
+            <>
+              <div className='grid-cols-1 space-y-2'>
+                <label htmlFor="utr_number" className="text-black md:text-sm md:font-normal capitalize">
+                  UTR Number<span className="text-[#e60000] ">*</span>
+                </label>
+                <Input
+                  type='text'
+                  value={Props.formdata?.utr_number ?? ""}
+                  className="text-black shadow md:rounded-sm md:py-1"
+                  placeholder="Type here ..."
+                  id='utr_number'
+                  name='utr_number'
+                  onChange={(e)=>Props.handlefieldChange(e)}
+                  readOnly={Props?.expenseData?.actual_vendors[0]?.is_approved ? true : false}
+                ></Input>
+              </div>
+              <div className='grid-cols-1 space-y-2'>
+                <label htmlFor="payment_date" className="text-black md:text-sm md:font-normal capitalize">
+                  Payment Date<span className="text-[#e60000] ">*</span>
+                </label>
+                <Input
+                  type='date'
+                  value={Props.formdata?.payment_date ?? ""}
+                  className="text-black shadow md:rounded-sm md:py-1"
+                  placeholder="Type here ..."
+                  id='payment_date'
+                  name='payment_date'
+                  onChange={(e)=>Props.handlefieldChange(e)}
+                  readOnly={Props?.expenseData?.actual_vendors[0]?.is_approved ? true : false}
+                ></Input>
+              </div>
+            </>
+          } */}
           <div className='grid-cols-1 space-y-2'>
             <label htmlFor="zone" className="text-black md:text-sm md:font-normal capitalize">
               Zone<span className="text-[#e60000] ">*</span>
