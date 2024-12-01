@@ -80,7 +80,7 @@ type EventEntry = {
   product_details:string;
   type_of_engagement:string;
   preactivity_submitted:number;
-
+  hcp_name:string;
 }
 
 type Compensation = {
