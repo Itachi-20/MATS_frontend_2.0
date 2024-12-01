@@ -21,6 +21,7 @@ import {
 import { Checkbox } from '@/components/ui/checkbox';
 import { useRouter } from 'next/navigation';
 import {Previewdata} from '@/app/(afterlogin)/hcp_services/page';
+import { PreviewData } from '../utility';
 
 type Props = {
   vendorType:{
@@ -100,14 +101,14 @@ const Form3 = ({...Props}:Props) => {
   const [totalLogisticAmount,setTotalLogisticAmount] = useState(0);
   const [totalCompansationAmount,setTotalCompansationAmount] = useState(0);
   const [totalEstimatedAmount,setTotalEstimatedAmount] = useState(0);
-
+  console.log(Props.previewData, PreviewData);
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const updatedFormData = {
       ...formdata
     };
     updatedFormData.event_type = "Awareness Program";
-
+console.log(updatedFormData,'updatedFormData')
     if (refNo) {
       updatedFormData.name = refNo;
     }
