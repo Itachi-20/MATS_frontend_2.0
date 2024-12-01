@@ -441,7 +441,7 @@ console.log(formdata,"this is form data")
           fill="#635E5E"
         />
       </svg>
-      <Button className="bg-white text-black border text-md font-normal rounded-xl pl-10 py-2 hover:bg-white" onClick={()=>router.push(`/add_vendor`)}>
+      <Button className="bg-white text-black border text-md font-normal rounded-xl pl-10 py-2 hover:bg-white" onClick={()=>router.push("/add_vendor")}>
         Add New Vendor
       </Button>
     </div>

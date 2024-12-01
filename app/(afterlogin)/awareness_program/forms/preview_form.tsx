@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox"
@@ -68,8 +70,17 @@ type EventEntry = {
   logistics: Logistics[];
   documents: ActivityDocument[];
   advance_approvers: any[]; // Empty array, can be customized later
-  city:string
-  reporting_head:string
+  city:string;
+  reporting_head:string;
+  requesting_hospital_name: string;
+  ship_to: string;
+  bill_to: string;
+  organization_name:string;
+  any_additional_expense:string;
+  product_details:string;
+  type_of_engagement:string;
+  preactivity_submitted:number;
+
 }
 
 type Compensation = {
@@ -171,13 +182,17 @@ type ActivityDocument = {
   document: DocumentDetails[];
 };
 
-const Preview_Form = () => {
+type props = {
+  refNo: string;
+}
+
+const Preview_Form = ({...Props}:props) => {
   const pathname = usePathname();
   const router = useRouter()
   const [dialog, setDialog] = useState(false);
   const [addVendor, setAddVendor] = useState(false);
   const [preview_data, setPreviewData] = useState<EventEntry | null>(null);
-  const [refNo, setRefNo] = useState<string | null>(localStorage.getItem("refno") ? localStorage.getItem("refno") : "");
+  const [refNo, setRefNo] = useState<string | null>(Props.refNo ?? "");
   const [isCommentbox,setIsCommentbox] = useState<boolean>();
   const [comment,setComment] = useState<string>();
   const isAddVendor = () => {
@@ -285,33 +300,22 @@ const Preview_Form = () => {
         <Documents
           eventData={preview_data}
           PageName={'nahi pata'}
+          fetchFile={PreviewData}
         />
-
-        <div className="flex md:pb-8 gap-3">
-          <input
-            type="checkbox"
-            onChange={handleCheckboxChange}
-            checked={isChecked}
-            className="checkbox"
-          />
-          <label className="text-black md:text-sm md:font-normal capitalize">
-            I hereby declare that all details filled by me are correct and genuine.<span className="text-[#e60000]">*</span>
-          </label>
-        </div>
 
         <div className="flex justify-end pt-5 gap-4">
           {/* <Button className="bg-white text-black border text-md font-normal">
             Save as Draft
-          </Button> */}
-          <Button className="bg-white text-black border text-md font-normal">
+          </Button>*/}
+          <Button className="bg-white text-black border text-md font-normal hover:text-white hover:bg-black" onClick={()=>{router.push(`/awareness_program?forms=4&refno=${refNo}`)}}>
             Back
           </Button>
-          <Button className={`bg-[#4430bf] text-white  font-normal border`} disabled={!isChecked} onClick={()=>handleDialog()}>
+          <Button className={`bg-[#4430bf] text-white  font-normal border hover:opacity-60`} onClick={()=>handleDialog()}>
             Submit
           </Button>
         </div>
       </div>
-      {
+        {
               isCommentbox &&
         <div className="absolute z-50 flex pt-10 items-end justify-center bg-black bg-opacity-50 w-full h-full inset-0 pb-40">
           <Comment_box 

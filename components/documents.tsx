@@ -74,8 +74,8 @@ type EventEntry = {
   logistics: Logistics[];
   documents: ActivityDocument[];
   advance_approvers: any[]; // Empty array, can be customized later
-  city:string
-  reporting_head:string
+  city:string;
+  reporting_head:string;
   preactivity_submitted:number;
 }
 

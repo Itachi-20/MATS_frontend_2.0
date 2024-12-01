@@ -1,18 +1,20 @@
-"use client"
 
-import React, { useState } from 'react';
+import React from 'react';
 import Form1 from "@/app/(afterlogin)/awareness_program/forms/form1";
 import Form2 from "@/app/(afterlogin)/awareness_program/forms/form2";
 import Form3 from "@/app/(afterlogin)/awareness_program/forms/form3";
 import Form4 from "@/app/(afterlogin)/awareness_program/forms/form4";
 import Preview_Form from './forms/preview_form';
-import Addvendor from '@/components/add_vendor';
 import Adddocument from '@/components/add_document';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react'
 import { usePathname } from 'next/navigation'
 import { AppWrapper } from '@/app/context/module'
 import { useSearchParams } from 'next/navigation'
+import { activityList, dropdown, PreviewData, handleBusinessUnitChange } from './utility';
+import { cookies } from "next/headers";
+import { Previewdata } from '../hcp_services/page';
+
 type dropdownData = {
   company: {
     name: string,
@@ -43,19 +45,19 @@ type dropdownData = {
   }[]
 }
 
-type Compensation = {
+export type Compensation = {
   vendor_type: string;
   vendor_name: string;
   est_amount: number;
   gst_included?: number;
 };
 
-type Logistics = {
+export type Logistics = {
   vendor_type: string;
   est_amount: number;
 };
 
-type formData = {
+export type formData = {
   name: string | null;
   event_type: string;
   company: string;
@@ -96,147 +98,27 @@ type activityDropdown = {
   }[]
 }
 
-const Index = () => {
-  const pathname = usePathname();
-  const searchParams = useSearchParams()
-  const search = searchParams.get('forms')
-  console.log("search", search)
-  const router = useRouter()
-  const [form, setForm] = useState<string | number | null>(searchParams.get('forms'));
-  const [activityDropdown, setActivityDropdown] = useState<activityDropdown | null>(null);
-  const [addVendor, setAddVendor] = useState(false);
-  const [dropdownData, setDropdownData] = useState<dropdownData | null>(null);
-  const [refNo, setRefNo] = useState<string | null>(localStorage.getItem("refno") ? localStorage.getItem("refno") : "");
-  const [logisticsBudget, setLogisticBudget] = useState<Logistics[]>([]);
+const Index = async ({...Props}:any) => {
+  const props =  await Props;
+  const {forms,refno} = await props.searchParams;
+  const activityDropdown:activityDropdown = await activityList();
+  const dropdownData:dropdownData =await dropdown();
+  // const [logisticsBudget, setLogisticBudget] = useState<Logistics[]>([]);
 
-  console.log(form, 'form')
   let eventype: { [key: string]: string } = {};
-  eventype["awareness_program"] = "Awareness Program";
-  useEffect(() => {
-    setFormData({ ...formdata, name: refNo })
-  }, [refNo])
-  const [formdata, setFormData] = useState<formData | {}>({});
-
-  const isAddVendor = () => {
-    setAddVendor(prev => !prev)
+  const cookie = await cookies()
+  let previewdata:  Previewdata | null = null;
+  let eventCostCenter = null;
+  if(refno){
+    previewdata =  await PreviewData(refno,cookie);
   }
-
-  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    const updatedFormData = {
-      ...formdata
-    };
-    updatedFormData.event_type = "Awareness Program";
-
-    if (refNo) {
-      updatedFormData.name = refNo;
-    }
-
-
-    try {
-      const response = await fetch(
-        "/api/training_and_education/handleSubmit",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: 'include',
-          body: JSON.stringify(updatedFormData)
-        }
-      );
-      if (response.ok) {
-        const data = await response.json();
-        console.log(data, "response data");
-        localStorage.setItem("refno", data.message);
-        setRefNo(data.message);
-
-        setTimeout(() => {
-          if (search == "1") {
-            router.push(`/awareness_program?forms=2`);
-          }
-          if (search == "2") {
-            router.push(`/awareness_program?forms=3`);
-          }
-          if (search == "3") {
-            router.push(`/awareness_program?forms=4`);
-          }
-          if (search == "4") {
-            router.push(`/awareness_program?forms=5`);
-          }
-        }, 1000)
-      } else {
-        console.log("submission failed");
-      }
-    } catch (error) {
-      console.error("Error during Submission:", error);
-    }
-  };
-
-
-  const handlefieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+  if(previewdata && previewdata.business_unit){
+    eventCostCenter = await handleBusinessUnitChange(previewdata.business_unit,cookie);
   }
-
-
-  const handleSelectChange = (value: string, name: string) => {
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-
-  const activityList = async () => {
-    try {
-      const response = await fetch("/api/training_and_education/activityList", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: 'include'
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setActivityDropdown(data.data);
-        console.log(data, "activity list")
-      } else {
-        console.log('Login failed');
-      }
-    } catch (error) {
-      console.error("Error during login:", error);
-    }
-  };
-  useEffect(()=>{
-    activityList();
-  },[])
-  const dropdown = async () => {
-    try {
-      const response = await fetch("/api/training_and_education/dropdown", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      const data = await response.json();
-      setDropdownData(data.data);
-      if (response.ok) {
-      } else {
-        console.log('Login failed');
-      }
-    } catch (error) {
-      console.error("Error during login:", error);
-    }
-  };
-
-  useEffect(() => {
-    dropdown();
-  }, [])
-
-  console.log(formdata, "this is form data");
 
   return (
     <>
+        <AppWrapper>
       <div className="px-7 pb-7 pt-4 w-full relative z-20">
         <div>
           <h1 className="text-black text-[30px] font-medium capitalize" id="form_top">
@@ -245,50 +127,40 @@ const Index = () => {
           <div className='py-9'></div>
         </div>
         {
-          search == "1" ?
+          forms == "1" ?
             <Form1
               // nextForm = {nextForm}
+              eventCostCenter={eventCostCenter}
+              previewData = {previewdata}
               dropdownData={dropdownData}
-              handlefieldChange={handlefieldChange}
-              handleSelectChange={handleSelectChange}
-              handleSubmit={handleSubmit}
+              refNo={refno}
             /> :
-            search == "2" ?
+            forms == "2" ?
               <Form2
-                handlefieldChange={handlefieldChange}
-                handleSelectChange={handleSelectChange}
-                handleSubmit={handleSubmit}
+                previewData = {previewdata}
+                refNo={refno}
               /> :
-              search == "3" ?
+              forms == "3" ?
                 <Form3
+                  previewData = {previewdata}
                   vendorType={dropdownData && dropdownData.vendor_type}
                   currency={dropdownData && dropdownData.currency}
-                  handlefieldChange={handlefieldChange}
-                  handleSelectChange={handleSelectChange}
-                  handleSubmit={handleSubmit}
-                  setFormData={setFormData}
-                  logisticsBudget={logisticsBudget}
-                  isAddVendor={isAddVendor}
+                  refNo={refno}
+
                 /> :
-                search == "4" ?
+                forms == "4" ?
                   <Form4
-                    // nextForm = {nextForm}
-                    // prevForm={prevForm}
-                    handleSubmit={handleSubmit}
                     activityDropdown={activityDropdown}
+                    refNo={refno}
+
                   /> :
-                  search == "5" ?
+                  forms == "5" ?
                     <Preview_Form
+                      refNo={refno}
                     /> : ""
         }
       </div>
-
-      {
-        addVendor &&
-        <Addvendor
-          isAddVendor={isAddVendor}
-        />
-      }
+      </AppWrapper>
     </>
   )
 }

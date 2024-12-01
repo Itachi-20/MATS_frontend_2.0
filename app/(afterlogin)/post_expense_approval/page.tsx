@@ -264,12 +264,15 @@ const Index = () => {
                                                 <TableCell>{data.event_start_date ?? "-"}</TableCell>
                                                 <TableCell>{data.total_amount ?? "-"}</TableCell>
                                                 <TableCell>{data.event_requestor ?? "-"}</TableCell>
-                                                <TableCell className={(data.travel_request_approved == true && role == "Event Finance")? 'sticky right-0 bg-[white] z-50 space-x-2 border-l border-slate-200':'sticky right-0 bg-[white] z-50 border-l border-slate-200'}>
+                                                <TableCell className={(data.travel_request_approved == true && role == "Event Finance")? 'sticky right-0 bg-[white] z-50 space-x-2 border-l border-slate-200':'sticky right-0 bg-[white] z-50 border-l border-slate-200 space-x-2'}>
                                                     
-                                                    <button className="border rounded-full px-4 py-1 border-[#0E4154] text-[#0E4154] hover:text-white hover:bg-[#0E4154] active:text-white active:bg-[#0E4154] transition-all delay-100" onClick={() => router.push(`/post_expense_approval/${data.name}`)} >Take Action</button>
+                                                    <Button className="border rounded-full px-4 py-1 border-[#0E4154] text-[#0E4154] hover:text-white hover:bg-[#0E4154] active:text-white active:bg-[#0E4154] transition-all delay-100" onClick={() => router.push(`/post_expense_approval/${data.name}`)} >Take Action</Button>
+
                                                     {
                                                         (data.travel_request_approved == true && role == "Event Finance" && data.status != "Closed") ? 
-                                                        <button className="border rounded-full px-4 py-1 border-red-600 text-red-600 hover:text-white hover:bg-red-600 transition-all delay-100" onClick={() => handleDeletePopUp(data.name)} >Close</button>:<></>
+                                                        <Button className="border rounded-full px-4 py-1 border-red-600 text-red-600 hover:text-white hover:bg-red-600 transition-all delay-100" onClick={() => handleDeletePopUp(data.name)} >Close</Button>
+                                                        :
+                                                        <Button className="border rounded-full px-4 py-1 border-red-600 text-red-600 hover:text-white hover:bg-red-600 transition-all delay-100 disabled:cursor-not-allowed" disabled>Close</Button>
                                                     }
                                                 
                                                 </TableCell>

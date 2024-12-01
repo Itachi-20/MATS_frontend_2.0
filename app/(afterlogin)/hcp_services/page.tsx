@@ -172,6 +172,7 @@ export type Previewdata = {
   post_expense_approved: number;
   travel_expense_submitted: number;
   travel_expense_approved: number;
+  budget:string;
 };
 
 type ChildVendor = {
