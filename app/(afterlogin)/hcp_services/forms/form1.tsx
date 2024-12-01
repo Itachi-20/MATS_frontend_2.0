@@ -125,6 +125,7 @@ type Props = {
   dropdownData: dropdownData | null;
   previewData:Previewdata | null;
   eventCostCenter:eventCostCenter | null;
+  refno: string;
 };
 const Form1 = ({ ...Props }: Props) => {
   const router = useRouter();
@@ -137,7 +138,7 @@ const Form1 = ({ ...Props }: Props) => {
   const [subtypeActivityVisible, setSubtypeActivityVisible] = useState(false); 
   const[engagementTypes, setEngagementTypes] = useState("");  
   const [formdata, setFormData] = useState<formData | {}>({});
-  const [refNo,setRefNo] = useState<string | null>(localStorage.getItem("refno")?localStorage.getItem("refno"):"");
+  const [refNo,setRefNo] = useState<string | null>(Props.refno);
 
   const handleSelectChange = (value: string, name: string) => {
        setFormData((prev) => ({ ...prev, [name]: value }));
@@ -159,6 +160,8 @@ const Form1 = ({ ...Props }: Props) => {
           updatedFormData.event_type = "HCP Services"
           if(refNo){
             updatedFormData.name = refNo;
+          }else{
+            updatedFormData.name = '';
           }
       
       
@@ -176,11 +179,9 @@ const Form1 = ({ ...Props }: Props) => {
             );
             if (response.ok) {
               const data = await response.json();
-              console.log(data, "response data");
-              localStorage.setItem("refno", data.message);
+              console.log(data, "response data-----------------------------------");
+              // localStorage.setItem("refno", data.message);
               setRefNo(data.message);
-      
-              
                 router.push(`/hcp_services?forms=2&refno=${data.message}`);
               
             } else {

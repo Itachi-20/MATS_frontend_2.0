@@ -285,6 +285,7 @@ const table = ({ tableData }: Props) => {
   const handleExport = () => {
     setExportOpen(prevState => !prevState);
   };
+
   const handleFileUpload: any = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = (e.target as HTMLInputElement).files;
     setFile(files);
@@ -318,6 +319,34 @@ const table = ({ tableData }: Props) => {
       console.error("Error during login:", error);
     }
   };
+  const handleAdvaneAmountApi = async (value: string) => {
+    console.log("inside amount api venser name ")
+    try {
+      const response = await fetch(
+        `/api/training_and_education/vendorName?vendor_name=${value}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          "credentials": 'include'
+        }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        setVendorDetails((prev) => ({
+          ...prev,
+          amount: data.data, // Update vendor_name in the vendorDetails state
+        }))
+        console.log(data, "vendor name api");
+      } else {
+        console.log("Login failed");
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
+    }
+  };
+
   const dropdown = async () => {
 
     try {
@@ -338,6 +367,7 @@ const table = ({ tableData }: Props) => {
       console.error("Error during login:", error);
     }
   };
+
 
   useEffect(() => {
     dropdown();
@@ -550,7 +580,7 @@ const table = ({ tableData }: Props) => {
               </label>
               <Select
                 onValueChange={(value: string) => {
-                  setCompansationVendorName(value);
+                  handleAdvaneAmountApi(value);
                   setVendorDetails((prev) => ({
                     ...prev,
                     vendor_name: value, // Update vendor_name in the vendorDetails state
@@ -580,6 +610,7 @@ const table = ({ tableData }: Props) => {
                 placeholder="Type Here"
                 type='number'
                 name='amount'
+                value={vendorDetails.amount ?? ''}
                 onChange={handlefieldChange}
               ></Input>
             </div>
