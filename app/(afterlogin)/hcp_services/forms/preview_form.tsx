@@ -233,6 +233,7 @@ const Preview_Form = ({ ...Props }: Props) => {
   const handleDialog = () => {
     setIsCommentbox(prev => !prev);
   }
+  console.log(preview_data,'preview_data')
 
   return (
     <>
@@ -274,7 +275,7 @@ const Preview_Form = ({ ...Props }: Props) => {
         {/* <Button className="bg-white text-black border text-md font-normal">
           Save as Draft
         </Button> */}
-        <Button className="bg-white text-black border text-md font-normal">
+        <Button className="bg-white text-black border text-md font-normal" onClick={()=>router.push(`/hcp_services?forms=4&refno=${Props.refno}`)}>
           Back
         </Button>
         <Button className={`bg-[#4430bf] text-white  font-normal border`} onClick={() => handleDialog()}>

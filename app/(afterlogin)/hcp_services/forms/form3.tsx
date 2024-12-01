@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/table";
 import { useRouter } from 'next/navigation';
 import {Previewdata} from '@/app/(afterlogin)/hcp_services/page'
-
+import { Toaster, toast } from 'sonner'
 
 type formData = {
   name: string | null;
@@ -441,7 +441,7 @@ console.log(formdata,"this is form data")
           fill="#635E5E"
         />
       </svg>
-      <Button className="bg-white text-black border text-md font-normal rounded-xl pl-10 py-2 hover:bg-white">
+      <Button className="bg-white text-black border text-md font-normal rounded-xl pl-10 py-2 hover:bg-white" onClick={()=>router.push(`/add_vendor`)}>
         Add New Vendor
       </Button>
     </div>
@@ -651,6 +651,9 @@ console.log(formdata,"this is form data")
         <Button className="bg-[#4430bf] text-white text-md font-normal border hover:bg-[#4430bf]" onClick={(e: React.MouseEvent<HTMLButtonElement>)=>handleSubmit(e)}>
           Next
         </Button>
+
+        <Toaster richColors position="top-right" />
+
       </div>
     </div>)
   );

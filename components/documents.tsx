@@ -12,7 +12,7 @@ import {
 import page from '@/app/(afterlogin)/advance_payment/[request_number]/page';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-
+import { Toaster, toast } from 'sonner'
 interface DocumentsProps {
   PageName: string; 
 }
@@ -203,6 +203,7 @@ const Documents = ({PageName,...Props}:Props) => {
         })
       })
       if(response.ok){
+        toast.success('Deleted Successfully')
         console.log("successfully deleted");
         Props.fetchFile();
       }
@@ -276,6 +277,8 @@ const Documents = ({PageName,...Props}:Props) => {
             </Table>
           </div>
         </div>
+        <Toaster richColors position="top-right" />
+
       </div>
       )
     })

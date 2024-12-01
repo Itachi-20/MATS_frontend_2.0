@@ -250,20 +250,54 @@ useEffect(()=>{
               </div>
             </div>
           </div>
-          <BasicDetails 
-          eventData = {eventData}
-          pathname="eventListPage"
+
+
+
+         {
+        eventData?.event_type == "Training and Education" || eventData?.event_type == "Awareness Program" ?
+
+          <BasicDetails
+            pathname=""
+            eventData={eventData}
           />
-          <EventDetails 
-          eventData = {eventData}
-          pathname="eventListPage"
+          :
+          <BasicDetails2
+            pathname=""
+            eventData={eventData}
           />
-          <LogisticBudget 
+      }
+
+      {
+        eventData?.event_type == "Training and Education" || eventData?.event_type == "Awareness Program" ?
+
+          <EventDetails
+            pathname=""
+            eventData={eventData}
+          />
+          :
+          <EventDetails2
+            pathname=""
+            eventData={eventData}
+          />
+      }
+      {eventData?.event_type == "HCP Services" &&
+      <HCPDetils
+        pathname=""
+        eventData={eventData}
+      />}
+      {
+        eventData?.event_type == "Patient Support" ?
+          <></>
+          : <VendorDetails
+            eventData={eventData}
+          />
+      }
+          {/* <LogisticBudget 
           eventData = {eventData}
           />
           <CompensationBudget 
           eventData = {eventData}
-          />
+          /> */}
           <TotalExpense 
           eventData = {eventData}
           //pathname="eventListPage"

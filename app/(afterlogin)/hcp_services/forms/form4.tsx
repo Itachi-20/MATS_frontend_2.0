@@ -21,7 +21,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useRouter } from 'next/navigation';
-
+import { Toaster, toast } from 'sonner'
 type Compensation = {
   vendor_type: string;
   vendor_name: string;
@@ -283,6 +283,9 @@ const form4 = ({ ...Props }: Props) => {
         <Button className="bg-[#4430bf] text-white text-md font-normal border" onClick={(e) => handleSubmit(e)}>
           Next
         </Button>
+
+        <Toaster richColors position="top-right" />
+
       </div>
     </div>)
   );

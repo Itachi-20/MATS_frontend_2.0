@@ -152,7 +152,7 @@ export default function EventList () {
                     Event Type
                   </TableHead>
                   <TableHead className={"text-center text-[#625d5d] lg:text-[15px] sm:text-[12px] text-[11px] font-normal font-['Montserrat']"} >
-                    Event Date
+                    Event Start Date
                   </TableHead>
                   <TableHead
                     className={
