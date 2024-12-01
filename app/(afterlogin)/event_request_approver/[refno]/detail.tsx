@@ -174,6 +174,7 @@ type ActivityDocument = {
 
 type Props = {
   tableData: EventEntry
+  refno:string;
 }
 
 const Index = ({ ...Props }: Props) => {
@@ -182,10 +183,10 @@ const Index = ({ ...Props }: Props) => {
   const [isCommentbox, setIsCommentbox] = useState<boolean>();
   const [comment, setComment] = useState<string>();
   const [type, setType] = useState<string>();
-  const param = useSearchParams()
-
+  const [refno, setRefno] = useState(Props.refno);
+console.log(refno,'refno')
   const handleApprove = async () => {
-    const refno = param.get("refno");
+    // const refno = param.get("refno");
     try {
       const response = await fetch(
         "/api/eventRequestApprove/Approve",

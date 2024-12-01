@@ -301,11 +301,11 @@ const page = () => {
                             <h1 className="text-center">{data?.modified.substring(0,10)}</h1>
                         </div>
                         <div className="col-span-1 flex justify-center pt-1">
-                            <Button className="px-10 text-white bg-[#4430bf]">
+                            {/* <Button className="px-10 text-white bg-[#4430bf]"> */}
                                 {/* <DialogBox button={"Execute"} msg={"Next Occurrence date"}/> */}
                                 {/* <DialogBox button={"Submit"} msg={"Are you sure you wanted to execute the event?"} refno={refno}/> */}
-                                Submit
-                                </Button>
+                                {/* Submit
+                                </Button> */}
                         </div>
                     </div>
                 </div>
