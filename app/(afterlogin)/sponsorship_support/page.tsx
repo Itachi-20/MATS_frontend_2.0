@@ -3,6 +3,8 @@ import React, { useState,useEffect } from 'react';
 import Form1 from "./forms/form1";
 import Form2 from "./forms/form2";
 import Form3 from "./forms/form3";
+import Form4 from "./forms/form4";
+import Preview from "./forms/preview_form";
 import Adddocument from '@/components/add_document';
 import Preview_Form from './forms/preview_form';
 import Addvendor from '@/components/add_vendor';
@@ -307,9 +309,16 @@ const index = () => {
           handleSubmit = {handleSubmit}
           />:
           search == "4"?
-          <Preview_Form
+          <Form4
+          activityDropdown={activityDropdown}
+          handleSubmit = {handleSubmit}
           // prevForm = {prevForm}
-          />:""
+          />:
+            search == "5"?
+            <Preview
+            // prevForm = {prevForm}
+            />:""
+          
         }
         </div>
     

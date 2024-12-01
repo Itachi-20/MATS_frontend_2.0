@@ -545,10 +545,10 @@ const Form1 = ({ ...Props }: Props) => {
       </div>
 
       <div className="flex justify-end pt-5 gap-4">
-        <Button className="bg-white text-black border text-md font-normal">
+        {/* <Button className="bg-white text-black border text-md font-normal">
           {" "}
           Save as Draft
-        </Button>
+        </Button> */}
         <Button className='bg-[#4430bf] text-white text-md font-normal border'onClick={(e)=>Props.handleSubmit(e)}>Next</Button>
       </div>
     </div>

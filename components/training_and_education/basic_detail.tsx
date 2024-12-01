@@ -236,21 +236,18 @@ const Basic_Details = ({ ...Props }: Props) => {
           ></Input>
         </div>
 
-        {
-          (Props.eventData?.division_category == "National" && Props.eventData?.business_unit == "Endosurgery") &&
-          <div className="flex flex-col gap-2">
-              <label className="lable">
-                Budget Sub Type<span className="text-[#e60000]">*</span>
-              </label>
-              <Input
-              className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
-              placeholder="Type Here"
-              readOnly={true}
-              value={Props.eventData?.division_sub_category}
-            ></Input>
+        {/* should be condition based */}
+        <div className="flex flex-col gap-2">
+            <label className="lable">
+              Budget Sub Type<span className="text-[#e60000]">*</span>
+            </label>
+            <Input
+            className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
+            placeholder="Type Here"
+            readOnly={true}
+            value={Props.eventData?.division_sub_category}
+          ></Input>
           </div>
-
-        }
         <div className="flex flex-col md:gap-2">
           <label className="text-black md:text-sm md:font-normal capitalize">
             city<span className="text-[#e60000]">*</span>
@@ -273,7 +270,7 @@ const Basic_Details = ({ ...Props }: Props) => {
             value={Props.eventData?.state}
           ></Input>
         </div>
-        <div className={`flex flex-col md:gap-2  ${Props.eventData?.event_type == "Awareness Program" ? "hidden" : ""}`}>
+        <div className={`flex flex-col md:gap-2  ${Props.pathname == "/assesment_program" ? "hidden" : ""}`}>
           <label className="text-black md:text-sm md:font-normal capitalize">
             Therapy<span className="text-[#e60000]">*</span>
           </label>

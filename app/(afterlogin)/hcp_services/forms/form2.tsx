@@ -101,12 +101,12 @@ type activityDropdown = {
 
 type Props = {
   previewData:Previewdata | null;
-  refno:string | undefined;
+  refno:string ;
 }
 const Form2 = ({...Props}:Props) => {
   const router = useRouter();
   const [formdata, setFormData] = useState<formData | {}>({});
-  const [refNo,setRefNo] = useState<string | null>(localStorage.getItem("refno")?localStorage.getItem("refno"):"");
+  const [refNo,setRefNo] = useState<string | null>(Props.refno);
   const [hcpValue,setHCPValue] = useState<string>()
   const handleAnyHCPChange = (value:string)=>{
     setHCPValue(value);
@@ -234,8 +234,8 @@ console.log(formdata,"this is form data")
         
       </div>
       <div className='flex justify-end pt-5 gap-4'>
-        <Button className='bg-white text-black border text-md font-normal'> Save as Draft</Button>
-        <Button className='bg-white text-black border text-md font-normal'>Back</Button>
+        {/* <Button className='bg-white text-black border text-md font-normal'> Save as Draft</Button> */}
+        <Button className='bg-white text-black border text-md font-normal' onClick={()=>router.push(`/hcp_services?forms=1&refno=${Props.refno}`)}>Back</Button>
         <Button className='bg-[#4430bf] text-white text-md font-normal border'onClick={(e)=>handleSubmit(e)}>Next</Button>
       </div>
     </div>)

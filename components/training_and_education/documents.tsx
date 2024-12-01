@@ -12,9 +12,9 @@ import {
 import page from '@/app/(afterlogin)/advance_payment/[request_number]/page';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Toaster, toast } from 'sonner'
+
 interface DocumentsProps {
-  PageName: string; 
+  PageName: string;
 }
 
 type EventEntry = {
@@ -74,8 +74,8 @@ type EventEntry = {
   logistics: Logistics[];
   documents: ActivityDocument[];
   advance_approvers: any[]; // Empty array, can be customized later
-  city:string;
-  reporting_head:string;
+  city: string
+  reporting_head: string;
   preactivity_submitted:number;
 }
 
@@ -165,7 +165,7 @@ type Logistics = {
 type File = {
   url: string;
   name: string;
-  file_name:string
+  file_name: string
 };
 
 type DocumentDetails = {
@@ -180,35 +180,34 @@ type ActivityDocument = {
 
 
 type Props = {
-  eventData:EventEntry | undefined | null
-  PageName:string,
-  fetchFile:()=>void
+  eventData: EventEntry | undefined | null
+  PageName: string,
+  fetchFile: () => void
 }
 
-const Documents = ({PageName,...Props}:Props) => {
-  console.log(Props.eventData?.documents,"this is documents")
+const Documents = ({ PageName, ...Props }: Props) => {
+  console.log(Props.eventData?.documents, "this is documents")
   const router = useRouter();
 
-  const handleDelete = async (name:String)=>{
+  const handleDelete = async (name: String) => {
     try {
-      const response = await fetch(`api/training_and_education/fileDelete/`,{
+      const response = await fetch(`api/training_and_education/fileDelete/`, {
         method: "POST",
         headers: {
-            'Content-Type': 'application/json',
-            //'Cookie': cookies as string 
+          'Content-Type': 'application/json',
+          //'Cookie': cookies as string 
         },
-        credentials:'include',
-        body:JSON.stringify({
-          name:name
+        credentials: 'include',
+        body: JSON.stringify({
+          name: name
         })
       })
-      if(response.ok){
-        toast.success('Deleted Successfully')
+      if (response.ok) {
         console.log("successfully deleted");
         Props.fetchFile();
       }
     } catch (error) {
-      console.log(error,"this is error");
+      console.log(error, "this is error");
     }
   }
 
@@ -222,67 +221,65 @@ const Documents = ({PageName,...Props}:Props) => {
 
 
       {
-        Props.eventData && Props.eventData.documents?.map((item,index)=>{
+        Props.eventData && Props.eventData.documents?.map((item, index) => {
           return (
-      <div className='border border-[#848484] p-4 rounded-2xl w-full mb-8'>
-        <h1 className="text-black pl-4 pb-4">
-          Document type:{" "}
-          <span className="font-semibold">{item.activity_type}</span>
-        </h1>
-        <div className="bg-white">
-          <div className="flex flex-col">
-            <Table>
-              <TableHeader>
-                <TableRow className="text-black">
-                  <TableHead className={"bg-[#E0E9FF] rounded-l-2xl text-[15px] w-[50%] pr-10"}
-                  >
-                    Supporting Document
-                  </TableHead>
-                  <TableHead className={"bg-[#E0E9FF] text-[15px] rounded-r-2xl w-[50%] divide-x-2"}
-                  >
-                   Documents
-                    
-                  </TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {
-                  item && item.document?.map((item2,index)=>{
-                    return (
-                <TableRow className="text-black divide-x-2">
-                  <TableCell>{item2.type}</TableCell>
-                  <TableCell>{item2.file?.map((item3,index)=>{
-                    return (
-                      <div className='flex justify-between'>
-                      <div className=''>{item3.file_name}</div>
-                      <div className='flex gap-5 items-center'>
-                        <Link rel="stylesheet" href={item3.url} target='blank'>
-                      <Image src={"/svg/view.svg"} width={20} height={20}  alt='view-document' className='cursor-pointer' />
-                        </Link>
-                        <div className={`${Props.eventData && Props.eventData.preactivity_submitted == 1 ?"hidden":""}`} onClick={async()=>{await handleDelete(item3.name)}}>
-                      <Image src={"/svg/delete.svg"} width={20} height={20}  alt='view-document' className='cursor-pointer' />
-                        </div>
-                      </div>
-                      </div>
-                    )
-                  })}</TableCell>
-                </TableRow>
-                    )
-                  })
-                }
-                <TableRow className="text-black">
-                  
-                </TableRow>
-              </TableBody>
-            </Table>
-          </div>
-        </div>
-        <Toaster richColors position="top-right" />
+            <div className='border border-[#848484] p-4 rounded-2xl w-full mb-8'>
+              <h1 className="text-black pl-4 pb-4">
+                Document type:{" "}
+                <span className="font-semibold">{item.activity_type}</span>
+              </h1>
+              <div className="bg-white">
+                <div className="flex flex-col">
+                  <Table>
+                    <TableHeader>
+                      <TableRow className="text-black">
+                        <TableHead className={"bg-[#E0E9FF] rounded-l-2xl text-[15px] w-[50%] pr-10"}
+                        >
+                          Supporting Document
+                        </TableHead>
+                        <TableHead className={"bg-[#E0E9FF] text-[15px] rounded-r-2xl w-[50%] divide-x-2"}
+                        >
+                          Documents
 
-      </div>
-      )
-    })
-  }
+                        </TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {
+                        item && item.document?.map((item2, index) => {
+                          return (
+                            <TableRow className="text-black divide-x-2">
+                              <TableCell>{item2.type}</TableCell>
+                              <TableCell>{item2.file?.map((item3, index) => {
+                                return (
+                                  <div className='flex justify-between'>
+                                    <div className=''>{item3.file_name}</div>
+                                    <div className='flex gap-5 items-center'>
+                                      <Link rel="stylesheet" href={item3.url}>
+                                        <Image src={"/svg/view.svg"} width={20} height={20} alt='view-document' className='cursor-pointer' />
+                                      </Link>
+                                      <div className={`${Props.eventData && Props.eventData.preactivity_submitted == 1 ? "hidden" : ""}`} onClick={async () => { await handleDelete(item3.name) }}>
+                                        <Image src={"/svg/delete.svg"} width={20} height={20} alt='view-document' className='cursor-pointer' />
+                                      </div>
+                                    </div>
+                                  </div>
+                                )
+                              })}</TableCell>
+                            </TableRow>
+                          )
+                        })
+                      }
+                      <TableRow className="text-black">
+
+                      </TableRow>
+                    </TableBody>
+                  </Table>
+                </div>
+              </div>
+            </div>
+          )
+        })
+      }
     </div>
   )
 }

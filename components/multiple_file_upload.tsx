@@ -18,7 +18,7 @@ interface SimpleFileUploadProps {
     // setFiles: React.Dispatch<React.SetStateAction<File[]>>
 }
 
-export default function SimpleFileUpload({ onNext,buttonText,files,setFiles }: SimpleFileUploadProps) {
+export default function SimpleFileUpload({ onNext,buttonText,files,setFiles}: SimpleFileUploadProps) {
     // const [files, setFiles] = useState<File[]>([])
     const [isOpen, setIsOpen] = useState(false)
     const [originalFiles, setOriginalFiles] = useState<FileList | null>(null)
@@ -27,7 +27,11 @@ export default function SimpleFileUpload({ onNext,buttonText,files,setFiles }: S
         const selectedFiles = e.target.files
         setOriginalFiles(selectedFiles)
         const filelist = Array.from(e.target.files || []);
-        setFiles(prevFiles => [...prevFiles, ...filelist])
+        setFiles(prevFiles => {
+            const existingFileNames = new Set(prevFiles.map(file => file.name));
+            const uniqueFiles = filelist.filter(file => !existingFileNames.has(file.name));
+            return [...prevFiles, ...uniqueFiles];
+          });
     }, [])
 
     const handleNext = useCallback(() => {

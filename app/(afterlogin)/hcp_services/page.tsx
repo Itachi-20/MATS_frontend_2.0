@@ -38,6 +38,9 @@ type dropdownData = {
   training_ref_no:{
     name:string
   }[]
+  sponsorship_ref_no:{
+    name:string
+  }[]
 }
 
 type activityDropdown = {
@@ -169,6 +172,7 @@ export type Previewdata = {
   post_expense_approved: number;
   travel_expense_submitted: number;
   travel_expense_approved: number;
+  budget:string;
 };
 
 type ChildVendor = {
@@ -282,7 +286,6 @@ const index = async({...Props}:any) => {
     eventCostCenter = await handleBusinessUnitChange(previewdata.business_unit,cookie);
   }
   console.log(previewdata?.any_govt_hcp,"this is preview data")
-  console.log(eventCostCenter,"this is cost center")
   return (
         <>
         <AppWrapper>
@@ -300,6 +303,7 @@ const index = async({...Props}:any) => {
            dropdownData={dropdownData}
            previewData={previewdata}
            eventCostCenter = {eventCostCenter}
+           refno = {refno}
           />:
           forms == "2"?
           <Form2
@@ -322,6 +326,7 @@ const index = async({...Props}:any) => {
           <Preview_Form
           // prevForm = {prevForm}
           previewData={previewdata}
+          refno= {refno}
           />:""
         
         }

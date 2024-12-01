@@ -1,7 +1,8 @@
-import React from 'react'
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import BeneficiaryDetails from "@/components/beneficiary_details";
+'use client'
+import React from 'react';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { usePathname } from 'next/navigation';
 
 type EventEntry = {
   name: string;
@@ -60,8 +61,14 @@ type EventEntry = {
   logistics: Logistics[];
   documents: ActivityDocument[];
   advance_approvers: any[]; // Empty array, can be customized later
-  city:string
-  reporting_head:string
+  city: string;
+  reporting_head: string;
+  requesting_hospital_name: string;
+  ship_to: string;
+  bill_to: string;
+  organization_name: string;
+  hcp_name: string;
+  hospital_affiliation: string;
 }
 
 type Compensation = {
@@ -150,7 +157,7 @@ type Logistics = {
 type File = {
   url: string;
   name: string;
-  file_name:string
+  file_name: string
 };
 
 type DocumentDetails = {
@@ -167,161 +174,78 @@ type ActivityDocument = {
 
 type Props = {
   pathname: string
-  eventData:EventEntry | undefined |null
+  eventData: EventEntry | undefined | null
 }
 
-const Basic_Details = ({ ...Props }: Props) => {
-  console.log(Props.pathname, "this is pathname")
+const Hcp_Details = ({ ...Props }: Props) => {
+  const pathname = usePathname();
+  console.log(pathname.substring(1));
   return (
     <div className="md:pb-8">
-      <div className="flex md:gap-6" >
+      <div className="flex gap-6">
         <h1 className="text-black md:text-[30px] md:font-medium uppercase md:pb-4">
-          Basic Details
+          HCP Details
         </h1>
       </div>
       <div className="grid md:grid-cols-3 md:gap-6">
-        <div className="flex flex-col md:gap-2">
+        <div className={`flex flex-col md:gap-2`}>
           <label className="text-black md:text-sm md:font-normal capitalize">
-            Company Name<span className="text-[#e60000]">*</span>
+            Hcp Name
           </label>
           <Input
             className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
             placeholder="Type Here"
             readOnly={true}
-            value={Props.eventData?.company}
+            value={Props.eventData?.hcp_name}
           ></Input>
         </div>
-        <div className="flex flex-col md:gap-2">
+        <div className={`flex flex-col md:gap-2`}>
           <label className="text-black md:text-sm md:font-normal capitalize">
-            Business Unit<span className="text-[#e60000]">*</span>
+            Hospital Affiliation
           </label>
           <Input
             className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
             placeholder="Type Here"
             readOnly={true}
-            value={Props.eventData?.business_unit}
+            value={Props.eventData?.hospital_affiliation}
           ></Input>
         </div>
-        <div className="flex flex-col md:gap-2">
+        <div className={`flex flex-col md:gap-2`}>
           <label className="text-black md:text-sm md:font-normal capitalize">
-            Event Requester<span className="text-[#e60000]">*</span>
+          Engagement of any government hCP’s
           </label>
           <Input
             className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
             placeholder="Type Here"
             readOnly={true}
-            value={Props.eventData?.event_requestor}
+            value={Props.eventData?.any_govt_hcp}
           ></Input>
         </div>
-        <div className="flex flex-col md:gap-2">
+        <div className={`flex flex-col md:gap-2`}>
           <label className="text-black md:text-sm md:font-normal capitalize">
-            Event Cost Center<span className="text-[#e60000]">*</span>
+          Total number of government hCP’s
           </label>
           <Input
             className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
             placeholder="Type Here"
             readOnly={true}
-            value={Props.eventData?.event_cost_center}
+            value={Props.eventData?.no_of_hcp}
           ></Input>
         </div>
-        <div className="flex flex-col md:gap-2">
+        <div className={`flex flex-col md:gap-2`}>
           <label className="text-black md:text-sm md:font-normal capitalize">
-            Budget<span className="text-[#e60000]">*</span>
+          BU Rational
           </label>
           <Input
             className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
             placeholder="Type Here"
             readOnly={true}
-            value={Props.eventData?.division_category}
+            value={Props.eventData?.bu_rational}
           ></Input>
-        </div>
-
-        {
-          (Props.eventData?.division_category == "National" && Props.eventData?.business_unit == "Endosurgery") &&
-          <div className="flex flex-col gap-2">
-              <label className="lable">
-                Budget Sub Type<span className="text-[#e60000]">*</span>
-              </label>
-              <Input
-              className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
-              placeholder="Type Here"
-              readOnly={true}
-              value={Props.eventData?.division_sub_category}
-            ></Input>
-          </div>
-
-        }
-        <div className="flex flex-col md:gap-2">
-          <label className="text-black md:text-sm md:font-normal capitalize">
-            city<span className="text-[#e60000]">*</span>
-          </label>
-          <Input
-            className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
-            placeholder="Type Here"
-            readOnly={true}
-            value={Props.eventData?.city}
-          ></Input>
-        </div>
-        <div className="flex flex-col md:gap-2">
-          <label className="text-black md:text-sm md:font-normal capitalize">
-            state<span className="text-[#e60000]">*</span>
-          </label>
-          <Input
-            className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
-            placeholder="Type Here"
-            readOnly={true}
-            value={Props.eventData?.state}
-          ></Input>
-        </div>
-        <div className={`flex flex-col md:gap-2  ${Props.eventData?.event_type == "Awareness Program" ? "hidden" : ""}`}>
-          <label className="text-black md:text-sm md:font-normal capitalize">
-            Therapy<span className="text-[#e60000]">*</span>
-          </label>
-          <Input
-            className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
-            placeholder="Type Here"
-            readOnly={true}
-            value={Props.eventData?.therapy}
-          ></Input>
-        </div>
-        <div className={`flex flex-col md:gap-2  ${Props.pathname == "/assesment_program" ? "hidden" : ""}`}>
-          <label className="text-black md:text-sm md:font-normal capitalize">
-            reporting head<span className="text-[#e60000]">*</span>
-          </label>
-          <Input
-            className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
-            placeholder="Type Here"
-            readOnly={true}
-            value={Props.eventData?.reporting_head}
-          ></Input>
-        </div>
-        <div className="flex flex-col md:gap-2">
-          <label className="text-black md:text-sm md:font-normal capitalize">
-            sub type of activity<span className="text-[#e60000]">*</span>
-          </label>
-          <Input
-            className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
-            placeholder="Type Here"
-            readOnly={true}
-            value={Props.eventData?.sub_type_of_activity}
-          ></Input>
-        </div>
-
-        <div className="flex flex-col gap-2">
-          <label className="lable">
-            Faculties<span className="text-[#e60000]">*</span>
-          </label>
-          <Textarea className='text-black shadow-md bg-[#f6f6f6]' placeholder='Type Here' readOnly value={Props.eventData?.faculty}/>
-        </div>
-        <div className="flex flex-col gap-2">
-          <label className="lable">
-            Participants<span className="text-[#e60000]">*</span>
-          </label>
-          <Textarea className='text-black shadow-md bg-[#f6f6f6]' placeholder='Type Here' readOnly value={Props.eventData?.participants}/>
         </div>
       </div>
     </div>
   )
 }
 
-export default Basic_Details
+export default Hcp_Details
