@@ -330,7 +330,7 @@ const event_Details = ({ ...Props }: Props) => {
           </>
         }
         {
-          Props.eventData?.event_type != 'Hcp Services' &&
+          Props.eventData?.event_type != 'HCP Services' &&
           <div className="flex flex-col md:gap-2">
             <label className="text-black md:text-sm md:font-normal capitalize">
               BU rational<span className="text-[#e60000]">*</span>
