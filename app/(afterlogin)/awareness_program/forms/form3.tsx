@@ -101,6 +101,7 @@ const Form3 = ({...Props}:Props) => {
   const [totalLogisticAmount,setTotalLogisticAmount] = useState(0);
   const [totalCompansationAmount,setTotalCompansationAmount] = useState(0);
   const [totalEstimatedAmount,setTotalEstimatedAmount] = useState(0);
+
   console.log(Props.previewData, PreviewData);
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();

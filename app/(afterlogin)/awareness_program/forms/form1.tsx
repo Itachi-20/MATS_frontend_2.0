@@ -387,7 +387,7 @@ const Form1 = ({ ...Props }: Props) => {
             </Select>
           </div>
         }
-        <div className="flex flex-col gap-2">
+        {/* <div className="flex flex-col gap-2">
           <label className="lable">
             City<span className="text-[#e60000]">*</span>
           </label>
@@ -398,7 +398,7 @@ const Form1 = ({ ...Props }: Props) => {
             <SelectTrigger className="dropdown">
               <SelectValue placeholder="Select" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent> */}
               {/* {Props.dropdownData &&
                   Props.dropdownData.city.map((item, index) => {
                     return (
@@ -407,9 +407,9 @@ const Form1 = ({ ...Props }: Props) => {
                       </SelectItem>
                     );
                   })} */}
-            </SelectContent>
+            {/* </SelectContent>
           </Select>
-        </div>
+        </div> */}
         <div className="flex flex-col gap-2">
           <label className="lable">
             State<span className="text-[#e60000]">*</span>

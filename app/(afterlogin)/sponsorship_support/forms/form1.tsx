@@ -367,7 +367,7 @@ const Form1 = ({ ...Props }: Props) => {
           </Select>
         </div>
 
-        <div className="flex flex-col gap-2">
+        {/* <div className="flex flex-col gap-2">
           <label className="lable">
             City<span className="text-[#e60000]">*</span>
           </label>
@@ -383,9 +383,9 @@ const Form1 = ({ ...Props }: Props) => {
               <SelectItem value="system">System</SelectItem>
             </SelectContent>
           </Select>
-        </div>
+        </div> */}
         
-        <div className="flex flex-col gap-2">
+        {/* <div className="flex flex-col gap-2">
           <label className="lable">
             Reporting Head<span className="text-[#e60000]">*</span>
           </label>
@@ -401,7 +401,7 @@ const Form1 = ({ ...Props }: Props) => {
               <SelectItem value="system">System</SelectItem>
             </SelectContent>
           </Select>
-        </div>
+        </div> */}
         <div className="flex flex-col gap-2">
           <label className="lable">
             Sub Type Of Activity<span className="text-[#e60000]">*</span>
