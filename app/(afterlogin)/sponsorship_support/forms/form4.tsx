@@ -1,4 +1,4 @@
-import React from 'react'
+import {useState,useEffect} from 'react'
 import {
     Select,
     SelectContent,
@@ -6,9 +6,10 @@ import {
     SelectTrigger,
     SelectValue,
   } from "@/components/ui/select";
-  import { useState, useEffect } from 'react';
   import { Textarea } from "@/components/ui/textarea";
   import { Button } from "@/components/ui/button";
+  import Documents from "@/components/documents"
+  import SimpleFileUpload from "@/components/multiple_file_upload";
   import {
     Table,
     TableBody,
@@ -19,10 +20,6 @@ import {
     TableRow,
   } from "@/components/ui/table";
   import { Input } from '@/components/ui/input';
-  import { useRouter } from 'next/navigation';
-  import Documents from "@/components/documents"
-  import SimpleFileUpload from "@/components/multiple_file_upload";
-
   type activityDropdown = {
     activity:{
       name:string,
@@ -37,17 +34,17 @@ import {
 
   type Props = {
     activityDropdown:activityDropdown| null
+    handleSubmit:(e:React.MouseEvent<HTMLButtonElement, MouseEvent>)=>void
 }
 const form4 = ({...Props}:Props) => {
-  const router = useRouter();
-  
+  const [files, setFiles] = useState<File[]>([]);
   const [activityType,setActivityType] = useState("");
   const [refno,setRefno] = useState(localStorage.getItem("refno")?localStorage.getItem("refno"):"");
   const [documentType,setDocumentType] = useState("");
   const [preview_data, setPreviewData] = useState<any>(null);
   const [uploadedFiles, setUploadedFiles] = useState<FileList | null>(); //added state 1
   const [fileList, setFileList] = useState<File[]>([]); //added state 2
-  const [files, setFiles] = useState<File[]>([]);
+  
 
   const FileUpload = async()=>{
     const formdata = new FormData();
@@ -65,7 +62,7 @@ const form4 = ({...Props}:Props) => {
       formdata.append("document_type",documentType)
     try {
       const response = await fetch(
-        `/api/monetary_grant/fileUpload`,
+        `/api/training_and_education/fileUpload`,
         {
           method: "POST",
           headers: {
@@ -78,8 +75,8 @@ const form4 = ({...Props}:Props) => {
 
       
       if (response.ok) {
-        PreviewData();
-       
+        // const data = await response.json();
+       PreviewData()
       } else {
         console.log("Login failed");
       }
@@ -93,6 +90,7 @@ const form4 = ({...Props}:Props) => {
     setActivityType(value);
   }
 
+
   const PreviewData = async () => {
     try {
       const response = await fetch("/api/previewData", {
@@ -100,18 +98,18 @@ const form4 = ({...Props}:Props) => {
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: "include",
+        credentials: 'include',
         body: JSON.stringify({
-          name: refno,
-        }),
+          name :refno
+        })
       });
 
       if (response.ok) {
         const data = await response.json();
         setPreviewData(data.data);
-        console.log(data, "PreviewData");
+        console.log(data, "PreviewData")
       } else {
-        console.log("Login failed");
+        console.log('Login failed');
       }
     } catch (error) {
       console.error("Error during login:", error);
@@ -122,53 +120,38 @@ const form4 = ({...Props}:Props) => {
     setUploadedFiles(fileList);
   };
 
-
-  useEffect(() => {
-    PreviewData();
-  }, []);
   useEffect(()=>{
-
+    PreviewData();
+  },[])
+  useEffect(()=>{
   },[preview_data])
-
-
   return (
     // </div>
     (<div>
       <h1 className="text-black text-2xl font-normal uppercase pb-8">
         Documents
       </h1>
-      <div className="grid grid-cols-3 gap-6 pb-7 text-black">
+      <div className="grid grid-cols-3 gap-12 pb-7 text-black">
         <div className="flex flex-col gap-2">
           <label className="lable">
             Document Type <span className="text-[#e60000]">*</span>
           </label>
           <Select
-            onValueChange={(value)=>handleActivityTypeChange(value)}
+          onValueChange={(value)=>handleActivityTypeChange(value)}
             >
               <SelectTrigger className="dropdown">
                 <SelectValue placeholder="Select" />
               </SelectTrigger>
-              <SelectContent>
+             <SelectContent>
                 {
                   Props.activityDropdown && Props.activityDropdown.activity.map((item,index)=>{
-                    if(item.name == "Pre Activity"){
-                      return (
-                        <SelectItem value={item.name}>
+                    return (
+                      <SelectItem value={item.name}>
                         {item.activity_name}
                       </SelectItem>
                     )
-                  }
-                  else{
-                    
-                      return (
-                        <SelectItem value={item.name} disabled>
-                        {item.activity_name}
-                      </SelectItem>
-                    )
-                  }
                   })
                 }
-                    
               </SelectContent>
             </Select>
         </div>
@@ -230,8 +213,12 @@ const form4 = ({...Props}:Props) => {
           {" "}
           Save as Draft
         </Button> */}
-        <Button className='bg-white text-black border text-md font-normal' onClick={()=>{router.push("/monetary_grant?forms=3")}}>Back</Button>
-        <Button className='bg-[#4430bf] text-white text-md font-normal border' onClick={()=>{router.push("/monetary_grant?forms=5")}}>Next</Button>
+        <Button className="bg-white text-black border text-md font-normal">
+          Back
+        </Button>
+        <Button className="bg-[#4430bf] text-white text-md font-normal border" onClick={(e)=>Props.handleSubmit(e)}>
+          Next
+        </Button>
       </div>
     </div>)
   );

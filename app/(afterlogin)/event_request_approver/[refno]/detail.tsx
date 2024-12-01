@@ -2,11 +2,14 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import BasicDetails from "@/components/basic_Details"
+import BasicDetails2 from "@/components/hcp/basic_Details";
+import EventDetails2 from "@/components/hcp/event_Details"
 import EventDetails from "@/components/event_Details"
 import VendorDetails from "@/components/vendor_Details"
 import TotalExpense from "@/components/total_Expense"
 import Documents from "@/components/documents"
 import { useRouter, useSearchParams } from 'next/navigation'
+import HCPDetils from  "@/components/hcp/hcp_detail"
 import Comment_box from "@/components/approvalCommentBox/Comment_box";
 type EventEntry = {
   name: string;
@@ -169,11 +172,13 @@ type ActivityDocument = {
   document: DocumentDetails[];
 };
 
+type Props = {
+  tableData: EventEntry
+}
 
-
-const Index = () => {
+const Index = ({ ...Props }: Props) => {
   const router = useRouter();
-  const [eventData, setEventData] = useState<EventEntry>();
+  const [eventData, setEventData] = useState<EventEntry>(Props.tableData);
   const [isCommentbox, setIsCommentbox] = useState<boolean>();
   const [comment, setComment] = useState<string>();
   const [type, setType] = useState<string>();
@@ -209,35 +214,35 @@ const Index = () => {
     }
   };
 
-  const eventDataApi = async () => {
-    console.log("inside event Data")
-    try {
-      const response = await fetch(
-        "/api/previewData",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: 'include',
-          body: JSON.stringify({
-            name: param.get("refno")
-          })
-        }
-      );
+  // const eventDataApi = async () => {
+  //   console.log("inside event Data")
+  //   try {
+  //     const response = await fetch(
+  //       "/api/previewData",
+  //       {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         credentials: 'include',
+  //         body: JSON.stringify({
+  //           name: param.get("refno")
+  //         })
+  //       }
+  //     );
 
-      if (response.ok) {
-        const data = await response.json();
-        setEventData(data.data);
+  //     if (response.ok) {
+  //       const data = await response.json();
+  //       setEventData(data.data);
 
 
-      } else {
-        console.log("Login failed");
-      }
-    } catch (error) {
-      console.error("Error during login:", error);
-    }
-  };
+  //     } else {
+  //       console.log("Login failed");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error during login:", error);
+  //   }
+  // };
 
   const handleDialog = () => {
     setIsCommentbox((prev) => !prev);
@@ -247,10 +252,10 @@ const Index = () => {
     setComment(value)
   }
 
-  useEffect(() => {
-    eventDataApi();
-  }, [])
-  console.log('eventData---------------------------------------', eventData?.is_approved)
+  // useEffect(() => {
+  //   eventDataApi();
+  // }, [])
+  console.log('eventData---------------------------------------', eventData?.event_type)
   return (
 
 
@@ -290,20 +295,47 @@ const Index = () => {
           </div>
         </div>
       </div>
-      <BasicDetails
+
+
+      {
+        eventData?.event_type == "Training and Education" || eventData?.event_type == "Awareness Program" ?
+
+          <BasicDetails
+            pathname=""
+            eventData={eventData}
+          />
+          :
+          <BasicDetails2
+            pathname=""
+            eventData={eventData}
+          />
+      }
+
+      {
+        eventData?.event_type == "Training and Education" || eventData?.event_type == "Awareness Program" ?
+
+          <EventDetails
+            pathname=""
+            eventData={eventData}
+          />
+          :
+          <EventDetails2
+            pathname=""
+            eventData={eventData}
+          />
+      }
+      {eventData?.event_type == "HCP Services" &&
+      <HCPDetils
         pathname=""
         eventData={eventData}
-      />
-
-      <EventDetails
-        pathname=""
-        eventData={eventData}
-      />
-
-      <VendorDetails
-        eventData={eventData}
-      />
-
+      />}
+      {
+        eventData?.event_type == "Patient Support" ?
+          <></>
+          : <VendorDetails
+            eventData={eventData}
+          />
+      }
       <TotalExpense
         eventData={eventData}
       />

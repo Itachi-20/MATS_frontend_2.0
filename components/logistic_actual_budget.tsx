@@ -480,9 +480,9 @@ export default function LogisticActualBudget({...Props}:Props) {
             </div>
 
             <div className="flex justify-end pt-20 gap-4">
-                <Button onClick={()=>{handleSubmit("Draft")}} className={`${Props.role == "Event Accounts"?"hidden":""} bg-white text-black border rounded-[8px] text-lg leading-normal font-normal px-[50px] py-[10px] font-['Poppins']`}>
+                {/* <Button onClick={()=>{handleSubmit("Draft")}} className={`${Props.role == "Event Accounts"?"hidden":""} bg-white text-black border rounded-[8px] text-lg leading-normal font-normal px-[50px] py-[10px] font-['Poppins']`}>
                     Save as Draft
-                </Button>
+                </Button> */}
                 <Link href="/">
                     <Button className={`bg-white text-black border rounded-[8px] text-lg leading-normal font-normal px-[50px] py-[10px] font-['Poppins']`}>
                         Back

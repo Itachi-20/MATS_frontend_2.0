@@ -198,8 +198,8 @@ const table = ({ ...Props }: Props) => {
                 return (
                   <TableRow key={index} className="text-center text-nowrap">
                     <TableCell>{data.name}</TableCell>
-                    <TableCell>{data.event_type}</TableCell>
                     <TableCell>{data.event_name}</TableCell>
+                    <TableCell> {data.event_type}</TableCell>
                     <TableCell>{data.event_start_date}</TableCell>
                     <TableCell>{data.total_estimated_expense}</TableCell>
                     <TableCell>{data.event_requestor}</TableCell>
@@ -353,7 +353,7 @@ const table = ({ ...Props }: Props) => {
                     <TableCell className="sticky right-0 bg-[white] z-50 ">
                       <div className="">
                         {
-                          <button className="border rounded-full px-4 py-1 border-[#0e4154] text-[#0e4154]" onClick={() => { router.push(`/event_request_approver?refno=${data.name}`) }}>Take Action</button>
+                          <button className="border rounded-full px-4 py-1 border-[#0e4154] text-[#0e4154]" onClick={() => { router.push(`/event_request_approver/${data.name}`) }}>Take Action</button>
                         }
                       </div>
                     </TableCell>

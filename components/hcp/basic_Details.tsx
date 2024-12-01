@@ -385,6 +385,83 @@ const Basic_Details = ({ ...Props }: Props) => {
         </>
         
       }
+        { Props.eventData && Props.eventData.type_of_engagement && Props.eventData.type_of_engagement == "One Time" &&
+        <>
+          <div className="py-8">
+              <h1 className="text-black text-2xl font-normal uppercase pb-8">
+                Sub Type Details
+              </h1>
+              <div className="grid md:grid-cols-2 md:gap-6">
+                    <div className="flex flex-col md:gap-2">
+                        <label className="text-black md:text-sm md:font-normal capitalize">
+                            Start Date<span className="text-[#e60000]">*</span>
+                        </label>
+                        <Input
+                            className="text-black shadow md:rounded-xl md:py-5"
+                            type="date"
+                            placeholder="dd/mm/yy"
+                            name="event_start_date"
+                            readOnly 
+                        ></Input>
+                    </div>
+                    <div className="flex flex-col md:gap-2">
+                        <label className="text-black md:text-sm md:font-normal capitalize">
+                            End Date<span className="text-[#e60000]">*</span>
+                        </label>
+                        <Input
+                            className="text-black shadow md:rounded-xl md:py-5"
+                            type="date"
+                            placeholder="dd/mm/yy"
+                            name="event_end_date"
+                            readOnly
+                        ></Input>
+                    </div>
+                    <div className="flex flex-col md:gap-2">
+                        <label className="text-black md:text-sm md:font-normal capitalize">
+                        Training & Education Request Ref Number<span className="text-[#e60000]">*</span>
+                        </label>
+                        <Input
+                            className="text-black shadow md:rounded-xl md:py-5"
+                            placeholder="Type Here"
+                            name="training_ref_no"
+                            readOnly
+                        ></Input>
+                    </div>
+                    <div className="flex flex-col md:gap-2">
+                        <label className="text-black md:text-sm md:font-normal capitalize">
+                        Sponsorship Support Request Ref Number <span className="text-[#e60000]">*</span>
+                        </label>
+                        <Input
+                            className="text-black shadow md:rounded-xl md:py-5"
+                            placeholder="Type Here"
+                            name="sponsorship_ref_no"
+                            readOnly
+                        ></Input>
+                    </div>
+                </div>
+          </div>
+
+          <div className="py-8">
+              <h1 className="text-black text-2xl font-normal uppercase pb-8">
+                MSA Details
+              </h1>
+              <div className="grid md:grid-cols-2 md:gap-6">
+                <div className="flex flex-col md:gap-2">
+                    <label className="text-black md:text-sm md:font-normal capitalize">
+                        Service Type<span className="text-[#e60000]">*</span>
+                    </label>
+                    <Input
+                        className="text-black shadow md:rounded-xl md:py-5"
+                        placeholder="Type Here"
+                        name="service_type"
+                        readOnly
+                    ></Input>
+                </div>
+              </div>
+          </div>
+        </>
+        
+      }
 
       { Props.eventData && Props.eventData.type_of_engagement && Props.eventData.type_of_engagement == "Scientific Advisory Consultancy Agreement" &&
         <>
