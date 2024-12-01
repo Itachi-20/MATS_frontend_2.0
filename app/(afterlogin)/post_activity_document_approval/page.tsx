@@ -7,7 +7,7 @@ import VendorDetails from "@/components/vendor_Details"
 import TotalExpense from "@/components/total_Expense"
 import Documents from "@/components/documents"
 import { useRouter, useSearchParams } from 'next/navigation'
-import Comment_box from "@/components/approvalCommentBox/Comment_box";
+import Comment_box from "@/components/Comment_box";
 
 type EventEntry = {
   name: string;
@@ -179,7 +179,7 @@ const Index = () => {
   const [type,setType] = useState<string>();
   const param = useSearchParams()
 
-  const handleApprove = async()=>{
+  const handleApprove = async(remarks:string)=>{
     const refno = param.get("refno");
       try {
         const response = await fetch(
@@ -192,7 +192,7 @@ const Index = () => {
             credentials:'include',
             body:JSON.stringify({
               name:refno,
-              "remark": "Test Approve Pre Activity",
+              "remark": remarks,
               "action":type
             })
           }
@@ -253,10 +253,9 @@ useEffect(()=>{
   eventDataApi();
 },[])
 
-  return (
-
-
-        <div className="md:px-7 md:pb-7 md:pt-4 w-full relative z-20 text-black">
+  return ( 
+          <>
+    <div className="md:px-7 md:pb-7 md:pt-4 w-full z-20 text-black">
           <div className="pb-5">
             <div className="flex justify-between">
             <h1 className=" md:text-[30px] md:font-medium capitalize md:pb-4"> Training and Education</h1>
@@ -282,18 +281,6 @@ useEffect(()=>{
               <Button className="bg-[#4430bf] hover:bg-[#4430bf] px-6" onClick={()=>{handleDialog();setType("Send Back")}}>Send Back</Button>
               </div>
             </div>
-
-            {
-              isCommentbox &&
-            <div className="absolute z-50 flex pt-10 items-center justify-center bg-black bg-opacity-50 w-full pr-20">
-              <Comment_box 
-              handleClose={handleDialog}
-              handleComment={handleComment}
-              Submitbutton = {handleApprove}
-              />
-              </div>
-        }
-    
           </div>
         <BasicDetails
         pathname=""
@@ -319,7 +306,17 @@ useEffect(()=>{
         />
 
     </div>
-    
+    {
+      isCommentbox &&
+    //  <div className="absolute z-50 flex pt-10 items-center justify-center bg-black bg-opacity-50 w-full pr-20">
+      <Comment_box 
+      handleClose={handleDialog}
+      // handleComment={handleComment}
+      handleSubmit = {handleApprove}
+      />
+      //  </div>
+}
+</>
   )
 }
 

@@ -93,7 +93,7 @@ const form4 = ({...Props}:Props) => {
   
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    router.push(`/hcp_services?forms=5&refno=${Props.refno}`)
+    router.replace(`/hcp_services?forms=5&refno=${Props.refno}`)
   };
 
   const handleNext = (fileList: FileList | null) => {
@@ -151,7 +151,7 @@ console.log(formdata,"this is form data")
       return;  
     }
       formdata.append("docname",refno as string)
-      formdata.append("activity_type",activityType);
+      formdata.append("activity_type","Pre Activity");
       formdata.append("document_type",documentType)
     try {
       const response = await fetch(
@@ -196,9 +196,10 @@ console.log(formdata,"this is form data")
           </label>
           <Select
           onValueChange={(value)=>handleActivityTypeChange(value)}
+          disabled
             >
               <SelectTrigger className="dropdown">
-                <SelectValue placeholder="Select" />
+                <SelectValue placeholder="Pre Activity" />
               </SelectTrigger>
               <SelectContent>
                 {

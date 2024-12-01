@@ -23,6 +23,8 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "../../context/AuthContext";
+import { Toaster, toast } from 'sonner';
+import DeletePopUp from "@/components/deleteDialog";
 
 
 type EventTable = {
@@ -45,6 +47,8 @@ type FormData = {
 
 const Index = () => {
     const [postExpenseApprovalList, setPostExpenseApprovalList] = useState<Array<EventTable>>(); 
+    const [openDeletePopUp, setOpenDeletePopUp] = useState(false);
+    const [loading, setLoading] = useState(false);
     const router = useRouter();
     const [formData, setFormData] = useState<FormData>(
         {
@@ -71,35 +75,52 @@ const Index = () => {
           console.error("Error during login:", error);
         }
     };
-
-    const handleClose = async (value: string) => {
-        formData.name = value;
-    try{
-        const tableData = await fetch(`/api/postExpenseApproval/closeTheEvent`,
-        {
-            method: "POST",
-            headers:{
-                "Content-Type": "application/json",
-            },
-            body:JSON.stringify(formData),
-            credentials:'include'
-        }
-        );
-        if(tableData.ok){
-            PostExpenseApprovalList();
-            const data = await tableData.json();
-            return data.message;
-        }
-        
-    } catch (error) {
-        console.log(error,"something went wrong");
-    }
-    }
+    const handleClose = async() => {
+        const apiCallPromise = new Promise(async (resolve, reject) => {
+            setLoading(true);
+            try {
+              const response = await fetch('/api/postExpenseApproval/closeTheEvent', {
+                method: "POST",
+                credentials: 'include',
+                body: JSON.stringify(formData),
+              });
       
+              if (!response.ok) {
+                setLoading(false);
+                throw new Error('Something went Wrong while closing the event');
+              }
+      
+              const data = await response.json();
+              resolve(data); // Resolve with the response data
+            } catch (error) {
+                setLoading(false)
+              reject(error); // Reject with the error
+            }
+        });
+        toast.promise(apiCallPromise, {
+            loading: 'Closing the event...',
+            success: (data) => {
+                setLoading(false);
+                setOpenDeletePopUp(false);
 
-      useEffect(() => {
-        PostExpenseApprovalList();
-      }, [])
+                setTimeout(() => {
+                    PostExpenseApprovalList();
+                }, 500);
+                return `Event ${formData.name} has successfully been closed!`;
+            },
+            error: (error) => `Failed to add vendor: ${error.message || error}`,
+          });
+    }
+
+    const handleDeletePopUp = async (value:string) => {
+        setOpenDeletePopUp(true);
+        formData.name = value;
+        // handleClose();
+    }
+    
+    useEffect(() => {
+    PostExpenseApprovalList();
+    }, [])
 
     console.log("List", postExpenseApprovalList);
 
@@ -135,7 +156,7 @@ const Index = () => {
                                 <SelectItem value="system">System</SelectItem>
                             </SelectContent>
                         </Select>
-                        <Button className="text-black text-md font-normal bg-white hover:bg-white border rounded-[25px] px-8 py-5 shadow">
+                        <Button className="text-black text-md font-normal bg-white hover:bg-white border rounded-[25px] px-8 py-5 hover:shadow-md transition-all delay-75 duration-100">
                             Back
                         </Button>
                         <div className="">
@@ -231,34 +252,45 @@ const Index = () => {
                                 >Action</TableHead>
                             </TableRow>
                         </TableHeader>
-                        <TableBody>
-                            {postExpenseApprovalList &&
-                                postExpenseApprovalList.map((data, index) => {
-                                    return (
-                                        <TableRow key={index} className="text-center text-nowrap">
-                                            <TableCell>{data.name}</TableCell>
-                                            <TableCell>{data.event_name ?? ""}</TableCell>
-                                            <TableCell>{data.event_type ?? ""}</TableCell>
-                                            <TableCell>{data.event_start_date}</TableCell>
-                                            <TableCell>{data.total_amount ?? ""}</TableCell>
-                                            <TableCell>{data.event_requestor ?? ""}</TableCell>
-                                            <TableCell className={(data.travel_request_approved == true && role == "Event Finance")? 'sticky right-0 bg-[white] z-50 space-x-2':'sticky right-0 bg-[white] z-50'}>
+                        {postExpenseApprovalList && postExpenseApprovalList.length > 0 ?
+                            <TableBody>
+                                {postExpenseApprovalList &&
+                                    postExpenseApprovalList.map((data, index) => {
+                                        return (
+                                            <TableRow key={index} className="text-center text-nowrap">
+                                                <TableCell>{data.name ?? "-"}</TableCell>
+                                                <TableCell>{data.event_name ?? "-"}</TableCell>
+                                                <TableCell>{data.event_type ?? "-"}</TableCell>
+                                                <TableCell>{data.event_start_date ?? "-"}</TableCell>
+                                                <TableCell>{data.total_amount ?? "-"}</TableCell>
+                                                <TableCell>{data.event_requestor ?? "-"}</TableCell>
+                                                <TableCell className={(data.travel_request_approved == true && role == "Event Finance")? 'sticky right-0 bg-[white] z-50 space-x-2 border-l border-slate-200':'sticky right-0 bg-[white] z-50 border-l border-slate-200'}>
+                                                    
+                                                    <button className="border rounded-full px-4 py-1 border-[#0E4154] text-[#0E4154] hover:text-white hover:bg-[#0E4154] active:text-white active:bg-[#0E4154] transition-all delay-100" onClick={() => router.push(`/post_expense_approval/${data.name}`)} >Take Action</button>
+                                                    {
+                                                        (data.travel_request_approved == true && role == "Event Finance" && data.status != "Closed") ? 
+                                                        <button className="border rounded-full px-4 py-1 border-red-600 text-red-600 hover:text-white hover:bg-red-600 transition-all delay-100" onClick={() => handleDeletePopUp(data.name)} >Close</button>:<></>
+                                                    }
                                                 
-                                                <button className="border rounded-full px-4 py-1 border-[#0E4154] text-[#0E4154]" onClick={() => router.push(`/post_expense_approval/${data.name}`)} >Take Action</button>
-                                                {
-                                                    (data.travel_request_approved == true && role == "Event Finance" && data.status != "Closed") ? 
-                                                    <button className="border rounded-full px-4 py-1 border-red-600 text-red-600" onClick={() => handleClose(data.name)} >Close</button>:<></>
-                                                }
-                                            
-                                            </TableCell>
-                                        </TableRow>
-                                    );
-                                })}
-                        </TableBody>
+                                                </TableCell>
+                                            </TableRow>
+                                        );
+                                    })}
+                            </TableBody>
+                            :
+                            <TableBody>
+                                <TableRow className="text-center text-black text-nowrap ">
+                                <TableCell colSpan={9}>No Results</TableCell>
+                                </TableRow>
+                            </TableBody>
+                        }    
                     </Table>
                 </div>
             </div>
-
+            <Toaster richColors position="top-right" />
+            {
+                openDeletePopUp && <DeletePopUp setClose={setOpenDeletePopUp} handleSubmit={handleClose} Loading={loading} text={"Are you sure you want to close this event?"}/>
+            }
         </>
     );
 };

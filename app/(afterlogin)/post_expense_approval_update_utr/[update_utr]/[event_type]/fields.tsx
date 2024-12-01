@@ -82,6 +82,7 @@ type Glcode = {
 
 type ActualVendor = {
   status: string;
+  is_approved: boolean;
 };
 
 type EventData = {
@@ -126,7 +127,7 @@ type Props = {
   formdata: FormData;
   handlefieldChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>)=>void
   handleSelectChange:(value: string, name: string)=>void
-  view: string | null;
+  // view: string | null;
   // handleSubmit: (e: React.MouseEvent<HTMLButtonElement>)=>void
 };
 
@@ -239,7 +240,7 @@ const Fields = ({ ...Props }: Props) => {
   //   handleCostCenter(Props?.formdata?.cost_center);
   // },[Props?.formdata?.cost_center]);
   useEffect(()=>{
-    handleStateChange("Gujarat");
+    handleStateChange(Props?.formdata?.state);
   },[])
  
   console.log("Print", Props.expenseData);
@@ -401,7 +402,7 @@ const Fields = ({ ...Props }: Props) => {
               <SelectContent>
                 {
                   Props.dropdown?.division.map((data, index) => (
-                    <SelectItem key={index} value={data.name}>-{data.name}-</SelectItem>
+                    <SelectItem key={index} value={data.name}>{data.name}</SelectItem>
                   ))
                 }
 
@@ -480,7 +481,7 @@ const Fields = ({ ...Props }: Props) => {
               <SelectContent>
                 {
                   Props.dropdown?.company.map((data, index) => (
-                    <SelectItem key={index} value={data.name}>-{data.company_name}-</SelectItem>
+                    <SelectItem key={index} value={data.name}>{data.company_name}</SelectItem>
                   ))
                 }
               </SelectContent>
@@ -502,7 +503,7 @@ const Fields = ({ ...Props }: Props) => {
               <SelectContent>
                 {
                   glCodeDropdown?.map((data, index) => (
-                    <SelectItem key={index} value={data.name}>-{data.name}-</SelectItem>
+                    <SelectItem key={index} value={data.name}>{data.name}</SelectItem>
                   ))
                 }
               </SelectContent>
@@ -568,7 +569,7 @@ const Fields = ({ ...Props }: Props) => {
               <SelectContent>
                 {
                   Props.dropdown?.zone.map((data, index) => (
-                    <SelectItem key={index} value={data.name}>-{data.zone}-</SelectItem>
+                    <SelectItem key={index} value={data.name}>{data.zone}</SelectItem>
                   ))
                 }
               </SelectContent>
@@ -589,7 +590,7 @@ const Fields = ({ ...Props }: Props) => {
               <SelectContent>
                 {
                   Props.dropdown?.state.map((data, index) => (
-                    <SelectItem key={index} value={data.name}>-{data.state}-</SelectItem>
+                    <SelectItem key={index} value={data.name}>{data.state}</SelectItem>
                   ))
                 }
               </SelectContent>

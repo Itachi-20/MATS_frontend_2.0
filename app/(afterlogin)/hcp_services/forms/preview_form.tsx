@@ -225,10 +225,17 @@ const Preview_Form = ({ ...Props }: Props) => {
     }
   };
 
-  return (
-    <>
-      <div className="md:px-7 md:pb-7 md:pt-4 w-full relative z-20">
+  const handleComment = (value:string)=>{
+    setComment(value)
+  }
 
+  const handleDialog = ()=>{
+    setIsCommentbox(prev=> !prev);
+  }
+
+  return (
+      <>
+        <div className="md:px-7 md:pb-7 md:pt-4 w-full z-20">
         <BasicDetails
           pathname=""
           eventData={preview_data}
@@ -260,7 +267,6 @@ const Preview_Form = ({ ...Props }: Props) => {
           eventData={preview_data}
         />
 
-
       </div>
 
       <div className="flex justify-end pt-5 gap-4">
@@ -276,6 +282,19 @@ const Preview_Form = ({ ...Props }: Props) => {
       </div>
 
     </>
+
+            {
+            isCommentbox &&
+            <div className=" absolute z-50 flex pt-10 items-end justify-center bg-black bg-opacity-50 w-full h-full inset-0 pb-40">
+          <Comment_box 
+          handleClose={handleDialog}
+          handleComment={handleComment}
+          Submitbutton = {handleFinalSubmit}
+          />
+          </div>
+          }
+        
+      </>
   )
 }
 

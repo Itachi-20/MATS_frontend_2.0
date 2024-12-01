@@ -35,6 +35,7 @@ import SuccessProp from '@/components/success_prop';
         est_amount: number;
         gst_included: number;
         gst: string;
+        is_approved: boolean;
         parent: string;
         parentfield: string;
         parenttype: string;
@@ -395,31 +396,31 @@ const page = () => {
                     {expensedata ? expensedata.event_type : ''}
                     </div>
                     <div className='flex'>
-                        <button className="border rounded-sm px-6 py-1 border-black text-black" onClick={()=>router.push(`/post_expense_approval/${refno.request_number}`)}>Back</button>
+                        <button className="border rounded-sm px-6 py-1 border-black text-black hover:text-white hover:bg-black transition-all delay-75 duration-100" onClick={()=>router.push(`/post_expense_approval/${refno.request_number}`)}>Back</button>
                     </div>
                 </div>
                 <div className='border rounded-3xl mt-5 mb-14 p-2 text-black grid grid-cols-3'>
                     <div className='grid-cols-1 px-6 border-r'>
                         <ul className=''>
-                            <li className='border-b p-2'>Event Date :<span className='font-semibold px-1'>{expensedata ? expensedata.event_date : ''}</span></li>
-                            <li className='border-b p-2'>Event Name :<span className='font-semibold px-1'>{expensedata ? expensedata.event_name : ''}</span></li>
-                            <li className='border-b p-2'>Event Requester Name :<span className='font-semibold px-1'>{expensedata ? expensedata.event_requestor : ''}</span></li>
-                            <li className='p-2'>Event Request Number :<span className='font-semibold px-1'>{expensedata ? expensedata.name : ''}</span></li>
+                            <li className='border-b p-2'>Event Date :<span className='font-semibold px-1'>{expensedata ? expensedata.event_date : '-'}</span></li>
+                            <li className='border-b p-2'>Event Name :<span className='font-semibold px-1'>{expensedata ? expensedata.event_name : '-'}</span></li>
+                            <li className='border-b p-2'>Event Requester Name :<span className='font-semibold px-1'>{expensedata ? expensedata.event_requestor : '-'}</span></li>
+                            <li className='p-2'>Event Request Number :<span className='font-semibold px-1'>{expensedata ? expensedata.name : '-'}</span></li>
                         </ul>
                     </div>
                     <div className='grid-cols-1 px-6 border-r'>
                         <ul className=''>
-                            <li className='border-b p-2'>Cost Center :<span className='font-semibold px-1'>{expensedata ? expensedata.cost_center : ''}</span></li>
-                            <li className='border-b p-2'>Cost Center Hod :<span className='font-semibold px-1'>{expensedata ? expensedata.cost_hod : ''}</span></li>
-                            <li className='border-b p-2'>Cost Center Description :<span className='font-semibold px-1'>{expensedata ? expensedata.cost_desc : ''}</span></li>
-                            <li className='p-2'>Reporting Head :<span className='font-semibold px-1'>{expensedata ? expensedata.reporting_head : ''}</span></li>
+                            <li className='border-b p-2'>Cost Center :<span className='font-semibold px-1'>{expensedata ? expensedata.cost_center : '-'}</span></li>
+                            <li className='border-b p-2'>Cost Center Hod :<span className='font-semibold px-1'>{expensedata ? expensedata.cost_hod : '-'}</span></li>
+                            <li className='border-b p-2'>Cost Center Description :<span className='font-semibold px-1'>{expensedata ? expensedata.cost_desc : '-'}</span></li>
+                            <li className='p-2'>Reporting Head :<span className='font-semibold px-1'>{expensedata ? expensedata.reporting_head : '-'}</span></li>
                         </ul>
                     </div>
                     <div className='grid-cols-1 px-6'>
                         <ul className=''>
-                            <li className='border-b p-2'>Business Unit :<span className='font-semibold px-1'>{expensedata ? expensedata.business_unit : ''}</span></li>
-                            <li className='border-b p-2'>Sub Type Of activity :<span className='font-semibold px-1'>{expensedata ? expensedata.sub_type_of_activity : ''}</span></li>
-                            <li className='border-b p-2'>Total Estimated Expense :<span className='font-semibold px-1'>{expensedata ? expensedata.total_compensation_expense : ''}</span></li>
+                            <li className='border-b p-2'>Business Unit :<span className='font-semibold px-1'>{expensedata ? expensedata.business_unit : '-'}</span></li>
+                            <li className='border-b p-2'>Sub Type Of activity :<span className='font-semibold px-1'>{expensedata ? expensedata.sub_type_of_activity : '-'}</span></li>
+                            <li className='border-b p-2'>Total Estimated Expense :<span className='font-semibold px-1'>{expensedata ? expensedata.total_compensation_expense : '-'}</span></li>
                         </ul>
                     </div>
 
@@ -434,18 +435,18 @@ const page = () => {
                     {
                         role == "Event%20Finance" &&
                         <Fields
-                            dropdown={dropdown}
+                            dropdown={dropdown as DropdownData}
                             handlefieldChange={handlefieldChange}
                             handleSelectChange={handleSelectChange}
                             // handleApproveRejectSendBack={handleApproveRejectSendBack}
                             view={view}   
-                            formdata={formdata}
-                            expenseData={expensedata} 
+                            formdata={formdata as FormData}
+                            expenseData={expensedata as EventData} 
                         />
                     }
                 </div>
                 {
-                    !(expensedata?.actual_vendors[0]?.status == "Post Expense Approved" || expensedata?.actual_vendors[0]?.status == "Post Expense Closed") &&
+                    !(expensedata?.actual_vendors[0]?.is_approved) && (role == "Event Finance" || role == "Event Approver") &&
                     <div className='flex justify-end gap-2 pt-8'>
                         <Button className={`${expensedata?.actual_vendors[0]?.status == "Post Expense Approved" ?'cursor-not-allowed':''} bg-[#5DBE74] px-6`} disabled={expensedata?.actual_vendors[0]?.status == "Post Expense Approved" ? true : false} onClick={()=>handleOpen('Approved')} >Approve</Button>
                         <Button className={`${expensedata?.actual_vendors[0]?.status == "Post Expense Approved" ?'cursor-not-allowed':''} bg-[#4430BF] px-6`} disabled={expensedata?.actual_vendors[0]?.status == "Post Expense Approved" ? true : false} onClick={()=>handleOpen('Send Back')}>Send Back</Button>
