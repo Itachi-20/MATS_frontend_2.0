@@ -12,6 +12,7 @@ import {
   import Image from 'next/image';
   import { useAuth } from "@/app/context/AuthContext";
   import { Input } from '@/components/ui/input';
+  
 
   type File = {
     name: string;
@@ -341,7 +342,7 @@ const table = ({ ...Props }: Props) => {
                           
                         </TableCell>
                         <TableCell>{data.vendor_name}</TableCell>
-                        <TableCell>{data.advance}</TableCell>
+                        <TableCell>{data.basic_amount}</TableCell>
                         <TableCell>{data.status}</TableCell>
                         <TableCell>{data.gst}</TableCell>
                         <TableCell>{data.invoice_amount}</TableCell>

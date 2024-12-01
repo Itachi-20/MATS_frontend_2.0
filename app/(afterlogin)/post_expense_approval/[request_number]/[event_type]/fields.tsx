@@ -92,30 +92,30 @@ type EventData = {
 
 type FormData = {
   name: string;
-  document_no: string;
-  posting_date: string;
-  invoice_number: string;
-  date: string;
+  document_no: string | null; // Allow null
+  posting_date: string | null;
+  invoice_number: string | null;
+  date: string | null;
   basic_amount: number;
-  gst: string;
+  gst: string | null;
   invoice_amount: number;
   tds: number;
   net_amount: number;
-  division: string;
-  cost_center: string;
-  cc_name: string;
-  nature: string;
-  company_name: string;
-  gl_name: string;
-  gl_code: string;
-  utr_number: number;
-  payment_date: string;
-  zone: string;
-  state: string;
-  city: string;
+  division: string | null;
+  cost_center: string | null;
+  cc_name: string | null;
+  nature: string | null;
+  company_name: string | null;
+  gl_name: string | null;
+  gl_code: string | null;
+  utr_number: number | null;
+  payment_date: string | null;
+  zone: string | null;
+  state: string | null;
+  city: string | null;
   action: string;
   remark: string;
-  narration: string;
+  narration: string | null;
   isClosed: boolean;
 };
 
@@ -127,7 +127,7 @@ type Props = {
   formdata: FormData;
   handlefieldChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>)=>void
   handleSelectChange:(value: string, name: string)=>void
-  view: string | null;
+  // view: string | null;
   // handleSubmit: (e: React.MouseEvent<HTMLButtonElement>)=>void
 };
 
@@ -227,19 +227,18 @@ const Fields = ({ ...Props }: Props) => {
   },[Props?.formdata?.company_name]);
 
   useEffect(()=>{
-    handleDivisionChange( Props.formdata?.division);
+    handleDivisionChange(Props.formdata?.division as string);
   },[Props?.formdata?.division]);
 
   useEffect(()=>{
-    handleStateChange(Props.formdata?.state);
+    handleStateChange(Props.formdata?.state as string);
   },[Props?.formdata?.state]);
-
   // useEffect(()=>{
   //   // console.log("In side useEFFECT", Props?.formdata?.company_name)
   //   handleCostCenter(Props?.formdata?.cost_center);
   // },[Props?.formdata?.cost_center]);
   useEffect(()=>{
-    handleStateChange(Props?.formdata?.state);
+    handleStateChange(Props?.formdata?.state as string);
   },[])
  
   console.log("Print", Props.expenseData);
@@ -469,7 +468,7 @@ const Fields = ({ ...Props }: Props) => {
               Company Name<span className="text-[#e60000] ">*</span>
             </label>
             <Select 
-              value={Props.formdata?.company_name}
+              value={Props.formdata?.company_name as string}
               onValueChange={(value) => {handleglcode(value); Props.handleSelectChange(value, "company_name");}}
               disabled={Props?.expenseData?.actual_vendors[0]?.is_approved ? true : false}
             >

@@ -705,7 +705,7 @@ const table = ({ tableData }: Props) => {
                           <TableCell>{data.vendor_type ?? "-"}</TableCell>
                           <TableCell>{data.vendor_code ?? "-"}</TableCell>
                           <TableCell>{data.vendor_name ?? "-"}</TableCell>
-                          <TableCell>{data.est_amount ?? "-"}</TableCell>
+                          <TableCell>{data.actual_amount ?? "-"}</TableCell>
                           <TableCell>{data.status ?? "-"}</TableCell>
                           <TableCell>{data.gst ?? "-"}</TableCell>
                           <TableCell>{data.invoice_amount ?? "-"}</TableCell>
