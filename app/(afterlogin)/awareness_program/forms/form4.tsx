@@ -110,10 +110,10 @@ const form4 = ({ ...Props }: Props) => {
       return;
     }
     formdata.append("docname", refNo as string);
-    if(uploadedFiles.length > 0) {
+    // if(uploadedFiles.length > 0) {
       formdata.append("activity_type", "Pre Activity");
       formdata.append("document_type", documentType);
-    }
+    // }
     try {
       const response = await fetch(
         `/api/training_and_education/fileUpload`,
