@@ -1,5 +1,12 @@
-"use client"
-import React, { useState,useEffect } from 'react'
+import {useState,useEffect} from 'react'
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+  } from "@/components/ui/select";
+  import { Textarea } from "@/components/ui/textarea";
   import { Button } from "@/components/ui/button";
   import Documents from "@/components/documents"
   import SimpleFileUpload from "@/components/multiple_file_upload";
@@ -13,56 +20,6 @@ import React, { useState,useEffect } from 'react'
     TableRow,
   } from "@/components/ui/table";
   import { Input } from '@/components/ui/input';
-  import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-  } from "@/components/ui/select";
-import { useRouter } from 'next/navigation';
-
-type Compensation = {
-  vendor_type: string;
-  vendor_name: string;
-  est_amount: number;
-  gst_included?: number;
-};
-
-type Logistics = {
-  vendor_type: string;
-  est_amount: number;
-};
-
-type formData = {
-  name: string | null;
-  event_type: string;
-  company: string;
-  event_cost_center: string;
-  state: string;
-  city: string;
-  event_start_date: string;
-  event_end_date: string;
-  bu_rational: string;
-  faculty: string;
-  participants: string;
-  therapy: string;
-  event_name: string;
-  event_venue: string;
-  comments: string;
-  compensation: Compensation[];
-  logistics: Logistics[];
-  total_compensation_expense: number;
-  total_logistics_expense: number;
-  event_requestor: string;
-  business_unit: string;
-  division_category: string;
-  division_sub_category: string;
-  sub_type_of_activity: string;
-  any_govt_hcp: string,
-  no_of_hcp: number
-};
-
   type activityDropdown = {
     activity:{
       name:string,
@@ -77,28 +34,62 @@ type formData = {
 
   type Props = {
     activityDropdown:activityDropdown| null
-    refno:string | null
+    handleSubmit:(e:React.MouseEvent<HTMLButtonElement, MouseEvent>)=>void
 }
 const form4 = ({...Props}:Props) => {
-  const router = useRouter();
   const [files, setFiles] = useState<File[]>([]);
   const [activityType,setActivityType] = useState("");
   const [refno,setRefno] = useState(localStorage.getItem("refno")?localStorage.getItem("refno"):"");
   const [documentType,setDocumentType] = useState("");
-  const [formdata, setFormData] = useState<formData | {}>({});
-  const [refNo,setRefNo] = useState<string | null>(localStorage.getItem("refno")?localStorage.getItem("refno"):"");
   const [preview_data, setPreviewData] = useState<any>(null);
   const [uploadedFiles, setUploadedFiles] = useState<FileList | null>(); //added state 1
   const [fileList, setFileList] = useState<File[]>([]); //added state 2
   
 
-  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    router.replace(`/hcp_services?forms=5&refno=${Props.refno}`)
-  };
+  const FileUpload = async()=>{
+    const formdata = new FormData();
 
-  const handleNext = (fileList: FileList | null) => {
-    setUploadedFiles(fileList);
-  };
+    if (uploadedFiles && uploadedFiles.length > 0) {
+      for (let i = 0; i < uploadedFiles.length; i++) {
+        formdata.append("file", uploadedFiles[i]); 
+      }
+    } else {
+      console.log("No file to upload");
+      return;  
+    }
+      formdata.append("docname",refno as string)
+      formdata.append("activity_type",activityType);
+      formdata.append("document_type",documentType)
+    try {
+      const response = await fetch(
+        `/api/training_and_education/fileUpload`,
+        {
+          method: "POST",
+          headers: {
+            //"Content-Type": "multipart/form-data",
+          },
+          body:formdata,
+          credentials:'include'
+        }
+      );
+
+      
+      if (response.ok) {
+        // const data = await response.json();
+       PreviewData()
+      } else {
+        console.log("Login failed");
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
+    }
+  }
+
+
+  const handleActivityTypeChange = (value:string)=>{
+    setActivityType(value);
+  }
+
 
   const PreviewData = async () => {
     try {
@@ -125,83 +116,33 @@ const form4 = ({...Props}:Props) => {
     }
   };
 
-  // useEffect(() => {
-  //   setFormData({ ...formdata, name: refNo })
-  // }, [refNo])
-
+  const handleNext = (fileList: FileList | null) => {
+    setUploadedFiles(fileList);
+  };
 
   useEffect(()=>{
     PreviewData();
   },[])
-
   useEffect(()=>{
   },[preview_data])
-
-console.log(formdata,"this is form data")
-
-  const FileUpload = async()=>{
-    const formdata = new FormData();
-
-    if (uploadedFiles && uploadedFiles.length > 0) {
-      for (let i = 0; i < uploadedFiles.length; i++) {
-        formdata.append("file", uploadedFiles[i]); 
-      }
-    } else {
-      console.log("No file to upload");
-      return;  
-    }
-      formdata.append("docname",refno as string)
-      formdata.append("activity_type","Pre Activity");
-      formdata.append("document_type",documentType)
-    try {
-      const response = await fetch(
-        `/api/training_and_education/fileUpload`,
-        {
-          method: "POST",
-          headers: {
-            //"Content-Type": "multipart/form-data",
-          },
-          body:formdata,
-          credentials:'include'
-        }
-      );
-
-      
-      if (response.ok) {
-        PreviewData();
-       
-      } else {
-        console.log("Login failed");
-      }
-    } catch (error) {
-      console.error("Error during login:", error);
-    }
-  }
-
-
-  const handleActivityTypeChange = (value:string)=>{
-    setActivityType(value);
-  }
-
   return (
     // </div>
     (<div>
       <h1 className="text-black text-2xl font-normal uppercase pb-8">
         Documents
       </h1>
-      <div className="grid grid-cols-3 gap-6 pb-7 text-black">
+      <div className="grid grid-cols-3 gap-12 pb-7 text-black">
         <div className="flex flex-col gap-2">
           <label className="lable">
             Document Type <span className="text-[#e60000]">*</span>
           </label>
           <Select
           onValueChange={(value)=>handleActivityTypeChange(value)}
-          disabled
             >
               <SelectTrigger className="dropdown">
-                <SelectValue placeholder="Pre Activity" />
+                <SelectValue placeholder="Select" />
               </SelectTrigger>
-              <SelectContent>
+             <SelectContent>
                 {
                   Props.activityDropdown && Props.activityDropdown.activity.map((item,index)=>{
                     return (
@@ -211,7 +152,6 @@ console.log(formdata,"this is form data")
                     )
                   })
                 }
-                    
               </SelectContent>
             </Select>
         </div>
@@ -276,7 +216,7 @@ console.log(formdata,"this is form data")
         <Button className="bg-white text-black border text-md font-normal">
           Back
         </Button>
-        <Button className="bg-[#4430bf] text-white text-md font-normal border" onClick={(e)=>handleSubmit(e)}>
+        <Button className="bg-[#4430bf] text-white text-md font-normal border" onClick={(e)=>Props.handleSubmit(e)}>
           Next
         </Button>
       </div>

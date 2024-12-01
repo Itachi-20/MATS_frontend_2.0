@@ -61,10 +61,12 @@ type EventEntry = {
   logistics: Logistics[];
   documents: ActivityDocument[];
   advance_approvers: any[]; // Empty array, can be customized later
-  city:string
-  reporting_head:string
-  type_of_engagement:string
-  product_details:string
+  city:string;
+  reporting_head:string;
+  requesting_hospital_name:string;
+  ship_to:string;
+  bill_to:string;
+  organization_name:string;
 }
 
 type Compensation = {
@@ -180,14 +182,14 @@ const event_Details = ({ ...Props }: Props) => {
     <div className="md:pb-8">
       <div className="flex gap-6">
         <h1 className="text-black md:text-[30px] md:font-medium uppercase md:pb-4">
-          {pathname.substring(1) == 'monetary_grant' || pathname.substring(1) == 'non_monetary_grant' || pathname.substring(1) == 'hcp_services' ? 'organisation Details' : 'event Details'}
+          {pathname.substring(1) == 'monetary_grant' || pathname.substring(1) == 'non_monetary_grant' ? 'organisation Details' : 'event Details'}
         </h1>
         
       </div>
       <div className="grid md:grid-cols-3 md:gap-6">
         <div className={`flex flex-col md:gap-2 ${pathname == "/patient_support" ? 'hidden':''}`}>
           <label className="text-black md:text-sm md:font-normal capitalize">
-            {pathname == ("/assesment_program") ? "Program Name" : (pathname == "/non_monetary_grant") || (pathname == "/monetary_grant") || pathname.substring(1) == 'hcp_services' ? "Organisation Name" : "Event Name"}<span className="text-[#e60000]">*</span>
+            {pathname == ("/assesment_program") ? "Program Name" : (pathname == "/non_monetary_grant") || (pathname == "/monetary_grant") ? "Organisation Name" : "Event Name"}<span className="text-[#e60000]">*</span>
           </label>
           <Input
             className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
