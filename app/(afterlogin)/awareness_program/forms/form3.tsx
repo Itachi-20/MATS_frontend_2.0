@@ -130,7 +130,7 @@ const Form3 = ({...Props}:Props) => {
         console.log(data, "response data");
         setRefNo(data.message);
         setTimeout(() => {
-          router.push(`/awareness_program?forms=3&refno=${data.message}`)
+          router.push(`/awareness_program?forms=4&refno=${data.message}`)
         }, 1000)
       } else {
         console.log("submission failed");
