@@ -2,8 +2,8 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox"
-import BasicDetails from "@/components/hcp/basic_Details"
-import EventDetails from "@/components/hcp/event_Details"
+import BasicDetails from "@/components/previewHCPComponents/basic_Details"
+import EventDetails from "@/components/previewHCPComponents/event_Details"
 import VendorDetails from "@/components/vendor_Details";
 import LogisticsBudget from "@/components/logistics_budget";
 import CompensationBudget from "@/components/compensation_budget"
@@ -14,7 +14,7 @@ import { usePathname } from 'next/navigation'
 import { useRouter } from 'next/navigation';
 import Comment_box from "@/components/approvalCommentBox/Comment_box";
 import { Previewdata } from '@/app/(afterlogin)/hcp_services/page'
-import Hcp_Details from "@/components/hcp/hcp_detail";
+import Hcp_Details from "@/components/previewHCPComponents/hcp_details";
 
 type EventEntry = {
   name: string | null;

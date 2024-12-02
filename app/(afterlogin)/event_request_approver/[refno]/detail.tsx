@@ -2,14 +2,14 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import BasicDetails from "@/components/basic_Details"
-import BasicDetails2 from "@/components/hcp/basic_Details";
-import EventDetails2 from "@/components/hcp/event_Details"
+import BasicDetails2 from "@/components/previewHCPComponents/basic_Details";
+import EventDetails2 from "@/components/previewHCPComponents/event_Details"
 import EventDetails from "@/components/event_Details"
 import VendorDetails from "@/components/vendor_Details"
 import TotalExpense from "@/components/total_Expense"
 import Documents from "@/components/documents"
 import { useRouter, useSearchParams } from 'next/navigation'
-import HCPDetils from  "@/components/hcp/hcp_detail"
+import HCPDetils from  "@/components/previewHCPComponents/hcp_details"
 import Comment_box from "@/components/approvalCommentBox/Comment_box";
 type EventEntry = {
   name: string;
