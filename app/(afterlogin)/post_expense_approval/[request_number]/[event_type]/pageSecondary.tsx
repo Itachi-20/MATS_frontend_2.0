@@ -319,7 +319,7 @@ const pagess = ({...Props}:props) => {
                         refno={refno}
                     />
                     {
-                        role == "Event%20Finance" &&
+                        role == "Event Finance" &&
                         <Fields
                             dropdown={dropdown as DropdownData}
                             handlefieldChange={handlefieldChange}
