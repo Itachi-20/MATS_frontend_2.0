@@ -3,9 +3,9 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox"
 import BasicDetails from "@/components/training_and_education/basic_detail"
 import EventDetails from "@/components/training_and_education/event_detail"
-import VendorDetails from "@/components/training_and_education/vendor_detail"
-import TotalExpense from "@/components/training_and_education/total_expense"
-import Documents from "@/components/training_and_education/documents"
+import VendorDetails from "@/components/commonPreviewComponents/vendor_detail"
+import TotalExpense from "@/components/commonPreviewComponents/total_expense"
+import Documents from "@/components/commonPreviewComponents/documents"
 import Add_vendor from "@/components/add_vendor";
 import { usePathname } from 'next/navigation'
 import { useRouter } from 'next/navigation';
