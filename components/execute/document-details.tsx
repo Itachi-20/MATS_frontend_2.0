@@ -279,6 +279,9 @@ const DocumentDetails = ({...Props}:Props) => {
       if (response.ok) {
         const data = await response.json();
         PreviewData();
+        setUploadedFiles(null)
+        setFiles([]);
+        setActivityType("");
        
       } else {
         console.log("Login failed");
@@ -309,7 +312,6 @@ const DocumentDetails = ({...Props}:Props) => {
       if (response.ok) {
         const data = await response.json();
         setPreviewData(data.data);
-        console.log(data, "PreviewData");
       } else {
         console.log("Login failed");
       }

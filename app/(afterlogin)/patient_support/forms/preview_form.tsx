@@ -4,16 +4,16 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox"
 import BasicDetails from "@/components/basic_Details"
-import EventDetails from "@/components/event_Details"
+import ShippingDetails from "@/components/previewPatientSupportComponents/shippingDetails"
 import VendorDetails from "@/components/vendor_Details";
 import LogisticsBudget from "@/components/logistics_budget";
 import CompensationBudget from "@/components/compensation_budget"
 import TotalExpense from "@/components/total_Expense"
 import Documents from "@/components/documents"
 import Add_vendor from "@/components/add_vendor";
-import ShippingDetails from "@/components/shipping_details";
-import BeneficiaryDetails from "@/components/beneficiary_details";
-import OtherDetails from "@/components/other_details";
+// import ShippingDetails from "@/components/shipping_details";
+import BeneficiaryDetails from "@/components/previewPatientSupportComponents/beneficialDetails";
+import OtherDetails from "@/components/sponsorshipSupportPreviewComponents/other_details";
 import { useEffect } from "react";
 import Comment_box from "@/components/approvalCommentBox/Comment_box";  
 
@@ -195,16 +195,14 @@ const Preview_Form = ({...Props}:Props) => {
   const [preview_data, setPreviewData] = useState<EventEntry | null>(null);
   const [dialog,setDialog] = useState(false);
   const [addVendor,setAddVendor] = useState(false);
-  const [isChecked, setIsChecked] = useState<boolean>(false);
+
   const [comment,setComment] = useState<string>();
   const [isCommentbox,setIsCommentbox] = useState<boolean>();
 
   
   const [refNo,setRefNo] = useState<string | null>(localStorage.getItem("refno")?localStorage.getItem("refno"):"");
   
-  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setIsChecked(e.target.checked);
-  };
+  
 
   const isAddVendor = ()=>{
     setAddVendor(prev => !prev)
@@ -279,7 +277,7 @@ const Preview_Form = ({...Props}:Props) => {
   }
   return (
       <>
-        <div className="md:px-7 md:pb-7 md:pt-4 w-full relative z-20">
+        <div className="md:px-7 md:pb-7 md:pt-4 w-full z-20">
             
         <BasicDetails
           pathname={pathname}
@@ -290,12 +288,10 @@ const Preview_Form = ({...Props}:Props) => {
         <BeneficiaryDetails
           pathname={pathname}
           eventData={preview_data}
-
         />
 
-        <EventDetails
-          pathname={pathname}
-          eventData={preview_data}
+        <ShippingDetails
+        eventData={preview_data}
         />
 
         <TotalExpense
@@ -307,18 +303,6 @@ const Preview_Form = ({...Props}:Props) => {
           PageName={'nahi pata'}
         />
         
-            <div className="flex items-center md:pb-8 gap-3">
-            <input
-            type="checkbox"
-            onChange={handleCheckboxChange}
-            checked={isChecked}
-            className="checkbox"
-          />
-            <label className="text-black md:text-sm md:font-normal">
-              I hereby declare that all details filled by me are correct and genuine.<span className="text-[#e60000]">*</span>
-                </label>
-            </div>
-
             <div className="flex justify-end pt-5 gap-4">
               {/* <Button className="bg-white text-black border text-md font-normal">
                 Save as Draft
@@ -326,7 +310,7 @@ const Preview_Form = ({...Props}:Props) => {
               <Button className="bg-white text-black border text-md font-normal">
                 Back
               </Button>
-              <Button className={`bg-[#4430bf] text-white  font-normal border`} disabled={!isChecked} onClick={()=>handleDialog()}>
+              <Button className={`bg-[#4430bf] text-white  font-normal border`} onClick={()=>handleDialog()}>
                 Submit
               </Button>
             </div>
