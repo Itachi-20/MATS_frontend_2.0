@@ -1,45 +1,42 @@
+
+"use client"
 import React,{useState, useEffect} from "react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox"
-import BasicDetails from "@/components/basic_Details"
-import EventDetails from "@/components/event_Details"
-import VendorDetails from "@/components/vendor_Details";
-import LogisticsBudget from "@/components/logistics_budget";
-import CompensationBudget from "@/components/compensation_budget"
-import TotalExpense from "@/components/total_Expense"
-import Documents from "@/components/documents"
+import BasicDetails from "@/components/training_and_education/basic_detail"
+import OrganisationDetils from "@/components/monetoryPreviewComponents/organizationDetails"
+import VendorDetails from "@/components/commonPreviewComponents/vendor_detail";
+import TotalExpense from "@/components/commonPreviewComponents/total_expense"
+import Documents from "@/components/commonPreviewComponents/documents"
 import Add_vendor from "@/components/add_vendor";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 import Comment_box from "@/components/approvalCommentBox/Comment_box";
-type Props = {
-  handleBackButton: (e: React.MouseEvent<HTMLButtonElement>) => void
-}
-
+import { Previewdata } from '@/app/(afterlogin)/monetary_grant/page'
 type EventEntry = {
-  name: string;
-  owner: string;
-  creation: string;
-  modified: string;
-  modified_by: string;
-  docstatus: number;
+  name: string | null;
+  owner: string | null;
+  creation: string | null;
+  modified: string | null;
+  modified_by: string | null;
+  docstatus: string | null;
   idx: number;
-  event_type: string;
-  company: string;
-  event_cost_center: string;
+  event_type: string | null;
+  company: string | null;
+  event_cost_center: string | null;
   state: string;
-  sub_type_of_activity: string;
+  sub_type_of_activity: string | null;
   business_unit: string;
   division_category: string;
   therapy: string;
   event_requestor: string;
-  division_sub_category: string;
+  division_sub_category: string | null;
   status: string;
   current_stage: string;
-  event_name: string;
+  event_name: string | null;
   event_start_date: string;
   any_govt_hcp: string;
-  comments: string;
+  comments: string | null;
   faculty: string;
   event_venue: string;
   event_end_date: string;
@@ -74,14 +71,10 @@ type EventEntry = {
   documents: ActivityDocument[];
   advance_approvers: any[]; // Empty array, can be customized later
   city: string
-  reporting_head:string;
-  requesting_hospital_name:string;
-  ship_to:string;
-  bill_to:string;
-  organization_name:string;
-  any_additional_expense:string
-  product_details:string
-  type_of_engagement:string
+  reporting_head: string
+  type_of_engagement: string
+  product_details: string
+  any_additional_expense: string
 }
 
 type Compensation = {
@@ -167,11 +160,10 @@ type Logistics = {
   doctype: string;
 }
 
-
 type File = {
   url: string;
   name: string;
-  file_name:string
+  file_name: string
 };
 
 type DocumentDetails = {
@@ -184,20 +176,20 @@ type ActivityDocument = {
   document: DocumentDetails[];
 };
 
+type Props = {
+  previewData: Previewdata | null;
+  refno: string | null;
+}
+
 const Preview_Form = ({...Props}:Props) => {
   const pathname = usePathname();
   const router = useRouter();
-  const [preview_data, setPreviewData] = useState<EventEntry | null>(null);
+  const [preview_data, setPreviewData] = useState<Previewdata | null | undefined>(Props.previewData);
   const [dialog,setDialog] = useState(false);
   const [isCommentbox,setIsCommentbox] = useState<boolean>();
   const [addVendor,setAddVendor] = useState(false);
   const [comment,setComment] = useState<string>();
-  const [isChecked, setIsChecked] = useState<boolean>(false);
-  const [refNo,setRefNo] = useState<string | null>(localStorage.getItem("refno")?localStorage.getItem("refno"):"");
-  
-  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setIsChecked(e.target.checked);
-  };
+  const [refNo, setRefNo] = useState<string | null>(Props.refno);
 
   const handleDialog = ()=>{
     setIsCommentbox(prev=> !prev);
@@ -271,7 +263,7 @@ const Preview_Form = ({...Props}:Props) => {
 
   return (
       <>
-        <div className="md:px-7 md:pb-7 md:pt-4 w-full relative z-20">
+        <div className="md:px-7 md:pb-7 md:pt-4 w-full  z-20">
             
         <BasicDetails
           pathname={pathname}
@@ -279,7 +271,7 @@ const Preview_Form = ({...Props}:Props) => {
 
         />
 
-        <EventDetails
+        <OrganisationDetils
           pathname={pathname}
           eventData={preview_data}
         />
@@ -297,26 +289,14 @@ const Preview_Form = ({...Props}:Props) => {
           PageName={''}
         />
         
-        <div className="flex md:pb-8 gap-3">
-          <input
-            type="checkbox"
-            onChange={handleCheckboxChange}
-            checked={isChecked}
-            className="checkbox"
-          />
-          <label className="text-black md:text-sm md:font-normal capitalize">
-            I hereby declare that all details filled by me are correct and genuine.<span className="text-[#e60000]">*</span>
-          </label>
-        </div>
-
         <div className="flex justify-end pt-5 gap-4">
           {/* <Button className="bg-white text-black border text-md font-normal">
             Save as Draft
           </Button> */}
-          <Button className="bg-white text-black border text-md font-normal">
+          <Button className="bg-white text-black border text-md font-normal" onClick={() => router.push(`/monetary_grant?forms=3&refno=${Props.refno}`)}>
             Back
           </Button>
-          <Button className={`bg-[#4430bf] text-white  font-normal border`} disabled={!isChecked} onClick={()=>handleDialog()}>
+          <Button className={`bg-[#4430bf] text-white  font-normal border`}  onClick={()=>handleDialog()}>
             Submit
           </Button>
         </div>

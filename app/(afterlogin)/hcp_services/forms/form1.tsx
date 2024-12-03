@@ -132,8 +132,8 @@ type Props = {
 };
 const Form1 = ({ ...Props }: Props) => {
   const router = useRouter();
-  const [businessUnit, setBusinessUnit] = useState("");
-  const [budget, setBudget] = useState("");
+  const [businessUnit, setBusinessUnit] = useState(Props.previewData?.business_unit ?? "");
+  const [budget, setBudget] = useState(Props.previewData?.division_category?? "");
   const [eventCostCenter, setEventCostCenter] =
     useState<eventCostCenter | null>(null);
   const [subtypeActivity, setSubtypeActivity] =
@@ -388,20 +388,20 @@ const Form1 = ({ ...Props }: Props) => {
           </Select>
         </div>
         {
-          businessUnit == "Endosurgery" && budget == "National" &&
+          (businessUnit == "Endosurgery" && budget == "National") &&          
           <div className="flex flex-col gap-2">
             <label className="lable">
               Budget Sub Type<span className="text-[#e60000]">*</span>
             </label>
             <Select
-              onValueChange={(value) => { handleSelectChange(value, "division_sub_category") }}
-              defaultValue={Props.previewData?.division_sub_category ? Props.previewData.division_sub_category : ""}
+            onValueChange={(value)=>{handleSelectChange(value,"division_sub_category")}}
+            defaultValue={Props.previewData?.division_sub_category?Props.previewData.division_sub_category:""}
             >
               <SelectTrigger className="dropdown">
                 <SelectValue placeholder="--Selected--" />
               </SelectTrigger>
               <SelectContent>
-                {subtypeActivity &&
+              {subtypeActivity &&
                   subtypeActivity.map((item, index) => {
                     return (
                       <SelectItem value={item.name}>
@@ -412,7 +412,6 @@ const Form1 = ({ ...Props }: Props) => {
               </SelectContent>
             </Select>
           </div>
-
         }
         {/* <div className="flex flex-col gap-2">
           <label className="lable">
