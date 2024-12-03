@@ -238,10 +238,10 @@ console.log(updatedFormData,'updatedFormData')
         setVendorName(data.data)
         console.log(data,"vendor name api");
       } else {
-        console.log("Login failed");
+        console.log("Response was Not OK");
       }
     } catch (error) {
-      console.error("Error during login:", error);
+      console.error("Error during vendor type change:", error);
     }
   };
 

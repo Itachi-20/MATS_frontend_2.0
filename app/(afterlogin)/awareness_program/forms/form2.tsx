@@ -60,10 +60,12 @@ type Props = {
   refNo: string | undefined;
 }
 const Form2 = ({ ...Props }: Props) => {
+  
   const router = useRouter();
   const [formdata, setFormData] = useState<formData>();
   const [refNo, setRefNo] = useState<string | null>(Props.refNo ?? "");
   const [eventStartDate, setEventStartDate] = useState<any>();
+
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const updatedFormData = {
@@ -116,7 +118,7 @@ const Form2 = ({ ...Props }: Props) => {
     }
     setEventStartDate(e.target.value)
     handlefieldChange(e);
-  }
+  };
   const handleEventEndDateValidate = (e: React.ChangeEvent<HTMLInputElement>) => {
     const currentDate = Date.now()
     if (e.target.valueAsNumber < currentDate || e.target.valueAsNumber < eventStartDate) {
@@ -127,7 +129,7 @@ const Form2 = ({ ...Props }: Props) => {
       toast.error("You cant select previous date");
     }
     handlefieldChange(e);
-  }
+  };
 
   return (
     <>

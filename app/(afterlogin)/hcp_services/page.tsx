@@ -7,6 +7,7 @@ import Preview_Form from './forms/preview_form';
 import { AppWrapper } from '@/app/context/module';
 import { dropdown,activityList,PreviewData,handleBusinessUnitChange,handleBudgetChange} from "./utility";
 import { cookies } from "next/headers";
+
 type dropdownData = {
   company: {
     name: string,
@@ -41,8 +42,7 @@ type dropdownData = {
   sponsorship_ref_no:{
     name:string
   }[]
-}
-
+};
 type activityDropdown = {
   activity:{
     name:string,
@@ -53,8 +53,7 @@ type activityDropdown = {
     activity_type:string,
     document_name:string
   }[]
-}
-
+};
 export type Previewdata = {
   name: string;
   owner: string;
@@ -174,7 +173,6 @@ export type Previewdata = {
   travel_expense_approved: number;
   budget:string;
 };
-
 type ChildVendor = {
   name: string;
   owner: string;
@@ -225,7 +223,6 @@ type ChildVendor = {
   parenttype: string;
   doctype: string;
 };
-
 type ChildOccurrence = {
   name: string;
   owner: string;
@@ -256,7 +253,6 @@ type ChildOccurrence = {
   parenttype: string;
   doctype: string;
 };
-
 type Document = {
   activity_type: string;
   document: {
