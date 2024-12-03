@@ -194,7 +194,7 @@ const Preview_Form = ({...Props}:Props) => {
   const [comment,setComment] = useState<string>();
   const [addVendor,setAddVendor] = useState(false);
   const [preview_data, setPreviewData] = useState<EventEntry | null>(null);
-  const [refNo, setRefNo] = useState<string | null>(localStorage.getItem("refno") ? localStorage.getItem("refno") : "");
+  const [refNo, setRefNo] = useState<string | null>(Props.refNo ?? "");
   const isAddVendor = ()=>{
     setAddVendor(prev => !prev)
   }
