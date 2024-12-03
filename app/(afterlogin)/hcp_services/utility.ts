@@ -40,40 +40,21 @@ export const activityList = async ()=>{
 }
 
 
-export const handleBudgetChange = async (value: string) => {
+export const handleBudgetChange = async (value: string, cookie:any) => {
     try {
       const response = await fetch(
-        "/api/training_and_education/subtypeDropdown",
+        `${process.env.FRAPPE_URL}/api/method/matsapp.api.event.event.data_based_on_budget_type?budget=${value}`,
         {
-          method: "POST",
+          method: "GET",
           headers: {
             "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            budget: value,
-          }),
+            "Cookie":cookie
+          }
         }
       );
-
-      
       if (response.ok) {
           const data = await response.json();
-          //setSubtypeActivity(data.data);
-          if (value == "National") {
-            //setSubtypeActivityVisible(true);
-            const Response = {
-                subtypeActivity:data.data,
-                SubtypeActivityVisible:true
-              } 
-              return Response;
-          } else {
-            //setSubtypeActivityVisible(false);
-            const Response = {
-                subtypeActivity:data.data,
-                SubtypeActivityVisible:false
-              } 
-              return Response;
-          }
+          return data.data;
       } else {
         console.log("Login failed");
       }
@@ -135,3 +116,5 @@ export const handleBudgetChange = async (value: string) => {
       console.error("Error during login:", error);
     }
   };
+
+  

@@ -266,7 +266,7 @@ const page = () => {
     },[])
 
     return (
-        <div className="md:px-7 md:pb-7 md:pt-[35px] w-full relative z-20 text-black">
+        <div className="md:px-7 md:pb-7 md:pt-[35px] w-full z-20 text-black">
             <div className="pb-5">
                 <div className="flex justify-between">
                     <h1 className=" md:text-[30px] md:font-medium capitalize md:pb-4"> Training and Education</h1>

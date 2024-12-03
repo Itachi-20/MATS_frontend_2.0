@@ -4,11 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox"
 import BasicDetails from "@/components/previewHCPComponents/basic_Details"
 import EventDetails from "@/components/previewHCPComponents/event_Details"
-import VendorDetails from "@/components/vendor_Details";
-import LogisticsBudget from "@/components/logistics_budget";
-import CompensationBudget from "@/components/compensation_budget"
-import TotalExpense from "@/components/total_Expense"
-import Documents from "@/components/documents"
+import VendorDetails from "@/components/commonPreviewComponents/vendor_detail";
+// import LogisticsBudget from "@/components/logistics_budget";
+// import CompensationBudget from "@/components/compensation_budget"
+import TotalExpense from "@/components/commonPreviewComponents/total_expense"
+import Documents from "@/components/commonPreviewComponents/documents"
 import Add_vendor from "@/components/add_vendor";
 import { usePathname } from 'next/navigation'
 import { useRouter } from 'next/navigation';
@@ -242,22 +242,18 @@ const Preview_Form = ({ ...Props }: Props) => {
           pathname=""
           eventData={preview_data}
         />
-
+        {preview_data && preview_data.type_of_engagement == "One Time" && 
         <EventDetails
-          pathname=""
           eventData={preview_data}
         />
+        }
         <Hcp_Details
           pathname=""
           eventData={preview_data}
         />
-        <LogisticsBudget
-          pathname=""
-          eventData={preview_data}
-        />
-        <CompensationBudget
-          pathname=""
-          eventData={preview_data}
+
+        <VendorDetails
+        eventData={preview_data}
         />
 
         <TotalExpense

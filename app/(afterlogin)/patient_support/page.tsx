@@ -285,7 +285,7 @@ const index = () => {
   return (
     <>
       <AppWrapper>
-        <div className="px-7 pb-7 pt-4 w-full relative z-20">
+        <div className="px-7 pb-7 pt-4 w-full z-20">
         {
             search == "1" ?
               <Form1
@@ -314,16 +314,6 @@ const index = () => {
           }
         </div>
 
-        {
-          addVendor &&
-          <Addvendor
-            isAddVendor={isAddVendor} isAddDocument={isAddDocument}
-          />
-        }
-        {
-          addDocument &&
-          <Adddocument isAddDocument={isAddDocument} />
-        }
       </AppWrapper>
     </>
   )

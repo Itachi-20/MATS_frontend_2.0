@@ -260,7 +260,7 @@ console.log(refno,'refno')
   return (
 
 
-    <div className={`md:px-7 md:pb-7 md:pt-4 w-full relative z-20 text-black`}>
+    <div className={`md:px-7 md:pb-7 md:pt-4 w-full z-20 text-black`}>
       <div className="pb-5">
         <div className="flex justify-between pb-4">
           {/* <h1 className=" md:text-[30px] md:font-medium capitalize md:pb-4"> Training and Education</h1> */}
