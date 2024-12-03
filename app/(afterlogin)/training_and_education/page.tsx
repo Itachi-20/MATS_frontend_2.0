@@ -1,55 +1,274 @@
-"use client"
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Form1 from "@/app/(afterlogin)/training_and_education/forms/form1";
 import Form2 from "@/app/(afterlogin)/training_and_education/forms/form2";
 import Form3 from "@/app/(afterlogin)/training_and_education/forms/form3";
 import Form4 from "@/app/(afterlogin)/training_and_education/forms/form4";
 import Preview_Form from './forms/preview_form';
-import Addvendor from '@/components/add_vendor';
-import Adddocument from '@/components/add_document';
-import { useRouter } from 'next/navigation';
 import { AppWrapper } from '@/app/context/module';
-import { usePathname } from 'next/navigation';
-import { useSearchParams } from 'next/navigation'
-type dropdownData = {
+import { PreviewData, handleBusinessUnitChange, activityList, dropdown } from '../hcp_services/utility';
+import { cookies } from 'next/headers';
+
+export type DropdownDataType = {
   company: {
     name: string,
-    company_name: "string"
+    company_name: string
+  }[],
+  currency: {
+    name: string
   }[],
   division: {
     name: string,
     division_name: string
   }[],
+  engagement_type:{
+    name:string,
+    engagement_type: string,
+  }[],
+  gst: {
+    name: string,
+    rate: string
+  }[],
+  hcp_ref_no: {
+    name: string
+  }[],
   requestor: {
     full_name: string,
     email: string
+  }[],
+  state: {
+    name: string,
+    state: string
+  }[],
+  training_ref_no: {
+    name: string
   }[],
   vendor_type: {
     name: string,
     vendor_type: string
   }[],
-  state: {
-    name: string,
-    state: string
-  }[]
-  currency: {
-    name: string
-  }[]
-}
-
-type Compensation = {
-  vendor_type: string;
-  vendor_name: string;
-  est_amount: number;
-  gst_included?: number;
 };
-
-type Logistics = {
-  vendor_type: string;
-  est_amount: number;
+export type ActivityDropdownType = {
+  activity:{
+    name:string,
+    activity_name:string
+  }[],
+  document:{
+    name:string,
+    activity_type:string,
+    document_name:string
+  }[]
 };
-
-type formData = {
+export type PreviewDataType = {
+  name: string;
+  owner: string;
+  creation: string;
+  modified: string;
+  modified_by: string;
+  docstatus: number;
+  idx: number;
+  event_type: string;
+  company: string;
+  event_cost_center: string;
+  state: string;
+  sub_type_of_activity: string;
+  business_unit: string;
+  division_category: string;
+  city: string | null;
+  therapy: string;
+  event_requestor: string;
+  division_sub_category: string | null;
+  reporting_head: string | null;
+  status: string;
+  current_stage: string;
+  product_amount: number;
+  quantity: number;
+  organizer_name: string | null;
+  sponsor_currency: number;
+  sponsorship_amount: number;
+  entitlement_in_lieu_of_sponsorship: string | null;
+  comment_if_any: string | null;
+  any_additional_expense: string | null;
+  event_name: string | null;
+  event_start_date: string;
+  any_govt_hcp: string;
+  comments: string | null;
+  faculty: string;
+  hcp_name: string;
+  type_of_engagement: string;
+  annual_plan: number;
+  product_details: string;
+  organization_name: string | null;
+  event_venue: string | null;
+  event_end_date: string;
+  no_of_hcp: number;
+  bu_rational: string;
+  participants: string;
+  training_ref_no: string | null;
+  hcp_ref_no: string | null;
+  sponsorship_ref_no: string | null;
+  service_type: string | null;
+  hospital_affiliation: string;
+  requesting_hospital_name: string | null;
+  bill_to: string | null;
+  ship_to: string | null;
+  total_compensation_expense: number;
+  has_advance_expense: number;
+  event_conclusion: string | null;
+  total_logistics_expense: number;
+  travel_vendors_status: string;
+  total_estimated_expense: number;
+  currency: string;
+  preactivity_status: string;
+  advance_status: string;
+  advance_expense_check: number;
+  post_activity_status: string;
+  post_expense_status: string;
+  post_expense_check: number;
+  travel_expense_status: string;
+  travel_expense_check: number;
+  amended_from: string | null;
+  document_no: string | null;
+  invoice_date: string | null;
+  invoice_amount: number;
+  division: string | null;
+  nature: string | null;
+  gl_code: string | null;
+  zone: string | null;
+  remark: string | null;
+  posting_date: string | null;
+  basic_amount: number;
+  tds: number;
+  cost_centre: string | null;
+  company_name: string | null;
+  utr_number: string | null;
+  finance_state: string | null;
+  invoice_number: string | null;
+  gst: number;
+  net_amount: number;
+  cc_name: string | null;
+  gl_name: string | null;
+  payment_date: string | null;
+  finance_city: string | null;
+  doctype: string;
+  actual_vendors: any[];
+  expense_attachments: any[];
+  preactivity_approvers: any[];
+  logistics: ChildVendor[];
+  travel_expense_approvers: any[];
+  post_activity_approvers: any[];
+  post_expense_vendors: any[];
+  travel_vendors: any[];
+  occurrence_status: ChildOccurrence[];
+  post_expense_approvers: any[];
+  documents: Document[];
+  advance_approvers: any[];
+  compensation: ChildVendor[];
+  occurrence_no: number;
+  preactivity_submitted: number;
+  preactivity_approved: number;
+  advance_request_submitted: number;
+  advance_request_approved: number;
+  executed: number;
+  post_activity_submitted: number;
+  post_activity_approved: number;
+  post_expense_submitted: number;
+  post_expense_approved: number;
+  travel_expense_submitted: number;
+  travel_expense_approved: number;
+  budget:string;
+};
+  type ChildVendor = {
+    name: string;
+    owner: string;
+    creation: string;
+    modified: string;
+    modified_by: string;
+    docstatus: number;
+    idx: number;
+    vendor_type: string;
+    actual_amount: number;
+    status: string;
+    file: string | null;
+    event_conclusion: string | null;
+    vendor_name: string | null;
+    advance: number;
+    budget_category: string;
+    advance_expense_check: number;
+    travel_expense_check: number;
+    est_amount: number;
+    gst_included: number;
+    gst: string;
+    occurrence_no: number;
+    post_expense_check: number;
+    document_no: string | null;
+    invoice_date: string | null;
+    invoice_amount: number;
+    division: string | null;
+    nature: string | null;
+    gl_code: string | null;
+    zone: string | null;
+    narration: string | null;
+    posting_date: string | null;
+    basic_amount: number;
+    tds: number;
+    cost_center: string | null;
+    company_name: string | null;
+    utr_number: string | null;
+    state: string | null;
+    invoice_number: string | null;
+    finance_gst: string | null;
+    net_amount: number;
+    cc_name: string | null;
+    gl_name: string | null;
+    payment_date: string | null;
+    city: string | null;
+    parent: string;
+    parentfield: string;
+    parenttype: string;
+    doctype: string;
+  };
+  type ChildOccurrence = {
+    name: string;
+    owner: string;
+    creation: string;
+    modified: string;
+    modified_by: string;
+    docstatus: number;
+    idx: number;
+    occurrence_no: number;
+    is_declared: number;
+    occurrence_date: string | null;
+    travel_vendor_status: string;
+    submitted_by: string | null;
+    status: string;
+    preactivity_submitted: number;
+    preactivity_approved: number;
+    executed: number;
+    advance_request_submitted: number;
+    advance_request_approved: number;
+    post_activity_submitted: number;
+    post_activity_approved: number;
+    post_expense_submitted: number;
+    post_expense_approved: number;
+    travel_expense_submitted: number;
+    travel_expense_approved: number;
+    parent: string;
+    parentfield: string;
+    parenttype: string;
+    doctype: string;
+  };
+  type Document = {
+    activity_type: string;
+    document: {
+        type: string;
+        file: {
+            name: string;
+            url: string;
+            file_name: string;
+        }[];
+    }[];
+  };
+export type FormDataType = {
   name: string | null;
   event_type: string;
   company: string;
@@ -65,8 +284,8 @@ type formData = {
   event_name: string;
   event_venue: string;
   comments: string;
-  compensation: Compensation[];
-  logistics: Logistics[];
+  compensation: CompensationType[];
+  logistics: LogisticsType[];
   total_compensation_expense: number;
   total_logistics_expense: number;
   event_requestor: string;
@@ -77,190 +296,39 @@ type formData = {
   any_govt_hcp: string,
   no_of_hcp: number
 };
+  type CompensationType = {
+    vendor_type: string;
+    vendor_name: string;
+    est_amount: number;
+    gst_included?: number;
+  };
+  type LogisticsType = {
+    vendor_type: string;
+    est_amount: number;
+  };
 
+const index = async ({...Props}:any) => {
 
-type activityDropdown = {
-  activity:{
-    name:string,
-    activity_name:string
-  }[],
-  document:{
-    name:string,
-    activity_type:string,
-    document_name:string
-  }[]
-}
+  const props =  await Props;
+  const {forms,refno} = await props.searchParams;
+  const activityDropdown:ActivityDropdownType = await activityList();
+  const dropdownData:DropdownDataType =await dropdown();
 
-
-
-const index = () => {
-  const pathname = usePathname();
-  const searchParams = useSearchParams()
-  const search = searchParams.get('forms')
-  const router = useRouter()
-  const [form,setForm] = useState<string | number | null>(searchParams.get('forms'));
-  const [addVendor,setAddVendor] = useState(false);
-  const [dropdownData,setDropdownData] = useState<dropdownData | null>(null);
-  const [activityDropdown ,setActivityDropdown] = useState<activityDropdown | null>(null);
-  const [refNo,setRefNo] = useState<string | null>(localStorage.getItem("refno")?localStorage.getItem("refno"):"");
-
-  const [logisticsBudget, setLogisticBudget] = useState<Logistics[]>([]);
-  const [addDocument,setAddDocument] = useState(false);
-
-  const isAddDocument = ()=>{
-    setAddDocument(prev => !prev)
+  const cookie = await cookies();
+  let previewdata:  PreviewDataType | null = null;
+  let eventCostCenter = null;
+  console.log(refno,cookie);
+  
+  if(refno){
+    previewdata =  await PreviewData(refno,cookie);
   }
-
-  // const handleLogisticsAdd = () => {
-  //   console.log("inside function")
-  //   if (logisticVendorType && logisticAmount > 0) {
-  //     const newObject: Logistics = { vendor_type: logisticVendorType, amount: logisticAmount };
-  //     setLogisticBudget(prevRows => {
-  //       const updatedRecords = [...prevRows, newObject]
-  //       console.log(updatedRecords)
-  //       return updatedRecords
-  //     }
-  //     )
-  //     setLogisticVendorType('');
-  //     setLogisticAmount(0);
-  //   }
-  // }
-
+  if(previewdata && previewdata.business_unit){
+    eventCostCenter = await handleBusinessUnitChange(previewdata.business_unit,cookie);
+  }
 
   let eventype: { [key: string]: string } = {};
   eventype["training_and_education"] = "Training and Education";
-  useEffect(() => {
-    setFormData({ ...formdata, name: refNo })
-  }, [refNo])
-  const [formdata, setFormData] = useState<formData | {}>({});
-
-  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-
-    const updatedFormData = {
-        ...formdata
-
-    };
-
-    // const eventype = pathname.split("_").map((item,index)=>
-    //   (
-    //     item.charAt(0).toUpperCase() + item.slice(1).toLowerCase()
-    //   )
-    // ).join().replaceAll("_"," ").replaceAll(","," ").replace("/","")
-    
-    updatedFormData.event_type = "Training and Education"
-    if(refNo){
-      updatedFormData.name = refNo;
-    }
-
-
-    try {
-      const response = await fetch(
-        "/api/training_and_education/handleSubmit",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: 'include',
-          body: JSON.stringify(updatedFormData)
-        }
-      );
-      if (response.ok) {
-        const data = await response.json();
-        console.log(data, "response data");
-        localStorage.setItem("refno", data.message);
-        setRefNo(data.message);
-
-        setTimeout(() => {
-          if (search == "1") {
-            router.push(`/training_and_education?forms=2`);
-          }
-          if (search == "2") {
-            router.push(`/training_and_education?forms=3`);
-          }
-          if (search == "3") {
-            router.push(`/training_and_education?forms=4`);
-          }
-          if (search == "4") {
-            router.push(`/training_and_education?forms=5`);
-          }
-        }, 1000)
-      } else {
-        console.log("submission failed");
-      }
-    } catch (error) {
-      console.error("Error during Submission:", error);
-    }
-  };
-
-
-  const handlefieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  }
-
-
-  const handleSelectChange = (value: string, name: string) => {
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const isAddVendor = () => {
-    setAddVendor(prev => !prev)
-  }
-
-
-  const dropdown = async () => {
-
-     try {
-         const response = await fetch("/api/training_and_education/dropdown", {
-             method: "GET",
-             headers: {
-                 "Content-Type": "application/json",
-             },
-         });
- 
-          const data = await response.json();
-          setDropdownData(data.data);
-         if (response.ok) {
-         } else {
-             console.log('Login failed');
-         }
-     } catch (error) {
-         console.error("Error during login:", error);
-     }
- };
-
- const activityList = async () => {
-  try {
-      const response = await fetch("/api/training_and_education/activityList", {
-          method: "GET",
-          headers: {
-              "Content-Type": "application/json",
-          },
-          credentials:'include'
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setActivityDropdown(data.data);
-        console.log(data,"activity list")
-      } else {
-          console.log('Login failed');
-      }
-  } catch (error) {
-      console.error("Error during login:", error);
-  }
-};
-
-  useEffect(()=>{
-    dropdown();
-  },[])
-
-  useEffect(()=>{
-    activityList();
-  },[])
-  console.log(formdata,"this is form data");
+  console.log(activityDropdown, dropdownData, previewdata);
 
   return (
     <>
@@ -268,119 +336,43 @@ const index = () => {
         <div className="px-7 pb-7 pt-4 w-full relative z-20">
           <div>
             <h1 className="text-black text-[30px] font-medium capitalize" id="form_top">
-              {/* Training & Education */}
-              {/* {pathname.replace("/","").replaceAll("_"," ")} */}
-
+            
             </h1>
             <div className='py-9'></div>
           </div>
           {
-            search == "1" ?
-              <Form1
-                //nextForm={nextForm}
-                dropdownData={dropdownData}
-                handlefieldChange={handlefieldChange}
-                handleSelectChange={handleSelectChange}
-                handleSubmit={handleSubmit}
+          forms == "1" ?
+            <Form1
+              eventCostCenter={eventCostCenter}
+              previewData = {previewdata}
+              dropdownData={dropdownData}
+              refNo={refno}
+            /> :
+            forms == "2" ?
+              <Form2
+                previewData = {previewdata}
+                refNo={refno}
               /> :
-              search == "2" ?
-                <Form2
-                  //nextForm={nextForm}
-                  //prevForm={prevForm}
-                  handlefieldChange={handlefieldChange}
-                  handleSelectChange={handleSelectChange}
-                  handleSubmit={handleSubmit}
+              forms == "3" ?
+                <Form3
+                  previewData = {previewdata}
+                  vendorType={dropdownData && dropdownData.vendor_type}
+                  currency={dropdownData && dropdownData.currency}
+                  refNo={refno}
+
                 /> :
-                search == "3" ?
-                  <Form3
-                 // nextForm = {nextForm}
-                  //prevForm={prevForm}
-                  isAddVendor = {isAddVendor}
-                  vendorType = {dropdownData && dropdownData.vendor_type}
-                  currency = {dropdownData && dropdownData.currency}
-                  handlefieldChange = {handlefieldChange}
-                  handleSelectChange={handleSelectChange}
-                  handleSubmit={handleSubmit}
-                  setFormData = {setFormData}
-                  logisticsBudget = {logisticsBudget}
-                  /> :
-                  search == "4" ?
-                    <Form4
-                   // nextForm = {nextForm}
-                    //prevForm={prevForm}
+                forms == "4" ?
+                  <Form4
                     activityDropdown={activityDropdown}
-                    handleSubmit = {handleSubmit}
-                    /> :
-                    search == "5" ?
-                      <Preview_Form
-                       // prevForm={prevForm}
-                      /> : ""
-          }
+                    refNo={refno}
+
+                  /> :
+                  forms == "5" ?
+                    <Preview_Form
+                      refNo={refno}
+                    /> : ""
+        }
         </div>
-
-        {/* {
-
-          form == 1?
-          <Form1
-          nextForm = {nextForm}
-          dropdownData={dropdownData}
-          handlefieldChange = {handlefieldChange}
-          handleSelectChange={handleSelectChange}
-          handleSubmit={handleSubmit}
-          />:
-          form == 2?
-          <Form2
-          nextForm = {nextForm}
-          prevForm={prevForm}
-          handlefieldChange = {handlefieldChange}
-          handleSelectChange={handleSelectChange}
-          handleSubmit={handleSubmit}
-          />:
-          form == 3?
-          <Form3
-          nextForm = {nextForm}
-          prevForm={prevForm}
-          isAddVendor = {isAddVendor}
-          vendorType = {dropdownData && dropdownData.vendor_type}
-          currency = {dropdownData && dropdownData.currency}
-          handlefieldChange = {handlefieldChange}
-          handleSelectChange={handleSelectChange}
-          handleSubmit={handleSubmit}
-          setFormData = {setFormData}
-          logisticsBudget = {logisticsBudget}
-          />:
-          form == 4?
-          <Form4
-          nextForm = {nextForm}
-          prevForm={prevForm}
-          activityDropdown={activityDropdown}
-          />:
-          form == 5?
-          <Preview_Form
-          prevForm = {prevForm}
-          />:""
-}{
-          addVendor &&
-          <Addvendor
-            isAddVendor={isAddVendor} isAddDocument={isAddDocument}
-          />
-
-        }
-        {
-          addDocument &&
-          <Adddocument isAddDocument={isAddDocument} />
-        } */}
-        {/* {
-          addVendor &&
-          <Addvendor
-            isAddVendor={isAddVendor} //isAddDocument={isAddDocument}
-          />
-
-        }
-        {
-          addDocument &&
-          <Adddocument isAddDocument={isAddDocument} />
-        } */}
       </AppWrapper>
     </>
   )
