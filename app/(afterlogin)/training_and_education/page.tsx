@@ -39,6 +39,10 @@ export type DropdownDataType = {
     name: string,
     state: string
   }[],
+  city: {
+    name: string,
+    city: string
+  }[],
   training_ref_no: {
     name: string
   }[],

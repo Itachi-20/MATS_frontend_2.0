@@ -70,15 +70,17 @@ type EventEntry = {
   logistics: Logistics[];
   documents: ActivityDocument[];
   advance_approvers: any[]; // Empty array, can be customized later
-  city:string
-  reporting_head:string
-  requesting_hospital_name:string 
-  ship_to:string 
-  bill_to:string 
-  organization_name:string
-  any_additional_expense:string 
-  product_details:string 
-  type_of_engagement:string
+  city:string;
+  reporting_head:string;
+  requesting_hospital_name:string; 
+  ship_to:string; 
+  bill_to:string; 
+  organization_name:string;
+  any_additional_expense:string; 
+  product_details:string;
+  type_of_engagement:string;
+  hcp_name:string;
+  preactivity_submitted: number;
 }
 
 type Compensation = {
@@ -299,6 +301,7 @@ const Preview_Form = ({...Props}:Props) => {
         <Documents
         PageName=""
          eventData={preview_data}
+         fetchFile={PreviewData}
         />
         
             <div className="flex md:pb-8 gap-3 relative">
