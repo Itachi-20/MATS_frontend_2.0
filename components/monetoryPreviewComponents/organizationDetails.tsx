@@ -3,6 +3,8 @@ import React from 'react';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { usePathname } from 'next/navigation';
+import BeneficiaryDetails from "@/components/beneficiary_details";
+
 
 type EventEntry = {
   name: string;
@@ -199,8 +201,6 @@ const event_Details = ({ ...Props }: Props) => {
             value={ Props.eventData?.organization_name}
           ></Input>
         </div>
-        
-          
             <div className="flex flex-col md:gap-2">
               <label className="text-black md:text-sm md:font-normal capitalize">
                 Event Start Date<span className="text-[#e60000]">*</span>
@@ -223,13 +223,7 @@ const event_Details = ({ ...Props }: Props) => {
               value={Props.eventData?.event_end_date}
             ></Input>
           </div>
-          
-
-      
-
        
-       
-        
           
             <div className="flex flex-col md:gap-2">
               <label className="text-black md:text-sm md:font-normal capitalize">
@@ -266,9 +260,7 @@ const event_Details = ({ ...Props }: Props) => {
             readOnly={true}
             value={Props.eventData?.bu_rational}
           ></Input>
-        </div>
-
-  
+        </div>  
           <div className="flex flex-col md:gap-2">
             <label className="text-black md:text-sm md:font-normal capitalize">
               Comments<span className="text-[#e60000]">*</span>
@@ -285,4 +277,4 @@ const event_Details = ({ ...Props }: Props) => {
   )
 }
 
-export default event_Details
+export default event_Details;

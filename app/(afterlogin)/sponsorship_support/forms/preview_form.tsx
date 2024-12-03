@@ -1,3 +1,4 @@
+"use client"
 import React,{useState,useEffect} from "react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -177,7 +178,7 @@ type ActivityDocument = {
 };
 
 type Props = {
-    //prevForm: ()=>void
+    refno: string | null
 }
 const Preview_Form = ({...Props}:Props) => {
   const pathname = usePathname();
@@ -187,7 +188,7 @@ const Preview_Form = ({...Props}:Props) => {
   const [preview_data, setPreviewData] = useState<EventEntry | null >(null);
   const [comment,setComment] = useState<string>();
   const [isCommentbox,setIsCommentbox] = useState<boolean>();
-  const [refNo, setRefNo] = useState<string | null>(localStorage.getItem("refno") ? localStorage.getItem("refno") : "");
+  const [refNo, setRefNo] = useState<string | null>(Props.refno);
   const isAddVendor = ()=>{
     setAddVendor(prev => !prev)
   }
@@ -195,11 +196,6 @@ const Preview_Form = ({...Props}:Props) => {
     setIsCommentbox(prev=> !prev);
   }
 
-  const [isChecked, setIsChecked] = useState<boolean>(false);
-
-  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setIsChecked(e.target.checked);
-  };
   const PreviewData = async () => {
     try {
       const response = await fetch("/api/previewData", {
@@ -298,8 +294,6 @@ const Preview_Form = ({...Props}:Props) => {
         PageName=""
         eventData={preview_data}
         />
-        
-        
 
             <div className="flex justify-end pt-5 gap-4">
               {/* <Button className="bg-white text-black border text-md font-normal">

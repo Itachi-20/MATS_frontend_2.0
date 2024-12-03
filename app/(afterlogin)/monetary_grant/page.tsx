@@ -1,17 +1,11 @@
-"use client"
-import React, { useState, useEffect } from 'react';
 
 import Form1 from "./forms/form1";
 import Form2 from "./forms/form2";
 import Form3 from "./forms/form3";
 import Form4 from "./forms/form4";
 import Preview_Form from './forms/preview_form';
-import Adddocument from '@/components/add_document';
-import Addvendor from '@/components/add_vendor';
-import { AppWrapper } from '@/app/context/module';
-import { usePathname } from 'next/navigation';
-import { useSearchParams,useRouter } from 'next/navigation';
-
+import { dropdown, activityList, PreviewData, handleBusinessUnitChange } from "./utility";
+import { cookies } from "next/headers";
 type dropdownData = {
   company: {
     name: string,
@@ -36,232 +30,261 @@ type dropdownData = {
   currency: {
     name: string
   }[]
+  engagement_type: {
+    name: string
+    engagement_type: string
+  }[]
+  training_ref_no: {
+    name: string
+  }[]
+  sponsorship_ref_no: {
+    name: string
+  }[]
 }
 
-type Compensation = {
-  vendor_type: string;
-  vendor_name: string;
-  est_amount: number;
-  gst_included?: number;
-};
+type activityDropdown = {
+  activity: {
+    name: string,
+    activity_name: string
+  }[],
+  document: {
+    name: string,
+    activity_type: string,
+    document_name: string
+  }[]
+}
 
-type Logistics = {
-  vendor_type: string;
-  est_amount: number;
-};
-
-type formData = {
-  name: string | null;
+export type Previewdata = {
+  name: string;
+  owner: string;
+  creation: string;
+  modified: string;
+  modified_by: string;
+  docstatus: number;
+  idx: number;
   event_type: string;
   company: string;
   event_cost_center: string;
   state: string;
-  city: string;
-  event_start_date: string;
-  event_end_date: string;
-  bu_rational: string;
-  faculty: string;
-  participants: string;
-  therapy: string;
-  event_name: string;
-  event_venue: string;
-  comments: string;
-  compensation: Compensation[];
-  logistics: Logistics[];
-  total_compensation_expense: number;
-  total_logistics_expense: number;
-  event_requestor: string;
+  sub_type_of_activity: string;
   business_unit: string;
   division_category: string;
-  division_sub_category: string;
-  sub_type_of_activity: string;
-  any_govt_hcp: string,
-  no_of_hcp: number
+  city: string | null;
+  therapy: string;
+  event_requestor: string;
+  division_sub_category: string | null;
+  reporting_head: string | null;
+  status: string;
+  current_stage: string;
+  product_amount: number;
+  quantity: number;
+  organizer_name: string | null;
+  sponsor_currency: number;
+  sponsorship_amount: number;
+  entitlement_in_lieu_of_sponsorship: string | null;
+  comment_if_any: string | null;
+  any_additional_expense: string | null;
+  event_name: string | null;
+  event_start_date: string;
+  any_govt_hcp: string;
+  comments: string | null;
+  faculty: string;
+  hcp_name: string;
+  type_of_engagement: string;
+  annual_plan: number;
+  product_details: string;
+  organization_name: string | null;
+  event_venue: string | null;
+  event_end_date: string;
+  no_of_hcp: number;
+  bu_rational: string;
+  participants: string;
+  training_ref_no: string | null;
+  hcp_ref_no: string | null;
+  sponsorship_ref_no: string | null;
+  service_type: string | null;
+  hospital_affiliation: string;
+  requesting_hospital_name: string | null;
+  bill_to: string | null;
+  ship_to: string | null;
+  total_compensation_expense: number;
+  has_advance_expense: number;
+  event_conclusion: string | null;
+  total_logistics_expense: number;
+  travel_vendors_status: string;
+  total_estimated_expense: number;
+  currency: string;
+  preactivity_status: string;
+  advance_status: string;
+  advance_expense_check: number;
+  post_activity_status: string;
+  post_expense_status: string;
+  post_expense_check: number;
+  travel_expense_status: string;
+  travel_expense_check: number;
+  amended_from: string | null;
+  document_no: string | null;
+  invoice_date: string | null;
+  invoice_amount: number;
+  division: string | null;
+  nature: string | null;
+  gl_code: string | null;
+  zone: string | null;
+  remark: string | null;
+  posting_date: string | null;
+  basic_amount: number;
+  tds: number;
+  cost_centre: string | null;
+  company_name: string | null;
+  utr_number: string | null;
+  finance_state: string | null;
+  invoice_number: string | null;
+  gst: number;
+  net_amount: number;
+  cc_name: string | null;
+  gl_name: string | null;
+  payment_date: string | null;
+  finance_city: string | null;
+  doctype: string;
+  actual_vendors: any[];
+  expense_attachments: any[];
+  preactivity_approvers: any[];
+  logistics: ChildVendor[];
+  travel_expense_approvers: any[];
+  post_activity_approvers: any[];
+  post_expense_vendors: any[];
+  travel_vendors: any[];
+  occurrence_status: ChildOccurrence[];
+  post_expense_approvers: any[];
+  documents: Document[];
+  advance_approvers: any[];
+  compensation: ChildVendor[];
+  occurrence_no: number;
+  preactivity_submitted: number;
+  preactivity_approved: number;
+  advance_request_submitted: number;
+  advance_request_approved: number;
+  executed: number;
+  post_activity_submitted: number;
+  post_activity_approved: number;
+  post_expense_submitted: number;
+  post_expense_approved: number;
+  travel_expense_submitted: number;
+  travel_expense_approved: number;
+  budget: string;
 };
 
-type activityDropdown = {
-  activity:{
-    name:string,
-    activity_name:string
-  }[],
-  document:{
-    name:string,
-    activity_type:string,
-    document_name:string
-  }[]
-}
+type ChildVendor = {
+  name: string;
+  owner: string;
+  creation: string;
+  modified: string;
+  modified_by: string;
+  docstatus: number;
+  idx: number;
+  vendor_type: string;
+  actual_amount: number;
+  status: string;
+  file: string | null;
+  event_conclusion: string | null;
+  vendor_name: string | null;
+  advance: number;
+  budget_category: string;
+  advance_expense_check: number;
+  travel_expense_check: number;
+  est_amount: number;
+  gst_included: number;
+  gst: string;
+  occurrence_no: number;
+  post_expense_check: number;
+  document_no: string | null;
+  invoice_date: string | null;
+  invoice_amount: number;
+  division: string | null;
+  nature: string | null;
+  gl_code: string | null;
+  zone: string | null;
+  narration: string | null;
+  posting_date: string | null;
+  basic_amount: number;
+  tds: number;
+  cost_center: string | null;
+  company_name: string | null;
+  utr_number: string | null;
+  state: string | null;
+  invoice_number: string | null;
+  finance_gst: string | null;
+  net_amount: number;
+  cc_name: string | null;
+  gl_name: string | null;
+  payment_date: string | null;
+  city: string | null;
+  parent: string;
+  parentfield: string;
+  parenttype: string;
+  doctype: string;
+};
 
-const index = () => {
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const [addVendor, setAddVendor] = useState(false);
-  const [addDocument, setAddDocument] = useState(false);
-  const [activityDropdown ,setActivityDropdown] = useState<activityDropdown | null>(null);
-  const [dropdownData, setDropdownData] = useState<dropdownData | null>(null);
-  const [refNo, setRefNo] = useState<string | null>(localStorage.getItem("refno") ? localStorage.getItem("refno") : "");
-  const search = searchParams.get('forms')
-  console.log("search", search)
-  const router = useRouter()
-  const [form, setForm] = useState<string | number | null>(searchParams.get('forms'));
-  const [logisticsBudget, setLogisticBudget] = useState<Logistics[]>([]);
+type ChildOccurrence = {
+  name: string;
+  owner: string;
+  creation: string;
+  modified: string;
+  modified_by: string;
+  docstatus: number;
+  idx: number;
+  occurrence_no: number;
+  is_declared: number;
+  occurrence_date: string | null;
+  travel_vendor_status: string;
+  submitted_by: string | null;
+  status: string;
+  preactivity_submitted: number;
+  preactivity_approved: number;
+  executed: number;
+  advance_request_submitted: number;
+  advance_request_approved: number;
+  post_activity_submitted: number;
+  post_activity_approved: number;
+  post_expense_submitted: number;
+  post_expense_approved: number;
+  travel_expense_submitted: number;
+  travel_expense_approved: number;
+  parent: string;
+  parentfield: string;
+  parenttype: string;
+  doctype: string;
+};
+
+type Document = {
+  activity_type: string;
+  document: {
+    type: string;
+    file: {
+      name: string;
+      url: string;
+      file_name: string;
+    }[];
+  }[];
+};
 
 
-  let eventype: { [key: string]: string } = {};
-  eventype["monetary_grant"] = "Monetary Grant";
-  useEffect(() => {
-    setFormData({ ...formdata, name: refNo })
-  }, [refNo])
-  const [formdata, setFormData] = useState<formData | {}>({});
-  // const router = useRouter();
-  // const nextForm = (): void => {
-  //   setForm(prev => prev + 1);
-  //   // router.push("/modules#form_top")
-  // }
 
-  // const prevForm = () => {
-  //   setForm(prev => prev - 1);
-  //   // router.push("/modules#form_top")
-  // }
-
-  const isAddVendor = () => {
-    setAddVendor(prev => !prev)
+const index = async ({ ...Props }: any) => {
+  const dropdownData: dropdownData = await dropdown();
+  const actvityDropdown: activityDropdown = await activityList();
+  const props = await Props;
+  const { forms, refno } = await props.searchParams;
+  const cookie = await cookies()
+  let previewdata: Previewdata | null = null;
+  let eventCostCenter = null;
+  if (refno) {
+    previewdata = await PreviewData(refno, cookie);
   }
-
-  const isAddDocument = () => {
-    setAddDocument(prev => !prev)
+  if (previewdata && previewdata.business_unit) {
+    eventCostCenter = await handleBusinessUnitChange(previewdata.business_unit, cookie);
   }
-
-  const handlefieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  }
-
-
-  const handleSelectChange = (value: string, name: string) => {
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const dropdown = async () => {
-
-    try {
-      const response = await fetch("/api/monetary_grant/dropdown", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      const data = await response.json();
-      setDropdownData(data.data);
-      if (response.ok) {
-      } else {
-        console.log('Login failed');
-      }
-    } catch (error) {
-      console.error("Error during login:", error);
-    }
-  };
-
-  const activityList = async () => {
-    try {
-      const response = await fetch("/api/monetary_grant/activityList", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: 'include'
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setActivityDropdown(data.data);
-        console.log(data, "activity list")
-      } else {
-        console.log('Login failed');
-      }
-    } catch (error) {
-      console.error("Error during login:", error);
-    }
-  };
-
-  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-
-    const updatedFormData = {
-      ...formdata
-
-    };
-
-    // const eventype = pathname.split("_").map((item,index)=>
-    //   (
-    //     item.charAt(0).toUpperCase() + item.slice(1).toLowerCase()
-    //   )
-    // ).join().replaceAll("_"," ").replaceAll(","," ").replace("/","")
-
-    if(updatedFormData.any_govt_hcp == "No"){
-      updatedFormData.no_of_hcp = 0
-    }
-
-
-    updatedFormData.event_type = "Monetary Grant"
-    if (refNo) {
-      updatedFormData.name = refNo;
-    }
-
-
-    try {
-      const response = await fetch(
-        "/api/monetary_grant/handleSubmit",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: 'include',
-          body: JSON.stringify(updatedFormData)
-        }
-      );
-      if (response.ok) {
-        const data = await response.json();
-        console.log(data, "response data");
-        localStorage.setItem("refno", data.message);
-        setRefNo(data.message);
-
-        setTimeout(() => {
-          if (search == "1") {
-            router.push(`/monetary_grant?forms=2`);
-          }
-          if (search == "2") {
-            router.push(`/monetary_grant?forms=3`);
-          }
-          if (search == "3") {
-            router.push(`/monetary_grant?forms=4`);
-          }
-          if (search == "4") {
-            router.push(`/monetary_grant?forms=5`);
-          }
-        }, 1000)
-      } else {
-        console.log("submission failed");
-      }
-    } catch (error) {
-      console.error("Error during Submission:", error);
-    }
-  };
-
-  const handleBackButton = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    router.push(`/monetary_grant?forms=${Number(search)-1}`);
-  }
-
-  useEffect(() => {
-    dropdown();
-  }, [])
-
-  useEffect(() => {
-    activityList();
-  }, [])
-
+  console.log(previewdata, "this is preview data")
   return (
     <>
       <AppWrapper>
@@ -269,63 +292,53 @@ const index = () => {
           <div>
             <h1 className="text-black text-[30px] font-medium capitalize" id="form_top">
             {/* {pathname.replace("/","").replaceAll("_"," ")} */}
-              </h1>
-            <div className='py-9'></div>
-          </div>
-          {
-            search == "1" ?
-              <Form1
-                // nextForm={nextForm}
-                dropdownData={dropdownData}
-                handlefieldChange={handlefieldChange}
-                handleSelectChange={handleSelectChange}
-                handleSubmit={handleSubmit}
-              /> :
-              search == "2" ?
-                <Form2
-                // nextForm={nextForm}
-                // dropdownData={dropdownData}
-                handleBackButton = {handleBackButton}
-                handlefieldChange={handlefieldChange}
-                handleSelectChange={handleSelectChange}
-                handleSubmit={handleSubmit}
-                /> :
-                search == "3" ?
-                  <Form3
-                  // nextForm = {nextForm}
-                  handleBackButton = {handleBackButton}
-                  // prevForm={prevForm}
-                  isAddVendor = {isAddVendor}
-                  vendorType = {dropdownData && dropdownData.vendor_type}
-                  currency = {dropdownData && dropdownData.currency}
-                  handlefieldChange = {handlefieldChange}
-                  handleSelectChange={handleSelectChange}
-                  handleSubmit={handleSubmit}
-                  setFormData = {setFormData}
-                  logisticsBudget = {logisticsBudget}
-                  /> :
-                  search == "4" ?
-                    <Form4
-                      activityDropdown={activityDropdown}
-                    /> :
-                    search == "5" ?
-                      <Preview_Form
-                        handleBackButton={handleBackButton}
-                      /> : ""
-          }
+          </h1>
+          <div className='py-9'></div>
         </div>
+        {
 
-        {
-          addVendor &&
-          <Addvendor
-            isAddVendor={isAddVendor} isAddDocument={isAddDocument}
-          />
+          forms == "1" ?
+            <Form1
+              dropdownData={dropdownData}
+              previewData={previewdata}
+              eventCostCenter={eventCostCenter}
+              refno={refno}
+            /> :
+            forms == "2" ?
+              <Form2
+                previewData={previewdata}
+                refno={refno}
+              /> :
+              forms == "3" ?
+                <Form3
+                  vendorType={dropdownData && dropdownData.vendor_type}
+                  currency={dropdownData && dropdownData.currency}
+                  previewData={previewdata}
+                  refno={refno}
+                /> :
+                forms == "4" ?
+                  <Form4
+                    activityDropdown={actvityDropdown}
+                    refno={refno}
+                  /> :
+                  forms == "5" ?
+                    <Preview_Form
+                      // prevForm = {prevForm}
+                      previewData={previewdata}
+                      refno={refno}
+                    /> : ""
+
         }
-        {
-          addDocument &&
-          <Adddocument isAddDocument={isAddDocument} />
-        }
-      </AppWrapper>
+      </div>
+
+      {/* {
+      addVendor &&
+      <Addvendor isAddVendor={isAddVendor} isAddDocument={isAddDocument}/>
+    }
+    {
+      addDocument &&
+      <Adddocument isAddDocument={isAddDocument}/>
+    } */}
     </>
   )
 }

@@ -90,8 +90,6 @@ const form4 = ({ ...Props }: Props) => {
   const [preview_data, setPreviewData] = useState<any>(null);
   const [uploadedFiles, setUploadedFiles] = useState<FileList | null>(); //added state 1
   const [fileList, setFileList] = useState<File[]>([]); //added state 2
-
-
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     router.replace(`/hcp_services?forms=5&refno=${Props.refno}`)
   };
