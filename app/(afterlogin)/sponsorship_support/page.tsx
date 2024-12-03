@@ -287,7 +287,6 @@ const index = async ({ ...Props }: any) => {
   }
   console.log(previewdata, "this is preview data")
   return (
-    <>
       <div className="px-7 pb-7 pt-4 w-full  z-20">
         <div>
           <h1 className="text-black text-[30px] font-medium capitalize" id="form_top">
@@ -327,77 +326,11 @@ const index = async ({ ...Props }: any) => {
                       // previewData={previewdata}
                       refno={refno}
                     /> : ""
-
-  useEffect(()=>{
-    dropdown();
-  },[])
-
-  useEffect(()=>{
-    activityList();
-  },[])
-  console.log(formdata,"this is form data");
-
-
-  return (
-        <>
-        <AppWrapper>
-        <div className="px-7 pb-7 pt-4 w-full z-20">
-          <div>
-        <h1 className="text-black text-[30px] font-medium capitalize" id="form_top">
-        {/* {pathname.replace("/","").replaceAll("_"," ")} */}
-              </h1>
-              <div className='py-9'></div>
-          </div>
-        {
-          search == "1"?
-          <Form1
-         // nextForm = {nextForm}
-         dropdownData={dropdownData}
-                handlefieldChange={handlefieldChange}
-                handleSelectChange={handleSelectChange}
-                handleSubmit={handleSubmit}
-          />:
-          search == "2"?
-          <Form2
-          // nextForm = {nextForm}
-          // prevForm={prevForm}
-          handlefieldChange={handlefieldChange}
-                  handleSelectChange={handleSelectChange}
-                  handleSubmit={handleSubmit}
-                  currency = {dropdownData?.currency}
-          />:
-          search == "3"?
-          <Form3
-          // nextForm = {nextForm}
-          // prevForm={prevForm}
-          //isAddVendor = {isAddVendor}
-          activityDropdown={activityDropdown}
-          handleSubmit = {handleSubmit}
-          />:
-          search == "4"?
-          <Form4
-          activityDropdown={activityDropdown}
-          handleSubmit = {handleSubmit}
-          // prevForm = {prevForm}
-          />:
-            search == "5"?
-            <Preview
-            // prevForm = {prevForm}
-            />:""
-          
-        }
-      </div>
-
-      {/* {
-      addVendor &&
-      <Addvendor isAddVendor={isAddVendor} isAddDocument={isAddDocument}/>
-    }
-    {
-      addDocument &&
-      <Adddocument isAddDocument={isAddDocument}/>
-    } */}
-    </>
+                  }
+                  </div>
   )
+  
 }
+        
 
 export default index

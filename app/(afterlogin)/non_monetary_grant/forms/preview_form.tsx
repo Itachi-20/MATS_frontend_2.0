@@ -179,7 +179,6 @@ type Props = {
 }
 
 const Preview_Form = ({...Props}:Props) => {
-  const pathname = usePathname();
   const router = useRouter();
   const [preview_data, setPreviewData] = useState<Previewdata | null | undefined>(Props.previewData);
   const [dialog,setDialog] = useState(false);
@@ -188,8 +187,6 @@ const Preview_Form = ({...Props}:Props) => {
 
   const [comment,setComment] = useState<string>();
   const [refNo, setRefNo] = useState<string | null>(Props.refno);
-  
-  const [refNo,setRefNo] = useState<string | null>(localStorage.getItem("refno")?localStorage.getItem("refno"):"");
  
   const isAddVendor = ()=>{
     setAddVendor(prev => !prev)
@@ -269,12 +266,12 @@ const Preview_Form = ({...Props}:Props) => {
       <>
         <div className="md:px-7 md:pb-7 md:pt-4 w-full z-20">
         <BasicDetails
-          pathname={pathname}
+          // pathname={pathname}
           eventData={preview_data}
 
         />
         <EquipmentGrantDetails
-          pathname={pathname}
+          // pathname={pathname}
           eventData={preview_data}
         />
 
