@@ -70,15 +70,17 @@ type EventEntry = {
   logistics: Logistics[];
   documents: ActivityDocument[];
   advance_approvers: any[]; // Empty array, can be customized later
-  city:string
-  reporting_head:string
-  requesting_hospital_name:string 
-  ship_to:string 
-  bill_to:string 
-  organization_name:string
-  any_additional_expense:string 
-  product_details:string 
-  type_of_engagement:string
+  city:string;
+  reporting_head:string;
+  requesting_hospital_name:string; 
+  ship_to:string; 
+  bill_to:string; 
+  organization_name:string;
+  any_additional_expense:string; 
+  product_details:string;
+  type_of_engagement:string;
+  hcp_name:string;
+  preactivity_submitted: number;
 }
 
 type Compensation = {
@@ -192,7 +194,7 @@ const Preview_Form = ({...Props}:Props) => {
   const [comment,setComment] = useState<string>();
   const [addVendor,setAddVendor] = useState(false);
   const [preview_data, setPreviewData] = useState<EventEntry | null>(null);
-  const [refNo, setRefNo] = useState<string | null>(localStorage.getItem("refno") ? localStorage.getItem("refno") : "");
+  const [refNo, setRefNo] = useState<string | null>(Props.refNo ?? "");
   const isAddVendor = ()=>{
     setAddVendor(prev => !prev)
   }
@@ -299,6 +301,7 @@ const Preview_Form = ({...Props}:Props) => {
         <Documents
         PageName=""
          eventData={preview_data}
+         fetchFile={PreviewData}
         />
         
             <div className="flex md:pb-8 gap-3 relative">
