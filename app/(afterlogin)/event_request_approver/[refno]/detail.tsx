@@ -1,16 +1,26 @@
 "use client"
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import BasicDetails from "@/components/basic_Details"
-import BasicDetails2 from "@/components/previewHCPComponents/basic_Details";
-import EventDetails2 from "@/components/previewHCPComponents/event_Details"
-import EventDetails from "@/components/event_Details"
-import VendorDetails from "@/components/vendor_Details"
-import TotalExpense from "@/components/total_Expense"
+
 import Documents from "@/components/documents"
 import { useRouter, useSearchParams } from 'next/navigation'
-import HCPDetils from  "@/components/previewHCPComponents/hcp_details"
 import Comment_box from "@/components/approvalCommentBox/Comment_box";
+
+import EventDetails from "@/components/training_and_education/event_detail";
+import EventDetailsSponsorship from "@/components/sponsorshipSupportPreviewComponents/eventDetails"
+import TotalExpense from "@/components/commonPreviewComponents/total_expense";
+import BasicDetails from "@/components/basic_Details";
+import VendorDetails from "@/components/commonPreviewComponents/vendor_detail";
+import HCPDetails from "@/components/previewHCPComponents/hcp_details";
+import BasicDetailsHCP from "@/components/previewHCPComponents/basic_Details";
+import HCPEventDetail from "@/components/previewHCPComponents/event_Details"
+import { useParams } from 'next/navigation'
+import OrganizationDetailsMonetary from '@/components/monetoryPreviewComponents/organizationDetails'
+import BeneficialDetails from "@/components/previewPatientSupportComponents/beneficialDetails"
+import ShippingDetails from "@/components/previewPatientSupportComponents/shippingDetails"
+import EquipmentDetails from "@/components/nonMonetoryPreviewComponents/equipmentDetails"
+
+
 type EventEntry = {
   name: string;
   owner: string;
@@ -263,10 +273,10 @@ console.log(refno,'refno')
     <div className={`md:px-7 md:pb-7 md:pt-4 w-full z-20 text-black`}>
       <div className="pb-5">
         <div className="flex justify-between pb-4">
-          {/* <h1 className=" md:text-[30px] md:font-medium capitalize md:pb-4"> Training and Education</h1> */}
+          <h1 className=" md:text-[30px] md:font-medium capitalize md:pb-4">{eventData?.event_type}</h1>
           <div></div>
           <div className="flex gap-4 bg-white">
-            <Button className="border border-[#4430bf] text-[#4430bf] px-6">Audit Trail</Button>
+            <Button className="border border-[#4430bf] text-[#4430bf] px-6" onClick={()=>router.push(`/audit_trail/${eventData.name}`)}>Audit Trail</Button>
             <Button className="bg-white text-black border px-8 hover:bg-white">Back</Button>
           </div>
         </div>
@@ -299,52 +309,84 @@ console.log(refno,'refno')
 
 
       {
-        eventData?.event_type == "Training and Education" || eventData?.event_type == "Awareness Program" ?
+        eventData?.event_type != "HCP Services" &&
 
           <BasicDetails
             pathname=""
             eventData={eventData}
           />
-          :
-          <BasicDetails2
+         }
+
+         {
+          eventData?.event_type == "HCP Services" &&
+          <BasicDetailsHCP
             pathname=""
             eventData={eventData}
           />
       }
-
       {
-        eventData?.event_type == "Training and Education" || eventData?.event_type == "Awareness Program" ?
+        eventData?.event_type == "Patient Support" && 
+        <>
+        <BeneficialDetails
+        eventData={eventData}
+        />
+
+        <ShippingDetails
+        eventData={eventData}
+        />
+        </>
+
+      }
+      {
+        (eventData?.event_type == "Training and Education" || eventData?.event_type == "Awareness Program") &&
 
           <EventDetails
             pathname=""
             eventData={eventData}
           />
-          :
-          <EventDetails2
-            pathname=""
-            eventData={eventData}
-          />
+      }
+      {
+        eventData?.event_type == "Monetary Grant" && 
+        <OrganizationDetailsMonetary
+        eventData={eventData}
+        />
+      }
+      {
+        eventData?.event_type == "Sponsorship Support" && 
+        <EventDetailsSponsorship
+        eventData={eventData}/>
+      }
+      {
+        eventData?.event_type == "Non Monetary Grant" && 
+        <EquipmentDetails
+        eventData={eventData}
+        />
+      }
+      {
+         eventData?.type_of_engagement == "One Time" && 
+        <HCPEventDetail
+        eventData={eventData}
+        />
       }
       {eventData?.event_type == "HCP Services" &&
-      <HCPDetils
+      <HCPDetails
         pathname=""
         eventData={eventData}
       />}
+
       {
-        eventData?.event_type == "Patient Support" ?
-          <></>
-          : <VendorDetails
+        
+           <VendorDetails
             eventData={eventData}
           />
       }
-      <TotalExpense
-        eventData={eventData}
-      />
-
-      <Documents
-        eventData={eventData}
-        PageName=""
-      />
+          <TotalExpense 
+          eventData = {eventData}
+          //pathname="eventListPage"
+          />            
+          <Documents 
+          eventData = {eventData}
+          PageName={"eventListPage"} /> 
       {
         isCommentbox &&
         <div className="absolute z-50 flex pt-10 items-start justify-center bg-black bg-opacity-50 w-full h-full inset-0 pb-40">

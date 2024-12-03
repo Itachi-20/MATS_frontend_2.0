@@ -1,13 +1,27 @@
 "use client"
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import BasicDetails from "@/components/basic_Details"
-import EventDetails from "@/components/event_Details"
-import VendorDetails from "@/components/vendor_Details"
-import TotalExpense from "@/components/total_Expense"
+//import BasicDetails from "@/components/basic_Details"
+//import EventDetails from "@/components/event_Details"
+//import VendorDetails from "@/components/vendor_Details"
+//import TotalExpense from "@/components/total_Expense"
 import Documents from "@/components/documents"
 import { useRouter, useSearchParams } from 'next/navigation'
 import Comment_box from "@/components/Comment_box";
+
+import EventDetails from "@/components/training_and_education/event_detail";
+import EventDetailsSponsorship from "@/components/sponsorshipSupportPreviewComponents/eventDetails"
+import TotalExpense from "@/components/commonPreviewComponents/total_expense";
+import BasicDetails from "@/components/basic_Details";
+import VendorDetails from "@/components/commonPreviewComponents/vendor_detail";
+import HCPDetails from "@/components/previewHCPComponents/hcp_details";
+import BasicDetailsHCP from "@/components/previewHCPComponents/basic_Details";
+import HCPEventDetail from "@/components/previewHCPComponents/event_Details"
+import { useParams } from 'next/navigation'
+import OrganizationDetailsMonetary from '@/components/monetoryPreviewComponents/organizationDetails'
+import BeneficialDetails from "@/components/previewPatientSupportComponents/beneficialDetails"
+import ShippingDetails from "@/components/previewPatientSupportComponents/shippingDetails"
+import EquipmentDetails from "@/components/nonMonetoryPreviewComponents/equipmentDetails"
 
 type EventEntry = {
   name: string;
@@ -260,7 +274,7 @@ useEffect(()=>{
             <div className="flex justify-between">
             <h1 className=" md:text-[30px] md:font-medium capitalize md:pb-4"> Training and Education</h1>
             <div className="flex gap-4 bg-white">
-            <Button className="border border-[#4430bf] text-[#4430bf] px-6">Audit Trail</Button>
+            <Button className="border border-[#4430bf] text-[#4430bf] px-6" onClick={()=>router.push(`/audit_trail/${eventData?.name}`)}>Audit Trail</Button>
               <Button className="bg-white text-black border px-8 hover:bg-white">Back</Button>
             </div>
               </div>
@@ -282,28 +296,85 @@ useEffect(()=>{
               </div>
             </div>
           </div>
-        <BasicDetails
+          {
+        eventData?.event_type != "HCP Services" &&
+
+          <BasicDetails
+            pathname=""
+            eventData={eventData}
+          />
+         }
+
+         {
+          eventData?.event_type == "HCP Services" &&
+          <BasicDetailsHCP
+            pathname=""
+            eventData={eventData}
+          />
+      }
+      {
+        eventData?.event_type == "Patient Support" && 
+        <>
+        <BeneficialDetails
+        eventData={eventData}
+        />
+
+        <ShippingDetails
+        eventData={eventData}
+        />
+        </>
+
+      }
+      {
+        (eventData?.event_type == "Training and Education" || eventData?.event_type == "Awareness Program") &&
+
+          <EventDetails
+            pathname=""
+            eventData={eventData}
+          />
+      }
+      {
+        eventData?.event_type == "Monetary Grant" && 
+        <OrganizationDetailsMonetary
+        eventData={eventData}
+        />
+      }
+      {
+        eventData?.event_type == "Sponsorship Support" && 
+        <EventDetailsSponsorship
+        eventData={eventData}/>
+      }
+      {
+        eventData?.event_type == "Non Monetary Grant" && 
+        <EquipmentDetails
+        eventData={eventData}
+        />
+      }
+      {
+         eventData?.type_of_engagement == "One Time" && 
+        <HCPEventDetail
+        eventData={eventData}
+        />
+      }
+      {eventData?.event_type == "HCP Services" &&
+      <HCPDetails
         pathname=""
-        eventData = {eventData}
-        />
+        eventData={eventData}
+      />}
 
-        <EventDetails
-        pathname=""
-        eventData = {eventData}
-        />
-
-        <VendorDetails
-        eventData = {eventData}
-        />
-
-        <TotalExpense
-        eventData = {eventData}
-        />
-            
-        <Documents
-        eventData = {eventData}
-        PageName=""
-        />
+      {
+        
+           <VendorDetails
+            eventData={eventData}
+          />
+      }
+          <TotalExpense 
+          eventData = {eventData}
+          //pathname="eventListPage"
+          />            
+          <Documents 
+          eventData = {eventData}
+          PageName={"eventListPage"} /> 
 
     </div>
     {
