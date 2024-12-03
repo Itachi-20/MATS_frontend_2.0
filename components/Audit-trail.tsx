@@ -261,7 +261,7 @@ const AuditTrail = ({ ...props }: AuditTrailProps) => {
                                                                 {item.status}
                                                             </span>
                                                         </TableCell>
-                                                        <TableCell className={"text-[#625d5d] text-[15px] font-normal text-center"} onClick={() => { handleExpandClick(index) }}>
+                                                        <TableCell className={"text-[#625d5d] text-[15px] font-normal text-center cursor-pointer"} onClick={() => { handleExpandClick(index) }}>
                                                             {/* {isOpen ? */}
                                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={`size-6 ${isOpen ? '-rotate-180 transition-all duration-150 delay-100' : ''}`}>
                                                                 <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />

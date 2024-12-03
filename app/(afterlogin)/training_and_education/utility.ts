@@ -32,34 +32,54 @@ export const activityList = async ()=>{
           const data = await response.json();
           return data.data;
         } else {
-            console.log('Login failed');
+            console.log('Response was not OKAY');
         }
     } catch (error) {
-        console.error("Error during login:", error);
+        console.error("Error fetching activity list:", error);
     }
 }
 
 
-export const handleBudgetChange = async (value: string, cookie:any) => {
+export const handleBudgetChange = async (value: string,cookie:any) => {
     try {
       const response = await fetch(
-        `${process.env.FRAPPE_URL}/api/method/matsapp.api.event.event.data_based_on_budget_type?budget=${value}`,
+        "/api/training_and_education/subtypeDropdown",
         {
-          method: "GET",
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "Cookie":cookie
-          }
+            'Cookie':cookie
+          },
+          body: JSON.stringify({
+            budget: value,
+          }),
         }
       );
+
+      
       if (response.ok) {
           const data = await response.json();
-          return data.data;
+          //setSubtypeActivity(data.data);
+          if (value == "National") {
+            //setSubtypeActivityVisible(true);
+            const Response = {
+                subtypeActivity:data.data,
+                SubtypeActivityVisible:true
+              } 
+              return Response;
+          } else {
+            //setSubtypeActivityVisible(false);
+            const Response = {
+                subtypeActivity:data.data,
+                SubtypeActivityVisible:false
+              } 
+              return Response;
+          }
       } else {
-        console.log("Login failed");
+        console.log("Response was not okay");
       }
     } catch (error) {
-      console.error("Error during login:", error);
+      console.error("Error handling budget change:", error);
     }
   };
 
@@ -79,6 +99,7 @@ export const handleBudgetChange = async (value: string, cookie:any) => {
 
       if (response.ok) {
         const data = await response.json();
+        console.log("Preview Data", data.data);
         return data.data;
       } else {
         console.log('failed',response.status);
@@ -110,11 +131,9 @@ export const handleBudgetChange = async (value: string, cookie:any) => {
         console.log(data.data,"this is utility event cost");
         return data.data;
       } else {
-        console.log("Login failed");
+        console.log("Response was not OKAY in business unit change");
       }
     } catch (error) {
-      console.error("Error during login:", error);
+      console.error("Error during business unit change:", error);
     }
   };
-
-  

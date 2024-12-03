@@ -133,10 +133,10 @@ const form4 = ({ ...Props }: Props) => {
         setDocumentType("");
         setFiles([]);
       } else {
-        console.log("Login failed");
+        console.log("Response was not OKAY");
       }
     } catch (error) {
-      console.error("Error during login:", error);
+      console.error("Error during file upload:", error);
     }
   }
   const handleActivityTypeChange = (value: string) => {
@@ -164,10 +164,10 @@ const form4 = ({ ...Props }: Props) => {
         setPreviewData(data.data);
         console.log(data, "PreviewData")
       } else {
-        console.log('Login failed');
+        console.log('Response was not OKAY');
       }
     } catch (error) {
-      console.error("Error during login:", error);
+      console.error("Error during Previewing data:", error);
     }
   };
   useEffect(() => {

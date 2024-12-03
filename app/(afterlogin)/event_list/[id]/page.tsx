@@ -5,16 +5,19 @@ import Link from "next/link";
 import { useRouter } from 'next/navigation';
 import Documents from "@/components/documents";
 import { Button } from "@/components/ui/button";
-import EventDetails from "@/components/event_Details";
-import EventDetails2 from "@/components/previewHCPComponents/event_Details";
-import TotalExpense from "@/components/total_Expense";
+import EventDetails from "@/components/training_and_education/event_detail";
+import EventDetailsSponsorship from "@/components/sponsorshipSupportPreviewComponents/eventDetails"
+import TotalExpense from "@/components/commonPreviewComponents/total_expense";
 import BasicDetails from "@/components/basic_Details";
-import VendorDetails from "@/components/vendor_Details";
-import HCPDetils from "@/components/previewHCPComponents/hcp_details";
-import BasicDetails2 from "@/components/previewHCPComponents/basic_Details";
-import LogisticBudget from "@/components/logistics_budget";
-import CompensationBudget from "@/components/compensation_budget";
+import VendorDetails from "@/components/commonPreviewComponents/vendor_detail";
+import HCPDetails from "@/components/previewHCPComponents/hcp_details";
+import BasicDetailsHCP from "@/components/previewHCPComponents/basic_Details";
+import HCPEventDetail from "@/components/previewHCPComponents/event_Details"
 import { useParams } from 'next/navigation'
+import OrganizationDetailsMonetary from '@/components/monetoryPreviewComponents/organizationDetails'
+import BeneficialDetails from "@/components/previewPatientSupportComponents/beneficialDetails"
+import ShippingDetails from "@/components/previewPatientSupportComponents/shippingDetails"
+import EquipmentDetails from "@/components/nonMonetoryPreviewComponents/equipmentDetails"
 
 type EventEntry = {
   name: string;
@@ -75,6 +78,7 @@ type EventEntry = {
   advance_approvers: any[]; // Empty array, can be customized later
   city:string
   reporting_head:string
+  type_of_engagement:string
 }
 
 type Compensation = {
@@ -229,7 +233,7 @@ useEffect(()=>{
         <div className="md:px-7 md:pb-7 md:pt-4 w-full relative z-20 text-black">
           <div className="pb-5">
             <div className="flex justify-between">
-                <h1 className=" md:text-[30px] md:font-medium capitalize md:pb-4"> Training and Education</h1>
+                <h1 className=" md:text-[30px] md:font-medium capitalize md:pb-4 text-black">{eventData?.event_type}</h1>
                 <div className="flex gap-4 bg-white">
                   <Button className="border border-[#4430bf] text-[#4430bf] px-6" onClick={()=>handlClick(refno as string)}>Audit Trail</Button>
                   <Link href={"/event_list"}> 
@@ -248,8 +252,8 @@ useEffect(()=>{
                 <h1 className="text-center">{eventData?.modified.substring(0,10)}</h1>
               </div>
               <div className="col-span-1 flex justify-center">
-              <Button className={`bg-[#4430bf] text-white border  px-8 hover:bg-[#4430bf] ${eventData && (eventData.executed == 1 || eventData.post_activity_approved == 1)?"":"hidden"} `} onClick={()=>router.push(`/post_document_activity?refno=${refno}`)}>Post Document</Button>
-              <Button className={`bg-[#4430bf] text-white border  px-8 hover:bg-[#4430bf] ${eventData && (eventData.executed == 0 && eventData.preactivity_approved == 1)?"":"hidden"} `} onClick={()=>router.push(`/execute?refno=${refno}`)}>Execute</Button>
+              <Button className={`bg-[#4430bf] text-white border  px-8 hover:bg-[#4430bf] ${eventData && (eventData.executed == 1 || eventData.post_activity_approved == 1)?"":"hidden"} `} onClick={()=>router.push(`/post_document_activity/${refno}`)}>Post Document</Button>
+              <Button className={`bg-[#4430bf] text-white border  px-8 hover:bg-[#4430bf] ${eventData && (eventData.executed == 0 && eventData.preactivity_approved == 1)?"":"hidden"} `} onClick={()=>router.push(`/execute/${refno}`)}>Execute</Button>
               </div>
               </div>
             </div>
@@ -258,51 +262,77 @@ useEffect(()=>{
 
 
          {
-        eventData?.event_type == "Training and Education" || eventData?.event_type == "Awareness Program" ?
+        eventData?.event_type != "HCP Services" &&
 
           <BasicDetails
             pathname=""
             eventData={eventData}
           />
-          :
-          
-          <BasicDetails2
+         }
+
+         {
+          eventData?.event_type == "HCP Services" &&
+          <BasicDetailsHCP
             pathname=""
             eventData={eventData}
           />
       }
-
       {
-        eventData?.event_type == "Training and Education" || eventData?.event_type == "Awareness Program" ?
+        eventData?.event_type == "Patient Support" && 
+        <>
+        <BeneficialDetails
+        eventData={eventData}
+        />
+
+        <ShippingDetails
+        eventData={eventData}
+        />
+        </>
+
+      }
+      {
+        (eventData?.event_type == "Training and Education" || eventData?.event_type == "Awareness Program") &&
 
           <EventDetails
             pathname=""
             eventData={eventData}
           />
-          :
-          <EventDetails2
-            pathname=""
-            eventData={eventData}
-          />
+      }
+      {
+        eventData?.event_type == "Monetary Grant" && 
+        <OrganizationDetailsMonetary
+        eventData={eventData}
+        />
+      }
+      {
+        eventData?.event_type == "Sponsorship Support" && 
+        <EventDetailsSponsorship
+        eventData={eventData}/>
+      }
+      {
+        eventData?.event_type == "Non Monetary Grant" && 
+        <EquipmentDetails
+        eventData={eventData}
+        />
+      }
+      {
+         eventData?.type_of_engagement == "One Time" && 
+        <HCPEventDetail
+        eventData={eventData}
+        />
       }
       {eventData?.event_type == "HCP Services" &&
-      <HCPDetils
+      <HCPDetails
         pathname=""
         eventData={eventData}
       />}
+
       {
-        eventData?.event_type == "Patient Support" ?
-          <></>
-          : <VendorDetails
+        
+           <VendorDetails
             eventData={eventData}
           />
       }
-          {/* <LogisticBudget 
-          eventData = {eventData}
-          />
-          <CompensationBudget 
-          eventData = {eventData}
-          /> */}
           <TotalExpense 
           eventData = {eventData}
           //pathname="eventListPage"

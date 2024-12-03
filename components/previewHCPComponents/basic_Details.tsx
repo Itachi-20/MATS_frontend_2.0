@@ -178,6 +178,7 @@ type Props = {
 
 const Basic_Details = ({ ...Props }: Props) => {
   console.log("Props.sub_type_of_activity",Props.eventData?.event_start_date)
+  console.log("this is engaement type", Props.eventData?.type_of_engagement)
   return (
     <div className="md:pb-8">
       <div className="flex md:gap-6" >
@@ -244,7 +245,7 @@ const Basic_Details = ({ ...Props }: Props) => {
 
         {/* should be condition based */}
         {
-          Props.eventData?.division_category == "National" &&
+          Props.eventData?.division_category == "National" && Props.eventData?.business_unit == "Endosurgery" &&
           <div className="flex flex-col gap-2">
               <label className="lable">
                 Budget Sub Type<span className="text-[#e60000]">*</span>
@@ -312,7 +313,12 @@ const Basic_Details = ({ ...Props }: Props) => {
             value={Props.eventData?.sub_type_of_activity}
           ></Input>
         </div>  
-
+        <div className="flex flex-col gap-2">
+          <label className="lable">
+          Type Of Engagement<span className="text-[#e60000]">*</span>
+          </label>
+          <Input className='text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5' placeholder='Type Here' readOnly value={Props.eventData?.type_of_engagement}/>
+        </div>
         <div className="flex flex-col gap-2">
           <label className="lable">
             Faculties<span className="text-[#e60000]">*</span>
@@ -480,7 +486,7 @@ const Basic_Details = ({ ...Props }: Props) => {
         
       }
 
-      { Props.eventData && Props.eventData.type_of_engagement && Props.eventData.type_of_engagement == "Scientific Advisory Consultancy Agreement" &&
+      { Props.eventData && Props.eventData.type_of_engagement && (Props.eventData.type_of_engagement == "Scientific Advisory Consultancy Agreement" || Props.eventData.type_of_engagement == "Scientific Advisory Consultancy Agreement") &&
         <>
           <div className="py-8">
               <h1 className="text-black text-2xl font-normal uppercase pb-8">

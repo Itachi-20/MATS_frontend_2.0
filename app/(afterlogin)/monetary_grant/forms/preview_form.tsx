@@ -4,8 +4,10 @@ import React,{useState, useEffect} from "react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox"
 import BasicDetails from "@/components/training_and_education/basic_detail"
-import OrganisationDetils from "@/components/monetoryPreviewComponents/organizationDetails"
+import OrganizationDetails from "@/components/monetoryPreviewComponents/organizationDetails"
 import VendorDetails from "@/components/commonPreviewComponents/vendor_detail";
+import LogisticsBudget from "@/components/logistics_budget";
+import CompensationBudget from "@/components/compensation_budget"
 import TotalExpense from "@/components/commonPreviewComponents/total_expense"
 import Documents from "@/components/commonPreviewComponents/documents"
 import Add_vendor from "@/components/add_vendor";
@@ -263,7 +265,7 @@ const Preview_Form = ({...Props}:Props) => {
 
   return (
       <>
-        <div className="md:px-7 md:pb-7 md:pt-4 w-full  z-20">
+        <div className="md:px-7 md:pb-7 md:pt-4 w-full z-20">
             
         <BasicDetails
           pathname={pathname}
@@ -271,8 +273,7 @@ const Preview_Form = ({...Props}:Props) => {
 
         />
 
-        <OrganisationDetils
-          pathname={pathname}
+        <OrganizationDetails
           eventData={preview_data}
         />
 
@@ -288,7 +289,6 @@ const Preview_Form = ({...Props}:Props) => {
           eventData={preview_data}
           PageName={''}
         />
-        
         <div className="flex justify-end pt-5 gap-4">
           {/* <Button className="bg-white text-black border text-md font-normal">
             Save as Draft
@@ -296,7 +296,7 @@ const Preview_Form = ({...Props}:Props) => {
           <Button className="bg-white text-black border text-md font-normal" onClick={() => router.push(`/monetary_grant?forms=3&refno=${Props.refno}`)}>
             Back
           </Button>
-          <Button className={`bg-[#4430bf] text-white  font-normal border`}  onClick={()=>handleDialog()}>
+          <Button className={`bg-[#4430bf] text-white  font-normal border`} onClick={()=>handleDialog()}>
             Submit
           </Button>
         </div>

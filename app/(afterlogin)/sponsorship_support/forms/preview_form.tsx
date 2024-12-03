@@ -3,12 +3,12 @@ import React,{useState,useEffect} from "react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import BasicDetails from "@/components/basic_Details";
-import EventDetails from "@/components/event_Details";
+import EventDetails from "@/components/sponsorshipSupportPreviewComponents/eventDetails";
 import TotalExpense from "@/components/total_Expense";
 import Documents from "@/components/documents";
 import Add_vendor from "@/components/add_vendor";
-import SponsorshipDetails from "@/components/sponsorship_details";
-import OtherDetails from "@/components/other_details";
+import SponsorshipDetails from "@/components/sponsorshipSupportPreviewComponents/sponsorshipDetails";
+import OtherDetails from "@/components/sponsorshipSupportPreviewComponents/other_details";
 import { usePathname } from 'next/navigation'
 import { useRouter } from 'next/navigation';
 import Comment_box from "@/components/approvalCommentBox/Comment_box";  
@@ -294,8 +294,6 @@ const Preview_Form = ({...Props}:Props) => {
         PageName=""
         eventData={preview_data}
         />
-        
-       
 
             <div className="flex justify-end pt-5 gap-4">
               {/* <Button className="bg-white text-black border text-md font-normal">
@@ -304,7 +302,7 @@ const Preview_Form = ({...Props}:Props) => {
               <Button className="bg-white text-black border text-md font-normal">
                 Back
               </Button>
-              <Button className={`bg-[#4430bf] text-white  font-normal border`}  onClick={()=>handleDialog()}>
+              <Button className={`bg-[#4430bf] text-white  font-normal border`} onClick={()=>handleDialog()}>
                 Submit
               </Button>
             </div>

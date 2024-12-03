@@ -1,3 +1,5 @@
+"use client"
+
 import React,{useState,useEffect} from "react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox"
@@ -180,6 +182,7 @@ type ActivityDocument = {
 
 
 type Props = {
+  refNo:string
 }
 const Preview_Form = ({...Props}:Props) => {
   const pathname = usePathname();
@@ -220,10 +223,10 @@ const Preview_Form = ({...Props}:Props) => {
         setPreviewData(data.data);
         console.log(data, "PreviewData")
       } else {
-        console.log('Login failed');
+        console.log('Response not okay while previewing data');
       }
     } catch (error) {
-      console.error("Error during login:", error);
+      console.error("Error during previewing data:", error);
     }
   };
   useEffect(() => {

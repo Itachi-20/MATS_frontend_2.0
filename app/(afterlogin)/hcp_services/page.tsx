@@ -5,8 +5,9 @@ import Form3 from "./forms/form3";
 import Form4 from "./forms/form4";
 import Preview_Form from './forms/preview_form';
 import { AppWrapper } from '@/app/context/module';
-import { dropdown,activityList,PreviewData,handleBusinessUnitChange} from "./utility";
+import { dropdown,activityList,PreviewData,handleBusinessUnitChange,handleBudgetChange} from "./utility";
 import { cookies } from "next/headers";
+
 type dropdownData = {
   company: {
     name: string,
@@ -41,8 +42,7 @@ type dropdownData = {
   sponsorship_ref_no:{
     name:string
   }[]
-}
-
+};
 type activityDropdown = {
   activity:{
     name:string,
@@ -53,8 +53,7 @@ type activityDropdown = {
     activity_type:string,
     document_name:string
   }[]
-}
-
+};
 export type Previewdata = {
   name: string;
   owner: string;
@@ -174,7 +173,6 @@ export type Previewdata = {
   travel_expense_approved: number;
   budget:string;
 };
-
 type ChildVendor = {
   name: string;
   owner: string;
@@ -225,7 +223,6 @@ type ChildVendor = {
   parenttype: string;
   doctype: string;
 };
-
 type ChildOccurrence = {
   name: string;
   owner: string;
@@ -256,7 +253,6 @@ type ChildOccurrence = {
   parenttype: string;
   doctype: string;
 };
-
 type Document = {
   activity_type: string;
   document: {
@@ -279,17 +275,22 @@ const index = async({...Props}:any) => {
   const cookie = await cookies()
   let previewdata:Previewdata | null =null;
   let eventCostCenter = null;
+  let subtypeActivity = null;
   if(refno){
       previewdata =  await PreviewData(refno,cookie);
   }
   if(previewdata && previewdata.business_unit){
     eventCostCenter = await handleBusinessUnitChange(previewdata.business_unit,cookie);
   }
-  console.log(previewdata?.any_govt_hcp,"this is preview data")
+
+  if(previewdata && previewdata.division_category == "National"){
+    subtypeActivity = await handleBudgetChange(previewdata.division_category,cookie);
+  }
+  console.log(previewdata,"this is preview data")
   return (
         <>
         <AppWrapper>
-        <div className="px-7 pb-7 pt-4 w-full relative z-20">
+        <div className="px-7 pb-7 pt-4 w-full z-20">
           <div>
         <h1 className="text-black text-[30px] font-medium capitalize" id="form_top">
         {/* {pathname.replace("/","").replaceAll("_"," ")} */}
@@ -304,6 +305,7 @@ const index = async({...Props}:any) => {
            previewData={previewdata}
            eventCostCenter = {eventCostCenter}
            refno = {refno}
+           subtypeActivity = {subtypeActivity}
           />:
           forms == "2"?
           <Form2

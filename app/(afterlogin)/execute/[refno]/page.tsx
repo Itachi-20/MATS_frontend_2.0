@@ -5,8 +5,16 @@ import DialogBox from '@/components/dialogbox';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 
-import DocumentDetails from '@/components/execute/document-details';
+import DocumentDetails from '@/components/commonPreviewComponents/documents';
 import { useParams } from 'next/navigation'
+import SimpleFileUpload from "@/components/multiple_file_upload";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 type document = {
   name: string;
@@ -202,8 +210,39 @@ const page = () => {
     const param = useParams();
     const refno = param.refno as string;
     const [document,setDocument] = useState<DocumentData>();
+    const [files, setFiles] = useState<File[]>([]);
     const [data,setData] = useState<EventEntry>();
     const [isDialog,setIsDialog] = useState(false);
+    const [uploadedFiles, setUploadedFiles] = useState<FileList | null>(); //added state 1
+    const [fileList, setFileList] = useState<File[]>([]); //added state 2
+    const [documentType, setDocumentType] = useState("");
+    const [activityType, setActivityType] = useState('Pre Activity');
+    const [preview_data, setPreviewData] = useState<any>(null);
+    const [activityDropdown,setActivityDropdown]  = useState<activityDropdown>();
+
+    const activityList = async ()=>{
+      try {
+          const response = await fetch(`/api/training_and_education/activityList/`, {
+              method: "GET",
+              headers: {
+                  "Content-Type": "application/json",
+              },
+              credentials:'include',
+          });
+    
+          if (response.ok) {
+            const data = await response.json();
+            console.log(data.data ,"tjis is api");
+            setActivityDropdown(data.data);
+          } else {
+              console.log('Login failed');
+          }
+      } catch (error) {
+          console.error("Error during login:", error);
+      }
+  }
+
+
     const fetchDocument = async()=>{
         try {
             const tableData = await fetch(
@@ -229,31 +268,71 @@ const page = () => {
           }
     }
 
-    const fetchData = async()=>{
-        try {
-            const tableData = await fetch(
-              `/api/previewData`,
-              {
-                method: "POST",
-                headers:{
-                  "Content-Type": "application/json",
-                },
-                credentials:"include",
-                body:JSON.stringify({
-                name: refno
-                })
-              }
-            );
-            if(tableData.ok){
-              const data = await tableData.json();
-              setData(data.data)
-            }
-            
-          } catch (error) {
-            console.log(error,"something went wrong");
+    const FileUpload = async () => {
+      const formdata = new FormData();
+  
+      if (uploadedFiles && uploadedFiles.length > 0) {
+        for (let i = 0; i < uploadedFiles.length; i++) {
+          formdata.append("file", uploadedFiles[i]);
+        }
+      } else {
+        console.log("No file to upload");
+        return;
+      }
+      formdata.append("docname", refno as string)
+      formdata.append("activity_type", "Executed");
+      formdata.append("document_type", documentType)
+      try {
+        const response = await fetch(
+          `/api/training_and_education/fileUpload`,
+          {
+            method: "POST",
+            headers: {
+              //"Content-Type": "multipart/form-data",
+            },
+            body: formdata,
+            credentials: 'include'
           }
+        );
+  
+  
+        if (response.ok) {
+          setDocumentType('')
+          setFiles([])
+          fetchData();
+  
+        } else {
+          console.log("Login failed");
+        }
+      } catch (error) {
+        console.error("Error during login:", error);
+      }
     }
-
+    const fetchData = async()=>{
+      try {
+          const tableData = await fetch(
+            `/api/previewData`,
+            {
+              method: "POST",
+              headers:{
+                "Content-Type": "application/json",
+              },
+              credentials:"include",
+              body:JSON.stringify({
+              name: refno
+              })
+            }
+          );
+          if(tableData.ok){
+            const data = await tableData.json();
+            console.log(data.data)
+            setPreviewData(data.data)
+          }
+          
+        } catch (error) {
+          console.log(error,"something went wrong");
+        }
+  }
     console.log(data,"this is api data");
     console.log(document,"this is api document")
 
@@ -265,13 +344,27 @@ const page = () => {
         fetchData();
     },[])
 
+    const handleNext = (fileList: FileList | null) => {
+      setUploadedFiles(fileList);
+    };
+  
+
+    const handleActivityTypeChange = (value: string) => {
+      setActivityType(value);
+    }
+
+    useEffect(()=>{
+      activityList();
+    },[])
+    const router = useRouter()
+
     return (
-        <div className="md:px-7 md:pb-7 md:pt-[35px] w-full relative z-20 text-black">
+        <div className="md:px-7 md:pb-7 md:pt-[35px] w-full z-20 text-black">
             <div className="pb-5">
                 <div className="flex justify-between">
-                    <h1 className=" md:text-[30px] md:font-medium capitalize md:pb-4"> Training and Education</h1>
+                    <h1 className=" md:text-[30px] md:font-medium capitalize md:pb-4"> {preview_data?.name}</h1>
                     <div className="flex gap-4 bg-white leading-normal">
-                        <Button className="border border-[#4430bf] text-[#4430bf] px-6 text-[18px]">Audit Trail</Button>
+                        <Button className="border border-[#4430bf] text-[#4430bf] px-6 text-[18px]" onClick={()=>router.push(`/audit_trail/${preview_data.name}`)}>Audit Trail</Button>
                         <Link href={"/"}>
                             <Button className="bg-white text-black border px-9 hover:bg-white text-[18px]">Back</Button>
                         </Link>
@@ -281,11 +374,11 @@ const page = () => {
                     <div className="grid grid-cols-5 w-full gap-4">
                         <div className="col-span-2 border-r-[1px] border-slate-300 pr-2">
                             <h1 className="bg-[#ecf2ff] px-2 rounded-xl text-center">Request Number</h1>
-                            <h1 className="text-center">{data?.name}</h1>
+                            <h1 className="text-center">{preview_data?.name}</h1>
                         </div>
                         <div className="col-span-2  border-r-[1px] border-slate-300 pr-2">
                             <h1 className="bg-[#ecf2ff] px-2 rounded-xl text-center">Request Date</h1>
-                            <h1 className="text-center">{data?.modified.substring(0,10)}</h1>
+                            <h1 className="text-center">{preview_data?.modified.substring(0,10)}</h1>
                         </div>
                         <div className="col-span-1 flex justify-center pt-1">
                             <Button className="px-20">
@@ -296,12 +389,92 @@ const page = () => {
                     </div>
                 </div>
             </div>
-            <DocumentDetails 
-            eventType = "Executed"
-            pathname=''
-            refno={refno}
-            data={data}
 
+            <h1 className="text-black text-2xl font-normal uppercase pb-8">
+        Documents
+      </h1>
+      <div className="grid grid-cols-3 gap-6 pb-7 text-black">
+        <div className="flex flex-col gap-2">
+          <label className="lable">
+            Document Type <span className="text-[#e60000]">*</span>
+          </label>
+          <Select
+            onValueChange={(value) => handleActivityTypeChange(value)}
+            disabled
+            value={'Executed'}
+          >
+            <SelectTrigger className="dropdown">
+              <SelectValue placeholder="Executed" />
+            </SelectTrigger>
+            <SelectContent>
+              {
+                activityDropdown && activityDropdown.activity.map((item, index) => {
+                  return (
+                    <SelectItem value={item.name}>
+                      {item.activity_name}
+                    </SelectItem>
+                  )
+                })
+              }
+
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="flex flex-col gap-2 col-span-1">
+          <label className="text-black text-sm font-normal capitalize">
+            Supporting Documents<span className="text-[#e60000]">*</span>
+          </label>
+          <Select
+            onValueChange={(value) => setDocumentType(value)}
+            value={documentType??''}
+          >
+            <SelectTrigger className="dropdown">
+              <SelectValue placeholder="Select" />
+            </SelectTrigger>
+            <SelectContent>
+              {
+                activityDropdown && activityDropdown.document.filter((item, index) => {
+                  if (item.activity_type == "Executed") {
+                    return item
+                  }
+                }).map((item, index) => {
+                  return (
+                    <SelectItem value={item.name}>{item.document_name}</SelectItem>
+                  )
+                })
+              }
+
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="flex items-end gap-6 col-span-1 text-nowrap">
+          <div className="flex flex-col gap-3">
+            {/* <h1 className="text-2xl font-bold">
+              {fileList.length > 0
+                ? `${fileList.length} file${
+                    fileList.length !== 1 ? "s" : ""
+                  } selected`
+                : ""}
+            </h1> */}
+            <label className="text-black text-sm font-normal capitalize">
+              Upload Files<span className="text-[#e60000]">*</span>
+            </label>
+            <SimpleFileUpload files={files} setFiles={setFiles} onNext={handleNext} buttonText={'Upload Here'} />
+          </div>
+          <Button
+            className="bg-white text-black border text-md font-normal"
+            onClick={() => FileUpload()}
+          >
+            Add
+          </Button>
+        </div>
+      </div>
+            <DocumentDetails 
+            // eventType='Post Activity'
+            PageName=""
+            // refno={refno}
+            fetchFile={fetchData}
+            eventData={preview_data}
             />
         </div>
     )

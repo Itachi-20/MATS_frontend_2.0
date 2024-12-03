@@ -2,14 +2,11 @@
 "use client"
 import React,{useState, useEffect} from "react";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox"
 import BasicDetails from "@/components/training_and_education/basic_detail"
-import EquipmentDetails from "@/components/nonMonetoryPreviewComponents/equipmentDetails"
+import EquipmentGrantDetails from "@/components/nonMonetoryPreviewComponents/equipmentDetails"
 import VendorDetails from "@/components/commonPreviewComponents/vendor_detail";
 import TotalExpense from "@/components/commonPreviewComponents/total_expense"
 import Documents from "@/components/commonPreviewComponents/documents"
-import Add_vendor from "@/components/add_vendor";
-import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 import Comment_box from "@/components/approvalCommentBox/Comment_box";
 import { Previewdata } from '@/app/(afterlogin)/monetary_grant/page'
@@ -188,8 +185,15 @@ const Preview_Form = ({...Props}:Props) => {
   const [dialog,setDialog] = useState(false);
   const [isCommentbox,setIsCommentbox] = useState<boolean>();
   const [addVendor,setAddVendor] = useState(false);
+
   const [comment,setComment] = useState<string>();
   const [refNo, setRefNo] = useState<string | null>(Props.refno);
+  
+  const [refNo,setRefNo] = useState<string | null>(localStorage.getItem("refno")?localStorage.getItem("refno"):"");
+ 
+  const isAddVendor = ()=>{
+    setAddVendor(prev => !prev)
+  }
 
   const handleDialog = ()=>{
     setIsCommentbox(prev=> !prev);
@@ -263,15 +267,13 @@ const Preview_Form = ({...Props}:Props) => {
 
   return (
       <>
-        <div className="md:px-7 md:pb-7 md:pt-4 w-full  z-20">
-            
+        <div className="md:px-7 md:pb-7 md:pt-4 w-full z-20">
         <BasicDetails
           pathname={pathname}
           eventData={preview_data}
 
         />
-
-        <EquipmentDetails
+        <EquipmentGrantDetails
           pathname={pathname}
           eventData={preview_data}
         />
@@ -288,18 +290,17 @@ const Preview_Form = ({...Props}:Props) => {
           eventData={preview_data}
           PageName={''}
         />
-        
-        <div className="flex justify-end pt-5 gap-4">
-          {/* <Button className="bg-white text-black border text-md font-normal">
-            Save as Draft
-          </Button> */}
-          <Button className="bg-white text-black border text-md font-normal" onClick={() => router.push(`/monetary_grant?forms=3&refno=${Props.refno}`)}>
-            Back
-          </Button>
-          <Button className={`bg-[#4430bf] text-white  font-normal border`}  onClick={()=>handleDialog()}>
-            Submit
-          </Button>
-        </div>
+            <div className="flex justify-end pt-5 gap-4">
+              {/* <Button className="bg-white text-black border text-md font-normal">
+                Save as Draft
+              </Button> */}
+              <Button className="bg-white text-black border text-md font-normal" >
+                Back
+              </Button>
+              <Button className={`bg-[#4430bf] text-white  font-normal border`} onClick={()=>handleDialog()}>
+                Submit
+              </Button>
+            </div>
         </div>
         {
             isCommentbox &&

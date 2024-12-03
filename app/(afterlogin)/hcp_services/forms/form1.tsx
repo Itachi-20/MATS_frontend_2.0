@@ -129,11 +129,12 @@ type Props = {
   previewData: Previewdata | null;
   eventCostCenter: eventCostCenter | null;
   refno: string;
+  subtypeActivity: subtypeActivity | null;
 };
 const Form1 = ({ ...Props }: Props) => {
   const router = useRouter();
-  const [businessUnit, setBusinessUnit] = useState(Props.previewData?.business_unit ?? "");
-  const [budget, setBudget] = useState(Props.previewData?.division_category?? "");
+  const [businessUnit, setBusinessUnit] = useState(Props.previewData?.business_unit);
+  const [budget, setBudget] = useState(Props.previewData?.division_category);
   const [eventCostCenter, setEventCostCenter] =
     useState<eventCostCenter | null>(null);
   const [subtypeActivity, setSubtypeActivity] =
@@ -345,19 +346,19 @@ const Form1 = ({ ...Props }: Props) => {
               <SelectValue placeholder="Select" />
             </SelectTrigger>
             <SelectContent>
-              {Props.eventCostCenter ? Props.eventCostCenter.cost_center.map((item, index) => {
-                return (
-                  <SelectItem value={item.name}>
-                    {item.cost_center_description}
-                  </SelectItem>
-                );
-              }) : eventCostCenter && eventCostCenter.cost_center.map((item, index) => {
+              {eventCostCenter ? eventCostCenter.cost_center.map((item, index) => {
                 return (
                   <SelectItem value={item.name}>
                     {item.cost_center_description}
                   </SelectItem>
                 )
-              })}
+              }): Props.eventCostCenter && Props.eventCostCenter.cost_center.map((item, index) => {
+                return (
+                  <SelectItem value={item.name}>
+                    {item.cost_center_description}
+                  </SelectItem>
+                );
+              }) }
             </SelectContent>
           </Select>
         </div>
@@ -371,24 +372,24 @@ const Form1 = ({ ...Props }: Props) => {
               <SelectValue placeholder="--Selected--" />
             </SelectTrigger>
             <SelectContent>
-              {Props.eventCostCenter ? Props.eventCostCenter.division_category.map((item, index) => {
-                return (
-                  <SelectItem value={item.name}>
-                    {item.category}
-                  </SelectItem>
-                );
-              }) : eventCostCenter && eventCostCenter.division_category.map((item, index) => {
+              {eventCostCenter ? eventCostCenter.division_category.map((item, index) => {
                 return (
                   <SelectItem value={item.name}>
                     {item.category}
                   </SelectItem>
                 )
+              }) : Props.eventCostCenter && Props.eventCostCenter.division_category.map((item, index) => {
+                return (
+                  <SelectItem value={item.name}>
+                    {item.category}
+                  </SelectItem>
+                );
               })}
             </SelectContent>
           </Select>
         </div>
         {
-          (businessUnit == "Endosurgery" && budget == "National") &&          
+          (businessUnit == "Endosurgery" && budget == "National") &&
           <div className="flex flex-col gap-2">
             <label className="lable">
               Budget Sub Type<span className="text-[#e60000]">*</span>
@@ -401,13 +402,19 @@ const Form1 = ({ ...Props }: Props) => {
                 <SelectValue placeholder="--Selected--" />
               </SelectTrigger>
               <SelectContent>
-              {subtypeActivity &&
+                {subtypeActivity ?
                   subtypeActivity.map((item, index) => {
                     return (
                       <SelectItem value={item.name}>
                         {item.division_sub_category}
                       </SelectItem>
                     );
+                  }): Props.subtypeActivity && Props.subtypeActivity.map((item,index)=>{
+                    return (
+                      <SelectItem value={item.name}>
+                        {item.division_sub_category}
+                      </SelectItem>
+                    )
                   })}
               </SelectContent>
             </Select>
@@ -465,18 +472,18 @@ const Form1 = ({ ...Props }: Props) => {
               <SelectValue placeholder="Select" />
             </SelectTrigger>
             <SelectContent>
-              {Props.eventCostCenter ? Props.eventCostCenter.therapy.map((item, index) => {
-                return (
-                  <SelectItem value={item.name}>
-                    {item.therapy}
-                  </SelectItem>
-                );
-              }) : eventCostCenter && eventCostCenter.therapy.map((item, index) => {
+              { eventCostCenter ? eventCostCenter.therapy.map((item, index) => {
                 return (
                   <SelectItem value={item.name}>
                     {item.therapy}
                   </SelectItem>
                 )
+              }): Props.eventCostCenter && Props.eventCostCenter.therapy.map((item, index) => {
+                return (
+                  <SelectItem value={item.name}>
+                    {item.therapy}
+                  </SelectItem>
+                );
               })}
             </SelectContent>
           </Select>
