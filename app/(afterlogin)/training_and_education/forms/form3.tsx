@@ -118,12 +118,10 @@ const Form3 = ({ ...Props }: Props) => {
 
     };
 
-    updatedFormData.event_type = "HCP Services"
+    updatedFormData.event_type = "Training and Education"
     if (refNo) {
       updatedFormData.name = refNo;
     }
-
-
     try {
       const response = await fetch(
         "/api/training_and_education/handleSubmit",
