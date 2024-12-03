@@ -113,10 +113,8 @@ const Form1 = ({ ...Props }: Props) => {
   const router = useRouter();
   const[businessUnit, setBusinessUnit] = useState(Props.previewData?.business_unit ?? "");
   const[budget, setBudget] = useState(Props.previewData?.division_category ?? "");
-  const [eventCostCenter, setEventCostCenter] =
-  useState<eventCostCenter | null>(null);
-  const [subtypeActivity, setSubtypeActivity] =
-  useState<subtypeActivity | null>(null);
+  const [eventCostCenter, setEventCostCenter] = useState<eventCostCenter | null>(null);
+  const [subtypeActivity, setSubtypeActivity] = useState<subtypeActivity | null>(null);
   const [subtypeActivityVisible, setSubtypeActivityVisible] = useState(false);
   const [engagementTypes, setEngagementTypes] = useState("");  
   const [formData, setFormData] = useState<formData>(); 
@@ -185,20 +183,20 @@ const Form1 = ({ ...Props }: Props) => {
         }
       );
 
-      const data = await response.json();
-      setSubtypeActivity(data.data);
-      if (value == "National") {
-        setSubtypeActivityVisible(true);
-      } else {
-        setSubtypeActivityVisible(false);
-      }
-
+      
       if (response.ok) {
+        const data = await response.json();
+        setSubtypeActivity(data.data);
+        if (value == "National") {
+          setSubtypeActivityVisible(true);
+        } else {
+          setSubtypeActivityVisible(false);
+        }
       } else {
-        console.log("Login failed");
+        console.log("Response was not OK");
       }
     } catch (error) {
-      console.error("Error during login:", error);
+      console.error("Error during submitting:", error);
     }
   };
   const handleBusinessUnitChange = async (value: string) => {
@@ -216,15 +214,15 @@ const Form1 = ({ ...Props }: Props) => {
         }
       );
 
-      const data = await response.json();
-      setEventCostCenter(data.data);
-
+      
       if (response.ok) {
+        const data = await response.json();
+        setEventCostCenter(data.data);
       } else {
-        console.log("Login failed");
+        console.log("Response was not OK");
       }
     } catch (error) {
-      console.error("Error during login:", error);
+      console.error("Error during submitting:", error);
     }
   };
 
@@ -318,7 +316,8 @@ const Form1 = ({ ...Props }: Props) => {
               <SelectValue placeholder="Select" />
             </SelectTrigger>
             <SelectContent>
-              { Props.eventCostCenter?Props.eventCostCenter.cost_center.map((item, index) => {
+              { Props.eventCostCenter?
+                  Props.eventCostCenter.cost_center.map((item, index) => {
                     return (
                       <SelectItem value={item.name}>
                         {item.cost_center_description}
