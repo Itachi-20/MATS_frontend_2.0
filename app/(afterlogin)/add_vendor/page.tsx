@@ -26,6 +26,9 @@ import {
 import Link from "next/link";
 import { useSearchParams } from 'next/navigation'
 import { useAuth } from "../../context/AuthContext";
+import ConfirmPopup from '@/components/deleteDialog'
+
+
 type dropdownData = {
     company: {
         name: string,
@@ -58,7 +61,7 @@ type DocumentRow = {
     filename: string;
     creation: string;
     owner: string;
-    file: string; 
+    file: string;
 };
 type formData = {
     name: string;
@@ -69,7 +72,7 @@ type formData = {
     vendor_code: string;
     email: string;
     contact_number: string;
-    pan_check:boolean;
+    pan_check: boolean;
     document: DocumentRow[];
 };
 
@@ -86,7 +89,9 @@ const page = () => {
     const [vendorcheck, setVendorCheck] = useState<boolean>()
     const [error, setError] = useState<string | null>()
     const [checkpopup, setCheckPopup] = useState(false)
+    const [confirmpopup, setConfirmPopup] = useState(false)
     const [formdata, setFormData] = useState<formData>();
+    const [loading, setLoading] = useState(false)
     const base_url = process.env.NEXT_PUBLIC_FRAPPE_URL;
     const router = useRouter()
     const view = useSearchParams().get('view')
@@ -123,19 +128,20 @@ const page = () => {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body:JSON.stringify({
-                    name:refno
+                body: JSON.stringify({
+                    name: refno
                 })
             });
 
-            const data = await response.json();
-            setFormData(data.data);
-            setFormData((prevState) => ({
-                ...prevState,
-                name: refno, 
-              })as formData);
-            setDocumentRows(data.data?.document)
             if (response.ok) {
+                const data = await response.json();
+                setFormData(data.data);
+                setFormData((prevState) => ({
+                    ...prevState,
+                    name: refno,
+                }) as formData);
+                setDocumentRows(data.data?.document)
+
             } else {
                 console.log('Login failed');
             }
@@ -151,9 +157,10 @@ const page = () => {
         setFormData({ ...formdata } as formData)
     }, [])
 
-    const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
-        e.preventDefault();
-          console.log("formdata------------------------------------------update check---", formdata)
+    const handleFinalSubmit = async () => {
+        setLoading(true)
+        // e.preventDefault();
+        console.log("formdata------------------------------------------update check---", formdata)
         try {
             const response = await fetch(
                 "/api/addVendor",
@@ -169,10 +176,12 @@ const page = () => {
             if (response.ok) {
                 const data = await response.json();
                 console.log(data, "response data");
+                setLoading(false)
+                setConfirmPopup(false)
                 setTimeout(() => {
                     router.push(`/event_vendor_list`);
                 }, 1000)
-                    toast.success(data.message)
+                toast.success(data.message)
             } else {
                 console.log("submission failed");
             }
@@ -203,7 +212,7 @@ const page = () => {
 
     const uploadFile = async () => {
         if (!file || !document_type) {
-            alert("Please select a file and a type before uploading.");
+            toast.warning("Please select a file and a type before uploading.");
             return;
         }
         const formData = new FormData();
@@ -231,15 +240,11 @@ const page = () => {
                     owner: data.message.modified_by,
                     file: data.message.file_url,
                 };
-                console.log("newDocument",newDocument)
-                // setFormData((prevFormData) => ({
-                //     ...prevFormData,
-                //     document: [...(prevFormData.document), newDocument],
-                // }));
+                console.log("newDocument", newDocument)
                 setFormData((prevFormData) => ({
                     ...prevFormData,
                     document: Array.isArray(prevFormData?.document) ? [...prevFormData.document, newDocument] : [newDocument],
-                  })as formData);
+                }) as formData);
                 // const updatedDocumentRows = [...documentRows , newDocument];
                 const updatedDocumentRows = [...(Array.isArray(documentRows) ? documentRows : []), newDocument];
 
@@ -257,18 +262,18 @@ const page = () => {
     };
     const handlePanfieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value })as formData);
-        
-            checkvendor(e);
-            setVendorCheck(false)
-            if (role == 'Event Requestor'){
+        setFormData(prev => ({ ...prev, [name]: value }) as formData);
+
+        checkvendor(e);
+        setVendorCheck(false)
+        if (role == 'Event Requestor') {
             setFormData((prevState) => ({
                 ...prevState,
-                pan_check: false,  // Adding or updating the refno field
-              }) as formData);
-            }
-            setError('')
-        
+                pan_check: false,
+            }) as formData);
+        }
+        setError('')
+
     }
 
     const checkvendor = async (e: any) => {
@@ -292,11 +297,11 @@ const page = () => {
                     if (data.data.length > 0) {
                         setError('PAN Already exists')
                         setVendorCheck(true);
-                        if (role == 'Event Requestor'){
-                        setFormData((prevState) => ({
-                            ...prevState,
-                            pan_check:true ,
-                          })as formData);
+                        if (role == 'Event Requestor') {
+                            setFormData((prevState) => ({
+                                ...prevState,
+                                pan_check: true,
+                            }) as formData);
                         }
                     }
                 } else {
@@ -312,22 +317,24 @@ const page = () => {
     const handlecheckpopup = async () => {
         setCheckPopup(true)
     };
-    console.log('formdata',formdata)
+    const handleConfirmpopup = async () => {
+        setConfirmPopup(true)
+    };
+    console.log('formdata', formdata)
     return (
         <>
             <div className='p-7 w-full relative z-20 text-black'>
 
-                
                 <div>
                     <div className='flex justify-between'>
                         <h1 className="text-black text-[22px] font-medium capitalize pb-8">
                             Vendor Detail
                         </h1>
                         {view != "view" &&
-                        <Button className="text-black text-md font-normal bg-white hover:bg-white border rounded-[25px] px-8 py-5 shadow" onClick={() => handlecheckpopup()}>
-                            Check Vendor
-                        </Button>
-                    }
+                            <Button className="text-black text-md font-normal bg-white hover:bg-white border rounded-[25px] px-8 py-5 shadow" onClick={() => handlecheckpopup()}>
+                                Check Vendor
+                            </Button>
+                        }
                     </div>
                     <div className="grid grid-cols-2 gap-12 pb-8">
                         <div className="flex flex-col gap-2">
@@ -337,7 +344,7 @@ const page = () => {
                             <Select
                                 onValueChange={(value) => handleSelectChange(value, "vendor_type")}
                                 disabled={view == "view"}
-                                value={formdata?formdata.vendor_type:''}
+                                value={formdata ? formdata.vendor_type : ''}
                             >
                                 <SelectTrigger className="dropdown" >
                                     <SelectValue placeholder="Select" />
@@ -365,7 +372,7 @@ const page = () => {
                                 name='vendor_code'
                                 onChange={(e) => handlefieldChange(e)}
                                 readOnly={view == "view"}
-                                value={formdata?formdata.vendor_code:''}
+                                value={formdata ? formdata.vendor_code : ''}
                             ></Input>
                         </div>
                         <div className="flex flex-col gap-2">
@@ -376,7 +383,7 @@ const page = () => {
                                 name='vendor_name'
                                 onChange={(e) => handlefieldChange(e)}
                                 readOnly={view == "view"}
-                                value={formdata?formdata.vendor_name:''}
+                                value={formdata ? formdata.vendor_name : ''}
                             ></Input>
                         </div>
                         <div className="flex flex-col gap-2">
@@ -388,7 +395,7 @@ const page = () => {
                                 // type='number'
                                 onChange={(e) => handlefieldChange(e)}
                                 readOnly={view == "view"}
-                                value={formdata?formdata.contact_number:''}
+                                value={formdata ? formdata.contact_number : ''}
                             ></Input>
                         </div>
                         <div className="flex flex-col gap-2">
@@ -399,9 +406,9 @@ const page = () => {
                                 name='pan_number'
                                 onChange={(e) => handlePanfieldChange(e)}
                                 readOnly={view == "view"}
-                                value={formdata?formdata.pan_number:''}
+                                value={formdata ? formdata.pan_number as string : ''}
                             ></Input>
-                            {error && <span className="text-red-500 mb-2">{error}</span>}
+                            {error && <span className="text-red-500 mb-2">{error}<Link href={''} className='bg-white hover:underline pl-2 text-blue-500' onClick={handlecheckpopup}>Click Here to check existing records</Link></span>}
                         </div>
                         <div className="flex flex-col gap-2">
                             <label className="text-black text-sm font-normal capitalize">
@@ -411,7 +418,7 @@ const page = () => {
                                 name='email'
                                 onChange={(e) => handlefieldChange(e)}
                                 readOnly={view == "view"}
-                                value={formdata?formdata.email:''}
+                                value={formdata ? formdata.email : ''}
                             ></Input>
                         </div>
                         <div className="flex flex-col col-span-2 gap-2">
@@ -422,7 +429,7 @@ const page = () => {
                                 name='remark'
                                 onChange={(e) => { handlefieldChange(e) }}
                                 readOnly={view == "view"}
-                                value={formdata?formdata.remark:''}
+                                value={formdata ? formdata.remark : ''}
                             />
                         </div>
                     </div>
@@ -504,7 +511,7 @@ const page = () => {
                                     <TableHead className="text-center">Document Name</TableHead>
                                     <TableHead className="text-center">Created Date</TableHead>
                                     <TableHead className="text-center">Created By</TableHead>
-                                    <TableHead className="text-center rounded-r-2xl">Download</TableHead>
+                                    <TableHead className="text-center rounded-r-2xl">View</TableHead>
                                 </TableRow>
                             </TableHeader>
                             {documentRows && documentRows.length > 0 ?
@@ -513,7 +520,7 @@ const page = () => {
                                         <TableRow key={index}>
                                             <TableCell className="text-center ">{row.document_type}</TableCell>
                                             <TableCell className="text-center">{row.filename}</TableCell>
-                                            <TableCell className="text-center">{row.creation.substring(0,10)}</TableCell>
+                                            <TableCell className="text-center">{row.creation.substring(0, 10)}</TableCell>
                                             <TableCell className="text-center">{row.owner}</TableCell>
                                             <TableCell className="text-center  flex justify-center gap-2">
 
@@ -524,7 +531,7 @@ const page = () => {
                                                     rel="noopener noreferrer"
                                                     className="text-blue-600 underline"
                                                 >
-                                                    Download
+                                                    View
                                                 </Link>
                                             </TableCell>
                                         </TableRow>
@@ -544,10 +551,10 @@ const page = () => {
                     <div className="flex justify-end pt-5 gap-4">
                         {view != "view" &&
                             <>
-                                 {/* <Button className="bg-white text-black border text-md font-normal hover:bg-white" >
+                                {/* <Button className="bg-white text-black border text-md font-normal hover:bg-white" >
                                    Back
                                 </Button> */}
-                                <Button className="bg-[#4430bf] text-white text-md font-normal border hover:bg-[#4430bf]" onClick={handleSubmit}>
+                                <Button className="bg-[#4430bf] text-white text-md font-normal border hover:bg-[#4430bf]" onClick={formdata?.pan_check ? handleConfirmpopup : handleFinalSubmit}>
                                     Submit
                                 </Button>
 
@@ -559,7 +566,12 @@ const page = () => {
             <Toaster richColors position="top-right" />
             {
 
-                checkpopup && <CheckPan setClose={setCheckPopup} />
+                checkpopup && <CheckPan setClose={setCheckPopup} pan_number={formdata?.pan_number} />
+            }
+
+            {
+
+                confirmpopup && <ConfirmPopup setClose={setConfirmPopup} text={'Approval is Triggered PAN already exists ?'} Loading={loading} handleSubmit={handleFinalSubmit} />
             }
 
         </>

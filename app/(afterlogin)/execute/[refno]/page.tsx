@@ -213,13 +213,12 @@ const page = () => {
     const [files, setFiles] = useState<File[]>([]);
     const [data,setData] = useState<EventEntry>();
     const [isDialog,setIsDialog] = useState(false);
-    const [uploadedFiles, setUploadedFiles] = useState<FileList | null>(); //added state 1
+    const [uploadedFiles, setUploadedFiles] = useState<FileList | null>(null)
     const [fileList, setFileList] = useState<File[]>([]); //added state 2
     const [documentType, setDocumentType] = useState("");
     const [activityType, setActivityType] = useState('Pre Activity');
     const [preview_data, setPreviewData] = useState<any>(null);
     const [activityDropdown,setActivityDropdown]  = useState<activityDropdown>();
-
     const activityList = async ()=>{
       try {
           const response = await fetch(`/api/training_and_education/activityList/`, {
@@ -299,6 +298,7 @@ const page = () => {
         if (response.ok) {
           setDocumentType('')
           setFiles([])
+          setUploadedFiles(null);
           fetchData();
   
         } else {
@@ -344,9 +344,9 @@ const page = () => {
         fetchData();
     },[])
 
-    const handleNext = (fileList: FileList | null) => {
-      setUploadedFiles(fileList);
-    };
+    const handleNext = () => {
+    
+    }
   
 
     const handleActivityTypeChange = (value: string) => {
@@ -459,7 +459,7 @@ const page = () => {
             <label className="text-black text-sm font-normal capitalize">
               Upload Files<span className="text-[#e60000]">*</span>
             </label>
-            <SimpleFileUpload files={files} setFiles={setFiles} onNext={handleNext} buttonText={'Upload Here'} />
+            <SimpleFileUpload files={files} setFiles={setFiles} setUploadedFiles={setUploadedFiles}  onNext={handleNext}buttonText={'Upload Here'} />
           </div>
           <Button
             className="bg-white text-black border text-md font-normal"

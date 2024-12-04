@@ -216,7 +216,7 @@ const page = () => {
     setDeleteName(name);
     setDeletePopup(true)
   };
-  console.log(formdata, "this is form data");
+  console.log(vendorData, "this is vendorData ");
   return (
     <>
       <div className='p-7 w-full relative z-20 text-black'>
