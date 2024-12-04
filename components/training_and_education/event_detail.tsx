@@ -345,7 +345,7 @@ const event_Details = ({ ...Props }: Props) => {
           ></Input>
         </div>
 
-        <div className="flex flex-col md:gap-2">
+        {/* <div className="flex flex-col md:gap-2">
           <label className="text-black md:text-sm md:font-normal capitalize">
             HCP Name<span className="text-[#e60000]">*</span>
           </label>
@@ -355,7 +355,7 @@ const event_Details = ({ ...Props }: Props) => {
             readOnly={true}
             value={Props.eventData?.hcp_name}
           ></Input>
-        </div>
+        </div> */}
 
         {(Props.eventData?.event_type != 'Sponsorship Support' && Props.eventData?.event_type != 'Patient Support') ?
           <div className="flex flex-col md:gap-2">
