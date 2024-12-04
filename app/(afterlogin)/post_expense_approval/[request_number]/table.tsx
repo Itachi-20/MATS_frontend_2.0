@@ -18,6 +18,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/app/context/AuthContext";
+
 
 type Data = {
 name: string;
@@ -58,12 +60,12 @@ type AdvanceRequest = {
 type Props = {
   tableData: Data; // Props includes the tableData field
   refno: string;
-  role: string;
+  // role: string;
 };
 
 const TableComponent = ({ ...Props }: Props) => {
   const router = useRouter();
-
+  const { role, name, userid, clearAuthData } = useAuth();
 
   return (
     <div className='p-7 w-full relative z-20 text-black'>
@@ -202,7 +204,7 @@ const TableComponent = ({ ...Props }: Props) => {
                   {/* Data Row */}
                   
                   {data?.advance_request.map((data, index) => (
-                  <TableRow className="text-center text-nowrap border-b">
+                  <TableRow key={index} className="text-center text-nowrap border-b">
                     {/* <TableCell className=''>{data.name}</TableCell>
                     <TableCell>{data.advance}</TableCell> */}
                     <TableCell>{data.vendor_name ?? "N/A"}</TableCell>
@@ -428,13 +430,13 @@ const TableComponent = ({ ...Props }: Props) => {
                       <div className="border-l border-slate-200 pl-2">
                       {
                         data?.is_approved == true ? (
-                          (data.status == "Post Expense Approved" && Props.role == "Event Finance") ?  
-                          <button className="border rounded-full px-4 py-1 border-[#0e4154] text-[#0e4154] hover:text-white hover:bg-[#0E4154] active:text-white active:bg-[#0E4154] transition-all delay-100" onClick={() => router.push(`/post_expense_approval_update_utr/${Props.refno}/${data.name}`)}>Update UTR</button>
+                          (data.status == "Post Expense Approved" && role == "Event Finance") ?  
+                          <button className="border rounded-full px-4 py-1 border-[#0e4154] text-[#0e4154] hover:text-white hover:bg-[#0E4154] active:text-white active:bg-[#0E4154] transition-all delay-100" onClick={() => router.push(`/post_expense_approval_update_urefno}/${data.name}`)}>Update UTR</button>
                           :
                           <button className="border rounded-full px-4 py-1 border-black text-black hover:text-white hover:bg-[#000] active:text-white active:bg-[#000] transition-all delay-100" onClick={() => router.push(`/post_expense_approval/${Props.refno}/${data.name}`)}>View</button>
                         )
                       :
-                        ( Props.role != "Event%20Requestor" ?
+                        ( role != "Event Requestor" ?
                         <button className="border rounded-full px-4 py-1 border-[#0e4154] text-[#0e4154] hover:text-white hover:bg-[#0E4154] active:text-white active:bg-[#0E4154] transition-all delay-100" onClick={() => router.push(`/post_expense_approval/${Props.refno}/${data.name}`)}>Take Action</button>
                         :
                         <button className="border rounded-full px-4 py-1 border-black text-black hover:text-white hover:bg-[#000] active:text-white active:bg-[#000] transition-all delay-100" onClick={() => router.push(`/post_expense_approval/${Props.refno}/${data.name}`)}>View</button>
