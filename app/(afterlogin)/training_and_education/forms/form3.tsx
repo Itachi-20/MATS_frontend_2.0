@@ -283,7 +283,7 @@ const Form3 = ({ ...Props }: Props) => {
     (<div>
       <div className='pb-8'>
         <h1 className="text-black text-2xl font-normal uppercase pb-8">
-          Budget Details
+          Budget/Vendor Details
         </h1>
         <div className="grid grid-cols-3 gap-6">
           <div className="flex flex-col gap-2">
