@@ -337,7 +337,7 @@ const index = async ({...Props}:any) => {
   return (
     <>
       <AppWrapper>
-        <div className="px-7 pb-7 pt-4 w-full relative z-20">
+        <div className="px-7 pb-7 pt-4 w-full z-20">
           <div>
             <h1 className="text-black text-[30px] font-medium capitalize" id="form_top">
             
