@@ -1,16 +1,11 @@
 import React from 'react';
 import { cookies } from 'next/headers';
 import Table from "@/app/(afterlogin)/post_expense_approval/[request_number]/table";
-// import { useAuth } from "@/app/context/AuthContext";
-
 
 const fetchData = async(names:any)=>{
-  // const { role, name, userid, clearAuthData } = useAuth();
-
   try {
     const cookie = await cookies();
     const Cookie = cookie.toString();
-    ///api/postExpenseApproval/particularListItemData
     const tableData = await fetch(`${process.env.FRAPPE_URL}/api/method/matsapp.api.event.event.get_post_expense_detail_list?name=${names}`,
       {
         method: "GET",
@@ -18,9 +13,6 @@ const fetchData = async(names:any)=>{
           "Content-Type": "application/json",
           "Cookie":Cookie
         },
-        // body:JSON.stringify({
-        //   name:name
-        // }),
         credentials:'include'
       }
     );
@@ -34,18 +26,11 @@ const fetchData = async(names:any)=>{
   }
 }
 const page = async ({params}:any) => {
-
   const {request_number} = await params; 
-  const cookie = await cookies();
-  const role = String(cookie.get("role"));
-   console.log(role, request_number);  
-  // const { role, name, userid, clearAuthData } = useAuth();
-
   const tableData = await fetchData(request_number);
-  console.log(tableData,"this is tablwe data");
   return (
     <>
-      <Table tableData={tableData} refno = {request_number} role={role}/>
+      <Table tableData={tableData} refno = {request_number}/>
     </>
   )
 }
