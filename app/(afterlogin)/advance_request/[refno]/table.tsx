@@ -111,7 +111,7 @@ const table = ({ tableData }: Props) => {
     file: null,
   });
   const [fileData, setFileData] = useState<DocumentRow[] | undefined>();
-  const [uploadedFiles, setUploadedFiles] = useState< FileList | null>()
+  const [uploadedFiles, setUploadedFiles] = useState<FileList | null>(null)
   const [files, setFiles] = useState<File[]>([]);
   const base_url = process.env.NEXT_PUBLIC_FRAPPE_URL;
   const router = useRouter();
@@ -166,7 +166,7 @@ const table = ({ tableData }: Props) => {
           ...prev,
           advance: data.data, // Update vendor_name in the vendorDetails state
         }))
-        console.log(data, "vendor name api");
+        console.log(data, "vendor amount advance api");
       } else {
         console.log("Login failed");
       }
@@ -375,8 +375,8 @@ const table = ({ tableData }: Props) => {
     }
   };
 
-  const handleNext = (fileList: FileList | null) => {
-    setUploadedFiles(fileList)
+  const handleNext = () => {
+    
   }
   return (
     <>
@@ -504,7 +504,7 @@ const table = ({ tableData }: Props) => {
 
         <div className='flex justify-end gap-2 pb-7'>
           {/* <SimpleFileUpload onNext={handleNext} buttonText={'Receipts/Bills'} /> */}
-          <SimpleFileUpload files={files} setFiles={setFiles} onNext={handleNext} buttonText={'Receipts/Bills'} />
+          <SimpleFileUpload files={files} setFiles={setFiles} setUploadedFiles={setUploadedFiles}  onNext={handleNext} buttonText={'Receipts/Bills'} />
 
           <Button className="border border-[#4430bf] text-[#4430bf] text-[18px]" onClick={() => addVendor()}>Add</Button>
         </div>
@@ -619,7 +619,7 @@ const table = ({ tableData }: Props) => {
                         <TableCell>{data.vendor_type}</TableCell>
                         <TableCell>{data.vendor_code}</TableCell>
                         <TableCell>{data.vendor_name}</TableCell>
-                        <TableCell>{data.billable_amount}</TableCell>
+                        <TableCell>{data.advance}</TableCell>
                         <TableCell>{data.status}</TableCell>
                         <TableCell>{data.gst}</TableCell>
                         <TableCell>{data.invoice_amount}</TableCell>

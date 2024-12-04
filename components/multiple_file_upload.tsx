@@ -1,3 +1,4 @@
+
 'use client'
 
 import React, { useState, useCallback } from 'react'
@@ -8,36 +9,46 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { X, FileText } from 'lucide-react'
 
-
 interface SimpleFileUploadProps {
-    onNext: (fileList: FileList | null) => void;
-    files: File[]
-    setFiles: React.Dispatch<React.SetStateAction<File[]>>
-    buttonText:string
-    // files: File[]
-    // setFiles: React.Dispatch<React.SetStateAction<File[]>>
+    onNext: () => void;
+    setUploadedFiles: React.Dispatch<React.SetStateAction<FileList | null>>; 
+    files: File[];
+    setFiles: React.Dispatch<React.SetStateAction<File[]>>;
+    buttonText: string;
 }
 
-export default function SimpleFileUpload({ onNext,buttonText,files,setFiles}: SimpleFileUploadProps) {
-    // const [files, setFiles] = useState<File[]>([])
-    const [isOpen, setIsOpen] = useState(false)
-    const [originalFiles, setOriginalFiles] = useState<FileList | null>(null)
+export default function SimpleFileUpload({ onNext, buttonText, files, setUploadedFiles, setFiles }: SimpleFileUploadProps) {
+    const [isOpen, setIsOpen] = useState(false);
 
-    const handleFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-        const selectedFiles = e.target.files
-        setOriginalFiles(selectedFiles)
-        const filelist = Array.from(e.target.files || []);
-        setFiles(prevFiles => [...prevFiles, ...filelist])
-    }, [])
+    const handleFileChange = useCallback(
+        (e: React.ChangeEvent<HTMLInputElement>) => {
+          const selectedFiles = e.target.files;
+          
+          if (selectedFiles) {
+            const newFileArray = Array.from(selectedFiles);
+            setUploadedFiles((prevUploadedFiles) => {
+              const prevFilesArray = prevUploadedFiles ? Array.from(prevUploadedFiles) : [];
+              const mergedFilesArray = [...prevFilesArray, ...newFileArray];
+              const dataTransfer = new DataTransfer();
+              mergedFilesArray.forEach((file) => dataTransfer.items.add(file));
+              
+              return dataTransfer.files;
+            });
+            setFiles((prevFiles) => [...prevFiles, ...newFileArray]);
+          }
+        },
+        [setUploadedFiles, setFiles] 
+      );
+      
 
     const handleNext = useCallback(() => {
-        onNext(originalFiles)
-        setIsOpen(false)
-    }, [files, originalFiles, onNext])
+        onNext(); 
+        setIsOpen(false);
+    }, [files, onNext]);
 
-    const removeFile = useCallback((fileToRemove:File ) => {
-        setFiles(files => files?.filter(file => file !== fileToRemove))
-    }, [])
+    const removeFile = useCallback((fileToRemove: File) => {
+        setFiles(prevFiles => prevFiles.filter(file => file !== fileToRemove));
+    }, [setFiles]);
 
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -45,7 +56,7 @@ export default function SimpleFileUpload({ onNext,buttonText,files,setFiles}: Si
                 <button className="flex items-center gap-2 px-2 py-1 bg-[#F0EDFF] rounded-md shadow-sm cursor-pointer border-[1px] border-[#4430BF]/20 hover:bg-[#E8E3FF] transition-colors">
                     <Image src={'/svg/download.svg'} alt='downloadsvg' width={20} height={20} />
                     <span className="font-medium text-[#4430BF]">
-                        {files && files.length > 0
+                        {files.length > 0
                             ? `${files.length} file${files.length > 1 ? 's' : ''} selected`
                             : buttonText}
                     </span>
@@ -69,7 +80,7 @@ export default function SimpleFileUpload({ onNext,buttonText,files,setFiles}: Si
                             multiple
                         />
                     </div>
-                    {files && files.length > 0 && (
+                    {files.length > 0 && (
                         <ScrollArea className="max-h-[200px] w-full text-black rounded-md border p-4">
                             {files.map((file, index) => (
                                 <div key={index} className="flex items-center justify-between bg-gray-100 p-2 mb-2 rounded">
@@ -94,10 +105,10 @@ export default function SimpleFileUpload({ onNext,buttonText,files,setFiles}: Si
                 </div>
                 <Button
                     className="border border-[#4430bf] text-[#FFF] px-6 bg-[#4430BF] text-[16px]"
-                    disabled={files?.length === 0}
+                    disabled={files.length === 0}
                     onClick={handleNext}
                 >
-                    Upload {files?.length} file{files?.length !== 1 ? 's' : ''}
+                    Upload {files.length} file{files.length !== 1 ? 's' : ''}
                 </Button>
             </DialogContent>
         </Dialog>

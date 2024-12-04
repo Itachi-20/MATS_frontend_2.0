@@ -222,7 +222,7 @@ const table = ({ tableData }: Props) => {
   const [fileData, setFileData] = useState<DocumentRow[] | undefined>();
   const [fileList, setFileList] = useState<File[]>([]);
   const [files, setFiles] = useState<File[]>([]);
-  const [uploadedFiles, setUploadedFiles] = useState< FileList | null>()
+  const [uploadedFiles, setUploadedFiles] = useState<FileList | null>(null)
   const base_url = process.env.NEXT_PUBLIC_FRAPPE_URL;
   const router = useRouter();
   const params = useParams();
@@ -492,10 +492,8 @@ const table = ({ tableData }: Props) => {
     setFileData(file);
     setOpen(true)
   };
-  const handleNext = (fileList: FileList | null) => {
-    setUploadedFiles(fileList)
-    const filelists = Array.from(fileList || []);
-    setFileList(filelists);
+  const handleNext = () => {
+    
   }
   const handleDeletePopup  = async(name : any) =>{
     setDeleteRecordname(name)
@@ -629,7 +627,7 @@ const table = ({ tableData }: Props) => {
         {
           !tableData.post_expense_approved && 
           <div className='flex justify-end gap-2 pb-7'>
-            <SimpleFileUpload files={files} setFiles={setFiles} onNext={handleNext} buttonText={'Receipts/Bills'} />
+            <SimpleFileUpload files={files} setFiles={setFiles} setUploadedFiles={setUploadedFiles}  onNext={handleNext} buttonText={'Receipts/Bills'} />
             <Button className="border border-[#4430bf] text-[#4430bf] text-[18px]" disabled={isLoading ? true:false} onClick={addVendor} >{isLoading ? 'Adding...':'Add'}</Button>
           </div>
         }

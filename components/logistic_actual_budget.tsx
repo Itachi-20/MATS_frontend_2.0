@@ -78,7 +78,7 @@ export default function LogisticActualBudget({...Props}:Props) {
     const { role, name, userid, clearAuthData } = useAuth();
     console.log(TravelVendorData,"88888888888888")
     const [files, setFiles] = useState<File[]>([]);
-  const [uploadedFiles, setUploadedFiles] = useState<FileList | null>(); //added state 1
+    const [uploadedFiles, setUploadedFiles] = useState<FileList | null>(null)
   const [fileList, setFileList] = useState<File[]>([]); //added state 2
 
     console.log(TravelVendorData,"this is the useefec api data")
@@ -161,6 +161,7 @@ export default function LogisticActualBudget({...Props}:Props) {
             setgst(0);
             setTotaAmount(0);
             travel_desk_data();
+            setUploadedFiles(null);
           } else {
             console.log("Login failed");
           }
@@ -238,9 +239,9 @@ export default function LogisticActualBudget({...Props}:Props) {
     }
 
 
-    const handleNext = (fileList: FileList | null) => {
-        setUploadedFiles(fileList);
-      };
+    const handleNext = () => {
+    
+    }
 
     useEffect(()=>{
     },[TravelVendorData])
@@ -385,7 +386,7 @@ export default function LogisticActualBudget({...Props}:Props) {
              <label className="text-black text-sm font-normal capitalize">
             Upload Files<span className="text-[#e60000]">*</span>
           </label>
-          <SimpleFileUpload files={files} setFiles={setFiles} onNext={handleNext} buttonText={'Upload Here'} />
+          <SimpleFileUpload files={files} setFiles={setFiles} setUploadedFiles={setUploadedFiles}  onNext={handleNext} buttonText={'Upload Here'} />
           </div>
                         
                
