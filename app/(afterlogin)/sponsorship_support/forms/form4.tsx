@@ -37,7 +37,7 @@ const form4 = ({...Props}:Props) => {
   const [preview_data, setPreviewData] = useState<any>(null);
   const [uploadedFiles, setUploadedFiles] = useState<FileList | null>(null)
   const [files, setFiles] = useState<File[]>([]);
-  // const [originalFiles, setOriginalFiles] = useState<FileList | null>(null)
+  // const [originalFiles, setOriginalFiles] = useState<FileList | null>(null);
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     router.replace(`/sponsorship_support?forms=5&refno=${Props.refno}`)
   };
@@ -81,8 +81,8 @@ const form4 = ({...Props}:Props) => {
           PreviewData();
         }, 500);
         setDocumentType('')
-        setFiles([])
-        setUploadedFiles(null)
+        setFiles([]);
+        setUploadedFiles(null);
         return 'Documents added successfully!';
       },
       error: (error) => `Failed : ${error.message || error}`,
@@ -128,7 +128,7 @@ const form4 = ({...Props}:Props) => {
 
   },[preview_data])
 
-  console.log('files ; uploadedFiles',files,uploadedFiles)
+  console.log('files ; uploadedFiles',files,uploadedFiles);
   return (
     (<div>
       <h1 className="text-black text-2xl font-normal uppercase pb-8">

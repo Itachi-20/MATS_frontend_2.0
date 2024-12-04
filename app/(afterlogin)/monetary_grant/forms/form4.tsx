@@ -36,7 +36,7 @@ const form4 = ({...Props}:Props) => {
   const [refno, setRefno] = useState(Props.refno);
   const [documentType,setDocumentType] = useState("");
   const [preview_data, setPreviewData] = useState<any>(null);
-  const [uploadedFiles, setUploadedFiles] = useState<FileList | null>(null) 
+  const [uploadedFiles, setUploadedFiles] = useState<FileList | null>(null);
   const [files, setFiles] = useState<File[]>([]);
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     router.replace(`/monetary_grant?forms=5&refno=${Props.refno}`)

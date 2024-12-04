@@ -35,7 +35,7 @@ const form4 = ({...Props}:Props) => {
   const [refno, setRefno] = useState(Props.refno);
   const [documentType,setDocumentType] = useState("");
   const [preview_data, setPreviewData] = useState<any>(null);
-  const [uploadedFiles, setUploadedFiles] = useState<FileList | null>(null)
+  const [uploadedFiles, setUploadedFiles] = useState<FileList | null>(null);
   const [files, setFiles] = useState<File[]>([]);
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     router.replace(`/non_monetary_grant?forms=5&refno=${Props.refno}`)
@@ -79,8 +79,8 @@ const form4 = ({...Props}:Props) => {
         setTimeout(() => {
           PreviewData();
         }, 500);
-        setDocumentType('')
-        setFiles([])
+        setDocumentType('');
+        setFiles([]);
         setUploadedFiles(null);
         return 'Documents added successfully!';
       },
@@ -116,7 +116,6 @@ const form4 = ({...Props}:Props) => {
       console.error("Error during login:", error);
     }
   };
-
   const handleNext = () => {
     
   }
