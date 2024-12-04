@@ -142,7 +142,7 @@ import { Toaster, toast } from 'sonner';
         company_name: string | null;
         gl_name: string | null;
         gl_code: string | null;
-        utr_number: number | null;
+        utr_number: string | null;
         payment_date: string | null;
         zone: string | null;
         state: string | null;
@@ -251,7 +251,7 @@ const pagess = ({...Props}:props) => {
             company_name: expensedata?.actual_vendors[0]?.company_code || "",
             gl_name: expensedata?.actual_vendors[0]?.gl_name || "",
             gl_code: expensedata?.actual_vendors[0]?.gl_code || "",
-            utr_number: Number(expensedata?.actual_vendors[0]?.utr_number) || 0, // Convert to number
+            utr_number: expensedata?.actual_vendors[0]?.utr_number || "",
             payment_date: expensedata?.actual_vendors[0]?.payment_date || "",
             zone: expensedata?.actual_vendors[0]?.zone || "",
             state: expensedata?.actual_vendors[0]?.state_code || "",
