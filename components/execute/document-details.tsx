@@ -233,7 +233,7 @@ const DocumentDetails = ({...Props}:Props) => {
   const [activitydropdown,setActivityDropdown] = useState<activityDropdown>();
   const [preview_data, setPreviewData] = useState<any>(null);
   const [files, setFiles] = useState<File[]>([]);
-  const [uploadedFiles, setUploadedFiles] = useState<FileList | null>(); //added state 1
+  const [uploadedFiles, setUploadedFiles] = useState<FileList | null>(null)
   const [fileList, setFileList] = useState<File[]>([]); //added state 2
   console.log(file,"this multi file")
   const handleFileChange: any = (e: any) => {
@@ -282,6 +282,7 @@ const DocumentDetails = ({...Props}:Props) => {
         setUploadedFiles(null)
         setFiles([]);
         setActivityType("");
+        setUploadedFiles(null);
        
       } else {
         console.log("Login failed");
@@ -329,9 +330,9 @@ const DocumentDetails = ({...Props}:Props) => {
   useEffect(()=>{
   },[preview_data])
 
-  const handleNext = (fileList: FileList | null) => {
-    setUploadedFiles(fileList);
-  };
+  const handleNext = () => {
+    
+  }
   
 
   const fetchDropdown = async()=>{
@@ -420,7 +421,7 @@ console.log(Props.data,"this is data")
                 : ""}
             </h1> */}
              
-          <SimpleFileUpload files={files} setFiles={setFiles} onNext={handleNext} buttonText={'Upload Here'} />
+          <SimpleFileUpload files={files} setFiles={setFiles} setUploadedFiles={setUploadedFiles}  onNext={handleNext} buttonText={'Upload Here'} />
           
           <button
             className="bg-white text-black border text-md font-normal px-4 py-2 rounded-xl"

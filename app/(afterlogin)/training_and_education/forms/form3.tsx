@@ -136,7 +136,7 @@ const Form3 = ({ ...Props }: Props) => {
       );
       if (response.ok) {
         const data = await response.json();
-        console.log(data, "response data");
+        // console.log(data, "response data");
         setRefNo(data.message);
 
         setTimeout(() => {
@@ -157,7 +157,7 @@ const Form3 = ({ ...Props }: Props) => {
       const newObject: Logistics = { vendor_type: logisticVendorType, est_amount: logisticAmount };
       setLogisticBudget(prevRows => {
         const updatedRecords = prevRows && [...prevRows, newObject]
-        console.log(updatedRecords)
+        // console.log(updatedRecords)
         setFormData((prev: any) => ({ ...prev, logistics: updatedRecords }))
         return updatedRecords
       }
@@ -172,7 +172,7 @@ const Form3 = ({ ...Props }: Props) => {
       const newObject: Compensation = { vendor_type: compansationVendorType, est_amount: compansationAmount, gst_included: compansation_is_GST, vendor_name: compansationVendorName };
       setCompansationBudget(prevRows => {
         const updatedRecords = prevRows && [...prevRows, newObject]
-        console.log(updatedRecords)
+        // console.log(updatedRecords)
         setFormData((prev: any) => ({ ...prev, compensation: updatedRecords }))
         return updatedRecords
       }
@@ -252,7 +252,7 @@ const Form3 = ({ ...Props }: Props) => {
       if (response.ok) {
         const data = await response.json();
         setVendorName(data.data)
-        console.log(data, "vendor name api");
+        // console.log(data, "vendor name api");
       } else {
         console.log("Response not ok while vendor type change");
       }
@@ -283,7 +283,7 @@ const Form3 = ({ ...Props }: Props) => {
     (<div>
       <div className='pb-8'>
         <h1 className="text-black text-2xl font-normal uppercase pb-8">
-          Budget Details
+          Budget/Vendor Details
         </h1>
         <div className="grid grid-cols-3 gap-6">
           <div className="flex flex-col gap-2">
@@ -650,7 +650,7 @@ const Form3 = ({ ...Props }: Props) => {
           {" "}
           Save as Draft
         </Button> */}
-        <Button className="bg-white text-black border text-md font-normal hover:bg-white" onClick={() => router.push(`/hcp_services?forms=2&refno=${Props.refNo}`)}>
+        <Button className="bg-white text-black border text-md font-normal hover:bg-white" onClick={() => router.push(`/training_and_education?forms=2&refno=${Props.refNo}`)}>
           Back
         </Button>
         <Button className="bg-[#4430bf] text-white text-md font-normal border hover:bg-[#4430bf]" onClick={(e: React.MouseEvent<HTMLButtonElement>) => handleSubmit(e)}>

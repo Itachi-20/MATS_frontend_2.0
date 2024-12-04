@@ -8,8 +8,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { Toaster, toast } from 'sonner'
+import { Button } from '@/components/ui/button';
 type EventTable = {
   name: string;
   vendor_type: string;
@@ -20,6 +22,7 @@ type EventTable = {
   email: string;
   contact_number: string;
   status:string;
+
 }[];
 
 type particularVendorData ={
@@ -41,7 +44,7 @@ type Props = {
 };
 const table = ({ ...Props }: Props) => {
   const router = useRouter()
-
+console.log(Props.vendorData,'Props')
   return (
     <div className="border bg-white h-full p-4 rounded-[18px]">
       <Table className={""}>
@@ -126,7 +129,10 @@ const table = ({ ...Props }: Props) => {
                   <TableCell>{data.pan_number}</TableCell>
                   <TableCell>{data.email}</TableCell>
                   <TableCell>{data.contact_number}</TableCell>
-                  <TableCell>{data.status}</TableCell>
+                  <TableCell>{data.status} 
+                    {/* {data.status == "Approved" ? data.status :<Button className="bg-[#F0EDFF] w-[75px] text-[#4430BF] text-sm  rounded-md font-semibold hover:underline capitalize" onClick={() => router.push(`/add_vendor?refno=${data.name}`)}>Approve</Button>} */}
+                    </TableCell>
+                  
                   <TableCell className="flex space-x-6 items-center justify-center border-l-2 sticky right-0 bg-[white] z-30">
                     {/* <div className="hover:cursor-pointer" onClick={() => router.push(`/add_vendor?refno=${data.name}&view=view`)}>
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
@@ -164,22 +170,7 @@ const table = ({ ...Props }: Props) => {
                         </g>
                       </svg>
                     </div>
-                    <div className="hover:cursor-pointer" onClick={() => Props.handleDeleteVendor(data.name)}>
-                      <svg
-                        width="18"
-                        height="20"
-                        viewBox="0 0 18 20"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          id="Vector"
-                          d="M14.6256 19.5H14.625H3.375C2.88779 19.5 2.48452 19.3344 2.13785 18.992C1.79142 18.6499 1.62565 18.254 1.625 17.7774V3.89583C1.625 3.30903 1.1493 2.83333 0.5625 2.83333C0.527982 2.83333 0.5 2.80535 0.5 2.77083V2.22222C0.5 1.88471 0.773604 1.61111 1.11111 1.61111H5.06944C5.65241 1.61111 6.125 1.13852 6.125 0.555556C6.125 0.524873 6.14987 0.5 6.18056 0.5H11.8194C11.8501 0.5 11.875 0.524873 11.875 0.555556C11.875 1.13852 12.3476 1.61111 12.9306 1.61111H16.8889C17.2264 1.61111 17.5 1.88471 17.5 2.22222V2.77083C17.5 2.80535 17.472 2.83333 17.4375 2.83333C16.8507 2.83333 16.375 3.30903 16.375 3.89583V17.7778C16.375 18.2534 16.2097 18.6493 15.863 18.9923C15.5165 19.3351 15.1133 19.5006 14.6256 19.5ZM5.125 14.4306C5.125 15.328 5.85254 16.0556 6.75 16.0556C7.64746 16.0556 8.375 15.328 8.375 14.4306V6.68056C8.375 5.78309 7.64746 5.05556 6.75 5.05556C5.85254 5.05556 5.125 5.78309 5.125 6.68056V14.4306ZM9.625 14.4306C9.625 15.328 10.3525 16.0556 11.25 16.0556C12.1475 16.0556 12.875 15.328 12.875 14.4306V6.68056C12.875 5.78309 12.1475 5.05556 11.25 5.05556C10.3525 5.05556 9.625 5.78309 9.625 6.68056V14.4306Z"
-                          fill="#242424"
-                          stroke="#636363"
-                        />
-                      </svg>
-                    </div>
+                    <Image src={"/svg/delete.svg"} width={20} height={20}  alt='view-document' className='cursor-pointer' onClick={() => Props.handleDeleteVendor(data.name)} />
                   </TableCell>  
                 </TableRow>
               );

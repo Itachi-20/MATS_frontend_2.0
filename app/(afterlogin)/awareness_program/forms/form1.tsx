@@ -34,10 +34,10 @@ type dropdownData = {
     name: string;
     state: string;
   }[];
-  // city: {
-  //   name: string;
-  //   state: string;
-  // }[];
+  city: {
+    name: string;
+    city: string;
+  }[];
 };
 
 type eventCostCenter = {
@@ -118,7 +118,7 @@ const Form1 = ({ ...Props }: Props) => {
   const [subtypeActivityVisible, setSubtypeActivityVisible] = useState(false);
   const [engagementTypes, setEngagementTypes] = useState("");  
   const [formData, setFormData] = useState<formData>(); 
-  console
+
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const updatedFormData = {
@@ -248,14 +248,17 @@ const Form1 = ({ ...Props }: Props) => {
               <SelectValue placeholder="Select" />
             </SelectTrigger>
             <SelectContent>
-              {Props.dropdownData &&
+              {Props.dropdownData ?
                 Props.dropdownData.company.map((item, index) => {
                   return (
                     <SelectItem value={item.name}>
                       {item.company_name}
                     </SelectItem>
                   );
-                })}
+                })
+                :
+                <SelectItem value={"null"} disabled>No Data Yet</SelectItem>
+              }
             </SelectContent>
           </Select>
         </div>
@@ -270,14 +273,17 @@ const Form1 = ({ ...Props }: Props) => {
               <SelectValue placeholder="Select" />
             </SelectTrigger>
             <SelectContent>
-              {Props.dropdownData &&
+              {Props.dropdownData ?
                 Props.dropdownData.division.map((item, index) => {
                   return (
                     <SelectItem value={item.name}>
                       {item.division_name}
                     </SelectItem>
                   );
-                })}
+                })
+                :
+                <SelectItem value={"null"} disabled>No Data Yet</SelectItem>
+              }
             </SelectContent>
           </Select>
         </div>
@@ -293,14 +299,17 @@ const Form1 = ({ ...Props }: Props) => {
               <SelectValue placeholder="Select" />
             </SelectTrigger>
             <SelectContent>
-              {Props.dropdownData &&
+              {Props.dropdownData ?
                 Props.dropdownData.requestor.map((item, index) => {
                   return (
                     <SelectItem value={item.email}>
                       {item.full_name}
                     </SelectItem>
                   );
-                })}
+                })
+                :
+                <SelectItem value={"null"} disabled>No Data Yet</SelectItem>
+              }
             </SelectContent>
           </Select>
         </div>
@@ -323,13 +332,16 @@ const Form1 = ({ ...Props }: Props) => {
                         {item.cost_center_description}
                       </SelectItem>
                     );
-                  }): eventCostCenter && eventCostCenter.cost_center.map((item,index)=>{
+                  }): eventCostCenter ? eventCostCenter.cost_center.map((item,index)=>{
                     return (
                       <SelectItem value={item.name}>
                         {item.cost_center_description}
                       </SelectItem>
                     )
-                  })}
+                  })
+                  :
+                <SelectItem value={"null"} disabled>No Data Yet</SelectItem>
+                }
             </SelectContent>
           </Select>
         </div>
@@ -350,13 +362,16 @@ const Form1 = ({ ...Props }: Props) => {
                         {item.category}
                       </SelectItem>
                     );
-                  }): eventCostCenter && eventCostCenter.division_category.map((item,index)=>{
+                  }): eventCostCenter ? eventCostCenter.division_category.map((item,index)=>{
                     return (
                       <SelectItem value={item.name}>
                         {item.category}
                       </SelectItem>
                     )
-                  })}
+                  })
+                  :
+                <SelectItem value={"null"} disabled>No Data Yet</SelectItem>
+                }
             </SelectContent>
           </Select>
         </div>
@@ -374,19 +389,22 @@ const Form1 = ({ ...Props }: Props) => {
                 <SelectValue placeholder="--Selected--" />
               </SelectTrigger>
               <SelectContent>
-              {subtypeActivity &&
+              {subtypeActivity ?
                   subtypeActivity.map((item, index) => {
                     return (
                       <SelectItem value={item.name}>
                         {item.division_sub_category}
                       </SelectItem>
                     );
-                  })}
+                  })
+                  :
+                <SelectItem value={"null"} disabled>No Data Yet</SelectItem>
+                }
               </SelectContent>
             </Select>
           </div>
         }
-        {/* <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2">
           <label className="lable">
             City<span className="text-[#e60000]">*</span>
           </label>
@@ -397,18 +415,21 @@ const Form1 = ({ ...Props }: Props) => {
             <SelectTrigger className="dropdown">
               <SelectValue placeholder="Select" />
             </SelectTrigger>
-            <SelectContent> */}
-              {/* {Props.dropdownData &&
+            <SelectContent>
+              {Props.dropdownData ?
                   Props.dropdownData.city.map((item, index) => {
                     return (
                       <SelectItem value={item.name}>
                         {item.city}
                       </SelectItem>
                     );
-                  })} */}
-            {/* </SelectContent>
+                  })
+                  :
+                <SelectItem value={"null"} disabled>No Data Yet</SelectItem>
+                }
+            </SelectContent>
           </Select>
-        </div> */}
+        </div>
         <div className="flex flex-col gap-2">
           <label className="lable">
             State<span className="text-[#e60000]">*</span>
@@ -421,14 +442,17 @@ const Form1 = ({ ...Props }: Props) => {
               <SelectValue placeholder="Select" />
             </SelectTrigger>
             <SelectContent>
-              {Props.dropdownData &&
+              {Props.dropdownData ?
                 Props.dropdownData.state.map((item, index) => {
                   return (
                     <SelectItem value={item.name}>
                       {item.state}
                     </SelectItem>
                   );
-                })}
+                })
+                :
+                <SelectItem value={"null"} disabled>No Data Yet</SelectItem>
+              }
             </SelectContent>
           </Select>
         </div>

@@ -83,7 +83,7 @@ export const PreviewData = async (refno:string,cookie:any) => {
       
       if (response.ok) {
         const data = await response.json();
-        console.log(data.data,"this is utility event cost");
+        // console.log(data.data,"this is utility event cost");
         return data.data;
       } else {
         console.log("Login failed");
