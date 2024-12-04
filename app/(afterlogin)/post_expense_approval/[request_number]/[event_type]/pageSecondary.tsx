@@ -158,7 +158,6 @@ import { Toaster, toast } from 'sonner';
         dropdownDataApi: DropdownData
     }
 const pagess = ({...Props}:props) => {
-    console.log(Props.dropdownDataApi , "###############")
     const [dropdown, setDropdown] = useState<DropdownData>(Props.dropdownDataApi);
     const [opencommentbox, setCommentBox] = useState(false);
     
@@ -175,19 +174,15 @@ const pagess = ({...Props}:props) => {
     const [open, setOpen] = useState(false);
     const [successprop, setSuccessprop] = useState(false);
 
-    console.log(expensedata, "----------------------", dropdown);
-
     const handleSuccessProp = async()=>{
         setCommentBox(false);
         setSuccessprop(!successprop);
         setTimeout(()=>{router.push('/post_expense_approval/')},2000);
     }
     const handleSetFileData = async (file: any) => {
-        // console.log(file, 'file in setfile ')
         setFileData(file);
         setOpen(true)
     };
-    
     const handleApiPromise = async() => {
         const updatedFormData = {
             ...formdata
@@ -201,7 +196,6 @@ const pagess = ({...Props}:props) => {
               });
       
               if (!response.ok) {
-                // setLoading(false);
                 throw new Error('Something went Wrong while closing the event');
               }
       
@@ -214,13 +208,10 @@ const pagess = ({...Props}:props) => {
         toast.promise(apiCallPromise, {
             loading: `${updatedFormData.action == "Approved" ? "Approving" : updatedFormData.action == "Send Back" ? "Send backing" : updatedFormData.action == "Rejected" ? "Rejecting" : ""} the event...`,
             success: (data) => {
-                // setLoading(false);
-                
                 handleSuccessProp();
-                console.log(data, "response data");
                 return `Event has successfully been ${updatedFormData.action}!`;
             },
-            error: (error) => `Failed to add vendor: ${error.message || error}`,
+            error: (error) => `Failed to approve/reject/send back post expense: ${error.message || error}`,
           });
     }
     const handleApproveRejectSendBack = async (remark:string) => {
@@ -271,7 +262,6 @@ const pagess = ({...Props}:props) => {
             isClosed: false,
         }));
     }, []);
-    
     
 
     return (

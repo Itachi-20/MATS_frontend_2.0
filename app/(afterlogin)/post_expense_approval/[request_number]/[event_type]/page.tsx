@@ -3,13 +3,12 @@ import Pagess from './pageSecondary'
 import { cookies } from 'next/headers';
 const page = async ({params}:any) => {
     const refno = await params;
-    console.log(refno, "refnoooooooooooooo")
     const eventDataApi = async () => {
     try {
         const cookie = await cookies();
         const Cookie = cookie.toString();
             const response = await fetch(
-                `http://10.120.140.7:8001/api/method/matsapp.api.utils.utils.get_post_expense_request_data?name=${refno.request_number}&expense_name=${refno.event_type}`,
+                `${process.env.FRAPPE_URL}/api/method/matsapp.api.utils.utils.get_post_expense_request_data?name=${refno.request_number}&expense_name=${refno.event_type}`,
                 {
                     method: "POST",
                     headers: {
@@ -22,26 +21,21 @@ const page = async ({params}:any) => {
             );
 
             if (response.ok) {
-                const data = await response.json();
-                console.log(data, "in api")
-            
+                const data = await response.json();            
                 return data.data;
-                
-
             } else {
-                console.log("Login failed");
+                console.log("Response not OKAY in Post Expense Request DATA");
             }
         } catch (error) {
-            console.error("Error during login:", error);
+            console.error("Error during Post Expense Request Data:", error);
         }
     };
     const dropdownDataApi = async () => {
-        console.log("inside dropdowndataapi Data");
         const cookie = await cookies();
         const Cookie = cookie.toString();
         try {
             const response = await fetch(
-                `http://10.120.140.7:8001/api/method/matsapp.api.utils.utils.get_expense_dropdown_data`,
+                `${process.env.FRAPPE_URL}/api/method/matsapp.api.utils.utils.get_expense_dropdown_data`,
                 {
                     method: "GET",
                     headers: {
@@ -56,10 +50,10 @@ const page = async ({params}:any) => {
                 const data = await response.json();
                 return data.message;
             } else {
-                console.log("Login failed");
+                console.log("Response not okay in getting expense dropdown data");
             }
         } catch (error) {
-            console.error("Error during login:", error);
+            console.error("Error during getting expense dropdown data:", error);
         }
     };  
     const eventData = await eventDataApi();
