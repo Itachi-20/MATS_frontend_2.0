@@ -321,7 +321,7 @@ const index = async ({...Props}:any) => {
   const cookie = await cookies();
   let previewdata:  PreviewDataType | null = null;
   let eventCostCenter = null;
-  console.log(refno,cookie);
+  // console.log(refno,cookie);
   
   if(refno){
     previewdata =  await PreviewData(refno,cookie);
@@ -330,9 +330,8 @@ const index = async ({...Props}:any) => {
     eventCostCenter = await handleBusinessUnitChange(previewdata.business_unit,cookie);
   }
 
-  let eventype: { [key: string]: string } = {};
-  eventype["training_and_education"] = "Training and Education";
-  console.log(activityDropdown, dropdownData, previewdata);
+  let eventType = "Training and Education";
+  // console.log(activityDropdown, dropdownData, previewdata);
 
   return (
     <>
@@ -350,7 +349,7 @@ const index = async ({...Props}:any) => {
               eventCostCenter={eventCostCenter}
               previewData = {previewdata}
               dropdownData={dropdownData}
-              refNo={refno}
+              // refNo={refno}
             /> :
             forms == "2" ?
               <Form2

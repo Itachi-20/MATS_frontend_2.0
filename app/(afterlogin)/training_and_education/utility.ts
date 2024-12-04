@@ -99,7 +99,7 @@ export const handleBudgetChange = async (value: string,cookie:any) => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log("Preview Data", data.data);
+        // console.log("Preview Data", data.data);
         return data.data;
       } else {
         console.log('failed',response.status);
@@ -128,7 +128,7 @@ export const handleBudgetChange = async (value: string,cookie:any) => {
       
       if (response.ok) {
         const data = await response.json();
-        console.log(data.data,"this is utility event cost");
+        // console.log(data.data,"this is utility event cost");
         return data.data;
       } else {
         console.log("Response was not OKAY in business unit change");

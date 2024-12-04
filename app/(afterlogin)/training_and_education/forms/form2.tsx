@@ -54,7 +54,7 @@ const Form2 = ({ ...Props }: Props) => {
       );
       if (response.ok) {
         const data = await response.json();
-        console.log(data, "response data");
+        // console.log(data, "response data");
         setRefNo(data.message);
         router.push(`/training_and_education?forms=3&refno=${data.message}`);
       } else {
@@ -86,7 +86,7 @@ const Form2 = ({ ...Props }: Props) => {
     }
     handlefieldChange(e);
   };
-  console.log("formdata", formData)
+  // console.log("formdata", formData)
   return (
     <>
       <div>

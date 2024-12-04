@@ -38,7 +38,7 @@ type Props = {
   eventCostCenter: eventCostCenter | null;
   dropdownData: DropdownDataType | null;
   previewData: PreviewDataType | null;
-  refNo: string
+  // refNo: string
 }
 
 const Form1 = ({ ...Props }: Props) => {
@@ -46,7 +46,7 @@ const Form1 = ({ ...Props }: Props) => {
   const router = useRouter();
   const [businessUnit, setBusinessUnit] = useState(Props.previewData?.business_unit ?? "");
   const [budget, setBudget] = useState(Props.previewData?.division_category ?? "");
-  const [refNo, setRefNo] = useState<string>(Props.refNo ?? "");
+  const [refNo, setRefNo] = useState<string>("");
   const [eventCostCenter, setEventCostCenter] = useState<eventCostCenter | null>(null);
   const [subtypeActivity, setSubtypeActivity] = useState<subtypeActivity | null>(null);
 

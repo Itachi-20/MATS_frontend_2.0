@@ -162,7 +162,7 @@ const form4 = ({ ...Props }: Props) => {
       if (response.ok) {
         const data = await response.json();
         setPreviewData(data.data);
-        console.log(data, "PreviewData")
+        // console.log(data, "PreviewData")
       } else {
         console.log('Response was not OKAY');
       }

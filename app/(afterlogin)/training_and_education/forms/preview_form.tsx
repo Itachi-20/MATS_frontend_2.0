@@ -223,7 +223,7 @@ const Preview_Form = ({...Props}:Props) => {
       if (response.ok) {
         const data = await response.json();
         setPreviewData(data.data);
-        console.log(data, "PreviewData")
+        // console.log(data, "PreviewData")
       } else {
         console.log('Response not okay while previewing data');
       }
@@ -233,10 +233,7 @@ const Preview_Form = ({...Props}:Props) => {
   };
   useEffect(() => {
     PreviewData();
-  }, [])
-
-  console.log("preview_data", preview_data, refNo)
-
+  }, []);
 
   const handleFinalSubmit = async () => {
     try {
@@ -256,7 +253,7 @@ const Preview_Form = ({...Props}:Props) => {
       );
       if (response.ok) {
         const data = await response.json();
-        console.log(data, "response data");
+        // console.log(data, "response data");
         setTimeout(() => {
           router.push(`/event_list`);
           localStorage.clear();
@@ -273,8 +270,6 @@ const Preview_Form = ({...Props}:Props) => {
   const handleComment = (value:string)=>{
     setComment(value)
   }
-  
-  
 
   return (
       <>
