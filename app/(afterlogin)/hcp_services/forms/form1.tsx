@@ -395,8 +395,8 @@ const Form1 = ({ ...Props }: Props) => {
               Budget Sub Type<span className="text-[#e60000]">*</span>
             </label>
             <Select
-              onValueChange={(value) => { handleSelectChange(value, "division_sub_category") }}
-              defaultValue={Props.previewData?.division_sub_category ? Props.previewData.division_sub_category : ""}
+            onValueChange={(value)=>{handleSelectChange(value,"division_sub_category")}}
+            defaultValue={Props.previewData?.division_sub_category?Props.previewData.division_sub_category:""}
             >
               <SelectTrigger className="dropdown">
                 <SelectValue placeholder="--Selected--" />
@@ -419,7 +419,6 @@ const Form1 = ({ ...Props }: Props) => {
               </SelectContent>
             </Select>
           </div>
-
         }
         {/* <div className="flex flex-col gap-2">
           <label className="lable">

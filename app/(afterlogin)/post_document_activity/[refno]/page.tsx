@@ -199,7 +199,7 @@ const page = () => {
     const [isChecked,setIsChecked] = useState<boolean>();
     const [isOccurance,setIsOccurance] = useState<boolean>(false);
     const [occuranceDate,setOcccuranceDate] = useState<string>();
-    const [uploadedFiles, setUploadedFiles] = useState<FileList | null>(); //added state 1
+    const [uploadedFiles, setUploadedFiles] = useState<FileList | null>(null)
     const [fileList, setFileList] = useState<File[]>([]); //added state 2
     const [documentType, setDocumentType] = useState("");
     const [activityType, setActivityType] = useState('Pre Activity');
@@ -265,7 +265,8 @@ const page = () => {
 
       if (response.ok) {
         setDocumentType('')
-        setFiles([])
+        setFiles([]);
+        setUploadedFiles(null);
         fetchData();
 
       } else {
@@ -331,9 +332,9 @@ const page = () => {
   }
 
 
-  const handleNext = (fileList: FileList | null) => {
-    setUploadedFiles(fileList);
-  };
+  const handleNext = () => {
+    
+  }
 
   const handleOccuranceDate = (e:React.ChangeEvent<HTMLInputElement>)=>{
     setOcccuranceDate(e.target.value);
@@ -459,7 +460,7 @@ const page = () => {
             <label className="text-black text-sm font-normal capitalize">
               Upload Files<span className="text-[#e60000]">*</span>
             </label>
-            <SimpleFileUpload files={files} setFiles={setFiles} onNext={handleNext} buttonText={'Upload Here'} />
+            <SimpleFileUpload files={files} setFiles={setFiles} setUploadedFiles={setUploadedFiles}  onNext={handleNext} buttonText={'Upload Here'} />
           </div>
           <Button
             className="bg-white text-black border text-md font-normal"

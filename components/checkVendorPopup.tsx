@@ -16,10 +16,11 @@ type vendor = {
 }[]
 type Props = {
     setClose: React.Dispatch<React.SetStateAction<boolean>>
+    pan_number:string | null | undefined;
 };
 
 const AddDocument = ({ ...Props }: Props) => {
-    const [pan, setPan] = useState<string | null>()
+    const [pan, setPan] = useState<string | null>(Props.pan_number?Props.pan_number:'')
     const [vendorlist, setVendorList] = useState<vendor>()
     const [error, setError] = useState<string | null>()
     //   const base_url = process.env.NEXT_PUBLIC_FRAPPE_URL;
@@ -27,7 +28,6 @@ const AddDocument = ({ ...Props }: Props) => {
         const { name, value } = e.target;
         setPan(value);
     }
-
     const checkvendor = async () => {
         console.log(pan, 'value in evebnt target')
         setError("")
@@ -41,7 +41,7 @@ const AddDocument = ({ ...Props }: Props) => {
                     body: JSON.stringify({
                         pan: pan,
                     }),
-
+                    
                 });
                 if (response.ok) {
                     const data = await response.json();
@@ -68,6 +68,7 @@ const AddDocument = ({ ...Props }: Props) => {
 
                     <Input className='dropdown' placeholder='Search PAN here'
                         name='pan_number'
+                        defaultValue={pan?pan:''}
                         onChange={(e) => handlePanfieldsearch(e)}
                     ></Input>
                     <Button className="bg-[#4430bf] text-white text-md font-normal border hover:bg-[#4430bf]" onClick={checkvendor}>

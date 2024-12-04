@@ -1,3 +1,4 @@
+"use client"
 import React, { useState, useEffect } from 'react'
 import { Input } from "@/components/ui/input";
 import {
@@ -18,24 +19,48 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Checkbox } from '@/components/ui/checkbox';
+import { Previewdata } from '@/app/(afterlogin)/monetary_grant/page'
+import { useRouter } from 'next/navigation';
+type formData = {
+  name: string | null;
+  event_type: string;
+  company: string;
+  event_cost_center: string;
+  state: string;
+  city: string;
+  event_start_date: string;
+  event_end_date: string;
+  bu_rational: string;
+  faculty: string;
+  participants: string;
+  therapy: string;
+  event_name: string;
+  event_venue: string;
+  comments: string;
+  compensation: Compensation[];
+  logistics: Logistics[];
+  total_compensation_expense: number;
+  total_logistics_expense: number;
+  event_requestor: string;
+  business_unit: string;
+  division_category: string;
+  division_sub_category: string;
+  sub_type_of_activity: string;
+  any_govt_hcp: string,
+  no_of_hcp: number
+};
+
 
 type Props = {
-  handleBackButton: (e: React.MouseEvent<HTMLButtonElement>) => void
-  // nextForm: () => void,
-  // prevForm: () => void,
-  isAddVendor: () => void,
   vendorType: {
     name: string,
     vendor_type: string
   }[] | null,
   currency: {
     name: string
-  }[] | null,
-  handlefieldChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
-  handleSelectChange: (value: string, name: string) => void;
-  handleSubmit: (e: React.MouseEvent<HTMLButtonElement>) => void
-  setFormData: (value: any) => void
-  logisticsBudget: Logistics[]
+  }[] | null
+  previewData: Previewdata | null | undefined
+  refno: string;
 }
 type Budget = "logistics" | "compensation" | "";
 
@@ -46,7 +71,7 @@ type vendorName = {
 
 type Compensation = {
   vendor_type: string;
-  vendor_name: string;
+  vendor_name: string | null;
   est_amount: number;
   gst_included?: number;
 };
@@ -60,23 +85,80 @@ const Form3 = ({ ...Props }: Props) => {
   const [vendorName, setVendorName] = useState<vendorName | null>(null);
   const [logisticVendorType, setLogisticVendorType] = useState("");
   const [logisticAmount, setLogisticAmount] = useState(0);
-  const [logisticsBudget, setLogisticBudget] = useState<Logistics[]>([]);
+  const [logisticsBudget, setLogisticBudget] = useState<Logistics[] | undefined>(Props.previewData?.logistics);
   const [compansationVendorName, setCompansationVendorName] = useState("");
   const [compansationVendorType, setCompansationVendorType] = useState("");
   const [compansationAmount, setCompansationAmount] = useState(0);
   const [compansation_is_GST, setCompansation_is_GST] = useState(0);
-  const [compansationBudget, setCompansationBudget] = useState<Compensation[]>([]);
+  const [compansationBudget, setCompansationBudget] = useState<Compensation[] | undefined>(Props.previewData?.compensation);
   const [totalLogisticAmount, setTotalLogisticAmount] = useState(0);
   const [totalCompansationAmount, setTotalCompansationAmount] = useState(0);
   const [totalEstimatedAmount, setTotalEstimatedAmount] = useState(0);
+
+  const router = useRouter();
+  const [formdata, setFormData] = useState<formData | {}>();
+  const [refNo, setRefNo] = useState<string | null>(Props.refno);
+
+  const handleSelectChange = (value: string, name: string) => {
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handlefieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  }
+
+  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    const updatedFormData = {
+      ...formdata
+
+    };
+    updatedFormData.event_type = "Non Monetary Grant"
+    if (refNo) {
+      updatedFormData.name = refNo;
+    }
+
+    try {
+      const response = await fetch(
+        "/api/monetary_grant/handleSubmit",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: 'include',
+          body: JSON.stringify(updatedFormData)
+        }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data, "response data");
+        setRefNo(data.message);
+        router.push(`/non_monetary_grant?forms=4&refno=${data.message}`);
+
+      } else {
+        console.log("submission failed");
+      }
+    } catch (error) {
+      console.error("Error during Submission:", error);
+    }
+  };
+  useEffect(() => {
+    setFormData({ ...formdata, name: Props.refno ? Props.refno : '' })
+    Props.refno
+  }, [])
+
+  console.log(formdata, "this is form data")
 
   const handleLogisticsAdd = () => {
     if (logisticVendorType && logisticAmount > 0) {
       const newObject: Logistics = { vendor_type: logisticVendorType, est_amount: logisticAmount };
       setLogisticBudget(prevRows => {
-        const updatedRecords = [...prevRows, newObject]
+        const updatedRecords = prevRows && [...prevRows, newObject]
         console.log(updatedRecords)
-        Props.setFormData((prev: any) => ({ ...prev, logistics: updatedRecords }))
+        setFormData((prev: any) => ({ ...prev, logistics: updatedRecords }))
         return updatedRecords
       }
       )
@@ -89,22 +171,23 @@ const Form3 = ({ ...Props }: Props) => {
     if (compansationVendorType && compansationAmount > 0) {
       const newObject: Compensation = { vendor_type: compansationVendorType, est_amount: compansationAmount, gst_included: compansation_is_GST, vendor_name: compansationVendorName };
       setCompansationBudget(prevRows => {
-        const updatedRecords = [...prevRows, newObject]
+        const updatedRecords = prevRows && [...prevRows, newObject]
         console.log(updatedRecords)
-        Props.setFormData((prev: any) => ({ ...prev, compensation: updatedRecords }))
+        setFormData((prev: any) => ({ ...prev, compensation: updatedRecords }))
         return updatedRecords
       }
       )
       setCompansationVendorType('');
       setCompansationAmount(0);
+      setCompansationVendorName('');
+      setCompansation_is_GST(0);
     }
   }
-
 
   const handleCompensationDelete = (indexToDelete: number) => {
     setCompansationBudget((prevRows) => {
       const updatedRecords = prevRows?.filter((_, index) => index !== indexToDelete) || [];
-      Props.setFormData((prev: any) => ({ ...prev, compensation: updatedRecords }));
+      setFormData((prev: any) => ({ ...prev, compensation: updatedRecords }));
       return updatedRecords;
     });
   };
@@ -113,10 +196,11 @@ const Form3 = ({ ...Props }: Props) => {
   const handleLogisticDelete = (indexToDelete: number) => {
     setLogisticBudget((prevRows) => {
       const updatedRecords = prevRows?.filter((_, index) => index !== indexToDelete) || [];
-      Props.setFormData((prev: any) => ({ ...prev, logistics: updatedRecords }));
+      setFormData((prev: any) => ({ ...prev, logistics: updatedRecords }));
       return updatedRecords;
     });
   };
+
   useEffect(() => {
     totalLogisticAmountCalculation();
   }, [logisticsBudget])
@@ -147,14 +231,10 @@ const Form3 = ({ ...Props }: Props) => {
       )
     })
   }
-
-
-
-
   const handleVendorTypeChangeApi = async (value: string) => {
     try {
       const response = await fetch(
-        `/api/monetary_grant/vendorName?vendor_type=${value}`,
+        `/api/training_and_education/vendorName?vendor_type=${value}`,
         {
           method: "GET",
           headers: {
@@ -193,7 +273,6 @@ const Form3 = ({ ...Props }: Props) => {
       setCompansation_is_GST(0);
     }
   }
-
   return (
     // </div>
     (<div>
@@ -201,7 +280,7 @@ const Form3 = ({ ...Props }: Props) => {
         <h1 className="text-black text-2xl font-normal uppercase pb-8">
           Budget Details
         </h1>
-        <div className="grid grid-cols-3 gap-12">
+        <div className="grid grid-cols-3 gap-6">
           <div className="flex flex-col gap-2">
             <label className="lable">
               Budget Type<span className="text-[#e60000]">*</span>
@@ -228,6 +307,7 @@ const Form3 = ({ ...Props }: Props) => {
             </label>
             <Select
               onValueChange={(value: string) => { setLogisticVendorType(value) }}
+              value={logisticVendorType ? logisticVendorType : ""}
             >
               <SelectTrigger className="dropdown">
                 <SelectValue placeholder="Select" />
@@ -256,6 +336,7 @@ const Form3 = ({ ...Props }: Props) => {
               placeholder="Type Here"
               type='number'
               onChange={handleAmountChange}
+              value={logisticAmount ? logisticAmount : ''}
             ></Input>
           </div>
           <div className="flex justify-end pt-7">
@@ -275,6 +356,7 @@ const Form3 = ({ ...Props }: Props) => {
                 </label>
                 <Select
                   onValueChange={(value) => { handleVendorTypeChangeApi(value); setCompansationVendorType(value) }}
+                  value={compansationVendorType ? compansationVendorType : ""}
                 >
                   <SelectTrigger className="dropdown">
                     <SelectValue placeholder="Select" />
@@ -294,6 +376,7 @@ const Form3 = ({ ...Props }: Props) => {
                 </label>
                 <Select
                   onValueChange={(value: string) => { setCompansationVendorName(value) }}
+                  value={compansationVendorName ? compansationVendorName : ""}
                 >
                   <SelectTrigger className="dropdown">
                     <SelectValue placeholder="Select" />
@@ -318,6 +401,7 @@ const Form3 = ({ ...Props }: Props) => {
                   placeholder="Type Here"
                   type='number'
                   onChange={(e) => handleCompensationChange(e)}
+                  value={compansationAmount ? compansationAmount : ""}
                 ></Input>
               </div>
               <div className="flex flex-col gap-5 items-center">
@@ -327,6 +411,7 @@ const Form3 = ({ ...Props }: Props) => {
                 <Input className='text-black w-5 h-5'
                   type='checkbox'
                   onChange={(e) => handle_is_GST(e)}
+                  value={compansation_is_GST ? compansation_is_GST : 0}
                 />
               </div>
             </div>
@@ -346,7 +431,7 @@ const Form3 = ({ ...Props }: Props) => {
                     fill="#635E5E"
                   />
                 </svg>
-                <Button className="bg-white text-black border text-md font-normal rounded-xl pl-10 py-2 hover:bg-white" onClick={Props.isAddVendor}>
+                <Button className="bg-white text-black border text-md font-normal rounded-xl pl-10 py-2 hover:bg-white" onClick={() => router.push("/add_vendor")}>
                   Add New Vendor
                 </Button>
               </div>
@@ -362,7 +447,7 @@ const Form3 = ({ ...Props }: Props) => {
         Logistics Budget
       </h1>
       <div className="border mb-8 border-[#848484] p-7 rounded-[50px] w-full mr-4  bg-white">
-        <Table className={""}>
+        <Table className={"overflow-hidden"}>
           <TableHeader className={"bg-[#E0E9FF]"}>
             <TableRow className={""}>
               <TableHead
@@ -394,7 +479,7 @@ const Form3 = ({ ...Props }: Props) => {
                 <><TableCell>{item.vendor_type}</TableCell><TableCell>{item.est_amount}</TableCell>
                   <TableCell>
                     <div className="flex justify-around">
-                      <div className="hover:cursor-pointer" onClick={()=>handleLogisticDelete(index)}>
+                      <div onClick={() => { handleLogisticDelete(index) }} className="hover:cursor-pointer">
                         <svg
                           width="18"
                           height="20"
@@ -415,17 +500,20 @@ const Form3 = ({ ...Props }: Props) => {
                 </>
               </TableRow>
             ))}
-            <div className='text-black pt-3 text-[16px]'>
-              Total Amount :- {totalLogisticAmount}
-            </div>
+            {/* <div className='text-black pt-3 text-[16px]'>
+                  Total Amount :- {totalLogisticAmount}
+                </div> */}
           </TableBody>
         </Table>
+        <div className='text-black pt-3 font-poppins text-[16px]'>
+                  Total Amount :- {totalLogisticAmount}
+                </div>
       </div>
       <h1 className="text-black text-2xl font-normal uppercase pb-8">
         Compensation Budget
       </h1>
       <div className="border border-[#848484] p-7 rounded-[50px] w-full mr-4  bg-white">
-        <Table className={""}>
+        <Table className={"overflow-hidden"}>
           <TableHeader className={"bg-[#E0E9FF]"}>
             <TableRow className={""}>
               <TableHead
@@ -477,7 +565,7 @@ const Form3 = ({ ...Props }: Props) => {
                 </TableCell>
                 <TableCell>
                   <div className="flex justify-around">
-                    <div className="hover:cursor-pointer" onClick={()=>handleCompensationDelete(index)}>
+                    <div className="hover:cursor-pointer" onClick={() => handleCompensationDelete(index)}>
                       <svg
                         width="18"
                         height="20"
@@ -497,11 +585,12 @@ const Form3 = ({ ...Props }: Props) => {
                 </TableCell>
               </TableRow>
             ))}
-            <div className='text-black pt-3 font-poppins text-[16px]'>
-              Total Amount :- {totalCompansationAmount}
-            </div>
+
           </TableBody>
         </Table>
+        <div className='text-black pt-3 font-poppins text-[16px]'>
+          Total Amount :- {totalCompansationAmount}
+        </div>
       </div>
       <h1 className="text-black text-2xl font-normal uppercase py-8">
         Expense Details
@@ -519,7 +608,7 @@ const Form3 = ({ ...Props }: Props) => {
             type='number'
             disabled
             value={totalLogisticAmount + totalCompansationAmount}
-            onChange={(e)=>Props.handlefieldChange(e)}
+            onChange={(e) => handlefieldChange(e)}
           ></Input>
         </div>
         <div className="flex flex-col col-span-1 gap-2">
@@ -527,15 +616,16 @@ const Form3 = ({ ...Props }: Props) => {
             Currency<span className="text-[#e60000]">*</span>
           </label>
           <Select
-          onValueChange={(value:string)=>{Props.handleSelectChange(value,"currency")}}
+            onValueChange={(value: string) => { handleSelectChange(value, "currency") }}
+            defaultValue={Props.previewData ? Props.previewData.currency : "INR"}
           >
             <SelectTrigger className="dropdown">
               <SelectValue placeholder="Select" />
             </SelectTrigger>
             <SelectContent>
               {
-                Props && Props.currency?.map((item,index)=>{
-                  return(
+                Props && Props.currency?.map((item, index) => {
+                  return (
                     <SelectItem value={item.name}>{item.name}</SelectItem>
                   )
                 })
@@ -549,8 +639,13 @@ const Form3 = ({ ...Props }: Props) => {
           {" "}
           Save as Draft
         </Button> */}
-        <Button className='bg-white text-black border text-md font-normal' onClick={Props.handleBackButton}>Back</Button>
-        <Button className='bg-[#4430bf] text-white text-md font-normal border' onClick={Props.handleSubmit}>Next</Button>
+        <Button className="bg-white text-black border text-md font-normal hover:bg-white" onClick={()=>router.push(`/non_monetary_grant?forms=2&refno=${Props.refno}`)}>
+          Back
+        </Button>
+        <Button className="bg-[#4430bf] text-white text-md font-normal border hover:bg-[#4430bf]" onClick={(e: React.MouseEvent<HTMLButtonElement>) => handleSubmit(e)}>
+          Next
+        </Button>
+
       </div>
     </div>)
   );
