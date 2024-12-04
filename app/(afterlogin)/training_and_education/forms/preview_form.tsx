@@ -202,11 +202,11 @@ const Preview_Form = ({...Props}:Props) => {
     setIsCommentbox(prev=> !prev);
   }
 
-  const [isChecked, setIsChecked] = useState<boolean>(false);
+  // const [isChecked, setIsChecked] = useState<boolean>(false);
 
-  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setIsChecked(e.target.checked);
-  };
+  // const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+  //   setIsChecked(e.target.checked);
+  // };
   const PreviewData = async () => {
     try {
       const response = await fetch("/api/previewData", {
@@ -304,7 +304,7 @@ const Preview_Form = ({...Props}:Props) => {
          fetchFile={PreviewData}
         />
         
-            <div className="flex md:pb-8 gap-3 relative">
+            {/* <div className="flex md:pb-8 gap-3 relative">
             <input
             type="checkbox"
             onChange={handleCheckboxChange}
@@ -315,7 +315,7 @@ const Preview_Form = ({...Props}:Props) => {
             I hereby declare that all details filled by me are correct and genuine.<span className="text-[#e60000]">*</span>
                 </label>
                
-            </div>
+            </div> */}
 
             <div className="flex justify-end pt-5 gap-4">
               {/* <Button className="bg-white text-black border text-md font-normal">
@@ -324,7 +324,7 @@ const Preview_Form = ({...Props}:Props) => {
               <Button className="bg-white text-black border text-md font-normal">
                 Back
               </Button>
-              <Button className={`bg-[#4430bf] text-white  font-normal border`} disabled={!isChecked} onClick={()=>handleDialog()}>
+              <Button className={`bg-[#4430bf] text-white  font-normal border`} onClick={()=>handleDialog()}>
                 Submit
               </Button>
             </div>
