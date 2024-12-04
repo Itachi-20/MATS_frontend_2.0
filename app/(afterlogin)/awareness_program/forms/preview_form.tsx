@@ -195,14 +195,7 @@ const Preview_Form = ({...Props}:props) => {
   const [refNo, setRefNo] = useState<string | null>(Props.refNo ?? "");
   const [isCommentbox,setIsCommentbox] = useState<boolean>();
   const [comment,setComment] = useState<string>();
-  const isAddVendor = () => {
-    setAddVendor(prev => !prev)
-  }
-  const [isChecked, setIsChecked] = useState<boolean>(false);
-
-  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setIsChecked(e.target.checked);
-  };
+  
   const PreviewData = async () => {
     try {
       const response = await fetch("/api/previewData", {
@@ -219,7 +212,7 @@ const Preview_Form = ({...Props}:props) => {
       if (response.ok) {
         const data = await response.json();
         setPreviewData(data.data);
-        console.log(data, "PreviewData")
+        // console.log(data, "PreviewData")
       } else {
         console.log('Response was not OKAY');
       }
@@ -231,7 +224,7 @@ const Preview_Form = ({...Props}:props) => {
     PreviewData();
   }, [])
 
-  console.log("preview_data", preview_data, refNo)
+  // console.log("preview_data", preview_data, refNo)
 
 
   const handleFinalSubmit = async () => {
@@ -252,7 +245,7 @@ const Preview_Form = ({...Props}:props) => {
       );
       if (response.ok) {
         const data = await response.json();
-        console.log(data, "response data");
+        // console.log(data, "response data");
         setTimeout(() => {
           router.push(`/event_list`);
           localStorage.clear();
