@@ -222,7 +222,7 @@ const form4 = ({ ...Props }: Props) => {
               </SelectTrigger>
               <SelectContent>
                 {
-                  Props.activityDropdown && Props.activityDropdown.document.filter((item,index)=>{
+                  Props.activityDropdown ? Props.activityDropdown.document.filter((item,index)=>{
                     if(item.activity_type == activityType){
                       return item
                     }
@@ -231,6 +231,8 @@ const form4 = ({ ...Props }: Props) => {
                       <SelectItem value={item.name}>{item.document_name}</SelectItem>
                     )
                   })
+                  :
+                <SelectItem value={"null"} disabled>No Data Yet</SelectItem>
                 }
                     
               </SelectContent>

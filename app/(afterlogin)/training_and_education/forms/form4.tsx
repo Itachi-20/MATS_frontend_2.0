@@ -264,7 +264,7 @@ const form4 = ({ ...Props }: Props) => {
           {" "}
           Save as Draft
         </Button>*/}
-        <Button className="bg-white text-black border text-md font-normal hover:text-white hover:bg-black" onClick={()=>router.push(`/awareness_program?forms=3&refno=${refNo}`)}>
+        <Button className="bg-white text-black border text-md font-normal hover:text-white hover:bg-black" onClick={()=>router.push(`/training_and_education?forms=3&refno=${refNo}`)}>
           Back
         </Button>
         <Button className="bg-[#4430bf] text-white text-md font-normal border" onClick={(e: React.MouseEvent<HTMLButtonElement>) => handleSubmit(e)} >

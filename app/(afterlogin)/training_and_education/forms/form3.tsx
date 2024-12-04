@@ -650,7 +650,7 @@ const Form3 = ({ ...Props }: Props) => {
           {" "}
           Save as Draft
         </Button> */}
-        <Button className="bg-white text-black border text-md font-normal hover:bg-white" onClick={() => router.push(`/hcp_services?forms=2&refno=${Props.refNo}`)}>
+        <Button className="bg-white text-black border text-md font-normal hover:bg-white" onClick={() => router.push(`/training_and_education?forms=2&refno=${Props.refNo}`)}>
           Back
         </Button>
         <Button className="bg-[#4430bf] text-white text-md font-normal border hover:bg-[#4430bf]" onClick={(e: React.MouseEvent<HTMLButtonElement>) => handleSubmit(e)}>

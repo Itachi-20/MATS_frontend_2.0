@@ -1,6 +1,6 @@
 "use client"
 
-import React,{useState,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox"
 import BasicDetails from "@/components/training_and_education/basic_detail"
@@ -70,16 +70,16 @@ type EventEntry = {
   logistics: Logistics[];
   documents: ActivityDocument[];
   advance_approvers: any[]; // Empty array, can be customized later
-  city:string;
-  reporting_head:string;
-  requesting_hospital_name:string; 
-  ship_to:string; 
-  bill_to:string; 
-  organization_name:string;
-  any_additional_expense:string; 
-  product_details:string;
-  type_of_engagement:string;
-  hcp_name:string;
+  city: string;
+  reporting_head: string;
+  requesting_hospital_name: string;
+  ship_to: string;
+  bill_to: string;
+  organization_name: string;
+  any_additional_expense: string;
+  product_details: string;
+  type_of_engagement: string;
+  hcp_name: string;
   preactivity_submitted: number;
 }
 
@@ -169,7 +169,7 @@ type Logistics = {
 type File = {
   url: string;
   name: string;
-  file_name:string
+  file_name: string
 };
 
 type DocumentDetails = {
@@ -184,29 +184,23 @@ type ActivityDocument = {
 
 
 type Props = {
-  refNo:string
+  refNo: string
 }
-const Preview_Form = ({...Props}:Props) => {
+const Preview_Form = ({ ...Props }: Props) => {
   const pathname = usePathname();
   const router = useRouter()
-  const [dialog,setDialog] = useState(false);
-  const [isCommentbox,setIsCommentbox] = useState<boolean>();
-  const [comment,setComment] = useState<string>();
-  const [addVendor,setAddVendor] = useState(false);
+  const [dialog, setDialog] = useState(false);
+  const [isCommentbox, setIsCommentbox] = useState<boolean>();
+  const [comment, setComment] = useState<string>();
+  const [addVendor, setAddVendor] = useState(false);
   const [preview_data, setPreviewData] = useState<EventEntry | null>(null);
   const [refNo, setRefNo] = useState<string | null>(Props.refNo ?? "");
-  const isAddVendor = ()=>{
+  const isAddVendor = () => {
     setAddVendor(prev => !prev)
   }
-  const handleDialog = ()=>{
-    setIsCommentbox(prev=> !prev);
+  const handleDialog = () => {
+    setIsCommentbox(prev => !prev);
   }
-
-  const [isChecked, setIsChecked] = useState<boolean>(false);
-
-  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setIsChecked(e.target.checked);
-  };
   const PreviewData = async () => {
     try {
       const response = await fetch("/api/previewData", {
@@ -247,7 +241,7 @@ const Preview_Form = ({...Props}:Props) => {
           credentials: 'include',
           body: JSON.stringify({
             name: refNo,
-            comment:comment
+            comment: comment
           })
         }
       );
@@ -266,75 +260,63 @@ const Preview_Form = ({...Props}:Props) => {
     }
   };
 
-  
-  const handleComment = (value:string)=>{
+
+  const handleComment = (value: string) => {
     setComment(value)
   }
 
   return (
-      <>
-        <div className="md:px-7 md:pb-7 md:pt-4 w-full z-20">
-            
+    <>
+      <div className="md:px-7 md:pb-7 md:pt-4 w-full z-20">
+
         <BasicDetails
-        pathname=""
-        eventData={preview_data}
+          pathname=""
+          eventData={preview_data}
         />
 
         <EventDetails
-         pathname=""
-         eventData={preview_data}
+          pathname=""
+          eventData={preview_data}
         />
 
         <VendorDetails
-         eventData={preview_data}
+          eventData={preview_data}
         />
 
         <TotalExpense
-         eventData={preview_data}
+          eventData={preview_data}
         />
-            
-        <Documents
-        PageName=""
-         eventData={preview_data}
-         fetchFile={PreviewData}
-        />
-        
-            <div className="flex md:pb-8 gap-3 relative">
-            <input
-            type="checkbox"
-            onChange={handleCheckboxChange}
-            checked={isChecked}
-            className="checkbox"
-          />
-            <label className="text-black md:text-sm md:font-normal capitalize">
-            I hereby declare that all details filled by me are correct and genuine.<span className="text-[#e60000]">*</span>
-                </label>
-               
-            </div>
 
-            <div className="flex justify-end pt-5 gap-4">
-              {/* <Button className="bg-white text-black border text-md font-normal">
+        <Documents
+          PageName=""
+          eventData={preview_data}
+          fetchFile={PreviewData}
+        />
+
+
+        <div className="flex justify-end pt-5 gap-4">
+          {/* <Button className="bg-white text-black border text-md font-normal">
                 Save as Draft
               </Button> */}
-              <Button className="bg-white text-black border text-md font-normal">
-                Back
-              </Button>
-              <Button className={`bg-[#4430bf] text-white  font-normal border`} disabled={!isChecked} onClick={()=>handleDialog()}>
-                Submit
-              </Button>
-            </div>
+          <Button className="bg-white text-black border text-md font-normal" onClick={()=>{router.push(`/training_and_education?forms=4&refno=${refNo}`)}}>
+            Back
+          </Button>
+          <Button className={`bg-[#4430bf] text-white  font-normal border`} onClick={() => handleDialog()}>
+            Submit
+          </Button>
         </div>
-        {
-            isCommentbox &&
-            <div className=" absolute z-50 flex pt-10 items-end justify-center bg-black bg-opacity-50 w-full h-full inset-0 pb-40">
-          <Comment_box 
-          handleClose={handleDialog}
-          handleComment={handleComment}
-          Submitbutton = {handleFinalSubmit}
+      </div>
+      {
+        isCommentbox &&
+        <div className=" absolute z-50 flex pt-10 items-end justify-center bg-black bg-opacity-50 w-full h-full inset-0 pb-40">
+          <Comment_box
+            handleClose={handleDialog}
+            handleComment={handleComment}
+            Submitbutton={handleFinalSubmit}
           />
-          </div>
-          }
-      </>
+        </div>
+      }
+    </>
   )
 }
 

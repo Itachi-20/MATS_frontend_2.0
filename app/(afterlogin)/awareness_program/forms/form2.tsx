@@ -92,11 +92,11 @@ const Form2 = ({ ...Props }: Props) => {
       );
       if (response.ok) {
         const data = await response.json();
-        console.log(data, "response data");
+        // console.log(data, "response data");
         setRefNo(data.message);
-        setTimeout(() => {
+        // setTimeout(() => {
           router.push(`/awareness_program?forms=3&refno=${data.message}`)
-        }, 1000)
+        // }, 1000)
       } else {
         console.log("submission failed");
       }

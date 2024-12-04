@@ -276,7 +276,7 @@ const Preview_Form = ({...Props}:props) => {
 
   return (
     <>
-      <div className="md:px-7 md:pb-7 md:pt-4 w-full relative z-20">
+      <div className="md:px-7 md:pb-7 md:pt-4 w-full  z-20">
 
         <BasicDetails
           pathname={pathname}
