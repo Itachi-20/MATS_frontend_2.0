@@ -108,7 +108,7 @@ type FormData = {
   company_name: string | null;
   gl_name: string | null;
   gl_code: string | null;
-  utr_number: number | null;
+  utr_number: string | null;
   payment_date: string | null;
   zone: string | null;
   state: string | null;
