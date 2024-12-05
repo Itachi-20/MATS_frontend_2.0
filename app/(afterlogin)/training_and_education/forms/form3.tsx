@@ -140,7 +140,7 @@ const Form3 = ({ ...Props }: Props) => {
         setRefNo(data.message);
 
         setTimeout(() => {
-          router.push(`/training_and_education?forms=4&refno=${Props.refNo}`);
+          router.push(`/training_and_education?forms=4&refno=${data.message}`);
         }, 1000)
       } else {
         console.log("submission failed");
