@@ -31,10 +31,10 @@ type dropdownData = {
     name: string,
     state: string
   }[]
-  // city:{
-  //   name:string,
-  //   state:string
-  // }[]
+  city:{
+    name:string,
+    city:string
+  }[]
   currency: {
     name: string
   }[]
@@ -110,7 +110,7 @@ const Index = async ({...Props}:any) => {
   return (
     <>
         <AppWrapper>
-      <div className="px-7 pb-7 pt-4 w-full relative z-20">
+      <div className="px-7 pb-7 pt-4 w-full z-20">
         <div>
           <h1 className="text-black text-[30px] font-medium capitalize" id="form_top">
           {/* {pathname.replace("/","").replaceAll("_"," ")} */}
@@ -151,16 +151,6 @@ const Index = async ({...Props}:any) => {
         }
       </div>
       </AppWrapper>
-      {/* {
-              isCommentbox &&
-        <div className="absolute z-50 flex pt-10 items-end justify-center bg-black bg-opacity-50 w-full h-full inset-0 pb-40">
-          <Comment_box 
-          handleClose={handleDialog}
-          handleComment={handleComment}
-          Submitbutton = {handleFinalSubmit}
-          />
-          </div>
-          } */}
     </>
   )
 }

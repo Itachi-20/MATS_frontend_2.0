@@ -56,10 +56,7 @@ const Form1 = ({ ...Props }: Props) => {
     const updatedFormData = {
       ...formData
     };
-    updatedFormData.event_type = "Training and Education";
-    if(updatedFormData.division_category != "National"){
-      updatedFormData.division_sub_category = "";
-    }
+    updatedFormData.event_type = "Training and Education"; 
     if (refNo) {
       updatedFormData.name = refNo;
     }

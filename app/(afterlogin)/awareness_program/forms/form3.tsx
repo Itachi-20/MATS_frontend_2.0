@@ -300,7 +300,7 @@ console.log(updatedFormData,'updatedFormData')
               <SelectValue placeholder="Select" />
             </SelectTrigger>
             <SelectContent>
-              {Props && Props.vendorType?.filter((item,index)=>{
+              {Props.vendorType ? Props.vendorType?.filter((item,index)=>{
                 if(item.vendor_type == "Hotel" || item.vendor_type == "Travel" || item.vendor_type == "Food"){
                   return item
                 }})
@@ -309,6 +309,8 @@ console.log(updatedFormData,'updatedFormData')
                     <SelectItem value={item.name}>{item.vendor_type}</SelectItem>
                   )
                 })
+                :
+                <SelectItem value={"null"} disabled>No Data Yet</SelectItem>
                 }
             </SelectContent>
           </Select>
@@ -346,11 +348,15 @@ console.log(updatedFormData,'updatedFormData')
             <SelectValue placeholder="Select" />
           </SelectTrigger>
           <SelectContent>
-          {Props && Props.vendorType?.map((item,index)=>{
+          {
+          Props.vendorType ? Props.vendorType?.map((item,index)=>{
                 return(
                   <SelectItem value={item.name}>{item.vendor_type}</SelectItem>
                 )
-              })}
+              })
+              :
+                <SelectItem value={"null"} disabled>No Data Yet</SelectItem>
+            }
           </SelectContent>
         </Select>
       </div>
@@ -366,11 +372,13 @@ console.log(updatedFormData,'updatedFormData')
           </SelectTrigger>
           <SelectContent>
             {
-              vendorName && vendorName.map((item,index)=>{
+              vendorName ? vendorName.map((item,index)=>{
                 return(
                   <SelectItem value={item.name}>{item.vendor_name}</SelectItem>
                 )
               })
+              :
+                <SelectItem value={"null"} disabled>No Data Yet</SelectItem>
             }
           </SelectContent>
         </Select>
@@ -601,11 +609,13 @@ console.log(updatedFormData,'updatedFormData')
             </SelectTrigger>
             <SelectContent>
               {
-                Props && Props.currency?.map((item,index)=>{
+                Props.currency ? Props.currency?.map((item,index)=>{
                   return(
                     <SelectItem value={item.name}>{item.name}</SelectItem>
                   )
                 })
+                :
+                <SelectItem value={"null"} disabled>No Data Yet</SelectItem>
               }
             </SelectContent>
           </Select>

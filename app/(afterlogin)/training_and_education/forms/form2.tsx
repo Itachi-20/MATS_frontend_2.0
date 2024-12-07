@@ -54,7 +54,7 @@ const Form2 = ({ ...Props }: Props) => {
       );
       if (response.ok) {
         const data = await response.json();
-        console.log(data, "response data");
+        // console.log(data, "response data");
         setRefNo(data.message);
         router.push(`/training_and_education?forms=3&refno=${data.message}`);
       } else {
@@ -86,12 +86,12 @@ const Form2 = ({ ...Props }: Props) => {
     }
     handlefieldChange(e);
   };
-  console.log("formdata", formData)
+  // console.log("formdata", formData)
   return (
     <>
       <div>
         <h1 className='text-black text-2xl font-normal uppercase pb-8'>
-          Budget/Vendor Detail
+          Event Details
         </h1>
         <div className='grid grid-cols-2 gap-6'>
           <div className='flex flex-col gap-2'>
@@ -192,7 +192,7 @@ const Form2 = ({ ...Props }: Props) => {
         </div>
         <div className='flex justify-end pt-5 gap-4'>
           {/* <Button className='bg-white text-black border text-md font-normal'> Save as Draft</Button> */}
-          <Button className='bg-white text-black border text-md font-normal'>Back</Button>
+          <Button className='bg-white text-black border text-md font-normal' onClick={() => router.push(`/training_and_education?forms=1&refno=${Props.refNo}`)}>Back</Button>
           <Button className='bg-[#4430bf] text-white text-md font-normal border' onClick={handleSubmit}>Next</Button>
         </div>
       <Toaster richColors position="bottom-right" />

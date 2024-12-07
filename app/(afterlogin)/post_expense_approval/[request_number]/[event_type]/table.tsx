@@ -136,9 +136,9 @@ const table = ({ ...Props }: Props) => {
           );
 
           if (response.ok) {
-              console.log("SUCCEESSSSSSSSS");
+              console.log("Vendor Code added successfully");
           } else {
-              console.log("failed");
+              console.log("Response was not okay, unsuccess while adding vendor code");
           }
       } catch (error) {
           console.error("Error during vendor code insertion:", error);
@@ -159,7 +159,6 @@ const table = ({ ...Props }: Props) => {
     }
 
     const eventDataApi = async () => {
-      console.log("inside event Data")
       try {
           const response = await fetch(
               "/api/postExpenseApproval/postExpenseApprovalData",
@@ -177,7 +176,6 @@ const table = ({ ...Props }: Props) => {
           );
 
           if (response.ok) {
-            console.log("HELLLLLO")
               const data = await response.json();
               setExpenseData(data.data);
               setFormData({
@@ -186,21 +184,13 @@ const table = ({ ...Props }: Props) => {
                 "vendor_code": "",
                 "name": data.data?.actual_vendors?.[0]?.name ?? ""
               });
-              console.log(data.data?.actual_vendors[0]?.name, 'formdata is set')
-
           } else {
-              console.log("Login failed");
+              console.log("Response was not okay while getting post expense data");
           }
       } catch (error) {
-          console.error("Error during login:", error);
+          console.error("Error during getting post expense data:", error);
       }
   };
-
-    // useEffect(()=>{
-    //   formData.vendor_type = Props.expensetabledata?.[0]?.vendor_type;
-    //   formData.name =  Props.expensetabledata?.[0]?.name;
-    //   formData.vendor_name =  Props.expensetabledata?.[0]?.vendor_name;
-    // },[formData.vendor_code]);
 
     useEffect(()=>{
       eventDataApi();
@@ -342,7 +332,7 @@ const table = ({ ...Props }: Props) => {
                           
                         </TableCell>
                         <TableCell>{data.vendor_name}</TableCell>
-                        <TableCell>{data.basic_amount}</TableCell>
+                        <TableCell>{data.actual_amount}</TableCell>
                         <TableCell>{data.status}</TableCell>
                         <TableCell>{data.gst}</TableCell>
                         <TableCell>{data.invoice_amount}</TableCell>

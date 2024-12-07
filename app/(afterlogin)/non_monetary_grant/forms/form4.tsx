@@ -35,8 +35,7 @@ const form4 = ({...Props}:Props) => {
   const [refno, setRefno] = useState(Props.refno);
   const [documentType,setDocumentType] = useState("");
   const [preview_data, setPreviewData] = useState<any>(null);
-  const [uploadedFiles, setUploadedFiles] = useState<FileList | null>();
-  const [originalFiles, setOriginalFiles] = useState<FileList | null>(null) 
+  const [uploadedFiles, setUploadedFiles] = useState<FileList | null>(null);
   const [files, setFiles] = useState<File[]>([]);
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     router.replace(`/non_monetary_grant?forms=5&refno=${Props.refno}`)
@@ -80,8 +79,9 @@ const form4 = ({...Props}:Props) => {
         setTimeout(() => {
           PreviewData();
         }, 500);
-        setDocumentType('')
-        setFiles([])
+        setDocumentType('');
+        setFiles([]);
+        setUploadedFiles(null);
         return 'Documents added successfully!';
       },
       error: (error) => `Failed : ${error.message || error}`,
@@ -116,10 +116,9 @@ const form4 = ({...Props}:Props) => {
       console.error("Error during login:", error);
     }
   };
-
-  const handleNext = (fileList: FileList | null) => {
-    setUploadedFiles(fileList);
-  };
+  const handleNext = () => {
+    
+  }
   useEffect(() => {
     PreviewData();
   }, []);
@@ -191,7 +190,7 @@ const form4 = ({...Props}:Props) => {
             <label className="text-black text-sm font-normal capitalize">
               Upload Files<span className="text-[#e60000]">*</span>
             </label>
-            <SimpleFileUpload files={files} setFiles={setFiles} onNext={handleNext} buttonText={'Upload Here'} />
+            <SimpleFileUpload files={files} setFiles={setFiles} setUploadedFiles={setUploadedFiles}  onNext={handleNext} buttonText={'Upload Here'} />
           </div>
           <Button
             className="bg-white text-black border text-md font-normal"

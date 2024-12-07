@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/select";
 import { Item } from '@radix-ui/react-select';
 import { useRouter } from 'next/navigation';
-
+import { Toaster, toast } from 'sonner'
 type Compensation = {
   vendor_type: string;
   vendor_name: string;
@@ -91,7 +91,7 @@ const form4 = ({ ...Props }: Props) => {
   
   const [documentType, setDocumentType] = useState("");
   const [preview_data, setPreviewData] = useState<any>(null);
-  const [uploadedFiles, setUploadedFiles] = useState<FileList | null>(); //added state 1
+  const [uploadedFiles, setUploadedFiles] = useState<FileList | null>(null)
   const [fileList, setFileList] = useState<File[]>([]); //added state 2
   const [files, setFiles] = useState<File[]>([]);
 
@@ -106,6 +106,7 @@ const form4 = ({ ...Props }: Props) => {
         formdata.append("file", uploadedFiles[i]);
       }
     } else {
+      toast.warning("No file to Upload");
       console.log("No file to upload");
       return;
     }
@@ -114,37 +115,44 @@ const form4 = ({ ...Props }: Props) => {
       formdata.append("activity_type", "Pre Activity");
       formdata.append("document_type", documentType);
     // }
-    try {
-      const response = await fetch(
-        `/api/training_and_education/fileUpload`,
-        {
+    const apiCallPromise = new Promise(async (resolve, reject) => {
+      try {
+        const response = await fetch(`/api/training_and_education/fileUpload`, {
           method: "POST",
-          headers: {
-            //"Content-Type": "multipart/form-data",
-          },
+          credentials: 'include',
           body: formdata,
-          credentials: 'include'
+        });
+
+        if (!response.ok) {
+          throw new Error('file upload request failed');
         }
-      );
 
-
-      if (response.ok) {
-        PreviewData();
-        setDocumentType("");
-        setFiles([]);
-      } else {
-        console.log("Response was not OKAY");
+        const data = await response.json();
+        resolve(data); // Resolve with the response data
+      } catch (error) {
+        reject(error); // Reject with the error
       }
-    } catch (error) {
-      console.error("Error during file upload:", error);
-    }
+    });
+    toast.promise(apiCallPromise, {
+      loading: 'Submitting  details...',
+      success: (data) => {
+        setTimeout(() => {
+          PreviewData();
+        }, 500);
+        setDocumentType('')
+        setFiles([])
+        setUploadedFiles(null)
+        return 'Documents added successfully!';
+      },
+      error: (error) => `Failed : ${error.message || error}`,
+    });
   }
   const handleActivityTypeChange = (value: string) => {
     setActivityType(value);
   }
-  const handleNext = (fileList: FileList | null) => {
-    setUploadedFiles(fileList);
-  };
+  const handleNext = () => {
+    
+  }
 
   const PreviewData = async () => {
     try {
@@ -222,7 +230,7 @@ const form4 = ({ ...Props }: Props) => {
               </SelectTrigger>
               <SelectContent>
                 {
-                  Props.activityDropdown && Props.activityDropdown.document.filter((item,index)=>{
+                  Props.activityDropdown ? Props.activityDropdown.document.filter((item,index)=>{
                     if(item.activity_type == activityType){
                       return item
                     }
@@ -231,6 +239,8 @@ const form4 = ({ ...Props }: Props) => {
                       <SelectItem value={item.name}>{item.document_name}</SelectItem>
                     )
                   })
+                  :
+                <SelectItem value={"null"} disabled>No Data Yet</SelectItem>
                 }
                     
               </SelectContent>
@@ -241,7 +251,7 @@ const form4 = ({ ...Props }: Props) => {
             <label className="text-black text-sm font-normal capitalize">
               Upload Files<span className="text-[#e60000]">*</span>
             </label>
-            <SimpleFileUpload files={files} setFiles={setFiles} onNext={handleNext} buttonText={'Upload Here'} />
+            <SimpleFileUpload files={files} setFiles={setFiles} setUploadedFiles={setUploadedFiles}  onNext={handleNext} buttonText={'Upload Here'} />
           </div>
           <Button
             className="bg-white text-black border text-md font-normal"
@@ -257,6 +267,7 @@ const form4 = ({ ...Props }: Props) => {
         PageName={''}
         fetchFile={PreviewData}
       />
+      <Toaster richColors position="top-right" />
       <div className="flex justify-end pt-5 gap-4">
         {/* <Button className="bg-white text-black border text-md font-normal">
           {" "}

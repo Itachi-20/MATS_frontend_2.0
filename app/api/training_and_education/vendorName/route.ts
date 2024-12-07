@@ -13,7 +13,7 @@ export async function GET(req: Request) {
             },
         });
         const Response = await response.json();
-        console.log(Response,"this is api response")
+        // console.log(Response,"this is api response")
         if (!response.ok) {
             throw new Error(`Error: ${response.statusText}`);
         }

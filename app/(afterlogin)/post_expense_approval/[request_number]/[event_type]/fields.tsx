@@ -108,7 +108,7 @@ type FormData = {
   company_name: string | null;
   gl_name: string | null;
   gl_code: string | null;
-  utr_number: number | null;
+  utr_number: string | null;
   payment_date: string | null;
   zone: string | null;
   state: string | null;
@@ -523,7 +523,7 @@ const Fields = ({ ...Props }: Props) => {
             ></Input>
           </div>
           
-          { (Props.expenseData.actual_vendors[0].status == "Post Expense Approved" || Props.expenseData.actual_vendors[0].status == "Post Expense Closed") &&
+          { (Props.expenseData?.actual_vendors[0]?.status == "Post Expense Approved" || Props.expenseData?.actual_vendors[0]?.status == "Post Expense Closed") &&
             <>
               <div className='grid-cols-1 space-y-2'>
                 <label htmlFor="utr_number" className="text-black md:text-sm md:font-normal capitalize">
