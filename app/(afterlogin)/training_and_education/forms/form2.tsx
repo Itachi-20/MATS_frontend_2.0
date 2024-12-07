@@ -86,7 +86,6 @@ const Form2 = ({ ...Props }: Props) => {
     }
     handlefieldChange(e);
   };
-  // console.log("formdata", formData)
   return (
     <>
       <div>

@@ -416,7 +416,7 @@ const Form1 = ({ ...Props }: Props) => {
               <SelectValue placeholder="Select" />
             </SelectTrigger>
             <SelectContent>
-              {Props.dropdownData ?
+              {(Props.dropdownData && Props.dropdownData.city)?
                   Props.dropdownData.city.map((item, index) => {
                     return (
                       <SelectItem value={item.name}>
