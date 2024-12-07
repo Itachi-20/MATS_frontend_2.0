@@ -1,3 +1,4 @@
+"use client"
 import React,{useState} from "react";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
@@ -16,9 +17,11 @@ import BeneficiaryDetails from "@/components/previewPatientSupportComponents/ben
 import OtherDetails from "@/components/sponsorshipSupportPreviewComponents/other_details";
 import { useEffect } from "react";
 import Comment_box from "@/components/approvalCommentBox/Comment_box";  
+import { Previewdata } from '@/app/(afterlogin)/patient_support/page'
 
 type Props = {
-  handleBackButton: (e: React.MouseEvent<HTMLButtonElement>) => void
+  previewData: Previewdata | null;
+  refno: string | null;
 }
 
 type EventEntry = {
