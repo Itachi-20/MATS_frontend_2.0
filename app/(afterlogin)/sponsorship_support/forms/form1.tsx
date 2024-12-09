@@ -100,7 +100,8 @@ type FormData = {
   division_sub_category: string;
   sub_type_of_activity: string;
   any_govt_hcp: string,
-  no_of_hcp: number
+  no_of_hcp: number,
+  sponsor_currency: string
 };
 
 type Props = {
@@ -593,7 +594,7 @@ const Form1 = ({ ...Props }: Props) => {
               </label>
               <Select
                 onValueChange={(value) => { handleSelectChange(value, "sponsor_currency") }}
-                defaultValue={Props.previewData?.sponsor_currency ? Props.previewData.sponsor_currency : ""}
+                defaultValue={Props.previewData?.sponsor_currency ? Props.previewData.sponsor_currency : "INR"}
               >
                 <SelectTrigger className="dropdown">
                   <SelectValue placeholder="Select" />
