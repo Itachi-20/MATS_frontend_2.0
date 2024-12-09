@@ -416,7 +416,7 @@ const Sidebar = () => {
                 moduleItems.reports?.map((item, index) => {
                   return (
                     <li
-                      className=" hover:bg-white hover:rounded-xl hover:text-[#4430bf] text-[12px] py-1 cursor-pointer max-w-fit px-4 relative text-nowrap"
+                      className=" hover:bg-white hover:rounded-xl hover:text-[#4430bf] text-[10px] py-1 cursor-pointer max-w-fit px-4 relative text-nowrap"
                       onClick={() => {router.push(`${item.route}`);
                       }}
                     >
