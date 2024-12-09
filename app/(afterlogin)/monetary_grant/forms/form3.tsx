@@ -413,7 +413,7 @@ const Form3 = ({ ...Props }: Props) => {
                 <Input className='text-black w-5 h-5'
                   type='checkbox'
                   onChange={(e) => handle_is_GST(e)}
-                  value={compansation_is_GST ? compansation_is_GST : 0}
+                  checked={compansation_is_GST ? true : false}
                 />
               </div>
             </div>
