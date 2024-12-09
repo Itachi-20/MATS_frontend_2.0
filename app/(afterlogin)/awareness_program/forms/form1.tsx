@@ -386,7 +386,7 @@ const Form1 = ({ ...Props }: Props) => {
             defaultValue={Props.previewData?.division_sub_category?Props.previewData.division_sub_category:""}
             >
               <SelectTrigger className="dropdown">
-                <SelectValue placeholder="--Selected--" />
+                <SelectValue placeholder="Select" />
               </SelectTrigger>
               <SelectContent>
               {subtypeActivity ?

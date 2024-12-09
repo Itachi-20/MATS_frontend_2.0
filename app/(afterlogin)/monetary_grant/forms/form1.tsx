@@ -400,7 +400,7 @@ const Form1 = ({ ...Props }: Props) => {
               onValueChange={(value) => { handleSelectChange(value, "division_sub_category") }}
             >
               <SelectTrigger className="dropdown">
-                <SelectValue placeholder="--Selected--" />
+                <SelectValue placeholder="Select" />
               </SelectTrigger>
               <SelectContent>
                 {subtypeActivity &&
