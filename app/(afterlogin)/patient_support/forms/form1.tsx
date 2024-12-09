@@ -342,7 +342,7 @@ const Form1 = ({ ...Props }: Props) => {
           <Select onValueChange={(value) => { handleBudgetChange(value), handleSelectChange(value, "division_category"); setBudget(value) }}
             defaultValue={Props.previewData?.division_category ? Props.previewData.division_category : ""}>
             <SelectTrigger className="dropdown">
-              <SelectValue placeholder="--Selected--" />
+              <SelectValue placeholder="Select" />
             </SelectTrigger>
             <SelectContent>
               {eventCostCenter ? eventCostCenter.division_category.map((item, index) => {
@@ -372,7 +372,7 @@ const Form1 = ({ ...Props }: Props) => {
             defaultValue={Props.previewData?.division_sub_category?Props.previewData.division_sub_category:""}
             >
               <SelectTrigger className="dropdown">
-                <SelectValue placeholder="--Selected--" />
+                <SelectValue placeholder="Select" />
               </SelectTrigger>
               <SelectContent>
                 {subtypeActivity ?
