@@ -13,6 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Previewdata } from '@/app/(afterlogin)/monetary_grant/page'
+import { useAuth } from "@/app/context/AuthContext";
 type dropdownData = {
   company: {
     name: string;
@@ -109,6 +110,7 @@ type Props = {
 }
 
 const Form1 = ({ ...Props }: Props) => {
+  const { role, name, userid, clearAuthData } = useAuth();
   const [businessUnit, setBusinessUnit] = useState("");
   const [budget, setBudget] = useState("");
   const [fullName, setFullName] = useState<string | null>(null);
@@ -304,7 +306,7 @@ const Form1 = ({ ...Props }: Props) => {
             Event requester<span className="text-[#e60000]">*</span>
           </label>
           <Select
-            defaultValue={Props.previewData?.event_requestor ?? ""}
+            defaultValue={Props.previewData?.event_requestor ?Props.previewData?.event_requestor: userid as string}
             onValueChange={(value) => handleSelectChange(value, "event_requestor")}
           >
             <SelectTrigger className="dropdown">

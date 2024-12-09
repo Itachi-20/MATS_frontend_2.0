@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useRouter } from "next/navigation";
 import { Previewdata } from '@/app/(afterlogin)/hcp_services/page'
+import { useAuth } from "@/app/context/AuthContext";
 
 type dropdownData = {
   company: {
@@ -144,6 +145,8 @@ const Form1 = ({ ...Props }: Props) => {
   const [formdata, setFormData] = useState<formData | {}>({});
   const [refNo, setRefNo] = useState<string | null>(Props.refno);
 
+  const { role, name, userid, clearAuthData } = useAuth();
+
   const handleSelectChange = (value: string, name: string) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
@@ -261,6 +264,7 @@ const Form1 = ({ ...Props }: Props) => {
   }, [refNo])
 
   console.log(formdata, "this is form data")
+  console.log(userid,"this is context user id")
   return (
     // </div>
     (<div>
@@ -317,7 +321,7 @@ const Form1 = ({ ...Props }: Props) => {
           </label>
           <Select
             onValueChange={(value) => handleSelectChange(value, "event_requestor")}
-            defaultValue={Props.previewData?.event_requestor ? Props.previewData.event_requestor : ""}
+            defaultValue={Props.previewData?.event_requestor ? Props.previewData.event_requestor : userid as string}
           >
             <SelectTrigger className="dropdown">
               <SelectValue placeholder="Select" />
