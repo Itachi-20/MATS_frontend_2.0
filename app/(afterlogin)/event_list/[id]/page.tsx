@@ -76,9 +76,12 @@ type EventEntry = {
   logistics: Logistics[];
   documents: Document[];
   advance_approvers: any[]; // Empty array, can be customized later
-  city: string
-  reporting_head: string
-  type_of_engagement: string
+  city: string;
+  reporting_head: string;
+  type_of_engagement: string;
+  executed:number;
+  preactivity_approved:number;
+  post_activity_approved:number;
 }
 
 type Compensation = {
@@ -237,7 +240,7 @@ export default function EventListPage() {
           <div className="flex gap-4 bg-white">
             <Button className="border border-[#4430bf] text-[#4430bf] px-6" onClick={() => handlClick(refno as string)}>Audit Trail</Button>
             <Link href={"/event_list"}>
-              <Button className="bg-white text-black border px-8 hover:bg-white">Back</Button>
+              <Button className="bg-white text-black border px-8 hover:bg-white" onClick={()=>{router.push("/event_list")}}>Back</Button>
             </Link>
           </div>
         </div>

@@ -22,30 +22,23 @@ type document = {
   activity_type: string;
   document_name: string;
 };
-
 type DocumentData = {
   activity: Activity[];
   document: document[];
 };
-
-
-
 type Activity = {
   name: string;
   activity_name: string;
 };
-
 type Document = {
   name: string;
   activity_type: string;
   document_name: string;
 };
-
 type activityDropdown = {
   activity: Activity[];
   document: Document[];
 };
-
 type EventEntry = {
   name: string;
   owner: string;
@@ -105,8 +98,7 @@ type EventEntry = {
   advance_approvers: any[]; // Empty array, can be customized later
   city:string
   reporting_head:string
-}
-
+};
 type Compensation = {
   name: string;
   owner: string;
@@ -129,8 +121,7 @@ type Compensation = {
   parentfield: string;
   parenttype: string;
   doctype: string;
-}
-
+};
 type ApproverStatus = {
   name: string;
   owner: string;
@@ -149,8 +140,7 @@ type ApproverStatus = {
   parentfield: string;
   parenttype: string;
   doctype: string;
-}
-
+};
 type OccurrenceStatus = {
   name: string;
   owner: string;
@@ -165,8 +155,7 @@ type OccurrenceStatus = {
   parentfield: string;
   parenttype: string;
   doctype: string;
-}
-
+};
 type Logistics = {
   name: string;
   owner: string;
@@ -188,19 +177,16 @@ type Logistics = {
   parentfield: string;
   parenttype: string;
   doctype: string;
-}
-
+};
 type File = {
   url: string;
   name: string;
   file_name:string
 };
-
 type DocumentDetail = {
   type: string;
   file: File[];
 };
-
 type ActivityDocument = {
   activity_type: string;
   document: DocumentDetail[];
@@ -396,7 +382,7 @@ const page = () => {
                     <div className="flex gap-4 bg-white leading-normal">
                         <Button className="border border-[#4430bf] text-[#4430bf] px-6 text-[18px]" onClick={()=>router.push(`/audit_trail/${preview_data.name}`)}>Audit Trail</Button>
                         <Link href={"/"}>
-                            <Button className="bg-white text-black border px-9 hover:bg-white text-[18px]">Back</Button>
+                            <Button className="bg-white text-black border px-9 hover:bg-white text-[18px]" onClick={()=>{router.back()}}>Back</Button>
                         </Link>
                     </div>
                 </div>
