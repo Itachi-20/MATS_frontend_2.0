@@ -11,7 +11,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useRouter } from "next/navigation";
-import { Previewdata } from '@/app/(afterlogin)/hcp_services/page'
+import { Previewdata } from '@/app/(afterlogin)/hcp_services/page';
+import { Toaster, toast } from 'sonner';
 
 type dropdownData = {
   company: {
@@ -143,6 +144,7 @@ const Form1 = ({ ...Props }: Props) => {
   const [engagementTypes, setEngagementTypes] = useState("");
   const [formdata, setFormData] = useState<formData | {}>({});
   const [refNo, setRefNo] = useState<string | null>(Props.refno);
+  const [eventStartDate, setEventStartDate] = useState<any>(Props.previewData?.event_start_date ? new Date(Props.previewData?.event_start_date).getTime() : "");
 
   const handleSelectChange = (value: string, name: string) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -256,6 +258,22 @@ const Form1 = ({ ...Props }: Props) => {
     }
   };
 
+  const handleEventStartDateValidate = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const currentDate = new Date().setHours(0, 0, 0, 0);
+    if (e.target.valueAsNumber < currentDate) {
+      toast.error("You are selecting previous date");
+    }
+    setEventStartDate(e.target.valueAsNumber);
+    handlefieldChange(e);
+  };
+  const handleEventEndDateValidate = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (eventStartDate && e.target.valueAsNumber < eventStartDate ) {
+      toast.error("Event end Date should be greater than or equal to start date");
+      e.target.value = "";
+    }
+    handlefieldChange(e);
+  };
+
   useEffect(() => {
     setFormData({ ...formdata, name: refNo })
   }, [refNo])
@@ -263,7 +281,8 @@ const Form1 = ({ ...Props }: Props) => {
   console.log(formdata, "this is form data")
   return (
     // </div>
-    (<div>
+    <>
+    <div>
       <h1 className="text-black text-2xl font-normal uppercase pb-8">
         Basic Detail
       </h1>
@@ -594,7 +613,7 @@ const Form1 = ({ ...Props }: Props) => {
                   type="date"
                   placeholder="dd/mm/yy"
                   name="event_start_date"
-                  onChange={(e) => { handlefieldChange(e) }}
+                  onChange={(e) => { handleEventStartDateValidate(e) }}
                   defaultValue={Props.previewData?.event_start_date ? Props.previewData.event_start_date : ""}
                 ></Input>
               </div>
@@ -607,7 +626,7 @@ const Form1 = ({ ...Props }: Props) => {
                   type="date"
                   placeholder="dd/mm/yy"
                   name="event_end_date"
-                  onChange={(e) => { handlefieldChange(e) }}
+                  onChange={(e) => { handleEventEndDateValidate(e) }}
                   defaultValue={Props.previewData?.event_end_date ? Props.previewData.event_end_date : ""}
                 ></Input>
               </div>
@@ -710,7 +729,7 @@ const Form1 = ({ ...Props }: Props) => {
                   type="date"
                   placeholder="dd/mm/yy"
                   name="event_start_date"
-                  onChange={(e) => { handlefieldChange(e) }}
+                  onChange={(e) => { handleEventStartDateValidate(e) }}
                   defaultValue={Props.previewData?.event_start_date ? Props.previewData.event_start_date : ""}
                 ></Input>
               </div>
@@ -723,7 +742,7 @@ const Form1 = ({ ...Props }: Props) => {
                   type="date"
                   placeholder="dd/mm/yy"
                   name="event_end_date"
-                  onChange={(e) => { handlefieldChange(e) }}
+                  onChange={(e) => { handleEventEndDateValidate(e) }}
                   defaultValue={Props.previewData?.event_end_date ? Props.previewData.event_end_date : ""}
                 ></Input>
               </div>
@@ -732,6 +751,7 @@ const Form1 = ({ ...Props }: Props) => {
                   Annual Plan<span className="text-[#e60000]">*</span>
                 </label>
                 <Input
+                  type="number"
                   className="text-black shadow md:rounded-xl md:py-5"
                   placeholder="Type Here"
                   name="annual_plan"
@@ -781,7 +801,7 @@ const Form1 = ({ ...Props }: Props) => {
                   type="date"
                   placeholder="dd/mm/yy"
                   name="event_start_date"
-                  onChange={(e) => { handlefieldChange(e) }}
+                  onChange={(e) => { handleEventStartDateValidate(e) }}
                   defaultValue={Props.previewData?.event_start_date ? Props.previewData.event_start_date : ""}
                 ></Input>
               </div>
@@ -794,7 +814,7 @@ const Form1 = ({ ...Props }: Props) => {
                   type="date"
                   placeholder="dd/mm/yy"
                   name="event_end_date"
-                  onChange={(e) => { handlefieldChange(e) }}
+                  onChange={(e) => { handleEventEndDateValidate(e) }}
                   defaultValue={Props.previewData?.event_end_date ? Props.previewData.event_end_date : ""}
                 ></Input>
               </div>
@@ -832,7 +852,7 @@ const Form1 = ({ ...Props }: Props) => {
                   type="date"
                   placeholder="dd/mm/yy"
                   name="event_start_date"
-                  onChange={(e) => { handlefieldChange(e) }}
+                  onChange={(e) => { handleEventStartDateValidate(e) }}
                   defaultValue={Props.previewData?.event_start_date ? Props.previewData?.event_start_date : ""}
                 ></Input>
               </div>
@@ -845,7 +865,7 @@ const Form1 = ({ ...Props }: Props) => {
                   type="date"
                   placeholder="dd/mm/yy"
                   name="event_end_date"
-                  onChange={(e) => { handlefieldChange(e) }}
+                  onChange={(e) => { handleEventEndDateValidate(e) }}
                   defaultValue={Props.previewData?.event_end_date ? Props.previewData.event_end_date : ""}
                 ></Input>
               </div>
@@ -875,7 +895,9 @@ const Form1 = ({ ...Props }: Props) => {
         </Button> */}
         <Button className='bg-[#4430bf] text-white text-md font-normal border' onClick={(e) => handleSubmit(e)}>Next</Button>
       </div>
-    </div>)
+    </div>
+    <Toaster richColors position="bottom-right" /> 
+    </>
   );
 };
 
