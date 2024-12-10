@@ -45,6 +45,7 @@ type EventTable = {
     event_requestor: string;
     event_venue: string;
     current_stage: string;
+    owner:string;
     post_expense_approvers: post_expense_approvers;
 };
 
@@ -199,6 +200,13 @@ export default function Page() {
                                 </TableHead>
                                 <TableHead
                                     className={
+                                        "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                                    }
+                                >
+                                    Created By
+                                </TableHead>
+                                <TableHead
+                                    className={
                                         "text-center rounded-r-2xl text-[#625d5d] text-[15px] font-normal font-['Montserrat'] sticky right-0 z-50 bg-[#E0E9FF]"
                                     }
                                 >Action</TableHead>
@@ -212,13 +220,14 @@ export default function Page() {
                                         postExpenseApprovalList?.map((data, index) => {
                                             return (
                                                 <TableRow key={index} className="text-center text-nowrap">
-                                                    <TableCell>{data.name}</TableCell>
+                                                    <TableCell>{data.name ?? "-"}</TableCell>
 
-                                                    <TableCell>{data.event_name}</TableCell>
-                                                    <TableCell>{data.event_type}</TableCell>
-                                                    <TableCell>{data.event_start_date}</TableCell>
-                                                    <TableCell>{data.total_expense ?? ""}</TableCell>
-                                                    <TableCell>{data.event_requestor ?? ""}</TableCell>
+                                                    <TableCell>{data.event_name ?? "-"}</TableCell>
+                                                    <TableCell>{data.event_type ?? "-"}</TableCell>
+                                                    <TableCell>{data.event_start_date ?? "-"}</TableCell>
+                                                    <TableCell>{data.total_expense ?? "-"}</TableCell>
+                                                    <TableCell>{data.event_requestor ?? "-"}</TableCell>
+                                                    <TableCell>{data.owner ?? "-"}</TableCell>
                                                     <TableCell className="sticky right-0 bg-[white] z-50 ">
                                                         {/* { */}
                                                             {/* "Not" == "Approved" ? */}
