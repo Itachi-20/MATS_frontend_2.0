@@ -279,6 +279,13 @@ const Index = () => {
                                 </TableHead>
                                 <TableHead
                                     className={
+                                        "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                                    }
+                                >
+                                    Status
+                                </TableHead>
+                                <TableHead
+                                    className={
                                         "text-center rounded-r-2xl text-[#625d5d] text-[15px] font-normal font-['Montserrat'] sticky right-0 z-50 bg-[#E0E9FF]"
                                     }
                                 >Action</TableHead>
@@ -300,6 +307,7 @@ const Index = () => {
                                                 <TableCell>{data.total_amount ?? ""}</TableCell>
                                                 <TableCell>{data.event_requestor ?? "-"}</TableCell>
                                                 <TableCell>{data.owner ?? "-"}</TableCell>
+                                                <TableCell>{data.current_stage ?? "-"}</TableCell>
                                                 <TableCell className={(data.travel_request_approved == true && role == "Event Finance")? 'sticky right-0 bg-[white] z-50 space-x-2 border-l border-slate-200':'sticky right-0 bg-[white] z-50 border-l border-slate-200 space-x-2'}>
                                                     
                                                     <Button className="border rounded-full px-4 py-1 border-[#0E4154] text-[#0E4154] hover:text-white hover:bg-[#0E4154] active:text-white active:bg-[#0E4154] transition-all delay-100" onClick={() => router.push(`/post_expense_approval/${data.name}`)} >Take Action</Button>

@@ -220,14 +220,14 @@ export default function Page() {
                                         "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                                     }
                                 >
-                                   Status
+                                   Created By
                                 </TableHead>
                                 <TableHead
                                     className={
                                         "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                                     }
                                 >
-                                   Created By
+                                   Status
                                 </TableHead>
                                 <TableHead
                                     className={
@@ -252,14 +252,14 @@ export default function Page() {
                                                     <TableCell>{data.total_logistics_expense ?? ""}</TableCell>
                                                     <TableCell>{data.total_estimated_expense ?? ""}</TableCell>
                                                     <TableCell>{data.event_requestor ?? ""}</TableCell>
-                                                    <TableCell>{data.current_stage ?? ""}</TableCell>
                                                     <TableCell>{data.owner ?? ""}</TableCell>
+                                                    <TableCell>{data.current_stage ?? ""}</TableCell>
                                                     <TableCell className="sticky right-0 bg-[white] z-50 ">
                                                         {/* { */}
                                                             {/* "Not" == "Approved" ? */}
                                                                 {/* // <button className="border rounded-full px-4 py-1 border-[#0E4154] text-[#0E4154]" onClick={() => router.push(`/advance_payment/update_utr/${data.name}`)} >Update UTR</button> */}
                                                                 {/* : */}
-                                                                 <button className="border rounded-full px-4 py-1 border-[#0E4154] text-[#0E4154]" onClick={() => router.push(`/advance_payment/${data.name}`)} >Take Action</button>
+                                                                 <button className="border rounded-full px-4 py-1 border-[#0E4154] text-[#0E4154] hover:text-white hover:bg-[#0E4154] active:text-white active:bg-[#0E4154] transition-all delay-100" onClick={() => router.push(`/advance_payment/${data.name}`)} >Take Action</button>
                                                         {/* } */}
                                                     </TableCell>
                                                 </TableRow>

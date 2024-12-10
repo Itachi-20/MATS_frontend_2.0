@@ -146,10 +146,10 @@ const TableComponent = ({ ...Props }: Props) => {
                 Event Date
               </TableHead> */}
               <TableHead className="text-center text-[#625d5d] text-[15px] font-normal font-['Montserrat']">
-                Vendor Name
+              Vendor Type
               </TableHead>
               <TableHead className="text-center text-[#625d5d] text-[15px] font-normal font-['Montserrat']">
-                Vendor Type
+                Vendor Name
               </TableHead>
               <TableHead className="text-center text-[#625d5d] text-[15px] font-normal font-['Montserrat']">
                 Advance Request
@@ -207,8 +207,8 @@ const TableComponent = ({ ...Props }: Props) => {
                   <TableRow key={index} className="text-center text-nowrap border-b">
                     {/* <TableCell className=''>{data.name}</TableCell>
                     <TableCell>{data.advance}</TableCell> */}
-                    <TableCell>{data.vendor_name ?? "N/A"}</TableCell>
                     <TableCell>{data.vendor_type ?? "N/A"}</TableCell>
+                    <TableCell>{data.vendor_name ?? "N/A"}</TableCell>
                     <TableCell>{data.advance ?? "N/A"}</TableCell>
                     <TableCell className='border-r'>{data.est_amount ?? "N/A"}</TableCell>
                     <TableCell>
