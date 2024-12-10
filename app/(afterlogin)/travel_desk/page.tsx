@@ -17,6 +17,7 @@ type EventDetails = {
   event_venue: string;
   current_stage: string;
   total_amount: number;
+  owner: number;
 };
 
 
@@ -114,6 +115,14 @@ const cookie = await cookies();
                       "text-center  text-[#625d5d] lg:text-[15px] sm:text-[12px] text-[11px] font-normal font-['Montserrat']"
                     }
                   >
+                    Created By
+                  </TableHead>
+
+                  <TableHead
+                    className={
+                      "text-center  text-[#625d5d] lg:text-[15px] sm:text-[12px] text-[11px] font-normal font-['Montserrat']"
+                    }
+                  >
                     Event Venue
                   </TableHead>
                 
@@ -129,13 +138,14 @@ const cookie = await cookies();
                     tableData.map((data, index) => {
                       return (
                         <TableRow key={index} className="text-center text-nowrap lg:text-[16px] sm:text-[10px] text-[10px] font-light leading-normal font-['Poppins']">
-                          <TableCell>{data.name}</TableCell>
-                          <TableCell>{data.event_type}</TableCell>
-                          <TableCell>{data.event_name}</TableCell>
-                          <TableCell>{data.event_start_date}</TableCell>
-                          <TableCell>{data.event_end_date}</TableCell>
-                          <TableCell>{data.event_requestor}</TableCell>
-                          <TableCell>{data.event_venue}</TableCell>    
+                          <TableCell>{data.name ?? "-"}</TableCell>
+                          <TableCell>{data.event_type ?? "-"}</TableCell>
+                          <TableCell>{data.event_name ?? "-"}</TableCell>
+                          <TableCell>{data.event_start_date ?? "-"}</TableCell>
+                          <TableCell>{data.event_end_date ?? "-"}</TableCell>
+                          <TableCell>{data.event_requestor ?? "-"}</TableCell>
+                          <TableCell>{data.owner ?? "-"}</TableCell>
+                          <TableCell>{data.event_venue ?? "-"}</TableCell>    
                           <TableCell className="sticky right-0 bg-[white] flex border-l items-center border-slate-200"> 
                             <Link href={`/travel_desk/${data.name}`}>
                              <button className="rounded-[50px] lg:px-[14px] lg:py-[7px] sm:py-[3px] sm:px-[4px] px-[3px] py-[2px] border-[0.5px] border-[#0E4154] text-[#0E4154] lg:text-[12px] sm:text-[7px] text-[6px] font-light leading-normal">Take Action</button>

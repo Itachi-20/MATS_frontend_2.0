@@ -19,11 +19,39 @@ import Table from '@/app/(afterlogin)/event_approver_list/table'
 //   }[]
 // };
 
-type level = "Approved" | "Rejected" | "Pending";
-type preactivity_approvers = {
-  level:string,
-  name:string
+type Events = {
+  "name": string | null,
+  "event_type": string | null,
+  "event_name": string | null,
+  "event_start_date": string | null,
+  "event_end_date": string | null,
+  "event_requestor": string | null,
+  "owner": string | null,
+  "event_venue": string | null,
+  "status": string | null,
+  "total_estimated_expense": number,
+  "brief_status": string | null,
+  "current_stage": string | null,
+  "level1": string | null,
+  "level2": string | null,
+  "level3": string | null,
+  "level4": string | null,
+  "level5": string | null,
+  "level6": string | null,
+  "level7": string | null,
+  "status1": string | null,
+  "status2": string | null,
+  "status3": string | null,
+  "status4": string | null,
+  "status5": string | null,
+  "status6": string | null,
+  "status7": string | null,
+  "is_approved": boolean
 }
+  type Data = {
+      "events": Events[]
+  }
+      
  const fetchTable = async()=>{
   try {
     const cookie = await cookies();
@@ -52,96 +80,8 @@ type preactivity_approvers = {
 
 const Index = async() => {
 
-  const tableData = await fetchTable();
+  const tableData:Events[] = await fetchTable();
   console.log(tableData,"this is table data")
-  // const [tableData, setTableData] = useState<any[]>([]);
-  // const events: EventTable[] = [
-  //   {
-  //     request_number: "REQ001",
-  //     event_name: "Annual Conference",
-  //     event_type: "Conference",
-  //     event_date: "2024-10-15",
-  //     total_expense: 15000,
-  //     event_requestor: "John Doe",
-  //     level_1: "Approved",
-  //     level_2: "Pending",
-  //     level_3: "Approved",
-  //     level_4: "Rejected",
-  //     level_5: "Approved",
-  //     level_6: "Pending"
-  //   },
-  //   {
-  //     request_number: "REQ002",
-  //     event_name: "Product Launch",
-  //     event_type: "Launch",
-  //     event_date: "2024-11-20",
-  //     total_expense: 25000,
-  //     event_requestor: "Jane Smith",
-  //     level_1: "Pending",
-  //     level_2: "Approved",
-  //     level_3: "Approved",
-  //     level_4: "Pending",
-  //     level_5: "Rejected",
-  //     level_6: "Approved"
-  //   },
-  //   {
-  //     request_number: "REQ003",
-  //     event_name: "Team Building Retreat",
-  //     event_type: "Workshop",
-  //     event_date: "2024-09-30",
-  //     total_expense: 8000,
-  //     event_requestor: "Mike Johnson",
-  //     level_1: "Approved",
-  //     level_2: "Approved",
-  //     level_3: "Pending",
-  //     level_4: "Approved",
-  //     level_5: "Rejected",
-  //     level_6: "Approved"
-  //   },
-  //   {
-  //     request_number: "REQ004",
-  //     event_name: "End of Year Gala",
-  //     event_type: "Gala",
-  //     event_date: "2024-12-31",
-  //     total_expense: 40000,
-  //     event_requestor: "Emily Davis",
-  //     level_1: "Rejected",
-  //     level_2: "Rejected",
-  //     level_3: "Pending",
-  //     level_4: "Approved",
-  //     level_5: "Approved",
-  //     level_6: "Pending"
-  //   },
-  //   {
-  //     request_number: "REQ005",
-  //     event_name: "Marketing Workshop",
-  //     event_type: "Workshop",
-  //     event_date: "2024-10-10",
-  //     total_expense: 5500,
-  //     event_requestor: "Alex Brown",
-  //     level_1: "Pending",
-  //     level_2: "Approved",
-  //     level_3: "Rejected",
-  //     level_4: "Approved",
-  //     level_5: "Pending",
-  //     level_6: "Approved"
-  //   },
-  //   {
-  //     request_number: "REQ006",
-  //     event_name: "Client Appreciation Event",
-  //     event_type: "Social",
-  //     event_date: "2024-09-15",
-  //     total_expense: 12000,
-  //     event_requestor: "Sara Miller",
-  //     level_1: "Approved",
-  //     level_2: "Approved",
-  //     level_3: "Approved",
-  //     level_4: "Pending",
-  //     level_5: "Rejected",
-  //     level_6: "Approved"
-  //   }
-  // ];
-
   return (
     <>
       <Table
