@@ -39,7 +39,10 @@ type EventTable = {
     current_stage: string;
     status: string;
     owner: string;
-    travel_request_approved:boolean
+    travel_request_approved:boolean;
+    total_estimated_expense:string;
+    total_logistics_expense:string;
+    total_compensation_expense:string;
 };
 
 type FormData = {
@@ -237,6 +240,27 @@ const Index = () => {
                                         "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                                     }
                                 >
+                                    Total Compensation Amount
+                                </TableHead>
+                                <TableHead
+                                    className={
+                                        "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                                    }
+                                >
+                                    Total Logistics Amount
+                                </TableHead>
+                                <TableHead
+                                    className={
+                                        "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                                    }
+                                >
+                                    Total Estimated Amount
+                                </TableHead>
+                                <TableHead
+                                    className={
+                                        "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                                    }
+                                >
                                     Total Expense
                                 </TableHead>
                                 <TableHead
@@ -255,6 +279,13 @@ const Index = () => {
                                 </TableHead>
                                 <TableHead
                                     className={
+                                        "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                                    }
+                                >
+                                    Status
+                                </TableHead>
+                                <TableHead
+                                    className={
                                         "text-center rounded-r-2xl text-[#625d5d] text-[15px] font-normal font-['Montserrat'] sticky right-0 z-50 bg-[#E0E9FF]"
                                     }
                                 >Action</TableHead>
@@ -270,9 +301,13 @@ const Index = () => {
                                                 <TableCell>{data.event_name ?? "-"}</TableCell>
                                                 <TableCell>{data.event_type ?? "-"}</TableCell>
                                                 <TableCell>{data.event_start_date ?? "-"}</TableCell>
-                                                <TableCell>{data.total_amount ?? "-"}</TableCell>
+                                                <TableCell>{data.total_compensation_expense ?? ""}</TableCell>
+                                                <TableCell>{data.total_logistics_expense ?? ""}</TableCell>
+                                                <TableCell>{data.total_estimated_expense ?? ""}</TableCell>
+                                                <TableCell>{data.total_amount ?? ""}</TableCell>
                                                 <TableCell>{data.event_requestor ?? "-"}</TableCell>
                                                 <TableCell>{data.owner ?? "-"}</TableCell>
+                                                <TableCell>{data.current_stage ?? "-"}</TableCell>
                                                 <TableCell className={(data.travel_request_approved == true && role == "Event Finance")? 'sticky right-0 bg-[white] z-50 space-x-2 border-l border-slate-200':'sticky right-0 bg-[white] z-50 border-l border-slate-200 space-x-2'}>
                                                     
                                                     <Button className="border rounded-full px-4 py-1 border-[#0E4154] text-[#0E4154] hover:text-white hover:bg-[#0E4154] active:text-white active:bg-[#0E4154] transition-all delay-100" onClick={() => router.push(`/post_expense_approval/${data.name}`)} >Take Action</Button>
