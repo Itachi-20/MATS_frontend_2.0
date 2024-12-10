@@ -109,8 +109,8 @@ type Props = {
 }
 
 const Form1 = ({ ...Props }: Props) => {
-  const [businessUnit, setBusinessUnit] = useState("");
-  const [budget, setBudget] = useState("");
+  const [businessUnit, setBusinessUnit] = useState(Props.previewData?.business_unit ?? "");
+  const [budget, setBudget] = useState(Props.previewData?.division_category ?? "");
   const [fullName, setFullName] = useState<string | null>(null);
   const [formData, setFormData] = useState<FormData>();
   const [refNo, setRefNo] = useState<string | null>(Props.refno);
@@ -396,7 +396,7 @@ const Form1 = ({ ...Props }: Props) => {
               Budget Sub Type<span className="text-[#e60000]">*</span>
             </label>
             <Select
-              defaultValue={Props.previewData?.division_sub_category ?? ""}
+              defaultValue={Props.previewData?.division_sub_category ? Props.previewData?.division_sub_category : ""}
               onValueChange={(value) => { handleSelectChange(value, "division_sub_category") }}
             >
               <SelectTrigger className="dropdown">
