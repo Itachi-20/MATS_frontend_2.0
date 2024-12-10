@@ -343,14 +343,13 @@ const Sidebar = () => {
             </button>
 
             {/* menu list */}
-            <ul className="rounded max-h-0 overflow-hidden transition-[max-height] duration-1000 ease-in-out text-gray-700 pt-1 w-56 px-8 group-hover:max-h-96 text-[0.625rem]">
+            <ul className="rounded max-h-0 overflow-hidden transition-[max-height] duration-1000 ease-in-out text-gray-700 pt-1 w-56 px-5 group-hover:max-h-96 text-[0.625rem]">
               {moduleItems &&
                 moduleItems.modules?.map((item, index) => {
                   return (
                     <li
-                      className=" hover:bg-white hover:rounded-xl hover:text-[#4430bf] text-[12px] py-1 cursor-pointer max-w-fit px-4 relative text-nowrap"
-                      onClick={() => {
-                        router.push(`${item.route}`);
+                      className=" hover:bg-white hover:rounded-xl hover:text-[#4430bf] text-[12px] py-1 cursor-pointer max-w-fit px-2 relative text-nowrap"
+                      onClick={() => {router.push(`${item.route}`);
                       }}
                     >
                       <div className="absolute -left-3 -top-3">
@@ -412,14 +411,13 @@ const Sidebar = () => {
             </button>
 
             {/* menu list */}
-            <ul className="rounded max-h-0 overflow-hidden transition-[max-height] duration-1000 ease-in-out text-gray-700 pt-1 w-56 px-8 group-hover:max-h-96 text-[0.625rem]">
+            <ul className="rounded max-h-0 overflow-hidden transition-[max-height] duration-1000 ease-in-out text-gray-700 pt-1 w-56 px-5 group-hover:max-h-96 text-[0.625rem]">
               {moduleItems &&
                 moduleItems.reports?.map((item, index) => {
                   return (
                     <li
-                      className=" hover:bg-white hover:rounded-xl hover:text-[#4430bf] text-[10px] py-1 cursor-pointer max-w-fit px-4 relative text-nowrap"
-                      onClick={() => {
-                        router.push(`${item.route}`);
+                      className=" hover:bg-white hover:rounded-xl hover:text-[#4430bf] text-[12px] py-1 cursor-pointer max-w-fit px-2 relative text-nowrap"
+                      onClick={() => {router.push(`${item.route}`);
                       }}
                     >
                       <div className="absolute -left-3 -top-3">
@@ -460,7 +458,7 @@ const Sidebar = () => {
               </button>
 
               {/* menu list */}
-              <ul className="rounded max-h-0 overflow-hidden transition-[max-height] duration-1000 ease-in-out text-gray-700 pt-1 w-56 px-8 group-hover:max-h-96 text-[0.625rem]">
+              <ul className="rounded max-h-0 overflow-hidden transition-[max-height] duration-1000 ease-in-out text-gray-700 pt-1 w-56 px-5 group-hover:max-h-96 text-[0.625rem]">
                 {moduleItems &&
                   moduleItems.masters?.map((item, index) => {
                     return (
@@ -507,14 +505,13 @@ const Sidebar = () => {
             </button>
 
             {/* menu list */}
-            <ul className="rounded max-h-0 overflow-hidden transition-[max-height] duration-1000 ease-in-out text-gray-700 pt-1 w-56 px-8 group-hover:max-h-96 text-[0.625rem]">
+            <ul className="rounded max-h-0 overflow-hidden transition-[max-height] duration-1000 ease-in-out text-gray-700 pt-1 w-56 px-5 group-hover:max-h-96 text-[0.625rem]">
               {moduleItems &&
                 moduleItems.settings?.map((item, index) => {
                   return (
                     <li
-                      className=" hover:bg-white hover:rounded-xl hover:text-[#4430bf] text-[12px] py-1 cursor-pointer max-w-fit px-4 relative text-nowrap"
-                      onClick={() => {
-                        router.push(`${item.route}`);
+                      className=" hover:bg-white hover:rounded-xl hover:text-[#4430bf] text-[12px] py-1 cursor-pointer max-w-fit px-2 relative text-nowrap"
+                      onClick={() => {router.push(`${item.route}`);
                       }}
                     >
                       <div className="absolute -left-3 -top-3">
