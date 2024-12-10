@@ -72,30 +72,31 @@ const Form2 = ({ ...Props }: Props) => {
   const router = useRouter();
   const [formdata, setFormData] = useState<formData | {}>({});
   const [preview_data, setPreviewData] = useState<EventEntry | null>(null);
-  const [refNo,setRefNo] = useState<string | null>(localStorage.getItem("refno")?localStorage.getItem("refno"):"");
-  const [eventStartDate,setEventStartDate] = useState<any>();
+  const [refNo,setRefNo] = useState<string | null>(Props.refno ?? "");
+  const [eventStartDate, setEventStartDate] = useState<any>(Props.previewData?.event_start_date ? new Date(Props.previewData?.event_start_date).getTime() : "");
+  
   const handleEventStartDateValidate = (e:React.ChangeEvent<HTMLInputElement>)=>{
-    const currentDate = Date.now()
+    const currentDate = new Date().setHours(0, 0, 0, 0);
     if(e.target.valueAsNumber < currentDate){
-      toast.error("Please Enter Valid Start Date");
-      setEventStartDate(e.target.value)
-      handlefieldChange(e);
-  }
+      toast.error("You are choosing previous date");
+    }
+    setEventStartDate(e.target.valueAsNumber)
+    handlefieldChange(e);
 }
 
   const handleEventEndDateValidate = (e:React.ChangeEvent<HTMLInputElement>)=>{
-    const currentDate = Date.now()
-    if(e.target.valueAsNumber < currentDate || e.target.valueAsNumber < eventStartDate){
-      toast.error("Please Enter Valid End Date");
-      handlefieldChange(e);
+    if(eventStartDate && e.target.valueAsNumber < eventStartDate){
+      toast.error("End Date should be greater than or equal to start date");
+      e.target.value = "";
     }
+    handlefieldChange(e);
   }
 
-  const handleSelectChange = (value: string, name: string) => {
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+    const handleSelectChange = (value: string, name: string) => {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    };
 
-  const handlefieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const handlefieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
       const { name, value } = e.target;
       setFormData(prev => ({ ...prev, [name]: value }));
     }
@@ -141,7 +142,7 @@ const Form2 = ({ ...Props }: Props) => {
      };
   return (
     <>
-    (<div>
+    <div>
       <h1 className='text-black text-2xl font-normal uppercase pb-8'>
         Shipping Details
       </h1>
@@ -159,7 +160,7 @@ const Form2 = ({ ...Props }: Props) => {
           <label className='lable'>Event Start Date<span className='text-[#e60000]'>*</span></label>
           <Input type='date' className=' dropdown h-10 rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm'
               name='event_start_date'
-              onChange={(e)=>{handlefieldChange(e);handleEventStartDateValidate}}
+              onChange={(e)=>{handleEventStartDateValidate(e)}}
               defaultValue={Props.previewData?.event_start_date?Props.previewData.event_start_date:""}
             ></Input>
 
@@ -168,7 +169,7 @@ const Form2 = ({ ...Props }: Props) => {
           <label className='lable'>Event End Date<span className='text-[#e60000]'>*</span></label>
           <Input type='date' className=' dropdown h-10 rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm'
               name='event_end_date'
-              onChange={(e)=>{handlefieldChange(e);handleEventEndDateValidate}}
+              onChange={(e)=>{handleEventEndDateValidate(e)}}
               defaultValue={Props.previewData?.event_end_date?Props.previewData.event_end_date:""}
             ></Input>
         </div>
@@ -240,7 +241,7 @@ const Form2 = ({ ...Props }: Props) => {
             name='total_estimated_expense'
             type='number'
             // onChange={(e)=>Props.handlefieldChange(e)}
-            defaultValue={Props.previewData?.product_amount}
+            defaultValue={Props.previewData?.total_estimated_expense}
             readOnly
           ></Input>
         </div>
@@ -274,10 +275,10 @@ const Form2 = ({ ...Props }: Props) => {
       </div>
       <div className='flex justify-end pt-5 gap-4'>
         {/* <Button className='bg-white text-black border text-md font-normal'> Save as Draft</Button> */}
-        <Button className='bg-white text-black border text-md font-normal'>Back</Button>
+        <Button className='bg-white text-black border text-md font-normal' onClick={()=>{router.push(`/patient_support?forms=1&refno=${Props.refno}`)}}>Back</Button>
         <Button className='bg-[#4430bf] text-white text-md font-normal border' onClick={()=>{handleSubmit()}}>Next</Button>
       </div>
-    </div>)
+    </div>
     <Toaster richColors position="bottom-right" />
     </>
   );

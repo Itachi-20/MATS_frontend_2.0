@@ -75,19 +75,19 @@ const form4 = ({ ...Props }: Props) => {
   const router = useRouter();
   const [files, setFiles] = useState<File[]>([]);
   const [activityType, setActivityType] = useState('Pre Activity');
-  const [refno, setRefno] = useState(Props.refno);
+  const [refno, setRefno] = useState(Props.refno ?? "");
   const [documentType, setDocumentType] = useState("");
   const [formdata, setFormData] = useState<formData | {}>({});
   // const [refNo,setRefNo] = useState<string | null>(localStorage.getItem("refno")?localStorage.getItem("refno"):"");
   const [preview_data, setPreviewData] = useState<any>(null);
-  const [uploadedFiles, setUploadedFiles] = useState<FileList | null>(); //added state 1
+  const [uploadedFiles, setUploadedFiles] = useState<FileList | null>(null);
   const [fileList, setFileList] = useState<File[]>([]); //added state 2
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    router.replace(`/patient_support?forms=4&refno=${Props.refno}`)
+    router.push(`/patient_support?forms=4&refno=${refno}`)
   };
 
-  const handleNext = (fileList: FileList | null) => {
-    setUploadedFiles(fileList);
+  const handleNext = () => {
+    
   };
 
   const PreviewData = async () => {
@@ -99,7 +99,7 @@ const form4 = ({ ...Props }: Props) => {
         },
         credentials: 'include',
         body: JSON.stringify({
-          name: refno
+          name: Props.refno
         })
       });
 
@@ -115,9 +115,64 @@ const form4 = ({ ...Props }: Props) => {
     }
   };
 
+  
+
   // useEffect(() => {
   //   setFormData({ ...formdata, name: refNo })
   // }, [refNo])
+  const FileUpload = async()=>{
+    const formdata = new FormData();
+
+    if (uploadedFiles && uploadedFiles.length > 0 ) {
+      for (let i = 0; i < uploadedFiles.length; i++) {
+        formdata.append("file", uploadedFiles[i]); 
+      }
+    } else {
+      console.log("No file to upload");
+      toast.warning("No file to Upload");
+      return;  
+    }
+      formdata.append("docname",refno as string)
+      formdata.append("activity_type",activityType);
+      formdata.append("document_type",documentType)
+
+    const apiCallPromise = new Promise(async (resolve, reject) => {
+      try {
+        const response = await fetch(`/api/monetary_grant/fileUpload`, {
+          method: "POST",
+          credentials: 'include',
+          body: formdata,
+        });
+
+        if (!response.ok) {
+          throw new Error('file upload request failed');
+        }
+
+        const data = await response.json();
+        resolve(data); // Resolve with the response data
+      } catch (error) {
+        reject(error); // Reject with the error
+      }
+    });
+    toast.promise(apiCallPromise, {
+      loading: 'Submitting  details...',
+      success: (data) => {
+        setTimeout(() => {
+          PreviewData();
+        }, 500);
+        setDocumentType('')
+        setFiles([])
+        setUploadedFiles(null);
+        return 'Documents added successfully!';
+      },
+      error: (error) => `Failed : ${error.message || error}`,
+    });
+  }
+
+
+  const handleActivityTypeChange = (value: string) => {
+    setActivityType(value);
+  }
 
 
   useEffect(() => {
@@ -127,53 +182,6 @@ const form4 = ({ ...Props }: Props) => {
   useEffect(() => {
   }, [preview_data])
 
-  console.log(formdata, "this is form data")
-
-  const FileUpload = async () => {
-    const formdata = new FormData();
-
-    if (uploadedFiles && uploadedFiles.length > 0) {
-      for (let i = 0; i < uploadedFiles.length; i++) {
-        formdata.append("file", uploadedFiles[i]);
-      }
-    } else {
-      console.log("No file to upload");
-      return;
-    }
-    formdata.append("docname", refno as string)
-    formdata.append("activity_type", "Pre Activity");
-    formdata.append("document_type", documentType)
-    try {
-      const response = await fetch(
-        `/api/training_and_education/fileUpload`,
-        {
-          method: "POST",
-          headers: {
-            //"Content-Type": "multipart/form-data",
-          },
-          body: formdata,
-          credentials: 'include'
-        }
-      );
-
-
-      if (response.ok) {
-        setDocumentType('')
-        setFiles([])
-        PreviewData();
-
-      } else {
-        console.log("Login failed");
-      }
-    } catch (error) {
-      console.error("Error during login:", error);
-    }
-  }
-
-
-  const handleActivityTypeChange = (value: string) => {
-    setActivityType(value);
-  }
 
   return (
     // </div>
@@ -247,7 +255,7 @@ const form4 = ({ ...Props }: Props) => {
             <label className="text-black text-sm font-normal capitalize">
               Upload Files<span className="text-[#e60000]">*</span>
             </label>
-            <SimpleFileUpload files={files} setFiles={setFiles} onNext={handleNext} buttonText={'Upload Here'} />
+            <SimpleFileUpload files={files} setFiles={setFiles} setUploadedFiles={setUploadedFiles} onNext={handleNext} buttonText={'Upload Here'} />
           </div>
           <Button
             className="bg-white text-black border text-md font-normal"
@@ -267,7 +275,7 @@ const form4 = ({ ...Props }: Props) => {
           {" "}
           Save as Draft
         </Button> */}
-        <Button className="bg-white text-black border text-md font-normal" onClick={() => router.push(`/patient_support?forms=3&refno=${Props.refno}`)}>
+        <Button className="bg-white text-black border text-md font-normal" onClick={() => router.push(`/patient_support?forms=2&refno=${Props.refno}`)}>
           Back
         </Button>
         <Button className="bg-[#4430bf] text-white text-md font-normal border" onClick={(e) => handleSubmit(e)}>
