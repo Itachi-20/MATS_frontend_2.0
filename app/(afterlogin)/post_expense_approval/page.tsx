@@ -39,7 +39,10 @@ type EventTable = {
     current_stage: string;
     status: string;
     owner: string;
-    travel_request_approved:boolean
+    travel_request_approved:boolean;
+    total_estimated_expense:string;
+    total_logistics_expense:string;
+    total_compensation_expense:string;
 };
 
 type FormData = {
@@ -237,6 +240,27 @@ const Index = () => {
                                         "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                                     }
                                 >
+                                    Total Compensation Amount
+                                </TableHead>
+                                <TableHead
+                                    className={
+                                        "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                                    }
+                                >
+                                    Total Logistics Amount
+                                </TableHead>
+                                <TableHead
+                                    className={
+                                        "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                                    }
+                                >
+                                    Total Estimated Amount
+                                </TableHead>
+                                <TableHead
+                                    className={
+                                        "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                                    }
+                                >
                                     Total Expense
                                 </TableHead>
                                 <TableHead
@@ -270,7 +294,10 @@ const Index = () => {
                                                 <TableCell>{data.event_name ?? "-"}</TableCell>
                                                 <TableCell>{data.event_type ?? "-"}</TableCell>
                                                 <TableCell>{data.event_start_date ?? "-"}</TableCell>
-                                                <TableCell>{data.total_amount ?? "-"}</TableCell>
+                                                <TableCell>{data.total_compensation_expense ?? ""}</TableCell>
+                                                <TableCell>{data.total_logistics_expense ?? ""}</TableCell>
+                                                <TableCell>{data.total_estimated_expense ?? ""}</TableCell>
+                                                <TableCell>{data.total_amount ?? ""}</TableCell>
                                                 <TableCell>{data.event_requestor ?? "-"}</TableCell>
                                                 <TableCell>{data.owner ?? "-"}</TableCell>
                                                 <TableCell className={(data.travel_request_approved == true && role == "Event Finance")? 'sticky right-0 bg-[white] z-50 space-x-2 border-l border-slate-200':'sticky right-0 bg-[white] z-50 border-l border-slate-200 space-x-2'}>
