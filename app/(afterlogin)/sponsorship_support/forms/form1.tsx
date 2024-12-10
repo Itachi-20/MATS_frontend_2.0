@@ -113,15 +113,15 @@ type Props = {
 
 
 const Form1 = ({ ...Props }: Props) => {
-  const [businessUnit, setBusinessUnit] = useState("");
-  const [budget, setBudget] = useState("");
+  const [businessUnit, setBusinessUnit] = useState(Props.previewData?.business_unit ?? "");
+  const [budget, setBudget] = useState(Props.previewData?.division_category ? Props.previewData.division_category : "");
   const [eventCostCenter, setEventCostCenter] =
     useState<eventCostCenter | null>(null);
   const [subtypeActivity, setSubtypeActivity] =
     useState<subtypeActivity | null>(null);
   const [subtypeActivityVisible, setSubtypeActivityVisible] = useState(false);
   const [formData, setFormData] = useState<FormData>();
-  const [refNo, setRefNo] = useState<string | null>(Props.refno);
+  const [refNo, setRefNo] = useState<string | null>(Props.refno ?? "");
   const router = useRouter()
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();

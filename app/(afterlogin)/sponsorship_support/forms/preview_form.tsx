@@ -36,6 +36,7 @@ type EventEntry = {
   event_name: string;
   event_start_date: string;
   any_govt_hcp: string;
+  comment_if_any: string;
   comments: string;
   faculty: string;
   event_venue: string;
@@ -70,12 +71,19 @@ type EventEntry = {
   logistics: Logistics[];
   documents: ActivityDocument[];
   advance_approvers: any[]; // Empty array, can be customized later
-  city:string
-  reporting_head:string
-  organizer_name:string,
-    sponsorship_amount:number
-    entitlement_in_lieu_of_sponsorship:string
-    any_additional_expense:string
+  city:string;
+  reporting_head:string;
+  organizer_name:string;
+  sponsorship_amount:number;
+  entitlement_in_lieu_of_sponsorship:string;
+  any_additional_expense:string;
+  product_details:string;
+  type_of_engagement:string;
+  requesting_hospital_name: string;
+  bill_to:string;
+  ship_to:string;
+  organization_name:string;
+  preactivity_submitted:number;
 }
 
 type Compensation = {
@@ -184,18 +192,14 @@ const Preview_Form = ({...Props}:Props) => {
   const pathname = usePathname();
   const router = useRouter()
   const [dialog,setDialog] = useState(false);
-  const [addVendor,setAddVendor] = useState(false);
   const [preview_data, setPreviewData] = useState<EventEntry | null >(null);
   const [comment,setComment] = useState<string>();
   const [isCommentbox,setIsCommentbox] = useState<boolean>();
   const [refNo, setRefNo] = useState<string | null>(Props.refno);
-  const isAddVendor = ()=>{
-    setAddVendor(prev => !prev)
-  }
+
   const handleDialog = ()=>{
     setIsCommentbox(prev=> !prev);
-  }
-
+  };
   const PreviewData = async () => {
     try {
       const response = await fetch("/api/previewData", {
@@ -220,13 +224,6 @@ const Preview_Form = ({...Props}:Props) => {
       console.error("Error during login:", error);
     }
   };
-  useEffect(() => {
-    PreviewData();
-  }, [])
-
-  console.log("preview_data", preview_data, refNo)
-
-
   const handleFinalSubmit = async () => {
     try {
       const response = await fetch(
@@ -257,11 +254,12 @@ const Preview_Form = ({...Props}:Props) => {
       console.error("Error during Submission:", error);
     }
   };
-
-
   const handleComment = (value:string)=>{
     setComment(value)
-  }
+  };
+  useEffect(() => {
+    PreviewData();
+  }, [])
   return (
       <>
         <div className="md:px-7 md:pb-7 md:pt-4 w-full z-20">
@@ -293,13 +291,15 @@ const Preview_Form = ({...Props}:Props) => {
         <Documents
         PageName=""
         eventData={preview_data}
+        fetchFile={PreviewData}
         />
 
             <div className="flex justify-end pt-5 gap-4">
               {/* <Button className="bg-white text-black border text-md font-normal">
                 Save as Draft
               </Button> */}
-              <Button className="bg-white text-black border text-md font-normal">
+          
+              <Button className='bg-white text-black border text-md font-normal hover:text-white hover:bg-black' onClick={()=>router.push(`/sponsorship_support?forms=4&refno=${Props.refno}`)}>
                 Back
               </Button>
               <Button className={`bg-[#4430bf] text-white  font-normal border`} onClick={()=>handleDialog()}>
