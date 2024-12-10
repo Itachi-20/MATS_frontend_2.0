@@ -120,6 +120,7 @@ const Form1 = ({ ...Props }: Props) => {
   const [subtypeActivityVisible, setSubtypeActivityVisible] = useState(false);
   const [formData, setFormData] = useState<FormData>();
   const [refNo, setRefNo] = useState<string | null>(Props.refno);
+  const [loading, setLoading] = useState(true);
   const router = useRouter()
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -229,13 +230,20 @@ const Form1 = ({ ...Props }: Props) => {
     }
   }; 
 
-  useEffect(()=>{
-    if(Props?.previewData?.event_requestor){
-      handleSelectChange(Props.previewData.event_requestor, "event_requestor")
-    }else{
-      handleSelectChange(userid as string, "event_requestor")
+  useEffect(() => {
+    if (userid !== undefined) {
+      setLoading(false);
+      if(Props?.previewData?.event_requestor){
+        handleSelectChange(Props.previewData.event_requestor, "event_requestor")
+      }else{
+        handleSelectChange(userid as string, "event_requestor")
+      }
     }
-  },[])
+  }, [userid]);
+
+  if (loading) {
+    return <div>Loading Please Wait</div>;
+  }
 
   return (
     // </div>

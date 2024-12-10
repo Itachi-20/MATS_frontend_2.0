@@ -146,7 +146,7 @@ const Form1 = ({ ...Props }: Props) => {
   const [formdata, setFormData] = useState<formData | {}>({});
   const [refNo, setRefNo] = useState<string | null>(Props.refno);
   const [eventStartDate, setEventStartDate] = useState<any>(Props.previewData?.event_start_date ? new Date(Props.previewData?.event_start_date).getTime() : "");
-
+  const [loading, setLoading] = useState(true);
   const { role, name, userid, clearAuthData } = useAuth();
 
   const handleSelectChange = (value: string, name: string) => {
@@ -281,16 +281,22 @@ const Form1 = ({ ...Props }: Props) => {
     setFormData({ ...formdata, name: refNo })
   }, [refNo])
 
-  useEffect(()=>{
-    if(Props?.previewData?.event_requestor){
-      handleSelectChange(Props.previewData.event_requestor, "event_requestor")
-    }else{
-      handleSelectChange(userid as string, "event_requestor")
+  useEffect(() => {
+    if (userid !== undefined) {
+      setLoading(false);
+      if(Props?.previewData?.event_requestor){
+        handleSelectChange(Props.previewData.event_requestor, "event_requestor")
+      }else{
+        handleSelectChange(userid as string, "event_requestor")
+      }
     }
-  },[])
+  }, [userid]);
+
+  if (loading) {
+    return <div>Loading Please Wait</div>;
+  }
 
   console.log(formdata, "this is form data")
-  console.log(userid,"this is context user id")
   return (
     // </div>
     <>

@@ -119,6 +119,7 @@ const Form1 = ({ ...Props }: Props) => {
   const [subtypeActivity, setSubtypeActivity] = useState<subtypeActivity | null>(null);
   const [subtypeActivityVisible, setSubtypeActivityVisible] = useState(false);
   const [engagementTypes, setEngagementTypes] = useState("");  
+  const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState<formData>(); 
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -232,13 +233,20 @@ const Form1 = ({ ...Props }: Props) => {
     handleBudgetChange(budget);
   },[])
 
-  useEffect(()=>{
-    if(Props?.previewData?.event_requestor){
-      handleSelectChange(Props.previewData.event_requestor, "event_requestor")
-    }else{
-      handleSelectChange(userid as string, "event_requestor")
+  useEffect(() => {
+    if (userid !== undefined) {
+      setLoading(false);
+      if(Props?.previewData?.event_requestor){
+        handleSelectChange(Props.previewData.event_requestor, "event_requestor")
+      }else{
+        handleSelectChange(userid as string, "event_requestor")
+      }
     }
-  },[])
+  }, [userid]);
+
+  if (loading) {
+    return <div>Loading Please Wait</div>;
+  }
 
   return (
     <div>

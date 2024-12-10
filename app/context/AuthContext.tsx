@@ -25,7 +25,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         const savedRole = Cookies.get("role");
         const savedName = Cookies.get("full_name");
         const savedid = Cookies.get("user_id");
-        console.log("savedRole,savedName",savedName,savedRole,savedid)
         if (savedRole) setRole(savedRole);
         if (savedName) setName(savedName);
         if (savedid) setUserId(savedid)
