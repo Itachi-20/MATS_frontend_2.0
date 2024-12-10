@@ -245,7 +245,7 @@ const Basic_Details = ({ ...Props }: Props) => {
             className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
             placeholder="Type Here"
             readOnly={true}
-            value={Props.eventData?.division_sub_category}
+            value={Props.eventData?.division_sub_category ? Props.eventData?.division_sub_category : ""}
           ></Input>
           </div>
         <div className="flex flex-col md:gap-2">

@@ -410,7 +410,7 @@ const Form3 = ({ ...Props }: Props) => {
                 <Input className='text-black w-5 h-5'
                   type='checkbox'
                   onChange={(e) => handle_is_GST(e)}
-                  value={compansation_is_GST ? compansation_is_GST : 0}
+                  checked={compansation_is_GST ? true : false}
                 />
               </div>
             </div>
@@ -638,7 +638,7 @@ const Form3 = ({ ...Props }: Props) => {
           {" "}
           Save as Draft
         </Button> */}
-        <Button className="bg-white text-black border text-md font-normal hover:bg-white" onClick={()=>router.push(`/sponsorship_support?forms=2&refno=${Props.refno}`)}>
+        <Button className="bg-white text-black border text-md font-normal hover:text-white hover:bg-black" onClick={() => router.push(`/sponsorship_support?forms=2&refno=${Props.refno}`)}>
           Back
         </Button>
         <Button className="bg-[#4430bf] text-white text-md font-normal border hover:bg-[#4430bf]" onClick={(e: React.MouseEvent<HTMLButtonElement>) => handleSubmit(e)}>

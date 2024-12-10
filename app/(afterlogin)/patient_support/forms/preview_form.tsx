@@ -203,7 +203,7 @@ const Preview_Form = ({...Props}:Props) => {
   const [isCommentbox,setIsCommentbox] = useState<boolean>();
 
   
-  const [refNo,setRefNo] = useState<string | null>(localStorage.getItem("refno")?localStorage.getItem("refno"):"");
+  const [refNo,setRefNo] = useState<string | null>(Props.refno ?? "");
   
   
 
@@ -310,7 +310,7 @@ const Preview_Form = ({...Props}:Props) => {
               {/* <Button className="bg-white text-black border text-md font-normal">
                 Save as Draft
               </Button> */}
-              <Button className="bg-white text-black border text-md font-normal">
+              <Button className="bg-white text-black border text-md font-normal" onClick={()=>{router.push(`/patient_support?forms=3&refno=${Props.refno}`)}}>
                 Back
               </Button>
               <Button className={`bg-[#4430bf] text-white  font-normal border ${preview_data?.preactivity_submitted == 1?"hidden":""}`} onClick={()=>handleDialog()}>

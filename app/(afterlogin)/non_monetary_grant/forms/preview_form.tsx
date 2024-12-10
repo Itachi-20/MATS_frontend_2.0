@@ -67,11 +67,11 @@ type EventEntry = {
   logistics: Logistics[];
   documents: ActivityDocument[];
   advance_approvers: any[]; // Empty array, can be customized later
-  city: string
-  reporting_head: string
-  type_of_engagement: string
-  product_details: string
-  any_additional_expense: string
+  city: string;
+  reporting_head: string;
+  type_of_engagement: string;
+  product_details: string;
+  any_additional_expense: string;
 }
 
 type Compensation = {
@@ -286,12 +286,13 @@ const Preview_Form = ({...Props}:Props) => {
         <Documents
           eventData={preview_data}
           PageName={''}
+          fetchFile={PreviewData}
         />
             <div className="flex justify-end pt-5 gap-4">
               {/* <Button className="bg-white text-black border text-md font-normal">
                 Save as Draft
               </Button> */}
-              <Button className="bg-white text-black border text-md font-normal" >
+              <Button className="bg-white text-black border text-md font-normal hover:text-white hover:bg-black" onClick={() => router.push(`/non_monetary_grant?forms=4&refno=${Props.refno}`)}>
                 Back
               </Button>
               <Button className={`bg-[#4430bf] text-white  font-normal border ${preview_data?.preactivity_submitted == 1?"hidden":""}`} onClick={()=>handleDialog()}>
