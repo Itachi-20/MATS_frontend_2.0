@@ -93,12 +93,12 @@ const Sidebar = () => {
     moduleItems = {
       modules: [
         {
-          module: "Advance Approval",
-          route: "/advance_payment",
-        },
-        {
           module: "Event Request Approval",
           route: "/event_approver_list",
+        },
+        {
+          module: "Advance Approval",
+          route: "/advance_payment",
         },
         {
           module: "Post Document Approval",

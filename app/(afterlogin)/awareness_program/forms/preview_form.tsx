@@ -303,7 +303,7 @@ const Preview_Form = ({...Props}:props) => {
           <Button className="bg-white text-black border text-md font-normal hover:text-white hover:bg-black" onClick={()=>{router.push(`/awareness_program?forms=4&refno=${refNo}`)}}>
             Back
           </Button>
-          <Button className={`bg-[#4430bf] text-white  font-normal border hover:opacity-60`} onClick={()=>handleDialog()}>
+          <Button className={`bg-[#4430bf] text-white  font-normal border hover:opacity-60 ${preview_data?.preactivity_submitted == 1?"hidden":""}`} onClick={()=>handleDialog()}>
             Submit
           </Button>
         </div>

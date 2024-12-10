@@ -55,9 +55,6 @@ const table = ({...Props}:Props) => {
                   <SelectItem value="system">System</SelectItem>
                 </SelectContent>
               </Select>
-              <Button className="text-black text-md font-normal bg-white hover:bg-white border rounded-[25px] px-8 py-5 shadow">
-                Back
-              </Button>
               <div className="">
                 <svg
                   width="45"
@@ -187,6 +184,13 @@ const table = ({...Props}:Props) => {
                   </TableHead>
                   <TableHead
                     className={
+                      "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                    }
+                  >
+                    Level 7
+                  </TableHead>
+                  <TableHead
+                    className={
                       "text-center rounded-r-2xl text-[#625d5d] text-[15px] font-normal font-['Montserrat'] sticky right-0 z-50 bg-[#E0E9FF]"
                     }
                   >Action</TableHead>
@@ -255,7 +259,7 @@ const table = ({...Props}:Props) => {
                             <div  className="flex flex-col items-center">
                             {data.level3}
                     {
-                      data.level3 != null && (data.status2 == "Approved" ?
+                      data.level3 != null && (data.status3 == "Approved" ?
                         <span className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
                           A
                         </span>
@@ -279,7 +283,7 @@ const table = ({...Props}:Props) => {
                             <div  className="flex flex-col items-center">
                             {data.level4}
                     {
-                      data.level4 != null && (data.status1 == "Approved" ?
+                      data.level4 != null && (data.status4 == "Approved" ?
                         <span className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
                           A
                         </span>
@@ -303,7 +307,7 @@ const table = ({...Props}:Props) => {
                             <div  className="flex flex-col items-center">
                             {data.level5}
                     {
-                      data.level5 != null && (data.status4 == "Approved" ?
+                      data.level5 != null && (data.status5 == "Approved" ?
                         <span className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
                           A
                         </span>
@@ -323,12 +327,11 @@ const table = ({...Props}:Props) => {
                             </div>
 
                             </TableCell>
-                          <TableCell>
                             <TableCell>
                             <div  className="flex flex-col items-center">
                             {data.level6}
                     {
-                      data.level6 != null && (data.status5 == "Approved" ?
+                      data.level6 != null && (data.status6 == "Approved" ?
                         <span className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
                           A
                         </span>
@@ -348,7 +351,30 @@ const table = ({...Props}:Props) => {
                             </div>
 
                             </TableCell>
-                          </TableCell>
+                            <TableCell>
+                            <div  className="flex flex-col items-center">
+                            {data.level7}
+                    {
+                      data.level7 != null && (data.status7 == "Approved" ?
+                        <span className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
+                          A
+                        </span>
+                        : data.status7 == "Pending" ?
+                          <span className="w-6 rounded-md bg-[#fae8a8] text-[#937818] text-[15px] font-semibold">
+                            W
+                          </span>
+                          :
+                          <span className="w-6 rounded-md bg-[#feadad] text-[#9c0000] text-[15px] font-semibold">
+                            RJ
+                          </span>
+                      )}
+                    {
+                      data.level7 == null && <span>N/A</span>
+                    }
+
+                            </div>
+
+                            </TableCell>
                           <TableCell className="sticky right-0 bg-[white] z-50 ">
                             <div className="">
                             {

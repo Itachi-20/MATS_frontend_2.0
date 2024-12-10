@@ -13,6 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { PreviewDataType, DropdownDataType, FormDataType } from "../page";
+import { useAuth } from "@/app/context/AuthContext";
 
 type eventCostCenter = {
   cost_center: {
@@ -42,6 +43,7 @@ type Props = {
 }
 
 const Form1 = ({ ...Props }: Props) => {
+  const { role, name, userid, clearAuthData } = useAuth();
   const [formData, setFormData] = useState<FormDataType>();
   const router = useRouter();
   const [businessUnit, setBusinessUnit] = useState(Props.previewData?.business_unit ?? "");
@@ -220,7 +222,7 @@ const Form1 = ({ ...Props }: Props) => {
             Event requester<span className="text-[#e60000]">*</span>
           </label>
           <Select
-            defaultValue={Props.previewData?.event_requestor ?? ""}
+            defaultValue={Props.previewData?.event_requestor ?Props.previewData.event_requestor : userid as string}
             onValueChange={(value) => handleSelectChange(value, "event_requestor")}
           >
             <SelectTrigger className="dropdown">

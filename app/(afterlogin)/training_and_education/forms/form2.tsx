@@ -1,6 +1,6 @@
 "use client"
 import { useRouter } from 'next/navigation';
-import React, { useState } from 'react'
+import React, { useState,useRef } from 'react'
 import { Input } from "@/components/ui/input"
 import {
   Select,
@@ -23,6 +23,8 @@ type Props = {
 
 const Form2 = ({ ...Props }: Props) => {
   const router = useRouter();
+  const start_date_ref: React.RefObject<any> = useRef(null);
+  const end_date_ref: React.RefObject<any> = useRef(null);
   const [formData, setFormData] = useState<FormDataType>();
   const [refNo, setRefNo] = useState<string | null>(Props.refNo ?? "");
   const [eventStartDate, setEventStartDate] = useState<any>(Props.previewData?.event_start_date ? new Date(Props.previewData?.event_start_date).getTime() : "");
@@ -86,7 +88,21 @@ const Form2 = ({ ...Props }: Props) => {
       e.target.value = "";
     }
     handlefieldChange(e);
-  }
+  };
+
+  const handleStartDateClick = () => {
+    if (start_date_ref.current) {
+      start_date_ref.current.showPicker(); // For modern browsers
+      start_date_ref.current.focus(); // Fallback for older browsers
+    }
+  };
+  
+  const handleEndDateClick = () => {
+    if (end_date_ref.current) {
+      end_date_ref.current.showPicker(); // For modern browsers
+      end_date_ref.current.focus(); // Fallback for older browsers
+    }
+  };
   return (
     <>
       <div>
@@ -116,22 +132,26 @@ const Form2 = ({ ...Props }: Props) => {
             ></Input>
 
           </div>
-          <div className='flex flex-col gap-2'>
-            <label className='lable'>Event Start Date<span className='text-[#e60000]'>*</span></label>
+          <div className='flex flex-col gap-2'onClick={()=>{handleStartDateClick()}}>
+            <label className='lable'htmlFor='start_date'>Event Start Date<span className='text-[#e60000]'>*</span></label>
             <input 
               defaultValue={Props.previewData?.event_start_date ? Props.previewData.event_start_date : ""}
               type='date' 
+              id='start_date'
+              ref={start_date_ref}
               className='dropdown h-10 rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm'
               name='event_start_date'
               onChange={(e) =>{handleEventStartDateValidate(e)}}
             ></input>
 
           </div>
-          <div className='flex flex-col gap-2'>
-            <label className='lable'>Event End Date<span className='text-[#e60000]'>*</span></label>
+          <div className='flex flex-col gap-2'onClick={()=>{handleEndDateClick()}}>
+            <label className='lable'htmlFor='end_date'>Event End Date<span className='text-[#e60000]'>*</span></label>
             <input 
               defaultValue={Props.previewData?.event_end_date ? Props.previewData.event_end_date : ""}
               type='date' 
+              ref={end_date_ref}
+              id='end_date'
               className=' dropdown h-10 rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm'
               name='event_end_date'
               onChange={(e) => handleEventEndDateValidate(e)}
