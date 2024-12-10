@@ -25,8 +25,8 @@ const Form2 = ({ ...Props }: Props) => {
   const router = useRouter();
   const [formData, setFormData] = useState<FormDataType>();
   const [refNo, setRefNo] = useState<string | null>(Props.refNo ?? "");
-  const [eventStartDate, setEventStartDate] = useState<number | null>(null);
-  const [engagementHCP,setEngagementHCP] = useState<any>(Props.previewData?.any_govt_hcp ?? "");
+  const [eventStartDate, setEventStartDate] = useState<any>(Props.previewData?.event_start_date ? new Date(Props.previewData?.event_start_date).getTime() : "");
+  const [engagementHCP,setEngagementHCP] = useState<string>(Props.previewData?.any_govt_hcp ?? "");
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -71,21 +71,22 @@ const Form2 = ({ ...Props }: Props) => {
   const handleSelectChange = (value: string, name: string) => {
     setFormData((prev) => ({ ...prev, [name]: value }) as FormDataType);
   };
-  const handleEventStartDateValidate = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const currentDate = Date.now();
-    if (e.target.valueAsNumber < currentDate) {
-      toast.error("You are selecting previous date");
+  const handleEventStartDateValidate = (e:React.ChangeEvent<HTMLInputElement>)=>{
+    const currentDate = new Date().setHours(0, 0, 0, 0);
+    if(e.target.valueAsNumber < currentDate){
+      toast.error("You are choosing previous date");
     }
     setEventStartDate(e.target.valueAsNumber)
     handlefieldChange(e);
-  };
-  const handleEventEndDateValidate = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (eventStartDate !== null && e.target.valueAsNumber < eventStartDate ) {
-      toast.error("Event end date should be greater than start date");
+}
+
+  const handleEventEndDateValidate = (e:React.ChangeEvent<HTMLInputElement>)=>{
+    if(eventStartDate && e.target.valueAsNumber < eventStartDate){
+      toast.error("End Date should be greater than or equal to start date");
       e.target.value = "";
     }
     handlefieldChange(e);
-  };
+  }
   return (
     <>
       <div>
