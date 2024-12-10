@@ -26,19 +26,23 @@ type dropdownData = {
   state: {
     name: string,
     state: string
-  }[]
+  }[],
   currency: {
     name: string
-  }[]
+  }[],
   engagement_type: {
     name: string
     engagement_type: string
-  }[]
+  }[],
   training_ref_no: {
     name: string
-  }[]
+  }[],
   sponsorship_ref_no: {
     name: string
+  }[],
+  city: {
+    name: string,
+    city: string
   }[]
 }
 
@@ -79,7 +83,7 @@ export type Previewdata = {
   product_amount: number;
   quantity: number;
   organizer_name: string | null;
-  sponsor_currency: number;
+  sponsor_currency: string;
   sponsorship_amount: number;
   entitlement_in_lieu_of_sponsorship: string | null;
   comment_if_any: string | null;

@@ -1,6 +1,6 @@
 "use client"
 import React from 'react'
-import {useState} from 'react'
+import {useState,useRef} from 'react'
 import { Input } from "@/components/ui/input"
 import {
   Select,
@@ -58,10 +58,28 @@ type Props = {
   refno: string;
 }
 const Form2 = ({ ...Props }: Props) => {
-  const [eventStartDate,setEventStartDate] = useState<any>();
+  const start_date_ref: React.RefObject<any> = useRef(null);
+  const end_date_ref: React.RefObject<any> = useRef(null);
+  const [eventStartDate, setEventStartDate] = useState<any>(Props.previewData?.event_start_date ? new Date(Props.previewData?.event_start_date).getTime() : "");
+
   const [formdata, setFormData] = useState<formData | {}>({});
   const [refNo, setRefNo] = useState<string | null>(Props.refno);
   const router = useRouter()
+
+  const handleStartDateClick = () => {
+    if (start_date_ref.current) {
+      start_date_ref.current.showPicker(); // For modern browsers
+      start_date_ref.current.focus(); // Fallback for older browsers
+    }
+  };
+  
+  const handleEndDateClick = () => {
+    if (end_date_ref.current) {
+      end_date_ref.current.showPicker(); // For modern browsers
+      end_date_ref.current.focus(); // Fallback for older browsers
+    }
+  };
+
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
@@ -105,28 +123,28 @@ const Form2 = ({ ...Props }: Props) => {
   }
 
   const handleEventStartDateValidate = (e:React.ChangeEvent<HTMLInputElement>)=>{
-    const currentDate = Date.now()
+    const currentDate = new Date().setHours(0, 0, 0, 0);
     if(e.target.valueAsNumber < currentDate){
-      toast.error("Please Enter Valid Start Date");
+      toast.error("You are choosing previous date");
     }
-    setEventStartDate(e.target.value)
+    setEventStartDate(e.target.valueAsNumber)
     handlefieldChange(e);
 }
 
   const handleEventEndDateValidate = (e:React.ChangeEvent<HTMLInputElement>)=>{
-    const currentDate = Date.now()
-    if(e.target.valueAsNumber < currentDate || e.target.valueAsNumber < eventStartDate){
-      toast.error("Please Enter Valid End Date");
+    if(eventStartDate && e.target.valueAsNumber < eventStartDate){
+      toast.error("End Date should be greater than or equal to start date");
+      e.target.value = "";
     }
     handlefieldChange(e);
   }
   return (
     <>
-    (<div>
+    <div>
       <h1 className='text-black text-2xl font-normal uppercase pb-8'>
         Event Details
       </h1>
-      <div className='grid grid-cols-2 gap-12'>
+      <div className='grid grid-cols-2 gap-6'>
         <div className='flex flex-col gap-2'>
           <label className='lable'>Event Name <span className='text-[#e60000]'>*</span></label>
           <Input className='dropdown' placeholder='Type Here' name='event_name'
@@ -143,19 +161,23 @@ const Form2 = ({ ...Props }: Props) => {
           ></Input>
 
         </div>
-        <div className='flex flex-col gap-2'>
-          <label className='lable'>Event Start Date<span className='text-[#e60000]'>*</span></label>
+        <div className='flex flex-col gap-2'onClick={()=>{handleStartDateClick()}}>
+          <label className='lable' htmlFor='start_date'>Event Start Date<span className='text-[#e60000]'>*</span></label>
           <input type='date'
+          id='start_date'
           name='event_start_date'
            onChange={(e) => handleEventStartDateValidate(e)}
+           ref={start_date_ref}
            defaultValue={Props.previewData?.event_start_date?Props.previewData.event_start_date:""}
           className='dropdown h-10 rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm'></input>
 
         </div>
-        <div className='flex flex-col gap-2'>
-          <label className='lable'>Event End Date<span className='text-[#e60000]'>*</span></label>
+        <div className='flex flex-col gap-2'onClick={()=>{handleEndDateClick()}}>
+          <label className='lable'htmlFor='end_date'>Event End Date<span className='text-[#e60000]'>*</span></label>
           <input type='date' 
+          id='end_date'
           name='event_end_date'
+          ref={end_date_ref}
           onChange={(e) => handleEventEndDateValidate(e)}
           defaultValue={Props.previewData?.event_end_date?Props.previewData.event_end_date:""}
           className=' dropdown h-10 rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm'></input>
@@ -173,10 +195,12 @@ const Form2 = ({ ...Props }: Props) => {
      
       <div className='flex justify-end pt-5 gap-4'>
         {/* <Button className='bg-white text-black border text-md font-normal'> Save as Draft</Button> */}
-        <Button className='bg-white text-black border text-md font-normal' onClick={()=>router.push(`/sponsorship_support?forms=1&refno=${Props.refno}`)}>Back</Button>
+        <Button className="bg-white text-black border text-md font-normal hover:text-white hover:bg-black" onClick={() => router.push(`/sponsorship_support?forms=1&refno=${Props.refno}`)}>
+          Back
+        </Button>
         <Button className='bg-[#4430bf] text-white text-md font-normal border' onClick={(e)=>handleSubmit(e)}>Next</Button>
       </div>
-    </div>)
+    </div>
     <Toaster richColors position="bottom-right" />
     </>
   );

@@ -1,6 +1,6 @@
 "use client"
 import React from 'react';
-import { useState } from 'react';
+import { useState,useRef } from 'react';
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -11,8 +11,6 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { useContext } from 'react';
-import { AppContext } from '@/app/context/module';
 import { Toaster, toast } from 'sonner'
 import { useRouter } from 'next/navigation';
 import { Previewdata } from '@/app/(afterlogin)/monetary_grant/page'
@@ -105,6 +103,8 @@ type Props = {
   refno: string;
 }
 const Form2 = ({ ...Props }: Props) => {
+  const start_date_ref: React.RefObject<any> = useRef(null);
+  const end_date_ref: React.RefObject<any> = useRef(null);
   const [formdata, setFormData] = useState<formData | {}>({});
   const [refNo, setRefNo] = useState<string | null>(Props.refno);
   const router = useRouter()
@@ -115,21 +115,36 @@ const Form2 = ({ ...Props }: Props) => {
 
   // const { user } = appContext;
   // console.log(user, "this is user");
-  const[EngageHCP, setEngageHCP] = useState<string>("");
-  const [eventStartDate,setEventStartDate] = useState<any>();
-  const handleEventStartDateValidate = (e:React.ChangeEvent<HTMLInputElement>)=>{
-    const currentDate = Date.now()
-    if(e.target.valueAsNumber < currentDate){
-      toast.error("Please Enter Valid Start Date");
+  const [engagementHCP,setEngagementHCP] = useState<string>(Props.previewData?.any_govt_hcp ?? "");
+  const [eventStartDate, setEventStartDate] = useState<any>(Props.previewData?.event_start_date ? new Date(Props.previewData?.event_start_date).getTime() : "");
+
+  const handleStartDateClick = () => {
+    if (start_date_ref.current) {
+      start_date_ref.current.showPicker(); // For modern browsers
+      start_date_ref.current.focus(); // Fallback for older browsers
     }
-    setEventStartDate(e.target.value)
+  };
+  
+  const handleEndDateClick = () => {
+    if (end_date_ref.current) {
+      end_date_ref.current.showPicker(); // For modern browsers
+      end_date_ref.current.focus(); // Fallback for older browsers
+    }
+  };
+
+  const handleEventStartDateValidate = (e:React.ChangeEvent<HTMLInputElement>)=>{
+    const currentDate = new Date().setHours(0, 0, 0, 0);
+    if(e.target.valueAsNumber < currentDate){
+      toast.error("You are selecting previous Date");
+    }
+    setEventStartDate(e.target.valueAsNumber)
     handlefieldChange(e);
 }
 
   const handleEventEndDateValidate = (e:React.ChangeEvent<HTMLInputElement>)=>{
-    const currentDate = Date.now()
-    if(e.target.valueAsNumber < currentDate || e.target.valueAsNumber < eventStartDate){
-      toast.error("Please Enter Valid End Date");
+    if(e.target.valueAsNumber < eventStartDate){
+      toast.error("Date should be greater than or equal to start date");
+      e.target.value="";
     }
     handlefieldChange(e);
   }
@@ -140,6 +155,10 @@ const Form2 = ({ ...Props }: Props) => {
   }
 
   const handleSelectChange = (value: string, name: string) => {
+    // if(name == "any_govt_hcp" && value == "No"){
+    //   const noofhcpfield = document.getElementsByName("no_of_hcp")[0] as HTMLInputElement;
+    //   noofhcpfield.value = "0";
+    // }
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -185,7 +204,7 @@ const Form2 = ({ ...Props }: Props) => {
   
   return (
     <>
-    (<div>
+    <div>
       <h1 className='text-black text-2xl font-normal uppercase pb-8'>
         Organisation Details
       </h1>
@@ -199,19 +218,23 @@ const Form2 = ({ ...Props }: Props) => {
           ></Input>
 
         </div>
-        <div className='flex flex-col gap-2'>
-          <label className='lable'>Event Start Date<span className='text-[#e60000]'>*</span></label>
+        <div className='flex flex-col gap-2'onClick={()=>{handleStartDateClick()}}>
+          <label className='lable'htmlFor='start_date'>Event Start Date<span className='text-[#e60000]'>*</span></label>
           <Input type='date' className='dropdown h-10 rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm'
             name='event_start_date'
+            id='start_date'
+            ref={start_date_ref}
             onChange={(e)=>handleEventStartDateValidate(e)}
             defaultValue={Props.previewData?.event_start_date?Props.previewData.event_start_date:""}
           ></Input>
 
         </div>
-        <div className='flex flex-col gap-2'>
+        <div className='flex flex-col gap-2'onClick={()=>{handleEndDateClick()}}>
           <label className='lable'>Event End Date<span className='text-[#e60000]'>*</span></label>
           <Input type='date' className=' dropdown h-10 rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm'
             name='event_end_date'
+            id='end_date'
+            ref={end_date_ref}
             onChange={(e)=>handleEventEndDateValidate(e)}
             defaultValue={Props.previewData?.event_end_date?Props.previewData.event_end_date:""}
           ></Input>
@@ -219,11 +242,11 @@ const Form2 = ({ ...Props }: Props) => {
         <div className='flex flex-col gap-2'>
           <label className='lable'>engagement of any government hCP’s?<span className='text-[#e60000]'>*</span></label>
           <Select
-            onValueChange={(value)=>{handleSelectChange(value,"any_govt_hcp"); setEngageHCP(value);}}
+            onValueChange={(value)=>{handleSelectChange(value,"any_govt_hcp"); setEngagementHCP(value);}}
             defaultValue={Props.previewData?.any_govt_hcp?Props.previewData.any_govt_hcp:""}
             >
             <SelectTrigger className="dropdown">
-            <SelectValue placeholder="Select" />
+              <SelectValue placeholder="Select" />
             </SelectTrigger>
             <SelectContent>
             <SelectItem value="Yes">Yes</SelectItem>
@@ -233,7 +256,7 @@ const Form2 = ({ ...Props }: Props) => {
 
         </div>
 
-        { EngageHCP == "Yes" &&
+        { engagementHCP == "Yes" &&
           <div className='flex flex-col gap-2'>
             <label className='lable'>Total number of government hCP’s<span className='text-[#e60000]'>*</span></label>
             <Input className='dropdown' placeholder='Type Here'
@@ -268,7 +291,7 @@ const Form2 = ({ ...Props }: Props) => {
         <Button className='bg-white text-black border text-md font-normal' onClick={()=>router.push(`/monetary_grant?forms=1&refno=${Props.refno}`)}>Back</Button>
         <Button className='bg-[#4430bf] text-white text-md font-normal border' onClick={handleSubmit}>Next</Button>
       </div>
-    </div>)
+    </div>
     <Toaster richColors position="bottom-right" />
     </>
   );

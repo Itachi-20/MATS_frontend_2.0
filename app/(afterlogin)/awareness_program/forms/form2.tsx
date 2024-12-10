@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react';
+import { useState,useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { Input } from "@/components/ui/input";
 import {
@@ -62,9 +62,26 @@ type Props = {
 const Form2 = ({ ...Props }: Props) => {
   
   const router = useRouter();
+  const start_date_ref: React.RefObject<any> = useRef(null);
+  const end_date_ref: React.RefObject<any> = useRef(null);
   const [formdata, setFormData] = useState<formData>();
   const [refNo, setRefNo] = useState<string | null>(Props.refNo ?? "");
-  const [eventStartDate, setEventStartDate] = useState<any>();
+  const [eventStartDate, setEventStartDate] = useState<any>(Props.previewData?.event_start_date ? new Date(Props.previewData?.event_start_date).getTime() : "");
+  const [engagementHCP,setEngagementHCP] = useState<string>(Props.previewData?.any_govt_hcp ?? "");
+
+  const handleStartDateClick = () => {
+    if (start_date_ref.current) {
+      start_date_ref.current.showPicker(); // For modern browsers
+      start_date_ref.current.focus(); // Fallback for older browsers
+    }
+  };
+  
+  const handleEndDateClick = () => {
+    if (end_date_ref.current) {
+      end_date_ref.current.showPicker(); // For modern browsers
+      end_date_ref.current.focus(); // Fallback for older browsers
+    }
+  };
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -76,7 +93,9 @@ const Form2 = ({ ...Props }: Props) => {
     if (refNo) {
       updatedFormData.name = refNo;
     }
-
+    if(updatedFormData.any_govt_hcp == "No"){
+      updatedFormData.no_of_hcp = 0;
+    }
 
     try {
       const response = await fetch(
@@ -91,12 +110,9 @@ const Form2 = ({ ...Props }: Props) => {
         }
       );
       if (response.ok) {
-        const data = await response.json();
-        // console.log(data, "response data");
-        setRefNo(data.message);
-        // setTimeout(() => {
+          const data = await response.json();
+          setRefNo(data.message);
           router.push(`/awareness_program?forms=3&refno=${data.message}`)
-        // }, 1000)
       } else {
         console.log("submission failed");
       }
@@ -112,21 +128,17 @@ const Form2 = ({ ...Props }: Props) => {
     setFormData((prev) => ({ ...prev, [name]: value }) as formData);
   };
   const handleEventStartDateValidate = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const currentDate = Date.now()
+    const currentDate = new Date().setHours(0, 0, 0, 0);
     if (e.target.valueAsNumber < currentDate) {
       toast.error("You are selecting previous date");
     }
-    setEventStartDate(e.target.value)
+    setEventStartDate(e.target.valueAsNumber);
     handlefieldChange(e);
   };
   const handleEventEndDateValidate = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const currentDate = Date.now()
-    if (e.target.valueAsNumber < currentDate || e.target.valueAsNumber < eventStartDate) {
-      setFormData((prevFormData) => ({
-                    ...prevFormData,
-                    [e.target.name]: Props.previewData?.event_end_date
-                }) as formData);
-      toast.error("You cant select previous date");
+    if (eventStartDate && e.target.valueAsNumber < eventStartDate ) {
+      toast.error("Event end Date should be greater than or equal to start date");
+      e.target.value = "";
     }
     handlefieldChange(e);
   };
@@ -156,18 +168,22 @@ const Form2 = ({ ...Props }: Props) => {
             ></Input>
 
           </div>
-          <div className='flex flex-col gap-2'>
-            <label className='lable'>Program Start Date<span className='text-[#e60000]'>*</span></label>
+          <div className='flex flex-col gap-2' onClick={()=>{handleStartDateClick()}}>
+            <label className='lable'htmlFor='start_date'>Program Start Date<span className='text-[#e60000]'>*</span></label>
             <input type='date' className='dropdown h-10 rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm'
               name='event_start_date'
+              id='start_date'
+              ref={start_date_ref}
               defaultValue={Props.previewData?.event_start_date ? Props.previewData.event_start_date : ""}
               onChange={(e) => handleEventStartDateValidate(e)}
             ></input>
           </div>
-          <div className='flex flex-col gap-2'>
+          <div className='flex flex-col gap-2'onClick={()=>{handleEndDateClick()}}>
             <label className='lable'>Program End Date<span className='text-[#e60000]'>*</span></label>
             <input type='date' className=' dropdown h-10 rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm'
               name='event_end_date'
+              ref={end_date_ref}
+              id='end_date'
               defaultValue={Props.previewData?.event_end_date ? Props.previewData.event_end_date : ""}
               onChange={(e) => handleEventEndDateValidate(e)}
             ></input>
@@ -175,8 +191,8 @@ const Form2 = ({ ...Props }: Props) => {
           <div className='flex flex-col gap-2'>
             <label className='lable'>engagement of any government hCP’s?<span className='text-[#e60000]'>*</span></label>
             <Select
-              onValueChange={(value) => handleSelectChange(value, "any_govt_hcp")}
               defaultValue={Props.previewData?.any_govt_hcp ? Props.previewData.any_govt_hcp : ""}
+              onValueChange={(value) => {setEngagementHCP(value); handleSelectChange(value, "any_govt_hcp");}}
             >
               <SelectTrigger className="dropdown">
                 <SelectValue placeholder="Select" />
@@ -186,19 +202,24 @@ const Form2 = ({ ...Props }: Props) => {
                 <SelectItem value="No">No</SelectItem>
               </SelectContent>
             </Select>
-
           </div>
-
-          <div className='flex flex-col gap-2'>
-            <label className='lable'>Total number of government hCP’s<span className='text-[#e60000]'>*</span></label>
-            <Input className='dropdown' placeholder='Type Here'
-              name='no_of_hcp'
-              type='number'
-              disabled={!(formdata?.any_govt_hcp == "Yes" || Props.previewData?.any_govt_hcp == "Yes")}
-              defaultValue={Props.previewData?.no_of_hcp ? Props.previewData.no_of_hcp : ""}
-              onChange={(e) => handlefieldChange(e)}
-            ></Input>
-          </div>
+          {
+            engagementHCP == "Yes" ?
+            <div className='flex flex-col gap-2'>
+              <label className='lable'>Total number of government hCP’s<span className='text-[#e60000]'>*</span></label>
+              <Input 
+                defaultValue={Props.previewData?.no_of_hcp ? Props.previewData.no_of_hcp : ""}
+                className={`dropdown ${engagementHCP?"":"cursor-not-allowed"}`} 
+                placeholder='Type Here'
+                name='no_of_hcp'
+                type='number'
+                disabled = {engagementHCP == "Yes"?false:true}
+                onChange={(e) => handlefieldChange(e)}
+              ></Input>
+            </div> 
+            :
+            <div className='flex flex-col gap-2'></div>
+          }
 
           <div className='flex flex-col gap-2'>
             <label className='lable'>Comments<span className='text-[#e60000]'>*</span></label>

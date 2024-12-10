@@ -393,6 +393,7 @@ const Basic_Details = ({ ...Props }: Props) => {
                         className="text-black shadow md:rounded-xl md:py-5"
                         placeholder="Type Here"
                         name="service_type"
+                        value={Props.eventData?.service_type?Props.eventData?.service_type:""}
                         readOnly
                     ></Input>
                 </div>

@@ -148,6 +148,13 @@ const table = ({ ...Props }: Props) => {
                   "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                 }
               >
+                Created By
+              </TableHead>
+              <TableHead
+                className={
+                  "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                }
+              >
                 Level 1
               </TableHead>
               <TableHead
@@ -187,6 +194,13 @@ const table = ({ ...Props }: Props) => {
               </TableHead>
               <TableHead
                 className={
+                  "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                }
+              >
+                Level 7
+              </TableHead>
+              <TableHead
+                className={
                   "text-center rounded-r-2xl text-[#625d5d] text-[15px] font-normal font-['Montserrat'] sticky right-0 z-50 bg-[#E0E9FF]"
                 }
               >Action</TableHead>
@@ -197,12 +211,13 @@ const table = ({ ...Props }: Props) => {
               tableData.map((data: any, index: number) => {
                 return (
                   <TableRow key={index} className="text-center text-nowrap">
-                    <TableCell>{data.name}</TableCell>
-                    <TableCell>{data.event_name}</TableCell>
-                    <TableCell> {data.event_type}</TableCell>
-                    <TableCell>{data.event_start_date}</TableCell>
+                    <TableCell>{data.name ?? "-"}</TableCell>
+                    <TableCell>{data.event_name ?? "-"}</TableCell>
+                    <TableCell> {data.event_type ?? "-"}</TableCell>
+                    <TableCell>{data.event_start_date ?? "-"}</TableCell>
                     <TableCell>{data.total_estimated_expense}</TableCell>
-                    <TableCell>{data.event_requestor}</TableCell>
+                    <TableCell>{data.event_requestor ?? "-"}</TableCell>
+                    <TableCell>{data.owner ?? "-"}</TableCell>
                     <TableCell>
                       <div className="flex flex-col items-center">
                         {data.level1}
@@ -324,7 +339,6 @@ const table = ({ ...Props }: Props) => {
                       </div>
 
                     </TableCell>
-                    <TableCell>
                       <TableCell>
                         <div className="flex flex-col items-center">
                           {data.level6}
@@ -349,7 +363,30 @@ const table = ({ ...Props }: Props) => {
                         </div>
 
                       </TableCell>
-                    </TableCell>
+                      <TableCell>
+                        <div className="flex flex-col items-center">
+                          {data.level7}
+                          {
+                            data.level7 != null && (data.status7 == "Approved" ?
+                              <span className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
+                                A
+                              </span>
+                              : data.status7 == "Pending" ?
+                                <span className="w-6 rounded-md bg-[#fae8a8] text-[#937818] text-[15px] font-semibold">
+                                  W
+                                </span>
+                                :
+                                <span className="w-6 rounded-md bg-[#feadad] text-[#9c0000] text-[15px] font-semibold">
+                                  RJ
+                                </span>
+                            )}
+                          {
+                            data.level7 == null && <span>N/A</span>
+                          }
+
+                        </div>
+
+                      </TableCell>
                     <TableCell className="sticky right-0 bg-[white] z-50 ">
                       <div className="">
                         {

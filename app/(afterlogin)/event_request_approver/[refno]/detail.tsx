@@ -277,7 +277,7 @@ console.log(refno,'refno')
           <div></div>
           <div className="flex gap-4 bg-white">
             <Button className="border border-[#4430bf] text-[#4430bf] px-6" onClick={()=>router.push(`/audit_trail/${eventData.name}`)}>Audit Trail</Button>
-            <Button className="bg-white text-black border px-8 hover:bg-white">Back</Button>
+            <Button className="bg-white text-black border px-8 hover:bg-white" onClick={()=>{router.push('/event_list')}}>Back</Button>
           </div>
         </div>
         <div className="flex border rounded-xl justify-between p-3 bg-white gap-4">

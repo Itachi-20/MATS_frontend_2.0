@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useRouter } from "next/navigation";
 import {Previewdata} from '@/app/(afterlogin)/hcp_services/page'
+import { useAuth } from "@/app/context/AuthContext";
 
 type dropdownData = {
   company: {
@@ -111,6 +112,7 @@ type Props = {
 
 const Form1 = ({ ...Props }: Props) => {
   const router = useRouter();
+  const { role, name, userid, clearAuthData } = useAuth();
   const[businessUnit, setBusinessUnit] = useState(Props.previewData?.business_unit ?? "");
   const[budget, setBudget] = useState(Props.previewData?.division_category ?? "");
   const [eventCostCenter, setEventCostCenter] = useState<eventCostCenter | null>(null);
@@ -293,7 +295,7 @@ const Form1 = ({ ...Props }: Props) => {
           </label>
           <Select
             onValueChange={(value) => handleSelectChange(value, "event_requestor")}
-            defaultValue={Props.previewData?.event_requestor?Props.previewData.event_requestor:""}
+            defaultValue={Props.previewData?.event_requestor?Props.previewData.event_requestor:userid as string}
           >
             <SelectTrigger className="dropdown">
               <SelectValue placeholder="Select" />
@@ -386,7 +388,7 @@ const Form1 = ({ ...Props }: Props) => {
             defaultValue={Props.previewData?.division_sub_category?Props.previewData.division_sub_category:""}
             >
               <SelectTrigger className="dropdown">
-                <SelectValue placeholder="--Selected--" />
+                <SelectValue placeholder="Select" />
               </SelectTrigger>
               <SelectContent>
               {subtypeActivity ?
@@ -416,7 +418,7 @@ const Form1 = ({ ...Props }: Props) => {
               <SelectValue placeholder="Select" />
             </SelectTrigger>
             <SelectContent>
-              {Props.dropdownData ?
+              {(Props.dropdownData && Props.dropdownData.city)?
                   Props.dropdownData.city.map((item, index) => {
                     return (
                       <SelectItem value={item.name}>

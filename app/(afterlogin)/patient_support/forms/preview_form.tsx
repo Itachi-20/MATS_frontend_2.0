@@ -1,3 +1,4 @@
+"use client"
 import React,{useState} from "react";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
@@ -16,9 +17,11 @@ import BeneficiaryDetails from "@/components/previewPatientSupportComponents/ben
 import OtherDetails from "@/components/sponsorshipSupportPreviewComponents/other_details";
 import { useEffect } from "react";
 import Comment_box from "@/components/approvalCommentBox/Comment_box";  
+import { Previewdata } from '@/app/(afterlogin)/patient_support/page'
 
 type Props = {
-  handleBackButton: (e: React.MouseEvent<HTMLButtonElement>) => void
+  previewData: Previewdata | null;
+  refno: string | null;
 }
 
 type EventEntry = {
@@ -200,7 +203,7 @@ const Preview_Form = ({...Props}:Props) => {
   const [isCommentbox,setIsCommentbox] = useState<boolean>();
 
   
-  const [refNo,setRefNo] = useState<string | null>(localStorage.getItem("refno")?localStorage.getItem("refno"):"");
+  const [refNo,setRefNo] = useState<string | null>(Props.refno ?? "");
   
   
 
@@ -307,10 +310,10 @@ const Preview_Form = ({...Props}:Props) => {
               {/* <Button className="bg-white text-black border text-md font-normal">
                 Save as Draft
               </Button> */}
-              <Button className="bg-white text-black border text-md font-normal">
+              <Button className="bg-white text-black border text-md font-normal" onClick={()=>{router.push(`/patient_support?forms=3&refno=${Props.refno}`)}}>
                 Back
               </Button>
-              <Button className={`bg-[#4430bf] text-white  font-normal border`} onClick={()=>handleDialog()}>
+              <Button className={`bg-[#4430bf] text-white  font-normal border ${preview_data?.preactivity_submitted == 1?"hidden":""}`} onClick={()=>handleDialog()}>
                 Submit
               </Button>
             </div>

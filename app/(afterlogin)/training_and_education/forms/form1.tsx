@@ -13,6 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { PreviewDataType, DropdownDataType, FormDataType } from "../page";
+import { useAuth } from "@/app/context/AuthContext";
 
 type eventCostCenter = {
   cost_center: {
@@ -38,15 +39,16 @@ type Props = {
   eventCostCenter: eventCostCenter | null;
   dropdownData: DropdownDataType | null;
   previewData: PreviewDataType | null;
-  // refNo: string
+  refNo: string
 }
 
 const Form1 = ({ ...Props }: Props) => {
+  const { role, name, userid, clearAuthData } = useAuth();
   const [formData, setFormData] = useState<FormDataType>();
   const router = useRouter();
   const [businessUnit, setBusinessUnit] = useState(Props.previewData?.business_unit ?? "");
   const [budget, setBudget] = useState(Props.previewData?.division_category ?? "");
-  const [refNo, setRefNo] = useState<string>("");
+  const [refNo, setRefNo] = useState<string>(Props.refNo ?? "");
   const [eventCostCenter, setEventCostCenter] = useState<eventCostCenter | null>(null);
   const [subtypeActivity, setSubtypeActivity] = useState<subtypeActivity | null>(null);
 
@@ -56,10 +58,7 @@ const Form1 = ({ ...Props }: Props) => {
     const updatedFormData = {
       ...formData
     };
-    updatedFormData.event_type = "Training and Education";
-    if(updatedFormData.division_category != "National"){
-      updatedFormData.division_sub_category = "";
-    }
+    updatedFormData.event_type = "Training and Education"; 
     if (refNo) {
       updatedFormData.name = refNo;
     }
@@ -223,7 +222,7 @@ const Form1 = ({ ...Props }: Props) => {
             Event requester<span className="text-[#e60000]">*</span>
           </label>
           <Select
-            defaultValue={Props.previewData?.event_requestor ?? ""}
+            defaultValue={Props.previewData?.event_requestor ?Props.previewData.event_requestor : userid as string}
             onValueChange={(value) => handleSelectChange(value, "event_requestor")}
           >
             <SelectTrigger className="dropdown">
@@ -319,7 +318,7 @@ const Form1 = ({ ...Props }: Props) => {
             onValueChange={(value)=>{handleSelectChange(value,"division_sub_category")}}
             >
               <SelectTrigger className="dropdown">
-                <SelectValue placeholder="--Selected--" />
+                <SelectValue placeholder="Select" />
               </SelectTrigger>
               <SelectContent>
               {subtypeActivity &&
