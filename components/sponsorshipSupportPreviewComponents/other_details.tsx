@@ -31,7 +31,7 @@ import {
     event_name: string;
     event_start_date: string;
     any_govt_hcp: string;
-    comments: string;
+    comment_if_any: string;
     faculty: string;
     event_venue: string;
     event_end_date: string;
@@ -65,8 +65,9 @@ import {
     logistics: Logistics[];
     documents: ActivityDocument[];
     advance_approvers: any[]; // Empty array, can be customized later
-    city:string
-    reporting_head:string
+    city:string;
+    reporting_head:string;
+    any_additional_expense:string;
   }
   
   type Compensation = {
@@ -203,7 +204,7 @@ const Other_Details = ({...Props}:Props) => {
                     className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
                     placeholder="Type Here"
                     readOnly
-                    value={Props.eventData?.comments}
+                    value={Props.eventData?.comment_if_any}
                 ></Input>
             </div>
             <div className="flex flex-col md:gap-2">
@@ -213,6 +214,7 @@ const Other_Details = ({...Props}:Props) => {
                 <Input
                     className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
                     placeholder="Type Here"
+                    value={Props.eventData?.any_additional_expense}
                     readOnly
                 ></Input>
             </div>

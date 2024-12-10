@@ -82,7 +82,7 @@ export type Previewdata = {
   product_amount: number;
   quantity: number;
   organizer_name: string | null;
-  sponsor_currency: string | null;
+  sponsor_currency: string;
   sponsorship_amount: number;
   entitlement_in_lieu_of_sponsorship: string | null;
   comment_if_any: string | null;

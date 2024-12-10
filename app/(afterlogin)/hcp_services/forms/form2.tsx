@@ -171,7 +171,7 @@ const Form2 = ({...Props}:Props) => {
 console.log(formdata,"this is form data")
   return (
     // </div>
-    (<div>
+    <div>
       <h1 className='text-black text-2xl font-normal uppercase pb-8'>
         Hcp Details
       </h1>
@@ -238,7 +238,7 @@ console.log(formdata,"this is form data")
         <Button className='bg-white text-black border text-md font-normal' onClick={()=>router.push(`/hcp_services?forms=1&refno=${Props.refno}`)}>Back</Button>
         <Button className='bg-[#4430bf] text-white text-md font-normal border'onClick={(e)=>handleSubmit(e)}>Next</Button>
       </div>
-    </div>)
+    </div>
   );
 }
 

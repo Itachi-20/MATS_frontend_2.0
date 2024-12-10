@@ -101,7 +101,8 @@ type FormData = {
   division_sub_category: string;
   sub_type_of_activity: string;
   any_govt_hcp: string,
-  no_of_hcp: number
+  no_of_hcp: number,
+  sponsor_currency: string
 };
 
 type Props = {
@@ -114,15 +115,15 @@ type Props = {
 
 const Form1 = ({ ...Props }: Props) => {
   const { role, name, userid, clearAuthData } = useAuth();
-  const [businessUnit, setBusinessUnit] = useState("");
-  const [budget, setBudget] = useState("");
+  const [businessUnit, setBusinessUnit] = useState(Props.previewData?.business_unit ?? "");
+  const [budget, setBudget] = useState(Props.previewData?.division_category ? Props.previewData.division_category : "");
   const [eventCostCenter, setEventCostCenter] =
     useState<eventCostCenter | null>(null);
   const [subtypeActivity, setSubtypeActivity] =
     useState<subtypeActivity | null>(null);
   const [subtypeActivityVisible, setSubtypeActivityVisible] = useState(false);
   const [formData, setFormData] = useState<FormData>();
-  const [refNo, setRefNo] = useState<string | null>(Props.refno);
+  const [refNo, setRefNo] = useState<string | null>(Props.refno ?? "");
   const router = useRouter()
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -595,7 +596,7 @@ const Form1 = ({ ...Props }: Props) => {
               </label>
               <Select
                 onValueChange={(value) => { handleSelectChange(value, "sponsor_currency") }}
-                defaultValue={Props.previewData?.sponsor_currency ? Props.previewData.sponsor_currency : ""}
+                defaultValue={Props.previewData?.sponsor_currency ? Props.previewData.sponsor_currency : "INR"}
               >
                 <SelectTrigger className="dropdown">
                   <SelectValue placeholder="Select" />

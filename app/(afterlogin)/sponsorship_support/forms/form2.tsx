@@ -60,7 +60,8 @@ type Props = {
 const Form2 = ({ ...Props }: Props) => {
   const start_date_ref: React.RefObject<any> = useRef(null);
   const end_date_ref: React.RefObject<any> = useRef(null);
-  const [eventStartDate,setEventStartDate] = useState<any>();
+  const [eventStartDate, setEventStartDate] = useState<any>(Props.previewData?.event_start_date ? new Date(Props.previewData?.event_start_date).getTime() : "");
+
   const [formdata, setFormData] = useState<formData | {}>({});
   const [refNo, setRefNo] = useState<string | null>(Props.refno);
   const router = useRouter()
@@ -122,28 +123,28 @@ const Form2 = ({ ...Props }: Props) => {
   }
 
   const handleEventStartDateValidate = (e:React.ChangeEvent<HTMLInputElement>)=>{
-    const currentDate = Date.now()
+    const currentDate = new Date().setHours(0, 0, 0, 0);
     if(e.target.valueAsNumber < currentDate){
-      toast.error("Please Enter Valid Start Date");
+      toast.error("You are choosing previous date");
     }
-    setEventStartDate(e.target.value)
+    setEventStartDate(e.target.valueAsNumber)
     handlefieldChange(e);
 }
 
   const handleEventEndDateValidate = (e:React.ChangeEvent<HTMLInputElement>)=>{
-    const currentDate = Date.now()
-    if(e.target.valueAsNumber < currentDate || e.target.valueAsNumber < eventStartDate){
-      toast.error("Please Enter Valid End Date");
+    if(eventStartDate && e.target.valueAsNumber < eventStartDate){
+      toast.error("End Date should be greater than or equal to start date");
+      e.target.value = "";
     }
     handlefieldChange(e);
   }
   return (
     <>
-    (<div>
+    <div>
       <h1 className='text-black text-2xl font-normal uppercase pb-8'>
         Event Details
       </h1>
-      <div className='grid grid-cols-2 gap-12'>
+      <div className='grid grid-cols-2 gap-6'>
         <div className='flex flex-col gap-2'>
           <label className='lable'>Event Name <span className='text-[#e60000]'>*</span></label>
           <Input className='dropdown' placeholder='Type Here' name='event_name'
@@ -194,10 +195,12 @@ const Form2 = ({ ...Props }: Props) => {
      
       <div className='flex justify-end pt-5 gap-4'>
         {/* <Button className='bg-white text-black border text-md font-normal'> Save as Draft</Button> */}
-        <Button className='bg-white text-black border text-md font-normal' onClick={()=>router.push(`/sponsorship_support?forms=1&refno=${Props.refno}`)}>Back</Button>
+        <Button className="bg-white text-black border text-md font-normal hover:text-white hover:bg-black" onClick={() => router.push(`/sponsorship_support?forms=1&refno=${Props.refno}`)}>
+          Back
+        </Button>
         <Button className='bg-[#4430bf] text-white text-md font-normal border' onClick={(e)=>handleSubmit(e)}>Next</Button>
       </div>
-    </div>)
+    </div>
     <Toaster richColors position="bottom-right" />
     </>
   );

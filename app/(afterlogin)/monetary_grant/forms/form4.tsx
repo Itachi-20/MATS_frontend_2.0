@@ -200,7 +200,7 @@ const form4 = ({...Props}:Props) => {
             <label className="text-black text-sm font-normal capitalize">
               Upload Files<span className="text-[#e60000]">*</span>
             </label>
-            <SimpleFileUpload files={files} setFiles={setFiles} setUploadedFiles={setUploadedFiles}  onNext={handleNext}buttonText={'Upload Here'} />
+            <SimpleFileUpload files={files} setFiles={setFiles} setUploadedFiles={setUploadedFiles}  onNext={handleNext} buttonText={'Upload Here'} />
           </div>
           <Button
             className="bg-white text-black border text-md font-normal"
