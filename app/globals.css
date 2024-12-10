@@ -94,3 +94,11 @@ body{
   padding: 0;
   box-sizing: border-box;
 }
+
+.sidebar_container {
+  overflow: scroll; /* Keeps the scrollable behavior */
+}
+
+.sidebar_container::-webkit-scrollbar {
+  display: none; /* Hides the scrollbar */
+}
