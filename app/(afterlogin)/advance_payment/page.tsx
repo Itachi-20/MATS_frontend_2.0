@@ -43,8 +43,12 @@ type EventTable = {
     event_end_date: string;
     total_expense: number;
     event_requestor: string;
+    total_compensation_expense:number;
+    total_logistics_expense:number;
+    total_estimated_expense:number;
     event_venue: string;
     current_stage: string;
+    owner:string;
     post_expense_approvers: post_expense_approvers;
 };
 
@@ -77,9 +81,9 @@ export default function Page() {
         PostExpenseApprovalList();
     }, [])
 
+    console.log(postExpenseApprovalList,'postExpenseApprovalList')
     return (
         <>
-
 
             <div className="p-7 w-full relative z-20 text-black">
                 <div className="flex justify-between pb-5">
@@ -182,7 +186,20 @@ export default function Page() {
                                 >
                                     Event Date
                                 </TableHead>
-
+                                <TableHead
+                                    className={
+                                        "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                                    }
+                                >
+                                    Total Compensation Amount
+                                </TableHead>
+                                <TableHead
+                                    className={
+                                        "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                                    }
+                                >
+                                    Total Logistics Amount
+                                </TableHead>
                                 <TableHead
                                     className={
                                         "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
@@ -190,12 +207,27 @@ export default function Page() {
                                 >
                                     Total Expense
                                 </TableHead>
+                                
                                 <TableHead
                                     className={
                                         "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                                     }
                                 >
                                     Event Requestor
+                                </TableHead>
+                                <TableHead
+                                    className={
+                                        "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                                    }
+                                >
+                                   Status
+                                </TableHead>
+                                <TableHead
+                                    className={
+                                        "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                                    }
+                                >
+                                   Created By
                                 </TableHead>
                                 <TableHead
                                     className={
@@ -217,8 +249,12 @@ export default function Page() {
                                                     <TableCell>{data.event_name}</TableCell>
                                                     <TableCell>{data.event_type}</TableCell>
                                                     <TableCell>{data.event_start_date}</TableCell>
-                                                    <TableCell>{data.total_expense ?? ""}</TableCell>
+                                                    <TableCell>{data.total_compensation_expense ?? ""}</TableCell>
+                                                    <TableCell>{data.total_logistics_expense ?? ""}</TableCell>
+                                                    <TableCell>{data.total_estimated_expense ?? ""}</TableCell>
                                                     <TableCell>{data.event_requestor ?? ""}</TableCell>
+                                                    <TableCell>{data.current_stage ?? ""}</TableCell>
+                                                    <TableCell>{data.owner ?? ""}</TableCell>
                                                     <TableCell className="sticky right-0 bg-[white] z-50 ">
                                                         {/* { */}
                                                             {/* "Not" == "Approved" ? */}

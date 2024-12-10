@@ -13,9 +13,11 @@ import ViewDocument from '@/components/view_document'
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 type DocumentRow = {
-  name: string;
   file_name: string;
+  name:string;
   file_url: string;
+  creation:string;
+  owner:string;
 };
 
 type ActualVendor = {
