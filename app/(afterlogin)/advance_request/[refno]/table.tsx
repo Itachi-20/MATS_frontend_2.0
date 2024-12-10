@@ -84,6 +84,7 @@ type VendorData = {
   vendor_type: string;
   vendor_name: string;
   advance: number;
+  amount: number;
   file: File | null;
 };
 type DocumentRow = {
@@ -107,6 +108,7 @@ const table = ({ tableData }: Props) => {
     vendor_type: '',
     vendor_name: '',
     advance: 0,
+    amount:0,
     file: null,
   });
   const [fileData, setFileData] = useState<DocumentRow[] | undefined>();
@@ -137,35 +139,6 @@ const table = ({ tableData }: Props) => {
         const data = await response.json();
         setVendorName(data.data)
         console.log(data, "vendor name api");
-      } else {
-        console.log("Login failed");
-      }
-    } catch (error) {
-      console.error("Error during login:", error);
-    }
-  };
-
-  const handleAdvaneAmountApi = async (value: string) => {
-    try {
-      const response = await fetch(
-        `/api/training_and_education/vendorName?vendor_name=${value}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          "credentials": 'include'
-        }
-      );
-
-
-      if (response.ok) {
-        const data = await response.json();
-        setVendorDetails((prev) => ({
-          ...prev,
-          advance: data.data, // Update vendor_name in the vendorDetails state
-        }))
-        console.log(data, "vendor amount advance api");
       } else {
         console.log("Login failed");
       }
@@ -232,13 +205,12 @@ const table = ({ tableData }: Props) => {
     const { name, value } = e.target;
     const numericValue = name === 'advance' ? (value ? parseFloat(value) : '') : value;
     setVendorDetails(prev => ({ ...prev, [name]: numericValue }));
-  }
+  };
   const handleConclusionChange = (newConclusion: string) => {
     setEventConclusion(
       newConclusion,
     );
   };
-
   const addVendor = async () => {
     const formData = new FormData();
     formData.append("vendor_type", vendorDetails.vendor_type);
@@ -280,7 +252,7 @@ const table = ({ tableData }: Props) => {
         setTimeout(() => {
           EventData();
         }, 500);
-        setVendorDetails({ vendor_type: '', vendor_name: '', advance: 0, file: null });
+        setVendorDetails({ vendor_type: '', vendor_name: '', advance: 0, amount: 0, file: null });
         setUploadedFiles(null);
         setFiles([]);
         return 'Vendor has been added successfully!';
@@ -376,7 +348,40 @@ const table = ({ tableData }: Props) => {
 
   const handleNext = () => {
     
-  }
+  };
+
+  const handleAdvanceAmountApi = async (value: string) => {
+    console.log("inside amount api venser name ")
+    try {
+      const response = await fetch(
+        `/api/postExpense/getExpenseAmount`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          "credentials": 'include',
+          body: JSON.stringify({
+            name:tableData.name ,
+            vendor_name:value
+        }),
+        }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        setVendorDetails((prev) => ({
+          ...prev,
+          advance: data.data?.est_amount, // Update vendor_name in the vendorDetails state
+        }))
+        console.log(data, "-----------vendor name api------------------");
+      } else {
+        console.log("Login failed");
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
+    }
+  };
+
   return (
     <>
 
@@ -464,7 +469,7 @@ const table = ({ tableData }: Props) => {
             </label>
             <Select
               onValueChange={(value: string) => {
-                handleAdvaneAmountApi(value);
+                handleAdvanceAmountApi(value);
                 setVendorDetails((prev) => ({
                   ...prev,
                   vendor_name: value, // Update vendor_name in the vendorDetails state
