@@ -267,6 +267,17 @@ const event_Details = ({ ...Props }: Props) => {
         }
         <div className={`flex flex-col md:gap-2  ${Props.eventData?.event_type == "Awareness Program" ? "" : "hidden"}`}>
           <label className="text-black md:text-sm md:font-normal capitalize">
+            Program Start Date<span className="text-[#e60000]">*</span>
+          </label>
+          <Input
+            className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
+            placeholder="Type Here"
+            readOnly={true}
+            value={Props.eventData?.event_start_date}
+          ></Input>
+        </div>
+        <div className={`flex flex-col md:gap-2  ${Props.eventData?.event_type == "Awareness Program" ? "" : "hidden"}`}>
+          <label className="text-black md:text-sm md:font-normal capitalize">
             Program End Date<span className="text-[#e60000]">*</span>
           </label>
           <Input
@@ -274,6 +285,17 @@ const event_Details = ({ ...Props }: Props) => {
             placeholder="Type Here"
             readOnly={true}
             value={Props.eventData?.event_end_date}
+          ></Input>
+        </div>
+        <div className={`flex flex-col md:gap-2  ${Props.eventData?.event_type == "Awareness Program" ? "" : "hidden"}`}>
+          <label className="text-black md:text-sm md:font-normal capitalize">
+            HCP Name(if any)<span className="text-[#e60000]">*</span>
+          </label>
+          <Input
+            className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
+            placeholder="Type Here"
+            readOnly={true}
+            value={Props.eventData?.hcp_name}
           ></Input>
         </div>
 
