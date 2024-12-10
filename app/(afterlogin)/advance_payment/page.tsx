@@ -112,9 +112,9 @@ export default function Page() {
                                 <SelectItem value="system">System</SelectItem>
                             </SelectContent>
                         </Select>
-                        <Button className="text-black text-md font-normal bg-white hover:bg-white border rounded-[25px] px-8 py-5 shadow">
+                        {/* <Button className="text-black text-md font-normal bg-white hover:bg-white border rounded-[25px] px-8 py-5 shadow">
                             Back
-                        </Button>
+                        </Button> */}
                         <div className="">
                             <svg
                                 width="45"
