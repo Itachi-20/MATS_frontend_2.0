@@ -275,7 +275,7 @@ const Sidebar = () => {
 
   return (
     <div className="flex flex-col justify-between h-screen">
-      <div className="pt-10 text-black flex  flex-col">
+      <div className="pt-10 text-black flex flex-col h-full py-6">
         <div className="flex items-start justify-start gap-1 pl-1 pb-2 cursor-pointer" onClick={() => { router.replace("/dashboard") }}>
           <div className="">
             <svg
@@ -296,7 +296,7 @@ const Sidebar = () => {
           </div>
           <h1 className="text-black text-[40px] font-semibold pt-6">MATS</h1>
         </div>
-        <div className=" text-black">
+        <div className=" text-black flex-1 h-full overflow-x-hidden overflow-y-scroll sidebar_container">
           {/* <div className="group" id="parent"> */}
           <div className="group text-2xl">
             <button className=" text-gray-700 py-2 px-3 group-hover:text-white group-hover:bg-[#4430bf] group-hover:border group-hover:rounded-xl rounded inline-flex items-center gap-3">
@@ -540,34 +540,34 @@ const Sidebar = () => {
           </div>
           {/* END SETTING MANU  */}
         </div>
-      </div>
-      <div
-        className="flex absolute bottom-[7%] space-x-1 left-[3%] cursor-pointer text-gray-700 py-2 px-3 hover:text-white hover:bg-[#4430bf] hover:border hover:rounded-xl rounded items-center"
-        onClick={() => {
-          handleLogout();
-        }}
-      >
-        <svg
-          width="32"
-          height="32"
-          viewBox="0 0 32 32"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
+        <div
+          className="flex space-x-1 left-[3%] cursor-pointer text-gray-700 py-2 px-3 hover:text-white hover:bg-[#4430bf] hover:border hover:rounded-xl rounded items-center p-3"
+          onClick={() => {
+            handleLogout();
+          }}
         >
-          <g id="Sign Out Icon">
-            <g id="Group 923">
-              <path
-                id="Union"
-                fillRule="evenodd"
-                clipRule="evenodd"
-                d="M21.7741 22.2011L26.3365 16.8777C26.5544 16.6292 26.6659 16.3154 26.666 16C26.6661 15.7842 26.6141 15.5676 26.5085 15.3706C26.4615 15.2828 26.4041 15.1994 26.3365 15.1223L21.7741 9.79894C21.2949 9.23982 20.4532 9.17502 19.8941 9.65422C19.3349 10.1334 19.2702 10.9751 19.7494 11.5343L22.4339 14.6666L12.1077 14.6666C11.3713 14.6666 10.7744 15.2636 10.7744 15.9999C10.7744 16.7363 11.3713 17.3333 12.1077 17.3333L22.4341 17.3333L19.7494 20.4658C19.2702 21.0249 19.3349 21.8666 19.8941 22.3458C20.4532 22.825 21.2949 22.7602 21.7741 22.2011ZM13.3327 7.99992C14.0691 7.99992 14.666 8.59687 14.666 9.33325L14.666 11.3333C14.666 12.0696 15.263 12.6666 15.9993 12.6666C16.7357 12.6666 17.3327 12.0696 17.3327 11.3333L17.3327 9.33325C17.3327 7.12411 15.5418 5.33325 13.3327 5.33325L9.33268 5.33325C7.12354 5.33325 5.33268 7.12411 5.33268 9.33325L5.33268 22.6666C5.33268 24.8757 7.12354 26.6666 9.33268 26.6666L13.3327 26.6666C15.5418 26.6666 17.3327 24.8757 17.3327 22.6666L17.3327 20.6666C17.3327 19.9302 16.7357 19.3333 15.9993 19.3333C15.263 19.3333 14.666 19.9302 14.666 20.6666L14.666 22.6666C14.666 23.403 14.0691 23.9999 13.3327 23.9999L9.33268 23.9999C8.5963 23.9999 7.99935 23.403 7.99935 22.6666L7.99935 9.33325C7.99935 8.59687 8.5963 7.99992 9.33268 7.99992L13.3327 7.99992Z"
-                fill="currentColor"
-              />
+          <svg
+            width="32"
+            height="32"
+            viewBox="0 0 32 32"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g id="Sign Out Icon">
+              <g id="Group 923">
+                <path
+                  id="Union"
+                  fillRule="evenodd"
+                  clipRule="evenodd"
+                  d="M21.7741 22.2011L26.3365 16.8777C26.5544 16.6292 26.6659 16.3154 26.666 16C26.6661 15.7842 26.6141 15.5676 26.5085 15.3706C26.4615 15.2828 26.4041 15.1994 26.3365 15.1223L21.7741 9.79894C21.2949 9.23982 20.4532 9.17502 19.8941 9.65422C19.3349 10.1334 19.2702 10.9751 19.7494 11.5343L22.4339 14.6666L12.1077 14.6666C11.3713 14.6666 10.7744 15.2636 10.7744 15.9999C10.7744 16.7363 11.3713 17.3333 12.1077 17.3333L22.4341 17.3333L19.7494 20.4658C19.2702 21.0249 19.3349 21.8666 19.8941 22.3458C20.4532 22.825 21.2949 22.7602 21.7741 22.2011ZM13.3327 7.99992C14.0691 7.99992 14.666 8.59687 14.666 9.33325L14.666 11.3333C14.666 12.0696 15.263 12.6666 15.9993 12.6666C16.7357 12.6666 17.3327 12.0696 17.3327 11.3333L17.3327 9.33325C17.3327 7.12411 15.5418 5.33325 13.3327 5.33325L9.33268 5.33325C7.12354 5.33325 5.33268 7.12411 5.33268 9.33325L5.33268 22.6666C5.33268 24.8757 7.12354 26.6666 9.33268 26.6666L13.3327 26.6666C15.5418 26.6666 17.3327 24.8757 17.3327 22.6666L17.3327 20.6666C17.3327 19.9302 16.7357 19.3333 15.9993 19.3333C15.263 19.3333 14.666 19.9302 14.666 20.6666L14.666 22.6666C14.666 23.403 14.0691 23.9999 13.3327 23.9999L9.33268 23.9999C8.5963 23.9999 7.99935 23.403 7.99935 22.6666L7.99935 9.33325C7.99935 8.59687 8.5963 7.99992 9.33268 7.99992L13.3327 7.99992Z"
+                  fill="currentColor"
+                />
+              </g>
             </g>
-          </g>
-        </svg>
-        <div className="mt-[0.5px] text-[#currentColor] text-lg font-normal font-Poppins cursor-pointer">
-          Sign Out
+          </svg>
+          <div className="mt-[0.5px] text-[#currentColor] text-lg font-normal font-Poppins cursor-pointer">
+            Sign Out
+          </div>
         </div>
       </div>
     </div>

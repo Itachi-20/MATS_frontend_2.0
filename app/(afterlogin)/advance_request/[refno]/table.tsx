@@ -664,7 +664,7 @@ const table = ({ tableData }: Props) => {
 
         {  !tableData?.is_declared &&
         <div className='flex justify-end gap-2 pt-8'>
-          <Button className='bg-[#4430BF] px-10' onClick={handleSubmit}>Submit</Button>
+          <Button className='bg-[#4430BF] px-10 text-white' onClick={handleSubmit}>Submit</Button>
         </div>
          } 
       </div>
