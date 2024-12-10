@@ -244,8 +244,7 @@ export default function Page() {
                                         postExpenseApprovalList?.map((data, index) => {
                                             return (
                                                 <TableRow key={index} className="text-center text-nowrap">
-                                                    <TableCell>{data.name}</TableCell>
-
+                                                    <TableCell>{data.name ?? "-"}</TableCell>
                                                     <TableCell>{data.event_name}</TableCell>
                                                     <TableCell>{data.event_type}</TableCell>
                                                     <TableCell>{data.event_start_date}</TableCell>

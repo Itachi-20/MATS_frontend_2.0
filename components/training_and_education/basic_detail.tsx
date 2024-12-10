@@ -1,7 +1,6 @@
 import React from 'react'
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import BeneficiaryDetails from "@/components/beneficiary_details";
 
 type EventEntry = {
   name: string;
@@ -62,6 +61,7 @@ type EventEntry = {
   advance_approvers: any[]; // Empty array, can be customized later
   city:string
   reporting_head:string
+  hcp_ref_no:string
 }
 
 type Compensation = {
@@ -245,7 +245,7 @@ const Basic_Details = ({ ...Props }: Props) => {
             className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
             placeholder="Type Here"
             readOnly={true}
-            value={Props.eventData?.division_sub_category}
+            value={Props.eventData?.division_sub_category ? Props.eventData?.division_sub_category : ""}
           ></Input>
           </div>
         <div className="flex flex-col md:gap-2">
@@ -303,6 +303,21 @@ const Basic_Details = ({ ...Props }: Props) => {
             value={Props.eventData?.sub_type_of_activity}
           ></Input>
         </div>
+        {
+          Props.eventData && Props.eventData.event_type == "Training and Education" && 
+        <div className="flex flex-col md:gap-2">
+          <label className="text-black md:text-sm md:font-normal capitalize">
+          HCP Services Request Ref Number<span className="text-[#e60000]">*</span>
+          </label>
+          <Input
+            className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
+            placeholder="Type Here"
+            readOnly={true}
+            value={Props.eventData?.hcp_ref_no}
+            ></Input>
+        </div>
+          }
+        
 
         <div className="flex flex-col gap-2">
           <label className="lable">

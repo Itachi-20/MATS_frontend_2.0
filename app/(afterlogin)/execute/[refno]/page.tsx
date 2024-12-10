@@ -15,6 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import ExecuteDialog from '@/components/executeDialog';
 
 type document = {
   name: string;
@@ -219,6 +220,12 @@ const page = () => {
     const [activityType, setActivityType] = useState('Pre Activity');
     const [preview_data, setPreviewData] = useState<any>(null);
     const [activityDropdown,setActivityDropdown]  = useState<activityDropdown>();
+
+
+    const handleDialog = ()=>{
+      setIsDialog(prev =>!prev);
+    }
+
     const activityList = async ()=>{
       try {
           const response = await fetch(`/api/training_and_education/activityList/`, {
@@ -333,8 +340,30 @@ const page = () => {
           console.log(error,"something went wrong");
         }
   }
-    console.log(data,"this is api data");
-    console.log(document,"this is api document")
+
+  const handleExecute = async()=>{
+    try {
+        const tableData = await fetch(
+          `/api/eventExecute/execute`,
+          {
+            method: "POST",
+            headers:{
+              "Content-Type": "application/json",
+            },
+            credentials:"include",
+            body:JSON.stringify({
+            name: refno
+            })
+          }
+        );
+        if(tableData.ok){
+          router.push("/event_list");
+        }
+        
+      } catch (error) {
+        console.log(error,"something went wrong");
+      }
+}
 
     useEffect(()=>{
         fetchDocument();
@@ -345,7 +374,7 @@ const page = () => {
     },[])
 
     const handleNext = () => {
-    
+      
     }
   
 
@@ -359,6 +388,7 @@ const page = () => {
     const router = useRouter()
 
     return (
+      <>
         <div className="md:px-7 md:pb-7 md:pt-[35px] w-full z-20 text-black">
             <div className="pb-5">
                 <div className="flex justify-between">
@@ -381,9 +411,8 @@ const page = () => {
                             <h1 className="text-center">{preview_data?.modified.substring(0,10)}</h1>
                         </div>
                         <div className="col-span-1 flex justify-center pt-1">
-                            <Button className="px-20">
-                                {/* <DialogBox button={"Execute"} msg={"Next Occurrence date"}/> */}
-                                <DialogBox button={"Execute"} msg={"Are you sure you want to execute the event?"} refno={refno}/>
+                            <Button className="px-10 bg-[#4430bf] text-white" onClick={()=>{handleDialog()}}>
+                                Execute
                                 </Button>
                         </div>
                     </div>
@@ -477,6 +506,14 @@ const page = () => {
             eventData={preview_data}
             />
         </div>
+        {
+        isDialog &&
+       <ExecuteDialog
+       handleDialog={handleDialog}
+       handleExecute={handleExecute}
+       />
+      }
+        </>
     )
 }
 

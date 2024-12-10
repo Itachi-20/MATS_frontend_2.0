@@ -293,10 +293,10 @@ const Preview_Form = ({...Props}:Props) => {
           {/* <Button className="bg-white text-black border text-md font-normal">
             Save as Draft
           </Button> */}
-          <Button className="bg-white text-black border text-md font-normal" onClick={() => router.push(`/monetary_grant?forms=3&refno=${Props.refno}`)}>
+          <Button className='bg-white text-black border text-md font-normal hover:text-white hover:bg-black' onClick={() => router.push(`/monetary_grant?forms=4&refno=${Props.refno}`)}>
             Back
           </Button>
-          <Button className={`bg-[#4430bf] text-white  font-normal border`} onClick={()=>handleDialog()}>
+          <Button className={`bg-[#4430bf] text-white  font-normal border ${preview_data?.preactivity_submitted == 1?"hidden":""}`} onClick={()=>handleDialog()}>
             Submit
           </Button>
         </div>

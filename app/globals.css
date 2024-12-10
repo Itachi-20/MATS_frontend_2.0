@@ -64,11 +64,12 @@ body {
 }
 
 .child {
-  display:contents;
+  /* display:contents; */
   opacity: 0;
   max-height: 0;
   height: 0;
-  transition: opacity 0.2s ease-in-out 0.6s;
+  /* transition: opacity 0.2s ease-in-out 0.6s; */
+  transition: ease-in-out;
   transition-delay: 0.2s;
 }
 

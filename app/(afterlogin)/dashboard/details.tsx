@@ -141,7 +141,7 @@ const details = () => {
                 </div>
               </div>
             </div>
-            <div className="text-black">graph</div>
+            <div className="text-black"></div>
           </div>
           <div className="flex justify-between">
             <div className="border border-[#848484] p-7 rounded-[50px] w-full mr-4  bg-white">

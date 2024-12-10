@@ -191,7 +191,7 @@ const Documents = ({ PageName, ...Props }: Props) => {
 
   const handleDelete = async (name: String) => {
     try {
-      const response = await fetch(`api/training_and_education/fileDelete/`, {
+      const response = await fetch(`/api/training_and_education/fileDelete/`, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
@@ -258,9 +258,27 @@ const Documents = ({ PageName, ...Props }: Props) => {
                                       <Link rel="stylesheet" href={item3.url}>
                                         <Image src={"/svg/view.svg"} width={20} height={20} alt='view-document' className='cursor-pointer' />
                                       </Link>
-                                      <div className={`${Props.eventData && Props.eventData.preactivity_submitted == 1 ? "hidden" : ""}`} onClick={async () => { await handleDelete(item3.name) }}>
+                                      {
+                                        item.activity_type == "Pre Activity" && Props.eventData?.preactivity_submitted != 1 &&
+                                        <div onClick={async () => { await handleDelete(item3.name) }}>
                                         <Image src={"/svg/delete.svg"} width={20} height={20} alt='view-document' className='cursor-pointer' />
                                       </div>
+                                      }
+                                      {
+                                        item.activity_type == "Executed" && Props.eventData?.executed != 1 &&
+                                        <div onClick={async () => { await handleDelete(item3.name) }}>
+                                        <Image src={"/svg/delete.svg"} width={20} height={20} alt='view-document' className='cursor-pointer' />
+                                      </div>
+                                      }
+                                      {
+                                        item.activity_type == "Post Activity" && Props.eventData?.post_activity_submitted != 1 &&
+                                        <div onClick={async () => { await handleDelete(item3.name) }}>
+                                        <Image src={"/svg/delete.svg"} width={20} height={20} alt='view-document' className='cursor-pointer' />
+                                      </div>
+                                      }
+                                      {/* <div className={`${Props.eventData && Props.eventData.preactivity_submitted == 1 ? "hidden" : ""}`} onClick={async () => { await handleDelete(item3.name) }}>
+                                        <Image src={"/svg/delete.svg"} width={20} height={20} alt='view-document' className='cursor-pointer' />
+                                      </div> */}
                                     </div>
                                   </div>
                                 )

@@ -140,7 +140,7 @@ const Form3 = ({ ...Props }: Props) => {
         setRefNo(data.message);
 
         setTimeout(() => {
-          router.push(`/training_and_education?forms=4&refno=${Props.refNo}`);
+          router.push(`/training_and_education?forms=4&refno=${data.message}`);
         }, 1000)
       } else {
         console.log("submission failed");
@@ -150,7 +150,6 @@ const Form3 = ({ ...Props }: Props) => {
     }
   };
 
-  console.log(formdata, "this is form data")
 
   const handleLogisticsAdd = () => {
     if (logisticVendorType && logisticAmount > 0) {
@@ -169,13 +168,13 @@ const Form3 = ({ ...Props }: Props) => {
 
   const handleCompensationAdd = () => {
     if (compansationVendorType && compansationAmount > 0) {
-      const newObject: Compensation = { vendor_type: compansationVendorType, est_amount: compansationAmount, gst_included: compansation_is_GST, vendor_name: compansationVendorName };
-      setCompansationBudget(prevRows => {
-        const updatedRecords = prevRows && [...prevRows, newObject]
-        // console.log(updatedRecords)
-        setFormData((prev: any) => ({ ...prev, compensation: updatedRecords }))
-        return updatedRecords
-      }
+        const newObject: Compensation = { vendor_type: compansationVendorType, est_amount: compansationAmount, gst_included: compansation_is_GST, vendor_name: compansationVendorName };
+        setCompansationBudget(prevRows => {
+          const updatedRecords = prevRows && [...prevRows, newObject]
+          // console.log(updatedRecords)
+          setFormData((prev: any) => ({ ...prev, compensation: updatedRecords }))
+          return updatedRecords
+        }
       )
       setCompansationVendorType('');
       setCompansationAmount(0);
@@ -271,6 +270,7 @@ const Form3 = ({ ...Props }: Props) => {
   }
 
   const handle_is_GST = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(e.target.checked,"::::::::::::::::::::::");
     if (e.target.checked) {
       setCompansation_is_GST(1);
     } else {
@@ -280,7 +280,7 @@ const Form3 = ({ ...Props }: Props) => {
 
   return (
     // </div>
-    (<div>
+    <div>
       <div className='pb-8'>
         <h1 className="text-black text-2xl font-normal uppercase pb-8">
           Budget/Vendor Details
@@ -422,7 +422,7 @@ const Form3 = ({ ...Props }: Props) => {
                 <Input className='text-black w-5 h-5'
                   type='checkbox'
                   onChange={(e) => handle_is_GST(e)}
-                  value={compansation_is_GST ? compansation_is_GST : 0}
+                  checked={compansation_is_GST ? true : false}
                 />
               </div>
             </div>
@@ -660,7 +660,7 @@ const Form3 = ({ ...Props }: Props) => {
         <Toaster richColors position="top-right" />
 
       </div>
-    </div>)
+    </div>
   );
 }
 

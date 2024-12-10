@@ -478,7 +478,7 @@ const page = () => {
             eventData={preview_data}
             />
 
-<div className="flex md:pb-8 gap-3">
+<div className={`flex md:pb-8 gap-3 ${preview_data?.post_activity_submitted == 1?"hidden":""}`}>
             <input 
             type="checkbox"
             onChange={(e:React.ChangeEvent<HTMLInputElement>)=>{handleCheck(e);setCheckedValue(e.target.checked)}}

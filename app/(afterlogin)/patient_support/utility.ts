@@ -66,12 +66,15 @@ export const handleBudgetChange = async (value: string, cookie:any) => {
   export const PreviewData = async (refno:string,cookie:any) => {
     try {
       const response = await fetch(`${process.env.FRAPPE_URL}/api/method/matsapp.api.event.event.get_event_data?name=${refno}`, {
-        method: "GET",
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
           'Cookie':cookie
         },
-        credentials: 'include'
+        credentials: 'include',
+        body: JSON.stringify({
+          name :refno
+        })
       });
 
       if (response.ok) {

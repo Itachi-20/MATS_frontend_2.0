@@ -183,7 +183,7 @@ const event_Details = ({ ...Props }: Props) => {
     <div className="md:pb-8">
       <div className="flex gap-6">
         <h1 className="text-black md:text-[30px] md:font-medium uppercase md:pb-4">
-          {Props.eventData?.event_type == 'Monetary Grant' || Props.eventData?.event_type == 'Non Monetary Grant' ? 'organisation Details' : Props.eventData?.event_type == 'Awareness Program' ? 'Program Details':'event details'}
+          {Props.eventData?.event_type == 'Awareness Program' ? 'Program Details':'Event Details'}
         </h1>
         
       </div>
@@ -200,7 +200,7 @@ const event_Details = ({ ...Props }: Props) => {
           ></Input>
         </div>
         { 
-          (Props.eventData?.event_type == 'Sponsorship Support' || Props.eventData?.event_type == 'Non Monetary Grant' || Props.eventData?.event_type == 'Patient Support' || Props.eventData?.event_type == 'Monetary Grant') &&
+          (Props.eventData?.event_type == 'Training and Education')&&
           <>
             <div className="flex flex-col md:gap-2">
               <label className="text-black md:text-sm md:font-normal capitalize">
@@ -264,20 +264,6 @@ const event_Details = ({ ...Props }: Props) => {
             ></Input>
           </div>
           </>
-        }
-
-        { (Props.eventData?.event_type != 'Sponsorship Support' && Props.eventData?.event_type != 'Non Monetary Grant') &&
-          <div className="flex flex-col md:gap-2">
-            <label className="text-black md:text-sm md:font-normal capitalize">
-              {Props.eventData?.event_type == "Awareness Program" ? "Program Start Date" : "Event Date"}<span className="text-[#e60000]">*</span>
-            </label>
-            <Input
-              className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
-              placeholder="Type Here"
-              readOnly={true}
-              value={Props.eventData?.event_start_date}
-            ></Input>
-          </div>
         }
         <div className={`flex flex-col md:gap-2  ${Props.eventData?.event_type == "Awareness Program" ? "" : "hidden"}`}>
           <label className="text-black md:text-sm md:font-normal capitalize">

@@ -34,6 +34,7 @@ type EventTable = {
   travel_expense_approved:boolean
   travel_expense_submitted:boolean
   brief_status:string;
+  owner:string;
 };
 
 export default function EventList () {
@@ -132,9 +133,6 @@ export default function EventList () {
                 </SelectContent>
               </Select>
               <DatePicker />
-              <Button className="text-black text-md font-normal bg-white hover:bg-white border lg:px-7 lg:py-4 sm:px-[20px] sm:py-[10px] shadow lg:text-sm rounded-[50px] sm:text-[9px] sm:font-normal sm:leading-normal font-['Montserrat'] text-[9px]">
-                Back
-              </Button>
             </div>
           </div>
           
@@ -168,6 +166,14 @@ export default function EventList () {
                     }
                   >
                     Event Requestor
+                  </TableHead>
+
+                  <TableHead
+                    className={
+                      "text-center  text-[#625d5d] lg:text-[15px] sm:text-[12px] text-[11px] font-normal font-['Montserrat']"
+                    }
+                  >
+                    Created By
                   </TableHead>
 
                   <TableHead
@@ -226,13 +232,14 @@ export default function EventList () {
                     tableData?.map((data, index) => {
                       return (
                         <TableRow key={index} className="text-center text-nowrap">
-                          <TableCell>{data.name}</TableCell>
-                          <TableCell>{data.event_name}</TableCell>
-                          <TableCell>{data.event_type}</TableCell>
-                          <TableCell>{data.event_start_date}</TableCell>
-                          <TableCell>{data.event_end_date}</TableCell>
-                          <TableCell>{data.event_requestor}</TableCell>
-                          <TableCell>{data.event_venue}</TableCell>
+                          <TableCell>{data.name ?? "-"}</TableCell>
+                          <TableCell>{data.event_name ?? "-"}</TableCell>
+                          <TableCell>{data.event_type ?? "-"}</TableCell>
+                          <TableCell>{data.event_start_date ?? "-"}</TableCell>
+                          <TableCell>{data.event_end_date ?? "-"} </TableCell>
+                          <TableCell>{data.event_requestor ?? "-"}</TableCell>
+                          <TableCell>{data.owner ?? ""}</TableCell>
+                          <TableCell>{data.event_venue ?? "-"}</TableCell>
                           <TableCell>
                             <Button className={`bg-[#F0EDFF] w-[75px] text-[#4430BF] text-sm  rounded-md font-semibold  hover:underline`} 
                               disabled={!data.preactivity_approved} 
