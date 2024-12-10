@@ -1,5 +1,5 @@
 'use client'
-import React, { useState,useRef } from "react";
+import React, { useState,useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -228,6 +228,15 @@ const Form1 = ({ ...Props }: Props) => {
       console.error("Error during login:", error);
     }
   }; 
+
+  useEffect(()=>{
+    if(Props?.previewData?.event_requestor){
+      handleSelectChange(Props.previewData.event_requestor, "event_requestor")
+    }else{
+      handleSelectChange(userid as string, "event_requestor")
+    }
+  },[])
+
   return (
     // </div>
     (

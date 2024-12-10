@@ -263,6 +263,14 @@ const Form1 = ({ ...Props }: Props) => {
     setFormData({ ...formdata, name: refNo })
   }, [refNo])
 
+  useEffect(()=>{
+    if(Props?.previewData?.event_requestor){
+      handleSelectChange(Props.previewData.event_requestor, "event_requestor")
+    }else{
+      handleSelectChange(userid as string, "event_requestor")
+    }
+  },[])
+
   console.log(formdata, "this is form data")
   console.log(userid,"this is context user id")
   return (
