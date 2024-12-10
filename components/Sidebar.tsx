@@ -189,13 +189,13 @@ const Sidebar = () => {
           name: "Event Vendor",
           route: "/event_vendor_list",
         },
-        {
-          name: "Document Repository List",
-          route: "/repository_document_list",
-        },
+        // {
+        //   name: "Document Repository List",
+        //   route: "/repository_document_list",
+        // },
         {
           name: "Document Repository Type",
-          route: "/repository_document_Type",
+          route: "/repository_document_type",
         },
       ],
       settings: [

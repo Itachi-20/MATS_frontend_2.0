@@ -154,30 +154,30 @@ const AuditTrail = ({ ...props }: AuditTrailProps) => {
                                                         </TableCell>
                                                         <TableCell className={"text-[#625d5d] text-[15px] font-normal text-center flex flex-col"}>
                                                             <span className="">
-                                                                {item.event_name}
+                                                                {item.event_name ?? "-"}
                                                             </span>
                                                             <span>
-                                                                ({item.event_type})
+                                                                ({item.event_type ?? "-"})
                                                             </span>
                                                         </TableCell>
                                                         <TableCell className={"text-[#625d5d] text-[15px] font-normal text-center"}>
                                                             <span className="">
-                                                                {item.event_start_date}
+                                                                {item.event_start_date ?? "-"}
                                                             </span>
                                                         </TableCell>
                                                         <TableCell className={"text-[#625d5d] text-[15px] font-normal text-center"}>
                                                             <span className="">
-                                                                {item.event_venue}
+                                                                {item.event_venue ?? "-"}
                                                             </span>
                                                         </TableCell>
                                                         <TableCell className={"text-[#625d5d] text-[15px] font-normal text-center"}>
                                                             <span className="">
-                                                                {item.sub_type_of_activity}
+                                                                {item.sub_type_of_activity ?? "-"}
                                                             </span>
                                                         </TableCell>
                                                         <TableCell className={"text-[#625d5d] text-[15px] font-normal text-center"}>
                                                             <span className="">
-                                                                {item.status}
+                                                                {item.status ?? "-"}
                                                             </span>
                                                         </TableCell>
                                                         <TableCell className={"text-[#625d5d] text-[15px] font-normal text-center cursor-pointer"} onClick={() => { handleExpandClick(index) }}>

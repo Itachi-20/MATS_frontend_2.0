@@ -266,7 +266,7 @@ console.log(refno,'refno')
   // useEffect(() => {
   //   eventDataApi();
   // }, [])
-  console.log('eventData---------------------------------------', eventData?.event_type)
+  console.log('eventData---------------------------------------', eventData)
   return (
 
 

@@ -32,6 +32,8 @@ type DocumentRow = {
   name: string;
   file_name: string;
   file_url: string;
+  creation:string;
+  owner: string;
 };
 
 type DropdownData = {

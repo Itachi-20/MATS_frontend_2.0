@@ -73,11 +73,11 @@ type EventEntry = {
   logistics: Logistics[];
   documents: ActivityDocument[];
   advance_approvers: any[]; // Empty array, can be customized later
-  city: string
-  reporting_head: string
-  type_of_engagement: string
-  product_details: string
-  any_additional_expense: string
+  city: string;
+  reporting_head: string;
+  type_of_engagement: string;
+  product_details: string;
+  any_additional_expense: string;
 }
 
 type Compensation = {

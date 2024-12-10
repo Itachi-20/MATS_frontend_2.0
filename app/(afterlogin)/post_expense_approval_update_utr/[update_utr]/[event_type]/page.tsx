@@ -72,6 +72,7 @@ type File = {
     company_code: string;
     state_code: string;
     files: File[];
+    is_approved:boolean;
   };
   
   type ImportFile = {
@@ -323,9 +324,9 @@ const page = () => {
                     <div className='text-2xl font-semibold'>
                     {expensedata ? expensedata.event_type : ''}
                     </div>
-                    <div className='flex'>
+                    {/* <div className='flex'>
                         <button className="border rounded-sm px-6 py-1 border-black text-black">Back</button>
-                    </div>
+                    </div> */}
                 </div>
                 <div className='border rounded-3xl mt-5 mb-14 p-2 text-black grid grid-cols-3'>
                     <div className='grid-cols-1 px-6 border-r'>

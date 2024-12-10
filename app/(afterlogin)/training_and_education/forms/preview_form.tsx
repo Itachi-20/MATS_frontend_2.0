@@ -81,6 +81,7 @@ type EventEntry = {
   type_of_engagement: string;
   hcp_name: string;
   preactivity_submitted: number;
+  hcp_ref_no: string;
 }
 
 type Compensation = {

@@ -1,5 +1,6 @@
 'use client'
-import React, { useEffect } from 'react'
+import React, { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -14,6 +15,7 @@ type formData = {
 };
 
 const ChangePasswordPage = () => {
+  const router = useRouter();
   const { role, name, userid, clearAuthData } = useAuth();
   const [formdata, setFormData] = useState<formData>(
     {
@@ -153,7 +155,7 @@ const handlePasswordChange = async ()=>{
       <div className="flex justify-end pt-5 gap-4">
         <Button className='bg-[#4430bf] text-white text-md font-normal border px-7' onClick={()=>handlePasswordChange()} >Save</Button>
         <Link href="/">
-          <Button className="bg-white text-black border text-md font-normal px-7">
+          <Button className="bg-white text-black border text-md font-normal px-7" onClick={()=>{router.push("/dashboard")}}>
             Back
           </Button>
         </Link>
