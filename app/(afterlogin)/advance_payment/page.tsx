@@ -184,7 +184,14 @@ export default function Page() {
                                         "text-center text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                                     }
                                 >
-                                    Event Date
+                                    Event Start Date
+                                </TableHead>
+                                <TableHead
+                                    className={
+                                        "text-center text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                                    }
+                                >
+                                    Event End Date
                                 </TableHead>
                                 <TableHead
                                     className={
@@ -245,9 +252,10 @@ export default function Page() {
                                             return (
                                                 <TableRow key={index} className="text-center text-nowrap">
                                                     <TableCell>{data.name ?? "-"}</TableCell>
-                                                    <TableCell>{data.event_name}</TableCell>
-                                                    <TableCell>{data.event_type}</TableCell>
-                                                    <TableCell>{data.event_start_date}</TableCell>
+                                                    <TableCell>{data.event_name?? "-"}</TableCell>
+                                                    <TableCell>{data.event_type?? "-"}</TableCell>
+                                                    <TableCell>{data.event_start_date?? "-"}</TableCell>
+                                                    <TableCell>{data.event_end_date?? "-"}</TableCell>
                                                     <TableCell>{data.total_compensation_expense ?? ""}</TableCell>
                                                     <TableCell>{data.total_logistics_expense ?? ""}</TableCell>
                                                     <TableCell>{data.total_estimated_expense ?? ""}</TableCell>
