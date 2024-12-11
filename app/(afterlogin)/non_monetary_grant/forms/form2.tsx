@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import { Toaster, toast } from 'sonner'
 import { useRouter } from "next/navigation";
-import { Previewdata } from '@/app/(afterlogin)/monetary_grant/page'
+import { Previewdata } from '@/app/(afterlogin)/non_monetary_grant/page'
 type formData = {
   name: string | null;
   event_type: string;

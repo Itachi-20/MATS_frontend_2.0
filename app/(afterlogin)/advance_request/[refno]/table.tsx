@@ -515,7 +515,7 @@ const table = ({ tableData }: Props) => {
               <TableRow className={"text-nowrap rounded-r-2xl border-none"}>
                 <TableHead
                   className={
-                    "text-center rounded-l-2xl text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                    "text-center rounded-l-2xl  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                   }
                 >
                   Event Request Number
@@ -659,7 +659,7 @@ const table = ({ tableData }: Props) => {
 
         {  !tableData?.is_declared &&
         <div className='flex justify-end gap-2 pt-8'>
-          <Button className='bg-[#4430BF] px-10' onClick={handleSubmit}>Submit</Button>
+          <Button className='bg-[#4430BF] px-10' onClick={handleSubmit}>Submi</Button>
         </div>
          } 
       </div>
