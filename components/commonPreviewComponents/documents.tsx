@@ -12,6 +12,7 @@ import {
 import page from '@/app/(afterlogin)/advance_payment/[request_number]/page';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { toast,Toaster } from 'sonner';
 
 interface DocumentsProps {
   PageName: string;
@@ -204,6 +205,7 @@ const Documents = ({ PageName, ...Props }: Props) => {
       })
       if (response.ok) {
         console.log("successfully deleted");
+        toast.success("File Deleted Successfully");
         Props.fetchFile();
       }
     } catch (error) {
@@ -294,7 +296,9 @@ const Documents = ({ PageName, ...Props }: Props) => {
                   </Table>
                 </div>
               </div>
+              <Toaster richColors position="top-right" />
             </div>
+            
           )
         })
       }
