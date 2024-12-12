@@ -257,10 +257,6 @@ const Form1 = ({ ...Props }: Props) => {
     }
   }, [userid]);
 
-  if (loading) {
-    return <div>Loading Please Wait</div>;
-  }
-
   const handleStateChange = async (value: string) => {
     try {
       const response = await fetch(
@@ -330,6 +326,10 @@ const Form1 = ({ ...Props }: Props) => {
   }, [formdata?.event_requestor, formdata?.business_unit, formdata?.division_category, formdata?.division_sub_category, formdata?.state]);
 
   console.log("Formdata", formdata);
+
+  if (loading) {
+    return <div>Loading Please Wait</div>;
+  }
   return (
     // </div>
     (<div>

@@ -166,25 +166,6 @@ const Form1 = ({ ...Props }: Props) => {
   };
 
 
-  useEffect(() => {
-    handleBudgetChange(budget);
-  }, [])
-
-  useEffect(() => {
-    if (userid !== undefined) {
-      setLoading(false);
-      if(Props?.previewData?.event_requestor){
-        handleSelectChange(Props.previewData.event_requestor, "event_requestor")
-      }else{
-        handleSelectChange(userid as string, "event_requestor")
-      }
-    }
-  }, [userid]);
-
-  if (loading) {
-    return <div>Loading Please Wait</div>;
-  }
-
 
   const handleStateChange = async (value: string) => {
     try {
@@ -254,8 +235,28 @@ const Form1 = ({ ...Props }: Props) => {
     }
   }, [formData?.event_requestor, formData?.business_unit, formData?.division_category, formData?.division_sub_category, formData?.state]);
 
+  useEffect(() => {
+    if (userid !== undefined) {
+      setLoading(false);
+      if(Props?.previewData?.event_requestor){
+        handleSelectChange(Props.previewData.event_requestor, "event_requestor")
+      }else{
+        handleSelectChange(userid as string, "event_requestor")
+      }
+    }
+  }, [userid]);
+
+  useEffect(() => {
+    handleBudgetChange(budget);
+  }, [])
+
+  if (loading) {
+    return <div>Loading Please Wait</div>;
+  }
+
   console.log("Props.previewData", Props.previewData?.reporting_head);
   console.log(formData,reportingHeadDropdown, 'formdata')
+  
   return (
     // </div>
     <div>
