@@ -32,6 +32,8 @@ type DocumentRow = {
   name: string;
   file_name: string;
   file_url: string;
+  creation: string;
+  owner: string;
 };
 
 type DropdownData = {
@@ -175,8 +177,7 @@ const Fields = ({ ...Props }: Props) => {
     } catch (error) {
         console.error("Error during login:", error);
     } 
-  }
-
+  };
   const handleDivisionChange = async (value: string) => {
     try {
       const response = await fetch(
@@ -203,25 +204,22 @@ const Fields = ({ ...Props }: Props) => {
       console.error("Error during login:", error);
     }
   };
-  
-
   const handleStateChange = async (value: string) => {
     setFiltercity(Props.dropdown?.city.filter(item=>item.state == value));
-    
   };
-
   const handleGlname = async(value:any) =>{
     const parglcode = glCodeDropdown?.filter((item)=>item.name == value) ?? [];
     Props.formdata.gl_code = parglcode[0]?.gl_code;
-  
-  }
-
+  };
   const handleCostCenter = async(value:any) => {
     const ccname = eventCostCenter?.cost_center.filter(item=>item.name == value) ?? [];
     Props.formdata.cc_name = ccname[0]?.cost_center_description;
   //  }
+  };
+  function allowOnlyNumbers(e: React.FormEvent<HTMLInputElement>) {
+    const input = e.target as HTMLInputElement;
+    input.value = input.value.replace(/[^0-9]/g, ''); // Remove non-numeric characters
   }
-
   useEffect(()=>{
     handleglcode(Props.formdata?.company_name);
   },[Props?.formdata?.company_name]);
@@ -241,7 +239,6 @@ const Fields = ({ ...Props }: Props) => {
     handleStateChange(Props?.formdata?.state as string);
   },[])
  
-  console.log("Print", Props.expenseData);
 
   return (
 
@@ -328,12 +325,13 @@ const Fields = ({ ...Props }: Props) => {
               GST<span className="text-[#e60000] ">*</span>
             </label>
             <Input
-              type='text'
-              value={Props.formdata?.gst ?? ""}
+              type='number'
+              value={Props.formdata?.gst ?? 0}
               className="text-black shadow md:rounded-sm md:py-1"
               placeholder="Type here ..."
               id='gst'
               name='gst'
+              // onInput={(e)=>allowOnlyNumbers(e)}
               onChange={(e)=>Props.handlefieldChange(e)}
               readOnly={Props?.expenseData?.actual_vendors[0]?.is_approved ? true : false}
             ></Input>

@@ -331,13 +331,15 @@ const Index = () => {
                                                 </TableCell>
                                             </TableRow>
                                         );
-                                    })}
+                                    })
+                                
+                                }
                             </TableBody>
                             :
                             <TableBody>
-                                <TableRow className="text-center text-black text-nowrap ">
-                                <TableCell colSpan={9}>No Results</TableCell>
-                                </TableRow>
+                                 <TableRow>
+                                        <TableCell className="pr-6 py-3 whitespace-nowrap text-center text-gray-400 italic" colSpan={9}>No records found...</TableCell>
+                                    </TableRow>
                             </TableBody>
                         }    
                     </Table>
