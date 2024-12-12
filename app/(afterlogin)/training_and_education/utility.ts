@@ -137,3 +137,57 @@ export const handleBudgetChange = async (value: string,cookie:any) => {
       console.error("Error during business unit change:", error);
     }
   };
+
+
+  export const handleStateChange = async (value: string,cookie:any) => {
+    console.log("value in server",value)
+    try {
+      const response = await fetch(
+        `${process.env.FRAPPE_URL}/api/resource/City List?filters=[["state", "=", "${value}"]]&fields=["name","city"]`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Cookie":cookie
+          },
+          credentials:'include'
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log('frappe response city',data)
+        return data.data;
+      } else {
+        console.log("Response was not okay in state change ");
+      }
+    } catch (error) {
+      console.error("Error during state  change:", error);
+    }
+  };
+  export const handleReportingChange = async (event_requestor: string,business_unit:string,division_category:string,division_sub_category:string,state:string,cookie:any) => {
+    console.log("value in server",event_requestor,business_unit,division_category,division_sub_category,state)
+    try {
+      const response = await fetch(
+        `${process.env.FRAPPE_URL}/api/method/matsapp.api.event.event.get_reporting_head?event_requestor=${event_requestor}&business_unit=${business_unit}&division_category=${division_category}&division_sub_category=${division_sub_category?division_sub_category:''}&state=${state}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Cookie":cookie
+          },
+          credentials:'include'
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log('frappe response city',data)
+        return data.data;
+      } else {
+        console.log("Response was not okay in state change ",response);
+      }
+    } catch (error) {
+      console.error("Error during state  change:", error);
+    }
+  };
