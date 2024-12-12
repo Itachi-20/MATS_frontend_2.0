@@ -19,7 +19,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Checkbox } from '@/components/ui/checkbox';
-import { Previewdata } from '@/app/(afterlogin)/monetary_grant/page'
+import { Previewdata } from '@/app/(afterlogin)/non_monetary_grant/page'
 import { useRouter } from 'next/navigation';
 type formData = {
   name: string | null;

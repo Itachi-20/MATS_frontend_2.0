@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 import DocumentDetails from '@/components/commonPreviewComponents/documents';
 import { useParams } from 'next/navigation'
 import SimpleFileUpload from "@/components/multiple_file_upload";
+import { Toaster, toast } from 'sonner'
 import {
   Select,
   SelectContent,
@@ -274,32 +275,38 @@ const page = () => {
       formdata.append("docname", refno as string)
       formdata.append("activity_type", "Executed");
       formdata.append("document_type", documentType)
-      try {
-        const response = await fetch(
-          `/api/training_and_education/fileUpload`,
-          {
+      const apiCallPromise = new Promise(async (resolve, reject) => {
+        try {
+          const response = await fetch(`/api/training_and_education/fileUpload`, {
             method: "POST",
-            headers: {
-              //"Content-Type": "multipart/form-data",
-            },
+            credentials: 'include',
             body: formdata,
-            credentials: 'include'
+          });
+  
+          if (!response.ok) {
+            throw new Error('file upload request failed');
           }
-        );
   
-  
-        if (response.ok) {
+          const data = await response.json();
+          resolve(data); // Resolve with the response data
+        } catch (error) {
+          reject(error); // Reject with the error
+        }
+      });
+      toast.promise(apiCallPromise, {
+        loading: 'Submitting  details...',
+        success: (data) => {
+          setTimeout(() => {
+                 fetchData();
+          }, 500);
           setDocumentType('')
           setFiles([])
           setUploadedFiles(null);
-          fetchData();
-  
-        } else {
-          console.log("Login failed");
-        }
-      } catch (error) {
-        console.error("Error during login:", error);
-      }
+      
+          return 'Documents added successfully!';
+        },
+        error: (error) => `Failed : ${error.message || error}`,
+      });
     }
     const fetchData = async()=>{
       try {
@@ -483,6 +490,7 @@ const page = () => {
             Add
           </Button>
         </div>
+        <Toaster richColors position="top-right" />
       </div>
             <DocumentDetails 
             // eventType='Post Activity'

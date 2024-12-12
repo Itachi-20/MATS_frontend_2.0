@@ -7,7 +7,7 @@ import Preview_Form from './forms/preview_form';
 import { AppWrapper } from '@/app/context/module';
 import { PreviewData, handleBusinessUnitChange, activityList, dropdown } from '../hcp_services/utility';
 import { cookies } from 'next/headers';
-
+import {handleStateChange,handleReportingChange} from '../training_and_education/utility'
 export type DropdownDataType = {
   company: {
     name: string,
@@ -80,7 +80,7 @@ export type PreviewDataType = {
   city: string | null;
   therapy: string;
   event_requestor: string;
-  division_sub_category: string | null;
+  division_sub_category: string ;
   reporting_head: string | null;
   status: string;
   current_stage: string;
@@ -310,6 +310,10 @@ export type FormDataType = {
     vendor_type: string;
     est_amount: number;
   };
+  type cityDropdown = {
+    name: string;
+    city: string
+  }[];
 
 const index = async ({...Props}:any) => {
 
@@ -321,6 +325,8 @@ const index = async ({...Props}:any) => {
   const cookie = await cookies();
   let previewdata:  PreviewDataType | null = null;
   let eventCostCenter = null;
+  let cityDropdown = null;
+  let ReportingHeadDropdown = null;
   // console.log(refno,cookie);
   
   if(refno){
@@ -329,9 +335,13 @@ const index = async ({...Props}:any) => {
   if(previewdata && previewdata.business_unit){
     eventCostCenter = await handleBusinessUnitChange(previewdata.business_unit,cookie);
   }
-
+  if(previewdata && previewdata.state){
+    cityDropdown = await handleStateChange(previewdata?.state,cookie);
+  }
+  if(previewdata && previewdata.state && previewdata.event_requestor && previewdata.business_unit){
+    ReportingHeadDropdown = await handleReportingChange(previewdata.event_requestor,previewdata.business_unit,previewdata.division_category,previewdata.division_sub_category,previewdata?.state,cookie);
+  }
   let eventType = "Training and Education";
-  // console.log(activityDropdown, dropdownData, previewdata);
 
   return (
     <>
@@ -347,6 +357,8 @@ const index = async ({...Props}:any) => {
           forms == "1" ?
             <Form1
               eventCostCenter={eventCostCenter}
+              ReportingHeadDropdown={ReportingHeadDropdown}
+              cityDropdown={cityDropdown}
               previewData = {previewdata}
               dropdownData={dropdownData}
               refNo={refno}

@@ -9,7 +9,7 @@ import { AppWrapper } from '@/app/context/module';
 import { activityList, dropdown, PreviewData, handleBusinessUnitChange } from './utility';
 import { cookies } from "next/headers";
 import { Previewdata } from '../hcp_services/page';
-
+import { handleStateChange, handleReportingChange } from '../training_and_education/utility'
 type dropdownData = {
   company: {
     name: string,
@@ -31,9 +31,9 @@ type dropdownData = {
     name: string,
     state: string
   }[]
-  city:{
-    name:string,
-    city:string
+  city: {
+    name: string,
+    city: string
   }[]
   currency: {
     name: string
@@ -89,67 +89,77 @@ type activityDropdown = {
   }[]
 }
 
-const Index = async ({...Props}:any) => {
-  const props =  await Props;
-  const {forms,refno} = await props.searchParams;
-  const activityDropdown:activityDropdown = await activityList();
-  const dropdownData:dropdownData =await dropdown();
+const Index = async ({ ...Props }: any) => {
+  const props = await Props;
+  const { forms, refno } = await props.searchParams;
+  const activityDropdown: activityDropdown = await activityList();
+  const dropdownData: dropdownData = await dropdown();
 
   let eventype: { [key: string]: string } = {};
   const cookie = await cookies()
-  let previewdata:  Previewdata | null = null;
+  let previewdata: Previewdata | null = null;
   let eventCostCenter = null;
-  console.log(refno,cookie);
-  if(refno){
-    previewdata =  await PreviewData(refno,cookie);
+  let cityDropdown = null;
+  let ReportingHeadDropdown = null;
+  console.log(refno, cookie);
+  if (refno) {
+    previewdata = await PreviewData(refno, cookie);
   }
-  if(previewdata && previewdata.business_unit){
-    eventCostCenter = await handleBusinessUnitChange(previewdata.business_unit,cookie);
+  if (previewdata && previewdata.business_unit) {
+    eventCostCenter = await handleBusinessUnitChange(previewdata.business_unit, cookie);
+  }
+  if (previewdata && previewdata.state) {
+    cityDropdown = await handleStateChange(previewdata?.state, cookie);
+  }
+  if (previewdata && previewdata.state && previewdata.event_requestor && previewdata.business_unit) {
+    ReportingHeadDropdown = await handleReportingChange(previewdata.event_requestor, previewdata.business_unit, previewdata.division_category, previewdata.division_sub_category, previewdata?.state, cookie);
   }
   console.log("Preview data", previewdata);
   return (
     <>
-        <AppWrapper>
-      <div className="px-7 pb-7 pt-4 w-full z-20">
-        <div>
-          <h1 className="text-black text-[30px] font-medium capitalize" id="form_top">
-          {/* {pathname.replace("/","").replaceAll("_"," ")} */}
-          </h1>
-          <div className='py-9'></div>
-        </div>
-        {
-          forms == "1" ?
-            <Form1
-              eventCostCenter={eventCostCenter}
-              previewData = {previewdata}
-              dropdownData={dropdownData}
-              refNo={refno}
-            /> :
-            forms == "2" ?
-              <Form2
-                previewData = {previewdata}
+      <AppWrapper>
+        <div className="px-7 pb-7 pt-4 w-full z-20">
+          <div>
+            <h1 className="text-black text-[30px] font-medium capitalize" id="form_top">
+              {/* {pathname.replace("/","").replaceAll("_"," ")} */}
+            </h1>
+            <div className='py-9'></div>
+          </div>
+          {
+            forms == "1" ?
+              <Form1
+                cityDropdown={cityDropdown}
+                ReportingHeadDropdown={ReportingHeadDropdown}
+                eventCostCenter={eventCostCenter}
+                previewData={previewdata}
+                dropdownData={dropdownData}
                 refNo={refno}
               /> :
-              forms == "3" ?
-                <Form3
-                  previewData = {previewdata}
-                  vendorType={dropdownData && dropdownData.vendor_type}
-                  currency={dropdownData && dropdownData.currency}
+              forms == "2" ?
+                <Form2
+                  previewData={previewdata}
                   refNo={refno}
-
                 /> :
-                forms == "4" ?
-                  <Form4
-                    activityDropdown={activityDropdown}
+                forms == "3" ?
+                  <Form3
+                    previewData={previewdata}
+                    vendorType={dropdownData && dropdownData.vendor_type}
+                    currency={dropdownData && dropdownData.currency}
                     refNo={refno}
 
                   /> :
-                  forms == "5" ?
-                    <Preview_Form
+                  forms == "4" ?
+                    <Form4
+                      activityDropdown={activityDropdown}
                       refNo={refno}
-                    /> : ""
-        }
-      </div>
+
+                    /> :
+                    forms == "5" ?
+                      <Preview_Form
+                        refNo={refno}
+                      /> : ""
+          }
+        </div>
       </AppWrapper>
     </>
   )

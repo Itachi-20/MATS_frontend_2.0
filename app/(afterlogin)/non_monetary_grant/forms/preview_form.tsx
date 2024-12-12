@@ -9,7 +9,7 @@ import TotalExpense from "@/components/commonPreviewComponents/total_expense"
 import Documents from "@/components/commonPreviewComponents/documents"
 import { useRouter } from "next/navigation";
 import Comment_box from "@/components/approvalCommentBox/Comment_box";
-import { Previewdata } from '@/app/(afterlogin)/monetary_grant/page'
+import { Previewdata } from '@/app/(afterlogin)/non_monetary_grant/page'
 type EventEntry = {
   name: string | null;
   owner: string | null;

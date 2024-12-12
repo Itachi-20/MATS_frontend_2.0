@@ -520,7 +520,7 @@ const table = ({ tableData }: Props) => {
               <TableRow className={"text-nowrap rounded-r-2xl border-none"}>
                 <TableHead
                   className={
-                    "text-center rounded-l-2xl text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                    "text-center rounded-l-2xl  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                   }
                 >
                   Event Request Number

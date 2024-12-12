@@ -104,6 +104,10 @@ const Sidebar = () => {
           module: "Post Document Approval",
           route: "/post_activity_document_approval_list",
         },
+        {
+          module: "Post Expense Approval",
+          route: "/post_expense",
+        },
       ],
       masters: [],
       reports: [
@@ -133,6 +137,10 @@ const Sidebar = () => {
         {
           module: "Post Document Approval",
           route: "/post_activity_document_approval_list",
+        },
+        {
+          module: "Post Expense Approval",
+          route: "/post_expense",
         },
       ],
       reports: [
