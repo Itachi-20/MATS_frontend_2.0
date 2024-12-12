@@ -95,6 +95,10 @@ type File = {
     sub_type_of_activity: string | null;
     event_requestor: string;
     total_compensation_expense: number;
+  total_balance_amount:number;
+  total_advance_amount:number;
+  total_estimated_expense:number;
+  total_logistics_expense:number;
     actual_vendors: ActualVendor[];
     import_files: ImportFile[];
   }
@@ -328,13 +332,14 @@ const page = () => {
                         <button className="border rounded-sm px-6 py-1 border-black text-black">Back</button>
                     </div> */}
                 </div>
-                <div className='border rounded-3xl mt-5 mb-14 p-2 text-black grid grid-cols-3'>
+                <div className='border rounded-3xl mt-5 mb-7 p-2 text-black grid grid-cols-3'>
                     <div className='grid-cols-1 px-6 border-r'>
                         <ul className=''>
                             <li className='border-b p-2'>Event Date :<span className='font-semibold px-1'>{expensedata ? expensedata.event_date : ''}</span></li>
                             <li className='border-b p-2'>Event Name :<span className='font-semibold px-1'>{expensedata ? expensedata.event_name : ''}</span></li>
                             <li className='border-b p-2'>Event Requester Name :<span className='font-semibold px-1'>{expensedata ? expensedata.event_requestor : ''}</span></li>
-                            <li className='p-2'>Event Request Number :<span className='font-semibold px-1'>{expensedata ? expensedata.name : ''}</span></li>
+                            <li className='border-b p-2'>Event Requester Number :<span className='font-semibold px-1'>{expensedata ? expensedata.name : ''}</span></li>
+                            <li className=' p-2'>Business Unit :<span className='font-semibold px-1'>{expensedata ? expensedata.business_unit : ''}</span></li>
                         </ul>
                     </div>
                     <div className='grid-cols-1 px-6 border-r'>
@@ -342,14 +347,17 @@ const page = () => {
                             <li className='border-b p-2'>Cost Center :<span className='font-semibold px-1'>{expensedata ? expensedata.cost_center : ''}</span></li>
                             <li className='border-b p-2'>Cost Center Hod :<span className='font-semibold px-1'>{expensedata ? expensedata.cost_hod : ''}</span></li>
                             <li className='border-b p-2'>Cost Center Description :<span className='font-semibold px-1'>{expensedata ? expensedata.cost_desc : ''}</span></li>
-                            <li className='p-2'>Reporting Head :<span className='font-semibold px-1'>{expensedata ? expensedata.reporting_head : ''}</span></li>
+                            <li className='border-b p-2'>Reporting Head :<span className='font-semibold px-1'>{expensedata ? expensedata.event_date : ''}</span></li>
+                            <li className=' p-2'>Sub Type Of activity :<span className='font-semibold px-1'>{expensedata ? expensedata.sub_type_of_activity : ''}</span></li>
                         </ul>
                     </div>
                     <div className='grid-cols-1 px-6'>
                         <ul className=''>
-                            <li className='border-b p-2'>Business Unit :<span className='font-semibold px-1'>{expensedata ? expensedata.business_unit : ''}</span></li>
-                            <li className='border-b p-2'>Sub Type Of activity :<span className='font-semibold px-1'>{expensedata ? expensedata.sub_type_of_activity : ''}</span></li>
-                            <li className='border-b p-2'>Total Estimated Expense :<span className='font-semibold px-1'>{expensedata ? expensedata.total_compensation_expense : ''}</span></li>
+                            <li className='border-b p-2'>Total logistics Expense :<span className='font-semibold px-1'>{expensedata ? expensedata.total_logistics_expense : ''}</span></li>
+                            <li className='border-b p-2'>Total Compensation Expense :<span className='font-semibold px-1'>{expensedata ? expensedata.total_compensation_expense : ''}</span></li>
+                            <li className='border-b p-2'>Total Estimated Expense :<span className='font-semibold px-1'>{expensedata ? expensedata.total_estimated_expense : ''}</span></li>
+                            <li className='border-b p-2'>Total Advance Expense :<span className='font-semibold px-1'>{expensedata ? expensedata.total_advance_amount : ''}</span></li>
+                            <li className=' p-2'>Total Remaining Expense :<span className='font-semibold px-1'>{expensedata ? expensedata.total_balance_amount : ''}</span></li>
                         </ul>
                     </div>
 

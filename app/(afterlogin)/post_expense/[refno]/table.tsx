@@ -87,7 +87,7 @@ type Actual_vendors = {
   utr_number: string,
   vendor_name: string,
   vendor_code: string,
-  vendor_type:string,
+  vendor_type: string,
   zone: string
 }
 
@@ -118,8 +118,8 @@ type TravelVendors = {
   travel_expense_check: boolean,
   vendor_name: string,
   vendor_type: string
-  vendor_code:string
-  files:File;
+  vendor_code: string
+  files: File;
 }
 
 type TableData = {
@@ -137,7 +137,11 @@ type TableData = {
   name: string,
   reporting_head: string,
   sub_type_of_activity: string,
-  total_compensation_expense: number,
+  total_compensation_expense: number;
+  total_balance_amount: number;
+  total_advance_amount: number;
+  total_estimated_expense: number;
+  total_logistics_expense: number;
   occurrence_no: boolean,
   preactivity_submitted: boolean,
   preactivity_approved: boolean,
@@ -201,7 +205,7 @@ type DocumentRow = {
   file_url: string;
 };
 const table = ({ tableData }: Props) => {
-  const { role, name,userid, clearAuthData } = useAuth();
+  const { role, name, userid, clearAuthData } = useAuth();
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [successProp, setSuccessProp] = useState(false);
@@ -227,7 +231,7 @@ const table = ({ tableData }: Props) => {
   const router = useRouter();
   const params = useParams();
 
-  const fetchData = async()=>{
+  const fetchData = async () => {
     console.log("inside fetchData")
     try {
       const cookie = document.cookie;
@@ -236,22 +240,22 @@ const table = ({ tableData }: Props) => {
         `/api/postExpense/fetchData`,
         {
           method: "POST",
-          headers:{
+          headers: {
             "Content-Type": "application/json",
-            "Cookie":Cookie
+            "Cookie": Cookie
           },
-          body:JSON.stringify({name:params.refno})
+          body: JSON.stringify({ name: params.refno })
         }
       );
-      if(tableData.ok){
+      if (tableData.ok) {
         const data = await tableData.json();
-        console.log("data ",data)
+        console.log("data ", data)
         setTableData(data.data)
         return data.data
       }
-      
+
     } catch (error) {
-      console.log(error,"something went wrong");
+      console.log(error, "something went wrong");
     }
   }
 
@@ -333,9 +337,9 @@ const table = ({ tableData }: Props) => {
           },
           "credentials": 'include',
           body: JSON.stringify({
-            name:tableData.name ,
-            vendor_name:value
-        }),
+            name: tableData.name,
+            vendor_name: value
+          }),
         }
       );
       if (response.ok) {
@@ -493,14 +497,14 @@ const table = ({ tableData }: Props) => {
     setOpen(true)
   };
   const handleNext = () => {
-    
+
   }
-  const handleDeletePopup  = async(name : any) =>{
+  const handleDeletePopup = async (name: any) => {
     setDeleteRecordname(name)
     setIsDeletePropOpen(true)
   }
 
-  console.log(vendorDetails,'vendorDetails')
+  console.log(vendorDetails, 'vendorDetails')
   return (
     <>
       <div className='p-8'>
@@ -509,37 +513,41 @@ const table = ({ tableData }: Props) => {
             Training & Education
           </div>
           <div className='flex gap-4'>
-            <Button className="border rounded-sm px-6 py-1 border-black text-black hover:opacity-60" onClick={()=>{router.push("/event_list")}}>Back</Button>
+            <Button className="border rounded-sm px-6 py-1 border-black text-black hover:opacity-60" onClick={() => { router.push("/event_list") }}>Back</Button>
           </div>
         </div>
+
         <div className='border rounded-3xl mt-5 mb-7 p-2 text-black grid grid-cols-3'>
           <div className='grid-cols-1 px-6 border-r'>
             <ul className=''>
-              <li className='border-b p-2'>Event Date :<span className='font-semibold px-1'>{tableData ? tableData.event_date : '-'}</span></li>
-              <li className='border-b p-2'>Event Name :<span className='font-semibold px-1'>{tableData ? tableData.event_name : '-'}</span></li>
-              <li className='border-b p-2'>Event Requester Name :<span className='font-semibold px-1'>{tableData ? tableData.event_requestor : '-'}</span></li>
-              <li className='p-2'>Event Requester Number :<span className='font-semibold px-1'>{tableData ? tableData.name : '-'}</span></li>
+              <li className='border-b p-2'>Event Date :<span className='font-semibold px-1'>{tableData ? tableData.event_date : ''}</span></li>
+              <li className='border-b p-2'>Event Name :<span className='font-semibold px-1'>{tableData ? tableData.event_name : ''}</span></li>
+              <li className='border-b p-2'>Event Requester Name :<span className='font-semibold px-1'>{tableData ? tableData.event_requestor : ''}</span></li>
+              <li className='border-b p-2'>Event Requester Number :<span className='font-semibold px-1'>{tableData ? tableData.name : ''}</span></li>
+              <li className=' p-2'>Business Unit :<span className='font-semibold px-1'>{tableData ? tableData.business_unit : ''}</span></li>
             </ul>
           </div>
           <div className='grid-cols-1 px-6 border-r'>
             <ul className=''>
-              <li className='border-b p-2'>Cost Center :<span className='font-semibold px-1'>{tableData ? tableData.cost_center : '-'}</span></li>
-              <li className='border-b p-2'>Cost Center Hod :<span className='font-semibold px-1'>{tableData ? tableData.cost_hod : '-'}</span></li>
-              <li className='border-b p-2'>Cost Center Description :<span className='font-semibold px-1'>{tableData ? tableData.cost_desc : '-'}</span></li>
-              <li className='p-2'>Reporting Head :<span className='font-semibold px-1'>{tableData ? tableData.reporting_head : '-'}</span></li>
+              <li className='border-b p-2'>Cost Center :<span className='font-semibold px-1'>{tableData ? tableData.cost_center : ''}</span></li>
+              <li className='border-b p-2'>Cost Center Hod :<span className='font-semibold px-1'>{tableData ? tableData.cost_hod : ''}</span></li>
+              <li className='border-b p-2'>Cost Center Description :<span className='font-semibold px-1'>{tableData ? tableData.cost_desc : ''}</span></li>
+              <li className='border-b p-2'>Reporting Head :<span className='font-semibold px-1'>{tableData ? tableData.event_date : ''}</span></li>
+              <li className=' p-2'>Sub Type Of activity :<span className='font-semibold px-1'>{tableData ? tableData.sub_type_of_activity : ''}</span></li>
             </ul>
           </div>
           <div className='grid-cols-1 px-6'>
             <ul className=''>
-              <li className='border-b p-2'>Business Unit :<span className='font-semibold px-1'>{tableData ? tableData.business_unit : '-'}</span></li>
-              <li className='border-b p-2'>Sub Type Of activity :<span className='font-semibold px-1'>{tableData ? tableData.sub_type_of_activity : '-'}</span></li>
-              <li className='border-b p-2'>Total Estimated Expense :<span className='font-semibold px-1'>{tableData ? tableData.total_compensation_expense : '-'}</span></li>
+              <li className='border-b p-2'>Total logistics Expense :<span className='font-semibold px-1'>{tableData ? tableData.total_logistics_expense : ''}</span></li>
+              <li className='border-b p-2'>Total Compensation Expense :<span className='font-semibold px-1'>{tableData ? tableData.total_compensation_expense : ''}</span></li>
+              <li className='border-b p-2'>Total Estimated Expense :<span className='font-semibold px-1'>{tableData ? tableData.total_estimated_expense : ''}</span></li>
+              <li className='border-b p-2'>Total Advance Expense :<span className='font-semibold px-1'>{tableData ? tableData.total_advance_amount : ''}</span></li>
+              <li className=' p-2'>Total Remaining Expense :<span className='font-semibold px-1'>{tableData ? tableData.total_balance_amount : ''}</span></li>
             </ul>
           </div>
 
         </div>
-
-        { !tableData?.post_expense_approved &&
+        {!tableData?.post_expense_approved &&
           <div className=" grid grid-cols-3 gap-4 pb-7">
             <div className='col-span-3 space-y-2'>
               <label htmlFor="event_conclusion" className="text-black md:text-sm md:font-normal capitalize">
@@ -558,7 +566,7 @@ const table = ({ tableData }: Props) => {
                 Vendor Type<span className="text-[#e60000] ">*</span>
               </label>
               <Select
-              value={vendorDetails.vendor_type ?? ''}
+                value={vendorDetails.vendor_type ?? ''}
                 onValueChange={(value) => {
                   handleVendorTypeChangeApi(value);
                   setVendorDetails((prev) => ({
@@ -585,7 +593,7 @@ const table = ({ tableData }: Props) => {
                 Vendor Name<span className="text-[#e60000] ">*</span>
               </label>
               <Select
-              value={vendorDetails.vendor_name ?? ''}
+                value={vendorDetails.vendor_name ?? ''}
                 onValueChange={(value: string) => {
                   handleAdvaneAmountApi(value);
                   setVendorDetails((prev) => ({
@@ -625,10 +633,10 @@ const table = ({ tableData }: Props) => {
         }
 
         {
-          !tableData.post_expense_approved && 
+          !tableData.post_expense_approved &&
           <div className='flex justify-end gap-2 pb-7'>
-            <SimpleFileUpload files={files} setFiles={setFiles} setUploadedFiles={setUploadedFiles}  onNext={handleNext} buttonText={'Receipts/Bills'} />
-            <Button className="border border-[#4430bf] text-[#4430bf] text-[18px]" disabled={isLoading ? true:false} onClick={addVendor} >{isLoading ? 'Adding...':'Add'}</Button>
+            <SimpleFileUpload files={files} setFiles={setFiles} setUploadedFiles={setUploadedFiles} onNext={handleNext} buttonText={'Receipts/Bills'} />
+            <Button className="border border-[#4430bf] text-[#4430bf] text-[18px]" disabled={isLoading ? true : false} onClick={addVendor} >{isLoading ? 'Adding...' : 'Add'}</Button>
           </div>
         }
 
@@ -760,8 +768,8 @@ const table = ({ tableData }: Props) => {
                               </svg>
                             </div>
                             {
-                              !(data?.status == "Post Expense Approved" || data?.status == "Post Expense Closed")&& role=="Event Requester" && 
-                            <Image className='hover:cursor-pointer hover:opacity-60' src={'/svg/delete.svg'} alt='deletesvg' width={20} height={18} onClick={() => {handleDeletePopup(data.name)}} />
+                              !(data?.status == "Post Expense Approved" || data?.status == "Post Expense Closed") && role == "Event Requester" &&
+                              <Image className='hover:cursor-pointer hover:opacity-60' src={'/svg/delete.svg'} alt='deletesvg' width={20} height={18} onClick={() => { handleDeletePopup(data.name) }} />
                             }
                           </TableCell>
                         </TableRow>
@@ -807,7 +815,7 @@ const table = ({ tableData }: Props) => {
                     >
                       Vendor Code
                     </TableHead>
-    
+
                     <TableHead
                       className={
                         "text-center text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
@@ -815,7 +823,7 @@ const table = ({ tableData }: Props) => {
                     >
                       Vendor Name
                     </TableHead>
-    
+
                     <TableHead
                       className={
                         "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
@@ -837,7 +845,7 @@ const table = ({ tableData }: Props) => {
                     >
                       GST
                     </TableHead>
-    
+
                     <TableHead
                       className={
                         "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
@@ -900,7 +908,7 @@ const table = ({ tableData }: Props) => {
                               <TableCell>{data.net_amount ?? "-"}</TableCell>
                               {/* <TableCell>{data.utr_number ?? "-"}</TableCell>
                               <TableCell>{data.payment_date ?? "-"}</TableCell> */}
-    
+
                               <TableCell className='sticky right-0 z-20 gap-4 w-[120px] bg-white mt-2 flex border-l justify-center mb-2'>
                                 <div className='p-0 cursor-pointer hover:opacity-60' onClick={() => handleSetFileData(data.files)}>
                                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
@@ -927,7 +935,7 @@ const table = ({ tableData }: Props) => {
         }
 
         {
-          !tableData.post_expense_approved && 
+          !tableData.post_expense_approved &&
           <div className='flex justify-end gap-2 pt-8'>
             <Button className='bg-[#4430BF] px-10 text-white' onClick={handleSubmit}>Submit</Button>
           </div>
@@ -938,9 +946,9 @@ const table = ({ tableData }: Props) => {
         <ViewDocument setClose={setOpen} data={fileData} />
       }
       {exportopen && <UploadExport handleExport={handleExport} data={tabledata.import_files} />}
-      {isDeletePropOpen && <Ondeleteprop setClose={setIsDeletePropOpen} handleSubmit={handleRecordDeletion} Loading={isLoading} text={"Are you sure you want to close this event?"}/>}
-      {successProp && <SuccessProp title={"Post Expense Approval"}/>}
-      <Toaster richColors position="top-right"/>
+      {isDeletePropOpen && <Ondeleteprop setClose={setIsDeletePropOpen} handleSubmit={handleRecordDeletion} Loading={isLoading} text={"Are you sure you want to close this event?"} />}
+      {successProp && <SuccessProp title={"Post Expense Approval"} />}
+      <Toaster richColors position="top-right" />
     </>
 
   )
