@@ -164,20 +164,14 @@ const Fields = ({ ...Props }: Props) => {
 
       if (response.ok) {
         const data = await response.json();
-        // console.log("@@@@@@@data", data);
-        // console.log("@@@@@@@eventtype", Props?.expenseData?.event_type);
         setGlCodeDropdown(data && data.data);
-        // Props.formdata.gl_code = "";
-        // console.log(data, 'data')
-
       } else {
-        // console.log("@@@@@@@", Props?.expenseData?.event_type);
-        console.log("Login failed");
+        console.log("Response not okay while fetching gl code");
       }
     } catch (error) {
-      console.error("Error during login:", error);
-    }
-  }
+        console.error("Error during handling gl code:", error);
+    } 
+  };
 
   const handleDivisionChange = async (value: string) => {
     try {
@@ -205,26 +199,23 @@ const Fields = ({ ...Props }: Props) => {
       console.error("Error during login:", error);
     }
   };
-
-
   const handleStateChange = async (value: string) => {
-    setFiltercity(Props.dropdown?.city.filter(item => item.state == value));
-
+    setFiltercity(Props.dropdown?.city.filter(item=>item.state == value));
   };
-
-  const handleGlname = async (value: any) => {
-    const parglcode = glCodeDropdown?.filter((item) => item.name == value) ?? [];
+  const handleGlname = async(value:any) =>{
+    const parglcode = glCodeDropdown?.filter((item)=>item.name == value) ?? [];
     Props.formdata.gl_code = parglcode[0]?.gl_code;
-
-  }
-
-  const handleCostCenter = async (value: any) => {
-    const ccname = eventCostCenter?.cost_center.filter(item => item.name == value) ?? [];
+  };
+  const handleCostCenter = async(value:any) => {
+    const ccname = eventCostCenter?.cost_center.filter(item=>item.name == value) ?? [];
     Props.formdata.cc_name = ccname[0]?.cost_center_description;
-    //  }
+  //  }
+  };
+  function allowOnlyNumbers(e: React.FormEvent<HTMLInputElement>) {
+    const input = e.target as HTMLInputElement;
+    input.value = input.value.replace(/[^0-9]/g, ''); // Remove non-numeric characters
   }
-
-  useEffect(() => {
+  useEffect(()=>{
     handleglcode(Props.formdata?.company_name);
   }, [Props?.formdata?.company_name]);
 
@@ -235,15 +226,9 @@ const Fields = ({ ...Props }: Props) => {
   useEffect(() => {
     handleStateChange(Props.formdata?.state as string);
   }, [Props?.formdata?.state]);
-  // useEffect(()=>{
-  //   // console.log("In side useEFFECT", Props?.formdata?.company_name)
-  //   handleCostCenter(Props?.formdata?.cost_center);
-  // },[Props?.formdata?.cost_center]);
   useEffect(() => {
     handleStateChange(Props?.formdata?.state as string);
-  }, [])
-
-  console.log("Print", Props.expenseData);
+  },[]);
 
   return (
 
@@ -330,13 +315,14 @@ const Fields = ({ ...Props }: Props) => {
               GST<span className="text-[#e60000] ">*</span>
             </label>
             <Input
-              type='text'
-              value={Props.formdata?.gst ?? ""}
+              type='number'
+              value={Props.formdata?.gst ?? 0}
               className="text-black shadow md:rounded-sm md:py-1"
               placeholder="Type here ..."
               id='gst'
               name='gst'
-              onChange={(e) => Props.handlefieldChange(e)}
+              // onInput={(e)=>allowOnlyNumbers(e)}
+              onChange={(e)=>Props.handlefieldChange(e)}
               readOnly={Props?.expenseData?.actual_vendors[0]?.is_approved ? true : false}
             ></Input>
           </div>
