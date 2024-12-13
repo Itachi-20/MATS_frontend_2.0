@@ -4,7 +4,7 @@ import Image from "next/image";
 import Sidebar from "@/components/Sidebar";
 import Navbar from "@/components/Navbar";
 import { Input } from "@/components/ui/input";
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'nextjs-toploader/app';
 import {
     Select,
     SelectContent,

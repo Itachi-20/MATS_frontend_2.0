@@ -22,7 +22,8 @@ import {
 } from "@/components/ui/select";
 import Link from 'next/link';
 import { useState, useEffect } from 'react'
-import { useRouter, useParams } from 'next/navigation';
+import { useRouter } from 'nextjs-toploader/app';
+import {  useParams } from 'next/navigation';
 import ViewDocument from '@/components/view_document';
 import DeletePopup from '@/components/deleteDialog';
 import { Toaster, toast } from 'sonner';

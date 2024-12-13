@@ -4,7 +4,7 @@ import React, { useCallback } from "react";
 import { useEffect, useState } from "react"
 import Image from "next/image";
 import DatePicker from "./date-picker"
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'nextjs-toploader/app';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, } from "@/components/ui/table";
@@ -55,7 +55,7 @@ export default function EventList() {
   const [isPickerOpen, setIsPickerOpen] = useState(false);
   const total_event_list = 12;
   const [currentPage, setCurrentPage] = useState<number>(1);
-
+  const [loading, setLoading] = useState(true)
   const togglePicker = () => {
     setIsPickerOpen(!isPickerOpen);
   };
@@ -87,8 +87,6 @@ export default function EventList() {
     }
   }
 
-  const [tableData, setTableData] = useState<EventTable[]>()
-  const [loading, setLoading] = useState(true)
   const fetchTableData = async () => {
     setLoading(true)
     try {

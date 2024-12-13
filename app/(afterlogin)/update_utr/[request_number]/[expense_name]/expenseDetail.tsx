@@ -12,7 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useParams } from 'next/navigation'
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'nextjs-toploader/app';
 import Table from './table';
 import SubmitPopup from '@/components/success_prop'
 type EventTable = {

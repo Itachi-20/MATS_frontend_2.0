@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import DialogBox from '@/components/dialogbox';
 import { Button } from '@/components/ui/button';
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'nextjs-toploader/app';
 
 import DocumentDetails from '@/components/commonPreviewComponents/documents';
 import { useParams } from 'next/navigation'

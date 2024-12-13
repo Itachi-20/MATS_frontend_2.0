@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import Comment_box from '@/components/Comment_box'
 import { useParams } from 'next/navigation'
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'nextjs-toploader/app';
 import { Table } from 'lucide-react';
 import ViewDoc from "@/components/viewDocument";
 import SuccessProp from '@/components/success_prop';

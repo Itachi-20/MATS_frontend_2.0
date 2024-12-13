@@ -10,7 +10,7 @@ import {
   import { useState, useEffect } from 'react';
   import { Button } from "@/components/ui/button";
   import { Toaster, toast } from 'sonner'
-  import { useRouter } from 'next/navigation';
+  import { useRouter } from 'nextjs-toploader/app';
   import Documents from "@/components/documents"
   import SimpleFileUpload from "@/components/multiple_file_upload";
 

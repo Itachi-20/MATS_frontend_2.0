@@ -30,8 +30,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "My App",
-  description: "Next.js App with Auth Context",
+  title: "MATS",
+  description: "Meril Application ",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

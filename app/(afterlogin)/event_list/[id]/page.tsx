@@ -2,7 +2,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'nextjs-toploader/app';
 import Documents from "@/components/documents";
 import { Button } from "@/components/ui/button";
 import EventDetails from "@/components/training_and_education/event_detail";
