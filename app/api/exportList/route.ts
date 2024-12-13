@@ -4,18 +4,18 @@ export async function POST(req: Request) {
     try {
         const body = await req.json();
         const cookies = req.headers.get("cookie")
-        // console.log(cookies,"this api cookie")
-        const activity = body.activity;
+        console.log(cookies,"this api cookie")
+        const search_name = body.activity;
         const startdate = body.startDate;
         const enddate = body.endDate;
-        const page_no = body.pageNo;
-        const response = await fetch(`${process.env.FRAPPE_URL}/api/method/matsapp.api.event.event.get_event_list?activity=${activity}&startdate=${startdate}&enddate=${enddate}&page_no=${page_no}`, {
-            method: 'GET',
+        const search_eventname = body.pageNo;
+        const response = await fetch(`${process.env.FRAPPE_URL}/api/method/matsapp.api.export_data.excel_export.export_to_excel?startdate=${startdate}&enddate=${enddate}`, {
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Cookie': cookies as string 
             },
-            credentials:'include'
+            // credentials:'include'
         });
 
         if (!response.ok) {
