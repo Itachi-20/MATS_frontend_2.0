@@ -19,7 +19,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useRouter } from 'next/navigation';
-import { Loader2 } from "lucide-react";
+
 type Props = {
   tableData: any
 }
@@ -27,14 +27,6 @@ type Props = {
 const table = ({ ...Props }: Props) => {
   const [tableData, setTableData] = useState(Props.tableData);
   const router = useRouter();
-  const [loading, setLoading] = useState(true)
-  console.log('Props.tableData', Props.tableData)
-  useEffect(() => {
-    if (Props.tableData) {
-      setLoading(false);
-    }
-    setLoading(false);
-  }, [Props.tableData]);
   return (
     <div className="p-7 w-full relative z-20 text-black">
       <div className="flex justify-between pb-5">
@@ -214,253 +206,239 @@ const table = ({ ...Props }: Props) => {
               >Action</TableHead>
             </TableRow>
           </TableHeader>
-          {
-            loading ? <TableBody><TableRow ><TableCell colSpan={10} ><>
-              <div className='flex items-center justify-center'>
-                <Loader2 className=" mr-2 h-4 w-4 animate-spin" />
-                Loading...
-              </div>
-            </></TableCell></TableRow></TableBody> :
-              Props.tableData ?
-              <TableBody className="">
-              {tableData &&
-                tableData.map((data: any, index: number) => {
-                  return (
-                    <TableRow key={index} className="text-center text-nowrap">
-                      <TableCell>{data.name ?? "-"}</TableCell>
-                      <TableCell>{data.event_name ?? "-"}</TableCell>
-                      <TableCell> {data.event_type ?? "-"}</TableCell>
-                      <TableCell>{data.event_start_date ?? "-"}</TableCell>
-                      <TableCell>{data.total_estimated_expense}</TableCell>
-                      <TableCell>{data.event_requestor ?? "-"}</TableCell>
-                      <TableCell>{data.owner ?? "-"}</TableCell>
-                      <TableCell>
-                        <div className="flex flex-col items-center">
-                            {data.level1}
-                            {
-                              data.level1 != null &&
-                                (data.status1 == "Approved" ?
-                                  <span className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
-                                      A
-                                  </span>
-                                  : data.status1 == "Pending" ?
-                                      <span className="w-6 rounded-md bg-[#fae8a8] text-[#937818] text-[15px] font-semibold">
-                                          W
-                                      </span>
-                                      : data.status1 == "Rejected" ?
-                                          <span className="w-6 rounded-md bg-[#feadad] text-[#9c0000] text-[15px] font-semibold">
-                                              RJ
-                                          </span>
-                                          :
-                                          <span className="w-6 rounded-md bg-[#adadfe] text-[#363d9a] text-[15px] font-semibold">
-                                              SB
-                                          </span>
-                                
-                              )}
-                            {
-                              data.level1 == null && <span>N/A</span> 
-                            }
-  
-                        </div>
-  
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex flex-col items-center">
-                            {data.level2}
-                            {
-                              data.level2 != null &&
-                                (data.status2 == "Approved" ?
-                                  <span className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
-                                      A
-                                  </span>
-                                  : data.status2 == "Pending" ?
-                                      <span className="w-6 rounded-md bg-[#fae8a8] text-[#937818] text-[15px] font-semibold">
-                                          W
-                                      </span>
-                                      : data.status2 == "Rejected" ?
-                                          <span className="w-6 rounded-md bg-[#feadad] text-[#9c0000] text-[15px] font-semibold">
-                                              RJ
-                                          </span>
-                                          :
-                                          <span className="w-6 rounded-md bg-[#adadfe] text-[#363d9a] text-[15px] font-semibold">
-                                              SB
-                                          </span>
-                                
-                              )}
-                            {
-                              data.level2 == null && <span>N/A</span> 
-                            }
-  
-                        </div>
-  
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex flex-col items-center">
-                            {data.level3}
-                            {
-                              data.level3 != null &&
-                                (data.status3 == "Approved" ?
-                                  <span className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
-                                      A
-                                  </span>
-                                  : data.status3 == "Pending" ?
-                                      <span className="w-6 rounded-md bg-[#fae8a8] text-[#937818] text-[15px] font-semibold">
-                                          W
-                                      </span>
-                                      : data.status3 == "Rejected" ?
-                                          <span className="w-6 rounded-md bg-[#feadad] text-[#9c0000] text-[15px] font-semibold">
-                                              RJ
-                                          </span>
-                                          :
-                                          <span className="w-6 rounded-md bg-[#adadfe] text-[#363d9a] text-[15px] font-semibold">
-                                              SB
-                                          </span>
-                                
-                              )}
-                            {
-                              data.level3 == null && <span>N/A</span> 
-                            }
-  
-                        </div>
-  
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex flex-col items-center">
-                            {data.level4}
-                            {
-                              data.level4 != null &&
-                                (data.status4 == "Approved" ?
-                                  <span className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
-                                      A
-                                  </span>
-                                  : data.status4 == "Pending" ?
-                                      <span className="w-6 rounded-md bg-[#fae8a8] text-[#937818] text-[15px] font-semibold">
-                                          W
-                                      </span>
-                                      : data.status4 == "Rejected" ?
-                                          <span className="w-6 rounded-md bg-[#feadad] text-[#9c0000] text-[15px] font-semibold">
-                                              RJ
-                                          </span>
-                                          :
-                                          <span className="w-6 rounded-md bg-[#adadfe] text-[#363d9a] text-[15px] font-semibold">
-                                              SB
-                                          </span>
-                                
-                              )}
-                            {
-                              data.level4 == null && <span>N/A</span> 
-                            }
-  
-                        </div>
-  
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex flex-col items-center">
-                            {data.level5}
-                            {
-                              data.level5 != null &&
-                                (data.status5 == "Approved" ?
-                                  <span className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
-                                      A
-                                  </span>
-                                  : data.status5 == "Pending" ?
-                                      <span className="w-6 rounded-md bg-[#fae8a8] text-[#937818] text-[15px] font-semibold">
-                                          W
-                                      </span>
-                                      : data.status5 == "Rejected" ?
-                                          <span className="w-6 rounded-md bg-[#feadad] text-[#9c0000] text-[15px] font-semibold">
-                                              RJ
-                                          </span>
-                                          :
-                                          <span className="w-6 rounded-md bg-[#adadfe] text-[#363d9a] text-[15px] font-semibold">
-                                              SB
-                                          </span>
-                                
-                              )}
-                            {
-                              data.level5 == null && <span>N/A</span> 
-                            }
-  
-                        </div>
-  
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex flex-col items-center">
-                            {data.level6}
-                            {
-                              data.level6 != null &&
-                                (data.status6 == "Approved" ?
-                                  <span className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
-                                      A
-                                  </span>
-                                  : data.status6 == "Pending" ?
-                                      <span className="w-6 rounded-md bg-[#fae8a8] text-[#937818] text-[15px] font-semibold">
-                                          W
-                                      </span>
-                                      : data.status6 == "Rejected" ?
-                                          <span className="w-6 rounded-md bg-[#feadad] text-[#9c0000] text-[15px] font-semibold">
-                                              RJ
-                                          </span>
-                                          :
-                                          <span className="w-6 rounded-md bg-[#adadfe] text-[#363d9a] text-[15px] font-semibold">
-                                              SB
-                                          </span>
-                                
-                              )}
-                            {
-                              data.level6 == null && <span>N/A</span> 
-                            }
-  
-                        </div>
-  
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex flex-col items-center">
-                            {data.level7}
-                            {
-                              data.level7 != null &&
-                                (data.status7 == "Approved" ?
-                                  <span className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
-                                      A
-                                  </span>
-                                  : data.status7 == "Pending" ?
-                                      <span className="w-6 rounded-md bg-[#fae8a8] text-[#937818] text-[15px] font-semibold">
-                                          W
-                                      </span>
-                                      : data.status7 == "Rejected" ?
-                                          <span className="w-6 rounded-md bg-[#feadad] text-[#9c0000] text-[15px] font-semibold">
-                                              RJ
-                                          </span>
-                                          :
-                                          <span className="w-6 rounded-md bg-[#adadfe] text-[#363d9a] text-[15px] font-semibold">
-                                              SB
-                                          </span>
-                                
-                              )}
-                            {
-                              data.level7 == null && <span>N/A</span> 
-                            }
-  
-                        </div>
-  
-                      </TableCell>
-                      <TableCell className="sticky right-0 bg-[white] z-50 ">
-                        <div className="">
+          <TableBody className="">
+            {tableData &&
+              tableData.map((data: any, index: number) => {
+                return (
+                  <TableRow key={index} className="text-center text-nowrap">
+                    <TableCell>{data.name ?? "-"}</TableCell>
+                    <TableCell>{data.event_name ?? "-"}</TableCell>
+                    <TableCell> {data.event_type ?? "-"}</TableCell>
+                    <TableCell>{data.event_start_date ?? "-"}</TableCell>
+                    <TableCell>{data.total_estimated_expense}</TableCell>
+                    <TableCell>{data.event_requestor ?? "-"}</TableCell>
+                    <TableCell>{data.owner ?? "-"}</TableCell>
+                    <TableCell>
+                      <div className="flex flex-col items-center">
+                          {data.level1}
                           {
-                            <button className="border rounded-full px-4 py-1 border-[#0e4154] text-[#0e4154]" onClick={() => { router.push(`/event_request_approver/${data.name}`) }}>Take Action</button>
+                            data.level1 != null &&
+                              (data.status1 == "Approved" ?
+                                <span className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
+                                    A
+                                </span>
+                                : data.status1 == "Pending" ?
+                                    <span className="w-6 rounded-md bg-[#fae8a8] text-[#937818] text-[15px] font-semibold">
+                                        W
+                                    </span>
+                                    : data.status1 == "Rejected" ?
+                                        <span className="w-6 rounded-md bg-[#feadad] text-[#9c0000] text-[15px] font-semibold">
+                                            RJ
+                                        </span>
+                                        :
+                                        <span className="w-6 rounded-md bg-[#adadfe] text-[#363d9a] text-[15px] font-semibold">
+                                            SB
+                                        </span>
+                              
+                            )}
+                          {
+                            data.level1 == null && <span>N/A</span> 
                           }
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-            </TableBody>
-  
-                :
-                <TableBody>
-                  <TableRow ><TableCell colSpan={10} className='text-center'>No Results.</TableCell></TableRow>
-                </TableBody>
-          }
+
+                      </div>
+
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex flex-col items-center">
+                          {data.level2}
+                          {
+                            data.level2 != null &&
+                              (data.status2 == "Approved" ?
+                                <span className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
+                                    A
+                                </span>
+                                : data.status2 == "Pending" ?
+                                    <span className="w-6 rounded-md bg-[#fae8a8] text-[#937818] text-[15px] font-semibold">
+                                        W
+                                    </span>
+                                    : data.status2 == "Rejected" ?
+                                        <span className="w-6 rounded-md bg-[#feadad] text-[#9c0000] text-[15px] font-semibold">
+                                            RJ
+                                        </span>
+                                        :
+                                        <span className="w-6 rounded-md bg-[#adadfe] text-[#363d9a] text-[15px] font-semibold">
+                                            SB
+                                        </span>
+                              
+                            )}
+                          {
+                            data.level2 == null && <span>N/A</span> 
+                          }
+
+                      </div>
+
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex flex-col items-center">
+                          {data.level3}
+                          {
+                            data.level3 != null &&
+                              (data.status3 == "Approved" ?
+                                <span className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
+                                    A
+                                </span>
+                                : data.status3 == "Pending" ?
+                                    <span className="w-6 rounded-md bg-[#fae8a8] text-[#937818] text-[15px] font-semibold">
+                                        W
+                                    </span>
+                                    : data.status3 == "Rejected" ?
+                                        <span className="w-6 rounded-md bg-[#feadad] text-[#9c0000] text-[15px] font-semibold">
+                                            RJ
+                                        </span>
+                                        :
+                                        <span className="w-6 rounded-md bg-[#adadfe] text-[#363d9a] text-[15px] font-semibold">
+                                            SB
+                                        </span>
+                              
+                            )}
+                          {
+                            data.level3 == null && <span>N/A</span> 
+                          }
+
+                      </div>
+
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex flex-col items-center">
+                          {data.level4}
+                          {
+                            data.level4 != null &&
+                              (data.status4 == "Approved" ?
+                                <span className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
+                                    A
+                                </span>
+                                : data.status4 == "Pending" ?
+                                    <span className="w-6 rounded-md bg-[#fae8a8] text-[#937818] text-[15px] font-semibold">
+                                        W
+                                    </span>
+                                    : data.status4 == "Rejected" ?
+                                        <span className="w-6 rounded-md bg-[#feadad] text-[#9c0000] text-[15px] font-semibold">
+                                            RJ
+                                        </span>
+                                        :
+                                        <span className="w-6 rounded-md bg-[#adadfe] text-[#363d9a] text-[15px] font-semibold">
+                                            SB
+                                        </span>
+                              
+                            )}
+                          {
+                            data.level4 == null && <span>N/A</span> 
+                          }
+
+                      </div>
+
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex flex-col items-center">
+                          {data.level5}
+                          {
+                            data.level5 != null &&
+                              (data.status5 == "Approved" ?
+                                <span className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
+                                    A
+                                </span>
+                                : data.status5 == "Pending" ?
+                                    <span className="w-6 rounded-md bg-[#fae8a8] text-[#937818] text-[15px] font-semibold">
+                                        W
+                                    </span>
+                                    : data.status5 == "Rejected" ?
+                                        <span className="w-6 rounded-md bg-[#feadad] text-[#9c0000] text-[15px] font-semibold">
+                                            RJ
+                                        </span>
+                                        :
+                                        <span className="w-6 rounded-md bg-[#adadfe] text-[#363d9a] text-[15px] font-semibold">
+                                            SB
+                                        </span>
+                              
+                            )}
+                          {
+                            data.level5 == null && <span>N/A</span> 
+                          }
+
+                      </div>
+
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex flex-col items-center">
+                          {data.level6}
+                          {
+                            data.level6 != null &&
+                              (data.status6 == "Approved" ?
+                                <span className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
+                                    A
+                                </span>
+                                : data.status6 == "Pending" ?
+                                    <span className="w-6 rounded-md bg-[#fae8a8] text-[#937818] text-[15px] font-semibold">
+                                        W
+                                    </span>
+                                    : data.status6 == "Rejected" ?
+                                        <span className="w-6 rounded-md bg-[#feadad] text-[#9c0000] text-[15px] font-semibold">
+                                            RJ
+                                        </span>
+                                        :
+                                        <span className="w-6 rounded-md bg-[#adadfe] text-[#363d9a] text-[15px] font-semibold">
+                                            SB
+                                        </span>
+                              
+                            )}
+                          {
+                            data.level6 == null && <span>N/A</span> 
+                          }
+
+                      </div>
+
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex flex-col items-center">
+                          {data.level7}
+                          {
+                            data.level7 != null &&
+                              (data.status7 == "Approved" ?
+                                <span className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
+                                    A
+                                </span>
+                                : data.status7 == "Pending" ?
+                                    <span className="w-6 rounded-md bg-[#fae8a8] text-[#937818] text-[15px] font-semibold">
+                                        W
+                                    </span>
+                                    : data.status7 == "Rejected" ?
+                                        <span className="w-6 rounded-md bg-[#feadad] text-[#9c0000] text-[15px] font-semibold">
+                                            RJ
+                                        </span>
+                                        :
+                                        <span className="w-6 rounded-md bg-[#adadfe] text-[#363d9a] text-[15px] font-semibold">
+                                            SB
+                                        </span>
+                              
+                            )}
+                          {
+                            data.level7 == null && <span>N/A</span> 
+                          }
+
+                      </div>
+
+                    </TableCell>
+                    <TableCell className="sticky right-0 bg-[white] z-50 ">
+                      <div className="">
+                        {
+                          <button className="border rounded-full px-4 py-1 border-[#0e4154] text-[#0e4154]" onClick={() => { router.push(`/event_request_approver/${data.name}`) }}>Take Action</button>
+                        }
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+          </TableBody>
         </Table>
       </div>
     </div>
