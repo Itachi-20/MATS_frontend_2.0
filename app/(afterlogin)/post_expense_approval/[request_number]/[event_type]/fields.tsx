@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect,useRef } from 'react'
 import {
   Table,
   TableBody,
@@ -133,6 +133,8 @@ type Props = {
 
 const Fields = ({ ...Props }: Props) => {
 
+  const posting_date_ref: React.RefObject<any> = useRef(null);
+    const date_ref: React.RefObject<any> = useRef(null);
   const [open, setOpen] = useState(false);
   const [ccName,setCcName] = useState<ccname[]>();
   const [fileData, setFileData] = useState<DocumentRow[] | undefined>();
@@ -243,6 +245,20 @@ const Fields = ({ ...Props }: Props) => {
  
   console.log("Print", Props.expenseData);
 
+  const handlePostingDateClick = () => {
+    if (posting_date_ref.current) {
+      posting_date_ref.current.showPicker(); // For modern browsers
+      posting_date_ref.current.focus(); // Fallback for older browsers
+    }
+  };
+  
+  const handleDateClick = () => {
+    if (date_ref.current) {
+      date_ref.current.showPicker(); // For modern browsers
+      date_ref.current.focus(); // Fallback for older browsers
+    }
+  };
+
   return (
 
     <>
@@ -263,12 +279,13 @@ const Fields = ({ ...Props }: Props) => {
               readOnly={Props?.expenseData?.actual_vendors[0]?.is_approved ? true : false}
             ></Input>
           </div>
-          <div className='grid-cols-1 space-y-2'>
+          <div className='grid-cols-1 space-y-2' onClick={()=>{handlePostingDateClick()}}>
             <label htmlFor="amount" className="text-black md:text-sm md:font-normal capitalize">
               Posting Date<span className="text-[#e60000] ">*</span>
             </label>
             <Input
               type='date'
+              ref={posting_date_ref}
               value={Props.formdata?.posting_date ?? ""}
               className="text-black shadow md:rounded-sm md:py-1"
               placeholder="Type here ..."
@@ -293,12 +310,13 @@ const Fields = ({ ...Props }: Props) => {
               readOnly={Props?.expenseData?.actual_vendors[0]?.is_approved ? true : false}
             ></Input>
           </div>
-          <div className='grid-cols-1 space-y-2'>
+          <div className='grid-cols-1 space-y-2'onClick={()=>{handleDateClick()}}>
             <label htmlFor="date" className="text-black md:text-sm md:font-normal capitalize">
               Date<span className="text-[#e60000] ">*</span>
             </label>
             <Input
               type='date'
+              ref={date_ref}
               value={Props.formdata?.date ?? ""}
               className="text-black shadow md:rounded-sm md:py-1"
               placeholder="Type here ..."

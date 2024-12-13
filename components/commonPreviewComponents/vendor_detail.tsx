@@ -185,6 +185,9 @@ const vendor_Details = ({ ...Props }: Props) => {
           Vendor Details
         </h1>
       </div>
+      <h3 className="text-black md:text-[30px] md:font-medium capitalize md:pb-4">
+          Logistics
+        </h3>
       <div className="border border-[#848484] p-7 rounded-[50px] w-full mr-4 mb-8  bg-white">
         <Table className={""}>
           <TableHeader className={"bg-[#E0E9FF]"}>
@@ -229,6 +232,9 @@ const vendor_Details = ({ ...Props }: Props) => {
                 </div>
       </div>
 
+      <h3 className="text-black md:text-[30px] md:font-medium capitalize md:pb-4">
+          Compansation
+        </h3>
       <div className="border border-[#848484] p-7 rounded-[50px] w-full mr-4  bg-white">
         <Table className={""}>
           <TableHeader className={"bg-[#E0E9FF]"}>
