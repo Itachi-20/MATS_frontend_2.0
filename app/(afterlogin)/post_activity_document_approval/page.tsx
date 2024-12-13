@@ -22,6 +22,8 @@ import OrganizationDetailsMonetary from '@/components/monetoryPreviewComponents/
 import BeneficialDetails from "@/components/previewPatientSupportComponents/beneficialDetails"
 import ShippingDetails from "@/components/previewPatientSupportComponents/shippingDetails"
 import EquipmentDetails from "@/components/nonMonetoryPreviewComponents/equipmentDetails"
+import Sponsorship_Details from "@/components/sponsorshipSupportPreviewComponents/sponsorshipDetails";
+import Other_Details from "@/components/sponsorshipSupportPreviewComponents/other_details";
 
 type EventEntry = {
   name: string;
@@ -322,6 +324,19 @@ useEffect(()=>{
         <ShippingDetails
         eventData={eventData}
         />
+        </>
+
+      }
+      {
+        eventData?.event_type == "Sponsorship Support" &&
+        <>
+          <Sponsorship_Details
+            eventData={eventData}
+          />
+
+          <Other_Details
+            eventData={eventData}
+          />
         </>
 
       }

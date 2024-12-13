@@ -188,7 +188,7 @@ const Sponsorship_Details = ({...Props}:Props) => {
                     Sponsorship Details
                 </h1>
                 <div className="pt-3">
-                    <svg width="23" height="23" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    {/* <svg width="23" height="23" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g id="Group">
                             <g id="Vector">
                                 <mask id="path-1-inside-1_605_29773" fill="white">
@@ -198,7 +198,7 @@ const Sponsorship_Details = ({...Props}:Props) => {
                             </g>
                             <path id="Vector_2" d="M21.939 4.8002C22.4663 4.27287 22.7626 3.55765 22.7626 2.81189C22.7626 2.06613 22.4663 1.35092 21.939 0.823585C21.4117 0.296252 20.6965 9.62388e-09 19.9507 0C19.2049 -9.62388e-09 18.4897 0.296252 17.9624 0.823585L7.53019 11.2186C6.99573 11.7512 6.69531 12.4746 6.69531 13.2291C6.69531 14.7966 7.96602 16.0673 9.53351 16.0673C10.288 16.0673 11.0114 15.7669 11.544 15.2324L21.939 4.8002ZM16.0678 2.678L20.0846 6.69479L16.0678 2.678Z" fill="black" />
                         </g>
-                    </svg>
+                    </svg> */}
                 </div>
             </div>
             <div className="grid md:grid-cols-2 md:gap-6">
