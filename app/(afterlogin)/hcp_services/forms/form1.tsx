@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useRef } from "react";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -159,6 +159,8 @@ const Form1 = ({ ...Props }: Props) => {
   const [reportingHeadDropdown, setReportingHeadDropdown] = useState<reportingHeadDropdown | null>(null)  
   const [loading, setLoading] = useState(true);
   const { role, name, userid, clearAuthData } = useAuth();
+  const start_date_ref: React.RefObject<any> = useRef(null);
+  const end_date_ref: React.RefObject<any> = useRef(null);
 
   const handleSelectChange = (value: string, name: string) => {
     setFormData((prev) => ({ ...prev, [name]: value }) as FormData);
@@ -286,6 +288,20 @@ const Form1 = ({ ...Props }: Props) => {
       e.target.value = "";
     }
     handlefieldChange(e);
+  };
+
+  const handleStartDateClick = () => {
+    if (start_date_ref.current) {
+      start_date_ref.current.showPicker(); // For modern browsers
+      start_date_ref.current.focus(); // Fallback for older browsers
+    }
+  };
+  
+  const handleEndDateClick = () => {
+    if (end_date_ref.current) {
+      end_date_ref.current.showPicker(); // For modern browsers
+      end_date_ref.current.focus(); // Fallback for older browsers
+    }
   };
 
   useEffect(() => {
@@ -727,26 +743,30 @@ const Form1 = ({ ...Props }: Props) => {
               Sub Type Details
             </h1>
             <div className="grid md:grid-cols-2 md:gap-6">
-              <div className="flex flex-col md:gap-2">
-                <label className="text-black md:text-sm md:font-normal capitalize">
+              <div className="flex flex-col md:gap-2"onClick={()=>handleStartDateClick()}>
+                <label className="text-black md:text-sm md:font-normal capitalize"htmlFor="start_date">
                   Start Date<span className="text-[#e60000]">*</span>
                 </label>
                 <Input
                   className="text-black shadow md:rounded-xl md:py-5"
                   type="date"
+                  id="start_date"
+                  ref={start_date_ref}
                   placeholder="dd/mm/yy"
                   name="event_start_date"
                   onChange={(e) => { handleEventStartDateValidate(e) }}
                   defaultValue={Props.previewData?.event_start_date ? Props.previewData.event_start_date : ""}
                 ></Input>
               </div>
-              <div className="flex flex-col md:gap-2">
-                <label className="text-black md:text-sm md:font-normal capitalize">
+              <div className="flex flex-col md:gap-2"onClick={()=>handleEndDateClick()}>
+                <label className="text-black md:text-sm md:font-normal capitalize"htmlFor="end_date">
                   End Date<span className="text-[#e60000]">*</span>
                 </label>
                 <Input
                   className="text-black shadow md:rounded-xl md:py-5"
                   type="date"
+                  id="end_date"
+                  ref={end_date_ref}
                   placeholder="dd/mm/yy"
                   name="event_end_date"
                   onChange={(e) => { handleEventEndDateValidate(e) }}
@@ -843,26 +863,30 @@ const Form1 = ({ ...Props }: Props) => {
               Sub Type Details
             </h1>
             <div className="grid md:grid-cols-2 md:gap-6">
-              <div className="flex flex-col md:gap-2">
-                <label className="text-black md:text-sm md:font-normal capitalize">
+              <div className="flex flex-col md:gap-2" onClick={()=>{handleStartDateClick()}}>
+                <label className="text-black md:text-sm md:font-normal capitalize" htmlFor="start_date">
                   Start Date<span className="text-[#e60000]">*</span>
                 </label>
                 <Input
                   className="text-black shadow md:rounded-xl md:py-5"
                   type="date"
+                  id="start_date"
+                  ref={start_date_ref}
                   placeholder="dd/mm/yy"
                   name="event_start_date"
                   onChange={(e) => { handleEventStartDateValidate(e) }}
                   defaultValue={Props.previewData?.event_start_date ? Props.previewData.event_start_date : ""}
                 ></Input>
               </div>
-              <div className="flex flex-col md:gap-2">
-                <label className="text-black md:text-sm md:font-normal capitalize">
+              <div className="flex flex-col md:gap-2" onClick={()=>{handleEndDateClick()}}>
+                <label className="text-black md:text-sm md:font-normal capitalize" htmlFor="end_date">
                   End Date<span className="text-[#e60000]">*</span>
                 </label>
                 <Input
                   className="text-black shadow md:rounded-xl md:py-5"
                   type="date"
+                  id="end_date"
+                  ref={end_date_ref}
                   placeholder="dd/mm/yy"
                   name="event_end_date"
                   onChange={(e) => { handleEventEndDateValidate(e) }}
@@ -915,26 +939,30 @@ const Form1 = ({ ...Props }: Props) => {
               Sub Type Details
             </h1>
             <div className="grid md:grid-cols-2 md:gap-6">
-              <div className="flex flex-col md:gap-2">
-                <label className="text-black md:text-sm md:font-normal capitalize">
+              <div className="flex flex-col md:gap-2" onClick={()=>{handleStartDateClick()}}>
+                <label className="text-black md:text-sm md:font-normal capitalize"htmlFor="start_date">
                   Start Date<span className="text-[#e60000]">*</span>
                 </label>
                 <Input
                   className="text-black shadow md:rounded-xl md:py-5"
                   type="date"
+                  id="start_date"
+                  ref={start_date_ref}
                   placeholder="dd/mm/yy"
                   name="event_start_date"
                   onChange={(e) => { handleEventStartDateValidate(e) }}
                   defaultValue={Props.previewData?.event_start_date ? Props.previewData.event_start_date : ""}
                 ></Input>
               </div>
-              <div className="flex flex-col md:gap-2">
-                <label className="text-black md:text-sm md:font-normal capitalize">
+              <div className="flex flex-col md:gap-2" onClick={()=>{handleEndDateClick()}}>
+                <label className="text-black md:text-sm md:font-normal capitalize" htmlFor="end_date">
                   End Date<span className="text-[#e60000]">*</span>
                 </label>
                 <Input
                   className="text-black shadow md:rounded-xl md:py-5"
                   type="date"
+                  id="end_date"
+                  ref={end_date_ref}
                   placeholder="dd/mm/yy"
                   name="event_end_date"
                   onChange={(e) => { handleEventEndDateValidate(e) }}
@@ -966,26 +994,30 @@ const Form1 = ({ ...Props }: Props) => {
               Sub Type Details
             </h1>
             <div className="grid md:grid-cols-2 md:gap-6">
-              <div className="flex flex-col md:gap-2">
-                <label className="text-black md:text-sm md:font-normal capitalize">
+              <div className="flex flex-col md:gap-2"onClick={()=>handleStartDateClick()}>
+                <label className="text-black md:text-sm md:font-normal capitalize" htmlFor="start_date">
                   Start Date<span className="text-[#e60000]">*</span>
                 </label>
                 <Input
                   className="text-black shadow md:rounded-xl md:py-5"
                   type="date"
+                  id="start_date"
+                  ref={start_date_ref}
                   placeholder="dd/mm/yy"
                   name="event_start_date"
                   onChange={(e) => { handleEventStartDateValidate(e) }}
                   defaultValue={Props.previewData?.event_start_date ? Props.previewData?.event_start_date : ""}
                 ></Input>
               </div>
-              <div className="flex flex-col md:gap-2">
-                <label className="text-black md:text-sm md:font-normal capitalize">
+              <div className="flex flex-col md:gap-2" onClick={()=>handleEndDateClick()}>
+                <label className="text-black md:text-sm md:font-normal capitalize"htmlFor="end_date">
                   End Date<span className="text-[#e60000]">*</span>
                 </label>
                 <Input
                   className="text-black shadow md:rounded-xl md:py-5"
                   type="date"
+                  id="end_date"
+                  ref={end_date_ref}
                   placeholder="dd/mm/yy"
                   name="event_end_date"
                   onChange={(e) => { handleEventEndDateValidate(e) }}

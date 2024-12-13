@@ -1,6 +1,6 @@
 'use client'
 import React from 'react'
-import { useState, useEffect } from 'react'
+import { useState, useEffect,useRef } from 'react'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { Input } from '@/components/ui/input'
@@ -189,6 +189,8 @@ const ExpensePage = ({ ...Props }: Props) => {
       narration: Props.expensedata?.actual_vendors[0].narration,
     }
   );
+  const posting_date_ref: React.RefObject<any> = useRef(null);
+  const payment_date_ref: React.RefObject<any> = useRef(null);
   const [gldropdowndata, setGLDropdownData] = useState<GLdropdown[] | []>([])
   const [glName, setGLName] = useState<string>();
   const [glcode, setGLCode] = useState<string>();
@@ -281,6 +283,20 @@ const ExpensePage = ({ ...Props }: Props) => {
     formdata.gl_code = parglcode[0]?.gl_code;
 
   }
+
+  const handlePostingDateClick = () => {
+    if (posting_date_ref.current) {
+      posting_date_ref.current.showPicker(); // For modern browsers
+      posting_date_ref.current.focus(); // Fallback for older browsers
+    }
+  };
+  
+  const handlePaymentDateClick = () => {
+    if (payment_date_ref.current) {
+      payment_date_ref.current.showPicker(); // For modern browsers
+      payment_date_ref.current.focus(); // Fallback for older browsers
+    }
+  };
   return (
 
     <>
@@ -347,7 +363,7 @@ const ExpensePage = ({ ...Props }: Props) => {
               onChange={(e) => handleFieldChange(e)}
             ></Input>
           </div>
-          <div className='grid-cols-1 space-y-2'>
+          <div className='grid-cols-1 space-y-2' onClick={()=>{handlePostingDateClick()}}>
             <label htmlFor="amount" className="text-black md:text-sm md:font-normal capitalize">
               Posting Date<span className="text-[#e60000] ">*</span>
             </label>
@@ -357,6 +373,7 @@ const ExpensePage = ({ ...Props }: Props) => {
               // placeholder={formdata.posting_date ? formdata.posting_date : 'Type here ...'}
               id='posting_date'
               name='posting_date'
+              ref={posting_date_ref}
               value={formdata.posting_date ?? ''}
               onChange={(e) => handleFieldChange(e)}
             ></Input>
@@ -528,7 +545,7 @@ const ExpensePage = ({ ...Props }: Props) => {
               onChange={handleFieldChange}
             ></Input>
           </div>
-          <div className='grid-cols-1 space-y-2'>
+          <div className='grid-cols-1 space-y-2'onClick={()=>{handlePaymentDateClick()}}>
             <label htmlFor="payment_date" className="text-black md:text-sm md:font-normal capitalize">
               Payment Date<span className="text-[#e60000] ">*</span>
             </label>
@@ -538,6 +555,7 @@ const ExpensePage = ({ ...Props }: Props) => {
               // placeholder={formdata.payment_date ? formdata.payment_date as string : "Type Here ..."}
               id='payment_date'
               name='payment_date'
+              ref={payment_date_ref}
               value={formdata.payment_date as string ?? ''}
               onChange={handleFieldChange}
             ></Input>
