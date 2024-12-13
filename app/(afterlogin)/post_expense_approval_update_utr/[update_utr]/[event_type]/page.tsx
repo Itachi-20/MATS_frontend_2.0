@@ -198,35 +198,35 @@ const page = () => {
                 const data = await response.json();
                 setExpenseData(data.data);
                 setFormData((prev)=>({...prev,
-                    name: data.data.actual_vendors[0].name,
-                    document_no: data.data.actual_vendors[0].document_no,
-                    posting_date: data.data.actual_vendors[0].posting_date,
-                    invoice_number: data.data.actual_vendors[0].invoice_number,
+                    name: data.data.actual_vendors[0]?.name,
+                    document_no: data.data.actual_vendors[0]?.document_no,
+                    posting_date: data.data.actual_vendors[0]?.posting_date,
+                    invoice_number: data.data.actual_vendors[0]?.invoice_number,
                     date: data.data.event_date,
-                    basic_amount: data.data.actual_vendors[0].basic_amount,
-                    gst: data.data.actual_vendors[0].gst,
-                    invoice_amount: data.data.actual_vendors[0].invoice_amount,
-                    tds: data.data.actual_vendors[0].tds,
-                    net_amount: data.data.actual_vendors[0].net_amount,
-                    division: data.data.actual_vendors[0].division,
-                    cost_center: data.data.actual_vendors[0].cost_center,
-                    cc_name: data.data.actual_vendors[0].cc_name,
-                    nature: data.data.actual_vendors[0].nature,
-                    company_name: data.data.actual_vendors[0].company_code,
-                    gl_name: data.data.actual_vendors[0].gl_name,
-                    gl_code: data.data.actual_vendors[0].gl_code,
-                    utr_number: data.data.actual_vendors[0].utr_number,
-                    payment_date: data.data.actual_vendors[0].payment_date,
-                    zone: data.data.actual_vendors[0].zone,
-                    state: data.data.actual_vendors[0].state_code,
-                    city: data.data.actual_vendors[0].city,
-                    narration: data.data.actual_vendors[0].narration,
+                    basic_amount: data.data.actual_vendors[0]?.basic_amount,
+                    gst: data.data.actual_vendors[0]?.gst,
+                    invoice_amount: data.data.actual_vendors[0]?.invoice_amount,
+                    tds: data.data.actual_vendors[0]?.tds,
+                    net_amount: data.data.actual_vendors[0]?.net_amount,
+                    division: data.data.actual_vendors[0]?.division,
+                    cost_center: data.data.actual_vendors[0]?.cost_center,
+                    cc_name: data.data.actual_vendors[0]?.cc_name,
+                    nature: data.data.actual_vendors[0]?.nature,
+                    company_name: data.data.actual_vendors[0]?.company_code,
+                    gl_name: data.data.actual_vendors[0]?.gl_name,
+                    gl_code: data.data.actual_vendors[0]?.gl_code,
+                    utr_number: data.data.actual_vendors[0]?.utr_number,
+                    payment_date: data.data.actual_vendors[0]?.payment_date,
+                    zone: data.data.actual_vendors[0]?.zone,
+                    state: data.data.actual_vendors[0]?.state_code,
+                    city: data.data.actual_vendors[0]?.city,
+                    narration: data.data.actual_vendors[0]?.narration,
                     action:"",
                     remark:"",
                     isClosed: true
                 }))
 
-                console.log(data.data.actual_vendors[0].name, 'formdata is set')
+                console.log(data.data.actual_vendors[0]?.name, 'formdata is set')
 
             } else {
                 console.log("Login failed");
