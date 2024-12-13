@@ -23,9 +23,9 @@ import {
 import { Textarea } from '@/components/ui/textarea';
 
 type city = {
-  name:string,
+  name: string,
   city: string,
-  state:string,
+  state: string,
 }
 
 type DocumentRow = {
@@ -76,9 +76,9 @@ type eventCostCenter = {
 };
 
 type Glcode = {
-  name:string,
-  gl_code:string,
-  gl_name:string,
+  name: string,
+  gl_code: string,
+  gl_name: string,
 
 }
 
@@ -127,8 +127,8 @@ type Props = {
   dropdown: DropdownData;
   expenseData: EventData;
   formdata: FormData;
-  handlefieldChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>)=>void
-  handleSelectChange:(value: string, name: string)=>void
+  handlefieldChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void
+  handleSelectChange: (value: string, name: string) => void
   // view: string | null;
   // handleSubmit: (e: React.MouseEvent<HTMLButtonElement>)=>void
 };
@@ -136,48 +136,43 @@ type Props = {
 const Fields = ({ ...Props }: Props) => {
 
   const [open, setOpen] = useState(false);
-  const [ccName,setCcName] = useState<ccname[]>();
+  const [ccName, setCcName] = useState<ccname[]>();
   const [fileData, setFileData] = useState<DocumentRow[] | undefined>();
   const [glCodeDropdown, setGlCodeDropdown] = useState<Glcode[] | undefined>();
   const [particularGlCode, setParticularGlCode] = useState<Glcode[]>();
   const [eventCostCenter, setEventCostCenter] =
-    useState<eventCostCenter | null >(null);
+    useState<eventCostCenter | null>(null);
 
   const [filtercity, setFiltercity] = useState<city[]>();
-  
-  const handleglcode = async (value:any) => {
+
+  const handleglcode = async (value: any) => {
     try {
-        const response = await fetch(
-            "/api/postExpenseApproval/glDropdownData",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                credentials: 'include',
-                body: JSON.stringify({
-                  company_name: value,
-                  event_type: Props?.expenseData?.event_type,
-                }),
-            }
-        );
-
-        if (response.ok) {
-            const data = await response.json();
-            // console.log("@@@@@@@data", data);
-            // console.log("@@@@@@@eventtype", Props?.expenseData?.event_type);
-            setGlCodeDropdown(data && data.data);
-            // Props.formdata.gl_code = "";
-            // console.log(data, 'data')
-
-        } else {
-            // console.log("@@@@@@@", Props?.expenseData?.event_type);
-            console.log("Login failed");
+      const response = await fetch(
+        "/api/postExpenseApproval/glDropdownData",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: 'include',
+          body: JSON.stringify({
+            company_name: value,
+            event_type: Props?.expenseData?.event_type,
+          }),
         }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        setGlCodeDropdown(data && data.data);
+      } else {
+        console.log("Response not okay while fetching gl code");
+      }
     } catch (error) {
-        console.error("Error during login:", error);
+        console.error("Error during handling gl code:", error);
     } 
   };
+
   const handleDivisionChange = async (value: string) => {
     try {
       const response = await fetch(
@@ -193,7 +188,7 @@ const Fields = ({ ...Props }: Props) => {
         }
       );
 
-      
+
       if (response.ok) {
         const data = await response.json();
         setEventCostCenter(data && data.data);
@@ -222,23 +217,18 @@ const Fields = ({ ...Props }: Props) => {
   }
   useEffect(()=>{
     handleglcode(Props.formdata?.company_name);
-  },[Props?.formdata?.company_name]);
+  }, [Props?.formdata?.company_name]);
 
-  useEffect(()=>{
+  useEffect(() => {
     handleDivisionChange(Props.formdata?.division as string);
-  },[Props?.formdata?.division]);
+  }, [Props?.formdata?.division]);
 
-  useEffect(()=>{
+  useEffect(() => {
     handleStateChange(Props.formdata?.state as string);
-  },[Props?.formdata?.state]);
-  // useEffect(()=>{
-  //   // console.log("In side useEFFECT", Props?.formdata?.company_name)
-  //   handleCostCenter(Props?.formdata?.cost_center);
-  // },[Props?.formdata?.cost_center]);
-  useEffect(()=>{
+  }, [Props?.formdata?.state]);
+  useEffect(() => {
     handleStateChange(Props?.formdata?.state as string);
-  },[])
- 
+  },[]);
 
   return (
 
@@ -256,7 +246,7 @@ const Fields = ({ ...Props }: Props) => {
               placeholder="Type here ..."
               id='document_no'
               name='document_no'
-              onChange={(e)=>Props.handlefieldChange(e)}
+              onChange={(e) => Props.handlefieldChange(e)}
               readOnly={Props?.expenseData?.actual_vendors[0]?.is_approved ? true : false}
             ></Input>
           </div>
@@ -271,7 +261,7 @@ const Fields = ({ ...Props }: Props) => {
               placeholder="Type here ..."
               id='posting_date'
               name='posting_date'
-              onChange={(e)=>Props.handlefieldChange(e)}
+              onChange={(e) => Props.handlefieldChange(e)}
               readOnly={Props?.expenseData?.actual_vendors[0]?.is_approved ? true : false}
             ></Input>
           </div>
@@ -286,7 +276,7 @@ const Fields = ({ ...Props }: Props) => {
               placeholder="Type here ..."
               id='invoice_number'
               name='invoice_number'
-              onChange={(e)=>Props.handlefieldChange(e)}
+              onChange={(e) => Props.handlefieldChange(e)}
               readOnly={Props?.expenseData?.actual_vendors[0]?.is_approved ? true : false}
             ></Input>
           </div>
@@ -301,7 +291,7 @@ const Fields = ({ ...Props }: Props) => {
               placeholder="Type here ..."
               id='date'
               name='date'
-              onChange={(e)=>Props.handlefieldChange(e)}
+              onChange={(e) => Props.handlefieldChange(e)}
               readOnly={Props?.expenseData?.actual_vendors[0]?.is_approved ? true : false}
             ></Input>
           </div>
@@ -316,7 +306,7 @@ const Fields = ({ ...Props }: Props) => {
               placeholder="Type here ..."
               id='date'
               name='basic_amount'
-              onChange={(e)=>Props.handlefieldChange(e)}
+              onChange={(e) => Props.handlefieldChange(e)}
               readOnly={Props?.expenseData?.actual_vendors[0]?.is_approved ? true : false}
             ></Input>
           </div>
@@ -347,7 +337,7 @@ const Fields = ({ ...Props }: Props) => {
               placeholder="Type here ..."
               id='invoice_amount'
               name='invoice_amount'
-              onChange={(e)=>Props.handlefieldChange(e)}
+              onChange={(e) => Props.handlefieldChange(e)}
               readOnly={Props?.expenseData?.actual_vendors[0]?.is_approved ? true : false}
             ></Input>
           </div>
@@ -362,7 +352,7 @@ const Fields = ({ ...Props }: Props) => {
               placeholder="Type here ..."
               id='tds'
               name='tds'
-              onChange={(e)=>Props.handlefieldChange(e)}
+              onChange={(e) => Props.handlefieldChange(e)}
               readOnly={Props?.expenseData?.actual_vendors[0]?.is_approved ? true : false}
             ></Input>
           </div>
@@ -377,7 +367,7 @@ const Fields = ({ ...Props }: Props) => {
               placeholder="Type here ..."
               id='net_amount'
               name='net_amount'
-              onChange={(e)=>Props.handlefieldChange(e)}
+              onChange={(e) => Props.handlefieldChange(e)}
               readOnly={Props?.expenseData?.actual_vendors[0]?.is_approved ? true : false}
             ></Input>
           </div>
@@ -386,12 +376,12 @@ const Fields = ({ ...Props }: Props) => {
             <label htmlFor="division" className="text-black md:text-sm md:font-normal capitalize">
               Division<span className="text-[#e60000] ">*</span>
             </label>
-              
-            <Select 
-              onValueChange={(value) => {handleDivisionChange(value); Props.handleSelectChange(value, "division")}} 
+
+            <Select
+              onValueChange={(value) => { handleDivisionChange(value); Props.handleSelectChange(value, "division") }}
               value={Props.formdata?.division ?? ""}
               disabled={Props?.expenseData?.actual_vendors[0]?.is_approved ? true : false}
-              >
+            >
               <SelectTrigger className="dropdown rounded-sm gap-4">
                 <SelectValue placeholder="-Select-" />
               </SelectTrigger>
@@ -409,9 +399,9 @@ const Fields = ({ ...Props }: Props) => {
             <label htmlFor="cost_center" className="text-black md:text-sm md:font-normal capitalize">
               Cost Center<span className="text-[#e60000] ">*</span>
             </label>
-            <Select 
+            <Select
               value={Props.formdata?.cost_center ?? ""}
-              onValueChange={(value) =>  { handleCostCenter(value); Props.handleSelectChange(value, "cost_center");}}
+              onValueChange={(value) => { handleCostCenter(value); Props.handleSelectChange(value, "cost_center"); }}
               disabled={Props?.expenseData?.actual_vendors[0]?.is_approved ? true : false}
             >
               <SelectTrigger className="dropdown rounded-sm gap-4">
@@ -440,7 +430,7 @@ const Fields = ({ ...Props }: Props) => {
               placeholder="Type here ..."
               id='cc_name'
               name='cc_name'
-              onChange={(e)=>Props.handlefieldChange(e)}
+              onChange={(e) => Props.handlefieldChange(e)}
               readOnly
             ></Input>
           </div>
@@ -456,7 +446,7 @@ const Fields = ({ ...Props }: Props) => {
               placeholder="Type here ..."
               id='nature'
               name='nature'
-              onChange={(e)=>Props.handlefieldChange(e)}
+              onChange={(e) => Props.handlefieldChange(e)}
               readOnly={Props?.expenseData?.actual_vendors[0]?.is_approved ? true : false}
 
             ></Input>
@@ -465,12 +455,12 @@ const Fields = ({ ...Props }: Props) => {
             <label htmlFor="company_name" className="text-black md:text-sm md:font-normal capitalize">
               Company Name<span className="text-[#e60000] ">*</span>
             </label>
-            <Select 
+            <Select
               value={Props.formdata?.company_name as string}
-              onValueChange={(value) => {handleglcode(value); Props.handleSelectChange(value, "company_name");}}
+              onValueChange={(value) => { handleglcode(value); Props.handleSelectChange(value, "company_name"); }}
               disabled={Props?.expenseData?.actual_vendors[0]?.is_approved ? true : false}
             >
-              
+
               <SelectTrigger className="dropdown rounded-sm gap-4">
                 <SelectValue placeholder="-Select-" />
               </SelectTrigger>
@@ -487,12 +477,12 @@ const Fields = ({ ...Props }: Props) => {
             <label htmlFor="gl_name" className="text-black md:text-sm md:font-normal capitalize">
               GL Name<span className="text-[#e60000] ">*</span>
             </label>
-            <Select 
+            <Select
               value={Props.formdata?.gl_name ?? ""}
-              onValueChange={(value) => {handleGlname(value); Props.handleSelectChange(value, "gl_name"); }}
+              onValueChange={(value) => { handleGlname(value); Props.handleSelectChange(value, "gl_name"); }}
               disabled={Props?.expenseData?.actual_vendors[0]?.is_approved ? true : false}
-              >
-              
+            >
+
               <SelectTrigger className="dropdown rounded-sm gap-4">
                 <SelectValue placeholder="-Select-" />
               </SelectTrigger>
@@ -510,18 +500,18 @@ const Fields = ({ ...Props }: Props) => {
               GL Code<span className="text-[#e60000] ">*</span>
             </label>
             <Input
-            type='text'
-            value={Props.formdata?.gl_code ?? ""}
-            className="text-black shadow md:rounded-sm md:py-1"
+              type='text'
+              value={Props.formdata?.gl_code ?? ""}
+              className="text-black shadow md:rounded-sm md:py-1"
               placeholder="Type here ..."
               id='gl_code'
               name='gl_code'
-              onChange={(e)=>Props.handlefieldChange(e)}
+              onChange={(e) => Props.handlefieldChange(e)}
               readOnly
             ></Input>
           </div>
-          
-          { (Props.expenseData?.actual_vendors[0]?.status == "Post Expense Approved" || Props.expenseData?.actual_vendors[0]?.status == "Post Expense Closed") &&
+
+          {(Props.expenseData?.actual_vendors[0]?.status == "Post Expense Approved" || Props.expenseData?.actual_vendors[0]?.status == "Post Expense Closed") &&
             <>
               <div className='grid-cols-1 space-y-2'>
                 <label htmlFor="utr_number" className="text-black md:text-sm md:font-normal capitalize">
@@ -534,7 +524,7 @@ const Fields = ({ ...Props }: Props) => {
                   placeholder="Type here ..."
                   id='utr_number'
                   name='utr_number'
-                  onChange={(e)=>Props.handlefieldChange(e)}
+                  onChange={(e) => Props.handlefieldChange(e)}
                   readOnly={Props?.expenseData?.actual_vendors[0]?.is_approved ? true : false}
                 ></Input>
               </div>
@@ -549,7 +539,7 @@ const Fields = ({ ...Props }: Props) => {
                   placeholder="Type here ..."
                   id='payment_date'
                   name='payment_date'
-                  onChange={(e)=>Props.handlefieldChange(e)}
+                  onChange={(e) => Props.handlefieldChange(e)}
                   readOnly={Props?.expenseData?.actual_vendors[0]?.is_approved ? true : false}
                 ></Input>
               </div>
@@ -559,10 +549,10 @@ const Fields = ({ ...Props }: Props) => {
             <label htmlFor="zone" className="text-black md:text-sm md:font-normal capitalize">
               Zone<span className="text-[#e60000] ">*</span>
             </label>
-            <Select 
-            value={Props.formdata?.zone ?? ""}
-            onValueChange={(value) => Props.handleSelectChange(value, "zone")}
-            disabled={Props?.expenseData?.actual_vendors[0]?.is_approved ? true : false}
+            <Select
+              value={Props.formdata?.zone ?? ""}
+              onValueChange={(value) => Props.handleSelectChange(value, "zone")}
+              disabled={Props?.expenseData?.actual_vendors[0]?.is_approved ? true : false}
             >
               <SelectTrigger className="dropdown rounded-sm gap-4">
                 <SelectValue placeholder="-Select-" />
@@ -580,10 +570,10 @@ const Fields = ({ ...Props }: Props) => {
             <label htmlFor="state" className="text-black md:text-sm md:font-normal capitalize">
               State<span className="text-[#e60000] ">*</span>
             </label>
-            <Select 
-            value={Props.formdata?.state ?? ""}
-            onValueChange={(value) => {handleStateChange(value); Props.handleSelectChange(value, "state");}}
-            disabled={Props?.expenseData?.actual_vendors[0]?.is_approved ? true : false}
+            <Select
+              value={Props.formdata?.state ?? ""}
+              onValueChange={(value) => { handleStateChange(value); Props.handleSelectChange(value, "state"); }}
+              disabled={Props?.expenseData?.actual_vendors[0]?.is_approved ? true : false}
             >
               <SelectTrigger className="dropdown rounded-sm gap-4">
                 <SelectValue placeholder="-Select-" />
@@ -603,7 +593,7 @@ const Fields = ({ ...Props }: Props) => {
             </label>
             <Select
               value={Props.formdata?.city ?? ""}
-              onValueChange={(value) =>  Props.handleSelectChange(value, "city")}
+              onValueChange={(value) => Props.handleSelectChange(value, "city")}
               disabled={Props?.expenseData?.actual_vendors[0]?.is_approved ? true : false}
             >
               <SelectTrigger className="dropdown rounded-sm gap-4">
@@ -628,7 +618,7 @@ const Fields = ({ ...Props }: Props) => {
               placeholder="Type here ..."
               id='narration'
               name='narration'
-              onChange={(e)=>Props.handlefieldChange(e)}
+              onChange={(e) => Props.handlefieldChange(e)}
               readOnly={Props?.expenseData?.actual_vendors[0]?.is_approved ? true : false}
             ></Textarea>
           </div>

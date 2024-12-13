@@ -1,4 +1,5 @@
 "use client";
+import { Loader2 } from "lucide-react";
 import React, { useCallback } from "react";
 import { useEffect, useState } from "react"
 import Image from "next/image";
@@ -61,6 +62,7 @@ export default function EventList() {
   const handleExportButton = () => {
       exportEventList();
 };
+
   const handleClick = (refno: string, status: string, eventType: string) => {
     console.log(eventType, "function event type")
     if (status == "Draft") {
@@ -83,8 +85,12 @@ export default function EventList() {
     } else {
       router.push(`/event_list/${refno}`)
     }
-  };
+  }
+
+  const [tableData, setTableData] = useState<EventTable[]>()
+  const [loading, setLoading] = useState(true)
   const fetchTableData = async () => {
+    setLoading(true)
     try {
       const Data = await fetch(
         `/api/eventList`,
@@ -99,16 +105,18 @@ export default function EventList() {
             startDate: startDate,
             endDate: endDate,
             pageNo: currentPage,
-
           })
         }
       );
       if (Data.ok) {
         const data = await Data.json();
         setTableData(data.message)
+        setLoading(false)
+      }else{
+        setLoading(false)
       }
-
     } catch (error) {
+      setLoading(false);
       console.log(error, "something went wrong");
     }
   };
@@ -147,9 +155,7 @@ export default function EventList() {
   useEffect(() => {
     fetchTableData();
   }, [currentPage])
-
-
-  return (
+    return (
     <div className="p-7 w-full relative z-20 text-black">
       <div className="flex lg:justify-between flex-col-reverse lg:flex-row pb-5 gap-5 lg:gap-0">
         <Input
@@ -226,7 +232,7 @@ export default function EventList() {
                 }
               >
                 Event Venue
-              </TableHead>
+               </TableHead>
 
               <TableHead
                 className={
@@ -271,58 +277,62 @@ export default function EventList() {
               >View</TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody>
-            {tableData ?
-              tableData?.map((data, index) => {
-                return (
-                  <TableRow key={index} className="text-center text-nowrap">
-                    <TableCell>{data.name ?? "-"}</TableCell>
-                    <TableCell>{data.event_name ?? "-"}</TableCell>
-                    <TableCell>{data.event_type ?? "-"}</TableCell>
-                    <TableCell>{data.event_start_date ?? "-"}</TableCell>
-                    <TableCell>{data.event_end_date ?? "-"} </TableCell>
-                    <TableCell>{data.event_requestor ?? "-"}</TableCell>
-                    <TableCell>{data.owner ?? ""}</TableCell>
-                    <TableCell>{data.event_venue ?? "-"}</TableCell>
-                    <TableCell>
-                      <Button className={`bg-[#F0EDFF] w-[75px] text-[#4430BF] text-sm  rounded-md font-semibold  hover:underline`}
-                        disabled={!data.preactivity_approved}
-                        onClick={() => router.push(`/advance_request/${data.name}`)}>
-                        {(data.advance_request_submitted || data.is_declared) ? 'View' : "Request"}
-                      </Button>
-                    </TableCell>
-                    <TableCell>
-                      {
-                        data.post_activity_submitted ?
-                          (
-                            !data.post_expense_submitted ?
-                              <Button className="bg-[#F0EDFF] w-[75px] text-[#4430BF] text-sm  rounded-md font-semibold hover:underline capitalize" onClick={() => router.push(`/post_expense/${data.name}`)}>Request</Button> :
-                              <Button className="bg-[#F0EDFF] w-[75px] text-[#4430BF] text-sm  rounded-md font-semibold hover:underline capitalize" onClick={() => router.push(`/post_expense/${data.name}`)}>View</Button>
+          {
+            loading ? <TableBody><TableRow ><TableCell colSpan={9} ><>
+            <div className='flex items-center justify-center'>
+              <Loader2 className=" mr-2 h-4 w-4 animate-spin" />
+              Loading...
+            </div>
+            </></TableCell></TableRow></TableBody> :
+              tableData ? <TableBody>
+                {tableData &&
+                  tableData?.map((data, index) => {
+                    return (
+                      <TableRow key={index} className="text-center text-nowrap">
+                        <TableCell>{data.name ?? "-"}</TableCell>
+                        <TableCell>{data.event_name ?? "-"}</TableCell>
+                        <TableCell>{data.event_type ?? "-"}</TableCell>
+                        <TableCell>{data.event_start_date ?? "-"}</TableCell>
+                        <TableCell>{data.event_end_date ?? "-"} </TableCell>
+                        <TableCell>{data.event_requestor ?? "-"}</TableCell>
+                        <TableCell>{data.owner ?? ""}</TableCell>
+                        <TableCell>{data.event_venue ?? "-"}</TableCell>
+                        <TableCell>
+                          <Button className={`bg-[#F0EDFF] w-[75px] text-[#4430BF] text-sm  rounded-md font-semibold  hover:underline`}
+                            disabled={!data.preactivity_approved}
+                            onClick={() => router.push(`/advance_request/${data.name}`)}>
+                            {(data.advance_request_submitted || data.is_declared) ? 'View' : "Request"}
+                          </Button>
+                        </TableCell>
+                        <TableCell>
+                          {
+                            data.post_activity_submitted ?
+                              (
+                                !data.post_expense_submitted ?
+                                  <Button className="bg-[#F0EDFF] w-[75px] text-[#4430BF] text-sm  rounded-md font-semibold hover:underline capitalize" onClick={() => router.push(`/post_expense/${data.name}`)}>Request</Button> :
+                                  <Button className="bg-[#F0EDFF] w-[75px] text-[#4430BF] text-sm  rounded-md font-semibold hover:underline capitalize" onClick={() => router.push(`/post_expense/${data.name}`)}>View</Button>
 
-                          ) : (
-                            <Button className="bg-[#F0EDFF] w-[75px] text-[#4430BF] text-sm  rounded-md font-semibold hover:underline capitalize" disabled>Request</Button>
-                          )
+                              ) : (
+                                <Button className="bg-[#F0EDFF] w-[75px] text-[#4430BF] text-sm  rounded-md font-semibold hover:underline capitalize" disabled>Request</Button>
+                              )
 
-                      }
-                    </TableCell>
-                    <TableCell>{data.occurrence_no}</TableCell>
-                    <TableCell>{data.status}</TableCell>
-                    <TableCell>{data.brief_status}</TableCell>
-                    <TableCell className="sticky right-0 bg-[white] z-30 flex space-x-8 border-l border-slate-200 justify-center items-center mt-4">
-                      <Image src={"/svg/view.svg"} width={17} height={20} alt="view-svg" className="cursor-pointer" onClick={() => { handleClick(data.name, data.status, data.event_type) }} />
-                    </TableCell>
+                          }
+                        </TableCell>
+                        <TableCell>{data.occurrence_no}</TableCell>
+                        <TableCell>{data.status}</TableCell>
+                        <TableCell>{data.brief_status}</TableCell>
+                        <TableCell className="sticky right-0 bg-[white] z-30 flex space-x-8 border-l border-slate-200 justify-center items-center mt-4">
+                          <Image src={"/svg/view.svg"} width={17} height={20} alt="view-svg" className="cursor-pointer" onClick={() => { handleClick(data.name, data.status, data.event_type) }} />
+                        </TableCell>
 
-                  </TableRow>
-                );
-              }) :
-              <TableRow>
-                <TableCell className="pr-6 py-3 whitespace-nowrap text-center text-gray-400 italic" colSpan={9}>No records found...</TableCell>
-              </TableRow>
-            }
-          </TableBody>
+                      </TableRow>
+                    );
+                  })}
+              </TableBody> : <TableBody><TableRow><TableCell colSpan={9} ><div className="flex justify-center items-center">No Result.</div></TableCell></TableRow></TableBody>
+          }
         </Table>
       </div>
-      <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} total_event_list={total_event_list}/>
+        <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} total_event_list={total_event_list}/>
     </div>
   );
 };

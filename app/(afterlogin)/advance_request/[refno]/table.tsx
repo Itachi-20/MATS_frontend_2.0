@@ -31,7 +31,7 @@ import SimpleFileUpload from '@/components/multiple_file_upload';
 type TableData = {
   name: string;
   event_date: string;
-  cost_centre: string;
+  cost_center: string;
   cost_code: string;
   cost_desc: string;
   cost_hod: string;
@@ -40,6 +40,10 @@ type TableData = {
   sub_type_of_activity: string | null;
   event_requestor: string;
   total_compensation_expense: number;
+  total_balance_amount:number;
+  total_advance_amount:number;
+  total_estimated_expense:number;
+  total_logistics_expense:number;
   event_conclusion: string;
   is_declared: boolean;
   actual_vendors: Array<any>; // Replace `any` with a specific type if needed
@@ -400,22 +404,26 @@ const table = ({ tableData }: Props) => {
               <li className='border-b p-2'>Event Date :<span className='font-semibold px-1'>{tableData ? tableData.event_date : ''}</span></li>
               <li className='border-b p-2'>Event Name :<span className='font-semibold px-1'>{tableData ? tableData.event_name : ''}</span></li>
               <li className='border-b p-2'>Event Requester Name :<span className='font-semibold px-1'>{tableData ? tableData.event_requestor : ''}</span></li>
-              <li className='p-2'>Event Requester Number :<span className='font-semibold px-1'>{tableData ? tableData.name : ''}</span></li>
+              <li className='border-b p-2'>Event Requester Number :<span className='font-semibold px-1'>{tableData ? tableData.name : ''}</span></li>
+              <li className=' p-2'>Business Unit :<span className='font-semibold px-1'>{tableData ? tableData.business_unit : ''}</span></li>
             </ul>
           </div>
           <div className='grid-cols-1 px-6 border-r'>
             <ul className=''>
-              <li className='border-b p-2'>Cost Center :<span className='font-semibold px-1'>{tableData ? tableData.cost_centre : ''}</span></li>
+              <li className='border-b p-2'>Cost Center :<span className='font-semibold px-1'>{tableData ? tableData.cost_center : ''}</span></li>
               <li className='border-b p-2'>Cost Center Hod :<span className='font-semibold px-1'>{tableData ? tableData.cost_hod : ''}</span></li>
               <li className='border-b p-2'>Cost Center Description :<span className='font-semibold px-1'>{tableData ? tableData.cost_desc : ''}</span></li>
-              <li className='p-2'>Reporting Head :<span className='font-semibold px-1'>{tableData ? tableData.event_date : ''}</span></li>
+              <li className='border-b p-2'>Reporting Head :<span className='font-semibold px-1'>{tableData ? tableData.event_date : ''}</span></li>
+              <li className=' p-2'>Sub Type Of activity :<span className='font-semibold px-1'>{tableData ? tableData.sub_type_of_activity : ''}</span></li>
             </ul>
           </div>
           <div className='grid-cols-1 px-6'>
             <ul className=''>
-              <li className='border-b p-2'>Business Unit :<span className='font-semibold px-1'>{tableData ? tableData.business_unit : ''}</span></li>
-              <li className='border-b p-2'>Sub Type Of activity :<span className='font-semibold px-1'>{tableData ? tableData.sub_type_of_activity : ''}</span></li>
-              <li className='border-b p-2'>Total Estimated Expense :<span className='font-semibold px-1'>{tableData ? tableData.total_compensation_expense : ''}</span></li>
+              <li className='border-b p-2'>Total logistics Expense :<span className='font-semibold px-1'>{tableData ? tableData.total_logistics_expense : ''}</span></li>
+              <li className='border-b p-2'>Total Compensation Expense :<span className='font-semibold px-1'>{tableData ? tableData.total_compensation_expense : ''}</span></li>
+              <li className='border-b p-2'>Total Estimated Expense :<span className='font-semibold px-1'>{tableData ? tableData.total_estimated_expense : ''}</span></li>
+              <li className='border-b p-2'>Total Advance Expense :<span className='font-semibold px-1'>{tableData ? tableData.total_advance_amount : ''}</span></li>
+              <li className=' p-2'>Total Remaining Expense :<span className='font-semibold px-1'>{tableData ? tableData.total_balance_amount : ''}</span></li>
             </ul>
           </div>
 
