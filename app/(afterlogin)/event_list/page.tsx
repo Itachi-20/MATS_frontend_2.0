@@ -55,14 +55,14 @@ export default function EventList() {
   const [isPickerOpen, setIsPickerOpen] = useState(false);
   const total_event_list = 12;
   const [currentPage, setCurrentPage] = useState<number>(1);
-
+  const [loading, setLoading] = useState(true);
+  
   const togglePicker = () => {
     setIsPickerOpen(!isPickerOpen);
   };
   const handleExportButton = () => {
       exportEventList();
-};
-
+  };
   const handleClick = (refno: string, status: string, eventType: string) => {
     console.log(eventType, "function event type")
     if (status == "Draft") {
@@ -86,9 +86,6 @@ export default function EventList() {
       router.push(`/event_list/${refno}`)
     }
   }
-
-  const [tableData, setTableData] = useState<EventTable[]>()
-  const [loading, setLoading] = useState(true)
   const fetchTableData = async () => {
     setLoading(true)
     try {
