@@ -179,7 +179,7 @@ const page = () => {
                 setLoading(false)
                 setConfirmPopup(false)
                 setTimeout(() => {
-                    router.push(`/event_vendor_list`);
+                    router.back();
                 }, 1000)
                 toast.success(data.message)
             } else {

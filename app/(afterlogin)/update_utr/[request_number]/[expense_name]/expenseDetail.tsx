@@ -19,7 +19,7 @@ type EventTable = {
   name: string;
   event_date: string;
   event_type: string;
-  cost_centre: string;
+  cost_center: string;
   cost_code: string;
   cost_desc: string;
   cost_hod: string;
@@ -29,6 +29,10 @@ type EventTable = {
   sub_type_of_activity: string | null;
   event_requestor: string;
   total_compensation_expense: number;
+  total_balance_amount: number;
+  total_advance_amount: number;
+  total_estimated_expense: number;
+  total_logistics_expense: number;
   actual_vendors: ActualVendor[];
 
 };
@@ -57,7 +61,7 @@ type ActualVendor = {
   posting_date: string;
   basic_amount: number;
   cost_centre: string;
-  company_code:string | number | null;
+  company_code: string | number | null;
   state: string | null;
   invoice_number: string | null;
   finance_gst: number | null;
@@ -108,28 +112,27 @@ type FormData = {
   city: string | null | undefined;
   finance_remark: string | null | undefined;
   narration: string | null | undefined;
-  company_code:string | number | null | undefined;
+  company_code: string | number | null | undefined;
 };
 
 type Company = {
-  name: string; // Represents the company identifier, e.g., '7000', '8000'
-  company_name: string; // Represents the company name
+  name: string;
+  company_name: string;
 };
 
 type Division = {
-  name: string; // Represents the division identifier, e.g., 'Endosurgery', 'Diagnostics'
-  division_name: string; // Represents the division name
+  name: string;
+  division_name: string;
 };
 
 type State = {
-  name: string; // Represents the state code and name, e.g., 'Gujarat-GJ'
-  state: string; // Represents the state name, e.g., 'Gujarat'
+  name: string;
 };
 
 type City = {
-  name: string; // Represents the city name, e.g., 'Valsad', 'Mumbai'
-  city: string; // Represents the city name
-  state: string; // Represents the associated state code and name, e.g., 'Gujarat-GJ'
+  name: string;
+  city: string;
+  state: string;
 };
 
 type Dropdown = {
@@ -184,6 +187,7 @@ const ExpensePage = ({ ...Props }: Props) => {
       city: Props.expensedata?.actual_vendors[0]?.city,
       finance_remark: Props.expensedata?.actual_vendors[0]?.finance_remark,
       narration: Props.expensedata?.actual_vendors[0]?.narration,
+
     }
   );
   const posting_date_ref: React.RefObject<any> = useRef(null);
@@ -260,7 +264,7 @@ const ExpensePage = ({ ...Props }: Props) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleGLName = (code:string)=>{
+  const handleGLName = (code: string) => {
     setGLName(code);
   }
 
@@ -275,10 +279,10 @@ const ExpensePage = ({ ...Props }: Props) => {
     // })
   }
 
-  const handleGlname = async(value:any) =>{
-    const parglcode = gldropdowndata?.filter((item)=>item.name == value);
+  const handleGlname = async (value: any) => {
+    const parglcode = gldropdowndata?.filter((item) => item.name == value);
     formdata.gl_code = parglcode[0]?.gl_code;
- 
+
   }
 
   const handlePostingDateClick = () => {
@@ -311,31 +315,35 @@ const ExpensePage = ({ ...Props }: Props) => {
                                 <Input type="file" className="hidden" onChange={handleFileChange} />
                             </label> */}
             </div>
-            <Button className='bg-white  shadow text-black px-6' onClick={()=>router.push(`/advance_payment/${refno.request_number}`)}>Back</Button>
+            <Button className='bg-white  shadow text-black px-6' onClick={() => router.push(`/advance_payment/${refno.request_number}`)}>Back</Button>
           </div>
         </div>
-        <div className='border rounded-3xl mt-5 mb-14 p-2 text-black grid grid-cols-3'>
+        <div className='border rounded-3xl mt-5 mb-7 p-2 text-black grid grid-cols-3'>
           <div className='grid-cols-1 px-6 border-r'>
             <ul className=''>
               <li className='border-b p-2'>Event Date :<span className='font-semibold px-1'>{Props.expensedata ? Props.expensedata.event_date : ''}</span></li>
               <li className='border-b p-2'>Event Name :<span className='font-semibold px-1'>{Props.expensedata ? Props.expensedata.event_name : ''}</span></li>
               <li className='border-b p-2'>Event Requester Name :<span className='font-semibold px-1'>{Props.expensedata ? Props.expensedata.event_requestor : ''}</span></li>
-              <li className='p-2'>Event Request Number :<span className='font-semibold px-1'>{Props.expensedata ? Props.expensedata.name : ''}</span></li>
+              <li className='border-b p-2'>Event Requester Number :<span className='font-semibold px-1'>{Props.expensedata ? Props.expensedata.name : ''}</span></li>
+              <li className=' p-2'>Business Unit :<span className='font-semibold px-1'>{Props.expensedata ? Props.expensedata.business_unit : ''}</span></li>
             </ul>
           </div>
           <div className='grid-cols-1 px-6 border-r'>
             <ul className=''>
-              <li className='border-b p-2'>Cost Center :<span className='font-semibold px-1'>{Props.expensedata ? Props.expensedata.cost_centre : ''}</span></li>
+              <li className='border-b p-2'>Cost Center :<span className='font-semibold px-1'>{Props.expensedata ? Props.expensedata.cost_center : ''}</span></li>
               <li className='border-b p-2'>Cost Center Hod :<span className='font-semibold px-1'>{Props.expensedata ? Props.expensedata.cost_hod : ''}</span></li>
               <li className='border-b p-2'>Cost Center Description :<span className='font-semibold px-1'>{Props.expensedata ? Props.expensedata.cost_desc : ''}</span></li>
-              <li className='p-2'>Reporting Head :<span className='font-semibold px-1'>{Props.expensedata ? Props.expensedata.reporting_head : ''}</span></li>
+              <li className='border-b p-2'>Reporting Head :<span className='font-semibold px-1'>{Props.expensedata ? Props.expensedata.event_date : ''}</span></li>
+              <li className=' p-2'>Sub Type Of activity :<span className='font-semibold px-1'>{Props.expensedata ? Props.expensedata.sub_type_of_activity : ''}</span></li>
             </ul>
           </div>
           <div className='grid-cols-1 px-6'>
             <ul className=''>
-              <li className='border-b p-2'>Business Unit :<span className='font-semibold px-1'>{Props.expensedata ? Props.expensedata.business_unit : ''}</span></li>
-              <li className='border-b p-2'>Sub Type Of activity :<span className='font-semibold px-1'>{Props.expensedata ? Props.expensedata.sub_type_of_activity : ''}</span></li>
-              <li className='border-b p-2'>Total Estimated Expense :<span className='font-semibold px-1'>{Props.expensedata ? Props.expensedata.total_compensation_expense : ''}</span></li>
+              <li className='border-b p-2'>Total logistics Expense :<span className='font-semibold px-1'>{Props.expensedata ? Props.expensedata.total_logistics_expense : ''}</span></li>
+              <li className='border-b p-2'>Total Compensation Expense :<span className='font-semibold px-1'>{Props.expensedata ? Props.expensedata.total_compensation_expense : ''}</span></li>
+              <li className='border-b p-2'>Total Estimated Expense :<span className='font-semibold px-1'>{Props.expensedata ? Props.expensedata.total_estimated_expense : ''}</span></li>
+              <li className='border-b p-2'>Total Advance Expense :<span className='font-semibold px-1'>{Props.expensedata ? Props.expensedata.total_advance_amount : ''}</span></li>
+              <li className=' p-2'>Total Remaining Expense :<span className='font-semibold px-1'>{Props.expensedata ? Props.expensedata.total_balance_amount : ''}</span></li>
             </ul>
           </div>
 
@@ -468,10 +476,10 @@ const ExpensePage = ({ ...Props }: Props) => {
             <label className="text-black md:text-sm md:font-normal capitalize">
               Company Name<span className="text-[#e60000] ">*</span>
             </label>
-            
-            <Select 
-              onValueChange={(value) => {handleSelectChange(value, "company_name");gldropdown(value)}}
-               value={formdata.company_name  ??  ''}
+
+            <Select
+              onValueChange={(value) => { handleSelectChange(value, "company_name"); gldropdown(value) }}
+              value={formdata.company_name ?? ''}
             >
               <SelectTrigger className="dropdown text-black">
                 <SelectValue placeholder="Type Here ..." />
@@ -494,7 +502,7 @@ const ExpensePage = ({ ...Props }: Props) => {
             </label>
             <Select
               value={formdata?.gl_name ?? ""}
-              onValueChange={(value) => {handleGlname(value); handleSelectChange(value, "gl_name"); }}>
+              onValueChange={(value) => { handleGlname(value); handleSelectChange(value, "gl_name"); }}>
               <SelectTrigger className="dropdown rounded-sm gap-4">
                 <SelectValue placeholder="-Select-" />
               </SelectTrigger>

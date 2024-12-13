@@ -302,7 +302,7 @@ const table = ({ ...Props }: Props) => {
                   expenseData?.actual_vendors.map((data, index) => {
                     return (
                       <TableRow key={index} className="text-center text-nowrap text-black">
-                        <TableCell>{data.name}</TableCell>
+                        <TableCell>{data.parent}</TableCell>
                         <TableCell>{data.vendor_type}</TableCell>
                         <TableCell className={data && data.vendor_code ? '' : 'flex items-center space-x-2'}>
                           {
