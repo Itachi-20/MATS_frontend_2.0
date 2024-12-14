@@ -25,6 +25,8 @@
     "js-cookie": "^3.0.5",
     "lucide-react": "^0.447.0",
     "next": "15.0.0-canary.195",
+    "nextjs-progressbar": "^0.0.16",
+    "nextjs-toploader": "^3.7.15",
     "react": "19.0.0-rc-cd22717c-20241013",
     "react-day-picker": "^8.10.1",
     "react-dom": "19.0.0-rc-cd22717c-20241013",

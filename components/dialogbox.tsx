@@ -4,7 +4,7 @@ import CorrectSign from "@/public/svg/arrow";
 import { Button } from "@/components/ui/button";
 import { Input } from './ui/input';
 import { AlertDialog,AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger, } from "@/components/ui/alert-dialog";
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'nextjs-toploader/app';
 export default function Dialog({button,msg,refno}) {
 const router = useRouter();
   const handleExecute = async()=>{

@@ -28,6 +28,17 @@ const config: Config = {
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
   		},
+		  animation: {
+			'flip-horizontal': 'flipHorizontal 1s ease-in-out infinite',
+		  },
+		  keyframes: {
+			flipHorizontal: {
+			  '0%': { transform: 'rotateY(0deg)' },
+			  '50%': { transform: 'rotateY(180deg)' },
+			  
+			  '100%': { transform: 'rotateY(360deg)' },
+			},
+		  },
   	}
   },
   plugins: [require("tailwindcss-animate")],
