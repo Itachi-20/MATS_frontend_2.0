@@ -2,7 +2,7 @@
 import React,{useState,useEffect} from "react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import BasicDetails from "@/components/basic_Details";
+import BasicDetails from "@/components/commonPreviewComponents/basic_details";
 import EventDetails from "@/components/sponsorshipSupportPreviewComponents/eventDetails";
 import TotalExpense from "@/components/total_Expense";
 import Documents from "@/components/documents";

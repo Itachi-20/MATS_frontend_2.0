@@ -192,12 +192,16 @@ const event_Details = ({ ...Props }: Props) => {
           <label className="text-black md:text-sm md:font-normal capitalize">
             {Props.eventData?.event_type == ("Awareness Program") ? "Program Name" : (Props.eventData?.event_type == "Non Monetary Grant") || (Props.eventData?.event_type == "Monetary Grant") ? "Organisation Name" : "Event Name"}<span className="text-[#e60000]">*</span>
           </label>
-          <Input
+          {/* <Input
             className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
             placeholder="Type Here"
             readOnly={true}
             value={Props.eventData?.event_type == "Monetary Grant" ? Props.eventData?.organization_name : Props.eventData?.event_name}
-          ></Input>
+          ></Input> */}
+          <textarea className='text-black shadow-md border h-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl pl-2 pt-2' placeholder='Type Here'
+            readOnly={true}
+            value={Props.eventData?.event_type == "Monetary Grant" ? Props.eventData?.organization_name : Props.eventData?.event_name}
+          />
         </div>
         { 
           (Props.eventData?.event_type == 'Training and Education')&&
@@ -304,12 +308,16 @@ const event_Details = ({ ...Props }: Props) => {
             <label className="text-black md:text-sm md:font-normal capitalize">
               {Props.eventData?.event_type == "Awareness Program" ? "Program Venue and Location" : "Event Venue"}<span className="text-[#e60000]">*</span>
             </label>
-            <Input
+            {/* <Input
               className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
               placeholder="Type Here"
               readOnly={true}
               value={Props.eventData?.event_venue}
-            ></Input>
+            ></Input> */}
+            <textarea className='text-black shadow-md border h-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl pl-2 pt-2' placeholder='Type Here'
+            readOnly={true}
+            value={Props.eventData?.event_venue}
+          />
           </div>
         }
 
@@ -370,12 +378,12 @@ const event_Details = ({ ...Props }: Props) => {
             <label className="text-black md:text-sm md:font-normal capitalize">
               Comments<span className="text-[#e60000]">*</span>
             </label>
-            <Textarea
-              className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
+            <textarea
+              className='text-black shadow-md border h-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl pl-2 pt-2'
               placeholder="Type Here"
               readOnly={true}
               value={Props.eventData?.comments}
-            ></Textarea>
+            ></textarea>
           </div> :
           <></>
         }

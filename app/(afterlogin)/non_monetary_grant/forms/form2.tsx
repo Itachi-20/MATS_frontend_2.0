@@ -140,11 +140,16 @@ const Form2 = ({ ...Props }: Props) => {
         
         <div className='flex flex-col gap-2'>
           <label className='lable'>Name of Organization<span className='text-[#e60000]'>*</span></label>
-          <Textarea className='dropdown' placeholder='Type Here' 
+          {/* <Input className='dropdown' placeholder='Type Here' 
             name='organization_name'
             onChange={(e)=>handlefieldChange(e)}
             defaultValue={Props.previewData?.organization_name?Props.previewData.organization_name:""}
-          ></Textarea>
+          ></Input> */}
+          <textarea className='text-black shadow-md border h-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl pl-2 pt-2' placeholder='Type Here'
+            name='organization_name'
+            onChange={(e)=>{handlefieldChange(e)}}
+            defaultValue={Props.previewData?.organization_name?Props.previewData.organization_name:""}
+          />
         </div>
 
         <div className='flex flex-col gap-2'onClick={()=>{handleStartDateClick()}}>
@@ -171,7 +176,7 @@ const Form2 = ({ ...Props }: Props) => {
 
         <div className='flex flex-col gap-2'>
           <label className='lable'>BU Rational<span className='text-[#e60000]'>*</span></label>
-          <Textarea className='text-black shadow-md' placeholder='Type Here'
+          <textarea className='text-black shadow-md border h-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl pl-2 pt-2' placeholder='Type Here'
             name='bu_rational'
             onChange={(e)=>{handlefieldChange(e)}}
             defaultValue={Props.previewData?.bu_rational?Props.previewData.bu_rational:""}
@@ -179,7 +184,7 @@ const Form2 = ({ ...Props }: Props) => {
         </div>
         <div className='flex flex-col gap-2'>
           <label className='lable'>Comments<span className='text-[#e60000]'>*</span></label>
-          <Textarea className='text-black shadow-md' placeholder='Type Here'
+          <textarea className='text-black shadow-md border h-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl pl-2 pt-2' placeholder='Type Here'
             name='comments'
             onChange={(e)=>{handlefieldChange(e)}}
             defaultValue={Props.previewData?.comments?Props.previewData.comments:""}

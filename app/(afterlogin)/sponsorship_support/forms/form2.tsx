@@ -185,11 +185,11 @@ const Form2 = ({ ...Props }: Props) => {
         
         <div className='flex flex-col gap-2'>
           <label className='lable'>BU Rational<span className='text-[#e60000]'>*</span></label>
-          <Textarea 
+          <textarea 
           name='bu_rational'
           onChange={(e) => handlefieldChange(e)}
           defaultValue={Props.previewData?.bu_rational?Props.previewData.bu_rational:""}
-          className='text-black shadow-md' placeholder='Type Here' />
+          className='text-black shadow-md border h-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl pl-2 pt-2' placeholder='Type Here' />
         </div>
       </div>
      

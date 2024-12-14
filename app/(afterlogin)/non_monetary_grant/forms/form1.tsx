@@ -651,9 +651,9 @@ const Form1 = ({ ...Props }: Props) => {
           <label className="lable">
           Selection criteria for faculties<span className="text-[#e60000]">*</span>
           </label>
-          <Textarea
+          <textarea
             defaultValue={Props.previewData?.faculty ?? ""}
-            className="text-black shadow-md"
+            className='text-black shadow-md border h-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl pl-2 pt-2'
             placeholder="Type Here"
             name="faculty"
             onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => { handlefieldChange(e) }}
@@ -663,9 +663,9 @@ const Form1 = ({ ...Props }: Props) => {
           <label className="lable">
           Selection criteria for participants<span className="text-[#e60000]">*</span>
           </label>
-          <Textarea
+          <textarea
             defaultValue={Props.previewData?.participants ?? ""}
-            className="text-black shadow-md"
+            className='text-black shadow-md border h-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl pl-2 pt-2'
             placeholder="Type Here"
             name="participants"
             onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => { handlefieldChange(e) }}
