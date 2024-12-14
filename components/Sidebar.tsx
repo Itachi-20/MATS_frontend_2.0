@@ -1,5 +1,6 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect, useRouter } from "next/navigation";
@@ -30,9 +31,22 @@ type sidebarItems = {
   masters: masters[];
 };
 
+type Sidebar = {
+  modules:boolean,
+  masters:boolean,
+  reports:boolean,
+  settings:boolean,
+}
+
 const Sidebar = () => {
   const router = useRouter();
   const { role, userid, name } = useAuth();
+  const [handleSidebar,setHandleSidebar] = useState<Sidebar>({
+    modules:false,
+    masters:false,
+    reports:false,
+    settings:false,
+  })
   let moduleItems: sidebarItems | null = null;
 
   if (role == "Event Requestor") {
@@ -281,10 +295,20 @@ const Sidebar = () => {
     }
   };
 
+  //whichever module is clicked becomes active rest of others become non-active in sidebar item
+  const handleClick = (key: keyof Sidebar) => {
+    setHandleSidebar(prev =>
+      Object.keys(prev).reduce((acc, curr) => {
+        acc[curr as keyof Sidebar] = curr === key ? !prev[curr as keyof Sidebar] : false;
+        return acc;
+      }, {} as Sidebar)
+    );
+  };
+
   return (
-    <div className="flex flex-col justify-between h-screen">
-      <div className="pt-10 text-black flex flex-col h-full py-6">
-        <div className="flex items-start justify-start gap-1 pl-1 pb-2 cursor-pointer" onClick={() => { router.replace("/dashboard") }}>
+    <div className="flex flex-col justify-between h-screen w-full">
+      <div className="text-black flex flex-col h-full pt-16 pb-[4rem]">
+        <div className="flex justify-start gap-1 pl-1 pb-2 cursor-pointer items-center" onClick={() => { router.replace("/dashboard") }}>
           <div className="">
             <svg
               width="40"
@@ -302,12 +326,11 @@ const Sidebar = () => {
               <path d="M92 144.5V41H104V144.5H92Z" fill="#6193B5" />
             </svg>
           </div>
-          <h1 className="text-black text-[40px] font-semibold pt-6">MATS</h1>
+          <h1 className="text-black text-[40px] font-semibold">MATS</h1>
         </div>
         <div className=" text-black flex-1 h-full overflow-x-hidden overflow-y-scroll sidebar_container">
-          {/* <div className="group" id="parent"> */}
           <div className="group text-2xl">
-            <button className=" text-gray-700 py-2 px-3 group-hover:text-white group-hover:bg-[#4430bf] group-hover:border group-hover:rounded-xl rounded inline-flex items-center gap-3">
+            <button className={`${(handleSidebar.modules) ? "text-white bg-[#4430bf] border rounded-xl" : ""} w-full text-gray-700 py-2 px-3 group-hover:text-white group-hover:bg-[#4430bf] group-hover:border group-hover:rounded-xl rounded inline-flex items-center gap-3`} onClick={()=>{handleClick("modules")}}>
               <svg
                 width="32"
                 height="32"
@@ -349,14 +372,13 @@ const Sidebar = () => {
               </svg>
               <span className="mr-1 text-[1.125rem]">Modules</span>
             </button>
-
             {/* menu list */}
-            <ul className="rounded max-h-0 overflow-hidden transition-[max-height] duration-1000 ease-in-out text-gray-700 pt-1 w-56 px-5 group-hover:max-h-96 text-[0.625rem]">
+            <ul className={`${(handleSidebar.modules) ? "max-h-96" : ""} rounded max-h-0 overflow-hidden transition-[max-height] duration-700 ease-in-out text-gray-700 pt-1 w-56 px-5 text-[0.625rem]`}>
               {moduleItems &&
                 moduleItems.modules?.map((item, index) => {
                   return (
                     <li
-                      className=" hover:bg-white hover:rounded-xl hover:text-[#4430bf] text-[12px] py-1 cursor-pointer max-w-fit px-2 relative text-nowrap"
+                      className="hover:bg-white hover:rounded-xl hover:text-[#4430bf] text-[12px] py-1 cursor-pointer max-w-fit px-2 relative text-nowrap"
                       onClick={() => {router.push(`${item.route}`);
                       }}
                     >
@@ -384,33 +406,9 @@ const Sidebar = () => {
                 })}
             </ul>
           </div>
-          {/* START SETTING MANU  */}
-          {/* <div id="parent">
-            <div className="flex py-2 gap-2 pl-2 hover:border hover:rounded-xl hover:bg-[#4430bf] group hover:text-white hover:cursor-pointer">
-              
-<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
-<path d="M28 26.6665H4V6.6665" stroke="#636363" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<path opacity="0.4" d="M28 9.3335L17.3333 18.6668L12 13.3335L4 20.0002" stroke="#636363" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
-              <h1 className="pt-1">Reports</h1>
-            </div>           
-            <div id="element" className="z-10" >
-                {moduleItems &&
-                  moduleItems.reports?.map((data,index) => { 
-                    return (
-                      <div key={index} className="child py-4 px-5 rounded-bl-xl text-black  border-l border-black ml-4 relative text-nowrap">
-                       <Link href={data.route}>
-                          <div className="absolute -bottom-9 hover:bg-white rounded-xl text-black hover:text-[#4430bf] text-[12px] px-1 my-5 py-2 cursor-pointer">
-                          {data.name} 
-                          </div>
-                      </Link>
-                      </div>
-                    );
-                  })}
-            </div>           
-          </div> */}
           <div className="group text-2xl">
-            <button className=" text-gray-700 py-2 px-3 group-hover:text-white group-hover:bg-[#4430bf] group-hover:border group-hover:rounded-xl rounded inline-flex items-center gap-3">
+            <button className={`${(handleSidebar.reports) ? "text-white bg-[#4430bf] border rounded-xl" : ""} w-full text-gray-700 py-2 px-3 group-hover:text-white group-hover:bg-[#4430bf] group-hover:border group-hover:rounded-xl rounded inline-flex items-center gap-3`} onClick={()=>{handleClick("reports")}}>
+
               <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
                 <path d="M28 26.667H4V6.66699" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                 <path opacity="0.4" d="M28 9.33301L17.3333 18.6663L12 13.333L4 19.9997" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
@@ -419,7 +417,8 @@ const Sidebar = () => {
             </button>
 
             {/* menu list */}
-            <ul className="rounded max-h-0 overflow-hidden transition-[max-height] duration-1000 ease-in-out text-gray-700 pt-1 w-56 px-5 group-hover:max-h-96 text-[0.625rem]">
+            <ul className={`${(handleSidebar.reports) ? "max-h-96" : ""} rounded max-h-0 overflow-hidden transition-[max-height] duration-700 ease-in-out text-gray-700 pt-1 w-56 px-5 text-[0.625rem]`}>
+
               {moduleItems &&
                 moduleItems.reports?.map((item, index) => {
                   return (
@@ -452,12 +451,10 @@ const Sidebar = () => {
                 })}
             </ul>
           </div>
-          {/* END SETTING MANU  */}
-
           {
             (role == "Event Compliance" || role == "Event Finance") &&
             <div className="group text-2xl">
-              <button className=" text-gray-700 py-2 px-3 group-hover:text-white group-hover:bg-[#4430bf] group-hover:border group-hover:rounded-xl rounded inline-flex items-center gap-3">
+            <button className={`${(handleSidebar.masters) ? "text-white bg-[#4430bf] border rounded-xl" : ""} w-full text-gray-700 py-2 px-3 group-hover:text-white group-hover:bg-[#4430bf] group-hover:border group-hover:rounded-xl rounded inline-flex items-center gap-3`} onClick={()=>{handleClick("masters")}}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30" fill="none">
                   <path opacity="0.4" d="M2.5 7.75C2.5 5.86438 2.5 4.92157 3.08579 4.33579C3.67157 3.75 4.61438 3.75 6.5 3.75H23.5C25.3856 3.75 26.3284 3.75 26.9142 4.33579C27.5 4.92157 27.5 5.86438 27.5 7.75V9.25C27.5 10.1928 27.5 10.6642 27.2071 10.9571C26.9142 11.25 26.4428 11.25 25.5 11.25H4.5C3.55719 11.25 3.08579 11.25 2.79289 10.9571C2.5 10.6642 2.5 10.1928 2.5 9.25V7.75Z" fill="currentColor" />
                   <path fill-rule="evenodd" clip-rule="evenodd" d="M5.87868 25.3713C5 24.4926 5 23.0784 5 20.25V13.75H25V20.25C25 23.0784 25 24.4926 24.1213 25.3713C23.2426 26.25 21.8284 26.25 19 26.25H11C8.17157 26.25 6.75736 26.25 5.87868 25.3713ZM12.5 19C11.9477 19 11.5 19.4477 11.5 20C11.5 20.5523 11.9477 21 12.5 21H17.5C18.0523 21 18.5 20.5523 18.5 20C18.5 19.4477 18.0523 19 17.5 19H12.5Z" fill="currentColor" />
@@ -466,7 +463,8 @@ const Sidebar = () => {
               </button>
 
               {/* menu list */}
-              <ul className="rounded max-h-0 overflow-hidden transition-[max-height] duration-1000 ease-in-out text-gray-700 pt-1 w-56 px-5 group-hover:max-h-96 text-[0.625rem]">
+              <ul className={`${(handleSidebar.masters) ? "max-h-96" : ""} rounded max-h-0 overflow-hidden transition-[max-height] duration-700 ease-in-out text-gray-700 pt-1 w-56 px-5 text-[0.625rem]`}>
+
                 {moduleItems &&
                   moduleItems.masters?.map((item, index) => {
                     return (
@@ -501,10 +499,9 @@ const Sidebar = () => {
               </ul>
             </div>
           }
-
-          {/* START SETTING MANU  */}
           <div className="group text-2xl">
-            <button className=" text-gray-700 py-2 px-3 group-hover:text-white group-hover:bg-[#4430bf] group-hover:border group-hover:rounded-xl rounded inline-flex items-center gap-3">
+            <button className={`${( handleSidebar.settings) ? "text-white bg-[#4430bf] border rounded-xl" : ""} w-full text-gray-700 py-2 px-3 group-hover:text-white group-hover:bg-[#4430bf] group-hover:border group-hover:rounded-xl rounded inline-flex items-center gap-3`} onClick={()=>{handleClick("settings")}}>
+
               <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
                 <path d="M13.3329 29.3337C12.9995 29.3337 12.7195 29.0937 12.6662 28.7737L12.1729 25.2403C11.3329 24.907 10.6129 24.4537 9.91953 23.9203L6.59953 25.267C6.3062 25.3737 5.9462 25.267 5.7862 24.9737L3.11953 20.3603C3.03793 20.2229 3.00916 20.0605 3.0386 19.9035C3.06805 19.7464 3.1537 19.6055 3.27953 19.507L6.09286 17.2937L5.99953 16.0003L6.09286 14.667L3.27953 12.4937C3.1537 12.3952 3.06805 12.2542 3.0386 12.0972C3.00916 11.9401 3.03793 11.7777 3.11953 11.6403L5.7862 7.02699C5.9462 6.73366 6.3062 6.61366 6.59953 6.73366L9.91953 8.06699C10.6129 7.54699 11.3329 7.09366 12.1729 6.76033L12.6662 3.22699C12.7195 2.90699 12.9995 2.66699 13.3329 2.66699H18.6662C18.9995 2.66699 19.2795 2.90699 19.3329 3.22699L19.8262 6.76033C20.6662 7.09366 21.3862 7.54699 22.0795 8.06699L25.3995 6.73366C25.6929 6.61366 26.0529 6.73366 26.2129 7.02699L28.8795 11.6403C29.0529 11.9337 28.9729 12.2937 28.7195 12.4937L25.9062 14.667L25.9995 16.0003L25.9062 17.3337L28.7195 19.507C28.9729 19.707 29.0529 20.067 28.8795 20.3603L26.2129 24.9737C26.0529 25.267 25.6929 25.387 25.3995 25.267L22.0795 23.9337C21.3862 24.4537 20.6662 24.907 19.8262 25.2403L19.3329 28.7737C19.2795 29.0937 18.9995 29.3337 18.6662 29.3337H13.3329ZM14.9995 5.33366L14.5062 8.81366C12.9062 9.14699 11.4929 10.0003 10.4662 11.187L7.25286 9.80033L6.25286 11.5337L9.0662 13.6003C8.53286 15.1559 8.53286 16.8448 9.0662 18.4003L6.23953 20.4803L7.23953 22.2137L10.4795 20.827C11.5062 22.0003 12.9062 22.8537 14.4929 23.1737L14.9862 26.667H17.0129L17.5062 23.187C19.0929 22.8537 20.4929 22.0003 21.5195 20.827L24.7595 22.2137L25.7595 20.4803L22.9329 18.4137C23.4662 16.8537 23.4662 15.1603 22.9329 13.6003L25.7462 11.5337L24.7462 9.80033L21.5329 11.187C20.4852 9.97409 19.064 9.14389 17.4929 8.82699L16.9995 5.33366H14.9995Z" fill="currentColor" />
                 <circle opacity="0.4" cx="16" cy="16" r="3.75" stroke="currentColor" stroke-width="2.5" />
@@ -513,7 +510,8 @@ const Sidebar = () => {
             </button>
 
             {/* menu list */}
-            <ul className="rounded max-h-0 overflow-hidden transition-[max-height] duration-1000 ease-in-out text-gray-700 pt-1 w-56 px-5 group-hover:max-h-96 text-[0.625rem]">
+            <ul className={`${( handleSidebar.settings) ? "max-h-96" : ""} rounded max-h-0 overflow-hidden transition-[max-height] duration-700 ease-in-out text-gray-700 pt-1 w-56 px-5 text-[0.625rem]`}>
+
               {moduleItems &&
                 moduleItems.settings?.map((item, index) => {
                   return (
@@ -546,7 +544,6 @@ const Sidebar = () => {
                 })}
             </ul>
           </div>
-          {/* END SETTING MANU  */}
         </div>
         <div
           className="flex space-x-1 left-[3%] cursor-pointer text-gray-700 py-2 px-3 hover:text-white hover:bg-[#4430bf] hover:border hover:rounded-xl rounded items-center p-3"

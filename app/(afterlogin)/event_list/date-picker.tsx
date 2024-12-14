@@ -3,23 +3,23 @@ import { useState } from 'react';
 import {Input} from '@/components/ui/input';
 import Image from 'next/image';
 
-export default function DateRangePicker() {
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
-  const [isPickerOpen, setIsPickerOpen] = useState(false);
+type props = {
+  setStartDate: (value:string)=>void;
+  setEndDate: (value:string)=>void;
+  startDate: string;
+  endDate: string;
+  togglePicker: ()=>void;
+  isPickerOpen: boolean;
+  fetchTableData: ()=>void;
+}
 
-
-  // Toggle Date Picker
-  const togglePicker = () => {
-    setIsPickerOpen(!isPickerOpen);
-  };
-
+export default function DateRangePicker({...Props}:props) {
   return (
     <div className="relative">
       <Input
         type="text"
         readOnly
-        onClick={togglePicker}
+        onClick={Props.togglePicker}
         placeholder="Date"
         className="lg:w-24 sm:w-20 w-[70px] rounded-[50px] lg:px-3 lg:py-2 sm:px-3 sm:py-1 px-3 py-1 lg:text-[14px] sm:text-[10px] text-[9px] border border-gray-300 shadow-sm font-normal focus:outline-none cursor-pointer placeholder:text-black "
       />
@@ -29,14 +29,15 @@ export default function DateRangePicker() {
    
 
       {/* Date Pickers */}
-      {isPickerOpen && (
-        <div className="absolute z-50 mt-2 p-4 border border-gray-300 rounded-md shadow-md bg-white">
+      {Props.isPickerOpen && (
+        <div className="absolute right-0 z-50 mt-2 p-4 border border-gray-300 rounded-md shadow-md bg-white">
+          
           <label className="block text-sm font-medium">
             Start Date:
             <Input
               type="date"
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
+              value={Props.startDate}
+              onChange={(e) => Props.setStartDate(e.target.value)}
               className="block w-full mt-1 px-2 py-1 border border-gray-300 rounded-md"
             />
           </label>
@@ -44,13 +45,13 @@ export default function DateRangePicker() {
             End Date:
             <Input
               type="date"
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
+              value={Props.endDate}
+              onChange={(e) => Props.setEndDate(e.target.value)}
               className="block w-full mt-1 px-2 py-1 border border-gray-300 rounded-md"
             />
           </label>
           <button
-            onClick={togglePicker}
+            onClick={Props.fetchTableData}
             className="mt-4 w-full px-4 py-2 bg-blue-500 text-white rounded-md"
           >
             Done

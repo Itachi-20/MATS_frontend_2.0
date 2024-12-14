@@ -36,6 +36,7 @@ type ActualVendor = {
   payment_date: string | null;
   parent: string;
 };
+
 type Props = {
   expensetabledata: ActualVendor[] | undefined; // Props includes the tableData field
 };

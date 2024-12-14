@@ -5,7 +5,7 @@ import Sidebar from "@/components/Sidebar";
 import Navbar from "@/components/Navbar";
 import { Input } from "@/components/ui/input";
 import { useRouter } from 'next/navigation';
-
+import { Loader2 } from "lucide-react";
 import {
     Select,
     SelectContent,
@@ -43,12 +43,12 @@ type EventTable = {
     event_end_date: string;
     total_expense: number;
     event_requestor: string;
-    total_compensation_expense:number;
-    total_logistics_expense:number;
-    total_estimated_expense:number;
+    total_compensation_expense: number;
+    total_logistics_expense: number;
+    total_estimated_expense: number;
     event_venue: string;
     current_stage: string;
-    owner:string;
+    owner: string;
     post_expense_approvers: post_expense_approvers;
 };
 
@@ -56,8 +56,9 @@ type EventTable = {
 export default function Page() {
     const [postExpenseApprovalList, setPostExpenseApprovalList] = useState<Array<EventTable>>();
     const router = useRouter();
-    
+    const [loading, setLoading] = useState(true)
     const PostExpenseApprovalList = async () => {
+        setLoading(true)
         try {
             const response = await fetch("/api/advanceApproval/list", {
                 method: "GET",
@@ -69,10 +70,13 @@ export default function Page() {
             if (response.ok) {
                 const data = await response.json();
                 setPostExpenseApprovalList(data.message);
+                setLoading(false)
             } else {
                 console.log('Error fetching data');
+                setLoading(false)
             }
         } catch (error) {
+            setLoading(false)
             console.error("Error during login:", error);
         }
     };
@@ -81,7 +85,7 @@ export default function Page() {
         PostExpenseApprovalList();
     }, [])
 
-    console.log(postExpenseApprovalList,'postExpenseApprovalList')
+    console.log(postExpenseApprovalList, 'postExpenseApprovalList')
     return (
         <>
 
@@ -214,7 +218,7 @@ export default function Page() {
                                 >
                                     Total Expense
                                 </TableHead>
-                                
+
                                 <TableHead
                                     className={
                                         "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
@@ -227,14 +231,14 @@ export default function Page() {
                                         "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                                     }
                                 >
-                                   Created By
+                                    Created By
                                 </TableHead>
                                 <TableHead
                                     className={
                                         "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                                     }
                                 >
-                                   Status
+                                    Status
                                 </TableHead>
                                 <TableHead
                                     className={
@@ -243,47 +247,51 @@ export default function Page() {
                                 >Action</TableHead>
                             </TableRow>
                         </TableHeader>
-
                         {
-                            postExpenseApprovalList ?
-                                <TableBody>
-                                    {postExpenseApprovalList &&
-                                        postExpenseApprovalList?.map((data, index) => {
-                                            return (
-                                                <TableRow key={index} className="text-center text-nowrap">
-                                                    <TableCell>{data.name ?? "-"}</TableCell>
-                                                    <TableCell>{data.event_name?? "-"}</TableCell>
-                                                    <TableCell>{data.event_type?? "-"}</TableCell>
-                                                    <TableCell>{data.event_start_date?? "-"}</TableCell>
-                                                    <TableCell>{data.event_end_date?? "-"}</TableCell>
-                                                    <TableCell>{data.total_compensation_expense ?? ""}</TableCell>
-                                                    <TableCell>{data.total_logistics_expense ?? ""}</TableCell>
-                                                    <TableCell>{data.total_estimated_expense ?? ""}</TableCell>
-                                                    <TableCell>{data.event_requestor ?? ""}</TableCell>
-                                                    <TableCell>{data.owner ?? ""}</TableCell>
-                                                    <TableCell>{data.current_stage ?? ""}</TableCell>
-                                                    <TableCell className="sticky right-0 bg-[white] z-50 ">
-                                                        {/* { */}
-                                                            {/* "Not" == "Approved" ? */}
-                                                                {/* // <button className="border rounded-full px-4 py-1 border-[#0E4154] text-[#0E4154]" onClick={() => router.push(`/advance_payment/update_utr/${data.name}`)} >Update UTR</button> */}
-                                                                {/* : */}
-                                                                 <button className="border rounded-full px-4 py-1 border-[#0E4154] text-[#0E4154] hover:text-white hover:bg-[#0E4154] active:text-white active:bg-[#0E4154] transition-all delay-100" onClick={() => router.push(`/advance_payment/${data.name}`)} >Take Action</button>
-                                                        {/* } */}
-                                                    </TableCell>
-                                                </TableRow>
-                                            );
-                                        })}
-                                </TableBody>
+                            loading ? <TableBody><TableRow ><TableCell colSpan={7} ><>
+                                <div className='flex items-center justify-center'>
+                                    <Loader2 className=" mr-2 h-4 w-4 animate-spin" />
+                                    Loading...
+                                </div>
+                            </></TableCell></TableRow></TableBody> :
+                               postExpenseApprovalList ?
+                               <TableBody>
+                                   {postExpenseApprovalList &&
+                                       postExpenseApprovalList?.map((data, index) => {
+                                           return (
+                                               <TableRow key={index} className="text-center text-nowrap">
+                                                   <TableCell>{data.name ?? "-"}</TableCell>
+                                                   <TableCell>{data.event_name ?? "-"}</TableCell>
+                                                   <TableCell>{data.event_type ?? "-"}</TableCell>
+                                                   <TableCell>{data.event_start_date ?? "-"}</TableCell>
+                                                   <TableCell>{data.event_end_date ?? "-"}</TableCell>
+                                                   <TableCell>{data.total_compensation_expense ?? ""}</TableCell>
+                                                   <TableCell>{data.total_logistics_expense ?? ""}</TableCell>
+                                                   <TableCell>{data.total_estimated_expense ?? ""}</TableCell>
+                                                   <TableCell>{data.event_requestor ?? ""}</TableCell>
+                                                   <TableCell>{data.owner ?? ""}</TableCell>
+                                                   <TableCell>{data.current_stage ?? ""}</TableCell>
+                                                   <TableCell className="sticky right-0 bg-[white] z-50 ">
+                                                       {/* { */}
+                                                       {/* "Not" == "Approved" ? */}
+                                                       {/* // <button className="border rounded-full px-4 py-1 border-[#0E4154] text-[#0E4154]" onClick={() => router.push(`/advance_payment/update_utr/${data.name}`)} >Update UTR</button> */}
+                                                       {/* : */}
+                                                       <button className="border rounded-full px-4 py-1 border-[#0E4154] text-[#0E4154] hover:text-white hover:bg-[#0E4154] active:text-white active:bg-[#0E4154] transition-all delay-100" onClick={() => router.push(`/advance_payment/${data.name}`)} >Take Action</button>
+                                                       {/* } */}
+                                                   </TableCell>
+                                               </TableRow>
+                                           );
+                                       })}
+                               </TableBody>
 
-                                :
-                                <TableBody>
-                                    <TableRow className="text-center text-nowrap">
-                                        <TableCell className="" colSpan={7}>No Result</TableCell>
-                                    </TableRow>
+                               :
+                               <TableBody>
+                                   <TableRow className="text-center text-nowrap">
+                                       <TableCell className="" colSpan={7}>No Result</TableCell>
+                                   </TableRow>
 
-                                </TableBody>
+                               </TableBody>
                         }
-
                     </Table>
                 </div>
             </div>

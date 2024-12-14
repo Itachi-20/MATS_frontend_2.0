@@ -9,9 +9,11 @@ import { useRouter } from 'next/navigation';
 import { Textarea } from '@/components/ui/textarea'
 
 type File = {
-    name: string;
     file_name: string;
+    name:string;
     file_url: string;
+    creation:string;
+    owner:string;
 };
 
 type ActualVendor = {
@@ -35,7 +37,7 @@ type EventData = {
     name: string;
     event_date: string;
     event_type: string;
-    cost_centre: string;
+    cost_center: string;
     cost_code: string;
     cost_desc: string;
     cost_hod: string;
@@ -46,6 +48,10 @@ type EventData = {
     event_requestor: string;
     total_compensation_expense: number;
     event_conclusion: string;
+    total_balance_amount: number;
+    total_advance_amount: number;
+    total_estimated_expense: number;
+    total_logistics_expense: number;
     actual_vendors: ActualVendor[];
 };
 
@@ -60,7 +66,7 @@ const page = () => {
     const router = useRouter();
     const refno = useParams();
     const view = useSearchParams().get('view')
-    console.log("expensedata",expensedata)
+    console.log("expensedata", expensedata)
     const eventDataApi = async () => {
         try {
             const response = await fetch(
@@ -143,33 +149,36 @@ const page = () => {
                         <button className="border rounded-sm px-6 py-1 border-black text-black" onClick={() => router.push(`/advance_payment/${refno.request_number}`)}>Back</button>
                     </div>
                 </div>
-                <div className='border rounded-3xl mt-5 mb-14 p-2 text-black grid grid-cols-3'>
+                <div className='border rounded-3xl mt-5 mb-7 p-2 text-black grid grid-cols-3'>
                     <div className='grid-cols-1 px-6 border-r'>
                         <ul className=''>
                             <li className='border-b p-2'>Event Date :<span className='font-semibold px-1'>{expensedata ? expensedata.event_date : ''}</span></li>
                             <li className='border-b p-2'>Event Name :<span className='font-semibold px-1'>{expensedata ? expensedata.event_name : ''}</span></li>
                             <li className='border-b p-2'>Event Requester Name :<span className='font-semibold px-1'>{expensedata ? expensedata.event_requestor : ''}</span></li>
-                            <li className='p-2'>Event Request Number :<span className='font-semibold px-1'>{expensedata ? expensedata.name : ''}</span></li>
+                            <li className='border-b p-2'>Event Requester Number :<span className='font-semibold px-1'>{expensedata ? expensedata.name : ''}</span></li>
+                            <li className=' p-2'>Business Unit :<span className='font-semibold px-1'>{expensedata ? expensedata.business_unit : ''}</span></li>
                         </ul>
                     </div>
                     <div className='grid-cols-1 px-6 border-r'>
                         <ul className=''>
-                            <li className='border-b p-2'>Cost Center :<span className='font-semibold px-1'>{expensedata ? expensedata.cost_centre : ''}</span></li>
+                            <li className='border-b p-2'>Cost Center :<span className='font-semibold px-1'>{expensedata ? expensedata.cost_center : ''}</span></li>
                             <li className='border-b p-2'>Cost Center Hod :<span className='font-semibold px-1'>{expensedata ? expensedata.cost_hod : ''}</span></li>
                             <li className='border-b p-2'>Cost Center Description :<span className='font-semibold px-1'>{expensedata ? expensedata.cost_desc : ''}</span></li>
-                            <li className='p-2'>Reporting Head :<span className='font-semibold px-1'>{expensedata ? expensedata.reporting_head : ''}</span></li>
+                            <li className='border-b p-2'>Reporting Head :<span className='font-semibold px-1'>{expensedata ? expensedata.event_date : ''}</span></li>
+                            <li className=' p-2'>Sub Type Of activity :<span className='font-semibold px-1'>{expensedata ? expensedata.sub_type_of_activity : ''}</span></li>
                         </ul>
                     </div>
                     <div className='grid-cols-1 px-6'>
                         <ul className=''>
-                            <li className='border-b p-2'>Business Unit :<span className='font-semibold px-1'>{expensedata ? expensedata.business_unit : ''}</span></li>
-                            <li className='border-b p-2'>Sub Type Of activity :<span className='font-semibold px-1'>{expensedata ? expensedata.sub_type_of_activity : ''}</span></li>
-                            <li className='border-b p-2'>Total Estimated Expense :<span className='font-semibold px-1'>{expensedata ? expensedata.total_compensation_expense : ''}</span></li>
+                            <li className='border-b p-2'>Total logistics Expense :<span className='font-semibold px-1'>{expensedata ? expensedata.total_logistics_expense : ''}</span></li>
+                            <li className='border-b p-2'>Total Compensation Expense :<span className='font-semibold px-1'>{expensedata ? expensedata.total_compensation_expense : ''}</span></li>
+                            <li className='border-b p-2'>Total Estimated Expense :<span className='font-semibold px-1'>{expensedata ? expensedata.total_estimated_expense : ''}</span></li>
+                            <li className='border-b p-2'>Total Advance Expense :<span className='font-semibold px-1'>{expensedata ? expensedata.total_advance_amount : ''}</span></li>
+                            <li className=' p-2'>Total Remaining Expense :<span className='font-semibold px-1'>{expensedata ? expensedata.total_balance_amount : ''}</span></li>
                         </ul>
                     </div>
 
                 </div>
-
                 <div className=" grid grid-cols-3 gap-4 pb-7">
                     <div className='col-span-3 space-y-2'>
                         <label htmlFor="event_conclusion" className="text-black md:text-sm md:font-normal capitalize">
