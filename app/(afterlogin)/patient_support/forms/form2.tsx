@@ -16,6 +16,7 @@ import { useState } from 'react';
 import { Toaster, toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 import {Previewdata} from '@/app/(afterlogin)/patient_support/page'
+
 type EventEntry = {
   product_amount: number
 }
@@ -52,13 +53,15 @@ type formData = {
   logistics: Logistics[];
   total_compensation_expense: number;
   total_logistics_expense: number;
+  total_estimated_expense: number,
   event_requestor: string;
   business_unit: string;
   division_category: string;
   division_sub_category: string;
   sub_type_of_activity: string;
   any_govt_hcp: string,
-  no_of_hcp: number
+  no_of_hcp: number,
+  product_amount: string
 };
 
 type Props = {
@@ -118,16 +121,17 @@ const handleEndDateClick = () => {
     }
 
     const handleSubmit = async () => {
-   
        const updatedFormData = {
            ...formdata
-   
        };
        
-       updatedFormData.event_type = "Patient Support"
-       if(Props.refno){
-         updatedFormData.name = Props.refno;
-       }
+      updatedFormData.event_type = "Patient Support"
+      if(Props.previewData?.product_amount){
+        updatedFormData.total_estimated_expense = Props.previewData.product_amount;
+      }
+      if(Props.refno){
+        updatedFormData.name = Props.refno;
+      }
    
    
        try {
@@ -261,7 +265,7 @@ const handleEndDateClick = () => {
             name='total_estimated_expense'
             type='number'
             // onChange={(e)=>Props.handlefieldChange(e)}
-            defaultValue={Props.previewData?.total_estimated_expense}
+            defaultValue={Props.previewData?.product_amount}
             readOnly
           ></Input>
         </div>

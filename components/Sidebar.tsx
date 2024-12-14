@@ -7,6 +7,8 @@ import { redirect } from "next/navigation";
 import { useAuth } from "../app/context/AuthContext";
 import Cookies from "js-cookie";
 import { useRouter } from 'nextjs-toploader/app';
+import { usePathname } from "next/navigation";
+
 type modules = {
   module: string;
   route: string;
@@ -42,6 +44,7 @@ type Sidebar = {
 const Sidebar = () => {
   const router = useRouter();
   const { role, userid, name } = useAuth();
+  const pathname = usePathname();
   const [handleSidebar,setHandleSidebar] = useState<Sidebar>({
     modules:false,
     masters:false,
@@ -305,6 +308,15 @@ const Sidebar = () => {
       }, {} as Sidebar)
     );
   };
+
+  useEffect(()=>{
+    setHandleSidebar({
+      modules:false,
+      masters:false,
+      reports:false,
+      settings:false,
+    })
+  },[pathname])
 
   return (
     <div className="flex flex-col justify-between h-screen w-full">

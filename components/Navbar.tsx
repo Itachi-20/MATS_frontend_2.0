@@ -7,7 +7,7 @@ const Navbar = () => {
   const { role, name, userid, clearAuthData } = useAuth();
   const pathname = usePathname();
   return (
-    <div className='flex justify-between rounded-tl-[60px] text-black p-3 shadow-md  z-30'>
+    <div className='flex justify-between rounded-tl-[60px] text-black p-3 shadow-md'>
       <h1 className=' text-[#252424] text-[22px] pl-5 pt-2 font-semibold capitalize'>
         {pathname.substring(1).replace(/_/g, " ").split("/")[0] == "update utr" ? 'Update UTR' : pathname.substring(1).replace(/_/g, " ").split("/")[0]}
         {/* .split("/")[0]  */}

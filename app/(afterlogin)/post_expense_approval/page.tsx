@@ -26,6 +26,8 @@ import { useAuth } from "../../context/AuthContext";
 import { Toaster, toast } from 'sonner';
 import DeletePopUp from "@/components/deleteDialog";
 import { Loader2 } from "lucide-react";
+import { FormatDate } from '@/app/utility/dateFormatter';
+
 
 type EventTable = {
     name: string;
@@ -320,8 +322,8 @@ const Index = () => {
                                                    <TableCell>{data.name ?? "-"}</TableCell>
                                                    <TableCell>{data.event_name ?? "-"}</TableCell>
                                                    <TableCell>{data.event_type ?? "-"}</TableCell>
-                                                   <TableCell>{data.event_start_date ?? "-"}</TableCell>
-                                                   <TableCell>{data.event_end_date ?? "-"}</TableCell>
+                                                   <TableCell>{FormatDate(data.event_start_date) ?? "-"}</TableCell>
+                                                   <TableCell>{FormatDate(data.event_end_date) ?? "-"}</TableCell>
                                                    <TableCell>{data.total_compensation_expense ?? ""}</TableCell>
                                                    <TableCell>{data.total_logistics_expense ?? ""}</TableCell>
                                                    <TableCell>{data.total_estimated_expense ?? ""}</TableCell>
