@@ -61,8 +61,7 @@ export default function EventList() {
   };
   const handleExportButton = () => {
       exportEventList();
-};
-
+  };
   const handleClick = (refno: string, status: string, eventType: string) => {
     console.log(eventType, "function event type")
     if (status == "Draft") {
@@ -86,7 +85,6 @@ export default function EventList() {
       router.push(`/event_list/${refno}`)
     }
   }
-
   const fetchTableData = async () => {
     setLoading(true)
     try {

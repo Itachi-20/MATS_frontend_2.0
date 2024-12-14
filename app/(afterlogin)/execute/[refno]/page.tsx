@@ -213,6 +213,12 @@ const page = () => {
       setIsDialog(prev =>!prev);
     }
 
+    const executeFiles =preview_data && preview_data.documents.filter((item,index)=>{
+      if(item.activity_type == "Executed"){
+        return item;
+      }
+    })
+    console.log(executeFiles,"this is execute files")
     const activityList = async ()=>{
       try {
           const response = await fetch(`/api/training_and_education/activityList/`, {
@@ -404,7 +410,7 @@ const page = () => {
                             <h1 className="text-center">{preview_data?.modified.substring(0,10)}</h1>
                         </div>
                         <div className="col-span-1 flex justify-center pt-1">
-                            <Button className="px-10 bg-[#4430bf] text-white" onClick={()=>{handleDialog()}}>
+                            <Button className={`px-10 bg-[#4430bf] text-white ${executeFiles && executeFiles.length>0?"":"hidden"}`} onClick={()=>{handleDialog()}}>
                                 Execute
                                 </Button>
                         </div>
