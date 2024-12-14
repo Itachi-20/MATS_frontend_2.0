@@ -19,7 +19,7 @@ interface DocumentsProps {
 
 type EventEntry = {
   name: string;
-  owner: string;
+  owner: string;  
   creation: string;
   modified: string;
   modified_by: string;

@@ -1,60 +1,65 @@
 'use client'
 import React from 'react'
 import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-  } from "@/components/ui/select";
-  import { useState, useEffect } from 'react';
-  import { Button } from "@/components/ui/button";
-  import { useRouter } from 'nextjs-toploader/app';
-  import Documents from "@/components/documents"
-  import SimpleFileUpload from "@/components/multiple_file_upload";
-  import { Toaster, toast } from 'sonner'
-  type activityDropdown = {
-    activity: {
-      name: string,
-      activity_name: string
-    }[],
-    document: {
-      name: string,
-      activity_type: string,
-      document_name: string
-    }[]
-  }
-  
-  type Props = {
-    activityDropdown: activityDropdown | null
-    refno: string | null
-  }
-const form4 = ({...Props}:Props) => {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useState, useEffect } from 'react';
+import { Button } from "@/components/ui/button";
+import { useRouter } from 'nextjs-toploader/app';
+import Documents from "@/components/documents"
+import SimpleFileUpload from "@/components/multiple_file_upload";
+import { Toaster, toast } from 'sonner'
+// type activityDropdown = {
+//   activity: {
+//     name: string,
+//     activity_name: string
+//   }[],
+//   document: {
+//     name: string,
+//     activity_type: string,
+//     document_name: string
+//   }[]
+// }
+
+type activityDropdown = {
+    name: string,
+    document_name: string
+}[]
+
+type Props = {
+  activityDropdown: activityDropdown | null
+  refno: string | null
+}
+const form4 = ({ ...Props }: Props) => {
   const router = useRouter();
   const [activityType, setActivityType] = useState('Pre Activity');
   const [refno, setRefno] = useState(Props.refno);
-  const [documentType,setDocumentType] = useState("");
+  const [documentType, setDocumentType] = useState("");
   const [preview_data, setPreviewData] = useState<any>(null);
   const [uploadedFiles, setUploadedFiles] = useState<FileList | null>(null);
   const [files, setFiles] = useState<File[]>([]);
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     router.replace(`/non_monetary_grant?forms=5&refno=${Props.refno}`)
   };
-  const FileUpload = async()=>{
+  const FileUpload = async () => {
     const formdata = new FormData();
 
-    if (uploadedFiles && uploadedFiles.length > 0 ) {
+    if (uploadedFiles && uploadedFiles.length > 0) {
       for (let i = 0; i < uploadedFiles.length; i++) {
-        formdata.append("file", uploadedFiles[i]); 
+        formdata.append("file", uploadedFiles[i]);
       }
     } else {
       console.log("No file to upload");
       toast.warning("No file to Upload");
-      return;  
+      return;
     }
-      formdata.append("docname",refno as string)
-      formdata.append("activity_type",activityType);
-      formdata.append("document_type",documentType)
+    formdata.append("docname", refno as string)
+    formdata.append("activity_type", activityType);
+    formdata.append("document_type", documentType)
     const apiCallPromise = new Promise(async (resolve, reject) => {
       try {
         const response = await fetch(`/api/monetary_grant/fileUpload`, {
@@ -88,7 +93,7 @@ const form4 = ({...Props}:Props) => {
     });
   }
 
-  const handleActivityTypeChange = (value:string)=>{
+  const handleActivityTypeChange = (value: string) => {
     setActivityType(value);
   }
 
@@ -117,14 +122,14 @@ const form4 = ({...Props}:Props) => {
     }
   };
   const handleNext = () => {
-    
+
   }
   useEffect(() => {
     PreviewData();
   }, []);
-  useEffect(()=>{
+  useEffect(() => {
 
-  },[preview_data])
+  }, [preview_data])
 
   return (
     (<div>
@@ -139,13 +144,13 @@ const form4 = ({...Props}:Props) => {
           <Select
             onValueChange={(value) => handleActivityTypeChange(value)}
             disabled
-            value={'Pre Activity'}
+          defaultValue={'Pre Activity'}
           >
             <SelectTrigger className="dropdown">
               <SelectValue placeholder="Pre Activity" />
             </SelectTrigger>
             <SelectContent>
-              {
+              {/* {
                 Props.activityDropdown && Props.activityDropdown.activity.map((item, index) => {
                   return (
                     <SelectItem value={item.name}>
@@ -153,8 +158,10 @@ const form4 = ({...Props}:Props) => {
                     </SelectItem>
                   )
                 })
-              }
-
+              } */}
+              <SelectItem value={activityType}>
+                {activityType}
+              </SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -164,13 +171,13 @@ const form4 = ({...Props}:Props) => {
           </label>
           <Select
             onValueChange={(value) => setDocumentType(value)}
-            value={documentType??''}
+            value={documentType ?? ''}
           >
             <SelectTrigger className="dropdown">
               <SelectValue placeholder="Select" />
             </SelectTrigger>
             <SelectContent>
-              {
+              {/* {
                 Props.activityDropdown && Props.activityDropdown.document.filter((item, index) => {
                   if (item.activity_type == activityType) {
                     return item
@@ -180,8 +187,17 @@ const form4 = ({...Props}:Props) => {
                     <SelectItem value={item.name}>{item.document_name}</SelectItem>
                   )
                 })
-              }
+              } */}
 
+              {
+                Props.activityDropdown && Props.activityDropdown.map((item, index) => {
+                  return (
+                    <SelectItem value={item.name}>
+                      {item.document_name}
+                    </SelectItem>
+                  )
+                })
+              }
             </SelectContent>
           </Select>
         </div>
@@ -190,7 +206,7 @@ const form4 = ({...Props}:Props) => {
             <label className="text-black text-sm font-normal capitalize">
               Upload Files<span className="text-[#e60000]">*</span>
             </label>
-            <SimpleFileUpload files={files} setFiles={setFiles} setUploadedFiles={setUploadedFiles}  onNext={handleNext} buttonText={'Upload Here'} />
+            <SimpleFileUpload files={files} setFiles={setFiles} setUploadedFiles={setUploadedFiles} onNext={handleNext} buttonText={'Upload Here'} />
           </div>
           <Button
             className="bg-white text-black border text-md font-normal"
@@ -210,9 +226,9 @@ const form4 = ({...Props}:Props) => {
           {" "}
           Save as Draft
         </Button> */}
-         <Button className="bg-white text-black border text-md font-normal hover:text-white hover:bg-black" onClick={() => router.push(`/non_monetary_grant?forms=3&refno=${Props.refno}`)}>
-            Back
-          </Button>
+        <Button className="bg-white text-black border text-md font-normal hover:text-white hover:bg-black" onClick={() => router.push(`/non_monetary_grant?forms=3&refno=${Props.refno}`)}>
+          Back
+        </Button>
         <Button className="bg-[#4430bf] text-white text-md font-normal border" onClick={(e) => handleSubmit(e)}>
           Next
         </Button>

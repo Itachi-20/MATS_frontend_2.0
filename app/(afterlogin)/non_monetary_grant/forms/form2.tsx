@@ -140,11 +140,11 @@ const Form2 = ({ ...Props }: Props) => {
         
         <div className='flex flex-col gap-2'>
           <label className='lable'>Name of Organization<span className='text-[#e60000]'>*</span></label>
-          <Input className='dropdown' placeholder='Type Here' 
+          <Textarea className='dropdown' placeholder='Type Here' 
             name='organization_name'
             onChange={(e)=>handlefieldChange(e)}
             defaultValue={Props.previewData?.organization_name?Props.previewData.organization_name:""}
-          ></Input>
+          ></Textarea>
         </div>
 
         <div className='flex flex-col gap-2'onClick={()=>{handleStartDateClick()}}>

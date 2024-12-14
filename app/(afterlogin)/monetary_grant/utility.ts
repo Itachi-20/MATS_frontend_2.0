@@ -18,26 +18,27 @@ export const dropdown = async ()=>{
     }
 }
 
-export const activityList = async ()=>{
-    try {
-        const response = await fetch(`${process.env.FRAPPE_URL}/api/method/matsapp.api.event.event.get_document_and_activity_type`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            credentials:'include'
-        });
-  
-        if (response.ok) {
-          const data = await response.json();
-          return data.data;
-        } else {
-            console.log('Login failed');
-        }
-    } catch (error) {
-        console.error("Error during login:", error);
+export const activityList = async (cokkie: any, activity_type: string, event_type: string) => {
+  try {
+    const response = await fetch(`${process.env.FRAPPE_URL}/api/resource/Master Document Type?filters=[["activity_type","=","${activity_type}"],["event_type","=","${event_type}"]]&fields=["name","document_name"]`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        'Cookie': cokkie
+      },
+      // credentials:'include'
+    });
+    if (response.ok) {
+      const data = await response.json();
+      return data.data;
+    } else {
+      console.log('activity list not found');
     }
+  } catch (error) {
+    console.error("Error during login:", error);
+  }
 }
+
 
 
 export const handleBudgetChange = async (value: string) => {

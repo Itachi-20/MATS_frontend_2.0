@@ -52,16 +52,10 @@ export type DropdownDataType = {
   }[],
 };
 export type ActivityDropdownType = {
-  activity:{
-    name:string,
-    activity_name:string
-  }[],
-  document:{
-    name:string,
-    activity_type:string,
-    document_name:string
-  }[]
-};
+  name: string,
+  document_name: string
+ 
+} [];
 export type PreviewDataType = {
   name: string;
   owner: string;
@@ -319,7 +313,6 @@ const index = async ({...Props}:any) => {
 
   const props =  await Props;
   const {forms,refno} = await props.searchParams;
-  const activityDropdown:ActivityDropdownType = await activityList();
   const dropdownData:DropdownDataType =await dropdown();
 
   const cookie = await cookies();
@@ -328,7 +321,7 @@ const index = async ({...Props}:any) => {
   let cityDropdown = null;
   let ReportingHeadDropdown = null;
   // console.log(refno,cookie);
-  
+  const activityDropdown: ActivityDropdownType = await activityList(cookie, 'Pre Activity', 'Training and Education');
   if(refno){
     previewdata =  await PreviewData(refno,cookie);
   }

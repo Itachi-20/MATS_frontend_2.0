@@ -21,6 +21,7 @@ import {
 import { Checkbox } from '@/components/ui/checkbox';
 import { Previewdata } from '@/app/(afterlogin)/non_monetary_grant/page'
 import { useRouter } from 'nextjs-toploader/app';
+import { Toaster, toast } from 'sonner'
 type formData = {
   name: string | null;
   event_type: string;
@@ -153,7 +154,7 @@ const Form3 = ({ ...Props }: Props) => {
   console.log(formdata, "this is form data")
 
   const handleLogisticsAdd = () => {
-    if (logisticVendorType && logisticAmount > 0) {
+    if (logisticVendorType  && logisticAmount > 0) {
       const newObject: Logistics = { vendor_type: logisticVendorType, est_amount: logisticAmount };
       setLogisticBudget(prevRows => {
         const updatedRecords = prevRows && [...prevRows, newObject]
@@ -168,7 +169,7 @@ const Form3 = ({ ...Props }: Props) => {
   }
 
   const handleCompensationAdd = () => {
-    if (compansationVendorType && compansationAmount > 0) {
+    if (compansationVendorType && compansationVendorName && compansationAmount > 0) {
       const newObject: Compensation = { vendor_type: compansationVendorType, est_amount: compansationAmount, gst_included: compansation_is_GST, vendor_name: compansationVendorName };
       setCompansationBudget(prevRows => {
         const updatedRecords = prevRows && [...prevRows, newObject]
@@ -181,6 +182,8 @@ const Form3 = ({ ...Props }: Props) => {
       setCompansationAmount(0);
       setCompansationVendorName('');
       setCompansation_is_GST(0);
+    }else{
+      toast.warning("Please fill the mandotary fields")
     }
   }
 
@@ -647,6 +650,7 @@ const Form3 = ({ ...Props }: Props) => {
         </Button>
 
       </div>
+      <Toaster richColors position="top-right" />
     </div>)
   );
 }

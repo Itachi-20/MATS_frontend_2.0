@@ -41,7 +41,7 @@ export default function RootLayout({
              height={100}
              ></Image> */}
           <div className="col-span-5 border-2 rounded-l-[60px] w-full h-screen bg-white overflow-scroll overflow-x-hidden">
-            <div className="sticky top-0 bg-white">
+            <div className="sticky top-0 bg-white z-30">
               <Navbar />
             </div>
             {children}
