@@ -319,7 +319,7 @@ const Form3 = ({ ...Props }: Props) => {
               </SelectTrigger>
               <SelectContent>
                 {Props.vendorType ? Props.vendorType?.filter((item, index) => {
-                  if (item.vendor_type == "Hotel" || item.vendor_type == "Travel" || item.vendor_type == "Food") {
+                  if (item.name == "Hotel" || item.name == "Travel" || item.name == "Food") {
                     return item
                   }
                 })
