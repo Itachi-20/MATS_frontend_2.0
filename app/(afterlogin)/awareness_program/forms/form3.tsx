@@ -19,7 +19,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Checkbox } from '@/components/ui/checkbox';
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'nextjs-toploader/app';
 import {Previewdata} from '@/app/(afterlogin)/hcp_services/page';
 import { PreviewData } from '../utility';
 import { Toaster, toast } from 'sonner';

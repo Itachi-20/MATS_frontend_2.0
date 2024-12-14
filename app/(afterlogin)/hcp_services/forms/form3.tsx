@@ -18,7 +18,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'nextjs-toploader/app';
 import { Previewdata } from '@/app/(afterlogin)/hcp_services/page'
 import { Toaster, toast } from 'sonner'
 

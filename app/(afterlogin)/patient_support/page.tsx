@@ -2,9 +2,9 @@ import Form1 from "./forms/form1";
 import Form2 from "./forms/form2";
 import Form4 from "./forms/form4";
 import Preview_Form from './forms/preview_form';
-import { dropdown,activityList,PreviewData,handleBusinessUnitChange,handleBudgetChange} from "./utility";
+import { dropdown, activityList, PreviewData, handleBusinessUnitChange, handleBudgetChange } from "./utility";
 import { cookies } from "next/headers";
-import {handleStateChange,handleReportingChange} from '../training_and_education/utility'
+import { handleStateChange, handleReportingChange } from '../training_and_education/utility'
 type dropdownData = {
   company: {
     name: string,
@@ -61,7 +61,7 @@ export type Previewdata = {
   city: string | null;
   therapy: string;
   event_requestor: string;
-  division_sub_category: string ;
+  division_sub_category: string;
   reporting_head: string | null;
   status: string;
   current_stage: string;
@@ -160,7 +160,7 @@ export type Previewdata = {
   post_expense_approved: number;
   travel_expense_submitted: number;
   travel_expense_approved: number;
-  budget:string;
+  budget: string;
 };
 
 type ChildVendor = {
@@ -245,79 +245,72 @@ type ChildOccurrence = {
 };
 
 type activityDropdown = {
-  activity:{
-    name:string,
-    activity_name:string
-  }[],
-  document:{
-    name:string,
-    activity_type:string,
-    document_name:string
-  }[]
-}
+  name: string,
+  document_name: string
+}[]
 
-const index = async({...Props}:any) => {
-  const dropdownData:dropdownData = await dropdown();
-  const actvityDropdown:activityDropdown = await activityList(); 
-  const props =  await Props;
-  const {forms,refno} = await props.searchParams;
+const index = async ({ ...Props }: any) => {
+  const dropdownData: dropdownData = await dropdown();
+  const props = await Props;
+  const { forms, refno } = await props.searchParams;
   const cookie = await cookies()
-  let previewdata:Previewdata | null =null;
+  let previewdata: Previewdata | null = null;
   let eventCostCenter = null;
   let subtypeActivity = null;
   let cityDropdown = null;
   let ReportingHeadDropdown = null;
-  if(refno){
-      previewdata =  await PreviewData(refno,cookie);
+  const actvityDropdown: activityDropdown = await activityList(cookie, 'Pre Activity', 'Patient Support');
+  if (refno) {
+    previewdata = await PreviewData(refno, cookie);
   }
-  if(previewdata && previewdata.business_unit){
-    eventCostCenter = await handleBusinessUnitChange(previewdata.business_unit,cookie);
+  if (previewdata && previewdata.business_unit) {
+    eventCostCenter = await handleBusinessUnitChange(previewdata.business_unit, cookie);
   }
 
-  if(previewdata && previewdata.division_category == "National"){
-    subtypeActivity = await handleBudgetChange(previewdata.division_category,cookie);
+  if (previewdata && previewdata.division_category == "National") {
+    subtypeActivity = await handleBudgetChange(previewdata.division_category, cookie);
   }
-  if(previewdata && previewdata.state){
-    cityDropdown = await handleStateChange(previewdata?.state,cookie);
+  if (previewdata && previewdata.state) {
+    cityDropdown = await handleStateChange(previewdata?.state, cookie);
   }
-  if(previewdata && previewdata.state && previewdata.event_requestor && previewdata.business_unit){
-    ReportingHeadDropdown = await handleReportingChange(previewdata.event_requestor,previewdata.business_unit,previewdata.division_category,previewdata.division_sub_category,previewdata?.state,cookie);
+  if (previewdata && previewdata.state && previewdata.event_requestor && previewdata.business_unit) {
+    ReportingHeadDropdown = await handleReportingChange(previewdata.event_requestor, previewdata.business_unit, previewdata.division_category, previewdata.division_sub_category, previewdata?.state, cookie);
   }
-  console.log(previewdata,"this is preview data")
+  console.log(previewdata, "this is preview data")
 
   return (
     <>
-        <div className="px-7 pb-7 pt-4 w-full z-20">
+      <div className="px-7 pb-7 pt-4 w-full z-20">
         {
-            forms == "1" ?
-              <Form1
+          forms == "1" ?
+            <Form1
               ReportingHeadDropdown={ReportingHeadDropdown}
               cityDropdown={cityDropdown}
               dropdownData={dropdownData}
-           previewData={previewdata}
-           eventCostCenter = {eventCostCenter}
-           refno = {refno}
-           subtypeActivity = {subtypeActivity}
-              /> :
-              forms == "2" ?
-                <Form2
+              previewData={previewdata}
+              eventCostCenter={eventCostCenter}
+              refno={refno}
+              subtypeActivity={subtypeActivity}
+            /> :
+            forms == "2" ?
+              <Form2
                 previewData={previewdata}
-                refno = {refno}
-                currency = {dropdownData && dropdownData.currency}
+                refno={refno}
+                currency={dropdownData && dropdownData.currency}
+              /> :
+              forms == "3" ?
+                <Form4
+                  activityDropdown={actvityDropdown}
+                  refno={refno}
                 /> :
-                  forms == "3" ?
-                    <Form4
-                    activityDropdown={actvityDropdown}
-                    refno= {refno}
-                    /> :
-                    forms == "4" ?
-                      <Preview_Form
-                      previewData={previewdata}
-                      refno= {refno}
-                      /> : 
+                forms == "4" ?
+                  <Preview_Form
+                    previewData={previewdata}
+                    refno={refno}
+                  /> :
                   ""
-          }
-        </div>
+        }
+      </div>
     </>
   )
 }

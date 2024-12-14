@@ -4,7 +4,7 @@ import React, { useCallback } from "react";
 import { useEffect, useState } from "react"
 import Image from "next/image";
 import DatePicker from "./date-picker"
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'nextjs-toploader/app';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, } from "@/components/ui/table";
@@ -13,6 +13,7 @@ import { fetchData } from "../audit_trail/[id]/utility";
 import { useSearchParams } from "next/navigation";
 import { usePathname } from "next/navigation";
 import Pagination from "@/components/eventList/pagination";
+import { FormatDate } from '@/app/utility/dateFormatter';
 
 type EventTable = {
   name: string;
@@ -43,6 +44,20 @@ type EventTable = {
   owner: string;
 };
 
+export const formatDate = (dateString: string) => {
+  if(dateString){
+    const [year, month, day] = dateString.split('-').map(Number);
+  
+    // Create a new Date object (Note: months are 0-indexed in JavaScript)
+    const date = new Date(year, month - 1, day);
+  
+    // Manually format the date to 'dd-MM-yyyy'
+    const formattedDate = `${String(date.getDate()).padStart(2, '0')}-${String(date.getMonth() + 1).padStart(2, '0')}-${date.getFullYear()}`;
+  
+    return formattedDate;
+  }
+};
+
 export default function EventList() {
 
   const router = useRouter();
@@ -56,7 +71,7 @@ export default function EventList() {
   const total_event_list = 12;
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [loading, setLoading] = useState(true);
-  
+
   const togglePicker = () => {
     setIsPickerOpen(!isPickerOpen);
   };
@@ -289,8 +304,8 @@ export default function EventList() {
                         <TableCell>{data.name ?? "-"}</TableCell>
                         <TableCell>{data.event_name ?? "-"}</TableCell>
                         <TableCell>{data.event_type ?? "-"}</TableCell>
-                        <TableCell>{data.event_start_date ?? "-"}</TableCell>
-                        <TableCell>{data.event_end_date ?? "-"} </TableCell>
+                        <TableCell>{FormatDate(data.event_start_date) ?? "-"}</TableCell>
+                        <TableCell>{FormatDate(data.event_end_date) ?? "-"} </TableCell>
                         <TableCell>{data.event_requestor ?? "-"}</TableCell>
                         <TableCell>{data.owner ?? ""}</TableCell>
                         <TableCell>{data.event_venue ?? "-"}</TableCell>

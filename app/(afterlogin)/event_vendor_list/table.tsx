@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/table";
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'nextjs-toploader/app';
 import { Toaster, toast } from 'sonner'
 import { Button } from '@/components/ui/button';
 import { Loader2 } from "lucide-react";
