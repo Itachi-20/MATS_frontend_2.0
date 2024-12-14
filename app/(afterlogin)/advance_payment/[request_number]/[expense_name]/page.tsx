@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import Comment_box from '@/components/Comment_box'
 import { useParams, useSearchParams } from 'next/navigation'
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'nextjs-toploader/app';
 import { Textarea } from '@/components/ui/textarea'
 
 type File = {

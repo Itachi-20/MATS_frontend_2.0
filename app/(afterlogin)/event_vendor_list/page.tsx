@@ -13,7 +13,7 @@ import Table from "@/app/(afterlogin)/event_vendor_list/table";
 import { useState, useEffect } from 'react';
 import DeletePopup from '@/components/deleteDialog'
 import { View } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'nextjs-toploader/app';
 import { toast, Toaster } from 'sonner';
 
 type dropdownData = {
