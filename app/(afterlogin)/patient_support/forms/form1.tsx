@@ -626,10 +626,10 @@ const Form1 = ({ ...Props }: Props) => {
           </Select>
         </div>
       </div>
-      <div className="grid grid-cols-2 gap-10">
+      {/* <div className="grid grid-cols-2 gap-10">
         <div className="flex flex-col gap-2">
           <label className="lable">
-            Faculties<span className="text-[#e60000]">*</span>
+          Selection Criteria For Faculty<span className="text-[#e60000]">*</span>
           </label>
           <Textarea className='text-black shadow-md' placeholder='Type Here'
             name="faculty"
@@ -639,7 +639,7 @@ const Form1 = ({ ...Props }: Props) => {
         </div>
         <div className="flex flex-col gap-2">
           <label className="lable">
-            Participants<span className="text-[#e60000]">*</span>
+          Selection Criteria For Participant<span className="text-[#e60000]">*</span>
           </label>
           <Textarea className="text-black shadow-md"
             placeholder="Type Here"
@@ -648,7 +648,7 @@ const Form1 = ({ ...Props }: Props) => {
             defaultValue={Props.previewData?.participants ? Props.previewData.participants : ""}
           />
         </div>
-      </div>
+      </div> */}
 
       <div className="py-8">
         <h1 className="text-black text-2xl font-normal uppercase pb-8">
