@@ -168,7 +168,7 @@ const Sidebar = () => {
         },
         {
           name: "Event Summary Repost",
-          route: "/event_summary_report",
+          route: "/event_report",
         },
       ],
       masters: [
@@ -207,7 +207,7 @@ const Sidebar = () => {
         },
         {
           name: "Event Summary Repost",
-          route: "/event_summary_report",
+          route: "/event_report",
         },
       ],
       masters: [
@@ -242,7 +242,7 @@ const Sidebar = () => {
       reports: [
         {
           name: "Event Summary Repost",
-          route: "/event_summary_report",
+          route: "/event_report",
         },
       ],
       masters: [],
@@ -264,7 +264,7 @@ const Sidebar = () => {
       reports: [
         {
           name: "Event Summary Repost",
-          route: "/event_summary_report",
+          route: "/event_report",
         },
       ],
       masters: [],
