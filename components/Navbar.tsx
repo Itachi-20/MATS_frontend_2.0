@@ -1,12 +1,10 @@
 "use client"
 import React from 'react';
 import Image from 'next/image';
-import { useAppContext } from '@/app/context/module';
 import { usePathname } from 'next/navigation'
 import { useAuth } from "../app/context/AuthContext";
 const Navbar = () => {
   const { role, name, userid, clearAuthData } = useAuth();
-  const { user } = useAppContext();
   const pathname = usePathname();
   return (
     <div className='flex justify-between rounded-tl-[60px] text-black p-3 shadow-md'>

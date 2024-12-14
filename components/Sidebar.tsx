@@ -3,15 +3,16 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { redirect, useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 import { useAuth } from "../app/context/AuthContext";
 import Cookies from "js-cookie";
+import { useRouter } from 'nextjs-toploader/app';
 type modules = {
   module: string;
   route: string;
 };
 type reports = {
-  name: string;
+  name: string; 
   route: string;
 };
 

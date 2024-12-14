@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState,useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Button } from "@/components/ui/button";
 import Documents from "@/components/documents"
 import SimpleFileUpload from "@/components/multiple_file_upload";
@@ -22,7 +22,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Item } from '@radix-ui/react-select';
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'nextjs-toploader/app';
 import { Toaster, toast } from 'sonner'
 type Compensation = {
   vendor_type: string;
@@ -66,29 +66,22 @@ type Logistics = {
 // };
 
 type activityDropdown = {
-  activity: {
-    name: string,
-    activity_name: string
-  }[],
-  document: {
-    name: string,
-    activity_type: string,
-    document_name: string
-  }[]
-}
+  name: string,
+  document_name: string
+}[]
 
 type Props = {
-  refNo:string | null
+  refNo: string | null
   activityDropdown: activityDropdown | null
 }
 const form4 = ({ ...Props }: Props) => {
-  console.log("++++++++++++++++", Props.activityDropdown,"---------------");
+  console.log("++++++++++++++++", Props.activityDropdown, "---------------");
   const router = useRouter();
   // const [formdata, setFormData] = useState<formData>();
   const [refNo, setRefNo] = useState<string | null>(Props.refNo ?? "");
 
   const [activityType, setActivityType] = useState("Pre Activity");
-  
+
   const [documentType, setDocumentType] = useState("");
   const [preview_data, setPreviewData] = useState<any>(null);
   const [uploadedFiles, setUploadedFiles] = useState<FileList | null>(null)
@@ -112,8 +105,8 @@ const form4 = ({ ...Props }: Props) => {
     }
     formdata.append("docname", refNo as string);
     // if(uploadedFiles.length > 0) {
-      formdata.append("activity_type", "Pre Activity");
-      formdata.append("document_type", documentType);
+    formdata.append("activity_type", "Pre Activity");
+    formdata.append("document_type", documentType);
     // }
     const apiCallPromise = new Promise(async (resolve, reject) => {
       try {
@@ -151,7 +144,7 @@ const form4 = ({ ...Props }: Props) => {
     setActivityType(value);
   }
   const handleNext = () => {
-    
+
   }
 
   const PreviewData = async () => {
@@ -163,7 +156,7 @@ const form4 = ({ ...Props }: Props) => {
         },
         credentials: 'include',
         body: JSON.stringify({
-          name :refNo
+          name: refNo
         })
       });
 
@@ -182,10 +175,10 @@ const form4 = ({ ...Props }: Props) => {
     PreviewData();
   }, [])
 
-  useEffect(()=>{
-  },[preview_data])
+  useEffect(() => {
+  }, [preview_data])
 
-  
+
   return (
     <div>
       <h1 className="text-black text-2xl font-normal uppercase pb-8">
@@ -197,14 +190,14 @@ const form4 = ({ ...Props }: Props) => {
             Document Type <span className="text-[#e60000]">*</span>
           </label>
           <Select
-            onValueChange={(value) => handleActivityTypeChange(value)} 
+            onValueChange={(value) => handleActivityTypeChange(value)}
             disabled
           >
             <SelectTrigger className="dropdown">
               <SelectValue placeholder="Pre Activity" />
             </SelectTrigger>
             <SelectContent>
-              {
+              {/* {
                 Props.activityDropdown ? Props.activityDropdown.activity.map((item, index) => {
                   return (
                     <SelectItem value={item.name}>
@@ -213,8 +206,10 @@ const form4 = ({ ...Props }: Props) => {
                   )
                 }) :
                 <SelectItem value={"null"} disabled>No Data Yet</SelectItem>
-              }
-
+              } */}
+              <SelectItem value={activityType}>
+                {activityType}
+              </SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -223,35 +218,43 @@ const form4 = ({ ...Props }: Props) => {
             Supporting Documents<span className="text-[#e60000]">*</span>
           </label>
           <Select
-           onValueChange={(value)=>setDocumentType(value)}
-           value={documentType}
-            >
-              <SelectTrigger className="dropdown">
-                <SelectValue placeholder="Select" />
-              </SelectTrigger>
-              <SelectContent>
-                {
-                  Props.activityDropdown ? Props.activityDropdown.document.filter((item,index)=>{
-                    if(item.activity_type == activityType){
-                      return item
-                    }
-                  }).map((item,index)=>{
-                    return (
-                      <SelectItem value={item.name}>{item.document_name}</SelectItem>
-                    )
-                  }):
+            onValueChange={(value) => setDocumentType(value)}
+            value={documentType}
+          >
+            <SelectTrigger className="dropdown">
+              <SelectValue placeholder="Select" />
+            </SelectTrigger>
+            <SelectContent>
+              {/* {
+                Props.activityDropdown ? Props.activityDropdown.document.filter((item, index) => {
+                  if (item.activity_type == activityType) {
+                    return item
+                  }
+                }).map((item, index) => {
+                  return (
+                    <SelectItem value={item.name}>{item.document_name}</SelectItem>
+                  )
+                }) :
                   <SelectItem value={"null"} disabled>No Data Yet</SelectItem>
-                }
-                    
-              </SelectContent>
-            </Select>
+              } */}
+              {
+                Props.activityDropdown && Props.activityDropdown.map((item, index) => {
+                  return (
+                    <SelectItem value={item.name}>
+                      {item.document_name}
+                    </SelectItem>
+                  )
+                })
+              }
+            </SelectContent>
+          </Select>
         </div>
         <div className="flex items-end gap-6 col-span-1 text-nowrap">
           <div className="flex flex-col gap-3">
             <label className="text-black text-sm font-normal capitalize">
               Upload Files<span className="text-[#e60000]">*</span>
             </label>
-            <SimpleFileUpload files={files} setFiles={setFiles} setUploadedFiles={setUploadedFiles}  onNext={handleNext} buttonText={'Upload Here'} />
+            <SimpleFileUpload files={files} setFiles={setFiles} setUploadedFiles={setUploadedFiles} onNext={handleNext} buttonText={'Upload Here'} />
           </div>
           <Button
             className="bg-white text-black border text-md font-normal"
@@ -261,7 +264,7 @@ const form4 = ({ ...Props }: Props) => {
           </Button>
         </div>
       </div>
-      
+
       <Documents
         eventData={preview_data}
         PageName={''}
@@ -273,7 +276,7 @@ const form4 = ({ ...Props }: Props) => {
           {" "}
           Save as Draft
         </Button>*/}
-        <Button className="bg-white text-black border text-md font-normal hover:text-white hover:bg-black" onClick={()=>router.push(`/training_and_education?forms=3&refno=${refNo}`)}>
+        <Button className="bg-white text-black border text-md font-normal hover:text-white hover:bg-black" onClick={() => router.push(`/training_and_education?forms=3&refno=${refNo}`)}>
           Back
         </Button>
         <Button className="bg-[#4430bf] text-white text-md font-normal border" onClick={(e: React.MouseEvent<HTMLButtonElement>) => handleSubmit(e)} >

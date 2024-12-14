@@ -43,16 +43,9 @@ type dropdownData = {
 }
 
 type activityDropdown = {
-  activity: {
-    name: string,
-    activity_name: string
-  }[],
-  document: {
-    name: string,
-    activity_type: string,
-    document_name: string
-  }[]
-}
+  name: string,
+  document_name: string
+}[]
 
 export type Previewdata = {
   name: string;
@@ -270,7 +263,6 @@ type Document = {
 
 const index = async ({ ...Props }: any) => {
   const dropdownData: dropdownData = await dropdown();
-  const actvityDropdown: activityDropdown = await activityList();
   const props = await Props;
   const { forms, refno } = await props.searchParams;
   const cookie = await cookies()
@@ -278,6 +270,7 @@ const index = async ({ ...Props }: any) => {
   let eventCostCenter = null;
   let cityDropdown = null;
   let ReportingHeadDropdown = null;
+  const actvityDropdown: activityDropdown = await activityList(cookie,'Pre Activity','Non Monetary Grant');
   if (refno) {
     previewdata = await PreviewData(refno, cookie);
   }
@@ -290,7 +283,7 @@ const index = async ({ ...Props }: any) => {
   if(previewdata && previewdata.state && previewdata.event_requestor && previewdata.business_unit){
     ReportingHeadDropdown = await handleReportingChange(previewdata.event_requestor,previewdata.business_unit,previewdata.division_category,previewdata.division_sub_category,previewdata?.state,cookie);
   }
-  console.log(previewdata, "this is preview data")
+  console.log(actvityDropdown, "actvityDropdown")
   return (
         <div className="px-7 pb-7 pt-4 w-full z-20">
           <div>

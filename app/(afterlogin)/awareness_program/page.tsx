@@ -78,21 +78,13 @@ export type formData = {
   no_of_hcp: number
 };
 type activityDropdown = {
-  activity: {
-    name: string,
-    activity_name: string
-  }[],
-  document: {
-    name: string,
-    activity_type: string,
-    document_name: string
-  }[]
-}
+  name: string,
+  document_name: string
+}[]
 
 const Index = async ({ ...Props }: any) => {
   const props = await Props;
   const { forms, refno } = await props.searchParams;
-  const activityDropdown: activityDropdown = await activityList();
   const dropdownData: dropdownData = await dropdown();
 
   let eventype: { [key: string]: string } = {};
@@ -102,6 +94,7 @@ const Index = async ({ ...Props }: any) => {
   let cityDropdown = null;
   let ReportingHeadDropdown = null;
   console.log(refno, cookie);
+  const activityDropdown: activityDropdown = await activityList(cookie,'Pre Activity','Awareness Program');
   if (refno) {
     previewdata = await PreviewData(refno, cookie);
   }
