@@ -64,16 +64,9 @@ type formData = {
 };
 
 type activityDropdown = {
-  activity: {
-    name: string,
-    activity_name: string
-  }[],
-  document: {
-    name: string,
-    activity_type: string,
-    document_name: string
-  }[]
-}
+  name: string,
+  document_name: string
+}[]
 
 type Props = {
   activityDropdown: activityDropdown | null
@@ -95,7 +88,7 @@ const form4 = ({ ...Props }: Props) => {
   };
 
   const handleNext = () => {
-    
+
   }
 
   const PreviewData = async () => {
@@ -210,7 +203,7 @@ const form4 = ({ ...Props }: Props) => {
               <SelectValue placeholder="Pre Activity" />
             </SelectTrigger>
             <SelectContent>
-              {
+              {/* {
                 Props.activityDropdown && Props.activityDropdown.activity.map((item, index) => {
                   return (
                     <SelectItem value={item.name}>
@@ -218,8 +211,10 @@ const form4 = ({ ...Props }: Props) => {
                     </SelectItem>
                   )
                 })
-              }
-
+              } */}
+              <SelectItem value={activityType}>
+                {activityType}
+              </SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -229,13 +224,13 @@ const form4 = ({ ...Props }: Props) => {
           </label>
           <Select
             onValueChange={(value) => setDocumentType(value)}
-            value={documentType??''}
+            value={documentType ?? ''}
           >
             <SelectTrigger className="dropdown">
               <SelectValue placeholder="Select" />
             </SelectTrigger>
             <SelectContent>
-              {
+              {/* {
                 Props.activityDropdown && Props.activityDropdown.document.filter((item, index) => {
                   if (item.activity_type == activityType) {
                     return item
@@ -245,8 +240,16 @@ const form4 = ({ ...Props }: Props) => {
                     <SelectItem value={item.name}>{item.document_name}</SelectItem>
                   )
                 })
+              } */}
+              {
+                Props.activityDropdown ? Props.activityDropdown.map((item, index) => {
+                  return (
+                    <SelectItem value={item.name}>
+                      {item.document_name}
+                    </SelectItem>
+                  )
+                }) : <SelectItem value={"null"} disabled>No Data Yet</SelectItem>
               }
-
             </SelectContent>
           </Select>
         </div>
@@ -262,7 +265,7 @@ const form4 = ({ ...Props }: Props) => {
             <label className="text-black text-sm font-normal capitalize">
               Upload Files<span className="text-[#e60000]">*</span>
             </label>
-            <SimpleFileUpload files={files} setFiles={setFiles} setUploadedFiles={setUploadedFiles}  onNext={handleNext} buttonText={'Upload Here'} />
+            <SimpleFileUpload files={files} setFiles={setFiles} setUploadedFiles={setUploadedFiles} onNext={handleNext} buttonText={'Upload Here'} />
           </div>
           <Button
             className="bg-white text-black border text-md font-normal"

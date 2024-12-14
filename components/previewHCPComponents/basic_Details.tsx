@@ -302,7 +302,7 @@ const Basic_Details = ({ ...Props }: Props) => {
             value={Props.eventData?.reporting_head}
           ></Input>
         </div>
-        <div className="flex flex-col md:gap-2">
+        {/* <div className="flex flex-col md:gap-2">
           <label className="text-black md:text-sm md:font-normal capitalize">
             sub type of activity<span className="text-[#e60000]">*</span>
           </label>
@@ -312,7 +312,7 @@ const Basic_Details = ({ ...Props }: Props) => {
             readOnly={true}
             value={Props.eventData?.sub_type_of_activity}
           ></Input>
-        </div>  
+        </div>   */}
         <div className="flex flex-col gap-2">
           <label className="lable">
           Type Of Engagement<span className="text-[#e60000]">*</span>
@@ -321,16 +321,16 @@ const Basic_Details = ({ ...Props }: Props) => {
         </div>
         <div className="flex flex-col gap-2">
           <label className="lable">
-            Faculties<span className="text-[#e60000]">*</span>
+            Selection Criteria For Faculty<span className="text-[#e60000]">*</span>
           </label>
           <Textarea className='text-black shadow-md bg-[#f6f6f6]' placeholder='Type Here' readOnly value={Props.eventData?.faculty}/>
         </div>
-        <div className="flex flex-col gap-2">
+        {/* <div className="flex flex-col gap-2">
           <label className="lable">
             Participants<span className="text-[#e60000]">*</span>
           </label>
           <Textarea className='text-black shadow-md bg-[#f6f6f6]' placeholder='Type Here' readOnly value={Props.eventData?.participants}/>
-        </div>
+        </div> */}
       </div>
       { Props.eventData && Props.eventData.type_of_engagement && Props.eventData.type_of_engagement == "MSA" &&
         <>

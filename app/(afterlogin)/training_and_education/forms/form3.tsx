@@ -155,8 +155,7 @@ const Form3 = ({ ...Props }: Props) => {
     if (logisticVendorType && logisticAmount > 0) {
       const newObject: Logistics = { vendor_type: logisticVendorType, est_amount: logisticAmount };
       setLogisticBudget(prevRows => {
-        const updatedRecords = prevRows && [...prevRows, newObject]
-        // console.log(updatedRecords)
+        const updatedRecords = prevRows ? [...prevRows, newObject] : [newObject];
         setFormData((prev: any) => ({ ...prev, logistics: updatedRecords }))
         return updatedRecords
       }
@@ -170,7 +169,7 @@ const Form3 = ({ ...Props }: Props) => {
     if (compansationVendorType && compansationAmount > 0) {
         const newObject: Compensation = { vendor_type: compansationVendorType, est_amount: compansationAmount, gst_included: compansation_is_GST, vendor_name: compansationVendorName };
         setCompansationBudget(prevRows => {
-          const updatedRecords = prevRows && [...prevRows, newObject]
+          const updatedRecords = prevRows ? [...prevRows, newObject] : [newObject];
           // console.log(updatedRecords)
           setFormData((prev: any) => ({ ...prev, compensation: updatedRecords }))
           return updatedRecords
@@ -319,7 +318,7 @@ const Form3 = ({ ...Props }: Props) => {
               </SelectTrigger>
               <SelectContent>
                 {Props.vendorType ? Props.vendorType?.filter((item, index) => {
-                  if (item.vendor_type == "Hotel" || item.vendor_type == "Travel" || item.vendor_type == "Food") {
+                  if (item.name == "Hotel" || item.name == "Travel" || item.name == "Food") {
                     return item
                   }
                 })

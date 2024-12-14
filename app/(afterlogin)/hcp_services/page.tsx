@@ -44,16 +44,9 @@ type dropdownData = {
   }[]
 };
 type activityDropdown = {
-  activity:{
-    name:string,
-    activity_name:string
-  }[],
-  document:{
-    name:string,
-    activity_type:string,
-    document_name:string
-  }[]
-};
+  name: string,
+  document_name: string
+}[]
 export type Previewdata = {
   name: string;
   owner: string;
@@ -268,8 +261,7 @@ type Document = {
 
 
 const index = async({...Props}:any) => {
-  const dropdownData:dropdownData = await dropdown();
-  const actvityDropdown:activityDropdown = await activityList(); 
+  const dropdownData:dropdownData = await dropdown(); 
   const props =  await Props;
   const {forms,refno} = await props.searchParams;
   const cookie = await cookies()
@@ -278,6 +270,7 @@ const index = async({...Props}:any) => {
   let subtypeActivity = null;
   let cityDropdown = null;
   let ReportingHeadDropdown = null;
+  const actvityDropdown: activityDropdown = await activityList(cookie,'Pre Activity','HCP Services');
   if(refno){
       previewdata =  await PreviewData(refno,cookie);
   }

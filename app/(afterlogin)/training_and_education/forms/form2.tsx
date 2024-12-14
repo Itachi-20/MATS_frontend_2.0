@@ -112,25 +112,38 @@ const Form2 = ({ ...Props }: Props) => {
         <div className='grid grid-cols-2 gap-6'>
           <div className='flex flex-col gap-2'>
             <label className='lable'>Event Name <span className='text-[#e60000]'>*</span></label>
-            <Input 
+            {/* <Input 
               defaultValue={Props.previewData?.event_name ? Props.previewData.event_name : ""}
               className='dropdown' 
               placeholder='Type Here'
               name='event_name'
               onChange={(e) => handlefieldChange(e)}
-            ></Input>
+            ></Input> */}
+            <textarea 
+              defaultValue={Props.previewData?.event_name ? Props.previewData.event_name : ""}
+              className='text-black shadow-md border h-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl pl-2 pt-2' 
+              placeholder='Type Here'
+              name='event_name'
+              onChange={(e) => { handlefieldChange(e)}}
+            />
 
           </div>
           <div className='flex flex-col gap-2'>
             <label className='lable'>Event Venue<span className='text-[#e60000]'>*</span></label>
-            <Input 
+            {/* <Input 
               defaultValue={Props.previewData?.event_venue ? Props.previewData.event_venue : ""}
               className='dropdown' 
               placeholder='Type Here'
               name={"event_venue"}
               onChange={(e) => handlefieldChange(e)}
-            ></Input>
-
+            ></Input> */}
+            <textarea 
+              defaultValue={Props.previewData?.event_venue ? Props.previewData.event_venue : ""}
+              className='text-black shadow-md border h-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl pl-2 pt-2' 
+              placeholder='Type Here'
+              name='event_venue'
+              onChange={(e) => { handlefieldChange(e)}}
+              />
           </div>
           <div className='flex flex-col gap-2'onClick={()=>{handleStartDateClick()}}>
             <label className='lable'htmlFor='start_date'>Event Start Date<span className='text-[#e60000]'>*</span></label>
@@ -191,9 +204,9 @@ const Form2 = ({ ...Props }: Props) => {
           }
           <div className='flex flex-col gap-2'>
             <label className='lable'>Comments<span className='text-[#e60000]'>*</span></label>
-            <Textarea 
+            <textarea 
               defaultValue={Props.previewData?.comments ? Props.previewData.comments : ""}
-              className='text-black shadow-md' 
+              className='text-black shadow-md border h-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl pl-2 pt-2'
               placeholder='Type Here'
               name='comments'
               onChange={(e) => { handlefieldChange(e) }}
@@ -201,9 +214,9 @@ const Form2 = ({ ...Props }: Props) => {
           </div>
           <div className='flex flex-col gap-2'>
             <label className='lable'>BU Rational<span className='text-[#e60000]'>*</span></label>
-            <Textarea 
+            <textarea 
               defaultValue={Props.previewData?.bu_rational ? Props.previewData.bu_rational : ""}
-              className='text-black shadow-md' 
+              className='text-black shadow-md border h-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl pl-2 pt-2' 
               placeholder='Type Here'
               name='bu_rational'
               onChange={(e) => { handlefieldChange(e) }}

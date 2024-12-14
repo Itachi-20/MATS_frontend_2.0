@@ -1,6 +1,6 @@
 "use client"
 import React from 'react';
-import { useState,useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'nextjs-toploader/app';
 import SimpleFileUpload from "@/components/multiple_file_upload";
 import Documents from "@/components/documents"
@@ -15,17 +15,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Toaster, toast } from 'sonner'
 type activityDropdown = {
-  activity:{
-    name:string,
-    activity_name:string
-  }[],
-  document:{
-    name:string,
-    activity_type:string,
-    document_name:string
-  }[]
-}
-
+  name: string,
+  document_name: string
+}[]
 type Compensation = {
   vendor_type: string;
   vendor_name: string;
@@ -87,7 +79,7 @@ const form4 = ({ ...Props }: Props) => {
   };
 
   const handleNext = () => {
-    
+
   };
 
   const PreviewData = async () => {
@@ -115,26 +107,26 @@ const form4 = ({ ...Props }: Props) => {
     }
   };
 
-  
+
 
   // useEffect(() => {
   //   setFormData({ ...formdata, name: refNo })
   // }, [refNo])
-  const FileUpload = async()=>{
+  const FileUpload = async () => {
     const formdata = new FormData();
 
-    if (uploadedFiles && uploadedFiles.length > 0 ) {
+    if (uploadedFiles && uploadedFiles.length > 0) {
       for (let i = 0; i < uploadedFiles.length; i++) {
-        formdata.append("file", uploadedFiles[i]); 
+        formdata.append("file", uploadedFiles[i]);
       }
     } else {
       console.log("No file to upload");
       toast.warning("No file to Upload");
-      return;  
+      return;
     }
-      formdata.append("docname",refno as string)
-      formdata.append("activity_type",activityType);
-      formdata.append("document_type",documentType)
+    formdata.append("docname", refno as string)
+    formdata.append("activity_type", activityType);
+    formdata.append("document_type", documentType)
 
     const apiCallPromise = new Promise(async (resolve, reject) => {
       try {
@@ -203,7 +195,7 @@ const form4 = ({ ...Props }: Props) => {
               <SelectValue placeholder="Pre Activity" />
             </SelectTrigger>
             <SelectContent>
-              {
+              {/* {
                 Props.activityDropdown && Props.activityDropdown.activity.map((item, index) => {
                   return (
                     <SelectItem value={item.name}>
@@ -211,8 +203,10 @@ const form4 = ({ ...Props }: Props) => {
                     </SelectItem>
                   )
                 })
-              }
-
+              } */}
+              <SelectItem value={activityType}>
+                {activityType}
+              </SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -222,13 +216,13 @@ const form4 = ({ ...Props }: Props) => {
           </label>
           <Select
             onValueChange={(value) => setDocumentType(value)}
-            value={documentType??''}
+            value={documentType ?? ''}
           >
             <SelectTrigger className="dropdown">
               <SelectValue placeholder="Select" />
             </SelectTrigger>
             <SelectContent>
-              {
+              {/* {
                 Props.activityDropdown && Props.activityDropdown.document.filter((item, index) => {
                   if (item.activity_type == activityType) {
                     return item
@@ -238,8 +232,16 @@ const form4 = ({ ...Props }: Props) => {
                     <SelectItem value={item.name}>{item.document_name}</SelectItem>
                   )
                 })
+              } */}
+              {
+                Props.activityDropdown && Props.activityDropdown.map((item, index) => {
+                  return (
+                    <SelectItem value={item.name}>
+                      {item.document_name}
+                    </SelectItem>
+                  )
+                })
               }
-
             </SelectContent>
           </Select>
         </div>

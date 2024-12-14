@@ -206,12 +206,16 @@ const Sponsorship_Details = ({...Props}:Props) => {
                     <label className="text-black md:text-sm md:font-normal capitalize">
                         Organizer Name<span className="text-[#e60000]">*</span>
                     </label>
-                    <Input
+                    {/* <Input
                         className="text-black shadow bg-[#f6f6f6] md:rounded-xl md:py-5"
                         placeholder="Type Here"
                         value={Props.eventData?.organizer_name}
                         readOnly
-                    ></Input>
+                    ></Input> */}
+                    <textarea className='text-black shadow-md border h-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl pl-2 pt-2' placeholder='Type Here'
+                      readOnly={true}
+                      value={Props.eventData?.organizer_name}
+          />
                 </div>
                 <div className="flex flex-col md:gap-2">
                     <label className="text-black md:text-sm md:font-normal capitalize">

@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox"
-import BasicDetails from "@/components/basic_Details"
+import BasicDetails from "@/components/commonPreviewComponents/basic_details"
 import ShippingDetails from "@/components/previewPatientSupportComponents/shippingDetails"
 import VendorDetails from "@/components/vendor_Details";
 import LogisticsBudget from "@/components/logistics_budget";

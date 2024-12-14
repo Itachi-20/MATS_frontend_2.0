@@ -641,15 +641,15 @@ const Form1 = ({ ...Props }: Props) => {
                 <SelectValue placeholder="Select" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="Meril Event">
-                  {"Meril Event"}
+                <SelectItem value="Sponsorship Support for Scientific Conferences">
+                  {"Sponsorship Support for Scientific Conferences"}
                 </SelectItem>
-                <SelectItem value="Mix Event">
+                {/* <SelectItem value="Mix Event">
                   {"Mix Event"}
                 </SelectItem>
                 <SelectItem value="Marketing Event">
                   {"Marketing Event"}
-                </SelectItem>
+                </SelectItem> */}
               </SelectContent>
             </Select>
           </div>
@@ -657,11 +657,11 @@ const Form1 = ({ ...Props }: Props) => {
         <div className="grid grid-cols-2 gap-10">
           <div className="flex flex-col gap-2">
             <label className="lable">
-              Faculties<span className="text-[#e60000]">*</span>
+            Selection Criteria For Faculty<span className="text-[#e60000]">*</span>
             </label>
-            <Textarea
+            <textarea
               defaultValue={Props.previewData?.faculty ?? ""}
-              className="text-black shadow-md"
+              className='text-black shadow-md border h-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl pl-2 pt-2'
               placeholder="Type Here"
               name="faculty"
               onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => { handlefieldChange(e) }}
@@ -669,11 +669,11 @@ const Form1 = ({ ...Props }: Props) => {
           </div>
           <div className="flex flex-col gap-2">
             <label className="lable">
-              Participants<span className="text-[#e60000]">*</span>
+            Selection Criteria For Participant<span className="text-[#e60000]">*</span>
             </label>
-            <Textarea
+            <textarea
               defaultValue={Props.previewData?.participants ?? ""}
-              className="text-black shadow-md"
+              className='text-black shadow-md border h-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl pl-2 pt-2'
               placeholder="Type Here"
               name="participants"
               onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => { handlefieldChange(e) }}
@@ -689,15 +689,53 @@ const Form1 = ({ ...Props }: Props) => {
               <label className="text-black md:text-sm md:font-normal capitalize">
                 Organizer Name<span className="text-[#e60000]">*</span>
               </label>
-              <Input
+              {/* <Input
                 className="text-black shadow md:rounded-xl md:py-5"
                 placeholder="Type Here"
                 name="organizer_name"
                 onChange={(e) => handlefieldChange(e)}
                 defaultValue={Props.previewData?.organizer_name ? Props.previewData.organizer_name : ""}
-              ></Input>
+              ></Input> */}
+              <textarea
+              defaultValue={Props.previewData?.organizer_name ? Props.previewData.organizer_name : ""}
+              className='text-black shadow-md border h-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl pl-2 pt-2'
+              placeholder="Type Here"
+              name="organizer_name"
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => { handlefieldChange(e) }}
+            />
             </div>
             <div className="flex flex-col md:gap-2">
+              {/* <label className="text-black md:text-sm md:font-normal capitalize">
+                Sponsorship Amount<span className="text-[#e60000]">*</span>
+              </label>
+              <Input
+
+                className="text-black shadow md:rounded-xl md:py-5"
+                placeholder="Type Here"
+                type="number"
+                name="sponsorship_amount"
+                onChange={(e) => handlefieldChange(e)}
+                defaultValue={Props.previewData?.sponsorship_amount ? Props.previewData.sponsorship_amount : ""}
+              ></Input> */}
+              <label className="text-black md:text-sm md:font-normal capitalize">
+                Entitlement in Lieu of sponsorship<span className="text-[#e60000]">*</span>
+              </label>
+              {/* <Input
+                className="text-black shadow md:rounded-xl md:py-5"
+                placeholder="Type Here"
+                name="entitlement_in_lieu_of_sponsorship"
+                onChange={(e) => handlefieldChange(e)}
+                defaultValue={Props.previewData?.entitlement_in_lieu_of_sponsorship ? Props.previewData.entitlement_in_lieu_of_sponsorship : ""}
+              ></Input> */}
+              <textarea
+              defaultValue={Props.previewData?.entitlement_in_lieu_of_sponsorship ? Props.previewData.entitlement_in_lieu_of_sponsorship : ""}
+              className='text-black shadow-md border h-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl pl-2 pt-2'
+              placeholder="Type Here"
+              name="entitlement_in_lieu_of_sponsorship"
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => { handlefieldChange(e) }}
+            />
+            </div>
+            <div className="flex flex-col gap-2">
               <label className="text-black md:text-sm md:font-normal capitalize">
                 Sponsorship Amount<span className="text-[#e60000]">*</span>
               </label>
@@ -711,8 +749,8 @@ const Form1 = ({ ...Props }: Props) => {
                 defaultValue={Props.previewData?.sponsorship_amount ? Props.previewData.sponsorship_amount : ""}
               ></Input>
             </div>
-            <div className="flex flex-col gap-2">
-              <label className="lable">
+            <div className="flex flex-col md:gap-2">
+            <label className="lable">
                 Currency<span className="text-[#e60000]">*</span>
               </label>
               <Select
@@ -732,18 +770,6 @@ const Form1 = ({ ...Props }: Props) => {
                   }
                 </SelectContent>
               </Select>
-            </div>
-            <div className="flex flex-col md:gap-2">
-              <label className="text-black md:text-sm md:font-normal capitalize">
-                Entitlement in Lieu of sponsorship<span className="text-[#e60000]">*</span>
-              </label>
-              <Input
-                className="text-black shadow md:rounded-xl md:py-5"
-                placeholder="Type Here"
-                name="entitlement_in_lieu_of_sponsorship"
-                onChange={(e) => handlefieldChange(e)}
-                defaultValue={Props.previewData?.entitlement_in_lieu_of_sponsorship ? Props.previewData.entitlement_in_lieu_of_sponsorship : ""}
-              ></Input>
             </div>
           </div>
         </div>
