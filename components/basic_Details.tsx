@@ -309,15 +309,27 @@ const Basic_Details = ({ ...Props }: Props) => {
 
         <div className="flex flex-col gap-2">
           <label className="lable">
-            Faculties<span className="text-[#e60000]">*</span>
+            Selection Criteria For Faculty<span className="text-[#e60000]">*</span>
           </label>
-          <Textarea className='text-black shadow-md bg-[#f6f6f6]' placeholder='Type Here' readOnly value={Props.eventData?.faculty}/>
+          <textarea className='text-black shadow-md bg-[#f6f6f6]' placeholder='Type Here' readOnly value={Props.eventData?.faculty}/>
+          <textarea
+              className='text-black shadow-md border h-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl pl-2 pt-2'
+              placeholder="Type Here"
+              readOnly={true}
+              value={Props.eventData?.faculty}
+            ></textarea>
         </div>
         <div className="flex flex-col gap-2">
           <label className="lable">
-            Participants<span className="text-[#e60000]">*</span>
+          Selection Criteria For Participant<span className="text-[#e60000]">*</span>
           </label>
           <Textarea className='text-black shadow-md bg-[#f6f6f6]' placeholder='Type Here' readOnly value={Props.eventData?.participants}/>
+          <textarea
+              className='text-black shadow-md border h-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl pl-2 pt-2'
+              placeholder="Type Here"
+              readOnly={true}
+              value={Props.eventData?.participants}
+            ></textarea>
         </div>
       </div>
     </div>
