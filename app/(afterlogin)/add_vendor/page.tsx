@@ -96,6 +96,7 @@ const page = () => {
     const router = useRouter()
     const view = useSearchParams().get('view')
     const refno = useSearchParams().get('refno')
+    const from = useSearchParams().get('from')
     const { role, name, userid, clearAuthData } = useAuth();
     const dropdown = async () => {
         try {
@@ -150,7 +151,9 @@ const page = () => {
         }
     };
     useEffect(() => {
-        vendorViewData();
+        if(refno){
+            vendorViewData();
+        }
     }, [refno])
 
     useEffect(() => {
@@ -178,6 +181,11 @@ const page = () => {
                 console.log(data, "response data");
                 setLoading(false)
                 setConfirmPopup(false)
+                // if(role=='Event Requestor'){
+                //     router.push(`/${from}`)
+                // }else{
+                //     router.push(`/event_vendor_list`)
+                // }
                 setTimeout(() => {
                     router.back();
                 }, 1000)
@@ -320,7 +328,7 @@ const page = () => {
     const handleConfirmpopup = async () => {
         setConfirmPopup(true)
     };
-    console.log('formdata', formdata)
+    console.log('from', from)
     return (
         <>
             <div className='p-7 w-full relative z-20 text-black'>

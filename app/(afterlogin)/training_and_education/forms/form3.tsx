@@ -21,7 +21,7 @@ import {
 import { useRouter } from 'nextjs-toploader/app';
 import { Previewdata } from '@/app/(afterlogin)/hcp_services/page'
 import { Toaster, toast } from 'sonner'
-
+import { usePathname } from 'next/navigation';
 type formData = {
   name: string | null;
   event_type: string;
@@ -96,7 +96,7 @@ const Form3 = ({ ...Props }: Props) => {
   const [totalLogisticAmount, setTotalLogisticAmount] = useState(0);
   const [totalCompansationAmount, setTotalCompansationAmount] = useState(0);
   const [totalEstimatedAmount, setTotalEstimatedAmount] = useState(0);
-
+const pathname = usePathname()
   const router = useRouter();
   const [formdata, setFormData] = useState<formData | {}>();
   const [refNo, setRefNo] = useState<string | null>(Props.refNo);
@@ -277,6 +277,11 @@ const Form3 = ({ ...Props }: Props) => {
     }
   }
 
+  // const handleNavigation = () => {
+  //   const fromValue = encodeURIComponent(`training_and_education?forms=3&refno=${refNo}`);
+  //   router.push(`/add_vendor?from=${fromValue}`);
+  // };
+  
   return (
     // </div>
     <div>
@@ -441,7 +446,7 @@ const Form3 = ({ ...Props }: Props) => {
                     fill="#635E5E"
                   />
                 </svg>
-                <Button className="bg-white text-black border text-md font-normal rounded-xl pl-10 py-2 hover:bg-white" onClick={() => router.push("/add_vendor")}>
+                <Button className="bg-white text-black border text-md font-normal rounded-xl pl-10 py-2 hover:bg-white" onClick={() => router.push("/add_vendor",)}>
                   Add New Vendor
                 </Button>
               </div>
