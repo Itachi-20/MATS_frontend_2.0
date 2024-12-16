@@ -233,7 +233,8 @@ const page = () => {
   }
 
   const handleOccurance = ()=>{
-    setIsOccurance(true);
+    setIsOccurance(prev=> !prev);
+    setIsChecked(prev=>!prev);
   }
 
   const FileUpload = async () => {
@@ -386,6 +387,10 @@ const page = () => {
       setActivityType(value);
     }
 
+    const handleOccuranceDateDialog = ()=>{
+      
+    }
+
     useEffect(()=>{
       activityList();
     },[])
@@ -529,13 +534,13 @@ const page = () => {
   <h1 className='text-black pb-8 font-semibold text-lg'>Are you sure you want to declare this event?</h1>
   <div className='flex justify-center gap-4'>
   <Button className='bg-orange-600 px-12 border-none py-1' onClick={()=>{setIsChecked(false);setCheckedValue(prev=>!prev)}}>No</Button>
-  <Button className='bg-green-600 px-12 border-none py-1' onClick={()=>handlePostDocument()}>Yes</Button>
+  <Button className='bg-green-600 px-12 border-none py-1' onClick={()=>{preview_data?.event_type == "HCP Services"?handleOccurance():handlePostDocument()}}>Yes</Button>
   </div>
 </div>
 </div>
   }
   {
-              isChecked && data?.event_type == "HCP Services" &&
+              isOccurance &&preview_data?.event_type == "HCP Services" &&
               <div className="absolute z-50 flex inset-0 items-center justify-center bg-black bg-opacity-50 w-full">
 <div className="border-2 rounded-xl p-10 px-20 bg-white relative">
   <h1 className='text-black pb-8 font-semibold text-lg'>Occurance Date</h1>
