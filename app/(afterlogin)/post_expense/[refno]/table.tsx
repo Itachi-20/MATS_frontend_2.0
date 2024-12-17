@@ -633,7 +633,7 @@ const table = ({ tableData }: Props) => {
         }
 
         {
-          !tableData.post_expense_approved &&
+          !tableData?.post_expense_approved &&
           <div className='flex justify-end gap-2 pb-7'>
             <SimpleFileUpload files={files} setFiles={setFiles} setUploadedFiles={setUploadedFiles} onNext={handleNext} buttonText={'Receipts/Bills'} />
             <Button className="border border-[#4430bf] text-[#4430bf] text-[18px]" disabled={isLoading ? true : false} onClick={addVendor} >{isLoading ? 'Adding...' : 'Add'}</Button>
@@ -740,7 +740,7 @@ const table = ({ tableData }: Props) => {
               </TableRow>
             </TableHeader>
             {
-              tabledata.actual_vendors &&
+              tabledata?.actual_vendors &&
                 tabledata.actual_vendors.length > 0 ?
                 <TableBody>
                   {tabledata &&
@@ -787,7 +787,7 @@ const table = ({ tableData }: Props) => {
         </div>
 
         {
-          tableData.travel_vendors.length > 0 &&
+          tableData?.travel_vendors.length > 0 &&
           <>
             <h3 className='text-2xl font-semibold'>Travel Desk</h3>
             <div className="border bg-white h-full p-4 rounded-[18px] my-6">
@@ -889,8 +889,8 @@ const table = ({ tableData }: Props) => {
                   </TableRow>
                 </TableHeader>
                 {
-                  tabledata.travel_vendors &&
-                    tabledata.travel_vendors.length > 0 ?
+                  tabledata?.travel_vendors &&
+                    tabledata?.travel_vendors.length > 0 ?
                     <TableBody>
                       {tabledata &&
                         tabledata.travel_vendors.map((data, index) => {
@@ -935,7 +935,7 @@ const table = ({ tableData }: Props) => {
         }
 
         {
-          !tableData.post_expense_approved &&
+          !tableData?.post_expense_approved &&
           <div className='flex justify-end gap-2 pt-8'>
             <Button className='bg-[#4430BF] px-10 text-white' onClick={handleSubmit}>Back</Button>
           </div>
