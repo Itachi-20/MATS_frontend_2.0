@@ -349,31 +349,31 @@ const page = () => {
       console.log(error, "something went wrong");
     }
   }
-  const activityList = async () => {
-    try {
-      const response = await fetch(`/api/execute/activityList`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: 'include',
-        body: JSON.stringify({
-          activity_type: activityType,
-          event_type: preview_data?.event_type
-        })
-      });
-      console.log(response, 'response 323456789')
-      if (response.ok) {
-        const data = await response.json();
-        console.log(data,'data')
-        setActivityDropdown(data.data);
-      } else {
-        console.log('Login failed');
-      }
-    } catch (error) {
-      console.error("Error during login:", error);
-    }
-  }
+  // const activityList = async () => {
+  //   try {
+  //     const response = await fetch(`/api/execute/activityList`, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       credentials: 'include',
+  //       body: JSON.stringify({
+  //         activity_type: activityType,
+  //         event_type: preview_data?.event_type
+  //       })
+  //     });
+  //     console.log(response, 'response 323456789')
+  //     if (response.ok) {
+  //       const data = await response.json();
+  //       console.log(data,'data')
+  //       setActivityDropdown(data.data);
+  //     } else {
+  //       console.log('Login failed');
+  //     }
+  //   } catch (error) {
+  //     console.error("Error during login:", error);
+  //   }
+  // }
 
   const handleNext = () => {
 
