@@ -99,6 +99,12 @@ type DocumentRow = {
   creation:string;
   owner:string;
 };
+type Errors = {
+  vendor_type:string,
+  vendor_name:string,
+  advance:string,
+}
+ 
 
 const table = ({ tableData }: Props) => {
 
@@ -125,8 +131,10 @@ const table = ({ tableData }: Props) => {
   const [deletepopup, setDeletePopup] = useState(false);
   const [submitpop, setSubmitPopup] = useState(false);
   const req_no = useParams()
-
+  const [errors, setErrors] = useState<Errors>();
   const handleVendorTypeChangeApi = async (value: string) => {
+    setVendorDetails({ ...vendorDetails,vendor_name : "" ,advance : 0} as VendorData );
+    
     try {
       const response = await fetch(
         `/api/training_and_education/vendorName?vendor_type=${value}`,
@@ -138,7 +146,6 @@ const table = ({ tableData }: Props) => {
           "credentials": 'include'
         }
       );
-
 
       if (response.ok) {
         const data = await response.json();
@@ -210,19 +217,36 @@ const table = ({ tableData }: Props) => {
     const { name, value } = e.target;
     const numericValue = name === 'advance' ? (value ? parseFloat(value) : '') : value;
     setVendorDetails(prev => ({ ...prev, [name]: numericValue }));
+    setErrors({ ...errors, advance: "" } as Errors);
   };
   const handleConclusionChange = (newConclusion: string) => {
     setEventConclusion(
       newConclusion,
     );
   };
+  
+
+  const validate = () => {
+    const errors = {} as Errors;
+    if (!vendorDetails.vendor_type) errors.vendor_type = "Vendor Type is required";
+    if (!vendorDetails.vendor_name) errors.vendor_name = "Vendor Name is required";
+    if (!vendorDetails.advance) errors.advance = "Amount is required";
+    return errors;
+};
+
   const addVendor = async () => {
+    
+    const validationErrors = validate();
+    if (Object.keys(validationErrors).length > 0) {
+        setErrors(validationErrors as Errors);
+        return;
+    }
+    setErrors({} as Errors);
     const formData = new FormData();
     formData.append("vendor_type", vendorDetails.vendor_type);
     formData.append("vendor_name", vendorDetails.vendor_name);
     formData.append("advance", vendorDetails.advance as any);
     formData.append("name", req_no.refno as any);
-
     if (uploadedFiles && uploadedFiles.length > 0) {
       for (let i = 0; i < uploadedFiles.length; i++) {
         formData.append("file", uploadedFiles[i]);
@@ -260,6 +284,7 @@ const table = ({ tableData }: Props) => {
         setVendorDetails({ vendor_type: '', vendor_name: '', advance: 0, amount: 0, file: null });
         setUploadedFiles(null);
         setFiles([]);
+        setErrors({} as Errors);
         return 'Vendor has been added successfully!';
       },
       error: (error) => `Failed to add vendor: ${error.message || error}`,
@@ -367,7 +392,7 @@ const table = ({ tableData }: Props) => {
           },
           "credentials": 'include',
           body: JSON.stringify({
-            name:tableData.name ,
+            name:tableData?.name ,
             vendor_name:value
         }),
         }
@@ -376,8 +401,9 @@ const table = ({ tableData }: Props) => {
         const data = await response.json();
         setVendorDetails((prev) => ({
           ...prev,
-          advance: data.data?.est_amount, // Update vendor_name in the vendorDetails state
+          advance: data.data?.est_amount,
         }))
+        setErrors({ ...errors, advance: "" ,vendor_name: ""} as Errors);
         console.log(data, "-----------vendor name api------------------");
       } else {
         console.log("Login failed");
@@ -386,7 +412,7 @@ const table = ({ tableData }: Props) => {
       console.error("Error during login:", error);
     }
   };
-
+console.log(errors,'errros')
   return (
     <>
 
@@ -456,7 +482,7 @@ const table = ({ tableData }: Props) => {
                   ...prev,
                   vendor_type: value,
                 }))
-
+                setErrors({ ...errors, vendor_type: "" } as Errors);
               }}
               value={vendorDetails.vendor_type ?? ''}
             >
@@ -471,6 +497,7 @@ const table = ({ tableData }: Props) => {
                 })}
               </SelectContent>
             </Select>
+            {errors?.vendor_type && <p className="text-red-500 text-xs">{errors.vendor_type}</p>}
           </div>
           <div className='grid-cols-1 space-y-2'>
             <label htmlFor="vendor_name" className="text-black md:text-sm md:font-normal capitalize">
@@ -483,6 +510,7 @@ const table = ({ tableData }: Props) => {
                   ...prev,
                   vendor_name: value, // Update vendor_name in the vendorDetails state
                 }));
+                setErrors({ ...errors, vendor_name: "" } as Errors);
               }}
               value={vendorDetails.vendor_name ?? ''}
             >
@@ -499,6 +527,7 @@ const table = ({ tableData }: Props) => {
                 }
               </SelectContent>
             </Select>
+            {errors?.vendor_name && <p className="text-red-500 text-xs">{errors.vendor_name}</p>}
           </div>
           <div className='grid-cols-1 space-y-2'>
             <label htmlFor="amount" className="text-black md:text-sm md:font-normal capitalize">
@@ -511,7 +540,9 @@ const table = ({ tableData }: Props) => {
               name='advance'
               onChange={handlefieldChange}
               value={vendorDetails.advance ?? ''}
+              
             ></Input>
+            {errors?.advance && <p className="text-red-500 text-xs">{errors.advance}</p>}
           </div>
         </div>
 
