@@ -1,6 +1,6 @@
 import React from "react";
-import Table from "@/app/(afterlogin)/event_report/table"
-import {eventApprovalSummaryReport} from '../event_report/utility'
+import Table from "@/app/(afterlogin)/event_approval_summary_report/table"
+import {eventApprovalSummaryReport} from '../event_approval_summary_report/utility'
 import { cookies } from "next/headers";
 
 

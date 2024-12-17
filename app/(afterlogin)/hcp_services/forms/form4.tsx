@@ -154,12 +154,19 @@ const form4 = ({ ...Props }: Props) => {
         });
 
         if (!response.ok) {
+          setDocumentType('')
+          setFiles([])
+          setUploadedFiles(null)
           throw new Error('file upload request failed');
+
         }
 
         const data = await response.json();
         resolve(data); // Resolve with the response data
       } catch (error) {
+        setDocumentType('')
+        setFiles([])
+        setUploadedFiles(null)
         reject(error); // Reject with the error
       }
     });
@@ -182,7 +189,7 @@ const form4 = ({ ...Props }: Props) => {
   const handleActivityTypeChange = (value: string) => {
     setActivityType(value);
   }
-
+  console.log(files, 'files')
   return (
     // </div>
     (<div>

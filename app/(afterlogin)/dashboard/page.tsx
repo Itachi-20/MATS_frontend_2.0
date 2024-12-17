@@ -1,13 +1,25 @@
 import React from "react";
-import Sidebar from "@/components/Sidebar";
-import Navbar from "@/components/Navbar";
-import Image from "next/image";
 import Details from '@/app/(afterlogin)/dashboard/details'
-const Index = () => {
+import {fetchEventList} from '@/app/(afterlogin)/dashboard/utility'
+import { cookies } from "next/headers";
 
+export type tableData = {
+  name:string,
+  event_type:string,
+  event_start_date:string,
+  current_stage:string,
+  status:string
+}
 
+const Index = async() => {
+  const cookie = await cookies();
+  const table:tableData[] = await fetchEventList(cookie);
   return (
-    (<Details/>)
+    (
+    <Details
+    tableData={table}
+    />
+  )
   );
 };
 

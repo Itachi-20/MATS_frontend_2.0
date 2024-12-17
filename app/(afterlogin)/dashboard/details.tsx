@@ -19,8 +19,16 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "../../context/AuthContext";
-const details = () => {
+import {tableData} from "@/app/(afterlogin)/dashboard/page"
+import { useRouter } from 'next/navigation';
+
+type Props = {
+  tableData:tableData[]
+}
+
+const details = ({...Props}:Props) => {
   const { role, name,userid, clearAuthData } = useAuth();
+  const router = useRouter();
   return (
     <div className="px-7 pb-7 pt-4 w-full relative z-20 flex flex-col justify-stretch">
           <div className="flex justify-between pb-6">
@@ -177,7 +185,7 @@ const details = () => {
                     </g>
                   </svg>
                 </div>
-                <div className="flex gap-3">
+                {/* <div className="flex gap-3">
                   <Select>
                     <SelectTrigger className="w-[100px] text-black border border-black rounded-full focus-visible:outline-none ">
                       <SelectValue placeholder="Category" />
@@ -192,10 +200,12 @@ const details = () => {
                     className="w-30 text-black border border-black rounded-full"
                     type="date"
                   ></Input>
-                </div>
+                </div> */}
+                <Button className='text-[#625d5d] bg-[#E0E9FF] rounded-xl' onClick={()=>{router.push('/event_list')}}>Event List</Button>
               </div>
+                  <div className='overflow-y-scroll h-[200px] text-black'>
 
-              <Table className={""}>
+              <Table className=''>
                 <TableHeader className={"bg-[#E0E9FF]"}>
                   <TableRow className={""}>
                     <TableHead
@@ -209,7 +219,7 @@ const details = () => {
                       className={
                         "text-center text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                       }
-                    >
+                      >
                       Event Name & Type
                     </TableHead>
 
@@ -217,7 +227,7 @@ const details = () => {
                       className={
                         "text-center text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                       }
-                    >
+                      >
                       Event Date
                     </TableHead>
 
@@ -225,14 +235,14 @@ const details = () => {
                       className={
                         "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                       }
-                    >
+                      >
                       Type of Activity
                     </TableHead>
                     <TableHead
                       className={
                         "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                       }
-                    >
+                      >
                       Status
                     </TableHead>
 
@@ -240,23 +250,28 @@ const details = () => {
                       className={
                         "text-center rounded-tr-2xl text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                       }
-                    ></TableHead>
+                      ></TableHead>
                   </TableRow>
                 </TableHeader>
-                <TableBody>
-                  <TableRow>
-                    <TableCell></TableCell>
-                    <TableCell></TableCell>
+                <TableBody className='text-center'>
+                  {
+                    Props && Props.tableData?.map((item,index)=>{
+                      return (
+                        <TableRow>
+                          <TableCell>{item.name}</TableCell>
+                    <TableCell>{item.event_type}</TableCell>
 
-                    <TableCell></TableCell>
+                    <TableCell>{item.event_start_date}</TableCell>
 
-                    <TableCell></TableCell>
-                    <TableCell></TableCell>
-
-                    <TableCell></TableCell>
-                  </TableRow>
+                    <TableCell>{item.current_stage}</TableCell>
+                    <TableCell>{item.status}</TableCell>
+                        </TableRow>
+                      )
+                    })
+                  }
                 </TableBody>
               </Table>
+                  </div>
             </div>
             <div className="border rounded-[50px] flex flex-col bg-[#ebebf6] w-[30%] px-4 py-5">
               <div className="flex justify-between pb-3">
@@ -270,7 +285,7 @@ const details = () => {
                     viewBox="0 0 27 30"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
-                  >
+                    >
                     <path
                       id="Icon"
                       d="M26 12.2H1M19.0556 1V6.6M7.94444 1V6.6M11.4167 17.8L13.5 16.4V23.4M11.7639 23.4H15.2361M7.66667 29H19.3333C21.6669 29 22.8337 29 23.725 28.5422C24.509 28.1396 25.1464 27.497 25.5459 26.7068C26 25.8083 26 24.6322 26 22.28V10.52C26 8.16778 26 6.99167 25.5459 6.09324C25.1464 5.30296 24.509 4.66044 23.725 4.25777C22.8337 3.8 21.6669 3.8 19.3333 3.8H7.66667C5.33311 3.8 4.16634 3.8 3.27504 4.25777C2.49103 4.66044 1.85361 5.30296 1.45414 6.09324C1 6.99167 1 8.16778 1 10.52V22.28C1 24.6322 1 25.8083 1.45414 26.7068C1.85361 27.497 2.49103 28.1396 3.27504 28.5422C4.16634 29 5.33311 29 7.66667 29Z"
@@ -278,7 +293,7 @@ const details = () => {
                       strokeWidth="2"
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                    />
+                      />
                   </svg>
                 </div>
                 <div className="pt-5">
