@@ -149,7 +149,6 @@ const Form1 = ({ ...Props }: Props) => {
     if ((Props.previewData?.event_cost_center  ? (formData && ("event_cost_center" in formData && formData.event_cost_center == '')) : !formData?.event_cost_center )) errors.event_cost_center = "Event Cost Center is required";
     return errors;
   };
-
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 

@@ -13,6 +13,10 @@ export const handleEventStartDateValidate = ({...Props}:Props)=>{
     if(Props.e.target.valueAsNumber < currentDate){
       toast.error("You are choosing previous date");
     }
+    if(Props?.e.target.valueAsNumber > new Date(Props.formData?.event_end_date).getTime()){
+      toast.error("You are choosing date greater than end date");
+      Props.e.target.value = "";
+    }
 
     if(Props?.previewData?.event_end_date){
         if(Props.formData?.event_end_date != "" && Props.e.target.valueAsNumber > (Props.formData?.event_end_date ? new Date(Props.formData?.event_end_date).getTime() : new Date(Props.previewData?.event_end_date).getTime())){
