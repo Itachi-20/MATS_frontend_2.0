@@ -177,26 +177,50 @@ type activityDropdown = {
 }[]
 
 const page = () => {
-  const param = useParams();
-  const refno = param.refno as string;
-  //const [document,setDocument] = useState<DocumentData>();
-  const [data, setData] = useState<EventEntry>();
-  const [isDialog, setIsDialog] = useState(false);
-  const [files, setFiles] = useState<File[]>([]);
-  const [isChecked, setIsChecked] = useState<boolean>();
-  const [isOccurance, setIsOccurance] = useState<boolean>(false);
-  const [occuranceDate, setOcccuranceDate] = useState<string>();
-  const [uploadedFiles, setUploadedFiles] = useState<FileList | null>(null)
-  const [fileList, setFileList] = useState<File[]>([]); //added state 2
-  const [documentType, setDocumentType] = useState("");
-  const [activityType, setActivityType] = useState('Post Activity');
-  const [preview_data, setPreviewData] = useState<any>(null);
-  const [activityDropdown, setActivityDropdown] = useState<activityDropdown>();
-  const [checkedValue, setCheckedValue] = useState<boolean>();
-  const router = useRouter();
+    const param = useParams();
+    const refno = param.refno as string;
+    //const [document,setDocument] = useState<DocumentData>();
+    const [data,setData] = useState<EventEntry>();
+    const [isDialog,setIsDialog] = useState(false);
+    const [files, setFiles] = useState<File[]>([]);
+    const [isChecked,setIsChecked] = useState<boolean>();
+    const [isOccurance,setIsOccurance] = useState<boolean>(false);
+    const [occuranceDate,setOcccuranceDate] = useState<string>();
+    const [uploadedFiles, setUploadedFiles] = useState<FileList | null>(null)
+    const [fileList, setFileList] = useState<File[]>([]); //added state 2
+    const [documentType, setDocumentType] = useState("");
+    const [activityType, setActivityType] = useState('Pre Activity');
+    const [preview_data, setPreviewData] = useState<any>(null);
+    const [activityDropdown,setActivityDropdown]  = useState<activityDropdown>();
+    const [checkedValue,setCheckedValue] = useState<boolean>();
+    const router = useRouter();
+    
 
-  const handleOccurance = () => {
-    setIsOccurance(true);
+     const activityList = async ()=>{
+      try {
+          const response = await fetch(`/api/training_and_education/activityList/`, {
+              method: "GET",
+              headers: {
+                  "Content-Type": "application/json",
+              },
+              credentials:'include',
+          });
+    
+          if (response.ok) {
+            const data = await response.json();
+            console.log(data.data ,"tjis is api");
+            setActivityDropdown(data.data);
+          } else {
+              console.log('Login failed');
+          }
+      } catch (error) {
+          console.error("Error during login:", error);
+      }
+  }
+
+  const handleOccurance = ()=>{
+    setIsOccurance(prev=> !prev);
+    setIsChecked(prev=>!prev);
   }
 
   const FileUpload = async () => {
@@ -369,9 +393,13 @@ const page = () => {
     setIsChecked(prev => !prev);
   };
 
-  const handleActivityTypeChange = (value: string) => {
-    setActivityType(value);
-  }
+    const handleActivityTypeChange = (value: string) => {
+      setActivityType(value);
+    }
+
+    const handleOccuranceDateDialog = ()=>{
+      
+    }
 
   useEffect(() => {
     activityList();
@@ -516,35 +544,35 @@ console.log(activityDropdown,'activityDropdown')
           />
           <label className="text-black md:text-sm md:font-normal capitalize">
             I hereby declare that all details filled by me are correct and genuine.<span className="text-[#e60000]">*</span>
-          </label>
-        </div>
-      </div>
-      {
-        isChecked && data?.event_type != "HCP Services" &&
-        <div className="absolute z-50 flex inset-0 items-center justify-center bg-black bg-opacity-50">
-          <div className="border-2 rounded-xl p-5 bg-white relative">
-            <h1 className='text-black pb-8 font-semibold text-lg'>Are you sure you want to declare this event?</h1>
-            <div className='flex justify-center gap-4'>
-              <Button className='bg-orange-600 px-12 border-none py-1' onClick={() => { setIsChecked(false); setCheckedValue(prev => !prev) }}>No</Button>
-              <Button className='bg-green-600 px-12 border-none py-1' onClick={() => handlePostDocument()}>Yes</Button>
+                </label>
             </div>
-          </div>
         </div>
-      }
-      {
-        isChecked && data?.event_type == "HCP Services" &&
-        <div className="absolute z-50 flex inset-0 items-center justify-center bg-black bg-opacity-50 w-full">
-          <div className="border-2 rounded-xl p-10 px-20 bg-white relative">
-            <h1 className='text-black pb-8 font-semibold text-lg'>Occurance Date</h1>
-            <Input className='pb-4 text-black' type='date' onChange={(e) => handleOccuranceDate(e)}></Input>
-            <div className='flex justify-center gap-4 pt-4'>
-              <Button className='bg-green-600 px-12 border-none py-1' onClick={() => handlePostDocument()}>Submit</Button>
-            </div>
-          </div>
-        </div>
-      }
-    </>
-  )
+            {
+              isChecked && data?.event_type != "HCP Services" &&
+              <div className="absolute z-50 flex inset-0 items-center justify-center bg-black bg-opacity-50">
+<div className="border-2 rounded-xl p-5 bg-white relative">
+  <h1 className='text-black pb-8 font-semibold text-lg'>Are you sure you want to declare this event?</h1>
+  <div className='flex justify-center gap-4'>
+  <Button className='bg-orange-600 px-12 border-none py-1' onClick={()=>{setIsChecked(false);setCheckedValue(prev=>!prev)}}>No</Button>
+  <Button className='bg-green-600 px-12 border-none py-1' onClick={()=>{preview_data?.event_type == "HCP Services"?handleOccurance():handlePostDocument()}}>Yes</Button>
+  </div>
+</div>
+</div>
+  }
+  {
+              isOccurance &&preview_data?.event_type == "HCP Services" &&
+              <div className="absolute z-50 flex inset-0 items-center justify-center bg-black bg-opacity-50 w-full">
+<div className="border-2 rounded-xl p-10 px-20 bg-white relative">
+  <h1 className='text-black pb-8 font-semibold text-lg'>Occurance Date</h1>
+  <Input className='pb-4 text-black' type='date'  onChange={(e)=>handleOccuranceDate(e)}></Input>
+  <div className='flex justify-center gap-4 pt-4'>
+  <Button className='bg-green-600 px-12 border-none py-1' onClick={()=>handlePostDocument()}>Submit</Button>
+  </div>
+</div>
+</div>
+  }
+  </>
+    )
 }
 
 export default page

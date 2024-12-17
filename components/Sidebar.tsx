@@ -7,6 +7,8 @@ import { redirect } from "next/navigation";
 import { useAuth } from "../app/context/AuthContext";
 import Cookies from "js-cookie";
 import { useRouter } from 'nextjs-toploader/app';
+import { usePathname } from "next/navigation";
+
 type modules = {
   module: string;
   route: string;
@@ -42,6 +44,7 @@ type Sidebar = {
 const Sidebar = () => {
   const router = useRouter();
   const { role, userid, name } = useAuth();
+  const pathname = usePathname();
   const [handleSidebar,setHandleSidebar] = useState<Sidebar>({
     modules:false,
     masters:false,
@@ -165,7 +168,7 @@ const Sidebar = () => {
         },
         {
           name: "Event Summary Repost",
-          route: "/event_summary_report",
+          route: "/event_report",
         },
       ],
       masters: [
@@ -204,7 +207,7 @@ const Sidebar = () => {
         },
         {
           name: "Event Summary Repost",
-          route: "/event_summary_report",
+          route: "/event_report",
         },
       ],
       masters: [
@@ -239,7 +242,7 @@ const Sidebar = () => {
       reports: [
         {
           name: "Event Summary Repost",
-          route: "/event_summary_report",
+          route: "/event_report",
         },
       ],
       masters: [],
@@ -261,7 +264,7 @@ const Sidebar = () => {
       reports: [
         {
           name: "Event Summary Repost",
-          route: "/event_summary_report",
+          route: "/event_report",
         },
       ],
       masters: [],
@@ -306,12 +309,21 @@ const Sidebar = () => {
     );
   };
 
+  useEffect(()=>{
+    setHandleSidebar({
+      modules:false,
+      masters:false,
+      reports:false,
+      settings:false,
+    })
+  },[pathname])
+
   return (
     <div className="flex flex-col justify-between h-screen w-full">
       <div className="text-black flex flex-col h-full pt-16 pb-[4rem]">
         <div className="flex justify-start gap-1 pl-1 pb-2 cursor-pointer items-center" onClick={() => { router.replace("/dashboard") }}>
-          <div className="">
-            <svg
+          <div className="pb-6">
+            {/* <svg
               width="40"
               height="100"
               viewBox="0 0 143 145"
@@ -325,9 +337,10 @@ const Sidebar = () => {
                 fill="#5291CD"
               />
               <path d="M92 144.5V41H104V144.5H92Z" fill="#6193B5" />
-            </svg>
+            </svg> */}
+            <Image src="/Mats_logo.jpg" alt="" width={150} height={150}></Image>
           </div>
-          <h1 className="text-black text-[40px] font-semibold">MATS</h1>
+          {/* <h1 className="text-black text-[40px] font-semibold">MATS</h1> */}
         </div>
         <div className=" text-black flex-1 h-full overflow-x-hidden overflow-y-scroll sidebar_container">
           <div className="group text-2xl">
