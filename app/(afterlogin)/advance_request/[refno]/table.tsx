@@ -133,6 +133,8 @@ const table = ({ tableData }: Props) => {
   const req_no = useParams()
   const [errors, setErrors] = useState<Errors>();
   const handleVendorTypeChangeApi = async (value: string) => {
+    setVendorDetails({ ...vendorDetails,vendor_name : "" ,advance : 0} as VendorData );
+    
     try {
       const response = await fetch(
         `/api/training_and_education/vendorName?vendor_type=${value}`,
@@ -144,7 +146,6 @@ const table = ({ tableData }: Props) => {
           "credentials": 'include'
         }
       );
-
 
       if (response.ok) {
         const data = await response.json();
@@ -240,6 +241,7 @@ const table = ({ tableData }: Props) => {
         setErrors(validationErrors as Errors);
         return;
     }
+    setErrors({} as Errors);
     const formData = new FormData();
     formData.append("vendor_type", vendorDetails.vendor_type);
     formData.append("vendor_name", vendorDetails.vendor_name);
@@ -282,7 +284,7 @@ const table = ({ tableData }: Props) => {
         setVendorDetails({ vendor_type: '', vendor_name: '', advance: 0, amount: 0, file: null });
         setUploadedFiles(null);
         setFiles([]);
-        setErrors({ } as Errors);
+        setErrors({} as Errors);
         return 'Vendor has been added successfully!';
       },
       error: (error) => `Failed to add vendor: ${error.message || error}`,
@@ -399,10 +401,9 @@ const table = ({ tableData }: Props) => {
         const data = await response.json();
         setVendorDetails((prev) => ({
           ...prev,
-          advance: data.data?.est_amount, // Update vendor_name in the vendorDetails state
+          advance: data.data?.est_amount,
         }))
-        setErrors({ ...errors, advance: "" } as Errors);
-        
+        setErrors({ ...errors, advance: "" ,vendor_name: ""} as Errors);
         console.log(data, "-----------vendor name api------------------");
       } else {
         console.log("Login failed");

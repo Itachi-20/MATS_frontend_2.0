@@ -151,7 +151,7 @@ const page = () => {
         }
     };
     useEffect(() => {
-        if(refno){
+        if (refno) {
             vendorViewData();
         }
     }, [refno])
@@ -162,7 +162,6 @@ const page = () => {
 
     const handleFinalSubmit = async () => {
         setLoading(true)
-        // e.preventDefault();
         console.log("formdata------------------------------------------update check---", formdata)
         try {
             const response = await fetch(
@@ -181,13 +180,13 @@ const page = () => {
                 console.log(data, "response data");
                 setLoading(false)
                 setConfirmPopup(false)
-                // if(role=='Event Requestor'){
-                //     router.push(`/${from}`)
-                // }else{
-                //     router.push(`/event_vendor_list`)
-                // }
+
                 setTimeout(() => {
-                    router.back();
+                    if (role == 'Event Requestor') {
+                        router.push(`/${from}`)
+                    } else {
+                        router.push(`/event_vendor_list`)
+                    }
                 }, 1000)
                 toast.success(data.message)
             } else {
@@ -328,7 +327,7 @@ const page = () => {
     const handleConfirmpopup = async () => {
         setConfirmPopup(true)
     };
-    console.log('from', from)
+    console.log('dropdownData', dropdownData)
     return (
         <>
             <div className='p-7 w-full relative z-20 text-black'>
@@ -358,16 +357,13 @@ const page = () => {
                                     <SelectValue placeholder="Select" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    {dropdownData && dropdownData.vendor_type?.filter((item, index) => {
-                                        if (item.vendor_type == "Hotel" || item.vendor_type == "Travel" || item.vendor_type == "Food") {
-                                            return item
-                                        }
-                                    })
-                                        .map((item) => {
+                                    {
+                                        dropdownData ? dropdownData.vendor_type.map((item, index) => {
                                             return (
                                                 <SelectItem value={item.name}>{item.vendor_type}</SelectItem>
                                             )
-                                        })
+                                        }) :
+                                            <SelectItem value={"null"} disabled>No Data Yet</SelectItem>
                                     }
                                 </SelectContent>
                             </Select>

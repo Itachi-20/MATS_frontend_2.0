@@ -116,13 +116,19 @@ const form4 = ({ ...Props }: Props) => {
         });
 
         if (!response.ok) {
+          setDocumentType('')
+          setFiles([])
+          setUploadedFiles(null)
           throw new Error('file upload request failed');
         }
 
         const data = await response.json();
-        resolve(data); // Resolve with the response data
+        resolve(data); 
       } catch (error) {
-        reject(error); // Reject with the error
+        setDocumentType('')
+          setFiles([])
+          setUploadedFiles(null)
+        reject(error); 
       }
     });
     toast.promise(apiCallPromise, {
