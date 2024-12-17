@@ -236,7 +236,7 @@ const Form2 = ({ ...Props }: Props) => {
             }
           </div>
           <div className='flex flex-col gap-2' onClick={() => { handleEndDateClick() }}>
-            <label className={`lable ${(errors?.event_venue && !formdata?.event_venue) ? `text-red-600` : `text-black`}`}>
+            <label className={`lable ${(errors?.event_end_date && !formdata?.event_end_date) ? `text-red-600` : `text-black`}`}>
               Program End Date<span className='text-[#e60000]'>*</span>
             </label>
             <input
