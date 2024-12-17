@@ -41,7 +41,7 @@ const Form2 = ({ ...Props }: Props) => {
   const [eventStartDate, setEventStartDate] = useState<any>(Props.previewData?.event_start_date ? new Date(Props.previewData?.event_start_date).getTime() : "");
   const [engagementHCP, setEngagementHCP] = useState<string>(Props.previewData?.any_govt_hcp ?? "");
 
-  const validateAtSubmit = () => {
+  const validateAtSubmit = async () => {
     const errors: FormErrors = {};
     console.log("Checking Formdata value", formData?.event_name);
     if ((Props.previewData?.event_name ? (formData && ("event_name" in formData && formData.event_name == '')) : !formData?.event_name)) errors.event_name = "Event Name is required";
@@ -49,7 +49,7 @@ const Form2 = ({ ...Props }: Props) => {
     if ((Props?.previewData?.event_start_date ? (formData && ("event_start_date" in formData && formData.event_start_date == '')) : !formData?.event_start_date)) errors.event_start_date = "Event Start Date activity is required";
     if ((Props?.previewData?.event_end_date ? (formData && ("event_end_date" in formData && formData.event_end_date == '')) : !formData?.event_end_date)) errors.event_end_date = "Event End Date is required";
     if ((Props?.previewData?.any_govt_hcp ? (formData && ("any_govt_hcp" in formData && formData.any_govt_hcp == '')) : !formData?.any_govt_hcp)) errors.any_govt_hcp = "Engagement of any government hCP’s is required";
-    if ((formData?.any_govt_hcp || Props?.previewData?.any_govt_hcp) == "Yes" && (Props?.previewData?.no_of_hcp ? false : !formData?.no_of_hcp)) errors.no_of_hcp = "No of HCP is required";
+    if ((Props?.previewData?.no_of_hcp ? (formData && ("no_of_hcp" in formData && !formData.no_of_hcp)) : !formData?.no_of_hcp)) errors.no_of_hcp = "No of HCP is required";
     if ((Props?.previewData?.bu_rational ? (formData && ("bu_rational" in formData && formData.bu_rational == '')) : !formData?.bu_rational)) errors.bu_rational = "BU Rational is required";
     return errors;
   };
@@ -57,7 +57,7 @@ const Form2 = ({ ...Props }: Props) => {
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    const validationErrors = validateAtSubmit();
+    const validationErrors = await validateAtSubmit();
     if (Object.keys(validationErrors).length > 0) {
       console.error(validationErrors)
       setErrors(validationErrors);
