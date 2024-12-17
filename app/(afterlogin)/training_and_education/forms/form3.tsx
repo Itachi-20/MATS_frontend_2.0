@@ -20,9 +20,10 @@ import {
 } from "@/components/ui/table";
 import { useRouter } from 'nextjs-toploader/app';
 import { Previewdata } from '@/app/(afterlogin)/hcp_services/page'
+import IsAddPasanger from '@/components/addPassangerDialog'
 import { Toaster, toast } from 'sonner'
 
-type formData = {
+export type formData = {
   name: string | null;
   event_type: string;
   company: string;
@@ -51,7 +52,6 @@ type formData = {
   no_of_hcp: number
 };
 
-
 type Props = {
   vendorType: {
     name: string,
@@ -63,6 +63,7 @@ type Props = {
   previewData: Previewdata | null | undefined
   refNo: string;
 }
+
 type Budget = "logistics" | "compensation" | "";
 
 type vendorName = {
@@ -95,11 +96,15 @@ const Form3 = ({ ...Props }: Props) => {
   const [compansationBudget, setCompansationBudget] = useState<Compensation[] | undefined>(Props.previewData?.compensation);
   const [totalLogisticAmount, setTotalLogisticAmount] = useState(0);
   const [totalCompansationAmount, setTotalCompansationAmount] = useState(0);
-  const [totalEstimatedAmount, setTotalEstimatedAmount] = useState(0);
+  const [isAddPasanger,setIsAddPasanger] = useState<boolean>(false);
 
   const router = useRouter();
   const [formdata, setFormData] = useState<formData | {}>();
   const [refNo, setRefNo] = useState<string | null>(Props.refNo);
+
+  const handlePassangerDialog = ()=>{
+    setIsAddPasanger(prev => !prev);
+  }
 
   const handleSelectChange = (value: string, name: string) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -349,7 +354,7 @@ const Form3 = ({ ...Props }: Props) => {
             <Button className="bg-white text-[#4430bf] border border-[#4430bf] text-md font-normal hover:bg-white"
               onClick={() => handleLogisticsAdd()}
             >
-              Add
+              Add Expense
             </Button>
           </div>
         </div>
@@ -453,9 +458,12 @@ const Form3 = ({ ...Props }: Props) => {
           :
           ""
       }
-      <h1 className="text-black text-2xl font-normal uppercase pb-8">
+      <div className='flex justify-between pb-8'>
+      <h1 className="text-black text-2xl font-normal uppercase">
         Logistics Budget
       </h1>
+      <Button className={`text-white bg-blue-500 ${budgetType == "logistics"?"":"hidden"}`} onClick={()=>{handlePassangerDialog()}}>Add Passanger</Button>
+      </div>
       <div className="border mb-8 border-[#848484] p-7 rounded-[50px] w-full mr-4  bg-white">
         <Table className={"overflow-hidden"}>
           <TableHeader className={"bg-[#E0E9FF]"}>
@@ -657,6 +665,15 @@ const Form3 = ({ ...Props }: Props) => {
         </Button>
 
         <Toaster richColors position="top-right" />
+        {
+        isAddPasanger &&
+        
+          <IsAddPasanger
+          handleDialog={handlePassangerDialog}
+          refno={refNo}
+          />
+        
+      }
 
       </div>
     </div>
