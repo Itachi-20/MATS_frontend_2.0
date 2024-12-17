@@ -71,6 +71,7 @@ type Logistics = {
 
 type formData = {
   name: string | null;
+  organization_name:string;
   event_type: string;
   company: string;
   event_cost_center: string;
@@ -102,19 +103,24 @@ type Props = {
   previewData: Previewdata | null;
   refno: string;
 }
+
+type FormErrors = {
+  organization_name?: string;
+  event_venue?: string;
+  event_start_date?: string;
+  event_end_date?: string;
+  any_govt_hcp?: string;
+  no_of_hcp?: string;
+  bu_rational?: string;
+}
+
 const Form2 = ({ ...Props }: Props) => {
   const start_date_ref: React.RefObject<any> = useRef(null);
   const end_date_ref: React.RefObject<any> = useRef(null);
-  const [formdata, setFormData] = useState<formData | {}>({});
+  const [formdata, setFormData] = useState<formData>();
+    const [errors, setErrors] = useState<FormErrors>();
   const [refNo, setRefNo] = useState<string | null>(Props.refno);
   const router = useRouter()
-  // const appContext = useContext(AppContext);
-  // if (!appContext) {
-  //   throw new Error("SomeComponent must be used within an AppWrapper");
-  // }
-
-  // const { user } = appContext;
-  // console.log(user, "this is user");
   const [engagementHCP,setEngagementHCP] = useState<string>(Props.previewData?.any_govt_hcp ?? "");
   const [eventStartDate, setEventStartDate] = useState<any>(Props.previewData?.event_start_date ? new Date(Props.previewData?.event_start_date).getTime() : "");
 
@@ -124,14 +130,12 @@ const Form2 = ({ ...Props }: Props) => {
       start_date_ref.current.focus(); // Fallback for older browsers
     }
   };
-  
   const handleEndDateClick = () => {
     if (end_date_ref.current) {
       end_date_ref.current.showPicker(); // For modern browsers
       end_date_ref.current.focus(); // Fallback for older browsers
     }
   };
-
   const handleEventStartDateValidate = (e:React.ChangeEvent<HTMLInputElement>)=>{
     const currentDate = new Date().setHours(0, 0, 0, 0);
     if(e.target.valueAsNumber < currentDate){
@@ -139,32 +143,45 @@ const Form2 = ({ ...Props }: Props) => {
     }
     setEventStartDate(e.target.valueAsNumber)
     handlefieldChange(e);
-}
-
+  };
   const handleEventEndDateValidate = (e:React.ChangeEvent<HTMLInputElement>)=>{
     if(e.target.valueAsNumber < eventStartDate){
       toast.error("Date should be greater than or equal to start date");
       e.target.value="";
     }
     handlefieldChange(e);
-  }
-
+  };
   const handlefieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  }
-
+    setFormData(prev => ({ ...prev, [name]: value }) as formData);
+  };
   const handleSelectChange = (value: string, name: string) => {
     // if(name == "any_govt_hcp" && value == "No"){
     //   const noofhcpfield = document.getElementsByName("no_of_hcp")[0] as HTMLInputElement;
     //   noofhcpfield.value = "0";
     // }
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }) as formData);
   };
-
-
+  const validateAtSubmit = async () => {
+    const errors: FormErrors = {};
+    console.log("Checking Formdata value", formdata?.event_name);
+    if ((Props.previewData?.organization_name ? (formdata && ("organization_name" in formdata && formdata.organization_name == '')) : !formdata?.organization_name)) errors.organization_name = "Organization Name is required";
+    if ((Props?.previewData?.event_start_date ? (formdata && ("event_start_date" in formdata && formdata.event_start_date == '')) : !formdata?.event_start_date)) errors.event_start_date = "Event Start Date activity is required";
+    if ((Props?.previewData?.event_end_date ? (formdata && ("event_end_date" in formdata && formdata.event_end_date == '')) : !formdata?.event_end_date)) errors.event_end_date = "Event End Date is required";
+    if ((Props?.previewData?.any_govt_hcp ? (formdata && ("any_govt_hcp" in formdata && formdata.any_govt_hcp == '')) : !formdata?.any_govt_hcp)) errors.any_govt_hcp = "Engagement of any government hCP’s is required";
+    if (((formdata?.any_govt_hcp  == "Yes") || (Props?.previewData?.any_govt_hcp  == "Yes")) && (Props?.previewData?.no_of_hcp ? (formdata && ("no_of_hcp" in formdata && !formdata.no_of_hcp)) : !formdata?.no_of_hcp)) errors.no_of_hcp = "No of HCP is required";
+    if ((Props?.previewData?.bu_rational ? (formdata && ("bu_rational" in formdata && formdata.bu_rational == '')) : !formdata?.bu_rational)) errors.bu_rational = "BU Rational is required";
+    return errors;
+  };
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+
+    const validationErrors = await validateAtSubmit();
+    if (Object.keys(validationErrors).length > 0) {
+      console.error(validationErrors)
+      setErrors(validationErrors);
+      return;
+    }
 
     const updatedFormData = {
       ...formdata
@@ -210,42 +227,74 @@ const Form2 = ({ ...Props }: Props) => {
       </h1>
       <div className='grid grid-cols-2 gap-6'>
         <div className='flex flex-col gap-2'>
-          <label className='lable'>Organization Name <span className='text-[#e60000]'>*</span></label>
-          <Input className='dropdown' placeholder='Type Here' 
+        <label className={`lable ${(errors?.organization_name && !formdata?.organization_name) ? `text-red-600` : `text-black`}`}>Organization Name <span className='text-[#e60000]'>*</span></label>
+          <Input 
+            className={`${(errors?.organization_name && !formdata?.organization_name) ? `border border-red-600` : ``} text-black shadow-md border h-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-md pl-2 pt-2`} 
+            placeholder='Type Here' 
             name='organization_name'
             onChange={(e)=>handlefieldChange(e)}
             defaultValue={Props.previewData?.organization_name?Props.previewData.organization_name:""}
           ></Input>
-
+            {
+              errors &&
+              (errors?.organization_name && !formdata?.organization_name) &&
+              (
+                <p className="w-full text-red-500 text-[11px] font-normal text-left">
+                  {errors?.organization_name}
+                </p>
+              )
+            }
         </div>
         <div className='flex flex-col gap-2'onClick={()=>{handleStartDateClick()}}>
-          <label className='lable'htmlFor='start_date'>Event Start Date<span className='text-[#e60000]'>*</span></label>
-          <Input type='date' className='dropdown h-10 rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm'
+          <label className={`lable ${(errors?.event_start_date && !formdata?.event_start_date) ? `text-red-600` : `text-black`}`} htmlFor='start_date'>Event Start Date<span className='text-[#e60000]'>*</span></label>
+          <Input 
+            type='date' 
+            className={`${(errors?.event_start_date && !formdata?.event_start_date) ? `border border-red-600` : `border border-neutral-200`} dropdown h-10 rounded-md bg-white px-3 py-2 text-sm`}
             name='event_start_date'
             id='start_date'
             ref={start_date_ref}
             onChange={(e)=>handleEventStartDateValidate(e)}
             defaultValue={Props.previewData?.event_start_date?Props.previewData.event_start_date:""}
           ></Input>
-
+            {
+              errors &&
+              (errors?.event_start_date && !formdata?.event_start_date) &&
+              (
+                <p className="w-full text-red-500 text-[11px] font-normal text-left">
+                  {errors?.event_start_date}
+                </p>
+              )
+            }
         </div>
         <div className='flex flex-col gap-2'onClick={()=>{handleEndDateClick()}}>
-          <label className='lable'>Event End Date<span className='text-[#e60000]'>*</span></label>
-          <Input type='date' className=' dropdown h-10 rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm'
+          <label className={`lable ${(errors?.event_end_date && !formdata?.event_end_date) ? `text-red-600` : `text-black`}`}>Event End Date<span className='text-[#e60000]'>*</span></label>
+          <Input 
+            type='date' 
+            className={`${(errors?.event_end_date && !formdata?.event_end_date) ? `border border-red-600` : `border border-neutral-200`} dropdown h-10 rounded-md bg-white px-3 py-2 text-sm`}
             name='event_end_date'
             id='end_date'
             ref={end_date_ref}
             onChange={(e)=>handleEventEndDateValidate(e)}
             defaultValue={Props.previewData?.event_end_date?Props.previewData.event_end_date:""}
           ></Input>
+          {
+              errors &&
+              (errors?.event_end_date && !formdata?.event_end_date) &&
+              (
+                <p className="w-full text-red-500 text-[11px] font-normal text-left">
+                  {errors?.event_end_date}
+                </p>
+              )
+            }
         </div>
+        
         <div className='flex flex-col gap-2'>
-          <label className='lable'>engagement of any government hCP’s?<span className='text-[#e60000]'>*</span></label>
+        <label className={`lable ${(errors?.any_govt_hcp && !formdata?.any_govt_hcp) ? `text-red-600` : `text-black`}`}>engagement of any government hCP’s?<span className='text-[#e60000]'>*</span></label>
           <Select
             onValueChange={(value)=>{handleSelectChange(value,"any_govt_hcp"); setEngagementHCP(value);}}
             defaultValue={Props.previewData?.any_govt_hcp?Props.previewData.any_govt_hcp:""}
             >
-            <SelectTrigger className="dropdown">
+            <SelectTrigger className={`${(errors?.any_govt_hcp && !formdata?.any_govt_hcp) ? `border border-red-600` : ``} dropdown `}>
               <SelectValue placeholder="Select" />
             </SelectTrigger>
             <SelectContent>
@@ -253,32 +302,65 @@ const Form2 = ({ ...Props }: Props) => {
             <SelectItem value="No">No</SelectItem>
             </SelectContent>
           </Select>
-
+          {
+              errors &&
+              (errors?.any_govt_hcp && !formdata?.any_govt_hcp) &&
+              (
+                <p className="w-full text-red-500 text-[11px] font-normal text-left">
+                  {errors?.any_govt_hcp}
+                </p>
+              )
+            }
         </div>
 
-        { engagementHCP == "Yes" &&
+        {
+            engagementHCP == "Yes" ?
+              <div className='flex flex-col gap-2'>
+                <label className={`lable ${(errors?.no_of_hcp && !formdata?.no_of_hcp) ? `text-red-600` : `text-black`}`}>Total number of government hCP’s<span className='text-[#e60000]'>*</span></label>
+                <Input
+                  defaultValue={Props.previewData?.no_of_hcp ? Props.previewData.no_of_hcp : ""}
+                  className={`${(errors?.no_of_hcp && !formdata?.no_of_hcp) ? `border border-red-600` : `border border-neutral-200`} dropdown h-10 rounded-md bg-white px-3 py-2 text-sm`}
+                  placeholder='Type Here'
+                  name='no_of_hcp'
+                  type='number'
+                  disabled={engagementHCP == "Yes" ? false : true}
+                  onChange={(e) => handlefieldChange(e)}
+                ></Input>
+                {
+                  errors &&
+                  (errors?.no_of_hcp && !formdata?.no_of_hcp) &&
+                  (
+                    <p className="w-full text-red-500 text-[11px] font-normal text-left">
+                      {errors?.no_of_hcp}
+                    </p>
+                  )
+                }
+              </div>
+              :
+              <></>
+          }
+
           <div className='flex flex-col gap-2'>
-            <label className='lable'>Total number of government hCP’s<span className='text-[#e60000]'>*</span></label>
-            <Input className='dropdown' placeholder='Type Here'
-              name='no_of_hcp'
-              type='number'
-              onChange={(e)=>handlefieldChange(e)}
-              defaultValue={Props.previewData?.no_of_hcp?Props.previewData.no_of_hcp:""}
-            ></Input>
-
+            <label className={`lable ${(errors?.bu_rational && !formdata?.bu_rational) ? `text-red-600` : `text-black`}`}>BU Rational<span className='text-[#e60000]'>*</span></label>
+            <textarea
+              className={`${(errors?.bu_rational && !formdata?.bu_rational) ? `border border-red-600` : ``} text-black shadow-md border h-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-md pl-2 pt-2`}
+              placeholder='Type Here'
+              name='bu_rational'
+              defaultValue={Props.previewData?.bu_rational ? Props.previewData.bu_rational : ""}
+              onChange={(e) => { handlefieldChange(e) }}
+            />
+            {
+              errors &&
+              (errors?.bu_rational && !formdata?.bu_rational) &&
+              (
+                <p className="w-full text-red-500 text-[11px] font-normal text-left">
+                  {errors?.bu_rational}
+                </p>
+              )
+            }
           </div>
-        }
-
         <div className='flex flex-col gap-2'>
-          <label className='lable'>BU Rational<span className='text-[#e60000]'>*</span></label>
-          <textarea className='text-black shadow-md border h-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl pl-2 pt-2' placeholder='Type Here'
-            name='bu_rational'
-            onChange={(e)=>{handlefieldChange(e)}}
-            defaultValue={Props.previewData?.bu_rational?Props.previewData.bu_rational:""}
-          />
-        </div>
-        <div className='flex flex-col gap-2'>
-          <label className='lable'>Comments<span className='text-[#e60000]'>*</span></label>
+          <label className='lable'>Comments</label>
           <Textarea className='text-black shadow-md' placeholder='Type Here'
             name='comments'
             onChange={(e)=>{handlefieldChange(e)}}
