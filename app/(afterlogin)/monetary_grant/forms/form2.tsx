@@ -13,7 +13,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Toaster, toast } from 'sonner'
 import { useRouter } from 'nextjs-toploader/app';
-import { Previewdata } from '@/app/(afterlogin)/monetary_grant/page'
+import { Previewdata } from '@/app/(afterlogin)/monetary_grant/page';
+import { handleEventStartDateValidate, handleEventEndDateValidate } from "@/app/utility/dateValidation";
+
 type dropdownData = {
   company: {
     name: string;
@@ -136,21 +138,6 @@ const Form2 = ({ ...Props }: Props) => {
       end_date_ref.current.focus(); // Fallback for older browsers
     }
   };
-  const handleEventStartDateValidate = (e:React.ChangeEvent<HTMLInputElement>)=>{
-    const currentDate = new Date().setHours(0, 0, 0, 0);
-    if(e.target.valueAsNumber < currentDate){
-      toast.error("You are selecting previous Date");
-    }
-    setEventStartDate(e.target.valueAsNumber)
-    handlefieldChange(e);
-  };
-  const handleEventEndDateValidate = (e:React.ChangeEvent<HTMLInputElement>)=>{
-    if(e.target.valueAsNumber < eventStartDate){
-      toast.error("Date should be greater than or equal to start date");
-      e.target.value="";
-    }
-    handlefieldChange(e);
-  };
   const handlefieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }) as formData);
@@ -253,7 +240,16 @@ const Form2 = ({ ...Props }: Props) => {
             name='event_start_date'
             id='start_date'
             ref={start_date_ref}
-            onChange={(e)=>handleEventStartDateValidate(e)}
+            onChange={(e)=>handleEventStartDateValidate(
+              {
+                e: e,
+                formData: formdata,
+                previewData: Props.previewData,
+                setEventStartDate: setEventStartDate,
+                eventStartDate: eventStartDate,
+                handlefieldChange: handlefieldChange
+              }
+            )}
             defaultValue={Props.previewData?.event_start_date?Props.previewData.event_start_date:""}
           ></Input>
             {
@@ -274,7 +270,16 @@ const Form2 = ({ ...Props }: Props) => {
             name='event_end_date'
             id='end_date'
             ref={end_date_ref}
-            onChange={(e)=>handleEventEndDateValidate(e)}
+            onChange={(e)=>handleEventEndDateValidate(
+              {
+                e: e,
+                formData: formdata,
+                previewData: Props.previewData,
+                setEventStartDate: setEventStartDate,
+                eventStartDate: eventStartDate,
+                handlefieldChange: handlefieldChange
+              }
+            )}
             defaultValue={Props.previewData?.event_end_date?Props.previewData.event_end_date:""}
           ></Input>
           {
