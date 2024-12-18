@@ -28,6 +28,7 @@ type Props = {
 
 const details = ({...Props}:Props) => {
   const { role, name,userid, clearAuthData } = useAuth();
+  console.log(Props.tableData,"this is table data")
   const router = useRouter();
   return (
     <div className="px-7 pb-7 pt-4 w-full relative z-20 flex flex-col justify-stretch">
@@ -255,7 +256,7 @@ const details = ({...Props}:Props) => {
                 </TableHeader>
                 <TableBody className='text-center'>
                   {
-                    Props && Props.tableData?.map((item,index)=>{
+                    Props && role == "Requestor"&& Props.tableData?.map((item,index)=>{
                       return (
                         <TableRow>
                           <TableCell>{item.name}</TableCell>
