@@ -15,7 +15,8 @@ import { AppContext } from '@/app/context/module';
 import { useState } from 'react';
 import { Toaster, toast } from 'sonner'
 import { useRouter } from 'next/navigation'
-import {Previewdata} from '@/app/(afterlogin)/patient_support/page'
+import {Previewdata} from '@/app/(afterlogin)/patient_support/page';
+import { handleEventStartDateValidate, handleEventEndDateValidate } from "@/app/utility/dateValidation";
 
 type EventEntry = {
   product_amount: number
@@ -46,7 +47,7 @@ type formData = {
   faculty: string;
   participants: string;
   therapy: string;
-  event_name: string;
+  requesting_hospital_name: string;
   event_venue: string;
   comments: string;
   compensation: Compensation[];
@@ -61,7 +62,10 @@ type formData = {
   sub_type_of_activity: string;
   any_govt_hcp: string,
   no_of_hcp: number,
-  product_amount: string
+  product_amount: string,
+  ship_to: string,
+  bill_to: string,
+  currency: string,
 };
 
 type Props = {
@@ -71,95 +75,104 @@ type Props = {
     name: string
   }[] | null
 }
+
+type FormErrors = {
+  requesting_hospital_name?: string;
+  event_start_date?: string;
+  event_end_date?: string;
+  ship_to?: string;
+  bill_to?: string;
+  bu_rational?: string;
+  currency?: string;
+}
+
 const Form2 = ({ ...Props }: Props) => {
   const start_date_ref: React.RefObject<any> = useRef(null);
   const end_date_ref: React.RefObject<any> = useRef(null);
   const router = useRouter();
-  const [formdata, setFormData] = useState<formData | {}>({});
+  const [formdata, setFormData] = useState<formData>();
+  const [errors, setErrors] = useState<FormErrors>();
   const [preview_data, setPreviewData] = useState<EventEntry | null>(null);
   const [refNo,setRefNo] = useState<string | null>(Props.refno ?? "");
   const [eventStartDate, setEventStartDate] = useState<any>(Props.previewData?.event_start_date ? new Date(Props.previewData?.event_start_date).getTime() : "");
+
+  const handleStartDateClick = () => {
+    if (start_date_ref.current) {
+      start_date_ref.current.showPicker(); // For modern browsers
+      start_date_ref.current.focus(); // Fallback for older browsers
+    }
+  };
+  const handleEndDateClick = () => {
+    if (end_date_ref.current) {
+      end_date_ref.current.showPicker(); // For modern browsers
+      end_date_ref.current.focus(); // Fallback for older browsers
+    }
+  };
+  const handleSelectChange = (value: string, name: string) => {
+    setFormData((prev) => ({ ...prev, [name]: value }) as formData);
+  };
+  const handlefieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }) as formData);
+  };
+  const validateAtSubmit = () => {
+    const errors: FormErrors = {};
+    console.log("Checking Formdata value", formdata?.requesting_hospital_name);
+    if ((Props.previewData?.requesting_hospital_name ? (formdata && ("requesting_hospital_name" in formdata && formdata.requesting_hospital_name == '')) : !formdata?.requesting_hospital_name)) errors.requesting_hospital_name = "Requesting Hospital Name is required";
+    if ((Props?.previewData?.ship_to ? (formdata && ("ship_to" in formdata && formdata.ship_to == '')) : !formdata?.ship_to)) errors.ship_to = "Ship To is required";
+    if ((Props?.previewData?.bill_to ? (formdata && ("bill_to" in formdata && formdata.bill_to == '')) : !formdata?.bill_to)) errors.bill_to = "Bil To is required";
+    if ((Props?.previewData?.event_start_date ? (formdata && ("event_start_date" in formdata && formdata.event_start_date == '')) : !formdata?.event_start_date)) errors.event_start_date = "Event Start Date is required";
+    if ((Props?.previewData?.event_end_date ? (formdata && ("event_end_date" in formdata && formdata.event_end_date == '')) : !formdata?.event_end_date)) errors.event_end_date = "Event End Date is required";
+    if ((Props?.previewData?.bu_rational ? (formdata && ("bu_rational" in formdata && formdata.bu_rational == '')) : !formdata?.bu_rational)) errors.bu_rational = "BU Rational is required";
+    if ((Props?.previewData?.currency ? (formdata && ("currency" in formdata && formdata.currency == '')) : !formdata?.currency)) errors.currency = "Currency is required";
+    return errors;
+  };
+  const handleSubmit = async () => {
+      const updatedFormData = {
+          ...formdata
+      };
+      const validationErrors = validateAtSubmit();
+      if (Object.keys(validationErrors).length > 0) {
+        console.error(validationErrors)
+        setErrors(validationErrors);
+        return;
+      }
+      
+    updatedFormData.event_type = "Patient Support"
+    if(Props.previewData?.product_amount){
+      updatedFormData.total_estimated_expense = Props.previewData.product_amount;
+    }
+    if(Props.refno){
+      updatedFormData.name = Props.refno;
+    }
   
-  const handleEventStartDateValidate = (e:React.ChangeEvent<HTMLInputElement>)=>{
-    const currentDate = new Date().setHours(0, 0, 0, 0);
-    if(e.target.valueAsNumber < currentDate){
-      toast.error("You are choosing previous date");
-    }
-    setEventStartDate(e.target.valueAsNumber)
-    handlefieldChange(e);
-}
-
-const handleStartDateClick = () => {
-  if (start_date_ref.current) {
-    start_date_ref.current.showPicker(); // For modern browsers
-    start_date_ref.current.focus(); // Fallback for older browsers
-  }
-};
-
-const handleEndDateClick = () => {
-  if (end_date_ref.current) {
-    end_date_ref.current.showPicker(); // For modern browsers
-    end_date_ref.current.focus(); // Fallback for older browsers
-  }
-};
-
-  const handleEventEndDateValidate = (e:React.ChangeEvent<HTMLInputElement>)=>{
-    if(eventStartDate && e.target.valueAsNumber < eventStartDate){
-      toast.error("End Date should be greater than or equal to start date");
-      e.target.value = "";
-    }
-    handlefieldChange(e);
-  }
-
-    const handleSelectChange = (value: string, name: string) => {
-      setFormData((prev) => ({ ...prev, [name]: value }));
-    };
-
-    const handlefieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-      const { name, value } = e.target;
-      setFormData(prev => ({ ...prev, [name]: value }));
-    }
-
-    const handleSubmit = async () => {
-       const updatedFormData = {
-           ...formdata
-       };
-       
-      updatedFormData.event_type = "Patient Support"
-      if(Props.previewData?.product_amount){
-        updatedFormData.total_estimated_expense = Props.previewData.product_amount;
+  
+      try {
+        const response = await fetch(
+          "/api/training_and_education/handleSubmit",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: 'include',
+            body: JSON.stringify(updatedFormData)
+          }
+        );
+        if (response.ok) {
+          const data = await response.json();
+          setRefNo(data.message);
+  
+          setTimeout(() => {
+            router.push(`/patient_support?forms=3&refno=${data.message}`);
+          }, 1000)
+        } else {
+          console.log("submission failed");
+        }
+      } catch (error) {
+        console.error("Error during Submission:", error);
       }
-      if(Props.refno){
-        updatedFormData.name = Props.refno;
-      }
-   
-   
-       try {
-         const response = await fetch(
-           "/api/training_and_education/handleSubmit",
-           {
-             method: "POST",
-             headers: {
-               "Content-Type": "application/json",
-             },
-             credentials: 'include',
-             body: JSON.stringify(updatedFormData)
-           }
-         );
-         if (response.ok) {
-           const data = await response.json();
-           setRefNo(data.message);
-   
-           setTimeout(() => {
-             router.push(`/patient_support?forms=3&refno=${data.message}`);
-           }, 1000)
-         } else {
-           console.log("submission failed");
-         }
-       } catch (error) {
-         console.error("Error during Submission:", error);
-       }
-     };
+  };
   return (
     <>
     <div>
@@ -168,86 +181,144 @@ const handleEndDateClick = () => {
       </h1>
       <div className='grid grid-cols-2 gap-6'>
         <div className='flex flex-col gap-2'>
-          <label className='lable'>Requesting Hospital Name <span className='text-[#e60000]'>*</span></label>
-          <Input type='text' className=' dropdown h-10 rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm'
+          <label className={`lable ${(errors?.requesting_hospital_name && !formdata?.requesting_hospital_name) ? `text-red-600` : `text-black`}`}>Requesting Hospital Name <span className='text-[#e60000]'>*</span></label>
+          <Input 
+              type='text' 
+              className={`${(errors?.requesting_hospital_name && !formdata?.requesting_hospital_name) ? `border border-red-600` : `border border-neutral-200`} dropdown h-10 rounded-md bg-white px-3 py-2 text-sm`}
               name='requesting_hospital_name'
               onChange={(e)=>{handlefieldChange(e)}}
               defaultValue={Props.previewData?.requesting_hospital_name?Props.previewData.requesting_hospital_name:""}
             ></Input>
-
+            {
+              errors &&
+              (errors?.requesting_hospital_name && !formdata?.requesting_hospital_name) &&
+              (
+                <p className="w-full text-red-500 text-[11px] font-normal text-left">
+                  {errors?.requesting_hospital_name}
+                </p>
+              )
+            }
         </div>
-        <div className='flex flex-col gap-2' onClick={()=>{handleStartDateClick()}}>
-          <label className='lable' htmlFor='start_date'>Event Start Date<span className='text-[#e60000]'>*</span></label>
-          <Input type='date' className=' dropdown h-10 rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm'
-              id='start_date'
+        <div className='flex flex-col gap-2' onClick={() => { handleStartDateClick() }}>
+            <label className={`lable ${(errors?.event_start_date && !formdata?.event_start_date) ? `text-red-600` : `text-black`}`} htmlFor='start_date'>
+              Event Start Date<span className='text-[#e60000]'>*</span>
+            </label>
+            <input
+              type='date'
+              className={`${(errors?.event_start_date && !formdata?.event_start_date) ? `border border-red-600` : `border border-neutral-200`} dropdown h-10 rounded-md bg-white px-3 py-2 text-sm`}
               name='event_start_date'
+              id='start_date'
               ref={start_date_ref}
-              onChange={(e)=>{handleEventStartDateValidate(e)}}
-              defaultValue={Props.previewData?.event_start_date?Props.previewData.event_start_date:""}
-            ></Input>
-
+              defaultValue={Props.previewData?.event_start_date ? Props.previewData.event_start_date : ""}
+              onChange={(e) => handleEventStartDateValidate(
+                {
+                  e: e,
+                  formData: formdata,
+                  previewData: Props.previewData,
+                  setEventStartDate: setEventStartDate,
+                  eventStartDate: eventStartDate,
+                  handlefieldChange: handlefieldChange
+                }
+              )}
+            ></input>
+            {
+              errors &&
+              (errors?.event_start_date && !formdata?.event_start_date) &&
+              (
+                <p className="w-full text-red-500 text-[11px] font-normal text-left">
+                  {errors?.event_start_date}
+                </p>
+              )
+            }
         </div>
-        <div className='flex flex-col gap-2' onClick={()=>{handleEndDateClick()}}>
-          <label className='lable' htmlFor='end_date'>Event End Date<span className='text-[#e60000]'>*</span></label>
-          <Input type='date' className=' dropdown h-10 rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm'
-          id='end_date'
-              name='event_end_date'
-              ref={end_date_ref}
-              onChange={(e)=>{handleEventEndDateValidate(e)}}
-              defaultValue={Props.previewData?.event_end_date?Props.previewData.event_end_date:""}
-            ></Input>
-        </div>
-        {/* <div className='flex flex-col gap-2'>
-          <label className='lable'>engagement of any government hCP’s?<span className='text-[#e60000]'>*</span></label>
-          <Select>
-            <SelectTrigger className="dropdown">
-              <SelectValue placeholder="Select" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="light">Light</SelectItem>
-              <SelectItem value="dark">Dark</SelectItem>
-              <SelectItem value="system">System</SelectItem>
-            </SelectContent>
-          </Select>
-
+        <div className='flex flex-col gap-2' onClick={() => { handleEndDateClick() }}>
+          <label className={`lable ${(errors?.event_end_date && !formdata?.event_end_date) ? `text-red-600` : `text-black`}`}>
+            Event End Date<span className='text-[#e60000]'>*</span>
+          </label>
+          <input
+            type='date'
+            className={`${(errors?.event_end_date && !formdata?.event_end_date) ? `border border-red-600` : `border border-neutral-200`} dropdown h-10 rounded-md bg-white px-3 py-2 text-sm`}
+            name='event_end_date'
+            ref={end_date_ref}
+            id='end_date'
+            defaultValue={Props.previewData?.event_end_date ? Props.previewData.event_end_date : ""}
+            onChange={(e) => handleEventEndDateValidate(
+              {
+                e: e,
+                formData: formdata,
+                previewData: Props.previewData,
+                setEventStartDate: setEventStartDate,
+                eventStartDate: eventStartDate,
+                handlefieldChange: handlefieldChange
+              }
+            )}
+          ></input>
+          {
+            errors &&
+            (errors?.event_end_date && !formdata?.event_end_date) &&
+            (
+              <p className="w-full text-red-500 text-[11px] font-normal text-left">
+                {errors?.event_end_date}
+              </p>
+            )
+          }
         </div>
         <div className='flex flex-col gap-2'>
-          <label className='lable'>Total number of government hCP’s<span className='text-[#e60000]'>*</span></label>
-          <Select>
-            <SelectTrigger className="text-black shadow">
-              <SelectValue placeholder="Select" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="light">Light</SelectItem>
-              <SelectItem value="dark">Dark</SelectItem>
-              <SelectItem value="system">System</SelectItem>
-            </SelectContent>
-          </Select>
-
-        </div> */}
-        <div className='flex flex-col gap-2'>
-          <label className='lable'>Ship To<span className='text-[#e60000]'>*</span></label>
-          <Input type='text' className=' dropdown h-10 rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm'
+        <label className={`lable ${(errors?.ship_to && !formdata?.ship_to) ? `text-red-600` : `text-black`}`}>Ship To<span className='text-[#e60000]'>*</span></label>
+          <Input 
+              type='text' 
+              className={`${(errors?.ship_to && !formdata?.ship_to) ? `border border-red-600` : `border border-neutral-200`} dropdown h-10 rounded-md bg-white px-3 py-2 text-sm`}
               name='ship_to'
               onChange={(e)=>{handlefieldChange(e)}}
               defaultValue={Props.previewData?.ship_to?Props.previewData.ship_to:""}
             ></Input>
+            {
+            errors &&
+            (errors?.ship_to && !formdata?.ship_to) &&
+            (
+              <p className="w-full text-red-500 text-[11px] font-normal text-left">
+                {errors?.ship_to}
+              </p>
+            )
+          }
         </div>
         <div className='flex flex-col gap-2'>
-          <label className='lable'>Bill To<span className='text-[#e60000]'>*</span></label>
-          <Input type='text' className=' dropdown h-10 rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm'
+        <label className={`lable ${(errors?.bill_to && !formdata?.bill_to) ? `text-red-600` : `text-black`}`}>Bill To<span className='text-[#e60000]'>*</span></label>
+          <Input 
+              type='text' 
+              className={`${(errors?.bill_to && !formdata?.bill_to) ? `border border-red-600` : `border border-neutral-200`} dropdown h-10 rounded-md bg-white px-3 py-2 text-sm`}
               name='bill_to'
               onChange={(e)=>{handlefieldChange(e)}}
               defaultValue={Props.previewData?.bill_to?Props.previewData.bill_to:""}
             ></Input>
+            {
+            errors &&
+            (errors?.bill_to && !formdata?.bill_to) &&
+            (
+              <p className="w-full text-red-500 text-[11px] font-normal text-left">
+                {errors?.bill_to}
+              </p>
+            )
+          }
         </div>
         <div className='flex flex-col gap-2'>
-          <label className='lable'>BU Rational<span className='text-[#e60000]'>*</span></label>
-          <Textarea className='text-black shadow-md' placeholder='Type Here'
+        <label className={`lable ${(errors?.bu_rational && !formdata?.bu_rational) ? `text-red-600` : `text-black`}`}>BU Rational<span className='text-[#e60000]'>*</span></label>
+          <Textarea 
+            className={`${(errors?.bu_rational && !formdata?.bu_rational) ? `border border-red-600` : ``} text-black shadow-md border h-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-md pl-2 pt-2`}
+            placeholder='Type Here'
             name='bu_rational'
             onChange={(e)=>{handlefieldChange(e)}}
             defaultValue={Props.previewData?.bu_rational?Props.previewData.bu_rational:""}
           />
+          {
+            errors &&
+            (errors?.bu_rational && !formdata?.bu_rational) &&
+            (
+              <p className="w-full text-red-500 text-[11px] font-normal text-left">
+                {errors?.bu_rational}
+              </p>
+            )
+          }
         </div>
       </div>
       <h1 className="text-black text-2xl font-normal uppercase py-8">
@@ -270,14 +341,14 @@ const handleEndDateClick = () => {
           ></Input>
         </div>
         <div className="flex flex-col col-span-1 gap-2">
-          <label className="lable">
+        <label className={`lable ${(errors?.currency && !formdata?.currency) ? `text-red-600` : `text-black`}`}>
             Currency<span className="text-[#e60000]">*</span>
           </label>
           <Select
            defaultValue={Props.previewData?.currency ?? ""}
            onValueChange={(value) => handleSelectChange(value, "currency")}
           >
-            <SelectTrigger className="dropdown">
+            <SelectTrigger className={`${(errors?.currency && !formdata?.currency) ? `border border-red-600` : ``} dropdown `}>
               <SelectValue placeholder="Select" />
             </SelectTrigger>
             <SelectContent>
@@ -295,6 +366,15 @@ const handleEndDateClick = () => {
               }
             </SelectContent>
           </Select>
+          {
+            errors &&
+            (errors?.currency && !formdata?.currency) &&
+            (
+              <p className="w-full text-red-500 text-[11px] font-normal text-left">
+                {errors?.currency}
+              </p>
+            )
+          }
         </div>
       </div>
       <div className='flex justify-end pt-5 gap-4'>

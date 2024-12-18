@@ -43,6 +43,11 @@ type cityDropdown = {
   city: string
 }[];
 
+type FormErrors = {
+  sub_type_of_activity? : string;
+  event_cost_center? : string;
+}
+
 type Props = {
   cityDropdown: cityDropdown | null
   ReportingHeadDropdown: reportingHeadDropdown | null
@@ -55,6 +60,7 @@ type Props = {
 const Form1 = ({ ...Props }: Props) => {
   const { role, name, userid, clearAuthData } = useAuth();
   const [formData, setFormData] = useState<FormDataType>();
+  const [errors, setErrors] = useState<FormErrors>();
   const router = useRouter();
   const [businessUnit, setBusinessUnit] = useState(Props.previewData?.business_unit ?? "");
   const [budget, setBudget] = useState(Props.previewData?.division_category ?? "");
@@ -65,9 +71,21 @@ const Form1 = ({ ...Props }: Props) => {
   const [reportingHeadDropdown, setReportingHeadDropdown] = useState<reportingHeadDropdown | null>(null)  
   const [loading, setLoading] = useState(true);
   
+  const validateAtSubmit = () => {
+    const errors: FormErrors = {};
+    if ((Props.previewData?.sub_type_of_activity  ? (formData && ("sub_type_of_activity" in formData && formData.sub_type_of_activity == '')) : !formData?.sub_type_of_activity )) errors.sub_type_of_activity = "Sub type activity is required";
+    if ((Props.previewData?.event_cost_center  ? (formData && ("event_cost_center" in formData && formData.event_cost_center == '')) : !formData?.event_cost_center )) errors.event_cost_center = "Event Cost Center is required";
+    return errors;
+  };
+
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-
+    const validationErrors = validateAtSubmit();
+    if (Object.keys(validationErrors).length > 0) {
+      console.error(validationErrors)
+      setErrors(validationErrors);
+      return;
+    }
     const updatedFormData = {
       ...formData
     };
@@ -105,7 +123,7 @@ const Form1 = ({ ...Props }: Props) => {
   const handlefieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }) as FormDataType);
-  }
+  };
   const handleSelectChange = (value: string, name: string) => {
     if (name == "business_unit") { setBusinessUnit(value) };
     if (name == "division_category") { setBudget(value) };
@@ -164,9 +182,6 @@ const Form1 = ({ ...Props }: Props) => {
       console.error("Error during business unit change:", error);
     }
   };
-
-
-
   const handleStateChange = async (value: string) => {
     try {
       const response = await fetch(
@@ -194,7 +209,6 @@ const Form1 = ({ ...Props }: Props) => {
       console.error("Error during state  change:", error);
     }
   };
-
   const handleReportingChange = async () => {
     setReportingHeadDropdown([])
     try {
@@ -226,7 +240,6 @@ const Form1 = ({ ...Props }: Props) => {
       console.error("Error during Reporting change:", error);
     }
   };
-
   useEffect(() => {
     // Check if all values are present
     if (formData?.event_requestor && formData?.business_unit && formData?.state) {
@@ -266,7 +279,7 @@ const Form1 = ({ ...Props }: Props) => {
       <div className="grid grid-cols-2 gap-6 pb-8">
         <div className="flex flex-col gap-2">
           <label className="lable">
-            Company Name <span className="text-[#e60000]">*</span>
+            Company Name 
           </label>
           <Select
             defaultValue={Props.previewData?.company ?? ""}
@@ -293,7 +306,7 @@ const Form1 = ({ ...Props }: Props) => {
         </div>
         <div className="flex flex-col gap-2">
           <label className="lable">
-            Business Unit<span className="text-[#e60000]">*</span>
+            Business Unit
           </label>
           <Select
             defaultValue={Props.previewData?.business_unit ?? ""}
@@ -320,7 +333,7 @@ const Form1 = ({ ...Props }: Props) => {
         </div>
         <div className="flex flex-col gap-2">
           <label className="lable">
-            Event requester<span className="text-[#e60000]">*</span>
+            Event requester
           </label>
           <Select
             defaultValue={Props.previewData?.event_requestor ? Props.previewData.event_requestor : userid as string}
@@ -346,8 +359,8 @@ const Form1 = ({ ...Props }: Props) => {
           </Select>
         </div>
         <div className="flex flex-col gap-2">
-          <label className="lable">
-            event cost center<span className="text-[#e60000]">*</span>
+        <label className={`lable ${(errors?.event_cost_center && !formData?.event_cost_center) ? `text-red-600`:`text-black`}`}>
+            event cost center<span className={"text-[#e60000]"}>*</span>
           </label>
           <Select
             disabled={(formData?.business_unit || Props.previewData?.business_unit) ? false : true}
@@ -355,7 +368,7 @@ const Form1 = ({ ...Props }: Props) => {
             onValueChange={(value) => handleSelectChange(value, "event_cost_center")}
             required
           >
-            <SelectTrigger className="dropdown">
+             <SelectTrigger className={`dropdown ${(errors?.event_cost_center && !formData?.event_cost_center) ? `border border-red-600`:``}`}>
               <SelectValue placeholder="Select" />
             </SelectTrigger>
             <SelectContent>
@@ -377,10 +390,19 @@ const Form1 = ({ ...Props }: Props) => {
               }
             </SelectContent>
           </Select>
+          {
+            errors && 
+            (errors?.event_cost_center && !formData?.event_cost_center) && 
+              (
+              <p className="w-full text-red-500 text-[11px] font-normal text-left">
+                  {errors?.event_cost_center}
+              </p>
+              )
+          }
         </div>
         <div className="flex flex-col gap-2">
           <label className="lable">
-            Budget<span className="text-[#e60000]">*</span>
+            Budget
           </label>
           <Select
             defaultValue={Props.previewData?.division_category ?? ""}
@@ -412,7 +434,7 @@ const Form1 = ({ ...Props }: Props) => {
           (businessUnit == "Endosurgery" && budget == "National") &&
           <div className="flex flex-col gap-2">
             <label className="lable">
-              Budget Sub Type<span className="text-[#e60000]">*</span>
+              Budget Sub Type
             </label>
             <Select
               defaultValue={Props.previewData?.division_sub_category ?? ""}
@@ -436,7 +458,7 @@ const Form1 = ({ ...Props }: Props) => {
         }
         <div className="flex flex-col gap-2">
           <label className="lable">
-            State<span className="text-[#e60000]">*</span>
+            State
           </label>
           <Select
             defaultValue={Props.previewData?.state ?? ""}
@@ -465,7 +487,7 @@ const Form1 = ({ ...Props }: Props) => {
 
         <div className="flex flex-col gap-2">
           <label className="lable">
-            City<span className="text-[#e60000]">*</span>
+            City
           </label>
           <Select
             defaultValue={Props.previewData?.city ?? ""}
@@ -496,7 +518,7 @@ const Form1 = ({ ...Props }: Props) => {
 
         <div className="flex flex-col gap-2">
           <label className="lable">
-            Therapy<span className="text-[#e60000]">*</span>
+            Therapy
           </label>
           <Select
             defaultValue={Props.previewData?.therapy ?? ""}
@@ -527,7 +549,7 @@ const Form1 = ({ ...Props }: Props) => {
         </div>
         <div className="flex flex-col gap-2">
           <label className="lable">
-            Reporting Head<span className="text-[#e60000]">*</span>
+            Reporting Head
           </label>
           <Select
             defaultValue={Props.previewData?.reporting_head ?? "sletected reposting"}
@@ -558,7 +580,7 @@ const Form1 = ({ ...Props }: Props) => {
         </div>
         <div className="flex flex-col md:gap-2">
           <label className="text-black md:text-sm md:font-normal capitalize">
-            HCP Services Request Ref Number<span className="text-[#e60000]">*</span>
+            HCP Services Request Ref Number
           </label>
           <Select
             defaultValue={Props.previewData?.hcp_ref_no ?? ""}
@@ -582,15 +604,15 @@ const Form1 = ({ ...Props }: Props) => {
             </SelectContent>
           </Select>
         </div>
-        <div>
-          <label className="lable">
-            Sub Type Of Activity<span className="text-[#e60000]">*</span>
+        <div className="flex flex-col md:gap-2">
+          <label className={`lable ${(errors?.sub_type_of_activity && !formData?.sub_type_of_activity) ? `text-red-600`:`text-black`}`}>
+            Sub Type Of Activity <span className={"text-[#e60000]"}>*</span>
           </label>
           <Select
             defaultValue={Props.previewData?.sub_type_of_activity ?? ""}
             onValueChange={(value) => { handleSelectChange(value, "sub_type_of_activity") }}
           >
-            <SelectTrigger className="dropdown">
+            <SelectTrigger className={`dropdown ${(errors?.sub_type_of_activity && !formData?.sub_type_of_activity) ? `border border-red-600`:``}`}>
               <SelectValue placeholder="Select" />
             </SelectTrigger>
             <SelectContent>
@@ -605,16 +627,25 @@ const Form1 = ({ ...Props }: Props) => {
               </SelectItem>
             </SelectContent>
           </Select>
+          {
+            errors && 
+            (errors?.sub_type_of_activity && !formData?.sub_type_of_activity) && 
+              (
+              <p className="w-full text-red-500 text-[11px] font-normal text-left">
+                  {errors?.sub_type_of_activity}
+              </p>
+              )
+          }
         </div>
       </div>
       <div className="grid grid-cols-2 gap-10">
         <div className="flex flex-col gap-2">
           <label className="lable">
-          Selection Criteria For Faculty<span className="text-[#e60000]">*</span>
+          Selection Criteria For Faculty
           </label>
           <textarea
             defaultValue={Props.previewData?.faculty ?? ""}
-           className='text-black shadow-md border h-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl pl-2 pt-2'
+           className='text-black shadow-md border h-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-md pl-2 pt-2'
             placeholder="Type Here"
             name="faculty"
             onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => { handlefieldChange(e) }}
@@ -622,11 +653,11 @@ const Form1 = ({ ...Props }: Props) => {
         </div>
         <div className="flex flex-col gap-2">
           <label className="lable">
-          Selection Criteria For Participant<span className="text-[#e60000]">*</span>
+          Selection Criteria For Participant
           </label>
           <textarea
             defaultValue={Props.previewData?.participants ?? ""}
-            className='text-black shadow-md border h-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl pl-2 pt-2'
+            className='text-black shadow-md border h-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-md pl-2 pt-2'
             placeholder="Type Here"
             name="participants"
             onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => { handlefieldChange(e) }}
