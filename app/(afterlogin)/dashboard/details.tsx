@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -28,8 +28,23 @@ type Props = {
 
 const details = ({...Props}:Props) => {
   const { role, name,userid, clearAuthData } = useAuth();
-  console.log(Props.tableData,"this is table data")
+  const [isLoading,setIsLoading]  = useState<boolean>(false);
   const router = useRouter();
+
+  if(isLoading == true){
+    return(
+      <>
+      <div>loading please wait....</div>
+      </>
+    )
+  }
+
+  useEffect(()=>{
+    if(role != undefined ){
+      setIsLoading(false);
+    }
+  },[role])
+
   return (
     <div className="px-7 pb-7 pt-4 w-full relative z-20 flex flex-col justify-stretch">
           <div className="flex justify-between pb-6">
@@ -256,7 +271,7 @@ const details = ({...Props}:Props) => {
                 </TableHeader>
                 <TableBody className='text-center'>
                   {
-                    Props && role == "Requestor"&& Props.tableData?.map((item,index)=>{
+                    Props && role == "Event Requestor"&& Props.tableData?.map((item,index)=>{
                       return (
                         <TableRow>
                           <TableCell>{item.name}</TableCell>
