@@ -84,6 +84,7 @@ type EventEntry = {
   executed:number;
   preactivity_approved:number;
   post_activity_approved:number;
+  post_activity_submitted:number
 }
 
 type Compensation = {
@@ -257,7 +258,7 @@ export default function EventListPage() {
               <h1 className="text-center">{eventData?.modified.substring(0, 10)}</h1>
             </div>
             <div className="col-span-1 flex justify-center">
-              <Button className={`bg-[#4430bf] text-white border  px-8 hover:bg-[#4430bf] ${eventData && (eventData.executed == 1 || eventData.post_activity_approved == 1) && (eventData?.status != "Post Activity Submitted") ? "" : "hidden"} `} onClick={() => router.push(`/post_document_activity/${refno}`)}>Post Document</Button>
+              <Button className={`bg-[#4430bf] text-white border  px-8 hover:bg-[#4430bf] ${eventData && (eventData.executed == 1 && eventData.post_activity_submitted == 0) ? "" : "hidden"} `} onClick={() => router.push(`/post_document_activity/${refno}`)}>Post Document</Button>
               <Button className={`bg-[#4430bf] text-white border  px-8 hover:bg-[#4430bf] ${eventData && (eventData.executed == 0 && eventData.preactivity_approved == 1) ? "" : "hidden"} `} onClick={() => router.push(`/execute/${refno}`)}>Execute</Button>
             </div>
           </div>
