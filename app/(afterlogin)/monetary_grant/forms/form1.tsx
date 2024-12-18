@@ -119,6 +119,12 @@ type Props = {
   refno: string;
 }
 
+type FormErrors = {
+  sub_type_of_activity? : string;
+  event_cost_center?: string;
+}
+
+
 const Form1 = ({ ...Props }: Props) => {
 
   const { role, name, userid, clearAuthData } = useAuth();
@@ -126,18 +132,12 @@ const Form1 = ({ ...Props }: Props) => {
   const [budget, setBudget] = useState(Props.previewData?.division_category ?? "");
   const [fullName, setFullName] = useState<string | null>(null);
   const [formData, setFormData] = useState<FormData>();
+      const [errors, setErrors] = useState<FormErrors>();
   const [refNo, setRefNo] = useState<string | null>(Props.refno);
   const [citydropdown, setCityDropdown] = useState<cityDropdown | null>()
   const [reportingHeadDropdown, setReportingHeadDropdown] = useState<reportingHeadDropdown | null>(null)
   const [loading, setLoading] = useState(true);
-  const router = useRouter()
-  useEffect(() => {
-    const cookies = document.cookie
-      .split('; ')
-      .find(row => row.startsWith('full_name='));
-    const value = cookies?.split('=')[1] ?? null;
-    setFullName(value);
-  }, []);
+  const router = useRouter();
 
   const [eventCostCenter, setEventCostCenter] =
     useState<eventCostCenter | null>(null);
@@ -176,7 +176,6 @@ const Form1 = ({ ...Props }: Props) => {
       console.error("Error during login:", error);
     }
   };
-
   const handleBusinessUnitChange = async (value: string) => {
     try {
       const response = await fetch(
@@ -203,22 +202,30 @@ const Form1 = ({ ...Props }: Props) => {
       console.error("Error during login:", error);
     }
   };
-
   const handlefieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }) as FormData);
-  }
+  };
   const handleSelectChange = (value: string, name: string) => {
     if(name == "business_unit"){setBusinessUnit(value)};
     if(name == "division_category"){setBudget(value)};
     setFormData((prev) => ({ ...prev, [name]: value }) as FormData);
   };
-
-
-
+  const validateAtSubmit = () => {
+    const errors: FormErrors = {};
+    console.log("Checking Formdata value", formData?.sub_type_of_activity);
+    if ((Props.previewData?.sub_type_of_activity  ? (formData && ("sub_type_of_activity" in formData && formData.sub_type_of_activity == '')) : !formData?.sub_type_of_activity )) errors.sub_type_of_activity = "Sub Type Of Activity is required";
+    if ((Props.previewData?.event_cost_center  ? (formData && ("event_cost_center" in formData && formData.event_cost_center == '')) : !formData?.event_cost_center )) errors.event_cost_center = "Event Cost Center is required";
+    return errors;
+  };
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-
+    const validationErrors = validateAtSubmit();
+    if (Object.keys(validationErrors).length > 0) {
+      console.error(validationErrors)
+      setErrors(validationErrors);
+      return;
+    }
     const updatedFormData = {
       ...formData
     };
@@ -249,23 +256,6 @@ const Form1 = ({ ...Props }: Props) => {
       console.error("Error during Submission:", error);
     }
   };
-
-  useEffect(() => {
-    handleBudgetChange(budget);
-  }, [])
-
-  useEffect(() => {
-    if (userid !== undefined) {
-      setLoading(false);
-      if(Props?.previewData?.event_requestor){
-        handleSelectChange(Props.previewData.event_requestor, "event_requestor")
-      }else{
-        handleSelectChange(userid as string, "event_requestor")
-      }
-    }
-  }, [userid]);
-
-
   const handleStateChange = async (value: string) => {
     try {
       const response = await fetch(
@@ -293,7 +283,6 @@ const Form1 = ({ ...Props }: Props) => {
       console.error("Error during state  change:", error);
     }
   };
-
   const handleReportingChange = async () => {
     setReportingHeadDropdown([])
     try {
@@ -327,6 +316,29 @@ const Form1 = ({ ...Props }: Props) => {
   };
 
   useEffect(() => {
+    handleBudgetChange(budget);
+  }, [])
+
+  useEffect(() => {
+    const cookies = document.cookie
+      .split('; ')
+      .find(row => row.startsWith('full_name='));
+    const value = cookies?.split('=')[1] ?? null;
+    setFullName(value);
+  }, []);
+
+  useEffect(() => {
+    if (userid !== undefined) {
+      setLoading(false);
+      if(Props?.previewData?.event_requestor){
+        handleSelectChange(Props.previewData.event_requestor, "event_requestor")
+      }else{
+        handleSelectChange(userid as string, "event_requestor")
+      }
+    }
+  }, [userid]);
+
+  useEffect(() => {
     // Check if all values are present
     if (formData?.event_requestor && formData?.business_unit && formData?.state) {
       console.log("inside use effect reporting head");
@@ -350,7 +362,7 @@ const Form1 = ({ ...Props }: Props) => {
       <div className="grid grid-cols-2 gap-6 pb-8">
         <div className="flex flex-col gap-2">
           <label className="lable">
-            Company Name <span className="text-[#e60000]">*</span>
+            Company Name 
           </label>
           <Select
             defaultValue={Props.previewData?.company ?? ""}
@@ -377,7 +389,7 @@ const Form1 = ({ ...Props }: Props) => {
         </div>
         <div className="flex flex-col gap-2">
           <label className="lable">
-            Business Unit<span className="text-[#e60000]">*</span>
+            Business Unit
           </label>
           <Select
             defaultValue={Props.previewData?.business_unit ?? ""}
@@ -404,7 +416,7 @@ const Form1 = ({ ...Props }: Props) => {
         </div>
         <div className="flex flex-col gap-2">
           <label className="lable">
-            Event requester<span className="text-[#e60000]">*</span>
+            Event requester
           </label>
           <Select
             defaultValue={Props.previewData?.event_requestor ?Props.previewData?.event_requestor: userid as string}
@@ -430,7 +442,7 @@ const Form1 = ({ ...Props }: Props) => {
           </Select>
         </div>
         <div className="flex flex-col gap-2">
-          <label className="lable">
+        <label className={`lable ${(errors?.event_cost_center && !formData?.event_cost_center) ? `text-red-600`:`text-black`}`}>
             event cost center<span className="text-[#e60000]">*</span>
           </label>
           <Select
@@ -439,32 +451,42 @@ const Form1 = ({ ...Props }: Props) => {
             onValueChange={(value) => handleSelectChange(value, "event_cost_center")}
             required
           >
-            <SelectTrigger className="dropdown">
+            <SelectTrigger className={`dropdown ${(errors?.event_cost_center && !formData?.event_cost_center) ? `border border-red-600`:``}`}>
               <SelectValue placeholder="Select" />
             </SelectTrigger>
             <SelectContent>
-              {
-                eventCostCenter ? eventCostCenter.cost_center.map((item, index) => {
+              { Props.eventCostCenter?
+                Props.eventCostCenter.cost_center.map((item, index) => {
                   return (
                     <SelectItem value={item.name}>
                       {item.cost_center_description}
                     </SelectItem>
                   );
-                }) : Props.eventCostCenter ? Props.eventCostCenter.cost_center.map((item, index) => {
+                }): eventCostCenter ? eventCostCenter.cost_center.map((item,index)=>{
                   return (
                     <SelectItem value={item.name}>
                       {item.cost_center_description}
                     </SelectItem>
                   )
-                }) :
-                  <SelectItem value={"null"} disabled>No Data Yet</SelectItem>
+                })
+                :
+              <SelectItem value={"null"} disabled>No Data Yet</SelectItem>
               }
             </SelectContent>
           </Select>
+          {
+            errors && 
+            (errors?.event_cost_center && !formData?.event_cost_center) && 
+              (
+              <p className="w-full text-red-500 text-[11px] font-normal text-left">
+                  {errors?.event_cost_center}
+              </p>
+              )
+          }
         </div>
         <div className="flex flex-col gap-2">
           <label className="lable">
-            Budget<span className="text-[#e60000]">*</span>
+            Budget
           </label>
           <Select
             defaultValue={Props.previewData?.division_category ?? ""}
@@ -496,7 +518,7 @@ const Form1 = ({ ...Props }: Props) => {
           (businessUnit == "Endosurgery" && budget == "National") &&
           <div className="flex flex-col gap-2">
             <label className="lable">
-              Budget Sub Type<span className="text-[#e60000]">*</span>
+              Budget Sub Type
             </label>
             <Select
               defaultValue={Props.previewData?.division_sub_category ? Props.previewData?.division_sub_category : ""}
@@ -520,7 +542,7 @@ const Form1 = ({ ...Props }: Props) => {
         }
         <div className="flex flex-col gap-2">
           <label className="lable">
-            State<span className="text-[#e60000]">*</span>
+            State
           </label>
           <Select
             defaultValue={Props.previewData?.state ?? ""}
@@ -549,7 +571,7 @@ const Form1 = ({ ...Props }: Props) => {
 
         <div className="flex flex-col gap-2">
           <label className="lable">
-            City<span className="text-[#e60000]">*</span>
+            City
           </label>
           <Select
             defaultValue={Props.previewData?.city ?? ""}
@@ -580,7 +602,7 @@ const Form1 = ({ ...Props }: Props) => {
 
         <div className="flex flex-col gap-2">
           <label className="lable">
-            Therapy<span className="text-[#e60000]">*</span>
+            Therapy
           </label>
           <Select
             defaultValue={Props.previewData?.therapy ?? ""}
@@ -611,7 +633,7 @@ const Form1 = ({ ...Props }: Props) => {
         </div>
         <div className="flex flex-col gap-2">
           <label className="lable">
-            Reporting Head<span className="text-[#e60000]">*</span>
+            Reporting Head
           </label>
           <Select
             defaultValue={Props.previewData?.reporting_head ?? ""}
@@ -641,39 +663,54 @@ const Form1 = ({ ...Props }: Props) => {
           </Select>
         </div>
 
-        <div>
-          <label className="lable">
+        <div className="flex flex-col gap-2">
+        <label className={`lable ${(errors?.sub_type_of_activity && !formData?.sub_type_of_activity) ? `text-red-600`:`text-black`}`}>
             Sub Type Of Activity<span className="text-[#e60000]">*</span>
           </label>
           <Select
             defaultValue={Props.previewData?.sub_type_of_activity ?? ""}
             onValueChange={(value) => { handleSelectChange(value, "sub_type_of_activity") }}
           >
-            <SelectTrigger className="dropdown">
+            <SelectTrigger className={`dropdown ${(errors?.sub_type_of_activity && !formData?.sub_type_of_activity) ? `border border-red-600`:``}`}>
               <SelectValue placeholder="Select" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="Meril Event">
-                {"Meril Event"}
+              <SelectItem value="Education Grant">
+                {"Education Grant"}
               </SelectItem>
-              <SelectItem value="Mix Event">
-                {"Mix Event"}
+              <SelectItem value="Fellowship Support">
+                {"Fellowship Support"}
               </SelectItem>
-              <SelectItem value="Marketing Event">
-                {"Marketing Event"}
+              <SelectItem value="Capital/Equipment Grant">
+                {"Capital/Equipment Grant"}
+              </SelectItem>
+              <SelectItem value="Charitable Support">
+                {"Charitable Support"}
+              </SelectItem>
+              <SelectItem value="Others">
+                {"Others"}
               </SelectItem>
             </SelectContent>
           </Select>
+          {
+            errors && 
+            (errors?.sub_type_of_activity && !formData?.sub_type_of_activity) && 
+              (
+              <p className="w-full text-red-500 text-[11px] font-normal text-left">
+                  {errors?.sub_type_of_activity}
+              </p>
+              )
+          }
         </div>
       </div>
       <div className="grid grid-cols-2 gap-10">
         <div className="flex flex-col gap-2">
           <label className="lable">
-          Selection Criteria For Faculty<span className="text-[#e60000]">*</span>
+          Selection Criteria For Faculty
           </label>
           <textarea
             defaultValue={Props.previewData?.faculty ?? ""}
-            className='text-black shadow-md border h-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl pl-2 pt-2'
+            className='text-black shadow-md border h-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-md pl-2 pt-2'
             placeholder="Type Here"
             name="faculty"
             onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => { handlefieldChange(e) }}
@@ -681,11 +718,11 @@ const Form1 = ({ ...Props }: Props) => {
         </div>
         <div className="flex flex-col gap-2">
           <label className="lable">
-          Selection Criteria For Participants<span className="text-[#e60000]">*</span>
+          Selection Criteria For Participants
           </label>
           <textarea
             defaultValue={Props.previewData?.participants ?? ""}
-            className='text-black shadow-md border h-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl pl-2 pt-2'
+            className='text-black shadow-md border h-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-md pl-2 pt-2'
             placeholder="Type Here"
             name="participants"
             onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => { handlefieldChange(e) }}
