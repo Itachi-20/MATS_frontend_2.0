@@ -189,34 +189,34 @@ const page = () => {
     const [uploadedFiles, setUploadedFiles] = useState<FileList | null>(null)
     const [fileList, setFileList] = useState<File[]>([]); //added state 2
     const [documentType, setDocumentType] = useState("");
-    const [activityType, setActivityType] = useState('Pre Activity');
+    const [activityType, setActivityType] = useState('Post Activity');
     const [preview_data, setPreviewData] = useState<any>(null);
     const [activityDropdown,setActivityDropdown]  = useState<activityDropdown>();
     const [checkedValue,setCheckedValue] = useState<boolean>();
     const router = useRouter();
     
 
-     const activityList = async ()=>{
-      try {
-          const response = await fetch(`/api/training_and_education/activityList/`, {
-              method: "GET",
-              headers: {
-                  "Content-Type": "application/json",
-              },
-              credentials:'include',
-          });
+  //    const activityList = async ()=>{
+  //     try {
+  //         const response = await fetch(`/api/training_and_education/activityList/`, {
+  //             method: "GET",
+  //             headers: {
+  //                 "Content-Type": "application/json",
+  //             },
+  //             credentials:'include',
+  //         });
     
-          if (response.ok) {
-            const data = await response.json();
-            console.log(data.data ,"tjis is api");
-            setActivityDropdown(data.data);
-          } else {
-              console.log('Login failed');
-          }
-      } catch (error) {
-          console.error("Error during login:", error);
-      }
-  }
+  //         if (response.ok) {
+  //           const data = await response.json();
+  //           console.log(data.data ,"tjis is api");
+  //           setActivityDropdown(data.data);
+  //         } else {
+  //             console.log('Login failed');
+  //         }
+  //     } catch (error) {
+  //         console.error("Error during login:", error);
+  //     }
+  // }
 
   const handleOccurance = ()=>{
     setIsOccurance(prev=> !prev);
@@ -349,31 +349,31 @@ const page = () => {
       console.log(error, "something went wrong");
     }
   }
-  // const activityList = async () => {
-  //   try {
-  //     const response = await fetch(`/api/execute/activityList`, {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       credentials: 'include',
-  //       body: JSON.stringify({
-  //         activity_type: activityType,
-  //         event_type: preview_data?.event_type
-  //       })
-  //     });
-  //     console.log(response, 'response 323456789')
-  //     if (response.ok) {
-  //       const data = await response.json();
-  //       console.log(data,'data')
-  //       setActivityDropdown(data.data);
-  //     } else {
-  //       console.log('Login failed');
-  //     }
-  //   } catch (error) {
-  //     console.error("Error during login:", error);
-  //   }
-  // }
+  const activityList = async () => {
+    try {
+      const response = await fetch(`/api/execute/activityList`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          activity_type: activityType,
+          event_type: preview_data?.event_type
+        })
+      });
+      console.log(response, 'response 323456789')
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data,'data')
+        setActivityDropdown(data.data);
+      } else {
+        console.log('Login failed');
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
+    }
+  }
 
   const handleNext = () => {
 

@@ -60,9 +60,14 @@ console.log(savedRole,savedName,savedid,'savedid')
             height={100}
           ></Image>
         </div>
-        <div className="flex flex-col pb-5 justify-center items-center w-full px-20">
+        <div className="flex flex-col pt-10 pb-5 justify-center items-center w-full px-20">
           <h1 className='text-center text-black text-[50px] font-medium pb-10'>
-            MATS
+          <Image
+            src={"/Mats_logo.jpg"}
+            alt=""
+            width={150}
+            height={150}
+          ></Image>
           </h1>
           <input
             className="h-16 bg-[#ebebf6] rounded-full mb-4 p-4 w-full"
