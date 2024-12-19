@@ -27,7 +27,7 @@ import Link from "next/link";
 import { useSearchParams } from 'next/navigation'
 import { useAuth } from "../../context/AuthContext";
 import ConfirmPopup from '@/components/deleteDialog'
-
+import Image from 'next/image';
 
 type dropdownData = {
     company: {
@@ -80,6 +80,15 @@ type vendor = {
     vendor_type: string;
     vendor_name: string
 }
+
+type Errors = {
+    vendor_type: string;
+    vendor_name: string;
+    pan_number: string;
+    vendor_code: string;
+    email: string;
+    contact_number: string;
+}
 const page = () => {
     const [dropdownData, setDropdownData] = useState<dropdownData | null>(null);
     const [file, setFile] = useState<FileList | null>(null);
@@ -98,6 +107,14 @@ const page = () => {
     const refno = useSearchParams().get('refno')
     const from = useSearchParams().get('from')
     const { role, name, userid, clearAuthData } = useAuth();
+    const [errors, setErrors] = useState<Errors>();
+    const allOptions = [
+        "Cancelled Cheque",
+        "GST Copy",
+        "Non GST Declaration",
+        "Pan Card",
+    ];
+
     const dropdown = async () => {
         try {
             const response = await fetch("/api/training_and_education/dropdown", {
@@ -160,7 +177,44 @@ const page = () => {
         setFormData({ ...formdata } as formData)
     }, [])
 
+    const validate = () => {
+        const errors = {} as Errors;
+        if (!formdata?.vendor_type) errors.vendor_type = "Vendor Type is required";
+        if (!formdata?.vendor_name) errors.vendor_name = "Vendor Name is required";
+        if (!formdata?.pan_number) errors.pan_number = "Amount is required";
+        if (!formdata?.email) errors.email = "Email is required";
+        if (!formdata?.contact_number) {
+            errors.contact_number = "Contact Number is required";
+        } else {
+            const isValidContactNumber = formdata.contact_number.startsWith('+91') && formdata.contact_number.length === 13;
+            console.log(isValidContactNumber, 'isValidContactNumber')
+            if (!isValidContactNumber) {
+                console.log(isValidContactNumber, "isValidContactNumber")
+                errors.contact_number = "Contact Number should be valid 10 digits";
+            }
+        }
+        //  if (!formdata?.contact_number || formdata?.contact_number.length != 13  ) errors.contact_number = "Contact Number is required and Should valid";
+        return errors;
+    };
     const handleFinalSubmit = async () => {
+        const validationErrors = validate();
+        if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors as Errors);
+            return;
+        }
+        setErrors({} as Errors);
+        const uploadedDocuments = formdata?.document?.map((doc) => doc.document_type) || [];
+        const hasPanCard = uploadedDocuments.includes("Pan Card");
+        const hasCancelledCheque = uploadedDocuments.includes("Cancelled Cheque");
+        const hasGSTOrDeclaration =
+            uploadedDocuments.includes("GST Copy") ||
+            uploadedDocuments.includes("Non GST Declaration");
+        if (!hasPanCard || !hasCancelledCheque || !hasGSTOrDeclaration) {
+            toast.error(
+                'Mandatory documents: Pan Card, Cancelled Cheque, and one of GST Copy or Non GST Declaration'
+            );
+            return;
+        }
         setLoading(true)
         console.log("formdata------------------------------------------update check---", formdata)
         try {
@@ -182,7 +236,7 @@ const page = () => {
                 setConfirmPopup(false)
 
                 setTimeout(() => {
-                    if (role == 'Event Requestor') {
+                    if (role == 'Event Requestor' || from) {
                         router.push(`/${from}`)
                     } else {
                         router.push(`/event_vendor_list`)
@@ -198,7 +252,19 @@ const page = () => {
     };
     const handlefieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }) as formData);
+        if (name === 'contact_number') {
+            let updatedValue = value;
+            if (!value.startsWith('+91')) {
+                updatedValue = `+91`;
+            }
+            if (value === '') {
+                updatedValue = ``;
+            }
+            setFormData((prev) => ({ ...prev, [name]: updatedValue }) as formData);
+        }
+        else {
+            setFormData((prev) => ({ ...prev, [name]: value }) as formData);
+        }
     }
     const handleSelectChange = (value: string, name: string) => {
         setFormData((prev) => ({ ...prev, [name]: value }) as formData);
@@ -266,6 +332,52 @@ const page = () => {
         } catch (error) {
             console.error("Error uploading file:", error);
         }
+
+
+        const apiCallPromise = new Promise(async (resolve, reject) => {
+            try {
+                const response = await fetch('/api/fileUpload', {
+                    method: "POST",
+                    body: formData,
+                    credentials: "include",
+                });
+
+                if (!response.ok) {
+                    throw new Error('Advance request failed');
+                }
+
+                const data = await response.json();
+                const newDocument: DocumentRow = {
+                    document_type,
+                    is_private: "1",
+                    filename: data.message.file_name,
+                    creation: data.message.creation,
+                    owner: data.message.modified_by,
+                    file: data.message.file_url,
+                };
+                console.log("newDocument", newDocument)
+                setFormData((prevFormData) => ({
+                    ...prevFormData,
+                    document: Array.isArray(prevFormData?.document) ? [...prevFormData.document, newDocument] : [newDocument],
+                }) as formData);
+                const updatedDocumentRows = [...(Array.isArray(documentRows) ? documentRows : []), newDocument];
+
+                setDocumentRows(updatedDocumentRows);
+                setFile(null);
+                setFileName(null);
+                setDocumentType('');
+                resolve(data);
+            } catch (error) {
+                reject(error);
+            }
+        });
+        toast.promise(apiCallPromise, {
+            loading: 'Submitting vendor details...',
+            success: (data) => {
+                return 'Vendor has been added successfully!';
+            },
+            error: (error) => `Failed to add vendor: ${error.message || error}`,
+        });
     };
     const handlePanfieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -327,7 +439,15 @@ const page = () => {
     const handleConfirmpopup = async () => {
         setConfirmPopup(true)
     };
-    console.log('dropdownData', dropdownData)
+
+    const handleDeleteDocument = async (index: number) => {
+        console.log('indise delete ', index)
+        setDocumentRows((prevRows) => prevRows.filter((_, i) => i !== index));
+    };
+
+    const availableOptions = allOptions.filter(
+        (option) => !documentRows.some((row) => row.document_type === option)
+    );
     return (
         <>
             <div className='p-7 w-full relative z-20 text-black'>
@@ -345,7 +465,7 @@ const page = () => {
                     </div>
                     <div className="grid grid-cols-2 gap-12 pb-8">
                         <div className="flex flex-col gap-2">
-                            <label className="lable">
+                            <label className={`lable ${(errors?.vendor_type && !formdata?.vendor_type) ? `text-red-600` : `text-black`}`}>
                                 Vendor Type<span className="text-[#e60000]">*</span>
                             </label>
                             <Select
@@ -353,7 +473,7 @@ const page = () => {
                                 disabled={view == "view"}
                                 value={formdata ? formdata.vendor_type : ''}
                             >
-                                <SelectTrigger className="dropdown" >
+                                <SelectTrigger className={`dropdown ${(errors?.vendor_type && !formdata?.vendor_type) ? `border border-red-600` : ``}`} >
                                     <SelectValue placeholder="Select" />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -367,10 +487,19 @@ const page = () => {
                                     }
                                 </SelectContent>
                             </Select>
+                            {
+                                errors &&
+                                (errors?.vendor_type && !formdata?.vendor_type) &&
+                                (
+                                    <p className="w-full text-red-500 text-[11px] font-normal text-left">
+                                        {errors?.vendor_type}
+                                    </p>
+                                )
+                            }
                         </div>
                         <div className="flex flex-col gap-2">
                             <label className="text-black text-sm font-normal capitalize">
-                                Vendor Code<span className="text-[#e60000]">*</span>
+                                Vendor Code
                             </label>
                             <Input className='dropdown' placeholder='Type Here'
                                 name='vendor_code'
@@ -380,50 +509,87 @@ const page = () => {
                             ></Input>
                         </div>
                         <div className="flex flex-col gap-2">
-                            <label className="text-black text-sm font-normal capitalize">
+                            <label className={`lable ${(errors?.vendor_name && !formdata?.vendor_name) ? `text-red-600` : `text-black text-sm font-normal capitalize`}`}>
                                 Vendor Name<span className="text-[#e60000]">*</span>
                             </label>
-                            <Input className='dropdown' placeholder='Type Here'
+                            <Input className={`dropdown ${(errors?.vendor_name && !formdata?.vendor_name) ? `border border-red-600` : ``}`} placeholder='Type Here'
                                 name='vendor_name'
                                 onChange={(e) => handlefieldChange(e)}
                                 readOnly={view == "view"}
                                 value={formdata ? formdata.vendor_name : ''}
                             ></Input>
+                            {
+                                errors &&
+                                (errors?.vendor_name && !formdata?.vendor_name) &&
+                                (
+                                    <p className="w-full text-red-500 text-[11px] font-normal text-left">
+                                        {errors?.vendor_name}
+                                    </p>
+                                )
+                            }
                         </div>
                         <div className="flex flex-col gap-2">
-                            <label className="text-black text-sm font-normal capitalize">
+                            <label className={`lable ${((errors?.contact_number == 'Contact Number should be valid 10 digits') || (errors?.contact_number == 'Contact Number is required' && !formdata?.contact_number)) ? `text-red-600` : `text-black text-sm font-normal capitalize`}`}>
                                 Contact Number<span className="text-[#e60000]">*</span>
                             </label>
-                            <Input className='dropdown' placeholder='Type Here'
+                            <Input className={`dropdown ${((errors?.contact_number == 'Contact Number should be valid 10 digits') || (errors?.contact_number == 'Contact Number is required' && !formdata?.contact_number)) ? `border border-red-600` : ``}`} placeholder='Type Here'
                                 name='contact_number'
                                 // type='number'
                                 onChange={(e) => handlefieldChange(e)}
                                 readOnly={view == "view"}
-                                value={formdata ? formdata.contact_number : ''}
+                                maxLength={13}
+                                value={formdata ? formdata.contact_number : '+91'}
                             ></Input>
+                            {
+                                errors &&
+                                ((errors?.contact_number == 'Contact Number should be valid 10 digits') || (errors?.contact_number == 'Contact Number is required' && !formdata?.contact_number)) &&
+                                (
+                                    <p className="w-full text-red-500 text-[11px] font-normal text-left">
+                                        {errors?.contact_number}
+                                    </p>
+                                )
+                            }
                         </div>
                         <div className="flex flex-col gap-2">
-                            <label className="text-black text-sm font-normal capitalize">
+                            <label className={`lable ${(errors?.pan_number && !formdata?.pan_number) ? `text-red-600` : `text-black text-sm font-normal capitalize`}`}>
                                 PAN Number<span className="text-[#e60000]">*</span>
                             </label>
-                            <Input className='dropdown' placeholder='Type Here'
+                            <Input className={`dropdown ${(errors?.pan_number && !formdata?.pan_number) ? `border border-red-600` : ``}`} placeholder='Type Here'
                                 name='pan_number'
                                 onChange={(e) => handlePanfieldChange(e)}
                                 readOnly={view == "view"}
                                 value={formdata ? formdata.pan_number as string : ''}
                             ></Input>
                             {error && <span className="text-red-500 mb-2">{error}<Link href={''} className='bg-white hover:underline pl-2 text-blue-500' onClick={handlecheckpopup}>Click Here to check existing records</Link></span>}
+                            {
+                                errors &&
+                                (errors?.pan_number && !formdata?.pan_number) &&
+                                (
+                                    <p className="w-full text-red-500 text-[11px] font-normal text-left">
+                                        {errors?.pan_number}
+                                    </p>
+                                )
+                            }
                         </div>
                         <div className="flex flex-col gap-2">
-                            <label className="text-black text-sm font-normal capitalize">
+                            <label className={`lable ${(errors?.email && !formdata?.email) ? `text-red-600` : `text-black text-sm font-normal capitalize`}`}>
                                 Email<span className="text-[#e60000]">*</span>
                             </label>
-                            <Input className='dropdown' placeholder='Type Here'
+                            <Input className={`dropdown ${(errors?.email && !formdata?.email) ? `border border-red-600` : ``}`} placeholder='Type Here'
                                 name='email'
                                 onChange={(e) => handlefieldChange(e)}
                                 readOnly={view == "view"}
                                 value={formdata ? formdata.email : ''}
                             ></Input>
+                            {
+                                errors &&
+                                (errors?.email && !formdata?.email) &&
+                                (
+                                    <p className="w-full text-red-500 text-[11px] font-normal text-left">
+                                        {errors?.email}
+                                    </p>
+                                )
+                            }
                         </div>
                         <div className="flex flex-col col-span-2 gap-2">
                             <label className="text-black text-sm font-normal capitalize">
@@ -459,10 +625,11 @@ const page = () => {
                                                 <SelectValue placeholder={'Select'} />
                                             </SelectTrigger>
                                             <SelectContent>
-                                                <SelectItem value="Cancelled Cheque">Cancelled Cheque</SelectItem>
-                                                <SelectItem value="GST Copy">GST Copy</SelectItem>
-                                                <SelectItem value="Non GST Declaration">Non GST Declaration</SelectItem>
-                                                <SelectItem value="Pan Card">Pan Card</SelectItem>
+                                                {availableOptions.map((option) => (
+                                                    <SelectItem key={option} value={option}>
+                                                        {option}
+                                                    </SelectItem>
+                                                ))}
                                             </SelectContent>
                                         </Select>
                                     </div>
@@ -515,7 +682,7 @@ const page = () => {
                                     <TableHead className="text-center">Document Name</TableHead>
                                     <TableHead className="text-center">Created Date</TableHead>
                                     <TableHead className="text-center">Created By</TableHead>
-                                    <TableHead className="text-center rounded-r-2xl">View</TableHead>
+                                    <TableHead className="text-center rounded-r-2xl">Action</TableHead>
                                 </TableRow>
                             </TableHeader>
                             {documentRows && documentRows.length > 0 ?
@@ -526,9 +693,7 @@ const page = () => {
                                             <TableCell className="text-center">{row.filename}</TableCell>
                                             <TableCell className="text-center">{row.creation.substring(0, 10)}</TableCell>
                                             <TableCell className="text-center">{row.owner}</TableCell>
-                                            <TableCell className="text-center  flex justify-center gap-2">
-
-
+                                            <TableCell className="text-center  flex justify-center gap-3">
                                                 <Link
                                                     href={`${base_url}${row.file}`}
                                                     target="_blank"
@@ -537,6 +702,7 @@ const page = () => {
                                                 >
                                                     View
                                                 </Link>
+                                                <button onClick={() => handleDeleteDocument(index)} ><Image src={'/svg/delete.svg'} alt='deletesvg' width={20} height={18} /></button>
                                             </TableCell>
                                         </TableRow>
                                     ))
