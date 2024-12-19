@@ -2,14 +2,20 @@ import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {
     try {
+        
         const body = await req.json();
         const cookies = req.headers.get("cookie")
-        const response = await fetch(`${process.env.FRAPPE_URL}/api/resource/Master Document Type?filters=[["activity_type","=","${body.activity_type}"],["event_type","=","${body.event_type}"]]&fields=["name","document_name"]&order_by="document_name"`, {
-            method: 'GET',
+        const response = await fetch(`${process.env.FRAPPE_URL}/api/method/matsapp.api.utils.utils.submit_advance_expense`, {
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Cookie': cookies as string 
             },
+            body:JSON.stringify({
+                name: body.name,
+                event_conclusion: body.event_conclusion,
+                vendor: body.vendor
+              }),
             credentials:'include'
         });
 

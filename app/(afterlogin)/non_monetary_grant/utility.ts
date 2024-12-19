@@ -20,7 +20,7 @@ export const dropdown = async () => {
 
 export const activityList = async (cokkie: any, activity_type: string, event_type: string) => {
   try {
-    const response = await fetch(`${process.env.FRAPPE_URL}/api/resource/Master Document Type?filters=[["activity_type","=","${activity_type}"],["event_type","=","${event_type}"]]&fields=["name","document_name"]`, {
+    const response = await fetch(`${process.env.FRAPPE_URL}/api/resource/Master Document Type?filters=[["activity_type","=","${activity_type}"],["event_type","=","${event_type}"]]&fields=["name","document_name"]&order_by="document_name"`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
