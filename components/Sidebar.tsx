@@ -124,7 +124,7 @@ const Sidebar = () => {
         },
         {
           module: "Post Expense Approval",
-          route: "/post_expense",
+          route: "/post_expense_approval",
         },
       ],
       masters: [],
@@ -158,7 +158,7 @@ const Sidebar = () => {
         },
         {
           module: "Post Expense Approval",
-          route: "/post_expense",
+          route: "/post_expense_approval",
         },
       ],
       reports: [
