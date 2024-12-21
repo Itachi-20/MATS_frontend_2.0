@@ -81,7 +81,7 @@ export default function LogisticActualBudget({...Props}:Props) {
     const [uploadedFiles, setUploadedFiles] = useState<FileList | null>(null)
   const [fileList, setFileList] = useState<File[]>([]); //added state 2
 
-    console.log(TravelVendorData,"this is the useefec api data")
+    console.log(Props.refno,"this is the useefec api data")
 
     const handleFilePopup = (data:file[])=>{
         setFileData(data);
@@ -245,6 +245,12 @@ export default function LogisticActualBudget({...Props}:Props) {
 
     useEffect(()=>{
     },[TravelVendorData])
+
+    const handleNavigation = () => {
+        const fromValue = encodeURIComponent(`travel_desk/${Props.refno}`);
+        router.push(`/add_vendor?from=${fromValue}`);
+      };
+    
     return (
         <>
         <div className="md:pb-8">
@@ -256,7 +262,7 @@ export default function LogisticActualBudget({...Props}:Props) {
                     LOGISTICS Actual BUDGET
                 </h1>
                 <div className='flex space-x-6'>
-                    <button className='flex space-x-[10px] border-[1px] border-[#4430BF] rounded-[8px] items-center py-[6px] px-6'>
+                    <button className='flex space-x-[10px] border-[1px] border-[#4430BF] rounded-[8px] items-center py-[6px] px-6' onClick={() => handleNavigation()}>
                         <svg width="16" height="16" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path id="Vector" d="M14.8571 9.64286H9.14286V15.3571C9.14286 15.6602 9.02245 15.9509 8.80812 16.1653C8.59379 16.3796 8.30311 16.5 8 16.5C7.6969 16.5 7.40621 16.3796 7.19188 16.1653C6.97755 15.9509 6.85714 15.6602 6.85714 15.3571V9.64286H1.14286C0.839753 9.64286 0.549063 9.52245 0.334735 9.30812C0.120408 9.09379 0 8.8031 0 8.5C0 8.1969 0.120408 7.90621 0.334735 7.69188C0.549063 7.47755 0.839753 7.35714 1.14286 7.35714H6.85714V1.64286C6.85714 1.33975 6.97755 1.04906 7.19188 0.834735C7.40621 0.620407 7.6969 0.5 8 0.5C8.30311 0.5 8.59379 0.620407 8.80812 0.834735C9.02245 1.04906 9.14286 1.33975 9.14286 1.64286V7.35714H14.8571C15.1602 7.35714 15.4509 7.47755 15.6653 7.69188C15.8796 7.90621 16 8.1969 16 8.5C16 8.8031 15.8796 9.09379 15.6653 9.30812C15.4509 9.52245 15.1602 9.64286 14.8571 9.64286Z" fill="#4430BF" />
                         </svg>
