@@ -189,7 +189,7 @@ const Form3 = ({ ...Props }: Props) => {
   const handleCompensationAdd = async () => {
     console.log(compansation_is_GST,'compansation_is_GST')
     try {
-      if (!compansationVendorType && !compansationVendorName && compansationAmount <= 0) {
+      if (!compansationVendorType && !compansationVendorName && !compansationAmount) {
         return toast.warning("Fill the required field")
       }
       const newObject: Compensation = { vendor_type: compansationVendorType, est_amount: compansationAmount, gst_included: compansation_is_GST, vendor_name: compansationVendorName, name: refNo, budget_category: 'Compensation' };
