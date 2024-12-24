@@ -9,9 +9,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, } from "@/components/ui/table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from "@/components/ui/select";
-import { fetchData } from "../audit_trail/[id]/utility";
-import { useSearchParams } from "next/navigation";
-import { usePathname } from "next/navigation";
 import Pagination from "@/components/eventList/pagination";
 import { FormatDate } from '@/app/utility/dateFormatter';
 
@@ -45,25 +42,32 @@ type EventTable = {
 };
 
 export const formatDate = (dateString: string) => {
-  if(dateString){
+  if (dateString) {
     const [year, month, day] = dateString.split('-').map(Number);
-  
-    // Create a new Date object (Note: months are 0-indexed in JavaScript)
     const date = new Date(year, month - 1, day);
-  
-    // Manually format the date to 'dd-MM-yyyy'
     const formattedDate = `${String(date.getDate()).padStart(2, '0')}-${String(date.getMonth() + 1).padStart(2, '0')}-${date.getFullYear()}`;
-  
+
     return formattedDate;
   }
 };
 
+const useDebounce = (value: any, delay: any) => {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [value, delay]);
+
+  return debouncedValue;
+};
 export default function EventList() {
 
   const router = useRouter();
-  // const pathname = usePathname();
-  // const searchParams = useSearchParams();
-  // const params = new URLSearchParams(searchParams.toString())
   const [tableData, setTableData] = useState<EventTable[]>();
   const [startDate, setStartDate] = useState<string>('');
   const [endDate, setEndDate] = useState<string>('');
@@ -71,12 +75,13 @@ export default function EventList() {
   const total_event_list = 12;
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [loading, setLoading] = useState(true);
-
+  const [searchName, setSearchName] = useState('')
+  const [status, setStatus] = useState('');
   const togglePicker = () => {
     setIsPickerOpen(!isPickerOpen);
   };
   const handleExportButton = () => {
-      exportEventList();
+    exportEventList();
   };
   const handleClick = (refno: string, status: string, eventType: string) => {
     console.log(eventType, "function event type")
@@ -101,6 +106,8 @@ export default function EventList() {
       router.push(`/event_list/${refno}`)
     }
   }
+  const debouncedSearchName = useDebounce(searchName, 300);
+
   const fetchTableData = async () => {
     setLoading(true)
     try {
@@ -113,10 +120,11 @@ export default function EventList() {
           },
           credentials: 'include',
           body: JSON.stringify({
-            activity: "Pre Activity",
+            search_name: debouncedSearchName,
             startDate: startDate,
             endDate: endDate,
             pageNo: currentPage,
+            status: status
           })
         }
       );
@@ -124,7 +132,7 @@ export default function EventList() {
         const data = await Data.json();
         setTableData(data.message)
         setLoading(false)
-      }else{
+      } else {
         setLoading(false)
       }
     } catch (error) {
@@ -143,11 +151,11 @@ export default function EventList() {
           },
           credentials: 'include',
           body: JSON.stringify({
-            // activity: "Pre Activity",
+            search_name: debouncedSearchName,
+            status: status,
+            api_name: 'Event List',
             startDate: startDate,
             endDate: endDate,
-            // pageNo: currentPage,
-
           })
         }
       );
@@ -160,24 +168,40 @@ export default function EventList() {
       console.log(error, "something went wrong");
     }
   };
+
+  const handleTypeChange = (value: string) => {
+    setStatus(value);
+  };
+  const handlesearchname = async (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    console.log(value)
+    setTimeout(() => {
+      setSearchName(value);
+    }, 1000);
+  }
+
   useEffect(() => {
     fetchTableData();
   }, [])
 
   useEffect(() => {
     fetchTableData();
-  }, [currentPage])
-    return (
+  }, [currentPage, debouncedSearchName])
+
+  return (
     <div className="p-7 w-full relative z-20 text-black">
       <div className="flex lg:justify-between flex-col-reverse lg:flex-row pb-5 gap-5 lg:gap-0">
         <Input
           className="lg:w-[40%] md:w-full sm:w-full rounded-[50px] bg-[#ecf2ff]"
-          placeholder="Search"
+          placeholder="Search Request Number ..."
+          name='search_name'
+          onChange={(e) => { handlesearchname(e) }}
+
         />
 
         <div className="flex justify-end lg:gap-5 sm:gap-[10px] gap-[8px] items-center">
           <Button className="text-black w-34 shadow border hover:shadow-md active:shadow-lg lg:text-sm lg:rounded-[25px] lg:gap-4 sm:rounded-[50px] rounded-[50px] sm:text-[9px] sm:gap-[10px] gap-[9px] sm:font-normal sm:leading-[10.97px] text-[9px]" onClick={handleExportButton}>Export as Excel</Button>
-          <Select>
+          <Select onValueChange={() => handleTypeChange}>
             <SelectTrigger className="text-black w-34 shadow focus-visible:ring-transparent lg:text-sm lg:rounded-[25px] lg:gap-4 sm:rounded-[50px] rounded-[50px] sm:text-[9px] sm:gap-[10px]  gap-[9px] sm:font-normal sm:leading-[10.97px] text-[9px]">
               <SelectValue placeholder="Status" className="cursor-pointer" />
             </SelectTrigger>
@@ -244,7 +268,7 @@ export default function EventList() {
                 }
               >
                 Event Venue
-               </TableHead>
+              </TableHead>
 
               <TableHead
                 className={
@@ -291,10 +315,10 @@ export default function EventList() {
           </TableHeader>
           {
             loading ? <TableBody><TableRow ><TableCell colSpan={9} ><>
-            <div className='flex items-center justify-center'>
-              <Loader2 className=" mr-2 h-4 w-4 animate-spin" />
-              Loading...
-            </div>
+              <div className='flex items-center justify-center'>
+                <Loader2 className=" mr-2 h-4 w-4 animate-spin" />
+                Loading...
+              </div>
             </></TableCell></TableRow></TableBody> :
               tableData ? <TableBody>
                 {tableData &&
@@ -344,7 +368,7 @@ export default function EventList() {
           }
         </Table>
       </div>
-        <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} total_event_list={total_event_list}/>
+      <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} total_event_list={total_event_list} />
     </div>
   );
 };
