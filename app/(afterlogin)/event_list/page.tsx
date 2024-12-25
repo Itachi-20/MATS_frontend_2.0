@@ -169,6 +169,7 @@ export default function EventList() {
     }
   };
 
+
   const handleTypeChange = (value: string) => {
     setStatus(value);
   };

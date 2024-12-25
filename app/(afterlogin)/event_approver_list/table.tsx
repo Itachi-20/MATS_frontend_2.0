@@ -23,10 +23,34 @@ import { Loader2 } from "lucide-react";
 import Loader from '@/components/loader'
 import DatePicker from "@/app/(afterlogin)/event_list/date-picker"
 import { Events } from './page'
+import Pagination from "@/components/eventList/pagination";
 type Props = {
   tableData: Events[];
 }
 
+export const formatDate = (dateString: string) => {
+  if (dateString) {
+    const [year, month, day] = dateString.split('-').map(Number);
+    const date = new Date(year, month - 1, day);
+    const formattedDate = `${String(date.getDate()).padStart(2, '0')}-${String(date.getMonth() + 1).padStart(2, '0')}-${date.getFullYear()}`;
+    return formattedDate;
+  }
+};
+
+const useDebounce = (value: any, delay: any) => {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [value, delay]);
+
+  return debouncedValue;
+};
 const table = ({ ...Props }: Props) => {
   const [tableData, setTableData] = useState(Props.tableData);
   const router = useRouter();
@@ -35,17 +59,22 @@ const table = ({ ...Props }: Props) => {
   const [endDate, setEndDate] = useState<string>('');
   const [isPickerOpen, setIsPickerOpen] = useState(false);
   const [status, setStatus] = useState('');
-   const [currentPage, setCurrentPage] = useState<number>(1);
-     const [searchName, setSearchName] = useState('')
-  console.log('Props.tableData', Props.tableData)
-  useEffect(() => {
-    if (Props.tableData) {
-      setLoading(false);
-    }
-    setLoading(false);
-  }, [Props.tableData]);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [searchName, setSearchName] = useState('')
+  const total_event_list = 12;
+  // console.log('Props.tableData', Props.tableData)
+  // useEffect(() => {
+  //   if (Props.tableData) {
+  //     setLoading(false);
+  //   }
+  //   setLoading(false);
+  // }, [Props.tableData]);
+
+  const debouncedSearchName = useDebounce(searchName, 300);
+
   const fetchTableData = async () => {
     setLoading(true)
+    console.log
     try {
       const Data = await fetch(
         `/api/event_approval_list`,
@@ -56,19 +85,20 @@ const table = ({ ...Props }: Props) => {
           },
           credentials: 'include',
           body: JSON.stringify({
-            activity: "Pre Activity",
+            search_name: debouncedSearchName,
             startDate: startDate,
             endDate: endDate,
             pageNo: currentPage,
-            status:status
+            status: status
           })
         }
       );
       if (Data.ok) {
         const data = await Data.json();
+        console.log('data.data.events',data.data.events)
         setTableData(data.data.events)
         setLoading(false)
-      }else{
+      } else {
         setLoading(false)
       }
     } catch (error) {
@@ -83,11 +113,11 @@ const table = ({ ...Props }: Props) => {
 
   useEffect(() => {
     fetchTableData();
-  }, [currentPage])
+  }, [currentPage, debouncedSearchName])
 
   const handleTypeChange = (value: string) => {
     setStatus(value);
-};
+  };
   const handleExportButton = () => {
     exportEventList();
   };
@@ -103,9 +133,9 @@ const table = ({ ...Props }: Props) => {
           },
           credentials: 'include',
           body: JSON.stringify({
-            search_name: searchName,
+            search_name: debouncedSearchName,
             status: status,
-            api_name: 'Event List',
+            api_name: 'Pre Activity List',
             startDate: startDate,
             endDate: endDate,
           })
@@ -124,19 +154,31 @@ const table = ({ ...Props }: Props) => {
   const togglePicker = () => {
     setIsPickerOpen(!isPickerOpen);
   };
+
+  const handlesearchname = async (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    console.log(value)
+    setTimeout(() => {
+      setSearchName(value);
+    }, 1000);
+  }
+
+  console.log(tableData,searchName, 'searchName,tableData in client')
   return (
     <div className="p-7 w-full  z-20 text-black">
       <div className="flex lg:justify-between flex-col-reverse lg:flex-row pb-5 gap-5 lg:gap-0">
         <Input
           className="lg:w-[40%] md:w-full sm:w-full rounded-[50px] bg-[#ecf2ff]"
-          placeholder="Search"
-        />
+          placeholder="Search Request Number ..."
+          name='search_name'
+          onChange={(e) => { handlesearchname(e) }}
 
+        />
         <div className="flex justify-end lg:gap-5 sm:gap-[10px] gap-[8px] items-center">
           <Button className="text-black w-34 shadow border hover:shadow-md active:shadow-lg lg:text-sm lg:rounded-[25px] lg:gap-4 sm:rounded-[50px] rounded-[50px] sm:text-[9px] sm:gap-[10px] gap-[9px] sm:font-normal sm:leading-[10.97px] text-[9px]" onClick={handleExportButton}>Export as Excel</Button>
-          <Select onValueChange={()=>handleTypeChange}>
+          <Select onValueChange={() => handleTypeChange}>
             <SelectTrigger className="text-black w-34 shadow focus-visible:ring-transparent lg:text-sm lg:rounded-[25px] lg:gap-4 sm:rounded-[50px] rounded-[50px] sm:text-[9px] sm:gap-[10px]  gap-[9px] sm:font-normal sm:leading-[10.97px] text-[9px]">
-              <SelectValue placeholder="Status" className="cursor-pointer"  />
+              <SelectValue placeholder="Status" className="cursor-pointer" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All</SelectItem>
@@ -279,7 +321,7 @@ const table = ({ ...Props }: Props) => {
                 Loading...
               </div>
             </></TableCell></TableRow></TableBody> :
-              tableData ?
+              tableData.length > 0 ?
                 <TableBody className="">
                   {tableData &&
                     tableData?.map((data: any, index: number) => {
@@ -522,6 +564,7 @@ const table = ({ ...Props }: Props) => {
           }
         </Table>
       </div>
+      <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} total_event_list={total_event_list} />
     </div>
   )
 }

@@ -23,7 +23,7 @@ export async function POST(req: Request) {
         if (!response.ok) {
             throw new Error(`Error: ${response.statusText}`);
         }
-
+console.log(response,'response')
         
         return response;
     } catch (error: any) {

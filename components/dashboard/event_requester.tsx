@@ -20,7 +20,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useAuth } from "../../app/context/AuthContext";
 import { tableData } from "@/app/(afterlogin)/dashboard/page"
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'nextjs-toploader/app';
 import RequesterDashboard from '@/components/dashboard/event_requester'
 type CardData = {
   total_count: number,

@@ -81,7 +81,7 @@ export type Events = {
 const Index = async() => {
 
   const tableData:Events[] = await fetchTable();
-  console.log(tableData,"this is table data")
+  // console.log(tableData,"this is table data")
   return (
     <>
       <Table
