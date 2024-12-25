@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 //import TotalExpense from "@/components/total_Expense"
 import Documents from "@/components/documents"
 import { useRouter, useSearchParams } from 'next/navigation'
-import Comment_box from "@/components/Comment_box";
+import Comment_box from "@/components/approvalCommentBox/Comment_box";
 
 import EventDetails from "@/components/training_and_education/event_detail";
 import EventDetailsSponsorship from "@/components/sponsorshipSupportPreviewComponents/eventDetails"
@@ -190,12 +190,13 @@ type ActivityDocument = {
 const Index = () => {
   const router = useRouter();
   const [eventData,setEventData] = useState<EventEntry>();
-  const [isCommentbox,setIsCommentbox] = useState<boolean>();
+  const [isCommentbox,setIsCommentbox] = useState<boolean>(false);
   const [comment,setComment] = useState<string>();
   const [type,setType] = useState<string>();
+  const [buttonText,setButtonText] = useState<string>("")
   const param = useSearchParams()
 
-  const handleApprove = async(remarks:string)=>{
+  const handleApprove = async()=>{
     const refno = param.get("refno");
       try {
         const response = await fetch(
@@ -208,7 +209,7 @@ const Index = () => {
             credentials:'include',
             body:JSON.stringify({
               name:refno,
-              "remark": remarks,
+              "remark": comment,
               "action":type
             })
           }
@@ -277,7 +278,7 @@ useEffect(()=>{
             <h1 className=" md:text-[30px] md:font-medium capitalize md:pb-4"> Training and Education</h1>
             <div className="flex gap-4 bg-white">
             <Button className="border border-[#4430bf] text-[#4430bf] px-6" onClick={()=>router.push(`/audit_trail/${eventData?.name}`)}>Audit Trail</Button>
-              <Button className="bg-white text-black border px-8 hover:bg-white">Back</Button>
+              <Button className="bg-white text-black border px-8 hover:bg-white" onClick={()=>{router.push("/post_activity_document_approval_list")}}>Back</Button>
             </div>
               </div>
             <div className="flex border rounded-xl justify-between p-3 bg-white gap-4">
@@ -292,9 +293,9 @@ useEffect(()=>{
                 </div>
               </div>
               <div className="flex gap-4 text-white items-center">
-              <Button className="bg-[#5dbe74] hover:bg-[#5dbe74] px-6" onClick={()=>{handleDialog();setType("Approved")}}>Approve</Button>
-              <Button className="bg-[#ff5757] hover:bg-[#ff5757] px-6" onClick={()=>{handleDialog();setType("Rejected")}}>Reject</Button>
-              <Button className="bg-[#4430bf] hover:bg-[#4430bf] px-6" onClick={()=>{handleDialog();setType("Send Back")}}>Send Back</Button>
+              <Button className="bg-[#5dbe74] hover:bg-[#5dbe74] px-6" onClick={()=>{handleDialog();setType("Approved");setButtonText("Approve")}}>Approve</Button>
+              <Button className="bg-[#ff5757] hover:bg-[#ff5757] px-6" onClick={()=>{handleDialog();setType("Rejected");setButtonText("Reject")}}>Reject</Button>
+              <Button className="bg-[#4430bf] hover:bg-[#4430bf] px-6" onClick={()=>{handleDialog();setType("Send Back");setButtonText("Send Back")}}>Send Back</Button>
               </div>
             </div>
           </div>
@@ -394,13 +395,14 @@ useEffect(()=>{
     </div>
     {
       isCommentbox &&
-    //  <div className="absolute z-50 flex pt-10 items-center justify-center bg-black bg-opacity-50 w-full pr-20">
+      <div className="absolute z-50 flex pt-10 items-center justify-center inset-0 bg-black bg-opacity-50 w-full pr-20">
       <Comment_box 
       handleClose={handleDialog}
-      // handleComment={handleComment}
-      handleSubmit = {handleApprove}
+       handleComment={handleComment}
+      Submitbutton = {handleApprove}
+      ButtonText={buttonText}
       />
-      //  </div>
+        </div>
 }
 </>
   )
