@@ -135,7 +135,7 @@ const Sidebar = () => {
         },
         {
           name: "Event Summary Repost",
-          route: "/event_summary_report",
+          route: "/event_report",
         },
       ],
       settings: [
