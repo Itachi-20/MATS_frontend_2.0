@@ -321,7 +321,7 @@ export default function EventList() {
                 Loading...
               </div>
             </></TableCell></TableRow></TableBody> :
-              tableData ? <TableBody>
+              tableData && tableData?.length > 0 ? <TableBody>
                 {tableData &&
                   tableData?.map((data, index) => {
                     return (

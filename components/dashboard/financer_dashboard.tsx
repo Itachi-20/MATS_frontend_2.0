@@ -26,13 +26,17 @@ type CardData = {
   preactivity_approved_count: number,
   postactivity_approved_count: number,
   draft_count: number,
+  total_approved_count: number,
+  advance_approved_count: number,
+  post_exp_appr_count: number,
+  expense_approved_count:number
 }
 type Props = {
   tableData: tableData[]
   carddata: CardData
 }
 
-const details = ({ ...Props }: Props) => {
+const ApproverCardDetails = ({ ...Props }: Props) => {
   const { role, name, userid, clearAuthData } = useAuth();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
@@ -50,16 +54,16 @@ const details = ({ ...Props }: Props) => {
       setIsLoading(false);
     }
   }, [role])
-
+  console.log(Props, 'Props.')
   return (
- <div className="px-7 pb-7 pt-4 w-full relative z-20 flex flex-col justify-stretch">
+    <div className="px-7 pb-7 pt-4 w-full relative z-20 flex flex-col justify-stretch">
       <div className="flex justify-between pb-6">
         <div className="">
           <h1 className="text-black text-[20px] font-semibold pb-4 pl-1">
             Request Summary
           </h1>
           <div className="grid grid-cols-4 gap-5 text-black">
-            <div className="flex flex-col col-span-1 bg-[#fee4cb] py-5 pl-5 pr-20 rounded-2xl">
+            <div className="flex flex-col col-span-1 bg-[#fee4cb] py-5 pl-5 pr-5 rounded-2xl">
               <div className="pb-2">
                 <svg
                   width="30"
@@ -98,7 +102,7 @@ const details = ({ ...Props }: Props) => {
                     +8% from yesterday
                   </h1> */}
             </div>
-            <div className="flex flex-col col-span-1 bg-[#dbf6fd] py-5 pl-5 pr-20 rounded-2xl">
+            <div className="flex flex-col col-span-1 bg-[#dbf6fd] py-5 pl-5 pr-5 rounded-2xl">
               <div className="pb-2">
                 <svg
                   width="30"
@@ -123,15 +127,15 @@ const details = ({ ...Props }: Props) => {
                   </g>
                 </svg>
               </div>
-              <h1 className="text-[#151d48] text-xl font-semibold">{Props.carddata?.preactivity_approved_count}</h1>
+              <h1 className="text-[#151d48] text-xl font-semibold">{Props.carddata?.total_approved_count}</h1>
               <h1 className="text-[#415165] text-base font-semibold pt-2">
-              Total  Pre-activity
+                Total  Approved
               </h1>
               {/* <h1 className="text-[#4078ec] text-xs font-medium">
                     +8% from yesterday
                   </h1> */}
             </div>
-            <div className="flex flex-col col-span-1 bg-[#ffd3e2] py-5 pl-5 pr-20 rounded-2xl">
+            <div className="flex flex-col col-span-1 bg-[#ffd3e2] py-5 pl-5 pr-5 rounded-2xl">
               <div className="pb-2">
                 <svg
                   width="30"
@@ -158,15 +162,15 @@ const details = ({ ...Props }: Props) => {
                   </g>
                 </svg>
               </div>
-              <h1 className="text-[#151d48] text-xl font-semibold">{Props.carddata?.postactivity_approved_count}</h1>
+              <h1 className="text-[#151d48] text-xl font-semibold">{Props.carddata?.advance_approved_count}</h1>
               <h1 className="text-[#415165] text-base font-semibold pt-2">
-              Total Post-activity
+                Total Advance Approved
               </h1>
               {/* <h1 className="text-[#4078ec] text-xs font-medium">
                     +8% from yesterday
                   </h1> */}
             </div>
-            <div className="flex flex-col col-span-1 bg-[#B5D9FF] py-5 pl-5 pr-20 rounded-2xl">
+            <div className="flex flex-col col-span-1 bg-[#B5D9FF] py-5 pl-5 pr-5 rounded-2xl">
               <div className="pb-2">
                 <svg
                   width="30"
@@ -193,9 +197,9 @@ const details = ({ ...Props }: Props) => {
                   </g>
                 </svg>
               </div>
-              <h1 className="text-[#151d48] text-xl font-semibold">{Props.carddata?.draft_count}</h1>
+              <h1 className="text-[#151d48] text-xl font-semibold">{Props.carddata?.expense_approved_count}</h1>
               <h1 className="text-[#415165] text-base font-semibold pt-2">
-                Events Save as Draft
+                Total Expense Approved
               </h1>
               {/* <h1 className="text-[#4078ec] text-xs font-medium">
                     +8% from yesterday
@@ -207,11 +211,9 @@ const details = ({ ...Props }: Props) => {
       </div>
       <div className="flex justify-between">
         <div className="border border-[#848484] p-7 rounded-[50px] w-full mr-4  bg-white">
-          <h1 className="text-[#05004e] text-xl font-semibold pb-4">
-            All Request
-          </h1>
+         
           <div className="flex justify-between pb-5 gap-40">
-            <div className="relative">
+            {/* <div className="relative">
               <Input
                 className="bg-[#ecf2ff] rounded-full text-black pr-10 focus-visible:outline-none focus-visible:border-none focus:outline-none focus:border-none"
                 placeholder="Search"
@@ -238,29 +240,16 @@ const details = ({ ...Props }: Props) => {
                   />
                 </g>
               </svg>
-            </div>
-            {/* <div className="flex gap-3">
-                  <Select>
-                    <SelectTrigger className="w-[100px] text-black border border-black rounded-full focus-visible:outline-none ">
-                      <SelectValue placeholder="Category" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="light">Light</SelectItem>
-                      <SelectItem value="dark">Dark</SelectItem>
-                      <SelectItem value="system">System</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <Input
-                    className="w-30 text-black border border-black rounded-full"
-                    type="date"
-                  ></Input>
-                </div> */}
-            <Button className='text-[#625d5d] bg-[#E0E9FF] rounded-xl' onClick={() => { router.push('/event_list') }}>Event List</Button>
+            </div> */}
+             <h1 className="text-[#05004e] text-xl font-semibold pb-4">
+            Advance Request
+          </h1>
+            <Button className='text-[#625d5d] bg-[#E0E9FF] rounded-xl hover:underline' onClick={() => { router.push('/advance_payment') }}>Advance List</Button>
           </div>
-          <div className='overflow-y-scroll h-[200px] text-black'>
+          <div className=' h-fit text-black'>
 
             <Table className=''>
-              <TableHeader className={"bg-[#E0E9FF]"}>
+              <TableHeader className={"bg-[#E0E9FF] "}>
                 <TableRow className={""}>
                   <TableHead
                     className={
@@ -274,7 +263,7 @@ const details = ({ ...Props }: Props) => {
                       "text-center text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                     }
                   >
-                    Event Name & Type
+                    Event Type
                   </TableHead>
 
                   <TableHead
@@ -282,7 +271,7 @@ const details = ({ ...Props }: Props) => {
                       "text-center text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                     }
                   >
-                    Event Date
+                   Event Name 
                   </TableHead>
 
                   <TableHead
@@ -290,14 +279,14 @@ const details = ({ ...Props }: Props) => {
                       "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                     }
                   >
-                    Type of Activity
+                   Event Date
                   </TableHead>
                   <TableHead
                     className={
                       "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                     }
                   >
-                    Status
+                    Type of Activity
                   </TableHead>
 
                   <TableHead
@@ -309,16 +298,14 @@ const details = ({ ...Props }: Props) => {
               </TableHeader>
               <TableBody className='text-center'>
                 {
-                  Props && role == "Event Requestor" && Props.tableData?.map((item, index) => {
+                  Props.tableData && Props.tableData?.map((item, index) => {
                     return (
                       <TableRow>
                         <TableCell>{item.name}</TableCell>
                         <TableCell>{item.event_type}</TableCell>
-
+                        <TableCell>{item.event_name}</TableCell>
                         <TableCell>{item.event_start_date}</TableCell>
-
                         <TableCell>{item.current_stage}</TableCell>
-                        <TableCell>{item.status}</TableCell>
                       </TableRow>
                     )
                   })
@@ -453,4 +440,4 @@ const details = ({ ...Props }: Props) => {
   )
 }
 
-export default details
+export default ApproverCardDetails

@@ -75,7 +75,7 @@ const table = ({ ...Props }: Props) => {
     console.log
     try {
       const Data = await fetch(
-        `/api/event_approval_list`,
+        `/api/post_activity_document_approval_list`,
         {
           method: "POST",
           headers: {
