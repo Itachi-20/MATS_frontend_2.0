@@ -163,7 +163,7 @@ const table = ({ ...Props }: Props) => {
     }, 1000);
   }
 
-  console.log(tableData,searchName, 'searchName,tableData in client')
+  console.log(startDate,endDate, 'endDate')
   return (
     <div className="p-7 w-full  z-20 text-black">
       <div className="flex lg:justify-between flex-col-reverse lg:flex-row pb-5 gap-5 lg:gap-0">
@@ -172,7 +172,6 @@ const table = ({ ...Props }: Props) => {
           placeholder="Search Request Number ..."
           name='search_name'
           onChange={(e) => { handlesearchname(e) }}
-
         />
         <div className="flex justify-end lg:gap-5 sm:gap-[10px] gap-[8px] items-center">
           <Button className="text-black w-34 shadow border hover:shadow-md active:shadow-lg lg:text-sm lg:rounded-[25px] lg:gap-4 sm:rounded-[50px] rounded-[50px] sm:text-[9px] sm:gap-[10px] gap-[9px] sm:font-normal sm:leading-[10.97px] text-[9px]" onClick={handleExportButton}>Export as Excel</Button>
@@ -184,13 +183,13 @@ const table = ({ ...Props }: Props) => {
               <SelectItem value="all">All</SelectItem>
               <SelectItem value="awaitingApproval">Awaitting Approval</SelectItem>
               <SelectItem value="approved">Approved</SelectItem>
-              <SelectItem value="approved">Draft</SelectItem>
+              <SelectItem value="Pending">Pending</SelectItem>
               <SelectItem value="sendback">Sendback</SelectItem>
-              <SelectItem value="executed">Executed</SelectItem>
+              {/* <SelectItem value="executed">Executed</SelectItem> */}
               <SelectItem value="rejected">Rejected</SelectItem>
               <SelectItem value="cancelled">Cancelled</SelectItem>
               <SelectItem value="closed">Closed</SelectItem>
-              <SelectItem value="postactivity">PostActivity Document Uploaded</SelectItem>
+              {/* <SelectItem value="postactivity">PostActivity Document Uploaded</SelectItem> */}
             </SelectContent>
           </Select>
           <DatePicker startDate={startDate} endDate={endDate} setStartDate={setStartDate} setEndDate={setEndDate} isPickerOpen={isPickerOpen} togglePicker={togglePicker} fetchTableData={fetchTableData} />
