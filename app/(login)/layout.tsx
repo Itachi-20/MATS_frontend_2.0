@@ -9,7 +9,7 @@ export default function RootLayout({
       <div className=" col-span-2 text-white relative md:block hidden">
         <Image
           className=""
-          src={"/login_image.jpg"}
+          src={"/mats_login_image.png"}
           alt={"error_loading_image"}
           // width={"500"}
           // height={"100"}

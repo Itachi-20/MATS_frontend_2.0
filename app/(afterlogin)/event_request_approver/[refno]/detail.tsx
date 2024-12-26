@@ -194,7 +194,8 @@ const Index = ({ ...Props }: Props) => {
   const [eventData, setEventData] = useState<EventEntry>(Props.tableData);
   const [isCommentbox, setIsCommentbox] = useState<boolean>();
   const [comment, setComment] = useState<string>();
-  const [type, setType] = useState<string>();
+  const [type, setType] = useState<string>("");
+  const [buttonText,setButtonText] = useState<string>("");
   const [refno, setRefno] = useState(Props.refno);
 console.log(refno,'refno')
   const handleApprove = async () => {
@@ -279,7 +280,7 @@ console.log(refno,'refno')
           <div></div>
           <div className="flex gap-4 bg-white">
             <Button className="border border-[#4430bf] text-[#4430bf] px-6" onClick={()=>router.push(`/audit_trail/${eventData.name}`)}>Audit Trail</Button>
-            <Button className="bg-white text-black border px-8 hover:bg-white" onClick={()=>{router.push('/event_list')}}>Back</Button>
+            <Button className="bg-white text-black border px-8 hover:bg-white" onClick={()=>{router.push('/event_approver_list')}}>Back</Button>
           </div>
         </div>
         <div className="flex border rounded-xl justify-between p-3 bg-white gap-4">
@@ -300,9 +301,9 @@ console.log(refno,'refno')
             {
               !(eventData && eventData?.is_approved) &&
               <>
-                <Button className="bg-[#5dbe74] hover:bg-[#5dbe74] px-6" onClick={() => { handleDialog(); setType("Approved") }}>Approve</Button>
-                <Button className="bg-[#ff5757] hover:bg-[#ff5757] px-6" onClick={() => { handleDialog(); setType("Rejected") }}>Reject</Button>
-                <Button className="bg-[#4430bf] hover:bg-[#4430bf] px-6" onClick={() => { handleDialog(); setType("Send Back") }}>Send Back</Button>
+                <Button className="bg-[#5dbe74] hover:bg-[#5dbe74] px-6" onClick={() => { handleDialog(); setType("Approved"); setButtonText("Approve")}}>Approve</Button>
+                <Button className="bg-[#ff5757] hover:bg-[#ff5757] px-6" onClick={() => { handleDialog(); setType("Rejected");setButtonText("Reject") }}>Reject</Button>
+                <Button className="bg-[#4430bf] hover:bg-[#4430bf] px-6" onClick={() => { handleDialog(); setType("Send Back"); setButtonText("Send Back") }}>Send Back</Button>
               </>
             }
           </div>
@@ -409,6 +410,7 @@ console.log(refno,'refno')
             handleClose={handleDialog}
             handleComment={handleComment}
             Submitbutton={handleApprove}
+            ButtonText = {buttonText}
           />
         </div>
       }

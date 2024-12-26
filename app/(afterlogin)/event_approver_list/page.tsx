@@ -19,7 +19,7 @@ import Table from '@/app/(afterlogin)/event_approver_list/table'
 //   }[]
 // };
 
-type Events = {
+export type Events = {
   "name": string | null,
   "event_type": string | null,
   "event_name": string | null,
