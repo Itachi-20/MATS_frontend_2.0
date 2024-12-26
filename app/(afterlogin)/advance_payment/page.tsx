@@ -25,6 +25,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { FormatDate } from '@/app/utility/dateFormatter';
 import DatePicker from '../event_list/date-picker'
+import Pagination from "@/components/eventList/pagination";
 type post_expense_approvers = {
     level1: string;
     level2: string;
@@ -62,20 +63,24 @@ export default function Page() {
      const [endDate, setEndDate] = useState<string>('');
      const [isPickerOpen, setIsPickerOpen] = useState(false);
      const [currentPage, setCurrentPage] = useState<number>(1);
+     const [status,setStatus] = useState<string>();
+     const total_event_list = 12;
+     const [searchName, setSearchName] = useState('')
+
     const PostExpenseApprovalList = async () => {
         setLoading(true)
         try {
             const response = await fetch("/api/advanceApproval/list", {
-                method: "GET",
+                method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                // body: JSON.stringify({
-                //     activity: "Pre Activity",
-                //     startDate: startDate,
-                //     endDate: endDate,
-                //     pageNo: currentPage,
-                //   })
+                body: JSON.stringify({
+                    startDate: startDate,
+                    endDate: endDate,
+                    pageNo: currentPage,
+                    searchName:searchName,
+                  })
             });
 
             if (response.ok) {
@@ -92,6 +97,8 @@ export default function Page() {
         }
     };
 
+    console.log(postExpenseApprovalList,"this is approval list")
+
     const handleExportButton = () => {
         exportEventList();
     };
@@ -102,6 +109,14 @@ export default function Page() {
     const togglePicker = () => {
         setIsPickerOpen(!isPickerOpen);
       };
+
+      const handlesearchname = async (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+          const { name, value } = e.target;
+          console.log(value)
+          setTimeout(() => {
+            setSearchName(value);
+          }, 100);
+        }
 
     const exportEventList = async () => {
         try {
@@ -114,11 +129,12 @@ export default function Page() {
               },
               credentials: 'include',
               body: JSON.stringify({
-                // activity: "Pre Activity",
+                 status: status,
                 startDate: startDate,
                 endDate: endDate,
-                // pageNo: currentPage,
-    
+                 pageNo: currentPage,
+                 search_name:searchName,
+                 api_name:"Advance Expense List"
               })
             }
           );
@@ -131,10 +147,30 @@ export default function Page() {
           console.log(error, "something went wrong");
         }
       };
+
+
+      const useDebounce = (value: any, delay: any) => {
+        const [debouncedValue, setDebouncedValue] = useState(value);
+      
+        useEffect(() => {
+          const handler = setTimeout(() => {
+            setDebouncedValue(value);
+          }, delay);
+          return () => {
+            clearTimeout(handler);
+          };
+        }, [value, delay]);
+      
+        return debouncedValue;
+      };
+      const debouncedSearchName = useDebounce(searchName, 300);
         useEffect(() => {
             PostExpenseApprovalList();
-        }, [currentPage])
+        }, [currentPage,debouncedSearchName])
+
+
     console.log(postExpenseApprovalList, 'postExpenseApprovalList')
+    console.log(startDate,endDate,"this is console")
     return (
         <>
 
@@ -143,10 +179,13 @@ export default function Page() {
                     <Input
                         className="w-[40%] rounded-[50px] bg-[#ecf2ff]"
                         placeholder="Search"
+                        onChange={(e) => { handlesearchname(e) }}
                     />
                     <div className="flex justify-end lg:gap-5 sm:gap-[10px] gap-[8px] items-center">
                               <Button className="text-black w-34 shadow border hover:shadow-md active:shadow-lg lg:text-sm lg:rounded-[25px] lg:gap-4 sm:rounded-[50px] rounded-[50px] sm:text-[9px] sm:gap-[10px] gap-[9px] sm:font-normal sm:leading-[10.97px] text-[9px]" onClick={handleExportButton}>Export as Excel</Button>
-                              <Select>
+                              <Select
+                              onValueChange={(value)=>{setStatus(value)}}
+                              >
                                 <SelectTrigger className="text-black w-34 shadow focus-visible:ring-transparent lg:text-sm lg:rounded-[25px] lg:gap-4 sm:rounded-[50px] rounded-[50px] sm:text-[9px] sm:gap-[10px]  gap-[9px] sm:font-normal sm:leading-[10.97px] text-[9px]">
                                   <SelectValue placeholder="Status" className="cursor-pointer" />
                                 </SelectTrigger>
@@ -304,8 +343,8 @@ export default function Page() {
                         }
                     </Table>
                 </div>
+            <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} total_event_list={total_event_list} />
             </div>
-
         </>
     );
 };
