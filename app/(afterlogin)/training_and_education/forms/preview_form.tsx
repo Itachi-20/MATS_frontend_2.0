@@ -11,7 +11,7 @@ import Documents from "@/components/commonPreviewComponents/documents"
 import Add_vendor from "@/components/add_vendor";
 import { usePathname } from 'next/navigation'
 import { useRouter } from 'nextjs-toploader/app';
-import Comment_box from "@/components/approvalCommentBox/Comment_box";
+import Comment_box from "@/components/Comment_box";
 
 type EventEntry = {
   name: string;
@@ -311,8 +311,7 @@ const Preview_Form = ({ ...Props }: Props) => {
         <div className=" absolute z-50 flex pt-10 items-end justify-center bg-black bg-opacity-50 w-full h-full inset-0 pb-40">
           <Comment_box
             handleClose={handleDialog}
-            handleComment={handleComment}
-            Submitbutton={handleFinalSubmit}
+            handleSubmit={handleFinalSubmit}
           />
         </div>
       }
