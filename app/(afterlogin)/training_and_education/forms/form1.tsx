@@ -552,7 +552,7 @@ const Form1 = ({ ...Props }: Props) => {
             Reporting Head
           </label>
           <Select
-            defaultValue={Props.previewData?.reporting_head ?? "sletected reposting"}
+            defaultValue={Props.previewData?.reporting_head ?? "selected reporting"}
             onValueChange={(value) => { handleSelectChange(value, "reporting_head") }}
           >
             <SelectTrigger className="dropdown">

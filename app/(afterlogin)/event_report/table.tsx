@@ -241,7 +241,7 @@ const table = ({ ...Props }: Props) => {
 
             <TableHead
               className={
-                "sticky right-0 z-50 bg-[#E0E9FF] border-l-2 border-gray-450 shadow-2xl rounded-r-2xl  text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                "sticky right-0 bg-[#E0E9FF] border-l-2 border-gray-450 shadow-2xl rounded-r-2xl  text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
               }
             >
               View
@@ -282,7 +282,7 @@ const table = ({ ...Props }: Props) => {
                   <TableCell>{data.level5?data.level5:"NA"}</TableCell>
                   <TableCell>{data.level6?data.level6:"NA"}</TableCell>
                   <TableCell>{data.level7?data.level7:"NA"}</TableCell>
-                  <TableCell className="flex space-x-6 items-center justify-center sticky right-0 bg-[white] z-50 border-l-2 shadow-2xl">
+                  <TableCell className="flex space-x-6 items-center justify-center sticky right-0 bg-[white] border-l-2 shadow-2xl">
                     <div className="hover:cursor-pointer" onClick={()=>router.push(`/event_detail/${data.name}`)}>
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
                         <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
