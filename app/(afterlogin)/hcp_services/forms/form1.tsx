@@ -14,6 +14,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/app/context/AuthContext";
 import { Previewdata } from '@/app/(afterlogin)/hcp_services/page';
 import { Toaster, toast } from 'sonner';
+import IsReportingHeadDialog from "@/components/isReportingHeadDialog";
 
 type dropdownData = {
   company: {
@@ -161,6 +162,7 @@ const Form1 = ({ ...Props }: Props) => {
   const { role, name, userid, clearAuthData } = useAuth();
   const start_date_ref: React.RefObject<any> = useRef(null);
   const end_date_ref: React.RefObject<any> = useRef(null);
+  const [isReportingHeadDialog, setIsReportingHeadDialog] = useState(false);
 
   const handleSelectChange = (value: string, name: string) => {
     setFormData((prev) => ({ ...prev, [name]: value }) as FormData);
@@ -367,6 +369,13 @@ const Form1 = ({ ...Props }: Props) => {
           }),
         }
       );
+
+      if (response.status == 500) {
+        setIsReportingHeadDialog(true);
+        setTimeout(()=>{
+          setIsReportingHeadDialog(false);
+        },3000)
+      }
 
       if (response.ok) {
         const data = await response.json();
@@ -1052,6 +1061,9 @@ const Form1 = ({ ...Props }: Props) => {
       </div>
     </div>
     <Toaster richColors position="bottom-right" /> 
+    {formdata?.state  && isReportingHeadDialog && (
+        <IsReportingHeadDialog/>
+      )}
     </>
   );
 };

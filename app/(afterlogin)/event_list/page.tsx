@@ -11,6 +11,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, } from "
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from "@/components/ui/select";
 import Pagination from "@/components/eventList/pagination";
 import { FormatDate } from '@/app/utility/dateFormatter';
+
+
 type EventTable = {
   name: string;
   event_name: string;
@@ -199,6 +201,7 @@ export default function EventList() {
   console.log(status,'status')
   console.log("table data ",tableData)
   return (
+    <>
     <div className="p-7 w-full relative z-20 text-black">
       <div className="flex lg:justify-between flex-col-reverse lg:flex-row pb-5 gap-5 lg:gap-0">
         <Input
@@ -380,5 +383,6 @@ export default function EventList() {
       </div>
       <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} total_event_list={total_event_list} />
     </div>
+    </>
   );
 };
