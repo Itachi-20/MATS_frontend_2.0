@@ -1,16 +1,9 @@
 import { NextResponse } from 'next/server';
 
-export async function POST(req: Request) {
+export async function GET(req: Request) {
     try {
-        const body = await req.json();
         const cookies = req.headers.get("cookie")
-        // console.log(cookies,"this api cookie")
-        const search_name = body.search_name;
-        const startdate = body.startDate;
-        const enddate = body.endDate;
-        const page_no = body.pageNo;
-        const status = body.status;
-        const response = await fetch(`${process.env.FRAPPE_URL}/api/method/matsapp.api.event.event.get_event_list?search_name=${search_name}&startdate=${startdate}&enddate=${enddate}&page_no=${page_no}&status=${status}`, {
+        const response = await fetch(`${process.env.FRAPPE_URL}/api/method/matsapp.api.utils.common.fetch_requestors`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

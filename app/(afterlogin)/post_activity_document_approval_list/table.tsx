@@ -22,6 +22,7 @@ import { useRouter } from 'nextjs-toploader/app';
 import { Loader2 } from "lucide-react";
 import Pagination from "@/components/eventList/pagination";
 import DatePicker from "@/app/(afterlogin)/event_list/date-picker"
+import { FormatDate } from '@/app/utility/dateFormatter';
 type Props = {
   tableData: any;
 }
@@ -223,9 +224,15 @@ const table = ({ ...Props }: Props) => {
                   "text-center text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                 }
               >
-                Event Date
+                Event Start Date
               </TableHead>
-
+              <TableHead
+                className={
+                  "text-center text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                }
+              >
+                Event End Date
+              </TableHead>
               <TableHead
                 className={
                   "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
@@ -317,9 +324,10 @@ const table = ({ ...Props }: Props) => {
                       return (
                         <TableRow key={index} className="text-center text-nowrap">
                           <TableCell>{data.name ?? "-"}</TableCell>
-                          <TableCell>{data.event_type ?? "-"}</TableCell>
+                          <TableCell>{data.event_type ?? "-"} </TableCell>
                           <TableCell>{data.event_name ?? "-"}</TableCell>
-                          <TableCell>{data.event_start_date ?? "-"}</TableCell>
+                          <TableCell>{FormatDate(data.event_start_date) ?? "-"}</TableCell>
+                          <TableCell>{FormatDate(data.event_end_date) ?? "-"}</TableCell>
                           <TableCell>{data.total_expense ?? "-"}</TableCell>
                           <TableCell>{data.event_requestor ?? "-"}</TableCell>
                           <TableCell>{data.owner ?? "-"}</TableCell>

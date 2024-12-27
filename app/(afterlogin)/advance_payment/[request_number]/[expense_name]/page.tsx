@@ -202,9 +202,9 @@ const page = () => {
                         view == "view" ?
                             <></>
                             : <>
-                                <Button className='bg-[#5DBE74] px-6' onClick={() => handleOpen('Approved')}>Approve</Button>
-                                <Button className='bg-[#4430BF] px-6' onClick={() => handleOpen('Send Back')}>Send Back</Button>
-                                <Button className='bg-[#FF5757] px-6' onClick={() => handleOpen('Rejected')}>Reject</Button>
+                                <Button className='bg-[#5DBE74] px-6 text-white' onClick={() => handleOpen('Approved')}>Approve</Button>
+                                <Button className='bg-[#4430BF] px-6  text-white' onClick={() => handleOpen('Send Back')}>Send Back</Button>
+                                <Button className='bg-[#FF5757] px-6  text-white    ' onClick={() => handleOpen('Rejected')}>Reject</Button>
                             </>
                     }
 

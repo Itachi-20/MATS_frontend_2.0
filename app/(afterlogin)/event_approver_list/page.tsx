@@ -51,6 +51,11 @@ export type Events = {
   type Data = {
       "events": Events[]
   }
+
+  export type EventRequestor = {
+      "user": string,
+      "email": string,
+  }
       
  const fetchTable = async()=>{
   try {
@@ -76,16 +81,40 @@ export type Events = {
   }
 }
 
+const fetchEventRequestor = async () => {
+  const cookie = await cookies();
+    const Cookie = cookie.toString();
+  try {
+    const Data = await fetch(
+     `${process.env.FRAPPE_URL}/api/method/matsapp.api.utils.common.fetch_requestors`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Cookie":Cookie
+        },
+        credentials: 'include',
+      }
+    );
+    if (Data.ok) {
+      const data = await Data.json();
+      return data.message
+    } 
+  } catch (error) {
+    console.log(error, "something went wrong not able fetch requestor");
+  }
+};
 
 
 const Index = async() => {
 
   const tableData:Events[] = await fetchTable();
-  // console.log(tableData,"this is table data")
+  const EventRequestor:EventRequestor[] = await fetchEventRequestor();
   return (
     <>
       <Table
       tableData={tableData}
+      eventrequestor={EventRequestor}
       />
     </>
   );

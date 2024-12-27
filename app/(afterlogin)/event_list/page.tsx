@@ -1,6 +1,6 @@
 "use client";
 import { Loader2 } from "lucide-react";
-import React, { useCallback } from "react";
+import React, { ReactEventHandler, useCallback } from "react";
 import { useEffect, useState } from "react"
 import Image from "next/image";
 import DatePicker from "./date-picker"
@@ -11,7 +11,6 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, } from "
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from "@/components/ui/select";
 import Pagination from "@/components/eventList/pagination";
 import { FormatDate } from '@/app/utility/dateFormatter';
-
 type EventTable = {
   name: string;
   event_name: string;
@@ -46,7 +45,6 @@ export const formatDate = (dateString: string) => {
     const [year, month, day] = dateString.split('-').map(Number);
     const date = new Date(year, month - 1, day);
     const formattedDate = `${String(date.getDate()).padStart(2, '0')}-${String(date.getMonth() + 1).padStart(2, '0')}-${date.getFullYear()}`;
-
     return formattedDate;
   }
 };
@@ -109,6 +107,7 @@ export default function EventList() {
   const debouncedSearchName = useDebounce(searchName, 300);
 
   const fetchTableData = async () => {
+    console.log('insode api fetch data')
     setLoading(true)
     try {
       const Data = await fetch(
@@ -140,6 +139,8 @@ export default function EventList() {
       console.log(error, "something went wrong");
     }
   };
+
+ 
   const exportEventList = async () => {
     try {
       const Data = await fetch(
@@ -170,9 +171,16 @@ export default function EventList() {
   };
 
 
-  const handleTypeChange = (value: string) => {
-    setStatus(value);
+  const handleTypeChange = (e:any) => {
+    console.log(e,'e')
+    if(e == 'all'){
+      setStatus('')
+    }else{
+
+      setStatus(e);
+    }
   };
+
   const handlesearchname = async (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     console.log(value)
@@ -187,8 +195,9 @@ export default function EventList() {
 
   useEffect(() => {
     fetchTableData();
-  }, [currentPage, debouncedSearchName])
-
+  }, [currentPage, debouncedSearchName,status])
+  console.log(status,'status')
+  console.log("table data ",tableData)
   return (
     <div className="p-7 w-full relative z-20 text-black">
       <div className="flex lg:justify-between flex-col-reverse lg:flex-row pb-5 gap-5 lg:gap-0">
@@ -202,15 +211,15 @@ export default function EventList() {
 
         <div className="flex justify-end lg:gap-5 sm:gap-[10px] gap-[8px] items-center">
           <Button className="text-black w-34 shadow border hover:shadow-md active:shadow-lg lg:text-sm lg:rounded-[25px] lg:gap-4 sm:rounded-[50px] rounded-[50px] sm:text-[9px] sm:gap-[10px] gap-[9px] sm:font-normal sm:leading-[10.97px] text-[9px]" onClick={handleExportButton}>Export as Excel</Button>
-          <Select onValueChange={() => handleTypeChange}>
+          <Select onValueChange={(e) => handleTypeChange(e)} defaultValue="all">
             <SelectTrigger className="text-black w-34 shadow focus-visible:ring-transparent lg:text-sm lg:rounded-[25px] lg:gap-4 sm:rounded-[50px] rounded-[50px] sm:text-[9px] sm:gap-[10px]  gap-[9px] sm:font-normal sm:leading-[10.97px] text-[9px]">
               <SelectValue placeholder="Status" className="cursor-pointer" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All</SelectItem>
-              <SelectItem value="awaitingApproval">Awaitting Approval</SelectItem>
+              <SelectItem value="draft">Draft</SelectItem>
+              <SelectItem value="pending">Pending</SelectItem>
               <SelectItem value="approved">Approved</SelectItem>
-              <SelectItem value="approved">Draft</SelectItem>
               <SelectItem value="sendback">Sendback</SelectItem>
               <SelectItem value="executed">Executed</SelectItem>
               <SelectItem value="rejected">Rejected</SelectItem>
@@ -222,7 +231,7 @@ export default function EventList() {
           <DatePicker startDate={startDate} endDate={endDate} setStartDate={setStartDate} setEndDate={setEndDate} isPickerOpen={isPickerOpen} togglePicker={togglePicker} fetchTableData={fetchTableData} />
         </div>
       </div>
-
+    
       <div className="border bg-white h-full p-4 rounded-[18px]">
         <Table>
           <TableHeader className={"bg-[#E0E9FF]"}>

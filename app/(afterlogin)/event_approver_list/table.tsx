@@ -24,8 +24,16 @@ import Loader from '@/components/loader'
 import DatePicker from "@/app/(afterlogin)/event_list/date-picker"
 import { Events } from './page'
 import Pagination from "@/components/eventList/pagination";
+import Requestor_filter from '@/components/dashboard/search_event_requestor_component'
+import { Label } from "@/components/ui/label"
+import { FormatDate } from '@/app/utility/dateFormatter';
+type EventRequestor2 = {
+  "user": string,
+  "email": string,
+}
 type Props = {
   tableData: Events[];
+  eventrequestor: EventRequestor2[];
 }
 
 export const formatDate = (dateString: string) => {
@@ -62,13 +70,9 @@ const table = ({ ...Props }: Props) => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [searchName, setSearchName] = useState('')
   const total_event_list = 12;
-  // console.log('Props.tableData', Props.tableData)
-  // useEffect(() => {
-  //   if (Props.tableData) {
-  //     setLoading(false);
-  //   }
-  //   setLoading(false);
-  // }, [Props.tableData]);
+  const [event_requestor, setEventRequestor] = useState('');
+  const [requestor_dropdown, setEventRequestorDropdown] = useState(Props.eventrequestor);
+  const [checkstate, setCheckstate] = useState(false)
 
   const debouncedSearchName = useDebounce(searchName, 300);
 
@@ -95,7 +99,7 @@ const table = ({ ...Props }: Props) => {
       );
       if (Data.ok) {
         const data = await Data.json();
-        console.log('data.data.events',data.data.events)
+        console.log('data.data.events', data.data.events)
         setTableData(data.data.events)
         setLoading(false)
       } else {
@@ -115,8 +119,14 @@ const table = ({ ...Props }: Props) => {
     fetchTableData();
   }, [currentPage, debouncedSearchName])
 
-  const handleTypeChange = (value: string) => {
-    setStatus(value);
+  const handleTypeChange = (e:any) => {
+    console.log(e,'e')
+    if(e == 'all'){
+      setStatus('')
+    }else{
+
+      setStatus(e);
+    }
   };
   const handleExportButton = () => {
     exportEventList();
@@ -163,36 +173,65 @@ const table = ({ ...Props }: Props) => {
     }, 1000);
   }
 
-  console.log(startDate,endDate, 'endDate')
+  const handlecheckchange = (e: any) => {
+    console.log(e.target.checked)
+    setCheckstate(e.target.checked)
+    if (e.target.checked) {
+      setStatus('pending');
+    } else {
+      setStatus('');
+    }
+  };
+
+  console.log(event_requestor, 'event_requestor')
+  console.log(status, 'status')
   return (
     <div className="p-7 w-full  z-20 text-black">
-      <div className="flex lg:justify-between flex-col-reverse lg:flex-row pb-5 gap-5 lg:gap-0">
+      <div className="flex lg:justify-between flex-col-reverse lg:flex-row pb-5 lg:gap-3">
         <Input
-          className="lg:w-[40%] md:w-full sm:w-full rounded-[50px] bg-[#ecf2ff]"
+          className="lg:w-[30%] md:w-full sm:w-full rounded-[50px] bg-[#ecf2ff]"
           placeholder="Search Request Number ..."
           name='search_name'
           onChange={(e) => { handlesearchname(e) }}
         />
         <div className="flex justify-end lg:gap-5 sm:gap-[10px] gap-[8px] items-center">
-          <Button className="text-black w-34 shadow border hover:shadow-md active:shadow-lg lg:text-sm lg:rounded-[25px] lg:gap-4 sm:rounded-[50px] rounded-[50px] sm:text-[9px] sm:gap-[10px] gap-[9px] sm:font-normal sm:leading-[10.97px] text-[9px]" onClick={handleExportButton}>Export as Excel</Button>
-          <Select onValueChange={() => handleTypeChange}>
+          <Requestor_filter setEventRequestor={setEventRequestor} requestor_dropdown={requestor_dropdown} event_requestor={event_requestor} fetchTableData={fetchTableData} />
+          <Button className="text-black w-34 shadow border hover:shadow-md active:shadow-lg lg:text-sm lg:rounded-[25px] lg:gap-4 sm:rounded-[50px] rounded-[50px] sm:text-[9px] sm:gap-[10px] gap-[9px] sm:font-normal sm:leading-[10.97px] text-[9px]" onClick={handleExportButton}>Export</Button>
+          <Select onValueChange={(e) => handleTypeChange(e)} defaultValue="all">
             <SelectTrigger className="text-black w-34 shadow focus-visible:ring-transparent lg:text-sm lg:rounded-[25px] lg:gap-4 sm:rounded-[50px] rounded-[50px] sm:text-[9px] sm:gap-[10px]  gap-[9px] sm:font-normal sm:leading-[10.97px] text-[9px]">
               <SelectValue placeholder="Status" className="cursor-pointer" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All</SelectItem>
-              <SelectItem value="awaitingApproval">Awaitting Approval</SelectItem>
+              <SelectItem value="awaiting approval">Awaiting Approval</SelectItem>
               <SelectItem value="approved">Approved</SelectItem>
-              <SelectItem value="Pending">Pending</SelectItem>
+              <SelectItem value="pending">Pending</SelectItem>
               <SelectItem value="sendback">Sendback</SelectItem>
-              {/* <SelectItem value="executed">Executed</SelectItem> */}
               <SelectItem value="rejected">Rejected</SelectItem>
               <SelectItem value="cancelled">Cancelled</SelectItem>
               <SelectItem value="closed">Closed</SelectItem>
-              {/* <SelectItem value="postactivity">PostActivity Document Uploaded</SelectItem> */}
             </SelectContent>
           </Select>
           <DatePicker startDate={startDate} endDate={endDate} setStartDate={setStartDate} setEndDate={setEndDate} isPickerOpen={isPickerOpen} togglePicker={togglePicker} fetchTableData={fetchTableData} />
+          <label className="inline-flex items-center cursor-pointer">
+            <input
+              id='airplane-mode'
+              type="checkbox"
+              checked={checkstate}
+              onChange={(e) => handlecheckchange(e)}
+              className="sr-only peer"
+            />
+            <span
+              className={`relative w-14 h-8 transition-all duration-300 ease-in-out rounded-full ${checkstate ? 'bg-[#2196F3]' : 'bg-gray-300'
+                } peer-checked:bg-[#2196F3]`}
+            >
+              <span
+                className={`absolute left-1 top-1 w-6 h-6 bg-white rounded-full transition-all duration-300 ease-in-out ${checkstate ? 'translate-x-6' : 'translate-x-0'
+                  }`}
+              />
+            </span>
+          </label>
+          <Label htmlFor="airplane-mode">Ready For Approval</Label>
         </div>
       </div>
       <div className="border bg-white  p-4 rounded-[18px]">
@@ -329,8 +368,8 @@ const table = ({ ...Props }: Props) => {
                           <TableCell>{data.name ?? "-"}</TableCell>
                           <TableCell>{data.event_name ?? "-"}</TableCell>
                           <TableCell> {data.event_type ?? "-"}</TableCell>
-                          <TableCell>{data.event_start_date ?? "-"}</TableCell>
-                          <TableCell>{data.event_end_date ?? "-"}</TableCell>
+                          <TableCell>{FormatDate(data.event_start_date) ?? "-"}</TableCell>
+                          <TableCell>{FormatDate(data.event_end_date) ?? "-"}</TableCell>
                           <TableCell>{data.total_estimated_expense}</TableCell>
                           <TableCell>{data.event_requestor ?? "-"}</TableCell>
                           <TableCell>{data.owner ?? "-"}</TableCell>
