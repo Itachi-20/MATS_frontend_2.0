@@ -13,6 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Previewdata } from '@/app/(afterlogin)/patient_support/page'
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/app/context/AuthContext";
+import IsReportingHeadDialog from "@/components/isReportingHeadDialog";
 
 type FormData = {
   name: string | null;
@@ -138,6 +139,7 @@ const Form1 = ({ ...Props }: Props) => {
   const [citydropdown, setCityDropdown] = useState<cityDropdown | null>()
   const [reportingHeadDropdown, setReportingHeadDropdown] = useState<reportingHeadDropdown | null>(null)
   const [loading, setLoading] = useState(true);
+  const [isReportingHeadDialog, setIsReportingHeadDialog] = useState(false);
 
   const handleSelectChange = (value: string, name: string) => {
     setFormData((prev) => ({ ...prev, [name]: value }) as FormData);
@@ -302,6 +304,13 @@ const Form1 = ({ ...Props }: Props) => {
           }),
         }
       );
+
+      if (response.status == 500) {
+        setIsReportingHeadDialog(true);
+        setTimeout(()=>{
+          setIsReportingHeadDialog(false);
+        },3000)
+      }
 
       if (response.ok) {
         const data = await response.json();
@@ -710,6 +719,9 @@ const Form1 = ({ ...Props }: Props) => {
           Next
         </Button>
       </div>
+      {formdata?.state  && isReportingHeadDialog && (
+        <IsReportingHeadDialog/>
+      )}
     </div>)
   );
 };

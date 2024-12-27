@@ -12,6 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from "
 import Pagination from "@/components/eventList/pagination";
 import { FormatDate } from '@/app/utility/dateFormatter';
 
+
 type EventTable = {
   name: string;
   event_name: string;
@@ -190,6 +191,7 @@ export default function EventList() {
   }, [currentPage, debouncedSearchName])
 
   return (
+    <>
     <div className="p-7 w-full relative z-20 text-black">
       <div className="flex lg:justify-between flex-col-reverse lg:flex-row pb-5 gap-5 lg:gap-0">
         <Input
@@ -371,5 +373,6 @@ export default function EventList() {
       </div>
       <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} total_event_list={total_event_list} />
     </div>
+    </>
   );
 };

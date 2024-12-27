@@ -13,6 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useRouter } from "next/navigation";
 import {Previewdata} from '@/app/(afterlogin)/hcp_services/page'
 import { useAuth } from "@/app/context/AuthContext";
+import IsReportingHeadDialog from "@/components/isReportingHeadDialog";
 
 type dropdownData = {
   company: {
@@ -140,6 +141,7 @@ const Form1 = ({ ...Props }: Props) => {
   const [formData, setFormData] = useState<formData>(); 
     const [errors, setErrors] = useState<FormErrors>();
   const [citydropdown, setCityDropdown] = useState<cityDropdown | null>()
+    const [isReportingHeadDialog, setIsReportingHeadDialog] = useState(false);
   const [reportingHeadDropdown, setReportingHeadDropdown] = useState<reportingHeadDropdown | null>(null)
   
   const validateAtSubmit = () => {
@@ -308,6 +310,13 @@ const Form1 = ({ ...Props }: Props) => {
           }),
         }
       );
+
+      if (response.status == 500) {
+        setIsReportingHeadDialog(true);
+        setTimeout(()=>{
+          setIsReportingHeadDialog(false);
+        },3000)
+      }
 
       if (response.ok) {
         const data = await response.json();
@@ -692,6 +701,9 @@ const Form1 = ({ ...Props }: Props) => {
         </Button>*/}
         <Button className='bg-[#4430bf] text-white text-md font-normal border' onClick={(e: React.MouseEvent<HTMLButtonElement>)=>handleSubmit(e)}>Next</Button>
       </div>
+      {formData?.state  && isReportingHeadDialog && (
+        <IsReportingHeadDialog/>
+      )}
     </div>
   );
 };
