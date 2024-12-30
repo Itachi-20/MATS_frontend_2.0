@@ -311,6 +311,7 @@ const Index = () => {
                                 />
                             </span>
                         </label>
+                        <Label htmlFor="airplane-mode">Ready For Approval</Label>
                     </div>
                 </div>
 
