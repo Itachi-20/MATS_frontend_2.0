@@ -336,6 +336,7 @@ const table = ({ ...Props }: Props) => {
               </div>
             </></TableCell></TableRow></TableBody> :
               tableData.length > 0 ?
+              (
                 <TableBody className="">
                   {tableData &&
                     tableData.map((data: any, index: number) => {
