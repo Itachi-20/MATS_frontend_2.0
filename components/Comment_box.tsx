@@ -5,11 +5,17 @@ import { useState } from "react";
 import { useAuth } from "../app/context/AuthContext";
 type props = {
   handleClose: (value: string) => void;
-  handleSubmit: (value: string) => void
+  handleSubmit: (value: string) => void;
+  ButtonText:string;
 }
-const Comment_box = ({ handleClose, handleSubmit }: props) => {
+const Comment_box = ({ handleClose, handleSubmit,ButtonText}: props) => {
   const {role,userid,name} = useAuth();
   const [remarks, setRemarks] = useState<string>("");
+  const buttonColor:{ [key: string]: string } = {
+    "Approve":"bg-[#5DBE74] hover:bg-[#5DBE74]",
+    "Reject":"bg-[#ff5757] hover:bg-[#ff5757]",
+    "Send Back":"bg-[#4430bf] hover:bg-[#4430bf]"
+  }
   return (
     <div className="absolute z-50 flex inset-0 items-center justify-center bg-black bg-opacity-50">
       <div className="bg-white rounded-xl border  md:max-w-[600px] md:max-h-[350px] h-full w-full gap-8 text-black md:text-md font-light ">
@@ -24,8 +30,9 @@ const Comment_box = ({ handleClose, handleSubmit }: props) => {
           <Button className="bg-white text-black border text-md font-normal px-12 rounded-md hover:bg-white" onClick={() => handleClose('')}>
             Back
           </Button>
-          <Button className="bg-[#5DBE74] text-white text-md font-normal border px-8 hover:bg-[#5DBE74]" onClick={() => handleSubmit(remarks)}>
-            {role == "Event Approver"?"Approve":"Submit"}
+          <Button className={`text-white text-md font-normal border px-8 ${buttonColor[ButtonText]}`} onClick={() => handleSubmit(remarks)}>
+            {/* {role == "Event Approver"?"Approve":"Submit"} */}
+            {ButtonText ? ButtonText : "Submit"}
           </Button>
         </div>
 

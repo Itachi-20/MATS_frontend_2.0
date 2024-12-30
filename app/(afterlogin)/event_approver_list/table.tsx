@@ -123,14 +123,13 @@ const table = ({ ...Props }: Props) => {
 
   useEffect(() => {
     fetchTableData();
-  }, [currentPage, debouncedSearchName])
+  }, [currentPage, debouncedSearchName,status])
 
   const handleTypeChange = (e:any) => {
     console.log(e,'e')
     if(e == 'all'){
       setStatus('')
     }else{
-
       setStatus(e);
     }
   };
@@ -181,7 +180,7 @@ const table = ({ ...Props }: Props) => {
 
   const handlecheckchange = (e: any) => {
     console.log(e.target.checked)
-    setCheckstate(e.target.checked)
+    // setCheckstate(e.target.checked)
     if (e.target.checked) {
       setStatus('pending');
     } else {
@@ -204,7 +203,7 @@ const table = ({ ...Props }: Props) => {
         <div className="flex justify-end lg:gap-5 sm:gap-[10px] gap-[8px] items-center">
           <Requestor_filter setEventRequestor={setEventRequestor} requestor_dropdown={requestor_dropdown} event_requestor={event_requestor} fetchTableData={fetchTableData} />
           <Button className="text-black w-34 shadow border hover:shadow-md active:shadow-lg lg:text-sm lg:rounded-[25px] lg:gap-4 sm:rounded-[50px] rounded-[50px] sm:text-[9px] sm:gap-[10px] gap-[9px] sm:font-normal sm:leading-[10.97px] text-[9px]" onClick={handleExportButton}>Export</Button>
-          <Select onValueChange={(e) => handleTypeChange(e)} defaultValue="all">
+          <Select onValueChange={(e) => handleTypeChange(e)} value={status ? status : 'all'} >
             <SelectTrigger className="text-black w-34 shadow focus-visible:ring-transparent lg:text-sm lg:rounded-[25px] lg:gap-4 sm:rounded-[50px] rounded-[50px] sm:text-[9px] sm:gap-[10px]  gap-[9px] sm:font-normal sm:leading-[10.97px] text-[9px]">
               <SelectValue placeholder="Status" className="cursor-pointer" />
             </SelectTrigger>
@@ -213,7 +212,7 @@ const table = ({ ...Props }: Props) => {
               <SelectItem value="awaiting approval">Awaiting Approval</SelectItem>
               <SelectItem value="approved">Approved</SelectItem>
               <SelectItem value="pending">Pending</SelectItem>
-              <SelectItem value="sendback">Sendback</SelectItem>
+              <SelectItem value="send back">Sendback</SelectItem>
               <SelectItem value="rejected">Rejected</SelectItem>
               <SelectItem value="cancelled">Cancelled</SelectItem>
               <SelectItem value="closed">Closed</SelectItem>
@@ -224,16 +223,16 @@ const table = ({ ...Props }: Props) => {
             <input
               id='airplane-mode'
               type="checkbox"
-              checked={checkstate}
+              checked={status == 'pending' ? true : false}
               onChange={(e) => handlecheckchange(e)}
               className="sr-only peer"
               />
             <span
-              className={`relative w-14 h-8 transition-all duration-300 ease-in-out rounded-full ${checkstate ? 'bg-[#2196F3]' : 'bg-gray-300'
+              className={`relative w-14 h-8 transition-all duration-300 ease-in-out rounded-full ${status == 'pending' ? 'bg-[#2196F3]' : 'bg-gray-300'
               } peer-checked:bg-[#2196F3]`}
               >
               <span
-                className={`absolute left-1 top-1 w-6 h-6 bg-white rounded-full transition-all duration-300 ease-in-out ${checkstate ? 'translate-x-6' : 'translate-x-0'
+                className={`absolute left-1 top-1 w-6 h-6 bg-white rounded-full transition-all duration-300 ease-in-out ${status == 'pending' ? 'translate-x-6' : 'translate-x-0'
                 }`}
                 />
             </span>

@@ -38,22 +38,52 @@ type Props = {
 const ApproverCardDetails = ({ ...Props }: Props) => {
   const { role, name, userid, clearAuthData } = useAuth();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [Loading, setLoading] = useState<boolean>(false);
+  const [tableData, setTableData] = useState(Props.tableData);
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const router = useRouter();
+  // const fetchTableData = async () => {
+  //   setLoading(true)
+  //   console.log
+  //   try {
+  //     const Data = await fetch(
+  //       `/api/event_approval_list`,
+  //       {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         credentials: 'include',
+  //         body: JSON.stringify({
+  //           page_length:5,
+  //           search_name: '',
+  //           startDate: '',
+  //           endDate: '',
+  //           pageNo: currentPage,
+  //           status: '',
+  //         })
+  //       }
+  //     );
+  //     if (Data.ok) {
+  //       const data = await Data.json();
+  //       console.log('data.data.events', data)
+        
+  //       setTableData(data.data.events)
+  //       setLoading(false)
+  //     } else {
+  //       setLoading(false)
+  //     }
+  //   } catch (error) {
+  //     setLoading(false);
+  //     console.log(error, "something went wrong");
+  //   }
+  // };
 
-  if (isLoading == true) {
-    return (
-      <>
-        <div>loading please wait....</div>
-      </>
-    )
-  }
+  // useEffect(() => {
+  //   fetchTableData();
+  // }, [])
 
-  useEffect(() => {
-    if (role != undefined) {
-      setIsLoading(false);
-    }
-  }, [role])
-  console.log(Props.tableData, 'Props.')
+  console.log(tableData, 'Props.')
   return (
     <div className="px-7 pb-7 pt-4 w-full relative z-20 flex flex-col justify-stretch">
       <div className="flex justify-between pb-6">
@@ -278,7 +308,7 @@ const ApproverCardDetails = ({ ...Props }: Props) => {
       </div>
       <div className="flex justify-between">
         <div className="border border-[#848484] p-7 rounded-[50px] w-full mr-4  bg-white">
-         
+
           <div className="flex justify-between pb-5 gap-40">
             {/* <div className="relative">
               <Input
@@ -308,9 +338,9 @@ const ApproverCardDetails = ({ ...Props }: Props) => {
                 </g>
               </svg>
             </div> */}
-             <h1 className="text-[#05004e] text-xl font-semibold pb-4">
-            Event Request
-          </h1>
+            <h1 className="text-[#05004e] text-xl font-semibold pb-4">
+              Event Request
+            </h1>
             <Button className='text-[#625d5d] bg-[#E0E9FF] rounded-xl hover:underline' onClick={() => { router.push('/event_approver_list') }}>Pre Activity List</Button>
           </div>
           <div className=' h-fit text-black'>
@@ -365,7 +395,7 @@ const ApproverCardDetails = ({ ...Props }: Props) => {
               </TableHeader>
               <TableBody className='text-center'>
                 {
-                  Props.tableData && Props.tableData?.map((item, index) => {
+                  tableData && tableData?.map((item, index) => {
                     return (
                       <TableRow>
                         <TableCell>{item.name}</TableCell>
@@ -383,127 +413,6 @@ const ApproverCardDetails = ({ ...Props }: Props) => {
             </Table>
           </div>
         </div>
-        {/* <div className="border rounded-[50px] flex flex-col bg-[#ebebf6] w-[30%] px-4 py-5">
-          <div className="flex justify-between pb-3">
-            <h1 className="text-[#05004e] text-[30px] pl-1 font-semibold">
-              Events
-            </h1>
-            <div className="pt-3">
-              <svg
-                width="27"
-                height="30"
-                viewBox="0 0 27 30"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  id="Icon"
-                  d="M26 12.2H1M19.0556 1V6.6M7.94444 1V6.6M11.4167 17.8L13.5 16.4V23.4M11.7639 23.4H15.2361M7.66667 29H19.3333C21.6669 29 22.8337 29 23.725 28.5422C24.509 28.1396 25.1464 27.497 25.5459 26.7068C26 25.8083 26 24.6322 26 22.28V10.52C26 8.16778 26 6.99167 25.5459 6.09324C25.1464 5.30296 24.509 4.66044 23.725 4.25777C22.8337 3.8 21.6669 3.8 19.3333 3.8H7.66667C5.33311 3.8 4.16634 3.8 3.27504 4.25777C2.49103 4.66044 1.85361 5.30296 1.45414 6.09324C1 6.99167 1 8.16778 1 10.52V22.28C1 24.6322 1 25.8083 1.45414 26.7068C1.85361 27.497 2.49103 28.1396 3.27504 28.5422C4.16634 29 5.33311 29 7.66667 29Z"
-                  stroke="black"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
-            <div className="pt-5">
-              <svg
-                width="42"
-                height="18"
-                viewBox="0 0 42 18"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <g id="Group 201">
-                  <path
-                    id="Icon"
-                    d="M33 1L41 9L33 17"
-                    stroke="black"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <path
-                    id="Icon_2"
-                    d="M9 17L1 9L9 1"
-                    stroke="black"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </g>
-              </svg>
-            </div>
-          </div>
-          <Button className="w-28 bg-[#ffffff] text-black hover:bg-white text-xs font-normal rounded-2xl mb-3">
-            View All Events
-          </Button>
-          <div className="grid grid-row-3 gap-4">
-            <div className="col-span-1 rounded-full flex justify-between bg-white">
-              <div className="flex p-3">
-                <h1 className="text-black text-[25px] font-semibold ">
-                  25
-                </h1>
-                <div className="pl-2 ">
-                  <h1 className="text-black text-xs font-semibold">JAN</h1>
-                  <h1 className="text-black text-xs font-normal">
-                    Meril Annual Meet 2023
-                  </h1>
-                </div>
-              </div>
-              <div className="pt-3 pr-4">
-                <svg
-                  width="35"
-                  height="35"
-                  viewBox="0 0 35 35"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <g id="Arrow">
-                    <circle
-                      id="Ellipse 47"
-                      cx="17.5"
-                      cy="17.5"
-                      r="17.5"
-                      fill="#4430BF"
-                    />
-                    <path
-                      id="Arrow 1"
-                      d="M10 17C9.44772 17 9 17.4477 9 18C9 18.5523 9.44772 19 10 19V17ZM25.7071 18.7071C26.0976 18.3166 26.0976 17.6834 25.7071 17.2929L19.3431 10.9289C18.9526 10.5384 18.3195 10.5384 17.9289 10.9289C17.5384 11.3195 17.5384 11.9526 17.9289 12.3431L23.5858 18L17.9289 23.6569C17.5384 24.0474 17.5384 24.6805 17.9289 25.0711C18.3195 25.4616 18.9526 25.4616 19.3431 25.0711L25.7071 18.7071ZM10 19L25 19V17L10 17V19Z"
-                      fill="white"
-                    />
-                  </g>
-                </svg>
-              </div>
-            </div>
-            <div className="row-span-1 rounded-full bg-white">
-              <div className="flex p-3">
-                <h1 className="text-black text-[25px] font-semibold ">
-                  25
-                </h1>
-                <div className="pl-2 ">
-                  <h1 className="text-black text-xs font-semibold">JAN</h1>
-                  <h1 className="text-black text-xs font-normal">
-                    Meril Annual Meet 2023
-                  </h1>
-                </div>
-              </div>
-            </div>
-            <div className="row-span-1 rounded-full bg-white">
-              <div className="flex p-3">
-                <h1 className="text-black text-[25px] font-semibold ">
-                  25
-                </h1>
-                <div className="pl-2 ">
-                  <h1 className="text-black text-xs font-semibold">JAN</h1>
-                  <h1 className="text-black text-xs font-normal">
-                    Meril Annual Meet 2023
-                  </h1>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div> */}
       </div>
     </div>
   )

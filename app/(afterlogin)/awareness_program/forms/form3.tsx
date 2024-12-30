@@ -141,7 +141,7 @@ const Form3 = ({ ...Props }: Props) => {
   };
   const handleLogisticsAdd = async () => {
     try {
-      if (!logisticVendorType && logisticAmount <= 0) {
+      if (!logisticVendorType || logisticAmount <= 0) {
         return toast.warning("Fill the required field")
       }
       const newObject: Logistics = { vendor_type: logisticVendorType, est_amount: logisticAmount, name: refNo, budget_category: 'Logistics' };
@@ -154,17 +154,17 @@ const Form3 = ({ ...Props }: Props) => {
               "Content-Type": "application/json",
             },
             credentials: 'include',
-           body: JSON.stringify(newObject)
+            body: JSON.stringify(newObject)
           });
-  
+
           if (!response.ok) {
             throw new Error('vendor  request failed');
           }
-  
+
           const data = await response.json();
           resolve(data);
         } catch (error) {
-          reject(error); 
+          reject(error);
         }
       });
       toast.promise(apiCallPromise, {
@@ -187,9 +187,9 @@ const Form3 = ({ ...Props }: Props) => {
     }
   };
   const handleCompensationAdd = async () => {
-    console.log(compansation_is_GST,'compansation_is_GST')
+    console.log(compansation_is_GST, 'compansation_is_GST')
     try {
-      if (!compansationVendorType && !compansationVendorName && !compansationAmount) {
+      if (!compansationVendorType || !compansationVendorName || compansationAmount <= 0) {
         return toast.warning("Fill the required field")
       }
       const newObject: Compensation = { vendor_type: compansationVendorType, est_amount: compansationAmount, gst_included: compansation_is_GST, vendor_name: compansationVendorName, name: refNo, budget_category: 'Compensation' };
@@ -202,17 +202,17 @@ const Form3 = ({ ...Props }: Props) => {
               "Content-Type": "application/json",
             },
             credentials: 'include',
-           body: JSON.stringify(newObject)
+            body: JSON.stringify(newObject)
           });
-  
+
           if (!response.ok) {
             throw new Error('vendor  request failed');
           }
-  
+
           const data = await response.json();
           resolve(data);
         } catch (error) {
-          reject(error); 
+          reject(error);
         }
       });
       toast.promise(apiCallPromise, {
@@ -236,7 +236,8 @@ const Form3 = ({ ...Props }: Props) => {
     }
   };
 
-  const handleCompensationDelete = async (deletename:string) => { console.log("deletename", deletename)
+  const handleCompensationDelete = async (deletename: string) => {
+    console.log("deletename", deletename)
     try {
       const response = await fetch(
         "/api/deleteVendor",
@@ -427,13 +428,19 @@ const Form3 = ({ ...Props }: Props) => {
                     <SelectValue placeholder="Select" />
                   </SelectTrigger>
                   <SelectContent>
-                    {Props.vendorType ? Props.vendorType?.map((item, index) => {
-                      return (
-                        <SelectItem value={item.name}>{item.vendor_type}</SelectItem>
-                      )
-                    })
-                      :
-                      <SelectItem value={"null"} disabled>No Data Yet</SelectItem>
+                    {
+                      Props.vendorType
+                        ? Props.vendorType?.filter((item) => {
+                          return item.name !== "Hotel" && item.name !== "Travel" && item.name !== "Food";
+                        })
+                          .map((item) => {
+                            return (
+                              <SelectItem value={item.name} key={item.name}>
+                                {item.vendor_type}
+                              </SelectItem>
+                            );
+                          })
+                        : <SelectItem value={"null"} disabled>No Data Yet</SelectItem>
                     }
                   </SelectContent>
                 </Select>
@@ -548,7 +555,7 @@ const Form3 = ({ ...Props }: Props) => {
                 <><TableCell>{item.vendor_type}</TableCell><TableCell>{item.est_amount}</TableCell>
                   <TableCell>
                     <div className="flex justify-around">
-                      <div onClick={() =>  { handleLogisticDelete(item.name) }} >
+                      <div onClick={() => { handleLogisticDelete(item.name) }} >
                         <Image src={"/svg/delete.svg"} width={20} height={20} alt='view-document' className='cursor-pointer' />
                       </div>
                     </div>
@@ -622,7 +629,7 @@ const Form3 = ({ ...Props }: Props) => {
                 <TableCell>
                   <div className="flex justify-around">
                     <div className="hover:cursor-pointer" onClick={() => handleCompensationDelete(item.name)}>
-                    <Image src={"/svg/delete.svg"} width={20} height={20} alt='view-document' className='cursor-pointer' />
+                      <Image src={"/svg/delete.svg"} width={20} height={20} alt='view-document' className='cursor-pointer' />
                     </div>
                   </div>
                 </TableCell>
