@@ -46,7 +46,7 @@ type Props = {
     setEventRequestor: (value: string) => void;
     fetchTableData: () => void;
     event_requestor: string;
-    requestor_dropdown: EventRequestor2[];
+    requestor_dropdown: EventRequestor2[] | undefined;
 }
 
 const details = ({ ...Props }: Props) => {
@@ -61,7 +61,7 @@ const details = ({ ...Props }: Props) => {
                     className="w-[200px] justify-between shadow border hover:shadow-md active:shadow-lg lg:text-sm lg:rounded-[25px] rounded-[50px] gap-[9px] text-[9px] font-normal"
                 >
                     {Props.event_requestor
-                        ? Props.requestor_dropdown.find((event_requestor) => event_requestor.email === event_requestor.email)?.user
+                        ? Props.requestor_dropdown?.find((event_requestor) => event_requestor.email === event_requestor.email)?.user
                         : "Select Requestor..."}
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0" />
                 </Button>

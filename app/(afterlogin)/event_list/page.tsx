@@ -228,7 +228,7 @@ export default function EventList() {
               <SelectItem value="rejected">Rejected</SelectItem>
               <SelectItem value="cancelled">Cancelled</SelectItem>
               <SelectItem value="closed">Closed</SelectItem>
-              <SelectItem value="postactivity">PostActivity Document Uploaded</SelectItem>
+              {/* <SelectItem value="postactivity">PostActivity Document Uploaded</SelectItem> */}
             </SelectContent>
           </Select>
           <DatePicker startDate={startDate} endDate={endDate} setStartDate={setStartDate} setEndDate={setEndDate} isPickerOpen={isPickerOpen} togglePicker={togglePicker} fetchTableData={fetchTableData} />
