@@ -1,10 +1,13 @@
 import React from 'react'
-
-const isReportingHeadDialog = () => {
+type Props = {
+  handleIsReportingDialog:()=>void;
+}
+const isReportingHeadDialog = ({...Props}:Props) => {
   return (
     <div className=" absolute z-50 flex pt-10 items-end justify-center bg-black bg-opacity-50 w-full h-full inset-0">
           <div className="absolute z-50 flex inset-0 items-center justify-center bg-black bg-opacity-50">
-            <div className="bg-white rounded-xl border  md:max-w-[600px] md:max-h-[350px] gap-8 text-black md:text-md font-light ">
+            <div className="bg-white rounded-xl border  md:max-w-[600px] md:max-h-[350px] gap-8 text-black md:text-md font-light relative">
+              <div className='absolute right-5 top-3 cursor-pointer font-semibold text-xl' onClick={()=>{Props.handleIsReportingDialog()}}>X</div>
               <div className="text-2xl flex justify-center font-poppins pt-8">
                 <svg
                   width="800px"

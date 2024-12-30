@@ -313,9 +313,6 @@ const Form1 = ({ ...Props }: Props) => {
 
       if (response.status == 500) {
         setIsReportingHeadDialog(true);
-        setTimeout(()=>{
-          setIsReportingHeadDialog(false);
-        },3000)
       }
 
       if (response.ok) {
@@ -356,6 +353,10 @@ const Form1 = ({ ...Props }: Props) => {
 
   if (loading) {
     return <div>Loading Please Wait</div>;
+  }
+
+  const handleIsReportingDialog = ()=>{
+    setIsReportingHeadDialog(prev => !prev);
   }
 
   return (
@@ -702,7 +703,9 @@ const Form1 = ({ ...Props }: Props) => {
         <Button className='bg-[#4430bf] text-white text-md font-normal border' onClick={(e: React.MouseEvent<HTMLButtonElement>)=>handleSubmit(e)}>Next</Button>
       </div>
       {formData?.state  && isReportingHeadDialog && (
-        <IsReportingHeadDialog/>
+        <IsReportingHeadDialog
+        handleIsReportingDialog = {handleIsReportingDialog}
+        />
       )}
     </div>
   );

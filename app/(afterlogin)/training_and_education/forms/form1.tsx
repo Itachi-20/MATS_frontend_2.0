@@ -257,9 +257,6 @@ const Form1 = ({ ...Props }: Props) => {
 
       if (response.status == 500) {
         setIsReportingHeadDialog(true);
-        setTimeout(()=>{
-          setIsReportingHeadDialog(false);
-        },3000)
       }
 
       if (response.ok) {
@@ -311,6 +308,10 @@ const Form1 = ({ ...Props }: Props) => {
 
   if (loading) {
     return <div>Loading Please Wait</div>;
+  }
+
+  const handleIsReportingDialog = ()=>{
+    setIsReportingHeadDialog(prev => !prev);
   }
 
   console.log("Props.previewData", Props.previewData?.reporting_head);
@@ -775,7 +776,9 @@ const Form1 = ({ ...Props }: Props) => {
         </Button>
       </div>
       {formData?.state  && isReportingHeadDialog && (
-        <IsReportingHeadDialog/>
+        <IsReportingHeadDialog
+        handleIsReportingDialog = {handleIsReportingDialog}
+        />
       )}
     </div>
   );

@@ -372,9 +372,6 @@ const Form1 = ({ ...Props }: Props) => {
 
       if (response.status == 500) {
         setIsReportingHeadDialog(true);
-        setTimeout(()=>{
-          setIsReportingHeadDialog(false);
-        },3000)
       }
 
       if (response.ok) {
@@ -401,6 +398,10 @@ const Form1 = ({ ...Props }: Props) => {
   console.log(formdata, "this is form data")
   if (loading) {
     return <div>Loading Please Wait</div>;
+  }
+
+  const handleIsReportingDialog = ()=>{
+    setIsReportingHeadDialog(prev => !prev);
   }
   return (
     // </div>
@@ -1062,7 +1063,9 @@ const Form1 = ({ ...Props }: Props) => {
     </div>
     <Toaster richColors position="bottom-right" /> 
     {formdata?.state  && isReportingHeadDialog && (
-        <IsReportingHeadDialog/>
+        <IsReportingHeadDialog
+        handleIsReportingDialog = {handleIsReportingDialog}
+        />
       )}
     </>
   );

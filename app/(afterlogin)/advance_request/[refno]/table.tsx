@@ -132,6 +132,7 @@ const table = ({ tableData }: Props) => {
   const [submitpop, setSubmitPopup] = useState(false);
   const req_no = useParams()
   const [errors, setErrors] = useState<Errors>();
+  const [vendorAmount,setVendorAmount] = useState<number>(0);
   const handleVendorTypeChangeApi = async (value: string) => {
     setVendorDetails({ ...vendorDetails, vendor_name: "", advance: 0 } as VendorData);
 
@@ -216,9 +217,9 @@ const table = ({ tableData }: Props) => {
   const handlefieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     // const { name, value } = e.target;
     const name = e.target.name;
-    const value:number = (e.target.value as unknown) as number; 
-    if(value > tableData.total_logistics_expense ){
-      toast.warning("Input Amount Cannot be Greater Than Total Logistics Expense");
+    const value:number = (e.target.value as unknown) as number;
+    if(value > vendorAmount){
+      toast.warning("The amount cannot exceed the Advance TEA' (against the vendor's amount)");
       return;
     }
     const numericValue = name === 'advance' ? (value ? value : '') : value;
@@ -260,11 +261,6 @@ const table = ({ tableData }: Props) => {
     } else {
       toast.warning("No file to Upload");
       console.log("No file to upload");
-      return;
-    }
-
-    if(vendorDetails.advance > tableData.total_logistics_expense){
-      toast.warning("Input Amount Cannot be Greater Than Total Logistics Expense");
       return;
     }
 
@@ -407,10 +403,7 @@ const table = ({ tableData }: Props) => {
       );
       if (response.ok) {
         const data = await response.json();
-        setVendorDetails((prev) => ({
-          ...prev,
-          advance: data.data?.est_amount,
-        }))
+        setVendorAmount(data.data.est_amount);
         setErrors({ ...errors, advance: "", vendor_name: "" } as Errors);
         console.log(data, "-----------vendor name api------------------");
       } else {
