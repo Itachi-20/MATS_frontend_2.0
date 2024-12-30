@@ -23,7 +23,7 @@ const isReportingHeadDialog = () => {
                 </svg>
               </div>
               <div className="flex flex-col items-center px-7 pb-5">
-                <h1>No Reporting Head</h1>
+                <h1>Approval Matrix is not set for you. Kindly connect with Admin.</h1>
               </div>
             </div>
           </div>
