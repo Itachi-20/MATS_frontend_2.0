@@ -214,8 +214,14 @@ const table = ({ tableData }: Props) => {
   }, [])
 
   const handlefieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    const numericValue = name === 'advance' ? (value ? parseFloat(value) : '') : value;
+    // const { name, value } = e.target;
+    const name = e.target.name;
+    const value:number = (e.target.value as unknown) as number; 
+    if(value > tableData.total_logistics_expense ){
+      toast.warning("Input Amount Cannot be Greater Than Total Logistics Expense");
+      return;
+    }
+    const numericValue = name === 'advance' ? (value ? value : '') : value;
     setVendorDetails(prev => ({ ...prev, [name]: numericValue }));
     setErrors({ ...errors, advance: "" } as Errors);
   };
@@ -254,6 +260,11 @@ const table = ({ tableData }: Props) => {
     } else {
       toast.warning("No file to Upload");
       console.log("No file to upload");
+      return;
+    }
+
+    if(vendorDetails.advance > tableData.total_logistics_expense){
+      toast.warning("Input Amount Cannot be Greater Than Total Logistics Expense");
       return;
     }
 
@@ -535,7 +546,7 @@ const table = ({ tableData }: Props) => {
                   placeholder="Type Here"
                   type='number'
                   name='advance'
-                  onChange={handlefieldChange}
+                  onChange={(e)=>{handlefieldChange(e)}}
                   value={vendorDetails.advance ?? ''}
 
                 ></Input>
