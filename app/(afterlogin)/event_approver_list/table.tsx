@@ -99,7 +99,8 @@ const table = ({ ...Props }: Props) => {
             startDate: startDate,
             endDate: endDate,
             pageNo: currentPage,
-            status: status
+            status: status,
+            requestor:event_requestor,
           })
         }
       );
@@ -175,7 +176,7 @@ const table = ({ ...Props }: Props) => {
     console.log(value)
     setTimeout(() => {
       setSearchName(value);
-    }, 1000);
+    }, 100);
   }
 
   const handlecheckchange = (e: any) => {

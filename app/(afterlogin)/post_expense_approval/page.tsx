@@ -90,6 +90,7 @@ const Index = () => {
                     endDate: endDate,
                     pageNo: currentPage,
                     searchName: searchName,
+                    requestor: event_requestor,
                 })
             });
 
@@ -214,6 +215,7 @@ const Index = () => {
 
     useEffect(() => {
         PostExpenseApprovalList();
+        fetchEventRequestor();
     }, [])
 
     const useDebounce = (value: any, delay: any) => {
@@ -234,7 +236,7 @@ const Index = () => {
     const debouncedSearchName = useDebounce(searchName, 300);
     useEffect(() => {
         PostExpenseApprovalList();
-    }, [currentPage, debouncedSearchName])
+    }, [currentPage, debouncedSearchName, status])
 
 
     const handleExportButton = () => {
@@ -242,24 +244,23 @@ const Index = () => {
     };
     console.log("List", postExpenseApprovalList);
 
-    const handleTypeChange = (e:any) => {
-        console.log(e,'e')
-        if(e == 'all'){
-          setStatus('')
-        }else{
-    
-          setStatus(e);
+    const handleTypeChange = (e: any) => {
+        console.log(e, 'e')
+        if (e == 'all') {
+            setStatus('')
+        } else {
+            setStatus(e);
         }
-      };
+    };
     const handlecheckchange = (e: any) => {
         console.log(e.target.checked)
-        setCheckstate(e.target.checked)
+        // setCheckstate(e.target.checked)
         if (e.target.checked) {
-          setStatus('pending');
+            setStatus('pending');
         } else {
-          setStatus('');
+            setStatus('');
         }
-      };
+    };
 
     return (
         <>
@@ -276,37 +277,36 @@ const Index = () => {
                         <Requestor_filter setEventRequestor={setEventRequestor} requestor_dropdown={requestor_dropdown} event_requestor={event_requestor} fetchTableData={PostExpenseApprovalList} />
                         <Button className="text-black w-34 shadow border hover:shadow-md active:shadow-lg lg:text-sm lg:rounded-[25px] lg:gap-4 sm:rounded-[50px] rounded-[50px] sm:text-[9px] sm:gap-[10px] gap-[9px] sm:font-normal sm:leading-[10.97px] text-[9px]" onClick={handleExportButton}>Export as Excel</Button>
 
-                        <Select onValueChange={() => handleTypeChange}>
+                        <Select onValueChange={(e) => handleTypeChange(e)} value={status ? status : 'all'} >
                             <SelectTrigger className="text-black w-34 shadow focus-visible:ring-transparent lg:text-sm lg:rounded-[25px] lg:gap-4 sm:rounded-[50px] rounded-[50px] sm:text-[9px] sm:gap-[10px]  gap-[9px] sm:font-normal sm:leading-[10.97px] text-[9px]">
                                 <SelectValue placeholder="Status" className="cursor-pointer" />
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectItem value="all">All</SelectItem>
-                                <SelectItem value="awaitingApproval">Awaitting Approval</SelectItem>
+                                <SelectItem value="awaiting approval">Awaiting Approval</SelectItem>
                                 <SelectItem value="approved">Approved</SelectItem>
-                                <SelectItem value="approved">Draft</SelectItem>
-                                <SelectItem value="sendback">Sendback</SelectItem>
-                                <SelectItem value="executed">Executed</SelectItem>
+                                <SelectItem value="pending">Pending</SelectItem>
+                                <SelectItem value="send back">Sendback</SelectItem>
                                 <SelectItem value="rejected">Rejected</SelectItem>
                                 <SelectItem value="cancelled">Cancelled</SelectItem>
                                 <SelectItem value="closed">Closed</SelectItem>
-                                <SelectItem value="postactivity">PostActivity Document Uploaded</SelectItem>
                             </SelectContent>
                         </Select>
                         <DatePicker startDate={startDate} endDate={endDate} setStartDate={setStartDate} setEndDate={setEndDate} isPickerOpen={isPickerOpen} togglePicker={togglePicker} fetchTableData={PostExpenseApprovalList} />
                         <label className="inline-flex items-center cursor-pointer">
                             <input
+                                id='airplane-mode'
                                 type="checkbox"
-                                checked={checkstate}
+                                checked={status == 'pending' ? true : false}
                                 onChange={(e) => handlecheckchange(e)}
                                 className="sr-only peer"
                             />
                             <span
-                                className={`relative w-14 h-8 transition-all duration-300 ease-in-out rounded-full ${checkstate ? 'bg-[#2196F3]' : 'bg-gray-300'
+                                className={`relative w-14 h-8 transition-all duration-300 ease-in-out rounded-full ${status == 'pending' ? 'bg-[#2196F3]' : 'bg-gray-300'
                                     } peer-checked:bg-[#2196F3]`}
                             >
                                 <span
-                                    className={`absolute left-1 top-1 w-6 h-6 bg-white rounded-full transition-all duration-300 ease-in-out ${checkstate ? 'translate-x-6' : 'translate-x-0'
+                                    className={`absolute left-1 top-1 w-6 h-6 bg-white rounded-full transition-all duration-300 ease-in-out ${status == 'pending' ? 'translate-x-6' : 'translate-x-0'
                                         }`}
                                 />
                             </span>

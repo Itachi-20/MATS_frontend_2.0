@@ -1,9 +1,11 @@
 import { NextResponse } from 'next/server';
 
-export async function GET(req: Request) {
+export async function POST(req: Request) {
     try {
+        const body = await req.json();
         const cookies = req.headers.get("cookie")
-        const response = await fetch(`${process.env.FRAPPE_URL}/api/method/matsapp.api.utils.common.fetch_requestors`, {
+        const activity_type = body.activity_type;
+        const response = await fetch(`${process.env.FRAPPE_URL}/api/method/matsapp.api.utils.common.fetch_requestors?activity_type=${activity_type}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
