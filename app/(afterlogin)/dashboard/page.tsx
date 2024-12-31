@@ -6,12 +6,15 @@ import {fetchEventApproverList} from '@/app/(afterlogin)/dashboard/utility'
 import {fetchApproverCardData} from '@/app/(afterlogin)/dashboard/utility'
 import {fetchEventFinanceList} from '@/app/(afterlogin)/dashboard/utility'
 import {fetchFinanceCardData} from '@/app/(afterlogin)/dashboard/utility'
+import {fetchEventTravelList} from '@/app/(afterlogin)/dashboard/utility'
+import {fetchTravelCardData} from '@/app/(afterlogin)/dashboard/utility'
 import { cookies } from "next/headers";
 
 export type tableData = {
   name:string,
   event_type:string,
   event_start_date:string,
+  event_end_date:string,
   current_stage:string,
   status:string
   event_name:string
@@ -43,7 +46,12 @@ const Index = async() => {
   carddata = await fetchFinanceCardData(cookie);
 }
 
- console.log(carddata,'table')
+if(role == 'Event Travel'){
+  table = await fetchEventTravelList(cookie);
+  carddata = await fetchTravelCardData(cookie);
+}
+
+ console.log(table,'table')
   return (
     (
     <Details

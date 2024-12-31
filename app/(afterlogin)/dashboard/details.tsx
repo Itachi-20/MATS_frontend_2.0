@@ -24,6 +24,7 @@ import { useRouter } from 'next/navigation';
 import RequesterDashboard from '@/components/dashboard/event_requester'
 import ApproverDashboard from '@/components/dashboard/approver_dashboard'
 import FinancerDashboard from '@/components/dashboard/financer_dashboard'
+import TravelDashboard from '@/components/dashboard/travel'
 type CardData = {
   total_count: number,
   preactivity_approved_count: number,
@@ -71,6 +72,9 @@ const details = ({ ...Props }: Props) => {
 
       {
         role == 'Event Finance' && <FinancerDashboard tableData={Props.tableData} carddata={Props.carddata} />
+      }
+      {
+        role == 'Event Travel' && <TravelDashboard tableData={Props.tableData} carddata={Props.carddata} />
       }
 
     </>

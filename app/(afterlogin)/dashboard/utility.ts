@@ -111,3 +111,42 @@ export const fetchFinanceCardData = async (cookies: any) => {
 
     }
 }
+
+export const fetchEventTravelList = async (cookies: any) => {
+    try {
+        const response = await fetch(`${process.env.FRAPPE_URL}/api/method/matsapp.api.event.event.get_travel_expense_list`,{
+            method:"GET",
+            headers:{
+                "Content-Type": "application/json",
+                'Cookie':cookies
+            },
+            credentials:"include"
+        })
+        if(response.ok){
+            const data = await response.json();
+            console.log(data,'data')
+            return data.message;
+        }
+    } catch (error) {
+        console.log("server error:- ",error)
+    }
+}
+
+export const fetchTravelCardData = async (cookies: any) => {
+    try {
+        const response = await fetch(`${process.env.FRAPPE_URL}/api/method/matsapp.api.dashboard.dashboard_contents.get_financer_dashboard`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Cookie": cookies
+            }
+        });
+        if (response.ok) {
+            const data = await response.json();
+            console.log(data,'data--------------==============')
+            return data.data;
+        }
+    } catch (error) {
+
+    }
+}
