@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React,{useRef} from 'react'
 import { Input } from "@/components/ui/input";
 import {
     Select,
@@ -108,6 +108,7 @@ const page = () => {
     const from = useSearchParams().get('from')
     const { role, name, userid, clearAuthData } = useAuth();
     const [errors, setErrors] = useState<Errors>();
+    const inputFile = useRef<any>(null);
     const allOptions = [
         "Cancelled Cheque",
         "GST Copy",
@@ -269,12 +270,21 @@ const page = () => {
     const handleSelectChange = (value: string, name: string) => {
         setFormData((prev) => ({ ...prev, [name]: value }) as formData);
     };
+
+    const handleReset = () => {
+        if (inputFile.current) {
+            inputFile.current.value = "";
+            inputFile.current.type = "text";
+            inputFile.current.type = "file";
+        }
+    };
+
     const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length > 0) {
             setFile(e.target.files);
             setFileName(e.target.files[0]?.name);
         } else {
-            setFile(null);
+            handleReset();
             setFileName(null);
         }
     };
@@ -322,7 +332,7 @@ const page = () => {
                 const updatedDocumentRows = [...(Array.isArray(documentRows) ? documentRows : []), newDocument];
 
                 setDocumentRows(updatedDocumentRows);
-                setFile(null);
+                handleReset();
                 setFileName(null);
                 setDocumentType('');
 
@@ -659,7 +669,9 @@ const page = () => {
                                                 {/* <h1 className="mt-[2px]">{fileName ? fileName : ' Receipt/Bill'}</h1> */}
                                                 <span className="font-medium truncate max-w-[200px]">{fileName ? fileName : ' Receipt/Bill'}</span>
                                             </div>
-                                            <Input type="file" onChange={(e) => { handleFileUpload(e) }} id="file" className="hidden"></Input>
+                                            <Input type="file" onChange={(e) => { handleFileUpload(e) }} id="file" className="hidden" 
+                                            ref={inputFile}
+                                            ></Input>
                                         </label>
                                         <div className='items-baseline pt-7'>
                                             <Button
