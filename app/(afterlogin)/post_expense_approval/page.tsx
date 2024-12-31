@@ -291,6 +291,8 @@ const Index = () => {
                                 <SelectItem value="cancelled">Cancelled</SelectItem>
                                 <SelectItem value="closed">Closed</SelectItem>
                                 <SelectItem value="postactivity">PostActivity Document Uploaded</SelectItem>
+                                <SelectItem value="UTR Pending">UTR Pending</SelectItem>
+                                <SelectItem value="UTR Approved">UTR Approved</SelectItem>
                             </SelectContent>
                         </Select>
                         <DatePicker startDate={startDate} endDate={endDate} setStartDate={setStartDate} setEndDate={setEndDate} isPickerOpen={isPickerOpen} togglePicker={togglePicker} fetchTableData={PostExpenseApprovalList} />
