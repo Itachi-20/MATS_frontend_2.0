@@ -28,6 +28,7 @@ import DatePicker from '../event_list/date-picker'
 import Pagination from "@/components/eventList/pagination";
 import Requestor_filter from '@/components/dashboard/search_event_requestor_component'
 import { Label } from "@/components/ui/label"
+import { log } from "console";
 type post_expense_approvers = {
     level1: string;
     level2: string;
@@ -87,13 +88,14 @@ export default function Page() {
                     endDate: endDate,
                     pageNo: currentPage,
                     searchName: searchName,
-                    status:status,
-                    requestor:event_requestor 
+                    status: status,
+                    requestor: event_requestor,
                 })
             });
 
             if (response.ok) {
                 const data = await response.json();
+                console.log('data', data)
                 setPostExpenseApprovalList(data.message);
                 setLoading(false)
             } else {
@@ -110,15 +112,19 @@ export default function Page() {
             const Data = await fetch(
                 `/api/fetchEventRequestor`,
                 {
-                    method: "GET",
+                    method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                     },
                     credentials: 'include',
+                    body: JSON.stringify({
+                        activity_type: "Pre Activity"
+                    })
                 }
             );
             if (Data.ok) {
                 const data = await Data.json();
+                console.log(data, 'data')
                 setEventRequestorDropdown(data.message)
             }
         } catch (error) {
@@ -136,14 +142,6 @@ export default function Page() {
     const togglePicker = () => {
         setIsPickerOpen(!isPickerOpen);
     };
-
-    const handlesearchname = async (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-        const { name, value } = e.target;
-        console.log(value)
-        setTimeout(() => {
-            setSearchName(value);
-        }, 100);
-    }
 
     const exportEventList = async () => {
         try {
@@ -191,31 +189,38 @@ export default function Page() {
         return debouncedValue;
     };
     const debouncedSearchName = useDebounce(searchName, 300);
-    useEffect(() => {
-        PostExpenseApprovalList();
-    }, [currentPage, debouncedSearchName])
 
+    const handlesearchname = async (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+        const { name, value } = e.target;
+        console.log(value)
+        setTimeout(() => {
+            setSearchName(value);
+        }, 100);
+    }
     const handleTypeChange = (e: any) => {
         console.log(e, 'e')
         if (e == 'all') {
             setStatus('')
         } else {
-
             setStatus(e);
         }
     };
-
     const handlecheckchange = (e: any) => {
         console.log(e.target.checked)
-        setCheckstate(e.target.checked)
+        // setCheckstate(e.target.checked)
         if (e.target.checked) {
             setStatus('pending');
         } else {
             setStatus('');
         }
     };
+
+    useEffect(() => {
+        PostExpenseApprovalList();
+    }, [currentPage, debouncedSearchName, status])
+
     console.log(postExpenseApprovalList, 'postExpenseApprovalList')
-    console.log(startDate, endDate, "this is console")
+    console.log(requestor_dropdown, "this is console")
     return (
         <>
 
@@ -229,42 +234,45 @@ export default function Page() {
                     <div className="flex justify-end lg:gap-5 sm:gap-[10px] gap-[8px] items-center">
                         <Requestor_filter setEventRequestor={setEventRequestor} requestor_dropdown={requestor_dropdown} event_requestor={event_requestor} fetchTableData={PostExpenseApprovalList} />
                         <Button className="text-black w-34 shadow border hover:shadow-md active:shadow-lg lg:text-sm lg:rounded-[25px] lg:gap-4 sm:rounded-[50px] rounded-[50px] sm:text-[9px] sm:gap-[10px] gap-[9px] sm:font-normal sm:leading-[10.97px] text-[9px]" onClick={handleExportButton}>Export as Excel</Button>
-                        <Select onValueChange={() => handleTypeChange}>
+                        <Select onValueChange={(e) => handleTypeChange(e)} value={status ? status : 'all'}>
                             <SelectTrigger className="text-black w-34 shadow focus-visible:ring-transparent lg:text-sm lg:rounded-[25px] lg:gap-4 sm:rounded-[50px] rounded-[50px] sm:text-[9px] sm:gap-[10px]  gap-[9px] sm:font-normal sm:leading-[10.97px] text-[9px]">
                                 <SelectValue placeholder="Status" className="cursor-pointer" />
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectItem value="all">All</SelectItem>
-                                <SelectItem value="awaitingApproval">Awaitting Approval</SelectItem>
+                                <SelectItem value="utr updated">UTR Updated</SelectItem>
+                                <SelectItem value="pending">UTR Pending</SelectItem>
+                                <SelectItem value="awaiting approval">Awaitting Approval</SelectItem>
                                 <SelectItem value="approved">Approved</SelectItem>
-                                <SelectItem value="approved">Draft</SelectItem>
+                                <SelectItem value="pending">Pending</SelectItem>
                                 <SelectItem value="sendback">Sendback</SelectItem>
                                 <SelectItem value="executed">Executed</SelectItem>
                                 <SelectItem value="rejected">Rejected</SelectItem>
                                 <SelectItem value="cancelled">Cancelled</SelectItem>
                                 <SelectItem value="closed">Closed</SelectItem>
-                                <SelectItem value="postactivity">PostActivity Document Uploaded</SelectItem>
+                                {/* <SelectItem value="postactivity">PostActivity Document Uploaded</SelectItem> */}
                             </SelectContent>
                         </Select>
                         <DatePicker startDate={startDate} endDate={endDate} setStartDate={setStartDate} setEndDate={setEndDate} isPickerOpen={isPickerOpen} togglePicker={togglePicker} fetchTableData={PostExpenseApprovalList} />
                         <label className="inline-flex items-center cursor-pointer">
                             <input
+                                id='airplane-mode'
                                 type="checkbox"
-                                checked={checkstate}
+                                checked={status == 'pending' ? true : false}
                                 onChange={(e) => handlecheckchange(e)}
                                 className="sr-only peer"
                             />
                             <span
-                                className={`relative w-14 h-8 transition-all duration-300 ease-in-out rounded-full ${checkstate ? 'bg-[#2196F3]' : 'bg-gray-300'
+                                className={`relative w-14 h-8 transition-all duration-300 ease-in-out rounded-full ${status == 'pending' ? 'bg-[#2196F3]' : 'bg-gray-300'
                                     } peer-checked:bg-[#2196F3]`}
                             >
                                 <span
-                                    className={`absolute left-1 top-1 w-6 h-6 bg-white rounded-full transition-all duration-300 ease-in-out ${checkstate ? 'translate-x-6' : 'translate-x-0'
+                                    className={`absolute left-1 top-1 w-6 h-6 bg-white rounded-full transition-all duration-300 ease-in-out ${status == 'pending' ? 'translate-x-6' : 'translate-x-0'
                                         }`}
                                 />
                             </span>
                         </label>
-                         <Label htmlFor="airplane-mode">Ready For Approval</Label>
+                        <Label htmlFor="airplane-mode">Ready For Approval</Label>
                     </div>
                 </div>
 

@@ -86,7 +86,7 @@ const fetchEventRequestor = async () => {
     const Cookie = cookie.toString();
   try {
     const Data = await fetch(
-     `${process.env.FRAPPE_URL}/api/method/matsapp.api.utils.common.fetch_requestors`,
+     `${process.env.FRAPPE_URL}/api/method/matsapp.api.utils.common.fetch_requestors?activity_type=Pre Activity`,
       {
         method: "GET",
         headers: {

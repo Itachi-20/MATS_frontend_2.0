@@ -14,7 +14,8 @@ const Comment_box = ({ handleClose, handleSubmit,ButtonText}: props) => {
   const buttonColor:{ [key: string]: string } = {
     "Approve":"bg-[#5DBE74] hover:bg-[#5DBE74]",
     "Reject":"bg-[#ff5757] hover:bg-[#ff5757]",
-    "Send Back":"bg-[#4430bf] hover:bg-[#4430bf]"
+    "Send Back":"bg-[#4430bf] hover:bg-[#4430bf]",
+    'Submit':"bg-[#5DBE74] hover:bg-[#5DBE74]"
   }
   return (
     <div className="absolute z-50 flex inset-0 items-center justify-center bg-black bg-opacity-50">

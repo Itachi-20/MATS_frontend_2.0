@@ -437,7 +437,7 @@ const Form3 = ({ ...Props }: Props) => {
                     {
                       Props.vendorType
                         ? Props.vendorType?.filter((item) => {
-                          return item.name !== "Hotel" && item.name !== "Travel" && item.name !== "Food";
+                          return item.name !== "Hotel" && item.name !== "Travel";
                         })
                           .map((item) => {
                             return (

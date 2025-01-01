@@ -65,7 +65,7 @@ const [tableData,setTableData] = useState<EventDetails[]>([])
     exportEventList();
   };
 
-  const debouncedSearchName = useDebounce(searchName, 300);
+  const debouncedSearchName = useDebounce(searchName, 100);
 
   const fetchTableData = async () => {
     console.log('insode api fetch data')

@@ -239,23 +239,7 @@ const details = ({ ...Props }: Props) => {
                 </g>
               </svg>
             </div>
-            {/* <div className="flex gap-3">
-                  <Select>
-                    <SelectTrigger className="w-[100px] text-black border border-black rounded-full focus-visible:outline-none ">
-                      <SelectValue placeholder="Category" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="light">Light</SelectItem>
-                      <SelectItem value="dark">Dark</SelectItem>
-                      <SelectItem value="system">System</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <Input
-                    className="w-30 text-black border border-black rounded-full"
-                    type="date"
-                  ></Input>
-                </div> */}
-            <Button className='text-[#625d5d] bg-[#E0E9FF] rounded-xl' onClick={() => { router.push('/event_list') }}>Event List</Button>
+            <Button className='text-[#625d5d] bg-[#E0E9FF] rounded-xl hover:underline' onClick={() => { router.push('/event_list') }}>Event List</Button>
           </div>
           <div className='overflow-y-scroll h-[200px] text-black'>
 

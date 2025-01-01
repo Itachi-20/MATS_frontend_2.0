@@ -114,7 +114,7 @@ export const fetchFinanceCardData = async (cookies: any) => {
 
 export const fetchEventTravelList = async (cookies: any) => {
     try {
-        const response = await fetch(`${process.env.FRAPPE_URL}/api/method/matsapp.api.event.event.get_travel_expense_list`,{
+        const response = await fetch(`${process.env.FRAPPE_URL}/api/method/matsapp.api.event.event.get_travel_expense_list?page_length=5`,{
             method:"GET",
             headers:{
                 "Content-Type": "application/json",
