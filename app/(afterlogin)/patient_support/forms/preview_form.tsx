@@ -16,7 +16,7 @@ import Add_vendor from "@/components/add_vendor";
 import BeneficiaryDetails from "@/components/previewPatientSupportComponents/beneficialDetails";
 import OtherDetails from "@/components/sponsorshipSupportPreviewComponents/other_details";
 import { useEffect } from "react";
-import Comment_box from "@/components/approvalCommentBox/Comment_box";  
+import Comment_box from "@/components/Comment_box";  
 import { Previewdata } from '@/app/(afterlogin)/patient_support/page'
 
 type Props = {
@@ -323,8 +323,8 @@ const Preview_Form = ({...Props}:Props) => {
             <div className=" absolute z-50 flex pt-10 items-end justify-center bg-black bg-opacity-50 w-full h-full inset-0 pb-40">
           <Comment_box 
           handleClose={handleDialog}
-          handleComment={handleComment}
-          Submitbutton = {handleFinalSubmit}
+          handleSubmit = {handleFinalSubmit}
+          ButtonText={'Submit'}
           />
           </div>
           }

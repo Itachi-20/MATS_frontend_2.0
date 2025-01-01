@@ -9,7 +9,8 @@ export async function POST(req: Request) {
         const startdate = body.startDate;
         const enddate = body.endDate;
         const page_no = body.pageNo;
-        const response = await fetch(`${process.env.FRAPPE_URL}/api/method/matsapp.api.event.event.get_event_list?search_name=${search_name}&startdate=${startdate}&enddate=${enddate}&page_no=${page_no}`, {
+        const status = body.status;
+        const response = await fetch(`${process.env.FRAPPE_URL}/api/method/matsapp.api.event.event.get_event_list?search_name=${search_name}&startdate=${startdate}&enddate=${enddate}&page_no=${page_no}&status=${status}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

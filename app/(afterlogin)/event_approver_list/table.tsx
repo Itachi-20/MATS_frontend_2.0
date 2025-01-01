@@ -23,10 +23,48 @@ import { Loader2 } from "lucide-react";
 import Loader from '@/components/loader'
 import DatePicker from "@/app/(afterlogin)/event_list/date-picker"
 import { Events } from './page'
+import Pagination from "@/components/eventList/pagination";
+import Requestor_filter from '@/components/dashboard/search_event_requestor_component'
+import { Label } from "@/components/ui/label"
+import { FormatDate } from '@/app/utility/dateFormatter';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+type EventRequestor2 = {
+  "user": string,
+  "email": string,
+}
 type Props = {
   tableData: Events[];
+  eventrequestor: EventRequestor2[];
 }
 
+export const formatDate = (dateString: string) => {
+  if (dateString) {
+    const [year, month, day] = dateString.split('-').map(Number);
+    const date = new Date(year, month - 1, day);
+    const formattedDate = `${String(date.getDate()).padStart(2, '0')}-${String(date.getMonth() + 1).padStart(2, '0')}-${date.getFullYear()}`;
+    return formattedDate;
+  }
+};
+
+const useDebounce = (value: any, delay: any) => {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [value, delay]);
+
+  return debouncedValue;
+};
 const table = ({ ...Props }: Props) => {
   const [tableData, setTableData] = useState(Props.tableData);
   const router = useRouter();
@@ -35,17 +73,18 @@ const table = ({ ...Props }: Props) => {
   const [endDate, setEndDate] = useState<string>('');
   const [isPickerOpen, setIsPickerOpen] = useState(false);
   const [status, setStatus] = useState('');
-   const [currentPage, setCurrentPage] = useState<number>(1);
-     const [searchName, setSearchName] = useState('')
-  console.log('Props.tableData', Props.tableData)
-  useEffect(() => {
-    if (Props.tableData) {
-      setLoading(false);
-    }
-    setLoading(false);
-  }, [Props.tableData]);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [searchName, setSearchName] = useState('')
+  const total_event_list = 12;
+  const [event_requestor, setEventRequestor] = useState('');
+  const [requestor_dropdown, setEventRequestorDropdown] = useState(Props.eventrequestor);
+  const [checkstate, setCheckstate] = useState(false)
+
+  const debouncedSearchName = useDebounce(searchName, 300);
+
   const fetchTableData = async () => {
     setLoading(true)
+    console.log
     try {
       const Data = await fetch(
         `/api/event_approval_list`,
@@ -56,19 +95,21 @@ const table = ({ ...Props }: Props) => {
           },
           credentials: 'include',
           body: JSON.stringify({
-            activity: "Pre Activity",
+            search_name: debouncedSearchName,
             startDate: startDate,
             endDate: endDate,
             pageNo: currentPage,
-            status:status
+            status: status,
+            requestor:event_requestor,
           })
         }
       );
       if (Data.ok) {
         const data = await Data.json();
+        console.log('data.data.events', data.data.events)
         setTableData(data.data.events)
         setLoading(false)
-      }else{
+      } else {
         setLoading(false)
       }
     } catch (error) {
@@ -83,11 +124,16 @@ const table = ({ ...Props }: Props) => {
 
   useEffect(() => {
     fetchTableData();
-  }, [currentPage])
+  }, [currentPage, debouncedSearchName,status])
 
-  const handleTypeChange = (value: string) => {
-    setStatus(value);
-};
+  const handleTypeChange = (e:any) => {
+    console.log(e,'e')
+    if(e == 'all'){
+      setStatus('')
+    }else{
+      setStatus(e);
+    }
+  };
   const handleExportButton = () => {
     exportEventList();
   };
@@ -103,9 +149,9 @@ const table = ({ ...Props }: Props) => {
           },
           credentials: 'include',
           body: JSON.stringify({
-            search_name: searchName,
+            search_name: debouncedSearchName,
             status: status,
-            api_name: 'Event List',
+            api_name: 'Pre Activity List',
             startDate: startDate,
             endDate: endDate,
           })
@@ -124,34 +170,75 @@ const table = ({ ...Props }: Props) => {
   const togglePicker = () => {
     setIsPickerOpen(!isPickerOpen);
   };
-  return (
-    <div className="p-7 w-full  z-20 text-black">
-      <div className="flex lg:justify-between flex-col-reverse lg:flex-row pb-5 gap-5 lg:gap-0">
-        <Input
-          className="lg:w-[40%] md:w-full sm:w-full rounded-[50px] bg-[#ecf2ff]"
-          placeholder="Search"
-        />
 
+  const handlesearchname = async (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    console.log(value)
+    setTimeout(() => {
+      setSearchName(value);
+    }, 100);
+  }
+
+  const handlecheckchange = (e: any) => {
+    console.log(e.target.checked)
+    // setCheckstate(e.target.checked)
+    if (e.target.checked) {
+      setStatus('pending');
+    } else {
+      setStatus('');
+    }
+  };
+
+  console.log(event_requestor, 'event_requestor')
+  console.log(status, 'status')
+  return (
+    <TooltipProvider>
+    <div className="p-7 w-full  z-20 text-black">
+      <div className="flex lg:justify-between flex-col-reverse lg:flex-row pb-5 lg:gap-3">
+        <Input
+          className="lg:w-[30%] md:w-full sm:w-full rounded-[50px] bg-[#ecf2ff]"
+          placeholder="Search Request Number ..."
+          name='search_name'
+          onChange={(e) => { handlesearchname(e) }}
+          />
         <div className="flex justify-end lg:gap-5 sm:gap-[10px] gap-[8px] items-center">
-          <Button className="text-black w-34 shadow border hover:shadow-md active:shadow-lg lg:text-sm lg:rounded-[25px] lg:gap-4 sm:rounded-[50px] rounded-[50px] sm:text-[9px] sm:gap-[10px] gap-[9px] sm:font-normal sm:leading-[10.97px] text-[9px]" onClick={handleExportButton}>Export as Excel</Button>
-          <Select onValueChange={()=>handleTypeChange}>
+          <Requestor_filter setEventRequestor={setEventRequestor} requestor_dropdown={requestor_dropdown} event_requestor={event_requestor} fetchTableData={fetchTableData} />
+          <Button className="text-black w-34 shadow border hover:shadow-md active:shadow-lg lg:text-sm lg:rounded-[25px] lg:gap-4 sm:rounded-[50px] rounded-[50px] sm:text-[9px] sm:gap-[10px] gap-[9px] sm:font-normal sm:leading-[10.97px] text-[9px]" onClick={handleExportButton}>Export</Button>
+          <Select onValueChange={(e) => handleTypeChange(e)} value={status ? status : 'all'} >
             <SelectTrigger className="text-black w-34 shadow focus-visible:ring-transparent lg:text-sm lg:rounded-[25px] lg:gap-4 sm:rounded-[50px] rounded-[50px] sm:text-[9px] sm:gap-[10px]  gap-[9px] sm:font-normal sm:leading-[10.97px] text-[9px]">
-              <SelectValue placeholder="Status" className="cursor-pointer"  />
+              <SelectValue placeholder="Status" className="cursor-pointer" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All</SelectItem>
-              <SelectItem value="awaitingApproval">Awaitting Approval</SelectItem>
+              <SelectItem value="awaiting approval">Awaiting Approval</SelectItem>
               <SelectItem value="approved">Approved</SelectItem>
-              <SelectItem value="approved">Draft</SelectItem>
-              <SelectItem value="sendback">Sendback</SelectItem>
-              <SelectItem value="executed">Executed</SelectItem>
+              <SelectItem value="pending">Pending</SelectItem>
+              <SelectItem value="send back">Sendback</SelectItem>
               <SelectItem value="rejected">Rejected</SelectItem>
               <SelectItem value="cancelled">Cancelled</SelectItem>
               <SelectItem value="closed">Closed</SelectItem>
-              <SelectItem value="postactivity">PostActivity Document Uploaded</SelectItem>
             </SelectContent>
           </Select>
           <DatePicker startDate={startDate} endDate={endDate} setStartDate={setStartDate} setEndDate={setEndDate} isPickerOpen={isPickerOpen} togglePicker={togglePicker} fetchTableData={fetchTableData} />
+          <label className="inline-flex items-center cursor-pointer">
+            <input
+              id='airplane-mode'
+              type="checkbox"
+              checked={status == 'pending' ? true : false}
+              onChange={(e) => handlecheckchange(e)}
+              className="sr-only peer"
+              />
+            <span
+              className={`relative w-14 h-8 transition-all duration-300 ease-in-out rounded-full ${status == 'pending' ? 'bg-[#2196F3]' : 'bg-gray-300'
+              } peer-checked:bg-[#2196F3]`}
+              >
+              <span
+                className={`absolute left-1 top-1 w-6 h-6 bg-white rounded-full transition-all duration-300 ease-in-out ${status == 'pending' ? 'translate-x-6' : 'translate-x-0'
+                }`}
+                />
+            </span>
+          </label>
+          <Label htmlFor="airplane-mode">Ready For Approval</Label>
         </div>
       </div>
       <div className="border bg-white  p-4 rounded-[18px]">
@@ -162,21 +249,21 @@ const table = ({ ...Props }: Props) => {
                 className={
                   "text-center rounded-l-2xl text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                 }
-              >
+                >
                 Request Number
               </TableHead>
               <TableHead
                 className={
                   "text-center text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                 }
-              >
+                >
                 Event Name
               </TableHead>
               <TableHead
                 className={
                   "text-center text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                 }
-              >
+                >
                 Event Type
               </TableHead>
 
@@ -184,14 +271,14 @@ const table = ({ ...Props }: Props) => {
                 className={
                   "text-center text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                 }
-              >
+                >
                 Event Start Date
               </TableHead>
               <TableHead
                 className={
                   "text-center text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                 }
-              >
+                >
                 Event End Date
               </TableHead>
 
@@ -199,77 +286,77 @@ const table = ({ ...Props }: Props) => {
                 className={
                   "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                 }
-              >
+                >
                 Total Expense
               </TableHead>
               <TableHead
                 className={
                   "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                 }
-              >
+                >
                 Event Requestor
               </TableHead>
               <TableHead
                 className={
                   "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                 }
-              >
+                >
                 Created By
               </TableHead>
               <TableHead
                 className={
                   "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                 }
-              >
+                >
                 Level 1
               </TableHead>
               <TableHead
                 className={
                   "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                 }
-              >
+                >
                 Level 2
               </TableHead>
               <TableHead
                 className={
                   "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                 }
-              >
+                >
                 Level 3
               </TableHead>
               <TableHead
                 className={
                   "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                 }
-              >
+                >
                 Level 4
               </TableHead>
               <TableHead
                 className={
                   "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                 }
-              >
+                >
                 Level 5
               </TableHead>
               <TableHead
                 className={
                   "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                 }
-              >
+                >
                 Level 6
               </TableHead>
               <TableHead
                 className={
                   "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                 }
-              >
+                >
                 Level 7
               </TableHead>
               <TableHead
                 className={
                   "text-center rounded-r-2xl text-[#625d5d] text-[15px] font-normal font-['Montserrat'] sticky right-0 z-10 bg-[#E0E9FF]"
                 }
-              >Action</TableHead>
+                >Action</TableHead>
             </TableRow>
           </TableHeader>
           {
@@ -279,8 +366,8 @@ const table = ({ ...Props }: Props) => {
                 Loading...
               </div>
             </></TableCell></TableRow></TableBody> :
-              tableData ?
-                <TableBody className="">
+              tableData.length > 0 ?
+              <TableBody className="">
                   {tableData &&
                     tableData?.map((data: any, index: number) => {
                       return (
@@ -288,8 +375,8 @@ const table = ({ ...Props }: Props) => {
                           <TableCell>{data.name ?? "-"}</TableCell>
                           <TableCell>{data.event_name ?? "-"}</TableCell>
                           <TableCell> {data.event_type ?? "-"}</TableCell>
-                          <TableCell>{data.event_start_date ?? "-"}</TableCell>
-                          <TableCell>{data.event_end_date ?? "-"}</TableCell>
+                          <TableCell>{FormatDate(data.event_start_date) ?? "-"}</TableCell>
+                          <TableCell>{FormatDate(data.event_end_date) ?? "-"}</TableCell>
                           <TableCell>{data.total_estimated_expense}</TableCell>
                           <TableCell>{data.event_requestor ?? "-"}</TableCell>
                           <TableCell>{data.owner ?? "-"}</TableCell>
@@ -299,21 +386,42 @@ const table = ({ ...Props }: Props) => {
                               {
                                 data.level1 != null &&
                                 (data.status1 == "Approved" ?
-                                  <span className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
-                                    A
-                                  </span>
+
+                                  <Tooltip>
+                                                                <TooltipTrigger className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
+                                                                  A
+                                                                  <TooltipContent className="bg-white">
+                                                                    <p>Approved</p>
+                                                                  </TooltipContent>
+                                                                </TooltipTrigger>
+                                                              </Tooltip>
                                   : data.status1 == "Pending" ?
-                                    <span className="w-6 rounded-md bg-[#fae8a8] text-[#937818] text-[15px] font-semibold">
-                                      W
-                                    </span>
+                                  <Tooltip>
+                                                                <TooltipTrigger className="w-6 rounded-md bg-[#fae8a8] text-[#937818] text-[15px] font-semibold">
+                                                                  W
+                                                                  <TooltipContent className="bg-white">
+                                                                    <p>Waiting</p>
+                                                                  </TooltipContent>
+                                                                </TooltipTrigger>
+                                                              </Tooltip>
                                     : data.status1 == "Rejected" ?
-                                      <span className="w-6 rounded-md bg-[#feadad] text-[#9c0000] text-[15px] font-semibold">
-                                        RJ
-                                      </span>
+                                    <Tooltip>
+                                                                  <TooltipTrigger className="w-6 rounded-md bg-[#feadad] text-[#9c0000] text-[15px] font-semibold">
+                                                                    RJ
+                                                                    <TooltipContent className="bg-white">
+                                                                      <p>Rejected</p>
+                                                                    </TooltipContent>
+                                                                  </TooltipTrigger>
+                                                                </Tooltip>
                                       :
-                                      <span className="w-6 rounded-md bg-[#adadfe] text-[#363d9a] text-[15px] font-semibold">
-                                        SB
-                                      </span>
+                                      <Tooltip>
+                                                                    <TooltipTrigger className="w-6 rounded-md bg-[#adadfe] text-[#363d9a] text-[15px] font-semibold">
+                                                                      SB
+                                                                      <TooltipContent className="bg-white">
+                                                                        <p>Send Back</p>
+                                                                      </TooltipContent>
+                                                                    </TooltipTrigger>
+                                                                  </Tooltip>
 
                                 )}
                               {
@@ -329,21 +437,40 @@ const table = ({ ...Props }: Props) => {
                               {
                                 data.level2 != null &&
                                 (data.status2 == "Approved" ?
-                                  <span className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
-                                    A
-                                  </span>
+                                  <Tooltip>
+                                                                <TooltipTrigger className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
+                                                                  <TooltipContent className="bg-white">
+                                                                    <p>Approved</p>
+                                                                  </TooltipContent>
+                                                                </TooltipTrigger>
+                                                              </Tooltip>
                                   : data.status2 == "Pending" ?
-                                    <span className="w-6 rounded-md bg-[#fae8a8] text-[#937818] text-[15px] font-semibold">
-                                      W
-                                    </span>
+                                  <Tooltip>
+                                                                <TooltipTrigger className="w-6 rounded-md bg-[#fae8a8] text-[#937818] text-[15px] font-semibold">
+                                                                  W
+                                                                  <TooltipContent className="bg-white">
+                                                                    <p>Waiting</p>
+                                                                  </TooltipContent>
+                                                                </TooltipTrigger>
+                                                              </Tooltip>
                                     : data.status2 == "Rejected" ?
-                                      <span className="w-6 rounded-md bg-[#feadad] text-[#9c0000] text-[15px] font-semibold">
-                                        RJ
-                                      </span>
+                                    <Tooltip>
+                                                                  <TooltipTrigger className="w-6 rounded-md bg-[#feadad] text-[#9c0000] text-[15px] font-semibold">
+                                                                    RJ
+                                                                    <TooltipContent className="bg-white">
+                                                                      <p>Rejected</p>
+                                                                    </TooltipContent>
+                                                                  </TooltipTrigger>
+                                                                </Tooltip>
                                       :
-                                      <span className="w-6 rounded-md bg-[#adadfe] text-[#363d9a] text-[15px] font-semibold">
-                                        SB
-                                      </span>
+                                      <Tooltip>
+                                                                    <TooltipTrigger className="w-6 rounded-md bg-[#adadfe] text-[#363d9a] text-[15px] font-semibold">
+                                                                      SB
+                                                                      <TooltipContent className="bg-white">
+                                                                        <p>Send Back</p>
+                                                                      </TooltipContent>
+                                                                    </TooltipTrigger>
+                                                                  </Tooltip>
 
                                 )}
                               {
@@ -359,23 +486,43 @@ const table = ({ ...Props }: Props) => {
                               {
                                 data.level3 != null &&
                                 (data.status3 == "Approved" ?
-                                  <span className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
-                                    A
-                                  </span>
+                                  <Tooltip>
+                                                                <TooltipTrigger className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
+                                                                  A
+                                                                  <TooltipContent className="bg-white">
+                                                                    <p>Approved</p>
+                                                                  </TooltipContent>
+                                                                </TooltipTrigger>
+                                                              </Tooltip>
                                   : data.status3 == "Pending" ?
-                                    <span className="w-6 rounded-md bg-[#fae8a8] text-[#937818] text-[15px] font-semibold">
-                                      W
-                                    </span>
+                                  <Tooltip>
+                                                                <TooltipTrigger className="w-6 rounded-md bg-[#fae8a8] text-[#937818] text-[15px] font-semibold">
+                                                                  W
+                                                                  <TooltipContent className="bg-white">
+                                                                    <p>Waiting</p>
+                                                                  </TooltipContent>
+                                                                </TooltipTrigger>
+                                                              </Tooltip>
                                     : data.status3 == "Rejected" ?
-                                      <span className="w-6 rounded-md bg-[#feadad] text-[#9c0000] text-[15px] font-semibold">
-                                        RJ
-                                      </span>
+                                      <Tooltip>
+                                                                    <TooltipTrigger className="w-6 rounded-md bg-[#feadad] text-[#9c0000] text-[15px] font-semibold">
+                                                                      RJ
+                                                                      <TooltipContent className="bg-white">
+                                                                        <p>Rejected</p>
+                                                                      </TooltipContent>
+                                                                    </TooltipTrigger>
+                                                                  </Tooltip>
                                       :
-                                      <span className="w-6 rounded-md bg-[#adadfe] text-[#363d9a] text-[15px] font-semibold">
-                                        SB
-                                      </span>
+                                      <Tooltip>
+                                                                    <TooltipTrigger className="w-6 rounded-md bg-[#adadfe] text-[#363d9a] text-[15px] font-semibold">
+                                                                      SB
+                                                                      <TooltipContent className="bg-white">
+                                                                        <p>Send Back</p>
+                                                                      </TooltipContent>
+                                                                    </TooltipTrigger>
+                                                                  </Tooltip>
 
-                                )}
+)}
                               {
                                 data.level3 == null && <span>N/A</span>
                               }
@@ -389,23 +536,43 @@ const table = ({ ...Props }: Props) => {
                               {
                                 data.level4 != null &&
                                 (data.status4 == "Approved" ?
-                                  <span className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
-                                    A
-                                  </span>
+                                  <Tooltip>
+                                                                <TooltipTrigger className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
+                                                                  A
+                                                                  <TooltipContent className="bg-white">
+                                                                    <p>Approved</p>
+                                                                  </TooltipContent>
+                                                                </TooltipTrigger>
+                                                              </Tooltip>
                                   : data.status4 == "Pending" ?
-                                    <span className="w-6 rounded-md bg-[#fae8a8] text-[#937818] text-[15px] font-semibold">
-                                      W
-                                    </span>
+                                  <Tooltip>
+                              <TooltipTrigger className="w-6 rounded-md bg-[#fae8a8] text-[#937818] text-[15px] font-semibold">
+                                W
+                                <TooltipContent className="bg-white">
+                                  <p>Waiting</p>
+                                </TooltipContent>
+                              </TooltipTrigger>
+                            </Tooltip>
                                     : data.status4 == "Rejected" ?
-                                      <span className="w-6 rounded-md bg-[#feadad] text-[#9c0000] text-[15px] font-semibold">
-                                        RJ
-                                      </span>
+                                    <Tooltip>
+                                                                  RJ
+                                                                  <TooltipTrigger className="w-6 rounded-md bg-[#feadad] text-[#9c0000] text-[15px] font-semibold">
+                                                                    <TooltipContent className="bg-white">
+                                                                      <p>Rejected</p>
+                                                                    </TooltipContent>
+                                                                  </TooltipTrigger>
+                                                                </Tooltip>
                                       :
-                                      <span className="w-6 rounded-md bg-[#adadfe] text-[#363d9a] text-[15px] font-semibold">
-                                        SB
-                                      </span>
+                                      <Tooltip>
+                                                                    <TooltipTrigger className="w-6 rounded-md bg-[#adadfe] text-[#363d9a] text-[15px] font-semibold">
+                                                                      SB
+                                                                      <TooltipContent className="bg-white">
+                                                                        <p>Send Back</p>
+                                                                      </TooltipContent>
+                                                                    </TooltipTrigger>
+                                                                  </Tooltip>
 
-                                )}
+)}
                               {
                                 data.level4 == null && <span>N/A</span>
                               }
@@ -419,23 +586,43 @@ const table = ({ ...Props }: Props) => {
                               {
                                 data.level5 != null &&
                                 (data.status5 == "Approved" ?
-                                  <span className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
-                                    A
-                                  </span>
+                                 <Tooltip>
+                                                                                               <TooltipTrigger className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
+                                                                                               A
+                                                                                               <TooltipContent className='bg-white'>
+                                                                                                 <p>Approved</p>
+                                                                                               </TooltipContent>
+                                                                                               </TooltipTrigger>
+                                                                                             </Tooltip>
                                   : data.status5 == "Pending" ?
-                                    <span className="w-6 rounded-md bg-[#fae8a8] text-[#937818] text-[15px] font-semibold">
-                                      W
-                                    </span>
+                                  <Tooltip>
+                                                                                                <TooltipTrigger className="w-6 rounded-md bg-[#fae8a8] text-[#937818] text-[15px] font-semibold">
+                                                                                                  W
+                                                                                                  <TooltipContent className='bg-white'>
+                                                                                                    <p>Waiting</p>
+                                                                                                  </TooltipContent>
+                                                                                                </TooltipTrigger>
+                                                                                              </Tooltip>
                                     : data.status5 == "Rejected" ?
-                                      <span className="w-6 rounded-md bg-[#feadad] text-[#9c0000] text-[15px] font-semibold">
-                                        RJ
-                                      </span>
+                                    <Tooltip>
+                                                                                                    <TooltipTrigger className="w-6 rounded-md bg-[#feadad] text-[#9c0000] text-[15px] font-semibold">
+                                                                                                      RJ
+                                                                                                      <TooltipContent className='bg-white'>
+                                                                                                        <p>Rejected</p>
+                                                                                                      </TooltipContent>
+                                                                                                    </TooltipTrigger>
+                                                                                                  </Tooltip>
                                       :
-                                      <span className="w-6 rounded-md bg-[#adadfe] text-[#363d9a] text-[15px] font-semibold">
-                                        SB
-                                      </span>
+                                      <Tooltip>
+                                                                                                        <TooltipTrigger className="w-6 rounded-md bg-[#adadfe] text-[#363d9a] text-[15px] font-semibold">
+                                                                                                        SB
+                                                                                                        <TooltipContent>
+                                                                                                          <p>Send Back</p>
+                                                                                                        </TooltipContent>
+                                                                                                        </TooltipTrigger>
+                                                                                                      </Tooltip>
 
-                                )}
+)}
                               {
                                 data.level5 == null && <span>N/A</span>
                               }
@@ -449,23 +636,43 @@ const table = ({ ...Props }: Props) => {
                               {
                                 data.level6 != null &&
                                 (data.status6 == "Approved" ?
-                                  <span className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
-                                    A
-                                  </span>
+                                  <Tooltip>
+                                                                                                <TooltipTrigger className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
+                                                                                                A
+                                                                                                <TooltipContent className='bg-white'>
+                                                                                                  <p>Approved</p>
+                                                                                                </TooltipContent>
+                                                                                                </TooltipTrigger>
+                                                                                              </Tooltip>
                                   : data.status6 == "Pending" ?
-                                    <span className="w-6 rounded-md bg-[#fae8a8] text-[#937818] text-[15px] font-semibold">
-                                      W
-                                    </span>
+                                  <Tooltip>
+                                                                                                <TooltipTrigger className="w-6 rounded-md bg-[#fae8a8] text-[#937818] text-[15px] font-semibold">
+                                                                                                  W
+                                                                                                  <TooltipContent className='bg-white'>
+                                                                                                    <p>Waiting</p>
+                                                                                                  </TooltipContent>
+                                                                                                </TooltipTrigger>
+                                                                                              </Tooltip>
                                     : data.status6 == "Rejected" ?
-                                      <span className="w-6 rounded-md bg-[#feadad] text-[#9c0000] text-[15px] font-semibold">
-                                        RJ
-                                      </span>
+                                    <Tooltip>
+                                                                                                    <TooltipTrigger className="w-6 rounded-md bg-[#feadad] text-[#9c0000] text-[15px] font-semibold">
+                                                                                                  RJ
+                                                                                                  <TooltipContent className='bg-white'>
+                                                                                                  <p>Rejected</p>
+                                                                                                  </TooltipContent>
+                                                                                                    </TooltipTrigger>
+                                                                                                  </Tooltip>
                                       :
-                                      <span className="w-6 rounded-md bg-[#adadfe] text-[#363d9a] text-[15px] font-semibold">
-                                        SB
-                                      </span>
+                                      <Tooltip>
+                                                                                                        <TooltipTrigger className="w-6 rounded-md bg-[#adadfe] text-[#363d9a] text-[15px] font-semibold">
+                                                                                                        SB
+                                                                                                        <TooltipContent className='bg-white'>
+                                                                                                          <p>Send Back</p>
+                                                                                                        </TooltipContent>
+                                                                                                        </TooltipTrigger>
+                                                                                                      </Tooltip>
 
-                                )}
+)}
                               {
                                 data.level6 == null && <span>N/A</span>
                               }
@@ -479,23 +686,43 @@ const table = ({ ...Props }: Props) => {
                               {
                                 data.level7 != null &&
                                 (data.status7 == "Approved" ?
-                                  <span className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
-                                    A
-                                  </span>
+                                  <Tooltip>
+                                                                                                <TooltipTrigger className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
+                                                                                                A
+                                                                                                <TooltipContent className='bg-white'>
+                                                                                                  <p>Approved</p>
+                                                                                                </TooltipContent>
+                                                                                                </TooltipTrigger>
+                                                                                              </Tooltip>
                                   : data.status7 == "Pending" ?
-                                    <span className="w-6 rounded-md bg-[#fae8a8] text-[#937818] text-[15px] font-semibold">
-                                      W
-                                    </span>
+                                  <Tooltip>
+                                                                                               <TooltipTrigger className="w-6 rounded-md bg-[#fae8a8] text-[#937818] text-[15px] font-semibold">
+                                                                                                 W
+                                                                                                 <TooltipContent>
+                                                                                                   <p>Waiting</p>
+                                                                                                 </TooltipContent>
+                                                                                               </TooltipTrigger>
+                                                                                             </Tooltip>
                                     : data.status7 == "Rejected" ?
-                                      <span className="w-6 rounded-md bg-[#feadad] text-[#9c0000] text-[15px] font-semibold">
-                                        RJ
-                                      </span>
+                                    <Tooltip>
+                                                                                                    <TooltipTrigger className="w-6 rounded-md bg-[#fae8a8] text-[#937818] text-[15px] font-semibold">
+                                                                                                      RJ
+                                                                                                      <TooltipContent className='bg-white'>
+                                                                                                        <p>Rejected</p>
+                                                                                                      </TooltipContent>
+                                                                                                    </TooltipTrigger>
+                                                                                                  </Tooltip>
                                       :
-                                      <span className="w-6 rounded-md bg-[#adadfe] text-[#363d9a] text-[15px] font-semibold">
-                                        SB
-                                      </span>
+                                      <Tooltip>
+                                                                                                        <TooltipTrigger className="w-6 rounded-md bg-[#feadad] text-[#9c0000] text-[15px] font-semibold">
+                                                                                                        SB
+                                                                                                        <TooltipContent className='bg-white'>
+                                                                                                          <p>Send Back</p>
+                                                                                                        </TooltipContent>
+                                                                                                        </TooltipTrigger>
+                                                                                                      </Tooltip>
 
-                                )}
+)}
                               {
                                 data.level7 == null && <span>N/A</span>
                               }
@@ -515,14 +742,16 @@ const table = ({ ...Props }: Props) => {
                     })}
                 </TableBody>
 
-                :
-                <TableBody>
+:
+<TableBody>
                   <TableRow ><TableCell colSpan={10} className='text-center'>No Results.</TableCell></TableRow>
                 </TableBody>
           }
         </Table>
       </div>
+      <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} total_event_list={total_event_list} />
     </div>
+          </TooltipProvider>
   )
 }
 

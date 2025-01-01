@@ -164,7 +164,7 @@ type props = {
 const pagess = ({ ...Props }: props) => {
     const [dropdown, setDropdown] = useState<DropdownData>(Props.dropdownDataApi);
     const [opencommentbox, setCommentBox] = useState(false);
-
+    const [buttonText, setButtonText] = useState('')
     const [action, setAction] = useState<string>('')
     const [expensedata, setExpenseData] = useState<EventData>(Props.eventDataApi);
     const [formdata, setFormData] = useState<FormData>();
@@ -332,14 +332,14 @@ const pagess = ({ ...Props }: props) => {
                 {
                     !(expensedata?.actual_vendors[0]?.is_approved) && (role == "Event Finance" || role == "Event Approver") ?
                         <div className='flex justify-end gap-2 pt-8'>
-                            <Button className={`${expensedata?.actual_vendors[0]?.status == "Post Expense Approved" ? 'cursor-not-allowed' : ''} bg-[#5DBE74] px-6 text-white`} disabled={expensedata?.actual_vendors[0]?.status == "Post Expense Approved" ? true : false} onClick={() => handleOpen('Approved')} >Approve</Button>
-                            <Button className={`${expensedata?.actual_vendors[0]?.status == "Post Expense Approved" ? 'cursor-not-allowed' : ''} bg-[#4430BF] px-6 text-white`} disabled={expensedata?.actual_vendors[0]?.status == "Post Expense Approved" ? true : false} onClick={() => handleOpen('Send Back')}>Send Back</Button>
-                            <Button className={`${expensedata?.actual_vendors[0]?.status == "Post Expense Approved" ? 'cursor-not-allowed' : ''} bg-[#FF5757] px-6 text-white`} disabled={expensedata?.actual_vendors[0]?.status == "Post Expense Approved" ? true : false} onClick={() => handleOpen('Rejected')}>Reject</Button>
+                            <Button className={`${expensedata?.actual_vendors[0]?.status == "Post Expense Approved" ? 'cursor-not-allowed' : ''} bg-[#5DBE74] px-6 text-white`} disabled={expensedata?.actual_vendors[0]?.status == "Post Expense Approved" ? true : false} onClick={() => {handleOpen('Approved');setButtonText("Approve")}} >Approve</Button>
+                            <Button className={`${expensedata?.actual_vendors[0]?.status == "Post Expense Approved" ? 'cursor-not-allowed' : ''} bg-[#4430BF] px-6 text-white`} disabled={expensedata?.actual_vendors[0]?.status == "Post Expense Approved" ? true : false} onClick={() => {handleOpen('Send Back');setButtonText("Send Back")}}>Send Back</Button>
+                            <Button className={`${expensedata?.actual_vendors[0]?.status == "Post Expense Approved" ? 'cursor-not-allowed' : ''} bg-[#FF5757] px-6 text-white`} disabled={expensedata?.actual_vendors[0]?.status == "Post Expense Approved" ? true : false} onClick={() => {handleOpen('Rejected');setButtonText("Reject")}}>Reject</Button>
                         </div> : <></>
                 }
             </div>
             <Toaster richColors position="top-right" />
-            {opencommentbox && <Comment_box handleClose={handleOpen} handleSubmit={handleApproveRejectSendBack} />}
+            {opencommentbox && <Comment_box handleClose={handleOpen} handleSubmit={handleApproveRejectSendBack} ButtonText={buttonText} />}
             {open && <ViewDoc setClose={setOpen} data={fileData} />}
             {successprop && <SuccessProp title={"Post Expense Approval"} />}
         </>

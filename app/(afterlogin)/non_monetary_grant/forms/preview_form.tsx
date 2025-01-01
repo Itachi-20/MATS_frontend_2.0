@@ -8,7 +8,7 @@ import VendorDetails from "@/components/commonPreviewComponents/vendor_detail";
 import TotalExpense from "@/components/commonPreviewComponents/total_expense"
 import Documents from "@/components/commonPreviewComponents/documents"
 import { useRouter } from "next/navigation";
-import Comment_box from "@/components/approvalCommentBox/Comment_box";
+import Comment_box from "@/components/Comment_box";
 import { Previewdata } from '@/app/(afterlogin)/non_monetary_grant/page'
 type EventEntry = {
   name: string | null;
@@ -305,8 +305,8 @@ const Preview_Form = ({...Props}:Props) => {
             <div className=" absolute z-50 flex pt-10 items-end justify-center bg-black bg-opacity-50 w-full h-full inset-0 pb-40">
           <Comment_box 
           handleClose={handleDialog}
-          handleComment={handleComment}
-          Submitbutton = {handleFinalSubmit}
+          handleSubmit = {handleFinalSubmit}
+          ButtonText={'Submit'}
           />
           </div>
           }

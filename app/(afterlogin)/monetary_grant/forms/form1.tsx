@@ -14,6 +14,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Previewdata } from '@/app/(afterlogin)/monetary_grant/page'
 import { useAuth } from "@/app/context/AuthContext";
+import IsReportingHeadDialog from "@/components/isReportingHeadDialog";
 type dropdownData = {
   company: {
     name: string;
@@ -137,6 +138,7 @@ const Form1 = ({ ...Props }: Props) => {
   const [citydropdown, setCityDropdown] = useState<cityDropdown | null>()
   const [reportingHeadDropdown, setReportingHeadDropdown] = useState<reportingHeadDropdown | null>(null)
   const [loading, setLoading] = useState(true);
+  const [isReportingHeadDialog, setIsReportingHeadDialog] = useState(false);
   const router = useRouter();
 
   const [eventCostCenter, setEventCostCenter] =
@@ -303,6 +305,10 @@ const Form1 = ({ ...Props }: Props) => {
         }
       );
 
+      if (response.status == 500) {
+        setIsReportingHeadDialog(true);
+      }
+
       if (response.ok) {
         const data = await response.json();
         setReportingHeadDropdown(data.data);
@@ -350,6 +356,10 @@ const Form1 = ({ ...Props }: Props) => {
 
   if (loading) {
     return <div>Loading Please Wait</div>;
+  }
+
+  const handleIsReportingDialog = ()=>{
+    setIsReportingHeadDialog(prev => !prev);
   }
 
   return (
@@ -742,7 +752,11 @@ const Form1 = ({ ...Props }: Props) => {
           Next
         </Button>
       </div>
-
+      {formData?.state  && isReportingHeadDialog && (
+        <IsReportingHeadDialog
+        handleIsReportingDialog = {handleIsReportingDialog}
+        />
+      )}
     </div>)
   );
 };

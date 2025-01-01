@@ -134,8 +134,8 @@ const Sidebar = () => {
           route: "/audit_trail",
         },
         {
-          name: "Event Summary Repost",
-          route: "/event_summary_report",
+          name: "Event Summary Report",
+          route: "/event_report",
         },
       ],
       settings: [

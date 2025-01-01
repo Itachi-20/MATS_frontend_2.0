@@ -62,6 +62,7 @@ const page = () => {
     const [open, setOpen] = useState(false);
     const [opencommentbox, setCommentBox] = useState(false)
     const [action, setAction] = useState('')
+    const [buttonText, setButtonText] = useState('')
     const [expensedata, setExpenseData] = useState<EventData | null>(null);
     const router = useRouter();
     const refno = useParams();
@@ -202,15 +203,15 @@ const page = () => {
                         view == "view" ?
                             <></>
                             : <>
-                                <Button className='bg-[#5DBE74] px-6' onClick={() => handleOpen('Approved')}>Approve</Button>
-                                <Button className='bg-[#4430BF] px-6' onClick={() => handleOpen('Send Back')}>Send Back</Button>
-                                <Button className='bg-[#FF5757] px-6' onClick={() => handleOpen('Rejected')}>Reject</Button>
+                                <Button className='bg-[#5DBE74] px-6 text-white' onClick={() => {handleOpen('Approved');setButtonText("Approve")}}>Approve</Button>
+                                <Button className='bg-[#4430BF] px-6  text-white' onClick={() => {handleOpen('Send Back');setButtonText("Send Back")}}>Send Back</Button>
+                                <Button className='bg-[#FF5757] px-6  text-white    ' onClick={() => {handleOpen('Rejected');setButtonText("Reject")}}>Reject</Button>
                             </>
                     }
 
                 </div>
             </div>
-            {opencommentbox && <Comment_box handleClose={handleOpen} handleSubmit={handleApprove} />}
+            {opencommentbox && <Comment_box handleClose={handleOpen} handleSubmit={handleApprove} ButtonText={buttonText}/>}
         </>
     )
 }

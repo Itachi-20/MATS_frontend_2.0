@@ -142,7 +142,7 @@ const Form3 = ({ ...Props }: Props) => {
   };
   const handleLogisticsAdd = async () => {
     try {
-      if (!logisticVendorType && logisticAmount <= 0) {
+      if (!logisticVendorType || logisticAmount <= 0) {
         return toast.warning("Fill the required field")
       }
       const newObject: Logistics = { vendor_type: logisticVendorType, est_amount: logisticAmount, name: refNo, budget_category: 'Logistics' };
@@ -190,7 +190,7 @@ const Form3 = ({ ...Props }: Props) => {
   const handleCompensationAdd = async () => {
     console.log(compansation_is_GST, 'compansation_is_GST')
     try {
-      if (!compansationVendorType && !compansationVendorName && compansationAmount <= 0) {
+      if (!compansationVendorType || !compansationVendorName || compansationAmount <= 0) {
         return toast.warning("Fill the required field")
       }
       const newObject: Compensation = { vendor_type: compansationVendorType, est_amount: compansationAmount, gst_included: compansation_is_GST, vendor_name: compansationVendorName, name: refNo, budget_category: 'Compensation' };
@@ -366,19 +366,19 @@ const Form3 = ({ ...Props }: Props) => {
         </div>
       </div>
       {budgetType == "logistics" ?
-         <div className="grid grid-cols-3 gap-12 mb-7">
-         <div className="flex flex-col gap-2">
-           <label className="lable">
-             vendor type<span className="text-[#e60000]">*</span>
-           </label>
-           <Select
-             onValueChange={(value: string) => { setLogisticVendorType(value) }}
-             value={logisticVendorType ? logisticVendorType : ""}
-           >
-             <SelectTrigger className="dropdown">
-               <SelectValue placeholder="Select" />
-             </SelectTrigger>
-             <SelectContent>
+        <div className="grid grid-cols-3 gap-12 mb-7">
+          <div className="flex flex-col gap-2">
+            <label className="lable">
+              vendor type<span className="text-[#e60000]">*</span>
+            </label>
+            <Select
+              onValueChange={(value: string) => { setLogisticVendorType(value) }}
+              value={logisticVendorType ? logisticVendorType : ""}
+            >
+              <SelectTrigger className="dropdown">
+                <SelectValue placeholder="Select" />
+              </SelectTrigger>
+              <SelectContent>
                 {Props.vendorType ? Props.vendorType?.filter((item, index) => {
                   if (item.name == "Hotel" || item.name == "Travel" || item.name == "Food") {
                     return item
@@ -393,71 +393,6 @@ const Form3 = ({ ...Props }: Props) => {
                   <SelectItem value={"null"} disabled>No Data Yet</SelectItem>
                 }
               </SelectContent>
-           </Select>
-         </div>
-         <div className="flex flex-col gap-2">
-           <label className="lable">
-             Amount<span className="text-[#e60000]">*</span>
-           </label>
-           <Input
-             className="text-black shadow"
-             placeholder="Type Here"
-             type='number'
-             onChange={handleAmountChange}
-             value={logisticAmount ? logisticAmount : ''}
-           ></Input>
-         </div>
-         <div className="flex justify-end pt-7">
-           <Button className="bg-white text-[#4430bf] border border-[#4430bf] text-md font-normal hover:bg-white"
-             onClick={() => handleLogisticsAdd()}
-           >
-             Add
-           </Button>
-         </div>
-       </div>
-        : budgetType == "compensation" ?
-        <div>
-        <div className="grid grid-cols-4 gap-12">
-          <div className="flex flex-col gap-2">
-            <label className="lable">
-              vendor type<span className="text-[#e60000]">*</span>
-            </label>
-            <Select
-              onValueChange={(value) => { handleVendorTypeChangeApi(value); setCompansationVendorType(value) }}
-              value={compansationVendorType ? compansationVendorType : ""}
-            >
-              <SelectTrigger className="dropdown">
-                <SelectValue placeholder="Select" />
-              </SelectTrigger>
-              <SelectContent>
-                {Props && Props.vendorType?.map((item, index) => {
-                  return (
-                    <SelectItem value={item.name}>{item.vendor_type}</SelectItem>
-                  )
-                })}
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="flex flex-col gap-2">
-            <label className="lable">
-              vendor Name<span className="text-[#e60000]">*</span>
-            </label>
-            <Select
-              onValueChange={(value: string) => { setCompansationVendorName(value) }}
-              value={compansationVendorName ? compansationVendorName : ""}
-            >
-              <SelectTrigger className="dropdown">
-                <SelectValue placeholder="Select" />
-              </SelectTrigger>
-              <SelectContent>
-                {
-                  vendorName && vendorName.map((item, index) => {
-                    return (
-                      <SelectItem value={item.name}>{item.vendor_name}</SelectItem>
-                    )
-                  })
-                }
-              </SelectContent>
             </Select>
           </div>
           <div className="flex flex-col gap-2">
@@ -468,46 +403,120 @@ const Form3 = ({ ...Props }: Props) => {
               className="text-black shadow"
               placeholder="Type Here"
               type='number'
-              onChange={(e) => handleCompensationChange(e)}
-              value={compansationAmount ? compansationAmount : ""}
+              onChange={handleAmountChange}
+              value={logisticAmount ? logisticAmount : ''}
             ></Input>
           </div>
-          <div className="flex flex-col gap-5 items-center">
-            <label className="lable">
-              Is GST Included?<span className="text-[#e60000]">*</span>
-            </label>
-            <Input className='text-black w-5 h-5'
-              type='checkbox'
-              onChange={(e) => handle_is_GST(e)}
-              checked={compansation_is_GST ? true : false}
-            />
-          </div>
-        </div>
-        <div className="flex justify-end pt-5 gap-4 pb-4">
-          <div className="relative">
-            <svg
-              className="absolute top-3 left-4"
-              width="16"
-              height="16"
-              viewBox="0 0 16 16"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
+          <div className="flex justify-end pt-7">
+            <Button className="bg-white text-[#4430bf] border border-[#4430bf] text-md font-normal hover:bg-white"
+              onClick={() => handleLogisticsAdd()}
             >
-              <path
-                id="Vector"
-                d="M14.8571 9.14286H9.14286V14.8571C9.14286 15.1602 9.02245 15.4509 8.80812 15.6653C8.59379 15.8796 8.30311 16 8 16C7.6969 16 7.40621 15.8796 7.19188 15.6653C6.97755 15.4509 6.85714 15.1602 6.85714 14.8571V9.14286H1.14286C0.839753 9.14286 0.549063 9.02245 0.334735 8.80812C0.120408 8.59379 0 8.3031 0 8C0 7.6969 0.120408 7.40621 0.334735 7.19188C0.549063 6.97755 0.839753 6.85714 1.14286 6.85714H6.85714V1.14286C6.85714 0.839752 6.97755 0.549062 7.19188 0.334735C7.40621 0.120407 7.6969 0 8 0C8.30311 0 8.59379 0.120407 8.80812 0.334735C9.02245 0.549062 9.14286 0.839752 9.14286 1.14286V6.85714H14.8571C15.1602 6.85714 15.4509 6.97755 15.6653 7.19188C15.8796 7.40621 16 7.6969 16 8C16 8.3031 15.8796 8.59379 15.6653 8.80812C15.4509 9.02245 15.1602 9.14286 14.8571 9.14286Z"
-                fill="#635E5E"
-              />
-            </svg>
-            <Button className="bg-white text-black border text-md font-normal rounded-xl pl-10 py-2 hover:bg-white" onClick={() => handleNavigation()}>
-              Add New Vendor
+              Add
             </Button>
           </div>
-          <Button className="bg-white text-[#4430bf] border border-[#4430bf] text-md font-normal hover:bg-white" onClick={handleCompensationAdd}>
-            Add
-          </Button>
         </div>
-      </div>
+        : budgetType == "compensation" ?
+          <div>
+            <div className="grid grid-cols-4 gap-12">
+              <div className="flex flex-col gap-2">
+                <label className="lable">
+                  vendor type<span className="text-[#e60000]">*</span>
+                </label>
+                <Select
+                  onValueChange={(value) => { handleVendorTypeChangeApi(value); setCompansationVendorType(value) }}
+                  value={compansationVendorType ? compansationVendorType : ""}
+                >
+                  <SelectTrigger className="dropdown">
+                    <SelectValue placeholder="Select" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {
+                      Props.vendorType
+                        ? Props.vendorType?.filter((item) => {
+                          return item.name !== "Hotel" && item.name !== "Travel";
+                        })
+                          .map((item) => {
+                            return (
+                              <SelectItem value={item.name} key={item.name}>
+                                {item.vendor_type}
+                              </SelectItem>
+                            );
+                          })
+                        : <SelectItem value={"null"} disabled>No Data Yet</SelectItem>
+                    }
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="flex flex-col gap-2">
+                <label className="lable">
+                  vendor Name<span className="text-[#e60000]">*</span>
+                </label>
+                <Select
+                  onValueChange={(value: string) => { setCompansationVendorName(value) }}
+                  value={compansationVendorName ? compansationVendorName : ""}
+                >
+                  <SelectTrigger className="dropdown">
+                    <SelectValue placeholder="Select" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {
+                      vendorName && vendorName.map((item, index) => {
+                        return (
+                          <SelectItem value={item.name}>{item.vendor_name}</SelectItem>
+                        )
+                      })
+                    }
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="flex flex-col gap-2">
+                <label className="lable">
+                  Amount<span className="text-[#e60000]">*</span>
+                </label>
+                <Input
+                  className="text-black shadow"
+                  placeholder="Type Here"
+                  type='number'
+                  onChange={(e) => handleCompensationChange(e)}
+                  value={compansationAmount ? compansationAmount : ""}
+                ></Input>
+              </div>
+              <div className="flex flex-col gap-5 items-center">
+                <label className="lable">
+                  Is GST Included?<span className="text-[#e60000]">*</span>
+                </label>
+                <Input className='text-black w-5 h-5'
+                  type='checkbox'
+                  onChange={(e) => handle_is_GST(e)}
+                  checked={compansation_is_GST ? true : false}
+                />
+              </div>
+            </div>
+            <div className="flex justify-end pt-5 gap-4 pb-4">
+              <div className="relative">
+                <svg
+                  className="absolute top-3 left-4"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    id="Vector"
+                    d="M14.8571 9.14286H9.14286V14.8571C9.14286 15.1602 9.02245 15.4509 8.80812 15.6653C8.59379 15.8796 8.30311 16 8 16C7.6969 16 7.40621 15.8796 7.19188 15.6653C6.97755 15.4509 6.85714 15.1602 6.85714 14.8571V9.14286H1.14286C0.839753 9.14286 0.549063 9.02245 0.334735 8.80812C0.120408 8.59379 0 8.3031 0 8C0 7.6969 0.120408 7.40621 0.334735 7.19188C0.549063 6.97755 0.839753 6.85714 1.14286 6.85714H6.85714V1.14286C6.85714 0.839752 6.97755 0.549062 7.19188 0.334735C7.40621 0.120407 7.6969 0 8 0C8.30311 0 8.59379 0.120407 8.80812 0.334735C9.02245 0.549062 9.14286 0.839752 9.14286 1.14286V6.85714H14.8571C15.1602 6.85714 15.4509 6.97755 15.6653 7.19188C15.8796 7.40621 16 7.6969 16 8C16 8.3031 15.8796 8.59379 15.6653 8.80812C15.4509 9.02245 15.1602 9.14286 14.8571 9.14286Z"
+                    fill="#635E5E"
+                  />
+                </svg>
+                <Button className="bg-white text-black border text-md font-normal rounded-xl pl-10 py-2 hover:bg-white" onClick={() => handleNavigation()}>
+                  Add New Vendor
+                </Button>
+              </div>
+              <Button className="bg-white text-[#4430bf] border border-[#4430bf] text-md font-normal hover:bg-white" onClick={handleCompensationAdd}>
+                Add
+              </Button>
+            </div>
+          </div>
           :
           ""
       }
@@ -681,9 +690,9 @@ const Form3 = ({ ...Props }: Props) => {
           {" "}
           Save as Draft
         </Button> */}
-         <Button className="bg-white text-black border text-md font-normal hover:text-white hover:bg-black" onClick={() => router.push(`/non_monetary_grant?forms=2&refno=${Props.refno}`)}>
-                Back
-              </Button>
+        <Button className="bg-white text-black border text-md font-normal hover:text-white hover:bg-black" onClick={() => router.push(`/non_monetary_grant?forms=2&refno=${Props.refno}`)}>
+          Back
+        </Button>
         <Button className="bg-[#4430bf] text-white text-md font-normal border hover:bg-[#4430bf]" onClick={(e: React.MouseEvent<HTMLButtonElement>) => handleSubmit(e)}>
           Next
         </Button>

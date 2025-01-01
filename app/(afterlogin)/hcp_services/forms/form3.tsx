@@ -141,7 +141,7 @@ const Form3 = ({ ...Props }: Props) => {
   };
   const handleLogisticsAdd = async () => {
     try {
-      if (!logisticVendorType && logisticAmount <= 0) {
+      if (!logisticVendorType || logisticAmount <= 0) {
         return toast.warning("Fill the required field")
       }
       const newObject: Logistics = { vendor_type: logisticVendorType, est_amount: logisticAmount, name: refNo, budget_category: 'Logistics' };
@@ -187,9 +187,9 @@ const Form3 = ({ ...Props }: Props) => {
     }
   };
   const handleCompensationAdd = async () => {
-    console.log(compansation_is_GST, 'compansation_is_GST')
+    console.log(compansationVendorName, compansationVendorType,compansationAmount,'compansation_is_GST')
     try {
-      if (!compansationVendorType && !compansationVendorName && compansationAmount <= 0) {
+      if (!compansationVendorType || !compansationVendorName || compansationAmount <= 0) {
         return toast.warning("Fill the required field")
       }
       const newObject: Compensation = { vendor_type: compansationVendorType, est_amount: compansationAmount, gst_included: compansation_is_GST, vendor_name: compansationVendorName, name: refNo, budget_category: 'Compensation' };
@@ -429,11 +429,20 @@ const Form3 = ({ ...Props }: Props) => {
                     <SelectValue placeholder="Select" />
                   </SelectTrigger>
                   <SelectContent>
-                    {Props && Props.vendorType?.map((item, index) => {
-                      return (
-                        <SelectItem value={item.name}>{item.vendor_type}</SelectItem>
-                      )
-                    })}
+                    {
+                      Props.vendorType
+                        ? Props.vendorType?.filter((item) => {
+                          return item.name !== "Hotel" && item.name !== "Travel";
+                        })
+                          .map((item) => {
+                            return (
+                              <SelectItem value={item.name} key={item.name}>
+                                {item.vendor_type}
+                              </SelectItem>
+                            );
+                          })
+                        : <SelectItem value={"null"} disabled>No Data Yet</SelectItem>
+                    }
                   </SelectContent>
                 </Select>
               </div>

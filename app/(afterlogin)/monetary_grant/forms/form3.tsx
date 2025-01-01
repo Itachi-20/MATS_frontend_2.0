@@ -142,7 +142,7 @@ const Form3 = ({ ...Props }: Props) => {
   };
   const handleLogisticsAdd = async () => {
     try {
-      if (!logisticVendorType && (logisticAmount <= 0)) {
+      if (!logisticVendorType || (logisticAmount <= 0)) {
         return toast.warning("Fill the required field")
       }
       const newObject: Logistics = { vendor_type: logisticVendorType, est_amount: logisticAmount, name: refNo, budget_category: 'Logistics' };
@@ -190,7 +190,7 @@ const Form3 = ({ ...Props }: Props) => {
   const handleCompensationAdd = async () => {
     console.log(compansation_is_GST, 'compansation_is_GST')
     try {
-      if (!compansationVendorType && !compansationVendorName && compansationAmount <= 0) {
+      if (!compansationVendorType || !compansationVendorName || compansationAmount <= 0) {
         return toast.warning("Fill the required field")
       }
       const newObject: Compensation = { vendor_type: compansationVendorType, est_amount: compansationAmount, gst_included: compansation_is_GST, vendor_name: compansationVendorName, name: refNo, budget_category: 'Compensation' };
@@ -368,18 +368,18 @@ const Form3 = ({ ...Props }: Props) => {
       </div>
       {budgetType == "logistics" ?
         <div className="grid grid-cols-3 gap-12 mb-7">
-        <div className="flex flex-col gap-2">
-          <label className="lable">
-            vendor type<span className="text-[#e60000]">*</span>
-          </label>
-          <Select
-            onValueChange={(value: string) => { setLogisticVendorType(value) }}
-            value={logisticVendorType ? logisticVendorType : ""}
-          >
-            <SelectTrigger className="dropdown">
-              <SelectValue placeholder="Select" />
-            </SelectTrigger>
-            <SelectContent>
+          <div className="flex flex-col gap-2">
+            <label className="lable">
+              vendor type<span className="text-[#e60000]">*</span>
+            </label>
+            <Select
+              onValueChange={(value: string) => { setLogisticVendorType(value) }}
+              value={logisticVendorType ? logisticVendorType : ""}
+            >
+              <SelectTrigger className="dropdown">
+                <SelectValue placeholder="Select" />
+              </SelectTrigger>
+              <SelectContent>
                 {Props.vendorType ? Props.vendorType?.filter((item, index) => {
                   if (item.name == "Hotel" || item.name == "Travel" || item.name == "Food") {
                     return item
@@ -394,28 +394,28 @@ const Form3 = ({ ...Props }: Props) => {
                   <SelectItem value={"null"} disabled>No Data Yet</SelectItem>
                 }
               </SelectContent>
-          </Select>
+            </Select>
+          </div>
+          <div className="flex flex-col gap-2">
+            <label className="lable">
+              Amount<span className="text-[#e60000]">*</span>
+            </label>
+            <Input
+              className="text-black shadow"
+              placeholder="Type Here"
+              type='number'
+              onChange={handleAmountChange}
+              value={logisticAmount ? logisticAmount : ''}
+            ></Input>
+          </div>
+          <div className="flex justify-end pt-7">
+            <Button className="bg-white text-[#4430bf] border border-[#4430bf] text-md font-normal hover:bg-white"
+              onClick={() => handleLogisticsAdd()}
+            >
+              Add
+            </Button>
+          </div>
         </div>
-        <div className="flex flex-col gap-2">
-          <label className="lable">
-            Amount<span className="text-[#e60000]">*</span>
-          </label>
-          <Input
-            className="text-black shadow"
-            placeholder="Type Here"
-            type='number'
-            onChange={handleAmountChange}
-            value={logisticAmount ? logisticAmount : ''}
-          ></Input>
-        </div>
-        <div className="flex justify-end pt-7">
-          <Button className="bg-white text-[#4430bf] border border-[#4430bf] text-md font-normal hover:bg-white"
-            onClick={() => handleLogisticsAdd()}
-          >
-            Add
-          </Button>
-        </div>
-      </div>
         : budgetType == "compensation" ?
           <div>
             <div className="grid grid-cols-4 gap-12">
@@ -431,11 +431,20 @@ const Form3 = ({ ...Props }: Props) => {
                     <SelectValue placeholder="Select" />
                   </SelectTrigger>
                   <SelectContent>
-                    {Props && Props.vendorType?.map((item, index) => {
-                      return (
-                        <SelectItem value={item.name}>{item.vendor_type}</SelectItem>
-                      )
-                    })}
+                    {
+                      Props.vendorType
+                        ? Props.vendorType?.filter((item) => {
+                          return item.name !== "Hotel" && item.name !== "Travel";
+                        })
+                          .map((item) => {
+                            return (
+                              <SelectItem value={item.name} key={item.name}>
+                                {item.vendor_type}
+                              </SelectItem>
+                            );
+                          })
+                        : <SelectItem value={"null"} disabled>No Data Yet</SelectItem>
+                    }
                   </SelectContent>
                 </Select>
               </div>
