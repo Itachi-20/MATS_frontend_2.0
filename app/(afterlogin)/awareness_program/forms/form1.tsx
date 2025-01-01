@@ -631,7 +631,7 @@ const Form1 = ({ ...Props }: Props) => {
           </Select>
         </div>
         <div className="flex flex-col gap-2">
-        <label className={`lable ${(errors?.sub_type_of_activity && !formData?.sub_type_of_activity) ? `text-red-600`:`text-black`}`}>
+          <label className={`lable ${(errors?.sub_type_of_activity && !formData?.sub_type_of_activity) ? `text-red-600`:`text-black`}`}>
             Sub Type Of Activity <span className={"text-[#e60000]"}>*</span>
           </label>
           <Select

@@ -4,7 +4,7 @@ const SvgAnimation = () => {
   const svgContent = `
     <svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
       <!-- Light Gray, Thinner Checkmark Path -->
-      <path id="tick" d="M20 50 L40 70 L80 30" stroke="#ccc" stroke-width="8" fill="none" stroke-linecap="round"
+      <path id="tick" d="M20 50 L40 70 L80 30" stroke="#ccc" strokeWidth="8" fill="none" strokeLinecap="round"
         stroke-dasharray="100" stroke-dashoffset="100">
         <animate 
           attributeName="stroke-dashoffset" 
