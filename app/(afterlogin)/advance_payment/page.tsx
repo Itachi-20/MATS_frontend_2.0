@@ -86,8 +86,8 @@ export default function Page() {
                 body: JSON.stringify({
                     startDate: startDate,
                     endDate: endDate,
-                    pageNo: currentPage ,
-                    searchName: searchName ,
+                    pageNo: currentPage,
+                    searchName: searchName,
                     status: status,
                     requestor: event_requestor,
                 })
@@ -240,6 +240,8 @@ export default function Page() {
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectItem value="all">All</SelectItem>
+                                <SelectItem value="utr updated">UTR Updated</SelectItem>
+                                <SelectItem value="pending">UTR Pending</SelectItem>
                                 <SelectItem value="awaiting approval">Awaitting Approval</SelectItem>
                                 <SelectItem value="approved">Approved</SelectItem>
                                 <SelectItem value="pending">Pending</SelectItem>

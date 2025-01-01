@@ -341,7 +341,7 @@ const ApproverCardDetails = ({ ...Props }: Props) => {
             <h1 className="text-[#05004e] text-xl font-semibold pb-4">
               Event Request
             </h1>
-            <Button className='text-[#625d5d] bg-[#E0E9FF] rounded-xl hover:underline' onClick={() => { router.push('/event_approver_list') }}>Pre Activity List</Button>
+            <Button className='text-[#625d5d] bg-[#E0E9FF] rounded-xl hover:underline' onClick={() => { router.push('/event_approver_list') }}>View All</Button>
           </div>
           <div className=' h-fit text-black'>
 

@@ -315,6 +315,7 @@ const Preview_Form = ({...Props}:props) => {
           <Comment_box 
           handleClose={handleDialog}
           handleSubmit = {handleFinalSubmit}
+          ButtonText={'Submit'}
           />
           </div>
           }

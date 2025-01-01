@@ -94,7 +94,8 @@ const details = ({ ...Props }: Props) => {
 
                             {/* List the items in the dropdown */}
                             {Props.requestor_dropdown && Props.requestor_dropdown.map((item) => (
-                                <CommandItem
+                                <CommandItem 
+                                className="cursor-pointer"
                                     key={item.email}
                                     value={item.email}
                                     onSelect={(currentValue) => {
