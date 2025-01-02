@@ -84,7 +84,15 @@ type EventEntry = {
   documents: ActivityDocument[];
   advance_approvers: any[]; // Empty array, can be customized later
   city:string
-  reporting_head:string
+  reporting_head:string,
+  type_of_engagement:string
+  product_details:string
+  annual_plan:number;
+  service_type:string;
+  sponsorship_ref_no: string;
+  training_ref_no: string;
+  product_amount: number;
+  quantity:number;
 }
 
 type Compensation = {
@@ -276,7 +284,7 @@ useEffect(()=>{
     <div className="md:px-7 md:pb-7 md:pt-4 w-full z-20 text-black">
           <div className="pb-5">
             <div className="flex justify-between">
-            <h1 className=" md:text-[30px] md:font-medium capitalize md:pb-4"> Training and Education</h1>
+            <h1 className=" md:text-[30px] md:font-medium capitalize md:pb-4"> {eventData?.event_type ?? ""}</h1>
             <div className="flex gap-4 bg-white">
             <Button className="border border-[#4430bf] text-[#4430bf] px-6" onClick={()=>router.push(`/audit_trail/${eventData?.name}`)}>Audit Trail</Button>
               <Button className="bg-white text-black border px-8 hover:bg-white" onClick={()=>{router.push("/post_activity_document_approval_list")}}>Back</Button>
