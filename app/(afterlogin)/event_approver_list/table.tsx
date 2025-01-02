@@ -432,15 +432,19 @@ const table = ({ ...Props }: Props) => {
 
                             </TableCell>
                             <TableCell>
+
                             <div className="flex flex-col items-center">
+
                                 {data.level2}
                                 {
                                   data.level2 != null &&
                                   (data.status2 == "Approved" ?
 
+
                                     <Tooltip>
                                       <TooltipTrigger className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
                                         A
+
                                         <TooltipContent className="bg-white">
                                           <p>Approved</p>
                                         </TooltipContent>

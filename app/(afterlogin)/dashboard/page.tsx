@@ -18,6 +18,7 @@ export type tableData = {
   current_stage:string,
   status:string
   event_name:string
+  brief_status:string
 } 
  type CardData = {
   total_count:number,
@@ -30,6 +31,7 @@ export type tableData = {
 const Index = async() => {
   const cookie = await cookies();
   const role = cookie.getAll()[5].value;
+  console.log(cookie.getAll(),'role')
   let table;
   let  carddata;
   if(role == 'Event Requestor'){
@@ -51,7 +53,7 @@ if(role == 'Event Travel'){
   carddata = await fetchTravelCardData(cookie);
 }
 
- console.log(table,'table')
+ console.log(table,carddata,'table,carddata')
   return (
     (
     <Details

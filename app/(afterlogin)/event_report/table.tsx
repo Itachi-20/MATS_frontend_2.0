@@ -10,7 +10,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {Event} from "@/app/(afterlogin)/event_approval_summary_report/page"
-import { useRouter } from 'next/navigation';
+import { useRouter } from "nextjs-toploader/app";
 type level = "Approved" | "Rejected" | "Pending";
 type EventApprovalSummaryReportTable = {
     request_number: string;

@@ -339,7 +339,7 @@ const pagess = ({ ...Props }: props) => {
                 }
             </div>
             <Toaster richColors position="top-right" />
-            {opencommentbox && <Comment_box handleClose={handleOpen} handleSubmit={handleApproveRejectSendBack} />}
+            {opencommentbox && <Comment_box handleClose={handleOpen} handleSubmit={handleApproveRejectSendBack} ButtonText={"Submit"} />}
             {open && <ViewDoc setClose={setOpen} data={fileData} />}
             {successprop && <SuccessProp title={"Post Expense Approval"} />}
         </>

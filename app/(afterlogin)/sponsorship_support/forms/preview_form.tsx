@@ -12,7 +12,7 @@ import OtherDetails from "@/components/sponsorshipSupportPreviewComponents/other
 import { usePathname } from 'next/navigation'
 import { useRouter } from 'nextjs-toploader/app';
 import Comment_box from "@/components/Comment_box";  
-
+import VendorDetails from "@/components/commonPreviewComponents/vendor_detail"
 type EventEntry = {
   name: string;
   owner: string;
@@ -84,6 +84,7 @@ type EventEntry = {
   ship_to:string;
   organization_name:string;
   preactivity_submitted:number;
+  product_amount:number;
 }
 
 type Compensation = {
@@ -283,7 +284,9 @@ const Preview_Form = ({...Props}:Props) => {
         pathname=""
         eventData={preview_data}
         />
-      
+      <VendorDetails
+          eventData={preview_data}
+        />
         <TotalExpense
         eventData={preview_data}
         />
