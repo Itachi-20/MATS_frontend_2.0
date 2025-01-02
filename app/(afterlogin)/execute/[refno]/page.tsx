@@ -523,6 +523,7 @@ const page = () => {
         <ExecuteDialog
           handleDialog={handleDialog}
           handleExecute={handleExecute}
+          title={"Are you sure you want to execute the event?"}
         />
       }
     </>

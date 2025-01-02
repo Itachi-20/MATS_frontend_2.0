@@ -91,6 +91,7 @@ const Index = () => {
                     pageNo: currentPage,
                     searchName: searchName,
                     requestor: event_requestor,
+                    status:status
                 })
             });
 
@@ -112,11 +113,15 @@ const Index = () => {
             const Data = await fetch(
                 `/api/fetchEventRequestor`,
                 {
-                    method: "GET",
+                    method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                     },
                     credentials: 'include',
+                    body: JSON.stringify({
+                        activity_type: "Post Expense",
+                        
+                    })
                 }
             );
             if (Data.ok) {
@@ -261,7 +266,7 @@ const Index = () => {
             setStatus('');
         }
     };
-
+console.log(endDate,startDate)
     return (
         <>
 
