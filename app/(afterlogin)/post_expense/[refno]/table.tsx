@@ -155,6 +155,7 @@ type TableData = {
   travel_expense_submitted: boolean,
   travel_expense_approved: boolean,
   travel_vendors: TravelVendors[];
+  event_conclusion: string;
 };
 
 type Props = {
@@ -219,7 +220,10 @@ const table = ({ tableData }: Props) => {
   const [compansationVendorName, setCompansationVendorName] = useState("");
   const [dropdownData, setDropdownData] = useState<dropdownData | null>(null);
   const [vendorName, setVendorName] = useState<vendorName | null>(null);
-  const [tabledata, setTableData] = useState(tableData)
+  const [tabledata, setTableData] = useState(tableData);
+  const [submitted, setSubmitted] = useState(0);
+  const [approved, setApproved] = useState(0);
+  const [eventConclusion, setEventConclusion] = useState<string>();
   const [vendorDetails, setVendorDetails] = useState<VendorData>({
     vendor_type: '',
     vendor_name: '',
@@ -235,6 +239,7 @@ const table = ({ tableData }: Props) => {
   const base_url = process.env.NEXT_PUBLIC_FRAPPE_URL;
   const router = useRouter();
   const params = useParams();
+  const showButton = tabledata.actual_vendors.every(item => item.status !== "Draft") && !submitted && !approved && tableData.actual_vendors.length>0;
 
   const fetchData = async () => {
     console.log("inside fetchData")
@@ -256,6 +261,8 @@ const table = ({ tableData }: Props) => {
         const data = await tableData.json();
         console.log("data ", data)
         setTableData(data.data)
+        setSubmitted(data.data.post_expense_submitted);
+        setApproved(data.data.post_expense_approved);
         return data.data
       }
 
@@ -380,7 +387,6 @@ const table = ({ tableData }: Props) => {
     }
   };
 
-
   useEffect(() => {
     dropdown();
     fetchData()
@@ -392,10 +398,7 @@ const table = ({ tableData }: Props) => {
     setVendorDetails(prev => ({ ...prev, [name]: numericValue }));
   }
   const handleConclusionChange = (newConclusion: string) => {
-    setTableData(prev => ({
-      ...prev,
-      event_conclusion: newConclusion,
-    }));
+    setEventConclusion(newConclusion);
   };
   const addVendor = async () => {
     console.log("fileList", fileList);
@@ -504,35 +507,61 @@ const table = ({ tableData }: Props) => {
         setLoading(false);
         console.log(error, "something went wrong");
       }
-  }
+  };
+  console.log("Event Conclusion", eventConclusion);
+
   const handleExecute = async () => {
-    router.push(`/event_list`);
-    setSuccessProp(true);
-    setTimeout(() => {
-      setSuccessProp(false);
-    }, 500);
-      // try {
-      //   const tableData = await fetch(
-      //     `/api/`,
-      //     {
-      //       method: "POST",
-      //       headers: {
-      //         "Content-Type": "application/json",
-      //       },
-      //       credentials: "include",
-      //       body: JSON.stringify({
-      //         name: refno
-      //       })
-      //     }
-      //   );
-      //   if (tableData.ok) {
-      //     router.push("/event_list");
-      //   }
+    try{
+      setLoading(true);
+      const apiCallPromise = new Promise(async (resolve, reject) => {
+        try {
+          setLoading(true);
+          const tableData = await fetch(
+            `/api/postExpense/finalSubmission`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              credentials: "include",
+              body: JSON.stringify({
+                parent: refno,
+                event_conclusion: eventConclusion
+              })
+            }
+          );
   
-      // } catch (error) {
-      //   console.log(error, "something went wrong");
-      // }
+          if (!tableData.ok) {
+            throw new Error(`Can't Submit final Post Expense: ${refno}`);
+          }
   
+          const data = await tableData.json();
+            resolve(data);
+        } catch (error) {
+          reject(error);
+        }
+      });
+        toast.promise(apiCallPromise, {
+              loading: `Submitting Post Expense ${refno}...`,
+              success: (data) => {
+                setTimeout(() => {
+                  fetchData();
+                }, 500);
+                router.push(`/event_list`);
+                setSuccessProp(true);
+                setTimeout(() => {
+                  setSuccessProp(false);
+                }, 1000);
+                setLoading(false);
+                fetchData();
+                return 'Post Expense Submitted Successfully!';
+              },
+          error: (error) => {setLoading(false); setIsDialog(false); return`Failed to submit final expense: ${error.message || error}`},
+        });
+      } catch (error) {
+        setLoading(false);
+        console.log(error, "something went wrong");
+      }
   };
   const handleSetFileData = async (file: any) => {
     console.log(file, 'file in setfile ')
@@ -593,7 +622,7 @@ const table = ({ tableData }: Props) => {
           </div>
 
         </div>
-        {!tableData?.post_expense_approved &&
+        
           <div className=" grid grid-cols-3 gap-4 pb-7">
             <div className='col-span-3 space-y-2'>
               <label htmlFor="event_conclusion" className="text-black md:text-sm md:font-normal capitalize">
@@ -605,86 +634,92 @@ const table = ({ tableData }: Props) => {
                 id='event_conclusion'
                 name='event_conclusion'
                 onChange={(e) => handleConclusionChange(e.target.value)}
+                disabled={tableData?.post_expense_submitted}
+                value={tabledata.event_conclusion ?? eventConclusion}
               ></Textarea>
             </div>
-            <div className='grid-cols-1 space-y-2'>
-              <label htmlFor="vendor_type" className="text-black md:text-sm md:font-normal capitalize">
-                Vendor Type<span className="text-[#e60000] ">*</span>
-              </label>
-              <Select
-                value={vendorDetails.vendor_type ?? ''}
-                onValueChange={(value) => {
-                  handleVendorTypeChangeApi(value);
-                  setVendorDetails((prev) => ({
-                    ...prev,
-                    vendor_type: value,
-                  }))
-                    ;
-                }}
-              >
-                <SelectTrigger className="dropdown">
-                  <SelectValue placeholder="Select" />
-                </SelectTrigger>
-                <SelectContent>
-                  {dropdownData && dropdownData.vendor_type?.map((item, index) => {
-                    return (
-                      <SelectItem value={item.name}>{item.vendor_type}</SelectItem>
-                    )
-                  })}
-                </SelectContent>
-              </Select>
             </div>
-            <div className='grid-cols-1 space-y-2'>
-              <label htmlFor="vendor_name" className="text-black md:text-sm md:font-normal capitalize">
-                Vendor Name<span className="text-[#e60000] ">*</span>
-              </label>
-              <Select
-                value={vendorDetails.vendor_name ?? ''}
-                onValueChange={(value: string) => {
-                  handleAdvaneAmountApi(value);
-                  setVendorDetails((prev) => ({
-                    ...prev,
-                    vendor_name: value, // Update vendor_name in the vendorDetails state
-                  }));
-                }}
-              >
-                <SelectTrigger className="dropdown">
-                  <SelectValue placeholder="Select" />
-                </SelectTrigger>
-                <SelectContent>
-                  {
-                    vendorName && vendorName.map((item, index) => {
+            {!tableData?.post_expense_submitted &&
+            <div className=" grid grid-cols-3 gap-4 pb-7">
+              
+              <div className='grid-cols-1 space-y-2'>
+                <label htmlFor="vendor_type" className="text-black md:text-sm md:font-normal capitalize">
+                  Vendor Type<span className="text-[#e60000] ">*</span>
+                </label>
+                <Select
+                  value={vendorDetails.vendor_type ?? ''}
+                  onValueChange={(value) => {
+                    handleVendorTypeChangeApi(value);
+                    setVendorDetails((prev) => ({
+                      ...prev,
+                      vendor_type: value,
+                    }))
+                      ;
+                  }}
+                >
+                  <SelectTrigger className="dropdown">
+                    <SelectValue placeholder="Select" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {dropdownData && dropdownData.vendor_type?.map((item, index) => {
                       return (
-                        <SelectItem value={item.name}>{item.vendor_name ?? "name not defined"}</SelectItem>
+                        <SelectItem value={item.name}>{item.vendor_type}</SelectItem>
                       )
-                    })
-                  }
-                </SelectContent>
-              </Select>
+                    })}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className='grid-cols-1 space-y-2'>
+                <label htmlFor="vendor_name" className="text-black md:text-sm md:font-normal capitalize">
+                  Vendor Name<span className="text-[#e60000] ">*</span>
+                </label>
+                <Select
+                  value={vendorDetails.vendor_name ?? ''}
+                  onValueChange={(value: string) => {
+                    handleAdvaneAmountApi(value);
+                    setVendorDetails((prev) => ({
+                      ...prev,
+                      vendor_name: value, // Update vendor_name in the vendorDetails state
+                    }));
+                  }}
+                >
+                  <SelectTrigger className="dropdown">
+                    <SelectValue placeholder="Select" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {
+                      vendorName && vendorName.map((item, index) => {
+                        return (
+                          <SelectItem value={item.name}>{item.vendor_name ?? "name not defined"}</SelectItem>
+                        )
+                      })
+                    }
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className='grid-cols-1 space-y-2'>
+                <label htmlFor="amount" className="text-black md:text-sm md:font-normal capitalize">
+                  Amount<span className="text-[#e60000] ">*</span>
+                </label>
+                <Input
+                  className="text-black shadow"
+                  placeholder="Type Here"
+                  type='number'
+                  name='amount'
+                  value={vendorDetails.amount ?? ''}
+                  onChange={handlefieldChange}
+                ></Input>
+              </div>
             </div>
-            <div className='grid-cols-1 space-y-2'>
-              <label htmlFor="amount" className="text-black md:text-sm md:font-normal capitalize">
-                Amount<span className="text-[#e60000] ">*</span>
-              </label>
-              <Input
-                className="text-black shadow"
-                placeholder="Type Here"
-                type='number'
-                name='amount'
-                value={vendorDetails.amount ?? ''}
-                onChange={handlefieldChange}
-              ></Input>
-            </div>
-          </div>
-        }
-
-        {
-          !tableData?.post_expense_approved &&
+            }
+            {!tableData?.post_expense_submitted &&
           <div className='flex justify-end gap-2 pb-7'>
             <SimpleFileUpload files={files} setFiles={setFiles} setUploadedFiles={setUploadedFiles} onNext={handleNext} buttonText={'Receipts/Bills'} />
             <Button className="border border-[#4430bf] text-[#4430bf] text-[18px]" disabled={isLoading ? true : false} onClick={addVendor} >{isLoading ? 'Adding...' : 'Add'}</Button>
           </div>
+        
         }
+
 
         <h3 className='text-2xl font-semibold'>Compensation</h3>
         <div className="border bg-white h-full p-4 rounded-[18px] my-6">
@@ -812,21 +847,23 @@ const table = ({ tableData }: Props) => {
                           <TableCell>{data.payment_date ?? "-"}</TableCell>
 
                           {/* <TableCell className='z-20 gap-4 w-[120px] bg-white mt-2 flex border-l justify-center mb-2'> */}
-                          <TableCell className='sticky right-[116px] z-20 min-w-[80px] border-l border-r bg-white'>
-                            <div className='p-0 cursor-pointer hover:opacity-60 flex justify-center' onClick={() => handleSetFileData(data.files)}>
+                          <TableCell className={`sticky right-[120px] z-20 min-w-[80px] border-l border-r bg-white flex ${data.status == 'Draft'?'justify-between items-center':'justify-center'}`}>
+                            <div className='p-0 cursor-pointer hover:opacity-60' onClick={() => handleSetFileData(data.files)}>
                               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
                                 <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
                                 <path fillRule="evenodd" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 0 1 0-1.113ZM17.25 12a5.25 5.25 0 1 1-10.5 0 5.25 5.25 0 0 1 10.5 0Z" clipRule="evenodd" />
                               </svg>
                             </div>
-                            {
-                              !(data?.status == "Post Expense Approved" || data?.status == "Post Expense Closed") && role == "Event Requester" &&
-                              <Image className='hover:cursor-pointer hover:opacity-60' src={'/svg/delete.svg'} alt='deletesvg' width={20} height={18} onClick={() => { handleDeletePopup(data.name) }} />
-                            }
+                            <div>
+                              {
+                                ((data?.status == "Draft") && (role == "Event Requestor")) &&
+                                <Image className='hover:cursor-pointer hover:opacity-60' src={'/svg/delete.svg'} alt='deletesvg' width={20} height={18} onClick={() => { handleDeletePopup(data.name) }} />
+                              }
+                            </div>
                           </TableCell>
-                          <TableCell className='sticky right-0 z-20 gap-4 min-w-[120px] mt-2 mb-2 bg-white border-l'>
+                          <TableCell className='sticky right-0 z-20 gap-4 min-w-[120px] mt-2 mb-2 bg-white'>
                             <div className='p-0 '>
-                              <button className='bg-green-500 hover:opacity-60 disabled:hover:none  text-white disabled:cursor-not-allowed disabled:bg-gray-400  rounded-md px-3 py-2' disabled={(data.status == "Draft" && isLoading != true) ? false:true} onClick={() => { handleIndividualExpense(data.name) }}>{data.status == "Draft" ? "Submit" :"Submitted"}</button>
+                              <button className='bg-green-500 hover:opacity-60 disabled:hover:none  text-white disabled:cursor-not-allowed disabled:bg-gray-400 w-[87.5px] rounded-md px-3 py-2' disabled={(data.status == "Draft" && isLoading != true) ? false:true} onClick={() => { handleIndividualExpense(data.name) }}>{data.status == "Draft" ? "Submit" :"Submitted"}</button>
                             </div>
                           </TableCell>
                         </TableRow>
@@ -993,7 +1030,8 @@ const table = ({ tableData }: Props) => {
         }
 
         {
-          !tableData?.post_expense_approved &&
+          (showButton) && 
+          // (!(tabledata.post_expense_submitted)) && (tabledata.actual_vendors.length > 0) && 
           <div className='flex justify-end gap-2 pt-8'>
             <Button className='bg-[#4430BF] px-10 text-white' onClick={() => { handleDialog() }}>Final Submit</Button>
           </div>
