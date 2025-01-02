@@ -14,7 +14,7 @@ const SuccessProp = ({ ...Props }: props) => {
         <div className="flex flex-col items-center w-full">
           <h1 className="text-[30px] font-light leading-normal font-poppins ">Submitted Successfully</h1>
           <svg width="100" height="100" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
-            <path id="tickPath" d="M15 25 L22 32 L35 18" stroke="#f0f0f0" stroke-width="5" fill="none" />
+            <path id="tickPath" d="M15 25 L22 32 L35 18" stroke="#f0f0f0" strokeWidth="5" fill="none" />
 
             <rect width="5" height="5" fill="#8A2BE2" transform="translate(-2.5, -2.5)">
               <animateMotion repeatCount="indefinite" dur="3s" keyPoints="0;0.5;1;0.5;0" keyTimes="0;0.25;0.5;0.75;1" rotate="auto">
