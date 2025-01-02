@@ -3,7 +3,8 @@ import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 
 import Documents from "@/components/documents"
-import { useRouter, useSearchParams } from 'next/navigation'
+import {useSearchParams } from 'next/navigation'
+import { useRouter } from "nextjs-toploader/app";
 import Comment_box from "@/components/approvalCommentBox/Comment_box";
 
 import EventDetails from "@/components/training_and_education/event_detail";

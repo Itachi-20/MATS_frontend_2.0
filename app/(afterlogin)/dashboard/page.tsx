@@ -18,6 +18,7 @@ export type tableData = {
   current_stage:string,
   status:string
   event_name:string
+  brief_status:string
 } 
  type CardData = {
   total_count:number,

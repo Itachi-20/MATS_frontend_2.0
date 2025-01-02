@@ -292,7 +292,8 @@ export type FormDataType = {
   division_sub_category: string;
   sub_type_of_activity: string;
   any_govt_hcp: string,
-  no_of_hcp: number
+  no_of_hcp: number,
+  reporting_head:string
 };
   type CompensationType = {
     vendor_type: string;

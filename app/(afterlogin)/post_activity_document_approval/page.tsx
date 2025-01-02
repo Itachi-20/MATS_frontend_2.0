@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button";
 //import VendorDetails from "@/components/vendor_Details"
 //import TotalExpense from "@/components/total_Expense"
 import Documents from "@/components/documents"
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
+import { useRouter } from "nextjs-toploader/app";
 import Comment_box from "@/components/approvalCommentBox/Comment_box";
 
 import EventDetails from "@/components/training_and_education/event_detail";

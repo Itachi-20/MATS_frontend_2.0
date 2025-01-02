@@ -241,11 +241,11 @@ export default function Page() {
                             <SelectContent>
                                 <SelectItem value="all">All</SelectItem>
                                 <SelectItem value="utr updated">UTR Updated</SelectItem>
-                                <SelectItem value="pending">UTR Pending</SelectItem>
+                                <SelectItem value="utr pending">UTR Pending</SelectItem>
                                 <SelectItem value="awaiting approval">Awaitting Approval</SelectItem>
                                 <SelectItem value="approved">Approved</SelectItem>
                                 <SelectItem value="pending">Pending</SelectItem>
-                                <SelectItem value="sendback">Sendback</SelectItem>
+                                <SelectItem value="send back">Sendback</SelectItem>
                                 <SelectItem value="executed">Executed</SelectItem>
                                 <SelectItem value="rejected">Rejected</SelectItem>
                                 <SelectItem value="cancelled">Cancelled</SelectItem>
