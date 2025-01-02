@@ -32,6 +32,7 @@ import SimpleFileUpload from '@/components/multiple_file_upload';
 import { Toaster, toast } from 'sonner'
 import SuccessProp from '@/components/success_prop';
 import { useAuth } from "@/app/context/AuthContext";
+import ExecuteDialog from '@/components/executeDialog';
 
 type ImportFiles = {
   name: string,
@@ -206,7 +207,10 @@ type DocumentRow = {
 };
 const table = ({ tableData }: Props) => {
   const { role, name, userid, clearAuthData } = useAuth();
+  const param = useParams();
+  const refno = param.refno as string;
   const [open, setOpen] = useState(false);
+  const [isDialog, setIsDialog] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [successProp, setSuccessProp] = useState(false);
   const [exportopen, setExportOpen] = useState(false);
@@ -226,7 +230,8 @@ const table = ({ tableData }: Props) => {
   const [fileData, setFileData] = useState<DocumentRow[] | undefined>();
   const [fileList, setFileList] = useState<File[]>([]);
   const [files, setFiles] = useState<File[]>([]);
-  const [uploadedFiles, setUploadedFiles] = useState<FileList | null>(null)
+  const [uploadedFiles, setUploadedFiles] = useState<FileList | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
   const base_url = process.env.NEXT_PUBLIC_FRAPPE_URL;
   const router = useRouter();
   const params = useParams();
@@ -258,7 +263,6 @@ const table = ({ tableData }: Props) => {
       console.log(error, "something went wrong");
     }
   }
-
   const handleRecordDeletion = async () => {
     try {
       const response = await fetch(
@@ -291,7 +295,6 @@ const table = ({ tableData }: Props) => {
   const handleExport = () => {
     setExportOpen(prevState => !prevState);
   };
-
   const handleFileUpload: any = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = (e.target as HTMLInputElement).files;
     setFile(files);
@@ -356,7 +359,6 @@ const table = ({ tableData }: Props) => {
       console.error("Error during login:", error);
     }
   };
-
   const dropdown = async () => {
 
     try {
@@ -453,43 +455,84 @@ const table = ({ tableData }: Props) => {
       },
       error: (error) => `Failed to add vendor: ${error.message || error}`,
     });
-
-    // try {
-    //   const response = await fetch('/api/postExpense/postExpenseRequest', {
-    //     method: "POST",
-    //     headers: {
-    //       // "Content-Type": "application/json",
-    //     },
-    //     credentials: 'include',
-    //     body: formData
-    //   });
-
-    //   if (!response.ok) {
-    //     setIsLoading(false);
-    //     throw new Error('File upload failed');
-    //   }
-
-    //   const data = await response.json();
-    //   const file = data.message;
-
-    //   fetchData();
-    //   setVendorDetails({ vendor_type: '', vendor_name: '', amount: 0, file: null });
-    //   setFile(null);
-    //   setFileList([]);
-    //   setIsLoading(false);
-    // } catch (error) {
-    //   setIsLoading(false);
-    //   console.error('Error uploading file:', error);
-    //   alert('Failed to upload file. Please try again.');
-    // }
   };
-  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  const handleIndividualExpense = async (value:string) => {
+    try{
+      setLoading(true);
+      const apiCallPromise = new Promise(async (resolve, reject) => {
+        try {
+          setLoading(true);
+          const tableData = await fetch(
+            `/api/postExpense/submitIndividualExpense`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              credentials: "include",
+              body: JSON.stringify({
+                parent: refno,
+                name:value
+              })
+            }
+          );
+  
+          if (!tableData.ok) {
+            throw new Error(`Can't Submit ${value} expense`);
+          }
+  
+          const data = await tableData.json();
+            resolve(data);
+        } catch (error) {
+          reject(error);
+        }
+      });
+        toast.promise(apiCallPromise, {
+              loading: `Submitting Expense ...${value}`,
+              success: (data) => {
+                setTimeout(() => {
+                  fetchData();
+                }, 500);
+                console.log("data reponse ", data)
+                setLoading(false);
+                fetchData();
+                return 'Post Expense submitted successfully!';
+              },
+          error: (error) => {setLoading(false); return`Failed to submit expense: ${error.message || error}`},
+        });
+      } catch (error) {
+        setLoading(false);
+        console.log(error, "something went wrong");
+      }
+  }
+  const handleExecute = async () => {
     router.push(`/event_list`);
     setSuccessProp(true);
     setTimeout(() => {
       setSuccessProp(false);
     }, 500);
+      // try {
+      //   const tableData = await fetch(
+      //     `/api/`,
+      //     {
+      //       method: "POST",
+      //       headers: {
+      //         "Content-Type": "application/json",
+      //       },
+      //       credentials: "include",
+      //       body: JSON.stringify({
+      //         name: refno
+      //       })
+      //     }
+      //   );
+      //   if (tableData.ok) {
+      //     router.push("/event_list");
+      //   }
+  
+      // } catch (error) {
+      //   console.log(error, "something went wrong");
+      // }
+  
   };
   const handleSetFileData = async (file: any) => {
     console.log(file, 'file in setfile ')
@@ -502,6 +545,9 @@ const table = ({ tableData }: Props) => {
   const handleDeletePopup = async (name: any) => {
     setDeleteRecordname(name)
     setIsDeletePropOpen(true)
+  }
+  const handleDialog = () => {
+    setIsDialog(prev => !prev);
   }
 
   console.log(vendorDetails, 'vendorDetails')
@@ -734,7 +780,12 @@ const table = ({ tableData }: Props) => {
                 </TableHead>
                 <TableHead
                   className={
-                    "text-center rounded-r-2xl text-[#625d5d] text-[15px] font-normal font-['Montserrat'] sticky right-0 z-20 bg-[#E0E9FF] shadow"
+                    "text-center text-[#625d5d] text-[15px] font-normal font-['Montserrat'] border-l border-r sticky right-[115px] z-20 bg-[#E0E9FF] min-w-[80px]"
+                  }
+                >View</TableHead>
+                <TableHead
+                  className={
+                    "text-center rounded-r-2xl text-[#625d5d] text-[15px] font-normal font-['Montserrat'] sticky right-0 z-20 bg-[#E0E9FF] min-w-[120px]"
                   }
                 >Action</TableHead>
               </TableRow>
@@ -760,8 +811,9 @@ const table = ({ tableData }: Props) => {
                           <TableCell>{data.utr_number ?? "-"}</TableCell>
                           <TableCell>{data.payment_date ?? "-"}</TableCell>
 
-                          <TableCell className='sticky right-0 z-20 gap-4 w-[120px] bg-white mt-2 flex border-l justify-center mb-2'>
-                            <div className='p-0 cursor-pointer hover:opacity-60' onClick={() => handleSetFileData(data.files)}>
+                          {/* <TableCell className='z-20 gap-4 w-[120px] bg-white mt-2 flex border-l justify-center mb-2'> */}
+                          <TableCell className='sticky right-[116px] z-20 min-w-[80px] border-l border-r bg-white'>
+                            <div className='p-0 cursor-pointer hover:opacity-60 flex justify-center' onClick={() => handleSetFileData(data.files)}>
                               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
                                 <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
                                 <path fillRule="evenodd" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 0 1 0-1.113ZM17.25 12a5.25 5.25 0 1 1-10.5 0 5.25 5.25 0 0 1 10.5 0Z" clipRule="evenodd" />
@@ -772,7 +824,13 @@ const table = ({ tableData }: Props) => {
                               <Image className='hover:cursor-pointer hover:opacity-60' src={'/svg/delete.svg'} alt='deletesvg' width={20} height={18} onClick={() => { handleDeletePopup(data.name) }} />
                             }
                           </TableCell>
+                          <TableCell className='sticky right-0 z-20 gap-4 min-w-[120px] mt-2 mb-2 bg-white border-l'>
+                            <div className='p-0 '>
+                              <button className='bg-green-500 hover:opacity-60 disabled:hover:none  text-white disabled:cursor-not-allowed disabled:bg-gray-400  rounded-md px-3 py-2' disabled={(data.status == "Draft" && isLoading != true) ? false:true} onClick={() => { handleIndividualExpense(data.name) }}>{data.status == "Draft" ? "Submit" :"Submitted"}</button>
+                            </div>
+                          </TableCell>
                         </TableRow>
+                        
                       );
                     })}
                 </TableBody>
@@ -937,7 +995,7 @@ const table = ({ tableData }: Props) => {
         {
           !tableData?.post_expense_approved &&
           <div className='flex justify-end gap-2 pt-8'>
-            <Button className='bg-[#4430BF] px-10 text-white' onClick={handleSubmit}>Back</Button>
+            <Button className='bg-[#4430BF] px-10 text-white' onClick={() => { handleDialog() }}>Final Submit</Button>
           </div>
         }
       </div>
@@ -948,6 +1006,14 @@ const table = ({ tableData }: Props) => {
       {exportopen && <UploadExport handleExport={handleExport} data={tabledata.import_files} />}
       {isDeletePropOpen && <Ondeleteprop setClose={setIsDeletePropOpen} handleSubmit={handleRecordDeletion} Loading={isLoading} text={"Are you sure you want to close this event?"} />}
       {successProp && <SuccessProp title={"Post Expense Approval"} />}
+      {
+        isDialog &&
+        <ExecuteDialog
+          handleDialog={handleDialog}
+          handleExecute={handleExecute}
+          title={`All the expenses listed below are from the current occurrence.`}
+        />
+      }
       <Toaster richColors position="top-right" />
     </>
 
