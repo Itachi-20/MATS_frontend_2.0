@@ -24,9 +24,11 @@ export default function DateRangePicker({ ...Props }: props) {
   useEffect(() => {
     const today = new Date();
     const startDate = new Date(today);
+    const endDate = new Date(today);
     startDate.setFullYear(today.getFullYear() - 1);
+    endDate.setFullYear(today.getFullYear() + 1);
     const formattedStartDate = startDate.toISOString().split('T')[0];
-    const formattedEndDate = today.toISOString().split('T')[0];
+    const formattedEndDate = endDate.toISOString().split('T')[0];
     if (!Props.startDate && !Props.endDate) {
       Props.setStartDate(formattedStartDate);
       Props.setEndDate(formattedEndDate);

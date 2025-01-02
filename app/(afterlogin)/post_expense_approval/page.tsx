@@ -284,7 +284,7 @@ const Index = () => {
                             <SelectContent>
                                 <SelectItem value="all">All</SelectItem>
                                 <SelectItem value="utr updated">UTR Updated</SelectItem>
-                                <SelectItem value="pending">UTR Pending</SelectItem>
+                                <SelectItem value="utr pending">UTR Pending</SelectItem>
                                 <SelectItem value="awaiting approval">Awaiting Approval</SelectItem>
                                 <SelectItem value="approved">Approved</SelectItem>
                                 <SelectItem value="pending">Pending</SelectItem>

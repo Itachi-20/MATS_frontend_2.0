@@ -208,7 +208,7 @@ const page = () => {
   const [isDialog, setIsDialog] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState<FileList | null>(null)
   const [documentType, setDocumentType] = useState("");
-  const [activityType, setActivityType] = useState('Executed');
+  const [activityType, setActivityType] = useState('Execution');
   const [preview_data, setPreviewData] = useState<any>(null);
   const [activityDropdown, setActivityDropdown] = useState<activityDropdown>();
   const router = useRouter()
@@ -217,7 +217,7 @@ const page = () => {
     setIsDialog(prev => !prev);
   }
 
-  const executeFiles = preview_data && preview_data.documents.filter((item, index) => {
+  const executeFiles = preview_data && preview_data.documents.filter((item:any, index:any) => {
     if (item.activity_type == "Executed") {
       return item;
     }
@@ -353,7 +353,7 @@ const page = () => {
         },
         credentials: 'include',
         body: JSON.stringify({
-          activity_type: activityType,
+          activity_type: 'Executed',
           event_type:preview_data?.event_type
         })
       });
@@ -431,10 +431,10 @@ const page = () => {
             <Select
               onValueChange={(value) => handleActivityTypeChange(value)}
               disabled
-              value={'Executed'}
+              value={'Execution'}
             >
               <SelectTrigger className="dropdown">
-                <SelectValue placeholder="Executed" />
+                <SelectValue placeholder="Execution" />
               </SelectTrigger>
               <SelectContent>
                 {/* {

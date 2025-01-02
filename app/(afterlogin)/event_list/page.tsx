@@ -131,6 +131,7 @@ export default function EventList() {
       );
       if (Data.ok) {
         const data = await Data.json();
+        console.log(data,'data------------hitesh----------------')
         setTableData(data.message)
         setLoading(false)
       } else {
@@ -339,7 +340,7 @@ export default function EventList() {
                     return (
                       <TableRow key={index} className="text-center text-nowrap">
                         <TableCell>{data.name ?? "-"}</TableCell>
-                        <TableCell>{data.event_name ?? "-"}</TableCell>
+                        <TableCell className="max-w-[300px] truncate">{data.event_name ?? "-"}</TableCell>
                         <TableCell>{data.event_type ?? "-"}</TableCell>
                         <TableCell>{FormatDate(data.event_start_date) ?? "-"}</TableCell>
                         <TableCell>{FormatDate(data.event_end_date) ?? "-"} </TableCell>
