@@ -276,13 +276,13 @@ const details = ({ ...Props }: Props) => {
                   >
                     Event End Date
                   </TableHead>
-                  <TableHead
+                  {/* <TableHead
                     className={
                       "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                     }
                   >
                     Event  Status
-                  </TableHead>
+                  </TableHead> */}
                   <TableHead  
                     className={
                       "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
@@ -307,7 +307,7 @@ const details = ({ ...Props }: Props) => {
 
                         <TableCell>{FormatDate(item.event_start_date) ?? "-"}</TableCell>
                         <TableCell>{FormatDate(item.event_end_date) ?? "-"} </TableCell>
-                        <TableCell>{item.status}</TableCell>
+                        {/* <TableCell>{item.status}</TableCell> */}
                         <TableCell>{item.brief_status}</TableCell>
                       </TableRow>
                     )
