@@ -1,43 +1,4 @@
-// import React from 'react'
-
-// const page = () => {
-//   const eventDataApi = async()=>{
-//     console.log("inside event Data")
-//     try {
-//       const response = await fetch(
-//         "/api/previewData",
-//         {
-//           method: "POST",
-//           headers: {
-//             "Content-Type": "application/json",
-//           },
-//           credentials:'include',
-//           body:JSON.stringify({
-//             name:param.get("refno")
-//           })
-//         }
-//       );
-
-//       if (response.ok) {
-//         const data = await response.json();
-//         setEventData(data.data);
-        
-        
-//       } else {
-//         console.log("Login failed");
-//       }
-//     } catch (error) {
-//       console.error("Error during login:", error);
-//     }
-// };
-//   return (
-//     <div>page</div>
-//   )
-// }
-
-// export default page
-
-
+'use server'
 import React from 'react'
 import Table from './detail'
 import { cookies } from 'next/headers';
