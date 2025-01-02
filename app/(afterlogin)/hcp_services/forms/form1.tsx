@@ -759,7 +759,7 @@ const Form1 = ({ ...Props }: Props) => {
           </div>
         </div>
 
-        {(engagementTypes == "One Time" || Props.previewData?.type_of_engagement == "One Time") &&
+        {(engagementTypes ? (engagementTypes == "One Time"):(engagementTypes == "One Time" || Props.previewData?.type_of_engagement == "One Time")) &&
           <>
             <div className="py-8">
               <h1 className="text-black text-2xl font-normal uppercase pb-8">
@@ -933,7 +933,7 @@ const Form1 = ({ ...Props }: Props) => {
         }
 
 
-        {(engagementTypes == "MSA" || Props.previewData?.type_of_engagement == "MSA") &&
+        {(engagementTypes ? (engagementTypes == "MSA"):(engagementTypes == "MSA" || Props.previewData?.type_of_engagement == "MSA")) &&
           <>
             <div className="py-8">
               <h1 className="text-black text-2xl font-normal uppercase pb-8">
@@ -1045,7 +1045,7 @@ const Form1 = ({ ...Props }: Props) => {
 
         }
 
-        {(engagementTypes == "Scientific Advisory Consultancy Agreement" || Props.previewData?.type_of_engagement == "Scientific Advisory Consultancy Agreement") &&
+        {(engagementTypes ? (engagementTypes == "Scientific Advisory Consultancy Agreement"):(engagementTypes == "Scientific Advisory Consultancy Agreement" || Props.previewData?.type_of_engagement == "Scientific Advisory Consultancy Agreement")) &&
           <>
             <div className="py-8">
               <h1 className="text-black text-2xl font-normal uppercase pb-8">
@@ -1127,7 +1127,7 @@ const Form1 = ({ ...Props }: Props) => {
 
         }
 
-        {(engagementTypes == "Royalty Agreement" || engagementTypes == "Product development And Royalty Agreement" || engagementTypes == "Product Development Agreement" || engagementTypes == "Product feedback Agreement" || Props.previewData?.type_of_engagement == "Royalty Agreement" || Props.previewData?.type_of_engagement == "Product development And Royalty Agreement" || Props.previewData?.type_of_engagement == "Product Development Agreement" || Props.previewData?.type_of_engagement == "Product feedback Agreement") &&
+        {(engagementTypes ? (engagementTypes == "Royalty Agreement" || engagementTypes == "Product development And Royalty Agreement" || engagementTypes == "Product Development Agreement" || engagementTypes == "Product feedback Agreement"):(engagementTypes == "Royalty Agreement" || engagementTypes == "Product development And Royalty Agreement" || engagementTypes == "Product Development Agreement" || engagementTypes == "Product feedback Agreement" || Props.previewData?.type_of_engagement == "Royalty Agreement" || Props.previewData?.type_of_engagement == "Product development And Royalty Agreement" || Props.previewData?.type_of_engagement == "Product Development Agreement" || Props.previewData?.type_of_engagement == "Product feedback Agreement")) &&
           <>
             <div className="py-8">
               <h1 className="text-black text-2xl font-normal uppercase pb-8">
