@@ -1215,9 +1215,9 @@ const Form1 = ({ ...Props }: Props) => {
           {" "}
           Save as Draft
         </Button> */}
-        <Button className='bg-[#4430bf] text-white text-md font-normal border' onClick={(e) => handleSubmit(e)}>Next</Button>
+          <Button className='bg-[#4430bf] text-white text-md font-normal border' onClick={(e) => handleSubmit(e)}>Next</Button>
+        </div>
       </div>
-    </div>
     <Toaster richColors position="bottom-right" /> 
     {formdata?.state  && isReportingHeadDialog && (
         <IsReportingHeadDialog
