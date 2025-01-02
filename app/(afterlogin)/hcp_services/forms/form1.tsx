@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect,useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -9,7 +9,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/app/context/AuthContext";
 import { Previewdata } from '@/app/(afterlogin)/hcp_services/page';
@@ -47,23 +46,20 @@ type dropdownData = {
   training_ref_no: {
     name: string
   }[]
-  sponsorship_ref_no:{
-    name:string
+  sponsorship_ref_no: {
+    name: string
   }[]
-}
-
+};
 type Compensation = {
   vendor_type: string;
   vendor_name: string;
   est_amount: number;
   gst_included?: number;
 };
-
 type Logistics = {
   vendor_type: string;
   est_amount: number;
 };
-
 type FormData = {
   name: string | null;
   event_type: string;
@@ -90,10 +86,14 @@ type FormData = {
   division_sub_category: string;
   sub_type_of_activity: string;
   any_govt_hcp: string,
-  no_of_hcp: number
+  no_of_hcp: number,
+  type_of_engagement: string,
+  training_ref_no:string,
+  product_details:string,
+  annual_plan: number,
+  service_type: string,
+  sponsorship_ref_no: string,
 };
-
-
 type activityDropdown = {
   activity: {
     name: string,
@@ -105,7 +105,6 @@ type activityDropdown = {
     document_name: string
   }[]
 }
-
 type eventCostCenter = {
   cost_center: {
     name: string;
@@ -120,12 +119,10 @@ type eventCostCenter = {
     therapy: string;
   }[];
 };
-
 type subtypeActivity = {
   name: string;
   division_sub_category: string
 }[];
-
 type reportingHeadDropdown = {
   reporting_name: string;
   reporting: string
@@ -143,9 +140,24 @@ type Props = {
   refno: string;
   subtypeActivity: subtypeActivity | null;
 };
+type FormErrors = {
+  type_of_engagement?: string;
+  event_cost_center?: string;
+  product_details?: string;
+  event_end_date?: string;
+  event_start_date?: string;
+  annual_plan?: string;
+  service_type?: string;
+  event_venue?: string;
+  event_name?: string;
+  sponsorship_ref_no: string;
+  training_ref_no: string;
+}
+
 const Form1 = ({ ...Props }: Props) => {
   const router = useRouter();
   const [businessUnit, setBusinessUnit] = useState(Props.previewData?.business_unit);
+  const [errors, setErrors] = useState<Partial<FormErrors>>();
   const [budget, setBudget] = useState(Props.previewData?.division_category);
   const [eventCostCenter, setEventCostCenter] =
     useState<eventCostCenter | null>(null);
@@ -157,24 +169,58 @@ const Form1 = ({ ...Props }: Props) => {
   const [refNo, setRefNo] = useState<string | null>(Props.refno);
   const [eventStartDate, setEventStartDate] = useState<any>(Props.previewData?.event_start_date ? new Date(Props.previewData?.event_start_date).getTime() : "");
   const [citydropdown, setCityDropdown] = useState<cityDropdown | null>()
-  const [reportingHeadDropdown, setReportingHeadDropdown] = useState<reportingHeadDropdown | null>(null)  
+  const [reportingHeadDropdown, setReportingHeadDropdown] = useState<reportingHeadDropdown | null>(null)
   const [loading, setLoading] = useState(true);
   const { role, name, userid, clearAuthData } = useAuth();
   const start_date_ref: React.RefObject<any> = useRef(null);
   const end_date_ref: React.RefObject<any> = useRef(null);
   const [isReportingHeadDialog, setIsReportingHeadDialog] = useState(false);
 
+  const validateAtSubmit = () => {
+    const errors: Partial<FormErrors> = {};
+    console.log("Checking Formdata value", formdata?.type_of_engagement);
+    if ((Props.previewData?.type_of_engagement ? (formdata && ("type_of_engagement" in formdata && formdata.type_of_engagement == '')) : (!formdata?.type_of_engagement))) errors.type_of_engagement = "Type of engagement is required";
+    if ((Props.previewData?.event_cost_center ? (formdata && ("event_cost_center" in formdata && formdata.event_cost_center == '')) : (!formdata?.event_cost_center))) errors.event_cost_center = "Event Cost Center is required";
+    if ((Props.previewData?.product_details ? (formdata && ("product_details" in formdata && formdata.product_details == '')) : (((formdata?.type_of_engagement == "Royalty Agreement")||(formdata?.type_of_engagement == "Product feedback Agreement")||(formdata?.type_of_engagement == "Product Development Agreement")||(formdata?.type_of_engagement == "Product development And Royalty Agreement")) && (!formdata?.product_details)))) errors.product_details = "Product Details required";
+    if ((Props.previewData?.event_start_date ? (formdata && ("event_start_date" in formdata && formdata.event_start_date == '')) : (!formdata?.event_start_date))) errors.event_start_date = "Event Start Date is required";
+    if ((Props.previewData?.event_end_date ? (formdata && ("event_end_date" in formdata && formdata.event_end_date == '')) : (!formdata?.event_end_date))) errors.event_end_date = "Event End Date is required";
+    if ((Props.previewData?.annual_plan ? (formdata && ("annual_plan" in formdata && formdata.annual_plan)) : (((formdata?.type_of_engagement == "MSA") || (formdata?.type_of_engagement == "Scientific Advisory Consultancy Agreement")) && (!formdata?.annual_plan)))) errors.annual_plan = "Annual Plan is required";
+    if ((Props.previewData?.service_type ? (formdata && ("service_type" in formdata && formdata.service_type == '')) : ((formdata?.type_of_engagement == "MSA") && (!formdata?.service_type)))) errors.service_type = "Service Type is required";
+    if ((Props.previewData?.sponsorship_ref_no ? (formdata && ("sponsorship_ref_no" in formdata && formdata.sponsorship_ref_no == '')) : ((formdata?.type_of_engagement == "One Time") && (!formdata?.sponsorship_ref_no)))) errors.sponsorship_ref_no = "Sponsorship Reference Number is required";
+    if ((Props.previewData?.training_ref_no ? (formdata && ("training_ref_no" in formdata && formdata.training_ref_no == '')) : ((formdata?.type_of_engagement == "One Time") && (!formdata?.training_ref_no)))) errors.training_ref_no = "Training Reference Number is required";
+    if ((Props.previewData?.event_venue ? (formdata && ("event_venue" in formdata && formdata.event_venue == '')) : ((formdata?.type_of_engagement == "One Time") && (!formdata?.event_venue)))) errors.event_venue = "Event Venue is required";
+    if ((Props.previewData?.event_name ? (formdata && ("event_name" in formdata && formdata.event_name == '')) : ((formdata?.type_of_engagement == "One Time") && (!formdata?.event_name)))) errors.event_name = "Event Name is required";
+    return errors;
+  };
+  const handleFieldValues = () => {
+    setFormData((prevData) => ({
+      ...prevData,
+      event_name: "",
+      event_venue: "",
+      training_ref_no: "",
+      sponsorship_ref_no: "",
+      service_type: "",
+      annual_plan: 0,
+      event_end_date: "",
+      event_start_date: "",
+      product_details: "",
+    })as FormData);
+  };
   const handleSelectChange = (value: string, name: string) => {
     setFormData((prev) => ({ ...prev, [name]: value }) as FormData);
   };
   const handlefieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }) as FormData);
-  }
-
+  };
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-
+    const validationErrors = validateAtSubmit();
+    if (Object.keys(validationErrors).length > 0) {
+      console.error(validationErrors)
+      setErrors(validationErrors);
+      return;
+    }
     const updatedFormData = {
       ...formdata
 
@@ -202,8 +248,6 @@ const Form1 = ({ ...Props }: Props) => {
       );
       if (response.ok) {
         const data = await response.json();
-        console.log(data, "response data-----------------------------------");
-        // localStorage.setItem("refno", data.message);
         setRefNo(data.message);
         router.push(`/hcp_services?forms=2&refno=${data.message}`);
 
@@ -214,9 +258,6 @@ const Form1 = ({ ...Props }: Props) => {
       console.error("Error during Submission:", error);
     }
   };
-
-
-
   const handleBusinessUnitChange = async (value: string) => {
     try {
       const response = await fetch(
@@ -243,7 +284,6 @@ const Form1 = ({ ...Props }: Props) => {
       console.error("Error during login:", error);
     }
   };
-
   const handleBudgetChange = async (value: string) => {
     try {
       const response = await fetch(
@@ -275,7 +315,6 @@ const Form1 = ({ ...Props }: Props) => {
       console.error("Error during login:", error);
     }
   };
-
   const handleEventStartDateValidate = (e: React.ChangeEvent<HTMLInputElement>) => {
     const currentDate = new Date().setHours(0, 0, 0, 0);
     if (e.target.valueAsNumber < currentDate) {
@@ -285,43 +324,24 @@ const Form1 = ({ ...Props }: Props) => {
     handlefieldChange(e);
   };
   const handleEventEndDateValidate = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (eventStartDate && e.target.valueAsNumber < eventStartDate ) {
+    if (eventStartDate && e.target.valueAsNumber < eventStartDate) {
       toast.error("Event end Date should be greater than or equal to start date");
       e.target.value = "";
     }
     handlefieldChange(e);
   };
-
   const handleStartDateClick = () => {
     if (start_date_ref.current) {
       start_date_ref.current.showPicker(); // For modern browsers
       start_date_ref.current.focus(); // Fallback for older browsers
     }
   };
-  
   const handleEndDateClick = () => {
     if (end_date_ref.current) {
       end_date_ref.current.showPicker(); // For modern browsers
       end_date_ref.current.focus(); // Fallback for older browsers
     }
   };
-
-  useEffect(() => {
-    setFormData({ ...formdata, name: refNo } as FormData)
-  }, [refNo])
-
-  useEffect(() => {
-    if (userid !== undefined) {
-      setLoading(false);
-      if(Props?.previewData?.event_requestor){
-        handleSelectChange(Props.previewData.event_requestor, "event_requestor")
-      }else{
-        handleSelectChange(userid as string, "event_requestor")
-      }
-    }
-  }, [userid]);
-
-
   const handleStateChange = async (value: string) => {
     try {
       const response = await fetch(
@@ -349,7 +369,6 @@ const Form1 = ({ ...Props }: Props) => {
       console.error("Error during state  change:", error);
     }
   };
-
   const handleReportingChange = async () => {
     setReportingHeadDropdown([])
     try {
@@ -387,15 +406,26 @@ const Form1 = ({ ...Props }: Props) => {
   };
 
   useEffect(() => {
-    // Check if all values are present
+    setFormData({ ...formdata, name: refNo } as FormData)
+  }, [refNo])
+
+  useEffect(() => {
+    if (userid !== undefined) {
+      setLoading(false);
+      if (Props?.previewData?.event_requestor) {
+        handleSelectChange(Props.previewData.event_requestor, "event_requestor")
+      } else {
+        handleSelectChange(userid as string, "event_requestor")
+      }
+    }
+  }, [userid]);
+
+  useEffect(() => {
     if (formdata?.event_requestor && formdata?.business_unit && formdata?.state) {
-      console.log("inside use effect reporting head");
       handleReportingChange();
     }
   }, [formdata?.event_requestor, formdata?.business_unit, formdata?.division_category, formdata?.division_sub_category, formdata?.state]);
 
-  console.log("Formdata", formdata);
-  console.log(formdata, "this is form data")
   if (loading) {
     return <div>Loading Please Wait</div>;
   }
@@ -406,661 +436,788 @@ const Form1 = ({ ...Props }: Props) => {
   return (
     // </div>
     <>
-    <div>
-      <h1 className="text-black text-2xl font-normal uppercase pb-8">
-        Basic Detail
-      </h1>
-      <div className="grid grid-cols-2 gap-6 pb-8">
-        <div className="flex flex-col gap-2">
-          <label className="lable">
-            Company Names <span className="text-[#e60000]">*</span>
-          </label>
-          <Select
-            onValueChange={(value) => { handleSelectChange(value, "company") }}
-            defaultValue={Props.previewData?.company ? Props.previewData.company : ""}
-          >
-            <SelectTrigger className="dropdown">
-              <SelectValue placeholder="Select" />
-            </SelectTrigger>
-            <SelectContent>
-              {
-                Props.dropdownData && Props.dropdownData.company?.map((item, index) => {
-                  return (
-                    <SelectItem value={item.name}>{item.company_name}</SelectItem>
-                  )
-                })
-              }
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="flex flex-col gap-2">
-          <label className="lable">
-            Business Unit<span className="text-[#e60000]">*</span>
-          </label>
-          <Select onValueChange={(value) => { handleBusinessUnitChange(value); handleSelectChange(value, "business_unit"); setBusinessUnit(value) }}
-            defaultValue={Props.previewData?.business_unit ? Props.previewData.business_unit : ""}
-          >
-            <SelectTrigger className="dropdown">
-              <SelectValue placeholder="Select" />
-            </SelectTrigger>
-            <SelectContent>
-              {
-                Props.dropdownData && Props.dropdownData.division?.map((item, index) => {
-                  return (
-                    <SelectItem value={item.name}>{item.division_name}</SelectItem>
-                  )
-                })
-              }
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="flex flex-col gap-2">
-          <label className="lable">
-            Event requester<span className="text-[#e60000]">*</span>
-          </label>
-          <Select
-            onValueChange={(value) => handleSelectChange(value, "event_requestor")}
-            defaultValue={Props.previewData?.event_requestor ? Props.previewData.event_requestor : userid as string}
-          >
-            <SelectTrigger className="dropdown">
-              <SelectValue placeholder="Select" />
-            </SelectTrigger>
-            <SelectContent>
-              {Props.dropdownData &&
-                Props.dropdownData.requestor.map((item, index) => {
-                  return (
-                    <SelectItem value={item.email}>
-                      {item.full_name}
-                    </SelectItem>
-                  );
-                })}
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="flex flex-col gap-2">
-          <label className="lable">
-            event cost center<span className="text-[#e60000]">*</span>
-          </label>
-          <Select
-            onValueChange={(value) => handleSelectChange(value, "event_cost_center")}
-            defaultValue={Props.previewData?.event_cost_center ? Props.previewData.event_cost_center : ""}
-          >
-            <SelectTrigger className="dropdown">
-              <SelectValue placeholder="Select" />
-            </SelectTrigger>
-            <SelectContent>
-              {eventCostCenter ? eventCostCenter.cost_center.map((item, index) => {
-                return (
-                  <SelectItem value={item.name}>
-                    {item.cost_center_description}
-                  </SelectItem>
-                )
-              }): Props.eventCostCenter && Props.eventCostCenter.cost_center.map((item, index) => {
-                return (
-                  <SelectItem value={item.name}>
-                    {item.cost_center_description}
-                  </SelectItem>
-                );
-              }) }
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="flex flex-col gap-2">
-          <label className="lable">
-            Budget<span className="text-[#e60000]">*</span>
-          </label>
-          <Select onValueChange={(value) => { handleBudgetChange(value), handleSelectChange(value, "division_category"); setBudget(value) }}
-            defaultValue={Props.previewData?.division_category ? Props.previewData.division_category : ""}>
-            <SelectTrigger className="dropdown">
-              <SelectValue placeholder="Select" />
-            </SelectTrigger>
-            <SelectContent>
-              {eventCostCenter ? eventCostCenter.division_category.map((item, index) => {
-                return (
-                  <SelectItem value={item.name}>
-                    {item.category}
-                  </SelectItem>
-                )
-              }) : Props.eventCostCenter && Props.eventCostCenter.division_category.map((item, index) => {
-                return (
-                  <SelectItem value={item.name}>
-                    {item.category}
-                  </SelectItem>
-                );
-              })}
-            </SelectContent>
-          </Select>
-        </div>
-        {
-          (businessUnit == "Endosurgery" && budget == "National") &&
+      <div>
+        <h1 className="text-black text-2xl font-normal uppercase pb-8">
+          Basic Detail
+        </h1>
+        <div className="grid grid-cols-2 gap-6 pb-8">
           <div className="flex flex-col gap-2">
             <label className="lable">
-              Budget Sub Type<span className="text-[#e60000]">*</span>
+              Company Names
             </label>
             <Select
-            onValueChange={(value)=>{handleSelectChange(value,"division_sub_category")}}
-            defaultValue={Props.previewData?.division_sub_category?Props.previewData.division_sub_category:""}
+              onValueChange={(value) => { handleSelectChange(value, "company") }}
+              defaultValue={Props.previewData?.company ? Props.previewData.company : ""}
             >
               <SelectTrigger className="dropdown">
                 <SelectValue placeholder="Select" />
               </SelectTrigger>
               <SelectContent>
-                {subtypeActivity ?
-                  subtypeActivity.map((item, index) => {
+                {
+                  Props.dropdownData && Props.dropdownData.company?.map((item, index) => {
                     return (
-                      <SelectItem value={item.name}>
-                        {item.division_sub_category}
+                      <SelectItem value={item.name}>{item.company_name}</SelectItem>
+                    )
+                  })
+                }
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="flex flex-col gap-2">
+            <label className="lable">
+              Business Unit
+            </label>
+            <Select onValueChange={(value) => { handleBusinessUnitChange(value); handleSelectChange(value, "business_unit"); setBusinessUnit(value) }}
+              defaultValue={Props.previewData?.business_unit ? Props.previewData.business_unit : ""}
+            >
+              <SelectTrigger className="dropdown">
+                <SelectValue placeholder="Select" />
+              </SelectTrigger>
+              <SelectContent>
+                {
+                  Props.dropdownData && Props.dropdownData.division?.map((item, index) => {
+                    return (
+                      <SelectItem value={item.name}>{item.division_name}</SelectItem>
+                    )
+                  })
+                }
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="flex flex-col gap-2">
+            <label className="lable">
+              Event requester
+            </label>
+            <Select
+              onValueChange={(value) => handleSelectChange(value, "event_requestor")}
+              defaultValue={Props.previewData?.event_requestor ? Props.previewData.event_requestor : userid as string}
+            >
+              <SelectTrigger className="dropdown">
+                <SelectValue placeholder="Select" />
+              </SelectTrigger>
+              <SelectContent>
+                {Props.dropdownData &&
+                  Props.dropdownData.requestor.map((item, index) => {
+                    return (
+                      <SelectItem value={item.email}>
+                        {item.full_name}
                       </SelectItem>
                     );
-                  }): Props.subtypeActivity && Props.subtypeActivity.map((item,index)=>{
-                    return (
-                      <SelectItem value={item.name}>
-                        {item.division_sub_category}
-                      </SelectItem>
-                    )
                   })}
               </SelectContent>
             </Select>
           </div>
+          <div className="flex flex-col gap-2">
+            <label className="lable">
+              event cost center<span className="text-[#e60000]">*</span>
+            </label>
+            <Select
+              onValueChange={(value) => handleSelectChange(value, "event_cost_center")}
+              defaultValue={Props.previewData?.event_cost_center ? Props.previewData.event_cost_center : ""}
+            >
+              <SelectTrigger className="dropdown">
+                <SelectValue placeholder="Select" />
+              </SelectTrigger>
+              <SelectContent>
+                {eventCostCenter ? eventCostCenter.cost_center.map((item, index) => {
+                  return (
+                    <SelectItem value={item.name}>
+                      {item.cost_center_description}
+                    </SelectItem>
+                  )
+                }) : Props.eventCostCenter && Props.eventCostCenter.cost_center.map((item, index) => {
+                  return (
+                    <SelectItem value={item.name}>
+                      {item.cost_center_description}
+                    </SelectItem>
+                  );
+                })}
+              </SelectContent>
+            </Select>
+            {
+              errors &&
+              (errors?.event_cost_center && !formdata?.event_cost_center) &&
+              (
+                <p className="w-full text-red-500 text-[11px] font-normal text-left">
+                  {errors?.event_cost_center}
+                </p>
+              )
+            }
+          </div>
+          <div className="flex flex-col gap-2">
+            <label className="lable">
+              Budget
+            </label>
+            <Select onValueChange={(value) => { handleBudgetChange(value), handleSelectChange(value, "division_category"); setBudget(value) }}
+              defaultValue={Props.previewData?.division_category ? Props.previewData.division_category : ""}>
+              <SelectTrigger className="dropdown">
+                <SelectValue placeholder="Select" />
+              </SelectTrigger>
+              <SelectContent>
+                {eventCostCenter ? eventCostCenter.division_category.map((item, index) => {
+                  return (
+                    <SelectItem value={item.name}>
+                      {item.category}
+                    </SelectItem>
+                  )
+                }) : Props.eventCostCenter && Props.eventCostCenter.division_category.map((item, index) => {
+                  return (
+                    <SelectItem value={item.name}>
+                      {item.category}
+                    </SelectItem>
+                  );
+                })}
+              </SelectContent>
+            </Select>
+          </div>
+          {
+            (businessUnit == "Endosurgery" && budget == "National") &&
+            <div className="flex flex-col gap-2">
+              <label className="lable">
+                Budget Sub Type
+              </label>
+              <Select
+                onValueChange={(value) => { handleSelectChange(value, "division_sub_category") }}
+                defaultValue={Props.previewData?.division_sub_category ? Props.previewData.division_sub_category : ""}
+              >
+                <SelectTrigger className="dropdown">
+                  <SelectValue placeholder="Select" />
+                </SelectTrigger>
+                <SelectContent>
+                  {subtypeActivity ?
+                    subtypeActivity.map((item, index) => {
+                      return (
+                        <SelectItem value={item.name}>
+                          {item.division_sub_category}
+                        </SelectItem>
+                      );
+                    }) : Props.subtypeActivity && Props.subtypeActivity.map((item, index) => {
+                      return (
+                        <SelectItem value={item.name}>
+                          {item.division_sub_category}
+                        </SelectItem>
+                      )
+                    })}
+                </SelectContent>
+              </Select>
+            </div>
+          }
+          <div className="flex flex-col gap-2">
+            <label className="lable">
+              State
+            </label>
+            <Select
+              onValueChange={(value) => { handleSelectChange(value, "state"); handleStateChange(value) }}
+              defaultValue={Props.previewData?.state ? Props.previewData.state : ""}
+            >
+              <SelectTrigger className="dropdown">
+                <SelectValue placeholder="Select" />
+              </SelectTrigger>
+              <SelectContent>
+                {
+                  Props && Props.dropdownData && Props.dropdownData.state?.map((item, index) => {
+                    return (
+                      <SelectItem value={item.name}>{item.state}</SelectItem>
+                    )
+                  })
+                }
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="flex flex-col gap-2">
+            <label className="lable">
+              City
+            </label>
+            <Select
+              defaultValue={Props.previewData?.city ?? ""}
+              onValueChange={(value) => { handleSelectChange(value, "city") }} disabled={(formdata?.state || Props.previewData?.state) ? false : true}>
+              <SelectTrigger className="dropdown">
+                <SelectValue placeholder="Select" />
+              </SelectTrigger>
+              <SelectContent>
+                {
+                  citydropdown ? citydropdown.map((item, index) => {
+                    return (
+                      <SelectItem value={item.name}>
+                        {item.city}
+                      </SelectItem>
+                    );
+                  }) : Props.cityDropdown ? Props.cityDropdown.map((item, index) => {
+                    return (
+                      <SelectItem value={item.name}>
+                        {item.city}
+                      </SelectItem>
+                    )
+                  }) :
+                    <SelectItem value={"null"} disabled>No Data Yet</SelectItem>
+                }
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="flex flex-col gap-2">
+            <label className="lable">
+              Therapy
+            </label>
+            <Select
+              onValueChange={(value) => { handleSelectChange(value, "therapy") }}
+              defaultValue={Props.previewData?.therapy ? Props.previewData.therapy : ""}
+            >
+              <SelectTrigger className="dropdown">
+                <SelectValue placeholder="Select" />
+              </SelectTrigger>
+              <SelectContent>
+                {eventCostCenter ? eventCostCenter.therapy.map((item, index) => {
+                  return (
+                    <SelectItem value={item.name}>
+                      {item.therapy}
+                    </SelectItem>
+                  )
+                }) : Props.eventCostCenter && Props.eventCostCenter.therapy.map((item, index) => {
+                  return (
+                    <SelectItem value={item.name}>
+                      {item.therapy}
+                    </SelectItem>
+                  );
+                })}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="flex flex-col gap-2">
+            <label className="lable">
+              Reporting Head
+            </label>
+            <Select
+              defaultValue={Props.previewData?.reporting_head ?? ""}
+              onValueChange={(value) => { handleSelectChange(value, "reporting_head") }}
+            >
+              <SelectTrigger className="dropdown">
+                <SelectValue placeholder="Select" />
+              </SelectTrigger>
+              <SelectContent>
+                {
+                  reportingHeadDropdown ? reportingHeadDropdown.map((item, index) => {
+                    return (
+                      <SelectItem value={item.reporting}>
+                        {item.reporting_name}
+                      </SelectItem>
+                    );
+                  }) : Props.ReportingHeadDropdown ? Props.ReportingHeadDropdown.map((item, index) => {
+                    return (
+                      <SelectItem value={item.reporting}>
+                        {item.reporting_name}
+                      </SelectItem>
+                    )
+                  }) :
+                    <SelectItem value={"null"} disabled>No Data Yet</SelectItem>
+                }
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="flex flex-col gap-2">
+            <label className="lable">
+              Type Of Engagement<span className="text-[#e60000]">*</span>
+            </label>
+            <Select
+              onValueChange={(value) => { handleSelectChange(value, "type_of_engagement"); setEngagementTypes(value); handleFieldValues();}}
+              defaultValue={Props.previewData?.type_of_engagement ? Props.previewData.type_of_engagement : ""}
+            >
+              <SelectTrigger className="dropdown">
+                <SelectValue placeholder="Select" />
+              </SelectTrigger>
+              <SelectContent>
+                {
+                  Props.dropdownData && Props.dropdownData.engagement_type?.map((item, index) => {
+                    return (
+                      <SelectItem key={index} value={item.name}>{item.engagement_type}</SelectItem>
+                    )
+                  })
+                }
+              </SelectContent>
+            </Select>
+            {
+              errors &&
+              (errors?.type_of_engagement && !formdata?.type_of_engagement) &&
+              (
+                <p className="w-full text-red-500 text-[11px] font-normal text-left">
+                  {errors?.type_of_engagement}
+                </p>
+              )
+            }
+          </div>
+
+        </div>
+        <div className="grid grid-cols-2 gap-10">
+          <div className="flex flex-col gap-2">
+            <label className="lable">
+              Selection Criteria For Faculty
+            </label>
+            <textarea className='text-black shadow-md border h-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl pl-2 pt-2' placeholder='Type Here'
+              name="faculty"
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => { handlefieldChange(e) }}
+              defaultValue={Props.previewData?.faculty ? Props.previewData.faculty : ""}
+            />
+          </div>
+        </div>
+
+        {(engagementTypes ? (engagementTypes == "One Time"):(engagementTypes == "One Time" || Props.previewData?.type_of_engagement == "One Time")) &&
+          <>
+            <div className="py-8">
+              <h1 className="text-black text-2xl font-normal uppercase pb-8">
+                Sub Type Details
+              </h1>
+              <div className="grid md:grid-cols-2 md:gap-6">
+                <div className="flex flex-col md:gap-2" onClick={() => handleStartDateClick()}>
+                  <label className="text-black md:text-sm md:font-normal capitalize" htmlFor="start_date">
+                    Start Date<span className="text-[#e60000]">*</span>
+                  </label>
+                  <Input
+                    className="text-black shadow md:rounded-xl md:py-5"
+                    type="date"
+                    id="start_date"
+                    ref={start_date_ref}
+                    placeholder="dd/mm/yy"
+                    name="event_start_date"
+                    onChange={(e) => { handleEventStartDateValidate(e) }}
+                    defaultValue={Props.previewData?.event_start_date ? Props.previewData.event_start_date : ""}
+                  ></Input>
+                  {
+                    errors &&
+                    (errors?.event_start_date && !formdata?.event_start_date) &&
+                    (
+                      <p className="w-full text-red-500 text-[11px] font-normal text-left">
+                        {errors?.event_start_date}
+                      </p>
+                    )
+                  }
+                </div>
+                <div className="flex flex-col md:gap-2" onClick={() => handleEndDateClick()}>
+                  <label className="text-black md:text-sm md:font-normal capitalize" htmlFor="end_date">
+                    End Date<span className="text-[#e60000]">*</span>
+                  </label>
+                  <Input
+                    className="text-black shadow md:rounded-xl md:py-5"
+                    type="date"
+                    id="end_date"
+                    ref={end_date_ref}
+                    placeholder="dd/mm/yy"
+                    name="event_end_date"
+                    onChange={(e) => { handleEventEndDateValidate(e) }}
+                    defaultValue={Props.previewData?.event_end_date ? Props.previewData.event_end_date : ""}
+                  ></Input>
+                  {
+                    errors &&
+                    (errors?.event_end_date && !formdata?.event_end_date) &&
+                    (
+                      <p className="w-full text-red-500 text-[11px] font-normal text-left">
+                        {errors?.event_end_date}
+                      </p>
+                    )
+                  }
+                </div>
+                <div className="flex flex-col md:gap-2">
+                  <label className="text-black md:text-sm md:font-normal capitalize">
+                    Training & Education Request Ref Number<span className="text-[#e60000]">*</span>
+                  </label>
+                  <Select
+                    onValueChange={(value) => { handleSelectChange(value, "training_ref_no") }}
+                    defaultValue={Props.previewData?.training_ref_no ? Props.previewData.training_ref_no : ""}
+                  >
+                    <SelectTrigger className="dropdown">
+                      <SelectValue placeholder="Select" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {
+                        Props.dropdownData && Props.dropdownData.training_ref_no?.map((item, index) => {
+                          return (
+                            <SelectItem key={index} value={item.name}>{item.name}</SelectItem>
+                          )
+                        })
+                      }
+                    </SelectContent>
+                  </Select>
+                  {
+                    errors &&
+                    (errors?.training_ref_no && !formdata?.training_ref_no) &&
+                    (
+                      <p className="w-full text-red-500 text-[11px] font-normal text-left">
+                        {errors?.training_ref_no}
+                      </p>
+                    )
+                  }
+                </div>
+                <div className="flex flex-col md:gap-2">
+                  <label className="text-black md:text-sm md:font-normal capitalize">
+                    Sponsorship Support Request Ref Number<span className="text-[#e60000]">*</span>
+                  </label>
+                  <Select
+                    onValueChange={(value) => { handleSelectChange(value, "sponsorship_ref_no") }}
+                    defaultValue={Props.previewData?.sponsorship_ref_no ? Props.previewData.sponsorship_ref_no : ""}
+                  >
+                    <SelectTrigger className="dropdown">
+                      <SelectValue placeholder="Select" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {
+                        Props.dropdownData && Props.dropdownData.sponsorship_ref_no?.map((item, index) => {
+                          return (
+                            <SelectItem key={index} value={item.name}>{item.name}</SelectItem>
+                          )
+                        })
+                      }
+                    </SelectContent>
+                  </Select>
+                  {
+                    errors &&
+                    (errors?.sponsorship_ref_no && !formdata?.sponsorship_ref_no) &&
+                    (
+                      <p className="w-full text-red-500 text-[11px] font-normal text-left">
+                        {errors?.sponsorship_ref_no}
+                      </p>
+                    )
+                  }
+                </div>
+              </div>
+            </div>
+
+            <div className="py-8">
+              <h1 className="text-black text-2xl font-normal uppercase pb-8">
+                Event Details
+              </h1>
+              <div className="grid md:grid-cols-2 md:gap-6">
+                <div className="flex flex-col md:gap-2">
+                  <label className="text-black md:text-sm md:font-normal capitalize">
+                    Event Name<span className="text-[#e60000]">*</span>
+                  </label>
+                  <Input
+                    className="text-black shadow md:rounded-xl md:py-5"
+                    placeholder="Type Here"
+                    name="event_name"
+                    onChange={(e) => { handlefieldChange(e) }}
+                    defaultValue={Props.previewData?.event_name ? Props.previewData.event_name : ""}
+                  ></Input>
+                  {
+                    errors &&
+                    (errors?.event_name && !formdata?.event_name) &&
+                    (
+                      <p className="w-full text-red-500 text-[11px] font-normal text-left">
+                        {errors?.event_name}
+                      </p>
+                    )
+                  }
+                </div>
+                <div className="flex flex-col md:gap-2">
+                  <label className="text-black md:text-sm md:font-normal capitalize">
+                    Event Venue<span className="text-[#e60000]">*</span>
+                  </label>
+                  <Input
+                    className="text-black shadow md:rounded-xl md:py-5"
+                    placeholder="Type Here"
+                    name="event_venue"
+                    onChange={(e) => { handlefieldChange(e) }}
+                    defaultValue={Props.previewData?.event_venue ? Props.previewData.event_venue : ""}
+                  ></Input>
+                  {
+                    errors &&
+                    (errors?.event_venue && !formdata?.event_venue) &&
+                    (
+                      <p className="w-full text-red-500 text-[11px] font-normal text-left">
+                        {errors?.event_venue}
+                      </p>
+                    )
+                  }
+                </div>
+              </div>
+            </div>
+          </>
+
         }
-        <div className="flex flex-col gap-2">
-          <label className="lable">
-            State<span className="text-[#e60000]">*</span>
-          </label>
-          <Select
-            onValueChange={(value) => { handleSelectChange(value, "state"); handleStateChange(value)  }}
-            defaultValue={Props.previewData?.state ? Props.previewData.state : ""}
-          >
-            <SelectTrigger className="dropdown">
-              <SelectValue placeholder="Select" />
-            </SelectTrigger>
-            <SelectContent>
-              {
-                Props && Props.dropdownData && Props.dropdownData.state?.map((item, index) => {
-                  return (
-                    <SelectItem value={item.name}>{item.state}</SelectItem>
-                  )
-                })
-              }
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="flex flex-col gap-2">
-          <label className="lable">
-            City<span className="text-[#e60000]">*</span>
-          </label>
-          <Select
-            defaultValue={Props.previewData?.city ?? ""}
-            onValueChange={(value) => { handleSelectChange(value, "city") }} disabled={(formdata?.state || Props.previewData?.state) ? false : true}>
-            <SelectTrigger className="dropdown">
-              <SelectValue placeholder="Select" />
-            </SelectTrigger>
-            <SelectContent>
-              {
-                citydropdown ? citydropdown.map((item, index) => {
-                  return (
-                    <SelectItem value={item.name}>
-                      {item.city}
-                    </SelectItem>
-                  );
-                }) : Props.cityDropdown ? Props.cityDropdown.map((item, index) => {
-                  return (
-                    <SelectItem value={item.name}>
-                      {item.city}
-                    </SelectItem>
-                  )
-                }) :
-                  <SelectItem value={"null"} disabled>No Data Yet</SelectItem>
-              }
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="flex flex-col gap-2">
-          <label className="lable">
-            Therapy<span className="text-[#e60000]">*</span>
-          </label>
-          <Select
-            onValueChange={(value) => { handleSelectChange(value, "therapy") }}
-            defaultValue={Props.previewData?.therapy ? Props.previewData.therapy : ""}
-          >
-            <SelectTrigger className="dropdown">
-              <SelectValue placeholder="Select" />
-            </SelectTrigger>
-            <SelectContent>
-              { eventCostCenter ? eventCostCenter.therapy.map((item, index) => {
-                return (
-                  <SelectItem value={item.name}>
-                    {item.therapy}
-                  </SelectItem>
-                )
-              }): Props.eventCostCenter && Props.eventCostCenter.therapy.map((item, index) => {
-                return (
-                  <SelectItem value={item.name}>
-                    {item.therapy}
-                  </SelectItem>
-                );
-              })}
-            </SelectContent>
-          </Select>
-        </div>
-        {/* <div className="flex flex-col gap-2">
-          <label className="lable">
-            Sub Type Of Activity<span className="text-[#e60000]">*</span>
-          </label>
-          <Select
-            onValueChange={(value) => { handleSelectChange(value, "sub_type_of_activity") }}
-            defaultValue={Props.previewData?.sub_type_of_activity ? Props.previewData.sub_type_of_activity : ""}
-          >
-            <SelectTrigger className="dropdown">
-              <SelectValue placeholder="Select" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="Meril Event">
-                {"Meril Event"}
-              </SelectItem>
-              <SelectItem value="Mix Event">
-                {"Mix Event"}
-              </SelectItem>
-              <SelectItem value="Marketing Event">
-                {"Marketing Event"}
-              </SelectItem>
-            </SelectContent>
-          </Select>
-        </div> */}
-        <div className="flex flex-col gap-2">
-          <label className="lable">
-            Reporting Head<span className="text-[#e60000]">*</span>
-          </label>
-          <Select
-            defaultValue={Props.previewData?.reporting_head ?? ""}
-            onValueChange={(value) => { handleSelectChange(value, "reporting_head") }}
-          >
-            <SelectTrigger className="dropdown">
-              <SelectValue placeholder="Select" />
-            </SelectTrigger>
-            <SelectContent>
-              {
-                reportingHeadDropdown ? reportingHeadDropdown.map((item, index) => {
-                  return (
-                    <SelectItem value={item.reporting}>
-                      {item.reporting_name}
-                    </SelectItem>
-                  );
-                }) : Props.ReportingHeadDropdown ? Props.ReportingHeadDropdown.map((item, index) => {
-                  return (
-                    <SelectItem value={item.reporting}>
-                      {item.reporting_name}
-                    </SelectItem>
-                  )
-                }) :
-                  <SelectItem value={"null"} disabled>No Data Yet</SelectItem>
-              }
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="flex flex-col gap-2">
-          <label className="lable">
-            Type Of Engagement<span className="text-[#e60000]">*</span>
-          </label>
-          <Select
-            onValueChange={(value) => { handleSelectChange(value, "type_of_engagement"); setEngagementTypes(value) }}
-            defaultValue={Props.previewData?.type_of_engagement ? Props.previewData.type_of_engagement : ""}
-          >
-            <SelectTrigger className="dropdown">
-              <SelectValue placeholder="Select" />
-            </SelectTrigger>
-            <SelectContent>
-              {
-                Props.dropdownData && Props.dropdownData.engagement_type?.map((item, index) => {
-                  return (
-                    <SelectItem key={index} value={item.name}>{item.engagement_type}</SelectItem>
-                  )
-                })
-              }
-            </SelectContent>
-          </Select>
-        </div>
 
-      </div>
-      <div className="grid grid-cols-2 gap-10">
-        <div className="flex flex-col gap-2">
-          <label className="lable">
-          Selection Criteria For Faculty<span className="text-[#e60000]">*</span>
-          </label>
-          <textarea className='text-black shadow-md border h-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl pl-2 pt-2' placeholder='Type Here'
-            name="faculty"
-            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => { handlefieldChange(e) }}
-            defaultValue={Props.previewData?.faculty ? Props.previewData.faculty : ""}
-          />
-        </div>
-        {/* <div className="flex flex-col gap-2">
-          <label className="lable">
-            Participants<span className="text-[#e60000]">*</span>
-          </label>
-          <Textarea className="text-black shadow-md"
-            placeholder="Type Here"
-            name="participants"
-            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => { handlefieldChange(e) }}
-            defaultValue={Props.previewData?.participants ? Props.previewData.participants : ""}
-          />
-        </div> */}
-      </div>
 
-      {(engagementTypes == "One Time" || Props.previewData?.type_of_engagement == "One Time") &&
-        <>
-          <div className="py-8">
-            <h1 className="text-black text-2xl font-normal uppercase pb-8">
-              Sub Type Details
-            </h1>
-            <div className="grid md:grid-cols-2 md:gap-6">
-              <div className="flex flex-col md:gap-2"onClick={()=>handleStartDateClick()}>
-                <label className="text-black md:text-sm md:font-normal capitalize"htmlFor="start_date">
-                  Start Date<span className="text-[#e60000]">*</span>
-                </label>
-                <Input
-                  className="text-black shadow md:rounded-xl md:py-5"
-                  type="date"
-                  id="start_date"
-                  ref={start_date_ref}
-                  placeholder="dd/mm/yy"
-                  name="event_start_date"
-                  onChange={(e) => { handleEventStartDateValidate(e) }}
-                  defaultValue={Props.previewData?.event_start_date ? Props.previewData.event_start_date : ""}
-                ></Input>
-              </div>
-              <div className="flex flex-col md:gap-2"onClick={()=>handleEndDateClick()}>
-                <label className="text-black md:text-sm md:font-normal capitalize"htmlFor="end_date">
-                  End Date<span className="text-[#e60000]">*</span>
-                </label>
-                <Input
-                  className="text-black shadow md:rounded-xl md:py-5"
-                  type="date"
-                  id="end_date"
-                  ref={end_date_ref}
-                  placeholder="dd/mm/yy"
-                  name="event_end_date"
-                  onChange={(e) => { handleEventEndDateValidate(e) }}
-                  defaultValue={Props.previewData?.event_end_date ? Props.previewData.event_end_date : ""}
-                ></Input>
-              </div>
-              <div className="flex flex-col md:gap-2">
-                <label className="text-black md:text-sm md:font-normal capitalize">
-                  Training & Education Request Ref Number<span className="text-[#e60000]">*</span>
-                </label>
-                <Select
-                  onValueChange={(value) => { handleSelectChange(value, "training_ref_no") }}
-                  defaultValue={Props.previewData?.training_ref_no ? Props.previewData.training_ref_no : ""}
-                >
-                  <SelectTrigger className="dropdown">
-                    <SelectValue placeholder="Select" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {
-                      Props.dropdownData && Props.dropdownData.training_ref_no?.map((item, index) => {
-                        return (
-                          <SelectItem key={index} value={item.name}>{item.name}</SelectItem>
-                        )
-                      })
-                    }
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="flex flex-col md:gap-2">
-                <label className="text-black md:text-sm md:font-normal capitalize">
-                  Sponsorship Support Request Ref Number<span className="text-[#e60000]">*</span>
-                </label>
-                <Select
-                  onValueChange={(value) => { handleSelectChange(value, "sponsorship_ref_no") }}
-                  defaultValue={Props.previewData?.sponsorship_ref_no ? Props.previewData.sponsorship_ref_no : ""}
-                >
-                  <SelectTrigger className="dropdown">
-                    <SelectValue placeholder="Select" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {
-                      Props.dropdownData && Props.dropdownData.sponsorship_ref_no?.map((item, index) => {
-                        return (
-                          <SelectItem key={index} value={item.name}>{item.name}</SelectItem>
-                        )
-                      })
-                    }
-                  </SelectContent>
-                </Select>
+        {(engagementTypes ? (engagementTypes == "MSA"):(engagementTypes == "MSA" || Props.previewData?.type_of_engagement == "MSA")) &&
+          <>
+            <div className="py-8">
+              <h1 className="text-black text-2xl font-normal uppercase pb-8">
+                Sub Type Details
+              </h1>
+              <div className="grid md:grid-cols-2 md:gap-6">
+                <div className="flex flex-col md:gap-2" onClick={() => { handleStartDateClick() }}>
+                  <label className="text-black md:text-sm md:font-normal capitalize" htmlFor="start_date">
+                    Start Date<span className="text-[#e60000]">*</span>
+                  </label>
+                  <Input
+                    className="text-black shadow md:rounded-xl md:py-5"
+                    type="date"
+                    id="start_date"
+                    ref={start_date_ref}
+                    placeholder="dd/mm/yy"
+                    name="event_start_date"
+                    onChange={(e) => { handleEventStartDateValidate(e) }}
+                    defaultValue={Props.previewData?.event_start_date ? Props.previewData.event_start_date : ""}
+                  ></Input>
+                  {
+                    errors &&
+                    (errors?.event_start_date && !formdata?.event_start_date) &&
+                    (
+                      <p className="w-full text-red-500 text-[11px] font-normal text-left">
+                        {errors?.event_start_date}
+                      </p>
+                    )
+                  }
+                </div>
+                <div className="flex flex-col md:gap-2" onClick={() => { handleEndDateClick() }}>
+                  <label className="text-black md:text-sm md:font-normal capitalize" htmlFor="end_date">
+                    End Date<span className="text-[#e60000]">*</span>
+                  </label>
+                  <Input
+                    className="text-black shadow md:rounded-xl md:py-5"
+                    type="date"
+                    id="end_date"
+                    ref={end_date_ref}
+                    placeholder="dd/mm/yy"
+                    name="event_end_date"
+                    onChange={(e) => { handleEventEndDateValidate(e) }}
+                    defaultValue={Props.previewData?.event_end_date ? Props.previewData.event_end_date : ""}
+                  ></Input>
+                  {
+                    errors &&
+                    (errors?.event_end_date && !formdata?.event_end_date) &&
+                    (
+                      <p className="w-full text-red-500 text-[11px] font-normal text-left">
+                        {errors?.event_end_date}
+                      </p>
+                    )
+                  }
+                </div>
+                <div className="flex flex-col md:gap-2">
+                  <label className="text-black md:text-sm md:font-normal capitalize">
+                    Annual Plan<span className="text-[#e60000]">*</span>
+                  </label>
+                  <Input
+                    type="number"
+                    className="text-black shadow md:rounded-xl md:py-5"
+                    placeholder="Type Here"
+                    name="annual_plan"
+                    onChange={(e) => { handlefieldChange(e) }}
+                    defaultValue={Props.previewData?.annual_plan ? Props.previewData.annual_plan : ""}
+                  ></Input>
+                  {
+                    errors &&
+                    (errors?.annual_plan && !formdata?.annual_plan) &&
+                    (
+                      <p className="w-full text-red-500 text-[11px] font-normal text-left">
+                        {errors?.annual_plan}
+                      </p>
+                    )
+                  }
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="py-8">
-            <h1 className="text-black text-2xl font-normal uppercase pb-8">
-              Event Details
-            </h1>
-            <div className="grid md:grid-cols-2 md:gap-6">
-              <div className="flex flex-col md:gap-2">
-                <label className="text-black md:text-sm md:font-normal capitalize">
-                  Event Name<span className="text-[#e60000]">*</span>
-                </label>
-                <Input
-                  className="text-black shadow md:rounded-xl md:py-5"
-                  placeholder="Type Here"
-                  name="event_name"
-                  onChange={(e) => { handlefieldChange(e) }}
-                  defaultValue={Props.previewData?.event_name ? Props.previewData.event_name : ""}
-                ></Input>
-              </div>
-              <div className="flex flex-col md:gap-2">
-                <label className="text-black md:text-sm md:font-normal capitalize">
-                  Event Venue<span className="text-[#e60000]">*</span>
-                </label>
-                <Input
-                  className="text-black shadow md:rounded-xl md:py-5"
-                  placeholder="Type Here"
-                  name="event_venue"
-                  onChange={(e) => { handlefieldChange(e) }}
-                  defaultValue={Props.previewData?.event_venue ? Props.previewData.event_venue : ""}
-                ></Input>
+            <div className="py-8">
+              <h1 className="text-black text-2xl font-normal uppercase pb-8">
+                MSA Details
+              </h1>
+              <div className="grid md:grid-cols-2 md:gap-6">
+                <div className="flex flex-col md:gap-2">
+                  <label className="text-black md:text-sm md:font-normal capitalize">
+                    Service Type<span className="text-[#e60000]">*</span>
+                  </label>
+                  <Input
+                    className="text-black shadow md:rounded-xl md:py-5"
+                    placeholder="Type Here"
+                    name="service_type"
+                    onChange={(e) => { handlefieldChange(e) }}
+                    defaultValue={Props.previewData?.service_type ? Props.previewData.service_type : ""}
+                  ></Input>
+                   {
+                    errors &&
+                    (errors?.service_type && !formdata?.service_type) &&
+                    (
+                      <p className="w-full text-red-500 text-[11px] font-normal text-left">
+                        {errors?.service_type}
+                      </p>
+                    )
+                  }
+                </div>
               </div>
             </div>
-          </div>
-        </>
+          </>
 
-      }
+        }
 
-
-      {(engagementTypes == "MSA" || Props.previewData?.type_of_engagement == "MSA") &&
-        <>
-          <div className="py-8">
-            <h1 className="text-black text-2xl font-normal uppercase pb-8">
-              Sub Type Details
-            </h1>
-            <div className="grid md:grid-cols-2 md:gap-6">
-              <div className="flex flex-col md:gap-2" onClick={()=>{handleStartDateClick()}}>
-                <label className="text-black md:text-sm md:font-normal capitalize" htmlFor="start_date">
-                  Start Date<span className="text-[#e60000]">*</span>
-                </label>
-                <Input
-                  className="text-black shadow md:rounded-xl md:py-5"
-                  type="date"
-                  id="start_date"
-                  ref={start_date_ref}
-                  placeholder="dd/mm/yy"
-                  name="event_start_date"
-                  onChange={(e) => { handleEventStartDateValidate(e) }}
-                  defaultValue={Props.previewData?.event_start_date ? Props.previewData.event_start_date : ""}
-                ></Input>
-              </div>
-              <div className="flex flex-col md:gap-2" onClick={()=>{handleEndDateClick()}}>
-                <label className="text-black md:text-sm md:font-normal capitalize" htmlFor="end_date">
-                  End Date<span className="text-[#e60000]">*</span>
-                </label>
-                <Input
-                  className="text-black shadow md:rounded-xl md:py-5"
-                  type="date"
-                  id="end_date"
-                  ref={end_date_ref}
-                  placeholder="dd/mm/yy"
-                  name="event_end_date"
-                  onChange={(e) => { handleEventEndDateValidate(e) }}
-                  defaultValue={Props.previewData?.event_end_date ? Props.previewData.event_end_date : ""}
-                ></Input>
-              </div>
-              <div className="flex flex-col md:gap-2">
-                <label className="text-black md:text-sm md:font-normal capitalize">
-                  Annual Plan<span className="text-[#e60000]">*</span>
-                </label>
-                <Input
-                  type="number"
-                  className="text-black shadow md:rounded-xl md:py-5"
-                  placeholder="Type Here"
-                  name="annual_plan"
-                  onChange={(e) => { handlefieldChange(e) }}
-                  defaultValue={Props.previewData?.annual_plan ? Props.previewData.annual_plan : ""}
-                ></Input>
-              </div>
-            </div>
-          </div>
-
-          <div className="py-8">
-            <h1 className="text-black text-2xl font-normal uppercase pb-8">
-              MSA Details
-            </h1>
-            <div className="grid md:grid-cols-2 md:gap-6">
-              <div className="flex flex-col md:gap-2">
-                <label className="text-black md:text-sm md:font-normal capitalize">
-                  Service Type<span className="text-[#e60000]">*</span>
-                </label>
-                <Input
-                  className="text-black shadow md:rounded-xl md:py-5"
-                  placeholder="Type Here"
-                  name="service_type"
-                  onChange={(e) => { handlefieldChange(e) }}
-                  defaultValue={Props.previewData?.service_type ? Props.previewData.service_type : ""}
-                ></Input>
-              </div>
-            </div>
-          </div>
-        </>
-
-      }
-
-      {(engagementTypes == "Scientific Advisory Consultancy Agreement" || Props.previewData?.type_of_engagement == "Scientific Advisory Consultancy Agreement") &&
-        <>
-          <div className="py-8">
-            <h1 className="text-black text-2xl font-normal uppercase pb-8">
-              Sub Type Details
-            </h1>
-            <div className="grid md:grid-cols-2 md:gap-6">
-              <div className="flex flex-col md:gap-2" onClick={()=>{handleStartDateClick()}}>
-                <label className="text-black md:text-sm md:font-normal capitalize"htmlFor="start_date">
-                  Start Date<span className="text-[#e60000]">*</span>
-                </label>
-                <Input
-                  className="text-black shadow md:rounded-xl md:py-5"
-                  type="date"
-                  id="start_date"
-                  ref={start_date_ref}
-                  placeholder="dd/mm/yy"
-                  name="event_start_date"
-                  onChange={(e) => { handleEventStartDateValidate(e) }}
-                  defaultValue={Props.previewData?.event_start_date ? Props.previewData.event_start_date : ""}
-                ></Input>
-              </div>
-              <div className="flex flex-col md:gap-2" onClick={()=>{handleEndDateClick()}}>
-                <label className="text-black md:text-sm md:font-normal capitalize" htmlFor="end_date">
-                  End Date<span className="text-[#e60000]">*</span>
-                </label>
-                <Input
-                  className="text-black shadow md:rounded-xl md:py-5"
-                  type="date"
-                  id="end_date"
-                  ref={end_date_ref}
-                  placeholder="dd/mm/yy"
-                  name="event_end_date"
-                  onChange={(e) => { handleEventEndDateValidate(e) }}
-                  defaultValue={Props.previewData?.event_end_date ? Props.previewData.event_end_date : ""}
-                ></Input>
-              </div>
-              <div className="flex flex-col md:gap-2">
-                <label className="text-black md:text-sm md:font-normal capitalize">
-                  Annual Plan<span className="text-[#e60000]">*</span>
-                </label>
-                <Input
-                  className="text-black shadow md:rounded-xl md:py-5"
-                  placeholder="Type Here"
-                  name="annual_plan"
-                  onChange={(e) => { handlefieldChange(e) }}
-                  defaultValue={Props.previewData?.annual_plan ? Props.previewData.annual_plan : ""}
-                ></Input>
+        {(engagementTypes ? (engagementTypes == "Scientific Advisory Consultancy Agreement"):(engagementTypes == "Scientific Advisory Consultancy Agreement" || Props.previewData?.type_of_engagement == "Scientific Advisory Consultancy Agreement")) &&
+          <>
+            <div className="py-8">
+              <h1 className="text-black text-2xl font-normal uppercase pb-8">
+                Sub Type Details
+              </h1>
+              <div className="grid md:grid-cols-2 md:gap-6">
+                <div className="flex flex-col md:gap-2" onClick={() => { handleStartDateClick() }}>
+                  <label className="text-black md:text-sm md:font-normal capitalize" htmlFor="start_date">
+                    Start Date<span className="text-[#e60000]">*</span>
+                  </label>
+                  <Input
+                    className="text-black shadow md:rounded-xl md:py-5"
+                    type="date"
+                    id="start_date"
+                    ref={start_date_ref}
+                    placeholder="dd/mm/yy"
+                    name="event_start_date"
+                    onChange={(e) => { handleEventStartDateValidate(e) }}
+                    defaultValue={Props.previewData?.event_start_date ? Props.previewData.event_start_date : ""}
+                  ></Input>
+                   {
+                    errors &&
+                    (errors?.event_start_date && !formdata?.event_start_date) &&
+                    (
+                      <p className="w-full text-red-500 text-[11px] font-normal text-left">
+                        {errors?.event_start_date}
+                      </p>
+                    )
+                  }
+                </div>
+                <div className="flex flex-col md:gap-2" onClick={() => { handleEndDateClick() }}>
+                  <label className="text-black md:text-sm md:font-normal capitalize" htmlFor="end_date">
+                    End Date<span className="text-[#e60000]">*</span>
+                  </label>
+                  <Input
+                    className="text-black shadow md:rounded-xl md:py-5"
+                    type="date"
+                    id="end_date"
+                    ref={end_date_ref}
+                    placeholder="dd/mm/yy"
+                    name="event_end_date"
+                    onChange={(e) => { handleEventEndDateValidate(e) }}
+                    defaultValue={Props.previewData?.event_end_date ? Props.previewData.event_end_date : ""}
+                  ></Input>
+                  {
+                    errors &&
+                    (errors?.event_end_date && !formdata?.event_end_date) &&
+                    (
+                      <p className="w-full text-red-500 text-[11px] font-normal text-left">
+                        {errors?.event_end_date}
+                      </p>
+                    )
+                  }
+                </div>
+                <div className="flex flex-col md:gap-2">
+                  <label className="text-black md:text-sm md:font-normal capitalize">
+                    Annual Plan<span className="text-[#e60000]">*</span>
+                  </label>
+                  <Input
+                    className="text-black shadow md:rounded-xl md:py-5"
+                    placeholder="Type Here"
+                    name="annual_plan"
+                    onChange={(e) => { handlefieldChange(e) }}
+                    defaultValue={Props.previewData?.annual_plan ? Props.previewData.annual_plan : ""}
+                  ></Input>
+                  {
+                    errors &&
+                    (errors?.annual_plan && !formdata?.annual_plan) &&
+                    (
+                      <p className="w-full text-red-500 text-[11px] font-normal text-left">
+                        {errors?.annual_plan}
+                      </p>
+                    )
+                  }
+                </div>
               </div>
             </div>
-          </div>
-        </>
+          </>
 
-      }
+        }
 
-      {(engagementTypes == "Royalty Agreement" || engagementTypes == "Product development And Royalty Agreement" || engagementTypes == "Product Development Agreement" || engagementTypes == "Product feedback Agreement" || Props.previewData?.type_of_engagement == "Royalty Agreement" || Props.previewData?.type_of_engagement == "Product development And Royalty Agreement" || Props.previewData?.type_of_engagement == "Product Development Agreement" || Props.previewData?.type_of_engagement == "Product feedback Agreement") &&
-        <>
-          <div className="py-8">
-            <h1 className="text-black text-2xl font-normal uppercase pb-8">
-              Sub Type Details
-            </h1>
-            <div className="grid md:grid-cols-2 md:gap-6">
-              <div className="flex flex-col md:gap-2"onClick={()=>handleStartDateClick()}>
-                <label className="text-black md:text-sm md:font-normal capitalize" htmlFor="start_date">
-                  Start Date<span className="text-[#e60000]">*</span>
-                </label>
-                <Input
-                  className="text-black shadow md:rounded-xl md:py-5"
-                  type="date"
-                  id="start_date"
-                  ref={start_date_ref}
-                  placeholder="dd/mm/yy"
-                  name="event_start_date"
-                  onChange={(e) => { handleEventStartDateValidate(e) }}
-                  defaultValue={Props.previewData?.event_start_date ? Props.previewData?.event_start_date : ""}
-                ></Input>
-              </div>
-              <div className="flex flex-col md:gap-2" onClick={()=>handleEndDateClick()}>
-                <label className="text-black md:text-sm md:font-normal capitalize"htmlFor="end_date">
-                  End Date<span className="text-[#e60000]">*</span>
-                </label>
-                <Input
-                  className="text-black shadow md:rounded-xl md:py-5"
-                  type="date"
-                  id="end_date"
-                  ref={end_date_ref}
-                  placeholder="dd/mm/yy"
-                  name="event_end_date"
-                  onChange={(e) => { handleEventEndDateValidate(e) }}
-                  defaultValue={Props.previewData?.event_end_date ? Props.previewData.event_end_date : ""}
-                ></Input>
-              </div>
-              <div className="flex flex-col md:gap-2">
-                <label className="text-black md:text-sm md:font-normal capitalize">
-                  Product Details<span className="text-[#e60000]">*</span>
-                </label>
-                <Input
-                  className="text-black shadow md:rounded-xl md:py-5"
-                  placeholder="Type Here"
-                  name="product_details"
-                  onChange={(e) => { handlefieldChange(e) }}
-                  defaultValue={Props.previewData?.product_details ? Props.previewData.product_details : ""}
-                ></Input>
+        {(engagementTypes ? (engagementTypes == "Royalty Agreement" || engagementTypes == "Product development And Royalty Agreement" || engagementTypes == "Product Development Agreement" || engagementTypes == "Product feedback Agreement"):(engagementTypes == "Royalty Agreement" || engagementTypes == "Product development And Royalty Agreement" || engagementTypes == "Product Development Agreement" || engagementTypes == "Product feedback Agreement" || Props.previewData?.type_of_engagement == "Royalty Agreement" || Props.previewData?.type_of_engagement == "Product development And Royalty Agreement" || Props.previewData?.type_of_engagement == "Product Development Agreement" || Props.previewData?.type_of_engagement == "Product feedback Agreement")) &&
+          <>
+            <div className="py-8">
+              <h1 className="text-black text-2xl font-normal uppercase pb-8">
+                Sub Type Details
+              </h1>
+              <div className="grid md:grid-cols-2 md:gap-6">
+                <div className="flex flex-col md:gap-2" onClick={() => handleStartDateClick()}>
+                  <label className="text-black md:text-sm md:font-normal capitalize" htmlFor="start_date">
+                    Start Date<span className="text-[#e60000]">*</span>
+                  </label>
+                  <Input
+                    className="text-black shadow md:rounded-xl md:py-5"
+                    type="date"
+                    id="start_date"
+                    ref={start_date_ref}
+                    placeholder="dd/mm/yy"
+                    name="event_start_date"
+                    onChange={(e) => { handleEventStartDateValidate(e) }}
+                    defaultValue={Props.previewData?.event_start_date ? Props.previewData?.event_start_date : formdata?.event_start_date}
+                  ></Input>
+                  {
+                    errors &&
+                    (errors?.event_start_date && !formdata?.event_start_date) &&
+                    (
+                      <p className="w-full text-red-500 text-[11px] font-normal text-left">
+                        {errors?.event_start_date}
+                      </p>
+                    )
+                  }
+                </div>
+                <div className="flex flex-col md:gap-2" onClick={() => handleEndDateClick()}>
+                  <label className="text-black md:text-sm md:font-normal capitalize" htmlFor="end_date">
+                    End Date<span className="text-[#e60000]">*</span>
+                  </label>
+                  <Input
+                    className="text-black shadow md:rounded-xl md:py-5"
+                    type="date"
+                    id="end_date"
+                    ref={end_date_ref}
+                    placeholder="dd/mm/yy"
+                    name="event_end_date"
+                    onChange={(e) => { handleEventEndDateValidate(e) }}
+                    defaultValue={Props.previewData?.event_end_date ? Props.previewData.event_end_date : ""}
+                  ></Input>
+                  {
+                    errors &&
+                    (errors?.event_end_date && !formdata?.event_end_date) &&
+                    (
+                      <p className="w-full text-red-500 text-[11px] font-normal text-left">
+                        {errors?.event_end_date}
+                      </p>
+                    )
+                  }
+                </div>
+                <div className="flex flex-col md:gap-2">
+                  <label className="text-black md:text-sm md:font-normal capitalize">
+                    Product Details<span className="text-[#e60000]">*</span>
+                  </label>
+                  <Input
+                    className="text-black shadow md:rounded-xl md:py-5"
+                    placeholder="Type Here"
+                    name="product_details"
+                    onChange={(e) => { handlefieldChange(e) }}
+                    defaultValue={Props.previewData?.product_details ? Props.previewData.product_details : ""}
+                  ></Input>
+                  {
+                    errors &&
+                    (errors?.product_details && !formdata?.product_details) &&
+                    (
+                      <p className="w-full text-red-500 text-[11px] font-normal text-left">
+                        {errors?.product_details}
+                      </p>
+                    )
+                  }
+                </div>
               </div>
             </div>
-          </div>
-        </>
+          </>
 
-      }
+        }
 
 
-      <div className="flex justify-end pt-5 gap-4">
-        {/* <Button className="bg-white text-black border text-md font-normal">
+        <div className="flex justify-end pt-5 gap-4">
+          {/* <Button className="bg-white text-black border text-md font-normal">
           {" "}
           Save as Draft
         </Button> */}
-        <Button className='bg-[#4430bf] text-white text-md font-normal border' onClick={(e) => handleSubmit(e)}>Next</Button>
+          <Button className='bg-[#4430bf] text-white text-md font-normal border' onClick={(e) => handleSubmit(e)}>Next</Button>
+        </div>
       </div>
-    </div>
     <Toaster richColors position="bottom-right" /> 
     {formdata?.state  && isReportingHeadDialog && (
         <IsReportingHeadDialog

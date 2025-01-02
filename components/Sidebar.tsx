@@ -407,9 +407,9 @@ const Sidebar = () => {
                           <path
                             d="M12 36L10.6 36C7.23969 36 5.55953 36 4.27606 35.346C3.14708 34.7708 2.2292 33.8529 1.65396 32.7239C1 31.4405 1 29.7603 1 26.4L0.999999 1"
                             stroke="#848484"
-                            stroke-width="0.5"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
+                            strokeWidth="0.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                           />
                         </svg>
                       </div>
@@ -424,8 +424,8 @@ const Sidebar = () => {
             <button className={`${(handleSidebar.reports) ? "text-white bg-[#4430bf] border rounded-xl" : ""} w-full text-gray-700 py-2 px-3 group-hover:text-white group-hover:bg-[#4430bf] group-hover:border group-hover:rounded-xl rounded inline-flex items-center gap-3`} onClick={()=>{handleClick("reports")}}>
 
               <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
-                <path d="M28 26.667H4V6.66699" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                <path opacity="0.4" d="M28 9.33301L17.3333 18.6663L12 13.333L4 19.9997" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M28 26.667H4V6.66699" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                <path opacity="0.4" d="M28 9.33301L17.3333 18.6663L12 13.333L4 19.9997" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
               <span className="mr-1 text-[1.125rem]">Reports</span>
             </button>
@@ -452,9 +452,9 @@ const Sidebar = () => {
                           <path
                             d="M12 36L10.6 36C7.23969 36 5.55953 36 4.27606 35.346C3.14708 34.7708 2.2292 33.8529 1.65396 32.7239C1 31.4405 1 29.7603 1 26.4L0.999999 1"
                             stroke="#848484"
-                            stroke-width="0.5"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
+                            strokeWidth="0.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                           />
                         </svg>
                       </div>
@@ -499,9 +499,9 @@ const Sidebar = () => {
                             <path
                               d="M12 36L10.6 36C7.23969 36 5.55953 36 4.27606 35.346C3.14708 34.7708 2.2292 33.8529 1.65396 32.7239C1 31.4405 1 29.7603 1 26.4L0.999999 1"
                               stroke="#848484"
-                              stroke-width="0.5"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
+                              strokeWidth="0.5"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
                             />
                           </svg>
                         </div>
@@ -518,7 +518,7 @@ const Sidebar = () => {
 
               <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
                 <path d="M13.3329 29.3337C12.9995 29.3337 12.7195 29.0937 12.6662 28.7737L12.1729 25.2403C11.3329 24.907 10.6129 24.4537 9.91953 23.9203L6.59953 25.267C6.3062 25.3737 5.9462 25.267 5.7862 24.9737L3.11953 20.3603C3.03793 20.2229 3.00916 20.0605 3.0386 19.9035C3.06805 19.7464 3.1537 19.6055 3.27953 19.507L6.09286 17.2937L5.99953 16.0003L6.09286 14.667L3.27953 12.4937C3.1537 12.3952 3.06805 12.2542 3.0386 12.0972C3.00916 11.9401 3.03793 11.7777 3.11953 11.6403L5.7862 7.02699C5.9462 6.73366 6.3062 6.61366 6.59953 6.73366L9.91953 8.06699C10.6129 7.54699 11.3329 7.09366 12.1729 6.76033L12.6662 3.22699C12.7195 2.90699 12.9995 2.66699 13.3329 2.66699H18.6662C18.9995 2.66699 19.2795 2.90699 19.3329 3.22699L19.8262 6.76033C20.6662 7.09366 21.3862 7.54699 22.0795 8.06699L25.3995 6.73366C25.6929 6.61366 26.0529 6.73366 26.2129 7.02699L28.8795 11.6403C29.0529 11.9337 28.9729 12.2937 28.7195 12.4937L25.9062 14.667L25.9995 16.0003L25.9062 17.3337L28.7195 19.507C28.9729 19.707 29.0529 20.067 28.8795 20.3603L26.2129 24.9737C26.0529 25.267 25.6929 25.387 25.3995 25.267L22.0795 23.9337C21.3862 24.4537 20.6662 24.907 19.8262 25.2403L19.3329 28.7737C19.2795 29.0937 18.9995 29.3337 18.6662 29.3337H13.3329ZM14.9995 5.33366L14.5062 8.81366C12.9062 9.14699 11.4929 10.0003 10.4662 11.187L7.25286 9.80033L6.25286 11.5337L9.0662 13.6003C8.53286 15.1559 8.53286 16.8448 9.0662 18.4003L6.23953 20.4803L7.23953 22.2137L10.4795 20.827C11.5062 22.0003 12.9062 22.8537 14.4929 23.1737L14.9862 26.667H17.0129L17.5062 23.187C19.0929 22.8537 20.4929 22.0003 21.5195 20.827L24.7595 22.2137L25.7595 20.4803L22.9329 18.4137C23.4662 16.8537 23.4662 15.1603 22.9329 13.6003L25.7462 11.5337L24.7462 9.80033L21.5329 11.187C20.4852 9.97409 19.064 9.14389 17.4929 8.82699L16.9995 5.33366H14.9995Z" fill="currentColor" />
-                <circle opacity="0.4" cx="16" cy="16" r="3.75" stroke="currentColor" stroke-width="2.5" />
+                <circle opacity="0.4" cx="16" cy="16" r="3.75" stroke="currentColor" strokeWidth="2.5" />
               </svg>
               <span className="mr-1 text-[1.125rem]">Settings</span>
             </button>
@@ -545,9 +545,9 @@ const Sidebar = () => {
                           <path
                             d="M12 36L10.6 36C7.23969 36 5.55953 36 4.27606 35.346C3.14708 34.7708 2.2292 33.8529 1.65396 32.7239C1 31.4405 1 29.7603 1 26.4L0.999999 1"
                             stroke="#848484"
-                            stroke-width="0.5"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
+                            strokeWidth="0.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                           />
                         </svg>
                       </div>
