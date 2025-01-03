@@ -89,8 +89,8 @@ const TableComponent = ({ ...Props }: Props) => {
           className="w-[40%] rounded-[50px] bg-[#ecf2ff]"
           placeholder="Search"
         />
-        <div className="flex gap-5">
-          <Select>
+        <div className="flex">
+          {/* <Select>
             <SelectTrigger className="dropdown rounded-[25px] gap-4">
               <SelectValue placeholder="Export" />
             </SelectTrigger>
@@ -99,8 +99,8 @@ const TableComponent = ({ ...Props }: Props) => {
               <SelectItem value="dark">Dark</SelectItem>
               <SelectItem value="system">System</SelectItem>
             </SelectContent>
-          </Select>
-          <Select>
+          </Select> */}
+          {/* <Select>
             <SelectTrigger className="dropdown rounded-[25px] gap-4">
               <SelectValue placeholder="Filter" />
             </SelectTrigger>
@@ -109,11 +109,11 @@ const TableComponent = ({ ...Props }: Props) => {
               <SelectItem value="dark">Dark</SelectItem>
               <SelectItem value="system">System</SelectItem>
             </SelectContent>
-          </Select>
+          </Select> */}
           <Button className="text-black text-md font-normal bg-white hover:bg-white border rounded-[25px] px-8 py-5 hover:shadow-md" onClick={() => router.push(`/post_expense_approval`)}>
             Back
           </Button>
-          <div className="">
+          {/* <div className="">
             <svg
               width="45"
               height="45"
@@ -147,7 +147,7 @@ const TableComponent = ({ ...Props }: Props) => {
                   />
               </g>
             </svg>
-          </div>
+          </div> */}
         </div>
       </div>
       <div className="border bg-white h-full p-4 rounded-[18px]">
