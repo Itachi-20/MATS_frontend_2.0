@@ -330,7 +330,7 @@ const pagess = ({ ...Props }: props) => {
                     }
                 </div>
                 {
-                    !(expensedata?.actual_vendors[0]?.is_approved) && (role == "Event Finance" || role == "Event Approver") ?
+                    !(expensedata?.actual_vendors[0]?.is_approved) && (role != "Event Requestor") ?
                         <div className='flex justify-end gap-2 pt-8'>
                             <Button className={`${expensedata?.actual_vendors[0]?.status == "Post Expense Approved" ? 'cursor-not-allowed' : ''} bg-[#5DBE74] px-6 text-white`} disabled={expensedata?.actual_vendors[0]?.status == "Post Expense Approved" ? true : false} onClick={() => {handleOpen('Approved');setButtonText("Approve")}} >Approve</Button>
                             <Button className={`${expensedata?.actual_vendors[0]?.status == "Post Expense Approved" ? 'cursor-not-allowed' : ''} bg-[#4430BF] px-6 text-white`} disabled={expensedata?.actual_vendors[0]?.status == "Post Expense Approved" ? true : false} onClick={() => {handleOpen('Send Back');setButtonText("Send Back")}}>Send Back</Button>
