@@ -206,7 +206,7 @@ type DocumentRow = {
   createdBy: string;
   file_url: string;
 };
-const table = ({ tableData }: Props) => {
+const table = ({ ...Props }: Props) => {
   const { role, name, userid, clearAuthData } = useAuth();
   const param = useParams();
   const refno = param.refno as string;
@@ -220,10 +220,10 @@ const table = ({ tableData }: Props) => {
   const [compansationVendorName, setCompansationVendorName] = useState("");
   const [dropdownData, setDropdownData] = useState<dropdownData | null>(null);
   const [vendorName, setVendorName] = useState<vendorName | null>(null);
-  const [tabledata, setTableData] = useState(tableData);
+  const [tabledata, setTableData] = useState(Props.tableData);
   const [submitted, setSubmitted] = useState(0);
   const [approved, setApproved] = useState(0);
-  const [eventConclusion, setEventConclusion] = useState<string>();
+  const [eventConclusion, setEventConclusion] = useState<string>('');
   const [vendorDetails, setVendorDetails] = useState<VendorData>({
     vendor_type: '',
     vendor_name: '',
@@ -239,7 +239,7 @@ const table = ({ tableData }: Props) => {
   const base_url = process.env.NEXT_PUBLIC_FRAPPE_URL;
   const router = useRouter();
   const params = useParams();
-  const showButton = tabledata.actual_vendors.every(item => item.status !== "Draft") && !submitted && !approved && tableData.actual_vendors.length>0;
+  const showButton = (tabledata.actual_vendors.every(item => item.status !== "Draft")) && !(submitted) && !(approved) && (tabledata.actual_vendors.length>0);
 
   const fetchData = async () => {
     console.log("inside fetchData")
@@ -398,7 +398,7 @@ const table = ({ tableData }: Props) => {
     setVendorDetails(prev => ({ ...prev, [name]: numericValue }));
   }
   const handleConclusionChange = (newConclusion: string) => {
-    setEventConclusion(newConclusion);
+    setEventConclusion(() => newConclusion);
   };
   const addVendor = async () => {
     console.log("fileList", fileList);
@@ -595,29 +595,29 @@ const table = ({ tableData }: Props) => {
         <div className='border rounded-3xl mt-5 mb-7 p-2 text-black grid grid-cols-3'>
           <div className='grid-cols-1 px-6 border-r'>
             <ul className=''>
-              <li className='border-b p-2'>Event Date :<span className='font-semibold px-1'>{tableData ? tableData.event_date : ''}</span></li>
-              <li className='border-b p-2'>Event Name :<span className='font-semibold px-1'>{tableData ? tableData.event_name : ''}</span></li>
-              <li className='border-b p-2'>Event Requester Name :<span className='font-semibold px-1'>{tableData ? tableData.event_requestor : ''}</span></li>
-              <li className='border-b p-2'>Event Requester Number :<span className='font-semibold px-1'>{tableData ? tableData.name : ''}</span></li>
-              <li className=' p-2'>Business Unit :<span className='font-semibold px-1'>{tableData ? tableData.business_unit : ''}</span></li>
+              <li className='border-b p-2'>Event Date :<span className='font-semibold px-1'>{Props.tableData ? Props.tableData.event_date : ''}</span></li>
+              <li className='border-b p-2'>Event Name :<span className='font-semibold px-1'>{Props.tableData ? Props.tableData.event_name : ''}</span></li>
+              <li className='border-b p-2'>Event Requester Name :<span className='font-semibold px-1'>{Props.tableData ? Props.tableData.event_requestor : ''}</span></li>
+              <li className='border-b p-2'>Event Requester Number :<span className='font-semibold px-1'>{Props.tableData ? Props.tableData.name : ''}</span></li>
+              <li className=' p-2'>Business Unit :<span className='font-semibold px-1'>{Props.tableData ? Props.tableData.business_unit : ''}</span></li>
             </ul>
           </div>
           <div className='grid-cols-1 px-6 border-r'>
             <ul className=''>
-              <li className='border-b p-2'>Cost Center :<span className='font-semibold px-1'>{tableData ? tableData.cost_center : ''}</span></li>
-              <li className='border-b p-2'>Cost Center Hod :<span className='font-semibold px-1'>{tableData ? tableData.cost_hod : ''}</span></li>
-              <li className='border-b p-2'>Cost Center Description :<span className='font-semibold px-1'>{tableData ? tableData.cost_desc : ''}</span></li>
-              <li className='border-b p-2'>Reporting Head :<span className='font-semibold px-1'>{tableData ? tableData.event_date : ''}</span></li>
-              <li className=' p-2'>Sub Type Of activity :<span className='font-semibold px-1'>{tableData ? tableData.sub_type_of_activity : ''}</span></li>
+              <li className='border-b p-2'>Cost Center :<span className='font-semibold px-1'>{Props.tableData ? Props.tableData.cost_center : ''}</span></li>
+              <li className='border-b p-2'>Cost Center Hod :<span className='font-semibold px-1'>{Props.tableData ? Props.tableData.cost_hod : ''}</span></li>
+              <li className='border-b p-2'>Cost Center Description :<span className='font-semibold px-1'>{Props.tableData ? Props.tableData.cost_desc : ''}</span></li>
+              <li className='border-b p-2'>Reporting Head :<span className='font-semibold px-1'>{Props.tableData ? Props.tableData.event_date : ''}</span></li>
+              <li className=' p-2'>Sub Type Of activity :<span className='font-semibold px-1'>{Props.tableData ? Props.tableData.sub_type_of_activity : ''}</span></li>
             </ul>
           </div>
           <div className='grid-cols-1 px-6'>
             <ul className=''>
-              <li className='border-b p-2'>Total logistics Expense :<span className='font-semibold px-1'>{tableData ? tableData.total_logistics_expense : ''}</span></li>
-              <li className='border-b p-2'>Total Compensation Expense :<span className='font-semibold px-1'>{tableData ? tableData.total_compensation_expense : ''}</span></li>
-              <li className='border-b p-2'>Total Estimated Expense :<span className='font-semibold px-1'>{tableData ? tableData.total_estimated_expense : ''}</span></li>
-              <li className='border-b p-2'>Total Advance Expense :<span className='font-semibold px-1'>{tableData ? tableData.total_advance_amount : ''}</span></li>
-              <li className=' p-2'>Total Remaining Expense :<span className='font-semibold px-1'>{tableData ? tableData.total_balance_amount : ''}</span></li>
+              <li className='border-b p-2'>Total logistics Expense :<span className='font-semibold px-1'>{Props.tableData ? Props.tableData.total_logistics_expense : ''}</span></li>
+              <li className='border-b p-2'>Total Compensation Expense :<span className='font-semibold px-1'>{Props.tableData ? Props.tableData.total_compensation_expense : ''}</span></li>
+              <li className='border-b p-2'>Total Estimated Expense :<span className='font-semibold px-1'>{Props.tableData ? Props.tableData.total_estimated_expense : ''}</span></li>
+              <li className='border-b p-2'>Total Advance Expense :<span className='font-semibold px-1'>{Props.tableData ? Props.tableData.total_advance_amount : ''}</span></li>
+              <li className=' p-2'>Total Remaining Expense :<span className='font-semibold px-1'>{Props.tableData ? Props.tableData.total_balance_amount : ''}</span></li>
             </ul>
           </div>
 
@@ -634,12 +634,12 @@ const table = ({ tableData }: Props) => {
                 id='event_conclusion'
                 name='event_conclusion'
                 onChange={(e) => handleConclusionChange(e.target.value)}
-                disabled={tableData?.post_expense_submitted}
-                value={tabledata.event_conclusion ?? eventConclusion}
+                disabled={tabledata?.post_expense_submitted}
+                value={tabledata.event_conclusion ? tabledata.event_conclusion : eventConclusion}
               ></Textarea>
             </div>
             </div>
-            {!tableData?.post_expense_submitted &&
+            {!tabledata?.post_expense_submitted &&
             <div className=" grid grid-cols-3 gap-4 pb-7">
               
               <div className='grid-cols-1 space-y-2'>
@@ -712,7 +712,7 @@ const table = ({ tableData }: Props) => {
               </div>
             </div>
             }
-            {!tableData?.post_expense_submitted &&
+            {!tabledata?.post_expense_submitted &&
           <div className='flex justify-end gap-2 pb-7'>
             <SimpleFileUpload files={files} setFiles={setFiles} setUploadedFiles={setUploadedFiles} onNext={handleNext} buttonText={'Receipts/Bills'} />
             <Button className="border border-[#4430bf] text-[#4430bf] text-[18px]" disabled={isLoading ? true : false} onClick={addVendor} >{isLoading ? 'Adding...' : 'Add'}</Button>
@@ -862,8 +862,8 @@ const table = ({ tableData }: Props) => {
                             </div>
                           </TableCell>
                           <TableCell className='sticky right-0 z-20 gap-4 min-w-[120px] mt-2 mb-2 bg-white'>
-                            <div className='p-0 '>
-                              <button className='bg-green-500 hover:opacity-60 disabled:hover:none  text-white disabled:cursor-not-allowed disabled:bg-gray-400 w-[87.5px] rounded-md px-3 py-2' disabled={(data.status == "Draft" && isLoading != true) ? false:true} onClick={() => { handleIndividualExpense(data.name) }}>{data.status == "Draft" ? "Submit" :"Submitted"}</button>
+                            <div className=''>
+                              <button className='bg-green-500 hover:opacity-60 disabled:hover:none  text-white disabled:cursor-not-allowed disabled:bg-gray-400 w-[87.5px] rounded-md py-2' disabled={(data.status == "Draft" && isLoading != true) ? false:true} onClick={() => { handleIndividualExpense(data.name) }}>{data.status == "Draft" ? "Submit" :"Submitted"}</button>
                             </div>
                           </TableCell>
                         </TableRow>
@@ -882,7 +882,7 @@ const table = ({ tableData }: Props) => {
         </div>
 
         {
-          tableData?.travel_vendors.length > 0 &&
+          tabledata?.travel_vendors.length > 0 &&
           <>
             <h3 className='text-2xl font-semibold'>Travel Desk</h3>
             <div className="border bg-white h-full p-4 rounded-[18px] my-6">
