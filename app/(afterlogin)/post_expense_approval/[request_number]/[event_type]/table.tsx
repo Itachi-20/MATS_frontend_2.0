@@ -334,7 +334,7 @@ const table = ({ ...Props }: Props) => {
                         <TableCell>{data.vendor_name}</TableCell>
                         <TableCell>{data.actual_amount}</TableCell>
                         <TableCell>{data.status}</TableCell>
-                        <TableCell>{data.gst}</TableCell>
+                        <TableCell>{data.finance_gst}</TableCell>
                         <TableCell>{data.invoice_amount}</TableCell>
                         <TableCell>{data.tds}</TableCell>
                         <TableCell>{data.net_amount}</TableCell>
