@@ -33,6 +33,7 @@ type ActualVendor = {
   utr_number: string | null;
   payment_date: string | null;
   parent: string;
+  finance_gst:number | null;
 };
 type Props = {
   expensetabledata: ActualVendor[] | undefined; // Props includes the tableData field
@@ -161,7 +162,7 @@ const table = ({ ...Props }: Props) => {
                     <TableCell>{data.vendor_name}</TableCell>
                     <TableCell>{data.advance}</TableCell>
                     <TableCell>{data.status}</TableCell>
-                    <TableCell>{data.gst}</TableCell>
+                    <TableCell>{data.finance_gst}</TableCell>
                     <TableCell>{data.invoice_amount}</TableCell>
                     <TableCell>{data.tds}</TableCell>
                     <TableCell>{data.net_amount}</TableCell>

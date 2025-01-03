@@ -18,8 +18,8 @@
     "@radix-ui/react-scroll-area": "^1.2.1",
     "@radix-ui/react-select": "^2.1.2",
     "@radix-ui/react-slot": "^1.1.0",
-    "@radix-ui/react-tooltip": "^1.1.6",
     "@radix-ui/react-switch": "^1.1.2",
+    "@radix-ui/react-tooltip": "^1.1.6",
     "@types/js-cookie": "^3.0.6",
     "axios": "^1.7.7",
     "class-variance-authority": "^0.7.0",
@@ -36,7 +36,8 @@
     "react-dom": "19.0.0-rc-cd22717c-20241013",
     "sonner": "^1.7.0",
     "tailwind-merge": "^2.5.3",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "use-debounce": "^10.0.4"
   },
   "devDependencies": {
     "@types/node": "^20",

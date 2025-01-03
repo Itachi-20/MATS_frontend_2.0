@@ -389,12 +389,12 @@ const ExpensePage = ({ ...Props }: Props) => {
               // placeholder={formdata.basic_amount ? formdata.basic_amount as string : "Type here..."}
               id='basic_amount'
               name='basic_amount'
-              value={formdata.basic_amount as string ?? ''}
+              value={formdata.basic_amount as string ? formdata.basic_amount as string : ''}
               onChange={(e) => handleFieldChange(e)}
             ></Input>
           </div>
           <div className='grid-cols-1 space-y-2'>
-            <label htmlFor="gst" className="text-black md:text-sm md:font-normal capitalize">
+            <label htmlFor="finance_gst" className="text-black md:text-sm md:font-normal capitalize">
               GST<span className="text-[#e60000] ">*</span>
             </label>
             <Input

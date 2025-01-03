@@ -99,7 +99,7 @@ type FormData = {
   invoice_number: string | null;
   date: string | null;
   basic_amount: number;
-  gst: string | null;
+  finance_gst: string | null;
   invoice_amount: number;
   tds: number;
   net_amount: number;
@@ -167,6 +167,7 @@ const Fields = ({ ...Props }: Props) => {
       if (response.ok) {
         const data = await response.json();
         setGlCodeDropdown(data && data.data);
+        
       } else {
         console.log("Response not okay while fetching gl code");
       }
@@ -211,14 +212,10 @@ const Fields = ({ ...Props }: Props) => {
   const handleCostCenter = async(value:any) => {
     const ccname = eventCostCenter?.cost_center.filter(item=>item.name == value) ?? [];
     Props.formdata.cc_name = ccname[0]?.cost_center_description;
-  //  }
   };
-  function allowOnlyNumbers(e: React.FormEvent<HTMLInputElement>) {
-    const input = e.target as HTMLInputElement;
-    input.value = input.value.replace(/[^0-9]/g, ''); // Remove non-numeric characters
-  }
   useEffect(()=>{
     handleglcode(Props.formdata?.company_name);
+    // Props.formdata.gl_code = "";
   }, [Props?.formdata?.company_name]);
 
   useEffect(() => {
@@ -319,7 +316,7 @@ const Fields = ({ ...Props }: Props) => {
             </label>
             <Input
               type='number'
-              value={Props.formdata?.basic_amount ?? 0}
+              value={Props.formdata?.basic_amount ? Props.formdata?.basic_amount : ""}
               className="text-black shadow md:rounded-sm md:py-1"
               placeholder="Type here ..."
               id='date'
@@ -334,11 +331,11 @@ const Fields = ({ ...Props }: Props) => {
             </label>
             <Input
               type='number'
-              value={Props.formdata?.gst ?? 0}
+              value={Props.formdata?.finance_gst ? Props.formdata?.finance_gst : ''}
               className="text-black shadow md:rounded-sm md:py-1"
               placeholder="Type here ..."
               id='gst'
-              name='gst'
+              name='finance_gst'
               // onInput={(e)=>allowOnlyNumbers(e)}
               onChange={(e)=>Props.handlefieldChange(e)}
               readOnly={Props?.expenseData?.actual_vendors[0]?.is_approved ? true : false}
@@ -350,7 +347,7 @@ const Fields = ({ ...Props }: Props) => {
             </label>
             <Input
               type='number'
-              value={Props.formdata?.invoice_amount ?? 0}
+              value={Props.formdata?.invoice_amount ? Props.formdata?.invoice_amount : ''}
               className="text-black shadow md:rounded-sm md:py-1"
               placeholder="Type here ..."
               id='invoice_amount'
@@ -365,7 +362,7 @@ const Fields = ({ ...Props }: Props) => {
             </label>
             <Input
               type='number'
-              value={Props.formdata?.tds ?? 0}
+              value={Props.formdata?.tds ? Props.formdata?.tds : ''}
               className="text-black shadow md:rounded-sm md:py-1"
               placeholder="Type here ..."
               id='tds'
@@ -380,7 +377,7 @@ const Fields = ({ ...Props }: Props) => {
             </label>
             <Input
               type='number'
-              value={Props.formdata?.net_amount ?? 0}
+              value={Props.formdata?.net_amount ? Props.formdata?.net_amount:''}
               className="text-black shadow md:rounded-sm md:py-1"
               placeholder="Type here ..."
               id='net_amount'
@@ -474,7 +471,7 @@ const Fields = ({ ...Props }: Props) => {
               Company Name<span className="text-[#e60000] ">*</span>
             </label>
             <Select
-              value={Props.formdata?.company_name as string}
+              value={Props.formdata?.company_name as string ?? ""}
               onValueChange={(value) => { handleglcode(value); Props.handleSelectChange(value, "company_name"); }}
               disabled={Props?.expenseData?.actual_vendors[0]?.is_approved ? true : false}
             >
@@ -497,7 +494,7 @@ const Fields = ({ ...Props }: Props) => {
             </label>
             <Select
               value={Props.formdata?.gl_name ?? ""}
-              onValueChange={(value) => { handleGlname(value); Props.handleSelectChange(value, "gl_name"); }}
+              onValueChange={(value) => { handleGlname(value); Props.handleSelectChange(value, "gl_name");}}
               disabled={Props?.expenseData?.actual_vendors[0]?.is_approved ? true : false}
             >
 

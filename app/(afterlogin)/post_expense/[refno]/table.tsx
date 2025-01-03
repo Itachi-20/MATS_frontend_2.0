@@ -89,7 +89,8 @@ type Actual_vendors = {
   vendor_name: string,
   vendor_code: string,
   vendor_type: string,
-  zone: string
+  zone: string,
+  brief_status:string
 }
 
 type TravelVendors = {
@@ -206,7 +207,7 @@ type DocumentRow = {
   createdBy: string;
   file_url: string;
 };
-const table = ({ tableData }: Props) => {
+const table = ({ ...Props }: Props) => {
   const { role, name, userid, clearAuthData } = useAuth();
   const param = useParams();
   const refno = param.refno as string;
@@ -220,10 +221,10 @@ const table = ({ tableData }: Props) => {
   const [compansationVendorName, setCompansationVendorName] = useState("");
   const [dropdownData, setDropdownData] = useState<dropdownData | null>(null);
   const [vendorName, setVendorName] = useState<vendorName | null>(null);
-  const [tabledata, setTableData] = useState(tableData);
+  const [tabledata, setTableData] = useState(Props.tableData);
   const [submitted, setSubmitted] = useState(0);
   const [approved, setApproved] = useState(0);
-  const [eventConclusion, setEventConclusion] = useState<string>();
+  const [eventConclusion, setEventConclusion] = useState<string>('');
   const [vendorDetails, setVendorDetails] = useState<VendorData>({
     vendor_type: '',
     vendor_name: '',
@@ -239,7 +240,7 @@ const table = ({ tableData }: Props) => {
   const base_url = process.env.NEXT_PUBLIC_FRAPPE_URL;
   const router = useRouter();
   const params = useParams();
-  const showButton = tabledata.actual_vendors.every(item => item.status !== "Draft") && !submitted && !approved && tableData.actual_vendors.length>0;
+  const showButton = (tabledata.actual_vendors.every(item => item.status !== "Draft")) && !(submitted) && !(approved) && (tabledata.actual_vendors.length>0);
 
   const fetchData = async () => {
     console.log("inside fetchData")
@@ -335,37 +336,37 @@ const table = ({ tableData }: Props) => {
       console.error("Error during login:", error);
     }
   };
-  const handleAdvaneAmountApi = async (value: string) => {
-    console.log("inside amount api venser name ")
-    try {
-      const response = await fetch(
-        `/api/postExpense/getExpenseAmount`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          "credentials": 'include',
-          body: JSON.stringify({
-            name: tableData.name,
-            vendor_name: value
-          }),
-        }
-      );
-      if (response.ok) {
-        const data = await response.json();
-        setVendorDetails((prev) => ({
-          ...prev,
-          amount: data.data?.est_amount, // Update vendor_name in the vendorDetails state
-        }))
-        console.log(data, "-----------vendor name api------------------");
-      } else {
-        console.log("Login failed");
-      }
-    } catch (error) {
-      console.error("Error during login:", error);
-    }
-  };
+  // const handleAdvaneAmountApi = async (value: string) => {
+  //   console.log("inside amount api venser name ")
+  //   try {
+  //     const response = await fetch(
+  //       `/api/postExpense/getExpenseAmount`,
+  //       {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         "credentials": 'include',
+  //         body: JSON.stringify({
+  //           name: tableData.name,
+  //           vendor_name: value
+  //         }),
+  //       }
+  //     );
+  //     if (response.ok) {
+  //       const data = await response.json();
+  //       setVendorDetails((prev) => ({
+  //         ...prev,
+  //         amount: data.data?.est_amount, // Update vendor_name in the vendorDetails state
+  //       }))
+  //       console.log(data, "-----------vendor name api------------------");
+  //     } else {
+  //       console.log("Login failed");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error during login:", error);
+  //   }
+  // };
   const dropdown = async () => {
 
     try {
@@ -398,7 +399,7 @@ const table = ({ tableData }: Props) => {
     setVendorDetails(prev => ({ ...prev, [name]: numericValue }));
   }
   const handleConclusionChange = (newConclusion: string) => {
-    setEventConclusion(newConclusion);
+    setEventConclusion(() => newConclusion);
   };
   const addVendor = async () => {
     console.log("fileList", fileList);
@@ -595,29 +596,29 @@ const table = ({ tableData }: Props) => {
         <div className='border rounded-3xl mt-5 mb-7 p-2 text-black grid grid-cols-3'>
           <div className='grid-cols-1 px-6 border-r'>
             <ul className=''>
-              <li className='border-b p-2'>Event Date :<span className='font-semibold px-1'>{tableData ? tableData.event_date : ''}</span></li>
-              <li className='border-b p-2'>Event Name :<span className='font-semibold px-1'>{tableData ? tableData.event_name : ''}</span></li>
-              <li className='border-b p-2'>Event Requester Name :<span className='font-semibold px-1'>{tableData ? tableData.event_requestor : ''}</span></li>
-              <li className='border-b p-2'>Event Requester Number :<span className='font-semibold px-1'>{tableData ? tableData.name : ''}</span></li>
-              <li className=' p-2'>Business Unit :<span className='font-semibold px-1'>{tableData ? tableData.business_unit : ''}</span></li>
+              <li className='border-b p-2'>Event Date :<span className='font-semibold px-1'>{Props.tableData ? Props.tableData.event_date : ''}</span></li>
+              <li className='border-b p-2'>Event Name :<span className='font-semibold px-1'>{Props.tableData ? Props.tableData.event_name : ''}</span></li>
+              <li className='border-b p-2'>Event Requester Name :<span className='font-semibold px-1'>{Props.tableData ? Props.tableData.event_requestor : ''}</span></li>
+              <li className='border-b p-2'>Event Requester Number :<span className='font-semibold px-1'>{Props.tableData ? Props.tableData.name : ''}</span></li>
+              <li className=' p-2'>Business Unit :<span className='font-semibold px-1'>{Props.tableData ? Props.tableData.business_unit : ''}</span></li>
             </ul>
           </div>
           <div className='grid-cols-1 px-6 border-r'>
             <ul className=''>
-              <li className='border-b p-2'>Cost Center :<span className='font-semibold px-1'>{tableData ? tableData.cost_center : ''}</span></li>
-              <li className='border-b p-2'>Cost Center Hod :<span className='font-semibold px-1'>{tableData ? tableData.cost_hod : ''}</span></li>
-              <li className='border-b p-2'>Cost Center Description :<span className='font-semibold px-1'>{tableData ? tableData.cost_desc : ''}</span></li>
-              <li className='border-b p-2'>Reporting Head :<span className='font-semibold px-1'>{tableData ? tableData.event_date : ''}</span></li>
-              <li className=' p-2'>Sub Type Of activity :<span className='font-semibold px-1'>{tableData ? tableData.sub_type_of_activity : ''}</span></li>
+              <li className='border-b p-2'>Cost Center :<span className='font-semibold px-1'>{Props.tableData ? Props.tableData.cost_center : ''}</span></li>
+              <li className='border-b p-2'>Cost Center Hod :<span className='font-semibold px-1'>{Props.tableData ? Props.tableData.cost_hod : ''}</span></li>
+              <li className='border-b p-2'>Cost Center Description :<span className='font-semibold px-1'>{Props.tableData ? Props.tableData.cost_desc : ''}</span></li>
+              <li className='border-b p-2'>Reporting Head :<span className='font-semibold px-1'>{Props.tableData ? Props.tableData.event_date : ''}</span></li>
+              <li className=' p-2'>Sub Type Of activity :<span className='font-semibold px-1'>{Props.tableData ? Props.tableData.sub_type_of_activity : ''}</span></li>
             </ul>
           </div>
           <div className='grid-cols-1 px-6'>
             <ul className=''>
-              <li className='border-b p-2'>Total logistics Expense :<span className='font-semibold px-1'>{tableData ? tableData.total_logistics_expense : ''}</span></li>
-              <li className='border-b p-2'>Total Compensation Expense :<span className='font-semibold px-1'>{tableData ? tableData.total_compensation_expense : ''}</span></li>
-              <li className='border-b p-2'>Total Estimated Expense :<span className='font-semibold px-1'>{tableData ? tableData.total_estimated_expense : ''}</span></li>
-              <li className='border-b p-2'>Total Advance Expense :<span className='font-semibold px-1'>{tableData ? tableData.total_advance_amount : ''}</span></li>
-              <li className=' p-2'>Total Remaining Expense :<span className='font-semibold px-1'>{tableData ? tableData.total_balance_amount : ''}</span></li>
+              <li className='border-b p-2'>Total logistics Expense :<span className='font-semibold px-1'>{Props.tableData ? Props.tableData.total_logistics_expense : ''}</span></li>
+              <li className='border-b p-2'>Total Compensation Expense :<span className='font-semibold px-1'>{Props.tableData ? Props.tableData.total_compensation_expense : ''}</span></li>
+              <li className='border-b p-2'>Total Estimated Expense :<span className='font-semibold px-1'>{Props.tableData ? Props.tableData.total_estimated_expense : ''}</span></li>
+              <li className='border-b p-2'>Total Advance Expense :<span className='font-semibold px-1'>{Props.tableData ? Props.tableData.total_advance_amount : ''}</span></li>
+              <li className=' p-2'>Total Remaining Expense :<span className='font-semibold px-1'>{Props.tableData ? Props.tableData.total_balance_amount : ''}</span></li>
             </ul>
           </div>
 
@@ -634,12 +635,12 @@ const table = ({ tableData }: Props) => {
                 id='event_conclusion'
                 name='event_conclusion'
                 onChange={(e) => handleConclusionChange(e.target.value)}
-                disabled={tableData?.post_expense_submitted}
-                value={tabledata.event_conclusion ?? eventConclusion}
+                disabled={tabledata?.post_expense_submitted}
+                value={tabledata.event_conclusion ? tabledata.event_conclusion : eventConclusion}
               ></Textarea>
             </div>
             </div>
-            {!tableData?.post_expense_submitted &&
+            {!tabledata?.post_expense_submitted &&
             <div className=" grid grid-cols-3 gap-4 pb-7">
               
               <div className='grid-cols-1 space-y-2'>
@@ -676,7 +677,7 @@ const table = ({ tableData }: Props) => {
                 <Select
                   value={vendorDetails.vendor_name ?? ''}
                   onValueChange={(value: string) => {
-                    handleAdvaneAmountApi(value);
+                    // handleAdvaneAmountApi(value);
                     setVendorDetails((prev) => ({
                       ...prev,
                       vendor_name: value, // Update vendor_name in the vendorDetails state
@@ -706,13 +707,13 @@ const table = ({ tableData }: Props) => {
                   placeholder="Type Here"
                   type='number'
                   name='amount'
-                  value={vendorDetails.amount ?? ''}
+                  value={vendorDetails.amount == 0 ? "" : vendorDetails.amount}
                   onChange={handlefieldChange}
                 ></Input>
               </div>
             </div>
             }
-            {!tableData?.post_expense_submitted &&
+            {!tabledata?.post_expense_submitted &&
           <div className='flex justify-end gap-2 pb-7'>
             <SimpleFileUpload files={files} setFiles={setFiles} setUploadedFiles={setUploadedFiles} onNext={handleNext} buttonText={'Receipts/Bills'} />
             <Button className="border border-[#4430bf] text-[#4430bf] text-[18px]" disabled={isLoading ? true : false} onClick={addVendor} >{isLoading ? 'Adding...' : 'Add'}</Button>
@@ -763,6 +764,7 @@ const table = ({ tableData }: Props) => {
                 >
                   Billable Amount
                 </TableHead>
+
                 <TableHead
                   className={
                     "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
@@ -770,6 +772,15 @@ const table = ({ tableData }: Props) => {
                 >
                   Status
                 </TableHead>
+        
+                <TableHead
+                  className={
+                    "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                  }
+                >
+                  Post Expense Status
+                </TableHead>
+
                 <TableHead
                   className={
                     "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
@@ -839,6 +850,7 @@ const table = ({ tableData }: Props) => {
                           <TableCell>{data.vendor_name ?? "-"}</TableCell>
                           <TableCell>{data.actual_amount ?? "-"}</TableCell>
                           <TableCell>{data.status ?? "-"}</TableCell>
+                          <TableCell>{data.brief_status ?? "-"}</TableCell>
                           <TableCell>{data.gst ?? "-"}</TableCell>
                           <TableCell>{data.invoice_amount ?? "-"}</TableCell>
                           <TableCell>{data.tds ?? "-"}</TableCell>
@@ -847,7 +859,7 @@ const table = ({ tableData }: Props) => {
                           <TableCell>{data.payment_date ?? "-"}</TableCell>
 
                           {/* <TableCell className='z-20 gap-4 w-[120px] bg-white mt-2 flex border-l justify-center mb-2'> */}
-                          <TableCell className={`sticky right-[120px] z-20 min-w-[80px] border-l border-r bg-white flex ${data.status == 'Draft'?'justify-between items-center':'justify-center'}`}>
+                          <TableCell className={`sticky right-[120px] z-20 min-w-[80px] border-l border-r bg-white flex ${((data.status == 'Draft') && (role == "Event Requestor"))?'justify-between items-center':'justify-center'}`}>
                             <div className='p-0 cursor-pointer hover:opacity-60' onClick={() => handleSetFileData(data.files)}>
                               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
                                 <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
@@ -862,8 +874,8 @@ const table = ({ tableData }: Props) => {
                             </div>
                           </TableCell>
                           <TableCell className='sticky right-0 z-20 gap-4 min-w-[120px] mt-2 mb-2 bg-white'>
-                            <div className='p-0 '>
-                              <button className='bg-green-500 hover:opacity-60 disabled:hover:none  text-white disabled:cursor-not-allowed disabled:bg-gray-400 w-[87.5px] rounded-md px-3 py-2' disabled={(data.status == "Draft" && isLoading != true) ? false:true} onClick={() => { handleIndividualExpense(data.name) }}>{data.status == "Draft" ? "Submit" :"Submitted"}</button>
+                            <div className=''>
+                              <button className='bg-green-500 hover:opacity-60 disabled:hover:none  text-white disabled:cursor-not-allowed disabled:bg-gray-400 w-[87.5px] rounded-md py-2' disabled={(data.status == "Draft" && isLoading != true) ? false:true} onClick={() => { handleIndividualExpense(data.name) }}>{data.status == "Draft" ? "Submit" :"Submitted"}</button>
                             </div>
                           </TableCell>
                         </TableRow>
@@ -882,7 +894,7 @@ const table = ({ tableData }: Props) => {
         </div>
 
         {
-          tableData?.travel_vendors.length > 0 &&
+          tabledata?.travel_vendors.length > 0 &&
           <>
             <h3 className='text-2xl font-semibold'>Travel Desk</h3>
             <div className="border bg-white h-full p-4 rounded-[18px] my-6">
@@ -1042,7 +1054,7 @@ const table = ({ tableData }: Props) => {
         <ViewDocument setClose={setOpen} data={fileData} />
       }
       {exportopen && <UploadExport handleExport={handleExport} data={tabledata.import_files} />}
-      {isDeletePropOpen && <Ondeleteprop setClose={setIsDeletePropOpen} handleSubmit={handleRecordDeletion} Loading={isLoading} text={"Are you sure you want to close this event?"} />}
+      {isDeletePropOpen && <Ondeleteprop setClose={setIsDeletePropOpen} handleSubmit={handleRecordDeletion} Loading={isLoading} text={"Are you sure you want to delete this expense?"} />}
       {successProp && <SuccessProp title={"Post Expense Approval"} />}
       {
         isDialog &&
@@ -1052,7 +1064,7 @@ const table = ({ tableData }: Props) => {
           title={`All the expenses listed below are from the current occurrence.`}
         />
       }
-      <Toaster richColors position="top-right" />
+      <Toaster richColors position="top-right"/>
     </>
 
   )

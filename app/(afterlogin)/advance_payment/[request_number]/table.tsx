@@ -82,8 +82,8 @@ const TableComponent = ({ ...Props }: Props) => {
             className="w-[40%] rounded-[50px] bg-[#ecf2ff]"
             placeholder="Search"
           />
-          <div className="flex gap-5">
-            <Select>
+          <div className="flex">
+            {/* <Select>
               <SelectTrigger className="dropdown rounded-[25px] gap-4">
                 <SelectValue placeholder="Export" />
               </SelectTrigger>
@@ -92,8 +92,8 @@ const TableComponent = ({ ...Props }: Props) => {
                 <SelectItem value="dark">Dark</SelectItem>
                 <SelectItem value="system">System</SelectItem>
               </SelectContent>
-            </Select>
-            <Select>
+            </Select> */}
+            {/* <Select>
               <SelectTrigger className="dropdown rounded-[25px] gap-4">
                 <SelectValue placeholder="Filter" />
               </SelectTrigger>
@@ -102,7 +102,7 @@ const TableComponent = ({ ...Props }: Props) => {
                 <SelectItem value="dark">Dark</SelectItem>
                 <SelectItem value="system">System</SelectItem>
               </SelectContent>
-            </Select>
+            </Select> */}
             <Button
               className="text-black text-md font-normal bg-white hover:bg-white border rounded-[25px] px-8 py-5 shadow"
               onClick={() => {
@@ -111,7 +111,7 @@ const TableComponent = ({ ...Props }: Props) => {
             >
               Back
             </Button>
-            <div className="">
+            {/* <div className="">
               <svg
                 width="45"
                 height="45"
@@ -145,7 +145,7 @@ const TableComponent = ({ ...Props }: Props) => {
                   />
                 </g>
               </svg>
-            </div>
+            </div> */}
           </div>
         </div>
         <div className="border bg-white h-full p-4 rounded-[18px]">
@@ -406,40 +406,40 @@ const TableComponent = ({ ...Props }: Props) => {
                         {data.level5 != null &&
                           (data.status5 == "Approved" ? (
                             <Tooltip>
-                                                              <TooltipTrigger className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
-                                                              A
-                                                              <TooltipContent className='bg-white'>
-                                                                <p>Approved</p>
-                                                              </TooltipContent>
-                                                              </TooltipTrigger>
-                                                            </Tooltip>
+                              <TooltipTrigger className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
+                                A
+                                <TooltipContent className='bg-white'>
+                                  <p>Approved</p>
+                                </TooltipContent>
+                              </TooltipTrigger>
+                            </Tooltip>
                           ) : data.status5 == "Pending" ? (
                             <Tooltip>
-                                                              <TooltipTrigger className="w-6 rounded-md bg-[#fae8a8] text-[#937818] text-[15px] font-semibold">
-                                                                W
-                                                                <TooltipContent className='bg-white'>
-                                                                  <p>Waiting</p>
-                                                                </TooltipContent>
-                                                              </TooltipTrigger>
-                                                            </Tooltip>
+                              <TooltipTrigger className="w-6 rounded-md bg-[#fae8a8] text-[#937818] text-[15px] font-semibold">
+                                W
+                                <TooltipContent className='bg-white'>
+                                  <p>Waiting</p>
+                                </TooltipContent>
+                              </TooltipTrigger>
+                            </Tooltip>
                           ) : data.status5 == "Rejected" ? (
                             <Tooltip>
-                                                                <TooltipTrigger className="w-6 rounded-md bg-[#feadad] text-[#9c0000] text-[15px] font-semibold">
-                                                                  RJ
-                                                                  <TooltipContent className='bg-white'>
-                                                                    <p>Rejected</p>
-                                                                  </TooltipContent>
-                                                                </TooltipTrigger>
-                                                              </Tooltip>
+                              <TooltipTrigger className="w-6 rounded-md bg-[#feadad] text-[#9c0000] text-[15px] font-semibold">
+                                RJ
+                                <TooltipContent className='bg-white'>
+                                  <p>Rejected</p>
+                                </TooltipContent>
+                              </TooltipTrigger>
+                            </Tooltip>
                           ) : (
                             <Tooltip>
-                                                                  <TooltipTrigger className="w-6 rounded-md bg-[#adadfe] text-[#363d9a] text-[15px] font-semibold">
-                                                                  SB
-                                                                  <TooltipContent>
-                                                                    <p>Send Back</p>
-                                                                  </TooltipContent>
-                                                                  </TooltipTrigger>
-                                                                </Tooltip>
+                              <TooltipTrigger className="w-6 rounded-md bg-[#adadfe] text-[#363d9a] text-[15px] font-semibold">
+                                SB
+                                <TooltipContent>
+                                  <p>Send Back</p>
+                                </TooltipContent>
+                              </TooltipTrigger>
+                            </Tooltip>
                           ))}
                         {data.level5 == null && <span>N/A</span>}
                       </div>
@@ -451,40 +451,40 @@ const TableComponent = ({ ...Props }: Props) => {
                         {data.level6 != null &&
                           (data.status6 == "Approved" ? (
                             <Tooltip>
-                                                              <TooltipTrigger className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
-                                                              A
-                                                              <TooltipContent className='bg-white'>
-                                                                <p>Approved</p>
-                                                              </TooltipContent>
-                                                              </TooltipTrigger>
-                                                            </Tooltip>
+                              <TooltipTrigger className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
+                                A
+                                <TooltipContent className='bg-white'>
+                                  <p>Approved</p>
+                                </TooltipContent>
+                              </TooltipTrigger>
+                            </Tooltip>
                           ) : data.status6 == "Pending" ? (
                             <Tooltip>
-                                                              <TooltipTrigger className="w-6 rounded-md bg-[#fae8a8] text-[#937818] text-[15px] font-semibold">
-                                                                W
-                                                                <TooltipContent className='bg-white'>
-                                                                  <p>Waiting</p>
-                                                                </TooltipContent>
-                                                              </TooltipTrigger>
-                                                            </Tooltip>
+                              <TooltipTrigger className="w-6 rounded-md bg-[#fae8a8] text-[#937818] text-[15px] font-semibold">
+                                W
+                                <TooltipContent className='bg-white'>
+                                  <p>Waiting</p>
+                                </TooltipContent>
+                              </TooltipTrigger>
+                            </Tooltip>
                           ) : data.status6 == "Rejected" ? (
-                             <Tooltip>
-                                                                <TooltipTrigger className="w-6 rounded-md bg-[#feadad] text-[#9c0000] text-[15px] font-semibold">
-                                                              RJ
-                                                              <TooltipContent className='bg-white'>
-                                                              <p>Rejected</p>
-                                                              </TooltipContent>
-                                                                </TooltipTrigger>
-                                                              </Tooltip>
+                            <Tooltip>
+                              <TooltipTrigger className="w-6 rounded-md bg-[#feadad] text-[#9c0000] text-[15px] font-semibold">
+                                RJ
+                                <TooltipContent className='bg-white'>
+                                  <p>Rejected</p>
+                                </TooltipContent>
+                              </TooltipTrigger>
+                            </Tooltip>
                           ) : (
-                             <Tooltip>
-                                                                  <TooltipTrigger className="w-6 rounded-md bg-[#adadfe] text-[#363d9a] text-[15px] font-semibold">
-                                                                  SB
-                                                                  <TooltipContent className='bg-white'>
-                                                                    <p>Send Back</p>
-                                                                  </TooltipContent>
-                                                                  </TooltipTrigger>
-                                                                </Tooltip>
+                            <Tooltip>
+                              <TooltipTrigger className="w-6 rounded-md bg-[#adadfe] text-[#363d9a] text-[15px] font-semibold">
+                                SB
+                                <TooltipContent className='bg-white'>
+                                  <p>Send Back</p>
+                                </TooltipContent>
+                              </TooltipTrigger>
+                            </Tooltip>
                           ))}
                         {data.level6 == null && <span>N/A</span>}
                       </div>
@@ -496,40 +496,40 @@ const TableComponent = ({ ...Props }: Props) => {
                         {data.level7 != null &&
                           (data.status7 == "Approved" ? (
                             <Tooltip>
-                                                              <TooltipTrigger className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
-                                                              A
-                                                              <TooltipContent className='bg-white'>
-                                                                <p>Approved</p>
-                                                              </TooltipContent>
-                                                              </TooltipTrigger>
-                                                            </Tooltip>
+                              <TooltipTrigger className="w-6 rounded-md bg-[#a9fdbc] text-[#074f18] text-[15px] font-semibold">
+                                A
+                                <TooltipContent className='bg-white'>
+                                  <p>Approved</p>
+                                </TooltipContent>
+                              </TooltipTrigger>
+                            </Tooltip>
                           ) : data.status7 == "Pending" ? (
                             <Tooltip>
-                                                             <TooltipTrigger className="w-6 rounded-md bg-[#fae8a8] text-[#937818] text-[15px] font-semibold">
-                                                               W
-                                                               <TooltipContent>
-                                                                 <p>Waiting</p>
-                                                               </TooltipContent>
-                                                             </TooltipTrigger>
-                                                           </Tooltip>
+                              <TooltipTrigger className="w-6 rounded-md bg-[#fae8a8] text-[#937818] text-[15px] font-semibold">
+                                W
+                                <TooltipContent>
+                                  <p>Waiting</p>
+                                </TooltipContent>
+                              </TooltipTrigger>
+                            </Tooltip>
                           ) : data.status7 == "Rejected" ? (
                             <Tooltip>
-                                                                <TooltipTrigger className="w-6 rounded-md bg-[#fae8a8] text-[#937818] text-[15px] font-semibold">
-                                                                  RJ
-                                                                  <TooltipContent className='bg-white'>
-                                                                    <p>Rejected</p>
-                                                                  </TooltipContent>
-                                                                </TooltipTrigger>
-                                                              </Tooltip>
+                              <TooltipTrigger className="w-6 rounded-md bg-[#fae8a8] text-[#937818] text-[15px] font-semibold">
+                                RJ
+                                <TooltipContent className='bg-white'>
+                                  <p>Rejected</p>
+                                </TooltipContent>
+                              </TooltipTrigger>
+                            </Tooltip>
                           ) : (
                             <Tooltip>
-                                                                  <TooltipTrigger className="w-6 rounded-md bg-[#feadad] text-[#9c0000] text-[15px] font-semibold">
-                                                                  SB
-                                                                  <TooltipContent className='bg-white'>
-                                                                    <p>Send Back</p>
-                                                                  </TooltipContent>
-                                                                  </TooltipTrigger>
-                                                                </Tooltip>
+                              <TooltipTrigger className="w-6 rounded-md bg-[#feadad] text-[#9c0000] text-[15px] font-semibold">
+                                SB
+                                <TooltipContent className='bg-white'>
+                                  <p>Send Back</p>
+                                </TooltipContent>
+                              </TooltipTrigger>
+                            </Tooltip>
                           ))}
                         {data.level7 == null && <span>N/A</span>}
                       </div>
@@ -550,7 +550,7 @@ const TableComponent = ({ ...Props }: Props) => {
 
                         {data?.is_approved == true ? (
                           data.status == "Advance Approved" &&
-                          Props.role == "Event Finance" ? (
+                            Props.role == "Event Finance" ? (
                             <button
                               className="border rounded-full px-4 py-1 border-[#0e4154] text-[#0e4154]"
                               onClick={() =>

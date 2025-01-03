@@ -135,7 +135,7 @@ type FormData = {
     invoice_number: string | null;
     date: string | null;
     basic_amount: number;
-    gst: string | null;
+    finance_gst: string | null;
     invoice_amount: number;
     tds: number;
     net_amount: number;
@@ -244,7 +244,7 @@ const pagess = ({ ...Props }: props) => {
             invoice_number: expensedata?.actual_vendors[0]?.invoice_number || "",
             date: expensedata?.event_date || "",
             basic_amount: expensedata?.actual_vendors[0]?.basic_amount || 0,
-            gst: expensedata?.actual_vendors[0]?.gst || "",
+            finance_gst: expensedata?.actual_vendors[0]?.finance_gst || "",
             invoice_amount: expensedata?.actual_vendors[0]?.invoice_amount || 0,
             tds: expensedata?.actual_vendors[0]?.tds || 0,
             net_amount: expensedata?.actual_vendors[0]?.net_amount || 0,
@@ -330,7 +330,7 @@ const pagess = ({ ...Props }: props) => {
                     }
                 </div>
                 {
-                    !(expensedata?.actual_vendors[0]?.is_approved) && (role == "Event Finance" || role == "Event Approver") ?
+                    !(expensedata?.actual_vendors[0]?.is_approved) && (role != "Event Requestor") ?
                         <div className='flex justify-end gap-2 pt-8'>
                             <Button className={`${expensedata?.actual_vendors[0]?.status == "Post Expense Approved" ? 'cursor-not-allowed' : ''} bg-[#5DBE74] px-6 text-white`} disabled={expensedata?.actual_vendors[0]?.status == "Post Expense Approved" ? true : false} onClick={() => {handleOpen('Approved');setButtonText("Approve")}} >Approve</Button>
                             <Button className={`${expensedata?.actual_vendors[0]?.status == "Post Expense Approved" ? 'cursor-not-allowed' : ''} bg-[#4430BF] px-6 text-white`} disabled={expensedata?.actual_vendors[0]?.status == "Post Expense Approved" ? true : false} onClick={() => {handleOpen('Send Back');setButtonText("Send Back")}}>Send Back</Button>
