@@ -764,14 +764,6 @@ const table = ({ ...Props }: Props) => {
                 >
                   Billable Amount
                 </TableHead>
-        
-                <TableHead
-                  className={
-                    "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
-                  }
-                >
-                  Post Expense Status
-                </TableHead>
 
                 <TableHead
                   className={
@@ -779,6 +771,14 @@ const table = ({ ...Props }: Props) => {
                   }
                 >
                   Status
+                </TableHead>
+        
+                <TableHead
+                  className={
+                    "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                  }
+                >
+                  Post Expense Status
                 </TableHead>
 
                 <TableHead
