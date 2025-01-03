@@ -7,7 +7,7 @@ import Preview_Form from './forms/preview_form';
 import { AppWrapper } from '@/app/context/module';
 import { PreviewData, handleBusinessUnitChange, activityList, dropdown } from '../hcp_services/utility';
 import { cookies } from 'next/headers';
-import {handleStateChange,handleReportingChange} from '../training_and_education/utility'
+import {handleStateChange,handleReportingChange,handleCityChange,handleCityDropdown} from '../training_and_education/utility'
 export type DropdownDataType = {
   company: {
     name: string,
@@ -293,7 +293,8 @@ export type FormDataType = {
   sub_type_of_activity: string;
   any_govt_hcp: string,
   no_of_hcp: number,
-  reporting_head:string
+  hcp_ref_no:string,
+  reporting_head:string,
 };
   type CompensationType = {
     vendor_type: string;
@@ -314,12 +315,12 @@ const index = async ({...Props}:any) => {
 
   const props =  await Props;
   const {forms,refno} = await props.searchParams;
-  const dropdownData:DropdownDataType =await dropdown();
-
   const cookie = await cookies();
+  const dropdownData:DropdownDataType =await dropdown();
+  const cityDropdownData =await handleCityDropdown(cookie);
   let previewdata:  PreviewDataType | null = null;
   let eventCostCenter = null;
-  let cityDropdown = null;
+  let cityPreviewDropdown = null;
   let ReportingHeadDropdown = null;
   // console.log(refno,cookie);
   const activityDropdown: ActivityDropdownType = await activityList(cookie, 'Pre Activity', 'Training and Education');
@@ -329,14 +330,17 @@ const index = async ({...Props}:any) => {
   if(previewdata && previewdata.business_unit){
     eventCostCenter = await handleBusinessUnitChange(previewdata.business_unit,cookie);
   }
-  if(previewdata && previewdata.state){
-    cityDropdown = await handleStateChange(previewdata?.state,cookie);
-  }
+  // if(previewdata && previewdata.state){
+  //   cityDropdown = await handleStateChange(previewdata?.state,cookie);
+  // }
   if(previewdata && previewdata.state && previewdata.event_requestor && previewdata.business_unit){
     ReportingHeadDropdown = await handleReportingChange(previewdata.event_requestor,previewdata.business_unit,previewdata.division_category,previewdata.division_sub_category,previewdata?.state,cookie);
   }
+  if(previewdata && previewdata.city){
+    cityPreviewDropdown = await handleCityChange(previewdata?.city,1,10,cookie);
+  }
   let eventType = "Training and Education";
-
+console.log(previewdata?.city,'previewdata?.city',cityPreviewDropdown)
   return (
     <>
       <AppWrapper>
@@ -352,9 +356,10 @@ const index = async ({...Props}:any) => {
             <Form1
               eventCostCenter={eventCostCenter}
               ReportingHeadDropdown={ReportingHeadDropdown}
-              cityDropdown={cityDropdown}
+              cityDropdown={cityPreviewDropdown}
               previewData = {previewdata}
               dropdownData={dropdownData}
+              cityDropdownData={cityDropdownData}
               refNo={refno}
             /> :
             forms == "2" ?

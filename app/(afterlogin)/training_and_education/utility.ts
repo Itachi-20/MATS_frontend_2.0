@@ -191,3 +191,56 @@ export const handleBudgetChange = async (value: string,cookie:any) => {
       console.error("Error during state  change:", error);
     }
   };
+
+  export const handleCityChange = async (value: string,page_no:number,page_length:number,cookie:any) => {
+    console.log("value in server handleCityChange",value,page_length,page_no)
+    try {
+      const response = await fetch(
+        `${process.env.FRAPPE_URL}/api/method/matsapp.api.utils.common.search_city?city_name=${value}&page_no=${page_no}&page_length=${page_length}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Cookie":cookie
+          },
+          credentials:'include'
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log('frappe response city',data)
+        return data.data;
+      } else {
+        console.log("Response was not okay in state change ");
+      }
+    } catch (error) {
+      console.error("Error during state  change:", error);
+    }
+  };
+
+  export const handleCityDropdown = async (cookie:any) => {
+    try {
+      const response = await fetch(
+        `${process.env.FRAPPE_URL}/api/method/matsapp.api.utils.common.search_city?city_name=a&page_no=1&page_length=10`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Cookie":cookie
+          },
+          credentials:'include'
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log('frappe response city',data)
+        return data.data;
+      } else {
+        console.log("Response was not okay in city dropdown ");
+      }
+    } catch (error) {
+      console.error("Error during state  change:", error);
+    }
+  };
