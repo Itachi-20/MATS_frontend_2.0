@@ -135,7 +135,7 @@ type FormData = {
     invoice_number: string | null;
     date: string | null;
     basic_amount: number;
-    gst: string | null;
+    finance_gst: string | null;
     invoice_amount: number;
     tds: number;
     net_amount: number;
@@ -244,7 +244,7 @@ const pagess = ({ ...Props }: props) => {
             invoice_number: expensedata?.actual_vendors[0]?.invoice_number || "",
             date: expensedata?.event_date || "",
             basic_amount: expensedata?.actual_vendors[0]?.basic_amount || 0,
-            gst: expensedata?.actual_vendors[0]?.gst || "",
+            finance_gst: expensedata?.actual_vendors[0]?.finance_gst || "",
             invoice_amount: expensedata?.actual_vendors[0]?.invoice_amount || 0,
             tds: expensedata?.actual_vendors[0]?.tds || 0,
             net_amount: expensedata?.actual_vendors[0]?.net_amount || 0,

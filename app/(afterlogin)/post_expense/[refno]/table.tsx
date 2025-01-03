@@ -89,7 +89,8 @@ type Actual_vendors = {
   vendor_name: string,
   vendor_code: string,
   vendor_type: string,
-  zone: string
+  zone: string,
+  brief_status:string
 }
 
 type TravelVendors = {
@@ -763,6 +764,15 @@ const table = ({ ...Props }: Props) => {
                 >
                   Billable Amount
                 </TableHead>
+        
+                <TableHead
+                  className={
+                    "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                  }
+                >
+                  Post Expense Status
+                </TableHead>
+
                 <TableHead
                   className={
                     "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
@@ -770,6 +780,7 @@ const table = ({ ...Props }: Props) => {
                 >
                   Status
                 </TableHead>
+
                 <TableHead
                   className={
                     "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
@@ -839,6 +850,7 @@ const table = ({ ...Props }: Props) => {
                           <TableCell>{data.vendor_name ?? "-"}</TableCell>
                           <TableCell>{data.actual_amount ?? "-"}</TableCell>
                           <TableCell>{data.status ?? "-"}</TableCell>
+                          <TableCell>{data.brief_status ?? "-"}</TableCell>
                           <TableCell>{data.gst ?? "-"}</TableCell>
                           <TableCell>{data.invoice_amount ?? "-"}</TableCell>
                           <TableCell>{data.tds ?? "-"}</TableCell>
@@ -847,7 +859,7 @@ const table = ({ ...Props }: Props) => {
                           <TableCell>{data.payment_date ?? "-"}</TableCell>
 
                           {/* <TableCell className='z-20 gap-4 w-[120px] bg-white mt-2 flex border-l justify-center mb-2'> */}
-                          <TableCell className={`sticky right-[120px] z-20 min-w-[80px] border-l border-r bg-white flex ${data.status == 'Draft'?'justify-between items-center':'justify-center'}`}>
+                          <TableCell className={`sticky right-[120px] z-20 min-w-[80px] border-l border-r bg-white flex ${((data.status == 'Draft') && (role == "Event Requestor"))?'justify-between items-center':'justify-center'}`}>
                             <div className='p-0 cursor-pointer hover:opacity-60' onClick={() => handleSetFileData(data.files)}>
                               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
                                 <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
@@ -1042,7 +1054,7 @@ const table = ({ ...Props }: Props) => {
         <ViewDocument setClose={setOpen} data={fileData} />
       }
       {exportopen && <UploadExport handleExport={handleExport} data={tabledata.import_files} />}
-      {isDeletePropOpen && <Ondeleteprop setClose={setIsDeletePropOpen} handleSubmit={handleRecordDeletion} Loading={isLoading} text={"Are you sure you want to close this event?"} />}
+      {isDeletePropOpen && <Ondeleteprop setClose={setIsDeletePropOpen} handleSubmit={handleRecordDeletion} Loading={isLoading} text={"Are you sure you want to delete this expense?"} />}
       {successProp && <SuccessProp title={"Post Expense Approval"} />}
       {
         isDialog &&
@@ -1052,7 +1064,7 @@ const table = ({ ...Props }: Props) => {
           title={`All the expenses listed below are from the current occurrence.`}
         />
       }
-      <Toaster richColors position="top-right" />
+      <Toaster richColors position="top-right"/>
     </>
 
   )
