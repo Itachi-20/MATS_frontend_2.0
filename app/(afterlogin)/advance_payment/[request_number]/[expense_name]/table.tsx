@@ -36,6 +36,7 @@ type ActualVendor = {
   payment_date: string | null;
   parent: string;
   finance_gst: string;
+  brief_status: string;
 };
 
 type Props = {
@@ -107,6 +108,13 @@ const table = ({ ...Props }: Props) => {
               "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
             }
           >
+            Advance Status
+          </TableHead>
+          <TableHead
+            className={
+              "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+            }
+          >
             GST
           </TableHead>
 
@@ -165,6 +173,7 @@ const table = ({ ...Props }: Props) => {
                     <TableCell>{data.vendor_name}</TableCell>
                     <TableCell>{data.advance}</TableCell>
                     <TableCell>{data.status}</TableCell>
+                    <TableCell>{data.brief_status}</TableCell>
                     <TableCell>{data.finance_gst}</TableCell>
                     <TableCell>{data.invoice_amount}</TableCell>
                     <TableCell>{data.tds}</TableCell>

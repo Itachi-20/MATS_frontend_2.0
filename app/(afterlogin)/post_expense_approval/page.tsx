@@ -43,6 +43,7 @@ type EventTable = {
     event_venue: string;
     current_stage: string;
     status: string;
+    brief_status: string;
     owner: string;
     travel_request_approved: boolean;
     total_estimated_expense: string;
@@ -167,16 +168,14 @@ const Index = () => {
             },
             error: (error) => `Failed to add vendor: ${error.message || error}`,
         });
-    }
-
+    };
     const handlesearchname = async (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         console.log(value)
         setTimeout(() => {
             setSearchName(value);
         }, 100);
-    }
-
+    };
     const exportEventList = async () => {
         try {
             const Data = await fetch(
@@ -206,22 +205,15 @@ const Index = () => {
             console.log(error, "something went wrong");
         }
     };
-
-
     const togglePicker = () => {
         setIsPickerOpen(!isPickerOpen);
     };
-
     const handleDeletePopUp = async (value: string) => {
         setOpenDeletePopUp(true);
         formData.name = value;
         // handleClose();
     }
 
-    useEffect(() => {
-        PostExpenseApprovalList();
-        fetchEventRequestor();
-    }, [])
 
     const useDebounce = (value: any, delay: any) => {
         const [debouncedValue, setDebouncedValue] = useState(value);
@@ -237,18 +229,12 @@ const Index = () => {
 
         return debouncedValue;
     };
-
     const debouncedSearchName = useDebounce(searchName, 300);
-    useEffect(() => {
-        PostExpenseApprovalList();
-    }, [currentPage, debouncedSearchName, status])
-
+    
 
     const handleExportButton = () => {
         exportEventList();
     };
-    console.log("List", postExpenseApprovalList);
-
     const handleTypeChange = (e: any) => {
         console.log(e, 'e')
         if (e == 'all') {
@@ -266,7 +252,13 @@ const Index = () => {
             setStatus('');
         }
     };
-console.log(endDate,startDate)
+    useEffect(() => {
+        PostExpenseApprovalList();
+    }, [currentPage, debouncedSearchName, status, event_requestor]);
+    useEffect(() => {
+        PostExpenseApprovalList();
+        fetchEventRequestor();
+    }, []);
     return (
         <>
 
@@ -279,7 +271,7 @@ console.log(endDate,startDate)
                         onChange={(e) => { handlesearchname(e) }}
                     />
                     <div className="flex justify-end lg:gap-5 sm:gap-[10px] gap-[8px] items-center">
-                        <Requestor_filter setEventRequestor={setEventRequestor} requestor_dropdown={requestor_dropdown} event_requestor={event_requestor} fetchTableData={PostExpenseApprovalList} />
+                        <Requestor_filter setEventRequestor={setEventRequestor} requestor_dropdown={requestor_dropdown} event_requestor={event_requestor} />
                         <Button className="text-black w-34 shadow border hover:shadow-md active:shadow-lg lg:text-sm lg:rounded-[25px] lg:gap-4 sm:rounded-[50px] rounded-[50px] sm:text-[9px] sm:gap-[10px] gap-[9px] sm:font-normal sm:leading-[10.97px] text-[9px]" onClick={handleExportButton}>Export as Excel</Button>
 
                         <Select onValueChange={(e) => handleTypeChange(e)} value={status ? status : 'all'} >

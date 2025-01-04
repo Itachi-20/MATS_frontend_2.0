@@ -106,7 +106,7 @@ const table = ({ ...Props }: Props) => {
       );
       if (Data.ok) {
         const data = await Data.json();
-        console.log('data.data.events', data.data.events)
+        // console.log('data.data.events', data.data.events);
         setTableData(data.data.events)
         setLoading(false)
       } else {
@@ -124,7 +124,7 @@ const table = ({ ...Props }: Props) => {
 
   useEffect(() => {
     fetchTableData();
-  }, [currentPage, debouncedSearchName, status])
+  }, [currentPage, debouncedSearchName, status,event_requestor])
 
   const handleTypeChange = (e: any) => {
     console.log(e, 'e')
@@ -188,9 +188,6 @@ const table = ({ ...Props }: Props) => {
       setStatus('');
     }
   };
-
-  console.log(event_requestor, 'event_requestor')
-  console.log(status, 'status')
   return (
     <TooltipProvider>
       <div className="p-7 w-full  z-20 text-black">
@@ -202,7 +199,7 @@ const table = ({ ...Props }: Props) => {
             onChange={(e) => { handlesearchname(e) }}
           />
           <div className="flex justify-end lg:gap-5 sm:gap-[10px] gap-[8px] items-center">
-            <Requestor_filter setEventRequestor={setEventRequestor} requestor_dropdown={requestor_dropdown} event_requestor={event_requestor} fetchTableData={fetchTableData} />
+            <Requestor_filter setEventRequestor={setEventRequestor} requestor_dropdown={requestor_dropdown} event_requestor={event_requestor} />
             <Button className="text-black w-34 shadow border hover:shadow-md active:shadow-lg lg:text-sm lg:rounded-[25px] lg:gap-4 sm:rounded-[50px] rounded-[50px] sm:text-[9px] sm:gap-[10px] gap-[9px] sm:font-normal sm:leading-[10.97px] text-[9px]" onClick={handleExportButton}>Export</Button>
             <Select onValueChange={(e) => handleTypeChange(e)} value={status ? status : 'all'} >
               <SelectTrigger className="text-black w-34 shadow focus-visible:ring-transparent lg:text-sm lg:rounded-[25px] lg:gap-4 sm:rounded-[50px] rounded-[50px] sm:text-[9px] sm:gap-[10px]  gap-[9px] sm:font-normal sm:leading-[10.97px] text-[9px]">

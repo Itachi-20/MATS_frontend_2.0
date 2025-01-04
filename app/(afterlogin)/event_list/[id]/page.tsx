@@ -347,11 +347,12 @@ export default function EventListPage() {
         />}
 
       {
-
+        eventData?.event_type != "Patient Support" &&
         <VendorDetails
           eventData={eventData}
         />
       }
+
       <TotalExpense
         eventData={eventData}
       //pathname="eventListPage"

@@ -116,6 +116,7 @@ type TravelVendors = {
   parenttype: string,
   post_expense_check: boolean,
   status: string,
+  brief_status: string,
   tds: number,
   travel_expense_check: boolean,
   vendor_name: string,
@@ -157,6 +158,7 @@ type TableData = {
   travel_expense_approved: boolean,
   travel_vendors: TravelVendors[];
   event_conclusion: string;
+  brief_status: string;
 };
 
 type Props = {
@@ -945,6 +947,7 @@ const table = ({ ...Props }: Props) => {
                     >
                       Status
                     </TableHead>
+                  
                     <TableHead
                       className={
                         "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
