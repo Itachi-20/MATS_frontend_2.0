@@ -101,7 +101,7 @@ type TravelVendors = {
   budget_category: string,
   est_amount: number,
   event_conclusion: string,
-  gst: "12",
+  gst: string,
   gst_included: boolean,
   idx: number,
   invoice_amount: number,
@@ -851,7 +851,7 @@ const table = ({ ...Props }: Props) => {
                           <TableCell>{data.actual_amount ?? "-"}</TableCell>
                           <TableCell>{data.status ?? "-"}</TableCell>
                           <TableCell>{data.brief_status ?? "-"}</TableCell>
-                          <TableCell>{data.gst ?? "-"}</TableCell>
+                          <TableCell>{data.finance_gst ?? "-"}</TableCell>
                           <TableCell>{data.invoice_amount ?? "-"}</TableCell>
                           <TableCell>{data.tds ?? "-"}</TableCell>
                           <TableCell>{data.net_amount ?? "-"}</TableCell>
@@ -859,7 +859,7 @@ const table = ({ ...Props }: Props) => {
                           <TableCell>{data.payment_date ?? "-"}</TableCell>
 
                           {/* <TableCell className='z-20 gap-4 w-[120px] bg-white mt-2 flex border-l justify-center mb-2'> */}
-                          <TableCell className={`sticky right-[120px] z-20 min-w-[80px] border-l border-r bg-white flex ${((data.status == 'Draft') && (role == "Event Requestor"))?'justify-between items-center':'justify-center'}`}>
+                          <TableCell className={`sticky right-[120px] z-20 min-w-[80px] border-l border-r bg-white flex ${((data.status == 'Draft') && (role == "Event Requestor"))?'space-x-2 items-center':'justify-center'}`}>
                             <div className='p-0 cursor-pointer hover:opacity-60' onClick={() => handleSetFileData(data.files)}>
                               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
                                 <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />

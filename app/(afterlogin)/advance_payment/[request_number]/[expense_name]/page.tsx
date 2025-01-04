@@ -31,6 +31,7 @@ type ActualVendor = {
     utr_number: string | null;
     payment_date: string | null;
     parent: string;
+    finance_gst: string;
 };
 
 type EventData = {
