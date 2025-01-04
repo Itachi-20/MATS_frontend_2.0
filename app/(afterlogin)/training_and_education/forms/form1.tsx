@@ -68,7 +68,7 @@ type Props = {
 
 const Form1 = ({ ...Props }: Props) => {
   const { role, name, userid, clearAuthData } = useAuth();
-  const [formData, setFormData] = useState<FormDataType | null>(Props.previewData ??'');
+  const [formData, setFormData] = useState<FormDataType | null>(Props.previewData?? '');
   const [errors, setErrors] = useState<FormErrors>();
   const router = useRouter();
   const [businessUnit, setBusinessUnit] = useState(
@@ -89,6 +89,7 @@ const Form1 = ({ ...Props }: Props) => {
   const [loading, setLoading] = useState(true);
   const [isReportingHeadDialog, setIsReportingHeadDialog] = useState(false);
   const [city, setCity] = useState(Props.previewData?.city);
+  // const [previewcity, setPreviewCity] = useState(Props.previewData?.city);
   const validateAtSubmit = () => {
     const errors: FormErrors = {};
     if (
@@ -252,7 +253,7 @@ const Form1 = ({ ...Props }: Props) => {
     }
   };
   const handleCityChange = async (city: string) => {
-    setFormData((prev) => ({ ...prev, reporting_head: '' } as FormDataType));
+    // setFormData((prev) => ({ ...prev, reporting_head: '' } as FormDataType));
     try {
       const response = await fetch("/api/stateDropdown", {
         method: "POST",
@@ -400,11 +401,12 @@ const Form1 = ({ ...Props }: Props) => {
   const handleIsReportingDialog = () => {
     setIsReportingHeadDialog(prev => !prev);
   }
-
-  console.log("-------d", formData?.event_requestor ,
-    formData?.business_unit ,
-    formData?.state ,
-    formData?.division_category);
+  const clearCity = () => {
+    console.log('inside claer city')
+    setCity('');
+    setFormData((prev) => ({ ...prev, reporting_head: '' }) as FormDataType);
+    setFormData((prev) => ({ ...prev, state: '' }) as FormDataType);
+  };
 
   return (
     <div>
@@ -636,7 +638,7 @@ const Form1 = ({ ...Props }: Props) => {
         )}
         <div className="flex flex-col gap-2">
           <label className="lable">City</label>
-          <CityDropdwon setCity={setCity} city={city} citydropdown={citydropdown} handleCityChange={handleLoadCity} />
+          <CityDropdwon setCity={setCity} city={city} citydropdown={citydropdown} handleCityChange={handleLoadCity} clearCity={clearCity}/>
         </div>
         <div className="flex flex-col gap-2">
           <label
