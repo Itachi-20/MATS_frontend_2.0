@@ -7,7 +7,7 @@ import Preview_Form from './forms/preview_form';
 import { AppWrapper } from '@/app/context/module';
 import { dropdown,activityList,PreviewData,handleBusinessUnitChange,handleBudgetChange} from "./utility";
 import { cookies } from "next/headers";
-import {handleStateChange,handleReportingChange} from '../training_and_education/utility'
+import { handleStateChange, handleReportingChange, handleCityChange, handleCityDropdown } from '../training_and_education/utility'
 type dropdownData = {
   company: {
     name: string,
@@ -265,11 +265,13 @@ const index = async({...Props}:any) => {
   const props =  await Props;
   const {forms,refno} = await props.searchParams;
   const cookie = await cookies()
+  const cityDropdownData = await handleCityDropdown(cookie);
   let previewdata:Previewdata | null =null;
   let eventCostCenter = null;
   let subtypeActivity = null;
   let cityDropdown = null;
   let ReportingHeadDropdown = null;
+  let cityPreviewDropdown = null;
   const actvityDropdown: activityDropdown = await activityList(cookie,'Pre Activity','HCP Services');
   if(refno){
       previewdata =  await PreviewData(refno,cookie);
@@ -287,6 +289,12 @@ const index = async({...Props}:any) => {
   if(previewdata && previewdata.state && previewdata.event_requestor && previewdata.business_unit){
     ReportingHeadDropdown = await handleReportingChange(previewdata.event_requestor,previewdata.business_unit,previewdata.division_category,previewdata.division_sub_category,previewdata?.state,cookie);
   }
+  if (previewdata && previewdata.state && previewdata.event_requestor && previewdata.business_unit) {
+    ReportingHeadDropdown = await handleReportingChange(previewdata.event_requestor, previewdata.business_unit, previewdata.division_category, previewdata.division_sub_category, previewdata?.state, cookie);
+  }
+  if (previewdata && previewdata.city) {
+    cityPreviewDropdown = await handleCityChange(previewdata?.city, 1, 10, cookie);
+  }
   console.log(previewdata,"this is preview data")
   return (
         <>
@@ -302,12 +310,14 @@ const index = async({...Props}:any) => {
           forms == "1"?
           <Form1
           ReportingHeadDropdown={ReportingHeadDropdown}
-              cityDropdown={cityDropdown}
+              // cityDropdown={cityDropdown}
            dropdownData={dropdownData}
            previewData={previewdata}
            eventCostCenter = {eventCostCenter}
            refno = {refno}
            subtypeActivity = {subtypeActivity}
+           cityDropdown={cityDropdown}
+            cityDropdownData={cityDropdownData}
           />:
           forms == "2"?
           <Form2
