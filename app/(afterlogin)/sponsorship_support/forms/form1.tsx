@@ -14,6 +14,7 @@ import { useRouter } from "next/navigation";
 import { Previewdata } from '@/app/(afterlogin)/monetary_grant/page'
 import { useAuth } from "@/app/context/AuthContext";
 import IsReportingHeadDialog from "@/components/isReportingHeadDialog";
+import CityDropdwon from '@/components/training_and_education/search_city'
 type dropdownData = {
   company: {
     name: string;
@@ -107,18 +108,24 @@ type FormData = {
   organizer_name: string,
   entitlement_in_lieu_of_sponsorship: string,
   sponsorship_amount: number,
+  reporting_head: string,
 };
 
 type reportingHeadDropdown = {
   reporting_name: string;
   reporting: string
 }[];
-type cityDropdown = {
+type CityDropdown = {
   name: string;
   city: string
+}
+type stateDropdown = {
+  name: string;
+  state: string;
 }[];
 type Props = {
-  cityDropdown: cityDropdown | null
+  cityDropdown: CityDropdown[];
+  cityDropdownData: CityDropdown[];
   ReportingHeadDropdown: reportingHeadDropdown | null
   dropdownData: dropdownData | null;
   previewData: Previewdata | null;
@@ -133,6 +140,9 @@ type FormErrors = {
   entitlement_in_lieu_of_sponsorship?: string;
   sponsorship_amount?: string;
   sponsor_currency?: string;
+  state?: string;
+  reporting_head?: string;
+  division_category?:string;
 }
 
 const Form1 = ({ ...Props }: Props) => {
@@ -144,15 +154,16 @@ const Form1 = ({ ...Props }: Props) => {
   const [subtypeActivity, setSubtypeActivity] =
     useState<subtypeActivity | null>(null);
   const [subtypeActivityVisible, setSubtypeActivityVisible] = useState(false);
-  const [formData, setFormData] = useState<FormData>();
+  const [formData, setFormData] = useState<FormData>(Props.previewData ?? '');
   const [errors, setErrors] = useState<FormErrors>();
   const [refNo, setRefNo] = useState<string | null>(Props.refno ?? "");
   const [loading, setLoading] = useState(true);
   const router = useRouter()
-  const [citydropdown, setCityDropdown] = useState<cityDropdown | null>()
   const [reportingHeadDropdown, setReportingHeadDropdown] = useState<reportingHeadDropdown | null>(null)
   const [isReportingHeadDialog, setIsReportingHeadDialog] = useState(false);
-
+  const [citydropdown, setCityDropdown] = useState<CityDropdown[]>(Props.cityDropdown);
+  const [statedropdown, setStateDropdown] = useState<stateDropdown>();
+  const [city, setCity] = useState(Props.previewData?.city);
   const validateAtSubmit = () => {
     const errors: FormErrors = {};
     console.log("Checking Formdata value", formData?.sub_type_of_activity);
@@ -162,6 +173,9 @@ const Form1 = ({ ...Props }: Props) => {
     if ((Props.previewData?.entitlement_in_lieu_of_sponsorship ? (formData && ("entitlement_in_lieu_of_sponsorship" in formData && formData.entitlement_in_lieu_of_sponsorship == '')) : !formData?.entitlement_in_lieu_of_sponsorship)) errors.entitlement_in_lieu_of_sponsorship = "Entitlement in liew is sponsorship is required";
     if ((Props.previewData?.sponsorship_amount ? (formData && ("sponsorship_amount" in formData && !formData.sponsorship_amount)) : !formData?.sponsorship_amount)) errors.sponsorship_amount = "Sponsorship Amount is required";
     if ((Props.previewData?.sponsor_currency ? (formData && ("sponsor_currency" in formData && formData.sponsor_currency == '')) : !formData?.sponsor_currency)) errors.sponsor_currency = "Currency is required";
+    if (Props.previewData?.state ? formData && "state" in formData && formData.state == "" : !formData?.state) errors.state = "State is required";
+    if (Props.previewData?.reporting_head ? formData && "reporting_head" in formData && formData.reporting_head == "" : !formData?.reporting_head) errors.reporting_head = "Reporting Head is required";
+    if (Props.previewData?.division_category ? formData && "division_category" in formData && formData.division_category == "" : !formData?.division_category) errors.division_category = "Budget is required";
     return errors;
   };
 
@@ -247,6 +261,15 @@ const Form1 = ({ ...Props }: Props) => {
     }
   };
   const handleBusinessUnitChange = async (value: string) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      state: '',
+      reporting_head: '',
+      division_sub_category: '',
+      division_category: '',
+      event_cost_center: ''
+    }) as FormData);
+    setCity("")
     try {
       const response = await fetch(
         "/api/training_and_education/eventCostCenterDropdown",
@@ -289,27 +312,26 @@ const Form1 = ({ ...Props }: Props) => {
     }
   }, [userid]);
 
-
-  const handleStateChange = async (value: string) => {
+  const handleCityChange = async (city: string) => {
+    // setFormData((prev) => ({ ...prev, reporting_head: '' } as FormDataType));
     try {
-      const response = await fetch(
-        "/api/training_and_education/cityDropdown",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            state: value,
-          }),
-        }
-      );
-
+      const response = await fetch("/api/stateDropdown", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          city: city,
+        }),
+      });
 
       if (response.ok) {
         const data = await response.json();
-        setCityDropdown(data.data);
-        return data.data
+        if (data.message.length == 1) {
+          setFormData((prev) => ({ ...prev, state: data.message[0].name } as FormData));
+        }
+        setStateDropdown(data.message);
+        return data.data;
       } else {
         console.log("Response not okay  state change");
       }
@@ -318,6 +340,39 @@ const Form1 = ({ ...Props }: Props) => {
     }
   };
 
+  const handleLoadCity = async (city_name: string, page_length: number, page_no: number) => {
+    try {
+      const response = await fetch("/api/loadCityDropdown", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          city_name: city_name,
+          page_length: page_length,
+          page_no: page_no,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setCityDropdown(data.data);
+        return data.data;
+      } else {
+        console.log("Response not okay  state change");
+      }
+    } catch (error) {
+      console.error("Error during state  change:", error);
+    }
+  };
+
+  useEffect(() => {
+    console.log(city, 'city')
+    if (city) {
+      setFormData((prev) => ({ ...prev, city: city } as FormData));
+      handleCityChange(city)
+    }
+  }, [city]);
   const handleReportingChange = async () => {
     setReportingHeadDropdown([])
     try {
@@ -345,6 +400,9 @@ const Form1 = ({ ...Props }: Props) => {
       if (response.ok) {
         const data = await response.json();
         setReportingHeadDropdown(data.data);
+        if (data.data.length == 1) {
+          setFormData((prev) => ({ ...prev, reporting_head: data.data[0].reporting } as FormData));
+        }
         return data.data;
       } else {
         console.log("Response not Ok at Reporting change");
@@ -369,9 +427,15 @@ const Form1 = ({ ...Props }: Props) => {
   }
 
 
-  const handleIsReportingDialog = ()=>{
+  const handleIsReportingDialog = () => {
     setIsReportingHeadDialog(prev => !prev);
   }
+  const clearCity = () => {
+    console.log('inside claer city')
+    setCity('');
+    setFormData((prev) => ({ ...prev, reporting_head: '' }) as FormData);
+    setFormData((prev) => ({ ...prev, state: '' }) as FormData);
+  };
   return (
     // </div>
     (
@@ -412,7 +476,8 @@ const Form1 = ({ ...Props }: Props) => {
               Business Unit
             </label>
             <Select
-              defaultValue={Props.previewData?.business_unit ?? ""}
+              // defaultValue={Props.previewData?.business_unit ?? ""}
+              value={formData?.business_unit ? formData?.business_unit : Props.previewData?.business_unit ?? ''}
               onValueChange={(value) => { handleBusinessUnitChange(value); handleSelectChange(value, "business_unit"); }}
             >
               <SelectTrigger className="dropdown">
@@ -467,7 +532,8 @@ const Form1 = ({ ...Props }: Props) => {
             </label>
             <Select
               onValueChange={(value) => handleSelectChange(value, "event_cost_center")}
-              defaultValue={Props.previewData?.event_cost_center ? Props.previewData.event_cost_center : ""}
+              // defaultValue={Props.previewData?.event_cost_center ? Props.previewData.event_cost_center : ""}
+              value={formData?.event_cost_center ? formData?.event_cost_center : Props.previewData?.event_cost_center ?? ''}
             >
               <SelectTrigger className={`dropdown ${(errors?.event_cost_center && !formData?.event_cost_center) ? `border border-red-600` : ``}`}>
                 <SelectValue placeholder="Select" />
@@ -503,14 +569,19 @@ const Form1 = ({ ...Props }: Props) => {
             }
           </div>
           <div className="flex flex-col gap-2">
-            <label className="lable">
-              Budget
+            <label  className={`lable ${errors?.division_category && !formData?.division_category
+              ? `text-red-600`
+              : `text-black`
+              }`}>
+              Budget<span className={"text-[#e60000]"}>*</span>
             </label>
             <Select
-              defaultValue={Props.previewData?.division_category ?? ""}
+              // defaultValue={Props.previewData?.division_category ?? ""}
+              value={formData?.division_category ? formData?.division_category : Props.previewData?.division_category ?? ''}
               onValueChange={(value) => { handleBudgetChange(value), handleSelectChange(value, "division_category"); }}
             >
-              <SelectTrigger className="dropdown">
+              <SelectTrigger  className={`dropdown ${errors?.division_category && !formData?.division_category ? `border border-red-600` : ``
+                  }`}>
                 <SelectValue placeholder="Select" />
               </SelectTrigger>
               <SelectContent>
@@ -531,6 +602,11 @@ const Form1 = ({ ...Props }: Props) => {
                 }
               </SelectContent>
             </Select>
+            {errors && errors?.division_category && !formData?.division_category && (
+              <p className="w-full text-red-500 text-[11px] font-normal text-left">
+                {errors?.division_category}
+              </p>
+            )}
           </div>
           {
             (businessUnit == "Endosurgery" && budget == "National") &&
@@ -539,7 +615,8 @@ const Form1 = ({ ...Props }: Props) => {
                 Budget Sub Type
               </label>
               <Select
-                defaultValue={Props.previewData?.division_sub_category ?? ""}
+                // defaultValue={Props.previewData?.division_sub_category ?? ""}
+                value={formData?.division_category ? formData?.division_category : Props.previewData?.division_category ?? ''}
                 onValueChange={(value) => { handleSelectChange(value, "division_sub_category") }}
               >
                 <SelectTrigger className="dropdown">
@@ -559,56 +636,75 @@ const Form1 = ({ ...Props }: Props) => {
             </div>
           }
           <div className="flex flex-col gap-2">
-            <label className="lable">
-              State
+            <label className="lable">City</label>
+            <CityDropdwon setCity={setCity} city={city} citydropdown={citydropdown} handleCityChange={handleLoadCity} clearCity={clearCity} />
+          </div>
+          <div className="flex flex-col gap-2">
+            <label
+              className={`label ${errors?.state && !formData?.state ? `text-red-600` : `text-black`
+                }`}
+            >
+              State<span className={"text-[#e60000]"}>*</span>
             </label>
             <Select
-              defaultValue={Props.previewData?.state ?? ""}
-              onValueChange={(value) => { handleSelectChange(value, "state"); handleStateChange(value) }}
+              value={formData?.state ? formData?.state : Props.previewData?.state ?? ''}
+              // value={formData?.state ? formData?.state : (Props.previewData?.state ? Props.previewData?.state : (statedropdown?.length === 1 ? statedropdown[0].name : '')) }
+              onValueChange={(value) => {
+                handleSelectChange(value, "state");
+              }}
             >
-              <SelectTrigger className="dropdown">
+              <SelectTrigger
+                className={`dropdown ${errors?.state && !formData?.state ? `border border-red-600` : ``
+                  }`}
+              >
                 <SelectValue placeholder="Select" />
               </SelectTrigger>
               <SelectContent>
-                {
-                  Props.dropdownData &&
-                    Props.dropdownData.state ?
-                    Props.dropdownData.state.map((item, index) => {
-                      return (
-                        <SelectItem value={item.name}>
-                          {item.state}
-                        </SelectItem>
-                      );
-                    })
-                    :
-                    <SelectItem value={"null"} disabled>No Data Yet</SelectItem>
-                }
+                {statedropdown && statedropdown.length > 0 ? (
+                  statedropdown.map((item) => (
+                    <SelectItem key={item.name} value={item.name}>
+                      {item.state}
+                    </SelectItem>
+                  ))
+                ) : (
+                  <SelectItem value={"null"} disabled>
+                    No Data Yet
+                  </SelectItem>
+                )}
               </SelectContent>
             </Select>
+            {errors && errors?.state && !formData?.state && (
+              <p className="w-full text-red-500 text-[11px] font-normal text-left">
+                {errors?.state}
+              </p>
+            )}
           </div>
-
           <div className="flex flex-col gap-2">
-            <label className="lable">
-              City
+            <label  className={`label ${errors?.reporting_head && !formData?.reporting_head ? `text-red-600` : `text-black`
+                }`}>
+              Reporting Head<span className={"text-[#e60000]"}>*</span>
             </label>
             <Select
-              defaultValue={Props.previewData?.city ?? ""}
-              onValueChange={(value) => { handleSelectChange(value, "city") }} disabled={(formData?.state || Props.previewData?.state) ? false : true}>
-              <SelectTrigger className="dropdown">
+              // defaultValue={Props.previewData?.reporting_head ?? ""}
+              value={formData?.reporting_head ? formData?.reporting_head : Props.previewData?.reporting_head ?? ''}
+              onValueChange={(value) => { handleSelectChange(value, "reporting_head") }}
+            >
+              <SelectTrigger className={`dropdown ${errors?.reporting_head && !formData?.reporting_head ? `border border-red-600` : ``
+                  }`}>
                 <SelectValue placeholder="Select" />
               </SelectTrigger>
               <SelectContent>
                 {
-                  citydropdown ? citydropdown.map((item, index) => {
+                  reportingHeadDropdown ? reportingHeadDropdown.map((item, index) => {
                     return (
-                      <SelectItem value={item.name}>
-                        {item.city}
+                      <SelectItem value={item.reporting}>
+                        {item.reporting_name}
                       </SelectItem>
                     );
-                  }) : Props.cityDropdown ? Props.cityDropdown.map((item, index) => {
+                  }) : Props.ReportingHeadDropdown ? Props.ReportingHeadDropdown.map((item, index) => {
                     return (
-                      <SelectItem value={item.name}>
-                        {item.city}
+                      <SelectItem value={item.reporting}>
+                        {item.reporting_name}
                       </SelectItem>
                     )
                   }) :
@@ -616,8 +712,12 @@ const Form1 = ({ ...Props }: Props) => {
                 }
               </SelectContent>
             </Select>
+            {errors && errors?.reporting_head && !formData?.reporting_head && (
+              <p className="w-full text-red-500 text-[11px] font-normal text-left">
+                {errors?.reporting_head}
+              </p>
+            )}
           </div>
-
           <div className="flex flex-col gap-2">
             <label className="lable">
               Therapy
@@ -649,38 +749,6 @@ const Form1 = ({ ...Props }: Props) => {
               </SelectContent>
             </Select>
           </div>
-          <div className="flex flex-col gap-2">
-            <label className="lable">
-              Reporting Head
-            </label>
-            <Select
-              defaultValue={Props.previewData?.reporting_head ?? ""}
-              onValueChange={(value) => { handleSelectChange(value, "reporting_head") }}
-            >
-              <SelectTrigger className="dropdown">
-                <SelectValue placeholder="Select" />
-              </SelectTrigger>
-              <SelectContent>
-                {
-                  reportingHeadDropdown ? reportingHeadDropdown.map((item, index) => {
-                    return (
-                      <SelectItem value={item.reporting}>
-                        {item.reporting_name}
-                      </SelectItem>
-                    );
-                  }) : Props.ReportingHeadDropdown ? Props.ReportingHeadDropdown.map((item, index) => {
-                    return (
-                      <SelectItem value={item.reporting}>
-                        {item.reporting_name}
-                      </SelectItem>
-                    )
-                  }) :
-                    <SelectItem value={"null"} disabled>No Data Yet</SelectItem>
-                }
-              </SelectContent>
-            </Select>
-          </div>
-
           <div className="flex flex-col gap-2">
             <label className={`lable ${(errors?.sub_type_of_activity && !formData?.sub_type_of_activity) ? `text-red-600` : `text-black`}`}>
               Sub Type Of Activity <span className={"text-[#e60000]"}>*</span>
@@ -883,11 +951,11 @@ const Form1 = ({ ...Props }: Props) => {
             Next
           </Button>
         </div>
-        {formData?.state  && isReportingHeadDialog && (
-        <IsReportingHeadDialog
-        handleIsReportingDialog = {handleIsReportingDialog}
-        />
-      )}
+        {formData?.state && isReportingHeadDialog && (
+          <IsReportingHeadDialog
+            handleIsReportingDialog={handleIsReportingDialog}
+          />
+        )}
       </div>)
   );
 };

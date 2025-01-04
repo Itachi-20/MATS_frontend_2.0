@@ -9,7 +9,7 @@ import { AppWrapper } from '@/app/context/module';
 import { activityList, dropdown, PreviewData, handleBusinessUnitChange } from './utility';
 import { cookies } from "next/headers";
 import { Previewdata } from '../hcp_services/page';
-import { handleStateChange, handleReportingChange } from '../training_and_education/utility'
+import { handleStateChange, handleReportingChange, handleCityChange, handleCityDropdown } from '../training_and_education/utility'
 type dropdownData = {
   company: {
     name: string,
@@ -89,10 +89,12 @@ const Index = async ({ ...Props }: any) => {
 
   let eventype: { [key: string]: string } = {};
   const cookie = await cookies()
+  const cityDropdownData = await handleCityDropdown(cookie);
   let previewdata: Previewdata | null = null;
   let eventCostCenter = null;
   let cityDropdown = null;
   let ReportingHeadDropdown = null;
+  let cityPreviewDropdown = null;
   console.log(refno, cookie);
   const activityDropdown: activityDropdown = await activityList(cookie,'Pre Activity','Awareness Program');
   if (refno) {
@@ -106,6 +108,12 @@ const Index = async ({ ...Props }: any) => {
   }
   if (previewdata && previewdata.state && previewdata.event_requestor && previewdata.business_unit) {
     ReportingHeadDropdown = await handleReportingChange(previewdata.event_requestor, previewdata.business_unit, previewdata.division_category, previewdata.division_sub_category, previewdata?.state, cookie);
+  }
+  if (previewdata && previewdata.state && previewdata.event_requestor && previewdata.business_unit) {
+    ReportingHeadDropdown = await handleReportingChange(previewdata.event_requestor, previewdata.business_unit, previewdata.division_category, previewdata.division_sub_category, previewdata?.state, cookie);
+  }
+  if (previewdata && previewdata.city) {
+    cityPreviewDropdown = await handleCityChange(previewdata?.city, 1, 10, cookie);
   }
   console.log("Preview data", previewdata);
   return (
@@ -121,12 +129,14 @@ const Index = async ({ ...Props }: any) => {
           {
             forms == "1" ?
               <Form1
-                cityDropdown={cityDropdown}
+                // cityDropdown={cityDropdown}
                 ReportingHeadDropdown={ReportingHeadDropdown}
                 eventCostCenter={eventCostCenter}
                 previewData={previewdata}
                 dropdownData={dropdownData}
                 refNo={refno}
+                cityDropdown={cityDropdown}
+            cityDropdownData={cityDropdownData}
               /> :
               forms == "2" ?
                 <Form2
