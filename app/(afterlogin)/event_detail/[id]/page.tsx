@@ -241,9 +241,9 @@ export default function EventListPage() {
           <h1 className=" md:text-[30px] md:font-medium capitalize md:pb-4 text-black">{eventData?.event_type}</h1>
           <div className="flex gap-4 bg-white">
             <Button className="border border-[#4430bf] text-[#4430bf] px-6" onClick={() => handlClick(refno as string)}>Audit Trail</Button>
-            <Link href={"/event_list"}>
-              <Button className="bg-white text-black border px-8 hover:bg-white" onClick={()=>{router.push("/event_list")}}>Back</Button>
-            </Link>
+            {/* <Link href={"/event_list"}> */}
+              <Button className="bg-white text-black border px-8 hover:bg-white" onClick={()=>{router.push("/event_report")}}>Back</Button>
+            {/* </Link> */}
           </div>
         </div>
         <div className="flex border rounded-xl justify-between p-3 bg-white gap-4">

@@ -1,6 +1,7 @@
 import React from "react";
 import Table from "@/app/(afterlogin)/event_report/table"
-import {eventApprovalSummaryReport} from '../event_report/utility'
+import {eventApprovalSummaryReport} from '../event_report/utility';
+import {fetchEventRequestor} from '../event_report/utility';
 import { cookies } from "next/headers";
 
 
@@ -56,15 +57,21 @@ export type Event = {
     status7: string;
     is_approved: boolean;
   };
-  
+
+  export type EventRequestor = {
+    "user": string,
+    "email": string,
+}
 
 const Index = async() => {
     const cookie = await cookies()
     const tableData:Event[] = await eventApprovalSummaryReport(cookie);
-    console.log(tableData,"this is table data")
+    const EventRequestor:EventRequestor[] = await fetchEventRequestor(cookie);
+    console.log(tableData,"this is table data");
     return (
         <Table
         tableData = {tableData}
+        eventrequestor={EventRequestor}
         />
     );
 };

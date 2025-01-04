@@ -53,6 +53,7 @@ type EventTable = {
     total_estimated_expense: number;
     event_venue: string;
     current_stage: string;
+    brief_status: string;
     owner: string;
     post_expense_approvers: post_expense_approvers;
 };
@@ -74,7 +75,8 @@ export default function Page() {
     const [searchName, setSearchName] = useState('')
     const [event_requestor, setEventRequestor] = useState('');
     const [requestor_dropdown, setEventRequestorDropdown] = useState<EventRequestor[]>();
-    const [checkstate, setCheckstate] = useState(false)
+    const [checkstate, setCheckstate] = useState(false);
+    
     const PostExpenseApprovalList = async () => {
         setLoading(true)
         try {
@@ -134,10 +136,6 @@ export default function Page() {
     const handleExportButton = () => {
         exportEventList();
     };
-    useEffect(() => {
-        PostExpenseApprovalList();
-        fetchEventRequestor();
-    }, [])
 
     const togglePicker = () => {
         setIsPickerOpen(!isPickerOpen);
@@ -217,10 +215,14 @@ export default function Page() {
 
     useEffect(() => {
         PostExpenseApprovalList();
-    }, [currentPage, debouncedSearchName, status])
+        fetchEventRequestor();
+    }, []); 
 
-    console.log(postExpenseApprovalList, 'postExpenseApprovalList')
-    console.log(requestor_dropdown, "this is console")
+    useEffect(() => {
+        PostExpenseApprovalList();
+    }, [currentPage, debouncedSearchName, status, event_requestor])
+
+    
     return (
         <>
 
@@ -232,7 +234,7 @@ export default function Page() {
                         onChange={(e) => { handlesearchname(e) }}
                     />
                     <div className="flex justify-end lg:gap-5 sm:gap-[10px] gap-[8px] items-center">
-                        <Requestor_filter setEventRequestor={setEventRequestor} requestor_dropdown={requestor_dropdown} event_requestor={event_requestor} fetchTableData={PostExpenseApprovalList} />
+                        <Requestor_filter setEventRequestor={setEventRequestor} requestor_dropdown={requestor_dropdown} event_requestor={event_requestor}/>
                         <Button className="text-black w-34 shadow border hover:shadow-md active:shadow-lg lg:text-sm lg:rounded-[25px] lg:gap-4 sm:rounded-[50px] rounded-[50px] sm:text-[9px] sm:gap-[10px] gap-[9px] sm:font-normal sm:leading-[10.97px] text-[9px]" onClick={handleExportButton}>Export as Excel</Button>
                         <Select onValueChange={(e) => handleTypeChange(e)} value={status ? status : 'all'}>
                             <SelectTrigger className="text-black w-34 shadow focus-visible:ring-transparent lg:text-sm lg:rounded-[25px] lg:gap-4 sm:rounded-[50px] rounded-[50px] sm:text-[9px] sm:gap-[10px]  gap-[9px] sm:font-normal sm:leading-[10.97px] text-[9px]">
@@ -352,13 +354,20 @@ export default function Page() {
                                 >
                                     Created By
                                 </TableHead>
-                                <TableHead
+                                {/* <TableHead
                                     className={
                                         "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                                     }
                                 >
                                     Status
                                 </TableHead>
+                                <TableHead
+                                    className={
+                                        "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                                    }
+                                >
+                                    Advance Status
+                                </TableHead> */}
                                 <TableHead
                                     className={
                                         "text-center rounded-r-2xl text-[#625d5d] text-[15px] font-normal font-['Montserrat'] sticky right-0 z-50 bg-[#E0E9FF]"
@@ -389,7 +398,8 @@ export default function Page() {
                                                         <TableCell>{data.total_estimated_expense ?? ""}</TableCell>
                                                         <TableCell>{data.event_requestor ?? ""}</TableCell>
                                                         <TableCell>{data.owner ?? ""}</TableCell>
-                                                        <TableCell>{data.current_stage ?? ""}</TableCell>
+                                                        {/* <TableCell>{data.current_stage ?? ""}</TableCell>
+                                                        <TableCell>{data.brief_status ?? ""}</TableCell> */}
                                                         <TableCell className="sticky right-0 bg-[white] z-50 ">
                                                             {/* { */}
                                                             {/* "Not" == "Approved" ? */}

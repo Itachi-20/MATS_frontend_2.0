@@ -23,6 +23,7 @@ type ActualVendor = {
     files: File[];
     event_request_number: string
     status: string;
+    brief_status: string;
     advance: number;
     gst: string;
     invoice_amount: number;

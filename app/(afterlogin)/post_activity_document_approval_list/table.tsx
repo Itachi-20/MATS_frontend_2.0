@@ -79,7 +79,8 @@ const table = ({ ...Props }: Props) => {
   const debouncedSearchName = useDebounce(searchName, 300);
   const [event_requestor, setEventRequestor] = useState('');
   const [requestor_dropdown, setEventRequestorDropdown] = useState(Props.eventrequestor);
-  const [checkstate, setCheckstate] = useState(false)
+  const [checkstate, setCheckstate] = useState(false);
+
   const fetchTableData = async () => {
     setLoading(true);
     console.log;
@@ -101,7 +102,7 @@ const table = ({ ...Props }: Props) => {
       });
       if (Data.ok) {
         const data = await Data.json();
-        console.log("data.data.events", data.data.events);
+        // console.log("data.data.events", data.data.events);
         setTableData(data.data.events);
         setLoading(false);
       } else {
@@ -112,15 +113,6 @@ const table = ({ ...Props }: Props) => {
       console.log(error, "something went wrong");
     }
   };
-
-  useEffect(() => {
-    fetchTableData();
-  }, []);
-
-  useEffect(() => {
-    fetchTableData();
-  }, [currentPage, debouncedSearchName, status]);
-
   const handleTypeChange = (e:any) => {
     console.log(e,'e')
     if(e == 'all'){
@@ -132,7 +124,6 @@ const table = ({ ...Props }: Props) => {
   const handleExportButton = () => {
     exportEventList();
   };
-
   const exportEventList = async () => {
     try {
       const Data = await fetch(`/api/exportList`, {
@@ -157,11 +148,9 @@ const table = ({ ...Props }: Props) => {
       console.log(error, "something went wrong");
     }
   };
-
   const togglePicker = () => {
     setIsPickerOpen(!isPickerOpen);
   };
-
   const handlesearchname = async (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
@@ -173,7 +162,6 @@ const table = ({ ...Props }: Props) => {
       setSearchName(value);
     }, 100);
   };
-
   const handlecheckchange = (e: any) => {
     console.log(e.target.checked)
     // setCheckstate(e.target.checked)
@@ -183,6 +171,14 @@ const table = ({ ...Props }: Props) => {
       setStatus('');
     }
   };
+
+  useEffect(() => {
+    fetchTableData();
+  }, []);
+
+  useEffect(() => {
+    fetchTableData();
+  }, [currentPage, debouncedSearchName, status, event_requestor]);
   return (
     <TooltipProvider>
       <div className="p-7 w-full relative z-20 text-black">
@@ -196,7 +192,7 @@ const table = ({ ...Props }: Props) => {
             }}
           />
           <div className="flex justify-end lg:gap-5 sm:gap-[10px] gap-[8px] items-center">
-            <Requestor_filter setEventRequestor={setEventRequestor} requestor_dropdown={requestor_dropdown} event_requestor={event_requestor} fetchTableData={fetchTableData} />
+            <Requestor_filter setEventRequestor={setEventRequestor} requestor_dropdown={requestor_dropdown} event_requestor={event_requestor}/>
             <Button
               className="text-black w-34 shadow border hover:shadow-md active:shadow-lg lg:text-sm lg:rounded-[25px] lg:gap-4 sm:rounded-[50px] rounded-[50px] sm:text-[9px] sm:gap-[10px] gap-[9px] sm:font-normal sm:leading-[10.97px] text-[9px]"
               onClick={handleExportButton}

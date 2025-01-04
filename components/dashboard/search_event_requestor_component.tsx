@@ -44,7 +44,7 @@ type EventRequestor2 = {
 }
 type Props = {
     setEventRequestor: (value: string) => void;
-    fetchTableData: () => void;
+    // fetchTableData: () => void;
     event_requestor: string;
     requestor_dropdown: EventRequestor2[] | undefined;
 }
@@ -80,7 +80,7 @@ const details = ({ ...Props }: Props) => {
                                 onSelect={() => {
                                     Props.setEventRequestor(""); // Clear the selected value
                                     setOpen(false);
-                                    Props.fetchTableData();
+                                    // Props.fetchTableData();
                                 }}
                             >
                                 <Check
@@ -100,7 +100,7 @@ const details = ({ ...Props }: Props) => {
                                     value={item.email}
                                     onSelect={(currentValue) => {
                                         Props.setEventRequestor(currentValue === Props.event_requestor ? "" : currentValue);
-                                        Props.fetchTableData();
+                                        // Props.fetchTableData();
                                         setOpen(false);
                                     }}
                                 >

@@ -31,6 +31,7 @@ type ActualVendor = {
     vendor_type: string;
     actual_amount: number;
     status: string;
+    brief_status: string;
     vendor_name: string;
     vendor_code:string
     advance: number;
@@ -250,6 +251,13 @@ const table = ({ ...Props }: Props) => {
                   "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                 }
               >
+                Post Expense Status
+              </TableHead>
+              <TableHead
+                className={
+                  "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                }
+              >
                 GST
               </TableHead>
 
@@ -334,6 +342,7 @@ const table = ({ ...Props }: Props) => {
                         <TableCell>{data.vendor_name}</TableCell>
                         <TableCell>{data.actual_amount}</TableCell>
                         <TableCell>{data.status}</TableCell>
+                        <TableCell>{data.brief_status}</TableCell>
                         <TableCell>{data.finance_gst}</TableCell>
                         <TableCell>{data.invoice_amount}</TableCell>
                         <TableCell>{data.tds}</TableCell>

@@ -317,7 +317,7 @@ const pagess = ({ ...Props }: props) => {
                         refno={refno}
                     />
                     {
-                        role == "Event Finance" &&
+                        ((role == "Event Finance") && expensedata?.actual_vendors[0]?.status != "Post Expense Closed") && 
                         <Fields
                             dropdown={dropdown as DropdownData}
                             handlefieldChange={handlefieldChange}
