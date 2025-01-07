@@ -47,6 +47,7 @@ type TableData = {
   total_logistics_expense: number;
   event_conclusion: string;
   is_declared: boolean;
+  is_editable:boolean;
   actual_vendors: Array<any>; // Replace `any` with a specific type if needed
 };
 
@@ -132,7 +133,9 @@ const table = ({ tableData }: Props) => {
   const [submitpop, setSubmitPopup] = useState(false);
   const req_no = useParams()
   const [errors, setErrors] = useState<Errors>();
-  const [vendorAmount,setVendorAmount] = useState<number>(0);
+  const [vendorAmount, setVendorAmount] = useState<number>(0);
+  const [editable, setEditable] = useState<boolean>(false);
+  const [editable_name, setEditableName] = useState<string>('');
   const handleVendorTypeChangeApi = async (value: string) => {
     setVendorDetails({ ...vendorDetails, vendor_name: "", advance: 0 } as VendorData);
 
@@ -217,11 +220,16 @@ const table = ({ tableData }: Props) => {
   const handlefieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     // const { name, value } = e.target;
     const name = e.target.name;
-    const value:number = (e.target.value as unknown) as number;
-    if(value > vendorAmount){
-      toast.warning("The amount cannot exceed the Advance TEA' (against the vendor's amount)");
-      return;
-    }
+    const value: number = (e.target.value as unknown) as number;
+    console.log(value,'value')
+    // if (value > vendorAmount) {
+    //   toast.warning("The amount cannot exceed the Advance TEA' (against the vendor's amount)");
+    //   setVendorDetails((prev) => ({
+    //     ...prev,
+    //     advance: 0,
+    //   }))
+    //   return;
+    // }
     const numericValue = name === 'advance' ? (value ? value : '') : value;
     setVendorDetails(prev => ({ ...prev, [name]: numericValue }));
     setErrors({ ...errors, advance: "" } as Errors);
@@ -248,12 +256,18 @@ const table = ({ tableData }: Props) => {
       setErrors(validationErrors as Errors);
       return;
     }
+    console.log(vendorDetails.advance,'vendorDetails.advance')
+    if ((vendorDetails.advance > vendorAmount) || (vendorDetails.advance == 0) ) {
+      toast.warning(`The amount cannot be 0 or exceed  ${vendorAmount} the Advance TEA' (against the vendor's amount)`);
+      return;
+    }
     setErrors({} as Errors);
     const formData = new FormData();
     formData.append("vendor_type", vendorDetails.vendor_type);
     formData.append("vendor_name", vendorDetails.vendor_name);
     formData.append("advance", vendorDetails.advance as any);
     formData.append("name", req_no.refno as any);
+    formData.append("vendor_id", editable_name as string ? editable_name : '');
     if (uploadedFiles && uploadedFiles.length > 0) {
       for (let i = 0; i < uploadedFiles.length; i++) {
         formData.append("file", uploadedFiles[i]);
@@ -338,6 +352,21 @@ const table = ({ tableData }: Props) => {
     setOpen(true)
   };
 
+  const handleEditData = async (data: any) => {
+    console.log(data.vendor_name, 'file in setfile ')
+    setEditable(true);
+    await handleVendorTypeChangeApi(data.vendor_type)
+    setVendorDetails((prevState) => ({
+      ...prevState,
+      vendor_type: data.vendor_type,
+      vendor_name: data.vendor_name,
+      // advance: data.advance,
+      amount: 0,
+      file: null,
+    }) as VendorData);
+    handleAdvanceAmountApi(data.vendor_name)
+    setEditableName(data.name)
+  };
   const handleDeleteDialog = async (name: string) => {
     console.log('indise delete ')
     setDeleteName(name);
@@ -385,7 +414,7 @@ const table = ({ tableData }: Props) => {
   };
 
   const handleAdvanceAmountApi = async (value: string) => {
-    console.log("inside amount api venser name ")
+    console.log("inside amount api venser name ",value)
     try {
       const response = await fetch(
         `/api/postExpense/getExpenseAmount`,
@@ -403,7 +432,12 @@ const table = ({ tableData }: Props) => {
       );
       if (response.ok) {
         const data = await response.json();
+        console.log(data.data.est_amount,'data.data.est_amount')
         setVendorAmount(data.data.est_amount);
+        // setVendorDetails((prev) => ({
+        //   ...prev,
+        //   advance: data.data?.est_amount, // Update vendor_name in the vendorDetails state
+        // }))
         setErrors({ ...errors, advance: "", vendor_name: "" } as Errors);
         console.log(data, "-----------vendor name api------------------");
       } else {
@@ -413,6 +447,8 @@ const table = ({ tableData }: Props) => {
       console.error("Error during login:", error);
     }
   };
+
+  console.log(tableData?.is_editable, 'tableData?.is_editable')
   return (
     <>
 
@@ -455,22 +491,25 @@ const table = ({ tableData }: Props) => {
           </div>
 
         </div>
-        {!tableData?.is_declared &&
+        <div className=" gap-4 pb-7">
+          <div className='col-span-3 space-y-2'>
+            <label htmlFor="event_conclusion" className="text-black md:text-sm md:font-normal capitalize">
+              Event Conclusion
+            </label>
+            <Textarea
+              className="text-black shadow md:rounded-xl md:py-2"
+              placeholder="Type here ..."
+              id='event_conclusion'
+              name='event_conclusion'
+              onChange={(e) => handleConclusionChange(e.target.value)}
+              defaultValue={tableData?.event_conclusion ? tableData?.event_conclusion : ''}
+              readOnly={tableData?.is_declared}
+            ></Textarea>
+          </div>
+        </div>
+        {(editable || !tableData?.is_declared) &&
           <>
-            <div className=" grid grid-cols-3 gap-4 pb-7">
-              <div className='col-span-3 space-y-2'>
-                <label htmlFor="event_conclusion" className="text-black md:text-sm md:font-normal capitalize">
-                  Event Conclusion<span className="text-[#e60000] ">*</span>
-                </label>
-                <Textarea
-                  className="text-black shadow md:rounded-xl md:py-2"
-                  placeholder="Type here ..."
-                  id='event_conclusion'
-                  name='event_conclusion'
-                  onChange={(e) => handleConclusionChange(e.target.value)}
-                  defaultValue={tableData?.event_conclusion ?tableData?.event_conclusion:''}
-                ></Textarea>
-              </div>
+            <div className='grid grid-cols-3 gap-4 pb-7'>
 
               <div className='grid-cols-1 space-y-2'>
                 <label htmlFor="vendor_type" className="text-black md:text-sm md:font-normal capitalize">
@@ -486,9 +525,10 @@ const table = ({ tableData }: Props) => {
                     setErrors({ ...errors, vendor_type: "" } as Errors);
                   }}
                   value={vendorDetails.vendor_type ?? ''}
+                  disabled={editable}
                 >
-                  <SelectTrigger className="dropdown">
-                    <SelectValue placeholder="Select" />
+                  <SelectTrigger className="dropdown" >
+                    <SelectValue placeholder={vendorDetails.vendor_type ? vendorDetails.vendor_type : 'Select'} />
                   </SelectTrigger>
                   <SelectContent>
                     {dropdownData && dropdownData.vendor_type?.map((item, index) => {
@@ -514,6 +554,7 @@ const table = ({ tableData }: Props) => {
                     setErrors({ ...errors, vendor_name: "" } as Errors);
                   }}
                   value={vendorDetails.vendor_name ?? ''}
+                  disabled={editable}
                 >
                   <SelectTrigger className="dropdown">
                     <SelectValue placeholder="Select" />
@@ -539,14 +580,12 @@ const table = ({ tableData }: Props) => {
                   placeholder="Type Here"
                   type='number'
                   name='advance'
-                  onChange={(e)=>{handlefieldChange(e)}}
-                  value={vendorDetails.advance ?? ''}
-
+                  onChange={(e) => { handlefieldChange(e) }}
+                  value={vendorDetails.advance == 0 ? '' : vendorDetails.advance}
                 ></Input>
                 {errors?.advance && <p className="text-red-500 text-xs">{errors.advance}</p>}
               </div>
             </div>
-
             <div className='flex justify-end gap-2 pb-7'>
               {/* <SimpleFileUpload onNext={handleNext} buttonText={'Receipts/Bills'} /> */}
               <SimpleFileUpload files={files} setFiles={setFiles} setUploadedFiles={setUploadedFiles} onNext={handleNext} buttonText={'Receipts/Bills'} />
@@ -691,9 +730,11 @@ const table = ({ tableData }: Props) => {
                           {/* <Image src={'/svg/view.svg'} alt='viewsvg' width={24} height={18} /> */}
                           <button onClick={() => handleSetFileData(data.files)}><Image src={'/svg/view.svg'} alt='viewsvg' width={24} height={18} /></button>
                           {/* </Link> */}
-                          {/* <Image src={'/svg/editIcon.svg'} alt='editsvg' width={20} height={18} /> */}
+                          {data.is_row_editable && <button onClick={() => handleEditData(data)}>
+                            <Image src={'/svg/editIcon.svg'} alt='editsvg' width={20} height={18} />
+                          </button>}
                           {
-                            !tableData.is_declared &&
+                            (!tableData?.is_declared) &&
                             <button onClick={() => handleDeleteDialog(data.name)} ><Image src={'/svg/delete.svg'} alt='deletesvg' width={20} height={18} /></button>
                           }
                         </TableCell>
@@ -711,12 +752,12 @@ const table = ({ tableData }: Props) => {
           </Table>
         </div>
 
-        {!tableData?.is_declared &&
+        {(tableData?.is_editable || !tableData?.is_declared) &&
           <div className='flex justify-end gap-2 pt-8'>
             <Button className='bg-[#4430BF] px-10 text-white' onClick={handleSubmit}>Submit</Button>
           </div>
         }
-      </div>
+      </div >
       <Toaster richColors position="top-right" />
       {
         open &&
