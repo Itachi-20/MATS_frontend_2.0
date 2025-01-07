@@ -357,10 +357,10 @@ const table = ({ ...Props }: Props) => {
   //     );
   //     if (response.ok) {
   //       const data = await response.json();
-  //       setVendorDetails((prev) => ({
-  //         ...prev,
-  //         amount: data.data?.est_amount, // Update vendor_name in the vendorDetails state
-  //       }))
+        // setVendorDetails((prev) => ({
+        //   ...prev,
+        //   amount: data.data?.est_amount, // Update vendor_name in the vendorDetails state
+        // }))
   //       console.log(data, "-----------vendor name api------------------");
   //     } else {
   //       console.log("Login failed");
@@ -588,7 +588,7 @@ const table = ({ ...Props }: Props) => {
       <div className='p-8'>
         <div className='text-black flex justify-between items-center'>
           <div className='text-2xl font-semibold'>
-            Training & Education
+            {Props.tableData.event_type?Props.tableData.event_type:''}
           </div>
           <div className='flex gap-4'>
             <Button className="border rounded-sm px-6 py-1 border-black text-black hover:opacity-60" onClick={() => { router.push("/event_list") }}>Back</Button>

@@ -258,7 +258,7 @@ const Sidebar = () => {
       modules: [
         {
           module: "Account Approval",
-          route: "/travel_desk",
+          route: "/account_team",
         },
       ],
       reports: [

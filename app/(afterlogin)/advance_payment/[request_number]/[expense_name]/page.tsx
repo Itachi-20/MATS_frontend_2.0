@@ -55,6 +55,7 @@ type EventData = {
     total_estimated_expense: number;
     total_logistics_expense: number;
     actual_vendors: ActualVendor[];
+    can_approve:boolean
 };
 
 
@@ -69,7 +70,7 @@ const page = () => {
     const router = useRouter();
     const refno = useParams();
     const view = useSearchParams().get('view')
-    console.log("expensedata", expensedata)
+    console.log("expensedata", expensedata?.can_approve)
     const eventDataApi = async () => {
         try {
             const response = await fetch(
@@ -202,7 +203,7 @@ const page = () => {
 
                 <div className='flex justify-end gap-2 pt-8'>
                     {
-                        view == "view" ?
+                       (!expensedata?.can_approve) ?
                             <></>
                             : <>
                                 <Button className='bg-[#5DBE74] px-6 text-white' onClick={() => {handleOpen('Approved');setButtonText("Approve")}}>Approve</Button>

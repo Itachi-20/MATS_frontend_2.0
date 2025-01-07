@@ -22,6 +22,8 @@ type DocumentRow = {
     file_name: string;
     name:string;
     file_url: string;
+    owner:string;
+    creation:string
   };
 
 type Props = {
@@ -46,8 +48,8 @@ const AddDocument = ({ ...Props }: Props) => {
             <TableRow className="text-nowrap text-[#625d5d] text-[15px] font-normal">
               {/* <TableHead className="text-center rounded-l-2xl">Type</TableHead> */}
               <TableHead className="text-center rounded-l-2xl">Document Name</TableHead>
-              {/* <TableHead className="text-center">Created Date</TableHead>
-              <TableHead className="text-center">Created By</TableHead> */}
+              <TableHead className="text-center">Created Date</TableHead>
+              <TableHead className="text-center">Created By</TableHead>
               <TableHead className="text-center rounded-r-2xl">Download</TableHead>
             </TableRow>
           </TableHeader>
@@ -56,8 +58,8 @@ const AddDocument = ({ ...Props }: Props) => {
               {Props.data && Props.data.map((row, index) => (
                 <TableRow key={index}>
                   <TableCell className="text-center">{row.file_name}</TableCell>
-                  {/* <TableCell className="text-center">{row.createdDate}</TableCell>
-                  <TableCell className="text-center">{row.createdBy}</TableCell> */}
+                  <TableCell className="text-center">{row.creation.substring(0, 10)}</TableCell>
+                  <TableCell className="text-center">{row.owner}</TableCell>
                   <TableCell className="text-center">
 
                     {/* <Link href={row.downloadLink} target="_blank" rel="noopener noreferrer">
