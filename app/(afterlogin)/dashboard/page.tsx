@@ -1,5 +1,6 @@
 import React from "react";
 import Details from '@/app/(afterlogin)/dashboard/details'
+import DetailsNew from '@/app/(afterlogin)/request_summary/details'
 import {fetchEventList} from '@/app/(afterlogin)/dashboard/utility'
 import {fetchCardData} from '@/app/(afterlogin)/dashboard/utility'
 import {fetchEventApproverList} from '@/app/(afterlogin)/dashboard/utility'
@@ -55,12 +56,16 @@ if(role == 'Event Travel'){
 
  console.log(table,carddata,'table,carddata')
   return (
-    (
+    !(role == 'Event Compliance' || role == 'Event Finance') ?
     <Details
     tableData={table}
     carddata={carddata}
     />
-  )
+    :
+    <DetailsNew
+    tableData={table}
+    carddata={carddata}
+    />
   );
 };
 
