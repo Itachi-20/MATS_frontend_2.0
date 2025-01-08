@@ -6,18 +6,19 @@ const fetchData = async(names:any)=>{
   try {
     const cookie = await cookies();
     const Cookie = cookie.toString();
-    const tableData = await fetch(`${process.env.FRAPPE_URL}/api/method/matsapp.api.event.event.get_post_expense_detail_list?name=${names}`,
+    const tableData = await fetch(`${process.env.FRAPPE_URL}/api/method/matsapp.api.event.event.get_exception_expense_detail_list?name=${names}`,
       {
         method: "GET",
         headers:{
           "Content-Type": "application/json",
           "Cookie":Cookie
         },
-        credentials:'include'
+        credentials:'include' 
       }
     );
     if(tableData.ok){
       const data = await tableData.json();
+      console.log(data,'data exception')
       return data.data
     }
     

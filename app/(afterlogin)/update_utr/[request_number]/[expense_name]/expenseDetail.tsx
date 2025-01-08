@@ -192,39 +192,39 @@ const ExpensePage = ({ ...Props }: Props) => {
   );
   const posting_date_ref: React.RefObject<any> = useRef(null);
   const payment_date_ref: React.RefObject<any> = useRef(null);
-  const [gldropdowndata, setGLDropdownData] = useState<GLdropdown[] | []>([])
-  const [glName, setGLName] = useState<string>();
-  const [glcode, setGLCode] = useState<string>();
+  // const [gldropdowndata, setGLDropdownData] = useState<GLdropdown[] | []>([])
+  // const [glName, setGLName] = useState<string>();
+  // const [glcode, setGLCode] = useState<string>();
   const [submitpop, setSubmitPopup] = useState(false);
-  const gldropdown = async (value: any) => {
-    formdata.gl_code = '';
-    try {
-      const response = await fetch("/api/advanceApproval/getGL", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({
-          "company": value,
-          "event_type": Props.expensedata?.event_type.toString(),
-        })
-      });
+  // const gldropdown = async (value: any) => {
+  //   formdata.gl_code = '';
+  //   try {
+  //     const response = await fetch("/api/advanceApproval/getGL", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       credentials: "include",
+  //       body: JSON.stringify({
+  //         "company": value,
+  //         "event_type": Props.expensedata?.event_type.toString(),
+  //       })
+  //     });
 
-      const data = await response.json();
-      setGLDropdownData(data.data);
-      if (response.ok) {
-      } else {
-        console.log('Login failed');
-      }
-    } catch (error) {
-      console.error("Error during login:", error);
-    }
-  };
+  //     const data = await response.json();
+  //     setGLDropdownData(data.data);
+  //     if (response.ok) {
+  //     } else {
+  //       console.log('Login failed');
+  //     }
+  //   } catch (error) {
+  //     console.error("Error during login:", error);
+  //   }
+  // };
 
-  useEffect(() => {
-    gldropdown(formdata.company_name);
-  }, [formdata.company_name])
+  // useEffect(() => {
+  //   gldropdown(formdata.company_name);
+  // }, [formdata.company_name])
 
   const handleSubmit = async () => {
     try {
@@ -263,11 +263,41 @@ const ExpensePage = ({ ...Props }: Props) => {
   const handleSelectChange = (value: string, name: string) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
+  // const handleinvoiceChange = () => {
+  //   const basicAmount =Number(formdata.basic_amount as number || 0) ;
+  //   const financeGst = Number(formdata.finance_gst as number || 0);
+  //   console.log(typeof basicAmount);
+  //   console.log(typeof financeGst);
+  //   const invoiceAmount = basicAmount + (basicAmount * (financeGst / 100)) as number;
+  //   console.log(`Calculated Invoice Amount: ${invoiceAmount}, Basic Amount: ${basicAmount}, Finance GST: ${financeGst}`);
 
-  const handleGLName = (code: string) => {
-    setGLName(code);
+  //   if (invoiceAmount !== formdata.invoice_amount) {
+  //       setFormData(prev => ({ ...prev, invoice_amount: invoiceAmount }));
+  //   }
+  // };
+
+  useEffect(() => {
+    const basicAmount =Number(formdata.basic_amount as number || 0) ;
+    const financeGst = Number(formdata.finance_gst as number || 0);
+    console.log(typeof basicAmount);
+    console.log(typeof financeGst);
+    const invoiceAmount = basicAmount + (basicAmount * (financeGst / 100)) as number;
+    console.log(`Calculated Invoice Amount: ${invoiceAmount}, Basic Amount: ${basicAmount}, Finance GST: ${financeGst}`);
+    const invoiceAmountRounded = parseFloat(invoiceAmount.toFixed(3));
+    if (invoiceAmount !== formdata.invoice_amount) {
+        setFormData(prev => ({ ...prev, invoice_amount: invoiceAmountRounded }));
+    }
+}, [formdata.basic_amount, formdata.finance_gst]);
+
+useEffect(() => {
+  const basicAmount =Number(formdata.invoice_amount as number || 0) ;
+  const tds = Number(formdata.tds as number || 0);
+  const netAmount = basicAmount - tds;
+  const netAmountRounded = parseFloat(netAmount.toFixed(3));
+  if (netAmount !== formdata.net_amount) {
+      setFormData(prev => ({ ...prev, net_amount: netAmountRounded }));
   }
-
+}, [formdata.tds]);
   const handleGLCode = async () => {
     // gldropdowndata?.map((item, index) => {
     //   if (item.name == glName) {
@@ -279,11 +309,11 @@ const ExpensePage = ({ ...Props }: Props) => {
     // })
   }
 
-  const handleGlname = async (value: any) => {
-    const parglcode = gldropdowndata?.filter((item) => item.name == value);
-    formdata.gl_code = parglcode[0]?.gl_code;
+  // const handleGlname = async (value: any) => {
+  //   const parglcode = gldropdowndata?.filter((item) => item.name == value);
+  //   formdata.gl_code = parglcode[0]?.gl_code;
 
-  }
+  // }
 
   const handlePostingDateClick = () => {
     if (posting_date_ref.current) {
@@ -298,6 +328,8 @@ const ExpensePage = ({ ...Props }: Props) => {
       payment_date_ref.current.focus(); // Fallback for older browsers
     }
   };
+
+  console.log(Props.expensedata?.actual_vendors[0]?.invoice_number )
   return (
 
     <>
@@ -389,8 +421,8 @@ const ExpensePage = ({ ...Props }: Props) => {
               // placeholder={formdata.basic_amount ? formdata.basic_amount as string : "Type here..."}
               id='basic_amount'
               name='basic_amount'
-              value={formdata.basic_amount as string ? formdata.basic_amount as string : ''}
-              onChange={(e) => handleFieldChange(e)}
+              value={formdata.basic_amount as string ? formdata.basic_amount as string: ''}
+              onChange={(e) => (handleFieldChange(e))}
             ></Input>
           </div>
           <div className='grid-cols-1 space-y-2'>
@@ -404,7 +436,7 @@ const ExpensePage = ({ ...Props }: Props) => {
               id='finance_gst'
               name='finance_gst'
               value={formdata.finance_gst as string ?? ''}
-              onChange={handleFieldChange}
+              onChange={(e)=>(handleFieldChange(e))}
             ></Input>
           </div>
           <div className='grid-cols-1 space-y-2'>
@@ -417,7 +449,7 @@ const ExpensePage = ({ ...Props }: Props) => {
               // placeholder={formdata.invoice_amount ? formdata.invoice_amount as string : "Type Here ..."}
               id='invoice_amount'
               name='invoice_amount'
-              value={formdata.invoice_amount as string ?? ''}
+              value={formdata.invoice_amount as string?? ''}
               onChange={handleFieldChange}
             ></Input>
           </div>
@@ -478,12 +510,12 @@ const ExpensePage = ({ ...Props }: Props) => {
             </label>
 
             <Select
-              onValueChange={(value) => { handleSelectChange(value, "company_name"); gldropdown(value) }}
+              onValueChange={(value) => { handleSelectChange(value, "company_name") }}
               value={formdata.company_name ?? ''}
             >
               <SelectTrigger className="dropdown text-black">
                 <SelectValue placeholder="Type Here ..." />
-              </SelectTrigger>
+              </SelectTrigger>                                                                                                       
               <SelectContent>
                 {Props.dropdownData &&
                   Props.dropdownData.company.map((item, index) => {
@@ -496,7 +528,7 @@ const ExpensePage = ({ ...Props }: Props) => {
               </SelectContent>
             </Select>
           </div>
-          <div className='grid-cols-1 space-y-2'>
+          {/* <div className='grid-cols-1 space-y-2'>
             <label htmlFor="gl_name" className="text-black md:text-sm md:font-normal capitalize">
               GL Name<span className="text-[#e60000] ">*</span>
             </label>
@@ -532,7 +564,7 @@ const ExpensePage = ({ ...Props }: Props) => {
               value={formdata.gl_code as string ?? ''}
               readOnly
             ></Input>
-          </div>
+          </div> */}
           <div className='grid-cols-1 space-y-2'>
             <label htmlFor="utr_number" className="text-black md:text-sm md:font-normal capitalize">
               UTR Number<span className="text-[#e60000] ">*</span>

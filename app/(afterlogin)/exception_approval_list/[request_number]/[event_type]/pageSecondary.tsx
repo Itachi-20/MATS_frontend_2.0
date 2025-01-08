@@ -102,6 +102,7 @@ type EventData = {
     total_logistics_expense: number;
     actual_vendors: ActualVendor[];
     import_files: ImportFile[];
+    can_approve:boolean;
 }
 
 type DropdownData = {
@@ -129,32 +130,8 @@ type DropdownData = {
 };
 
 type FormData = {
-    name: string;
-    document_no: string | null; // Allow null
-    posting_date: string | null;
-    invoice_number: string | null;
-    date: string | null;
-    basic_amount: number;
-    gst: string | null;
-    invoice_amount: number;
-    tds: number;
-    net_amount: number;
-    division: string | null;
-    cost_center: string | null;
-    cc_name: string | null;
-    nature: string | null;
-    company_name: string | null;
-    gl_name: string | null;
-    gl_code: string | null;
-    utr_number: string | null;
-    payment_date: string | null;
-    zone: string | null;
-    state: string | null;
-    city: string | null;
     action: string;
     remark: string;
-    narration: string | null;
-    isClosed: boolean;
 };
 
 type props = {
@@ -162,7 +139,7 @@ type props = {
     dropdownDataApi: DropdownData
 }
 const pagess = ({ ...Props }: props) => {
-    const [dropdown, setDropdown] = useState<DropdownData>(Props.dropdownDataApi);
+    // const [dropdown, setDropdown] = useState<DropdownData>(Props.dropdownDataApi);
     const [opencommentbox, setCommentBox] = useState(false);
 
     const [action, setAction] = useState<string>('')
@@ -181,16 +158,20 @@ const pagess = ({ ...Props }: props) => {
     const handleSuccessProp = async () => {
         setCommentBox(false);
         setSuccessprop(!successprop);
-        setTimeout(() => { router.push('/post_expense_approval/') }, 2000);
+        setTimeout(() => { router.push('/exception_approval_list/') }, 2000);
     }
     const handleSetFileData = async (file: any) => {
         setFileData(file);
         setOpen(true)
     };
-    const handleApiPromise = async () => {
+
+    const handleApproveRejectSendBack = async (remark: string) => {
         const updatedFormData = {
-            ...formdata
+            name:expensedata?.actual_vendors[0]?.name,
+            action: action,
+            remark: remark
         };
+        console.log(updatedFormData, 'updatedFormData')
         const apiCallPromise = new Promise(async (resolve, reject) => {
             try {
                 const response = await fetch('/api/postExpenseApproval/finalSubmission', {
@@ -204,9 +185,9 @@ const pagess = ({ ...Props }: props) => {
                 }
 
                 const data = await response.json();
-                resolve(data); // Resolve with the response data
+                resolve(data);
             } catch (error) {
-                reject(error); // Reject with the error
+                reject(error);
             }
         });
         toast.promise(apiCallPromise, {
@@ -218,56 +199,58 @@ const pagess = ({ ...Props }: props) => {
             error: (error) => `Failed to approve/reject/send back post expense: ${error.message || error}`,
         });
     }
-    const handleApproveRejectSendBack = async (remark: string) => {
-        if (formdata) { formdata.action = action; }
-        if (formdata) { formdata.remark = remark; }
-        handleApiPromise();
-    }
-    const handlefieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }) as FormData);
-    }
-    const handleSelectChange = (value: string, name: string) => {
-        setFormData((prev) => ({ ...prev, [name]: value }) as FormData);
-    };
+
+    // const handleApiPromise = async (remark: string) => {
+
+    // }
+    // const handlefieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    //     const { name, value } = e.target;
+    //     setFormData(prev => ({ ...prev, [name]: value }) as FormData);
+    // }
+    // const handleSelectChange = (value: string, name: string) => {
+    //     setFormData((prev) => ({ ...prev, [name]: value }) as FormData);
+    // };
     const handleOpen = (value: string) => {
         setAction(value)
+        setFormData(prev => ({
+            ...prev,
+            action: value
+        }) as FormData);
         setCommentBox(prev => !prev)
     }
 
-    useEffect(() => {
-        setFormData((prev) => ({
-            ...prev,
-            name: expensedata?.actual_vendors[0]?.name || "",
-            document_no: expensedata?.actual_vendors[0]?.document_no || "",
-            posting_date: expensedata?.actual_vendors[0]?.posting_date || "",
-            invoice_number: expensedata?.actual_vendors[0]?.invoice_number || "",
-            date: expensedata?.event_date || "",
-            basic_amount: expensedata?.actual_vendors[0]?.basic_amount || 0,
-            gst: expensedata?.actual_vendors[0]?.gst || "",
-            invoice_amount: expensedata?.actual_vendors[0]?.invoice_amount || 0,
-            tds: expensedata?.actual_vendors[0]?.tds || 0,
-            net_amount: expensedata?.actual_vendors[0]?.net_amount || 0,
-            division: expensedata?.actual_vendors[0]?.division || "",
-            cost_center: expensedata?.actual_vendors[0]?.cost_center || "",
-            cc_name: expensedata?.actual_vendors[0]?.cc_name || "",
-            nature: expensedata?.actual_vendors[0]?.nature || "",
-            company_name: expensedata?.actual_vendors[0]?.company_code || "",
-            gl_name: expensedata?.actual_vendors[0]?.gl_name || "",
-            gl_code: expensedata?.actual_vendors[0]?.gl_code || "",
-            utr_number: expensedata?.actual_vendors[0]?.utr_number || "",
-            payment_date: expensedata?.actual_vendors[0]?.payment_date || "",
-            zone: expensedata?.actual_vendors[0]?.zone || "",
-            state: expensedata?.actual_vendors[0]?.state_code || "",
-            city: expensedata?.actual_vendors[0]?.city || "",
-            action: "",
-            remark: "",
-            narration: expensedata?.actual_vendors[0]?.narration || "",
-            isClosed: false,
-        }));
-    }, []);
-
-
+    // useEffect(() => {
+    //     setFormData((prev) => ({
+    //         ...prev,
+    //         name: expensedata?.actual_vendors[0]?.name || "",
+    //         document_no: expensedata?.actual_vendors[0]?.document_no || "",
+    //         posting_date: expensedata?.actual_vendors[0]?.posting_date || "",
+    //         invoice_number: expensedata?.actual_vendors[0]?.invoice_number || "",
+    //         date: expensedata?.event_date || "",
+    //         basic_amount: expensedata?.actual_vendors[0]?.basic_amount || 0,
+    //         gst: expensedata?.actual_vendors[0]?.gst || "",
+    //         invoice_amount: expensedata?.actual_vendors[0]?.invoice_amount || 0,
+    //         tds: expensedata?.actual_vendors[0]?.tds || 0,
+    //         net_amount: expensedata?.actual_vendors[0]?.net_amount || 0,
+    //         division: expensedata?.actual_vendors[0]?.division || "",
+    //         cost_center: expensedata?.actual_vendors[0]?.cost_center || "",
+    //         cc_name: expensedata?.actual_vendors[0]?.cc_name || "",
+    //         nature: expensedata?.actual_vendors[0]?.nature || "",
+    //         company_name: expensedata?.actual_vendors[0]?.company_code || "",
+    //         gl_name: expensedata?.actual_vendors[0]?.gl_name || "",
+    //         gl_code: expensedata?.actual_vendors[0]?.gl_code || "",
+    //         utr_number: expensedata?.actual_vendors[0]?.utr_number || "",
+    //         payment_date: expensedata?.actual_vendors[0]?.payment_date || "",
+    //         zone: expensedata?.actual_vendors[0]?.zone || "",
+    //         state: expensedata?.actual_vendors[0]?.state_code || "",
+    //         city: expensedata?.actual_vendors[0]?.city || "",
+    //         action: "",
+    //         remark: "",
+    //         narration: expensedata?.actual_vendors[0]?.narration || "",
+    //         isClosed: false,
+    //     }));
+    // }, []);
+console.log(expensedata,'expensedata    ')
     return (
         <>
             <div className='p-8  '>
@@ -276,7 +259,7 @@ const pagess = ({ ...Props }: props) => {
                         {expensedata ? expensedata.event_type : ''}
                     </div>
                     <div className='flex'>
-                        <button className="border rounded-sm px-6 py-1 border-black text-black hover:text-white hover:bg-black transition-all delay-75 duration-100" onClick={() => router.push(`/post_expense_approval/${refno.request_number}`)}>Back</button>
+                        <button className="border rounded-sm px-6 py-1 border-black text-black hover:text-white hover:bg-black transition-all delay-75 duration-100" onClick={() => router.push(`/exception_approval_list/${refno.request_number}`)}>Back</button>
                     </div>
                 </div>
                 <div className='border rounded-3xl mt-5 mb-7 p-2 text-black grid grid-cols-3'>
@@ -316,7 +299,7 @@ const pagess = ({ ...Props }: props) => {
                         handleSetFileData={handleSetFileData}
                         refno={refno}
                     />
-                    {
+                    {/* {
                         role == "Event Finance" &&
                         <Fields
                             dropdown={dropdown as DropdownData}
@@ -327,10 +310,10 @@ const pagess = ({ ...Props }: props) => {
                             formdata={formdata as FormData}
                             expenseData={expensedata as EventData}
                         />
-                    }
+                    } */}
                 </div>
                 {
-                    !(expensedata?.actual_vendors[0]?.is_approved) && (role == "Event Finance" || role == "Event Approver") ?
+                    (expensedata?.can_approve)?
                         <div className='flex justify-end gap-2 pt-8'>
                             <Button className={`${expensedata?.actual_vendors[0]?.status == "Post Expense Approved" ? 'cursor-not-allowed' : ''} bg-[#5DBE74] px-6 text-white`} disabled={expensedata?.actual_vendors[0]?.status == "Post Expense Approved" ? true : false} onClick={() => handleOpen('Approved')} >Approve</Button>
                             <Button className={`${expensedata?.actual_vendors[0]?.status == "Post Expense Approved" ? 'cursor-not-allowed' : ''} bg-[#4430BF] px-6 text-white`} disabled={expensedata?.actual_vendors[0]?.status == "Post Expense Approved" ? true : false} onClick={() => handleOpen('Send Back')}>Send Back</Button>
@@ -341,7 +324,7 @@ const pagess = ({ ...Props }: props) => {
             <Toaster richColors position="top-right" />
             {opencommentbox && <Comment_box handleClose={handleOpen} handleSubmit={handleApproveRejectSendBack} ButtonText={"Submit"} />}
             {open && <ViewDoc setClose={setOpen} data={fileData} />}
-            {successprop && <SuccessProp title={"Post Expense Approval"} />}
+            {successprop && <SuccessProp title={"Exception Approval List"} />}
         </>
     )
 }

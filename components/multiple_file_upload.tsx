@@ -48,8 +48,13 @@ export default function SimpleFileUpload({ onNext, buttonText, files, setUploade
 
     const removeFile = useCallback((fileToRemove: File) => {
         setFiles(prevFiles => prevFiles.filter(file => file !== fileToRemove));
-    }, [setFiles]);
-
+        setUploadedFiles(prevFiles => {
+            if (!prevFiles) return prevFiles; 
+            const filesArray = Array.from(prevFiles); 
+            const updatedFiles = filesArray.filter(file => file !== fileToRemove);
+            return updatedFiles as unknown as FileList;
+        });
+    }, [setFiles,setUploadedFiles]);
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
