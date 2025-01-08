@@ -180,7 +180,6 @@ const form4 = ({ ...Props }: Props) => {
   useEffect(() => {
   }, [preview_data])
 
-
   return (
     // </div>
     (<div>

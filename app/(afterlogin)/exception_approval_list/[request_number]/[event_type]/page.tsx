@@ -8,7 +8,7 @@ const page = async ({params}:any) => {
         const cookie = await cookies();
         const Cookie = cookie.toString();
             const response = await fetch(
-                `${process.env.FRAPPE_URL}/api/method/matsapp.api.utils.utils.get_post_expense_request_data?name=${refno.request_number}&expense_name=${refno.event_type}`,
+                `${process.env.FRAPPE_URL}/api/method/matsapp.api.utils.utils.get_exception_expense_request_data?name=${refno.request_number}&expense_name=${refno.event_type}`,
                 {
                     method: "POST",
                     headers: {

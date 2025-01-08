@@ -791,7 +791,7 @@ const Form1 = ({ ...Props }: Props) => {
               onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => { handlefieldChange(e) }}
             />
           </div>
-          <div className="flex flex-col gap-2">
+          {/* <div className="flex flex-col gap-2">
             <label className="lable">
               Selection Criteria For Participant
             </label>
@@ -802,7 +802,7 @@ const Form1 = ({ ...Props }: Props) => {
               name="participants"
               onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => { handlefieldChange(e) }}
             />
-          </div>
+          </div> */}
         </div>
         <div className="py-8">
           <h1 className="text-black text-2xl font-normal uppercase pb-8">

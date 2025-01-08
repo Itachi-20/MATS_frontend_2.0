@@ -8,17 +8,16 @@ export async function POST(req: Request) {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body:JSON.stringify(body),
-            credentials:'include'
+            body: JSON.stringify(body),
+            // credentials: 'include'
         });
-
+        console.log(response.status,response.statusText, 'response.status')
         if (!response.ok) {
-            throw new Error(`Error: ${response.statusText}`);
+            return  response;
         }
-
-        
         return response;
+
     } catch (error: any) {
-        return NextResponse.json({ error: error.message || 'Something went wrong' }, { status: 500 });
+        return NextResponse.json({ error: error || 'Something went wrong' }, { status:500});
     }
 }

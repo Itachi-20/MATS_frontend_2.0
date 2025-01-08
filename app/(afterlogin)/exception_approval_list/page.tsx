@@ -76,11 +76,10 @@ const Index = () => {
     const [event_requestor, setEventRequestor] = useState('');
     const [requestor_dropdown, setEventRequestorDropdown] = useState<[]>();
     const [checkstate, setCheckstate] = useState(false)
-
     const PostExpenseApprovalList = async () => {
         setTableLoading(true)
         try {
-            const response = await fetch("/api/postExpenseApproval/list", {
+            const response = await fetch(`/api/exceptionApproval/exceptionApprovallist`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -92,7 +91,6 @@ const Index = () => {
                     searchName: searchName,
                 })
             });
-
             if (response.ok) {
                 const data = await response.json();
                 setTableLoading(false)
@@ -108,24 +106,28 @@ const Index = () => {
     };
     const fetchEventRequestor = async () => {
         try {
-            const Data = await fetch(
-                `/api/fetchEventRequestor`,
-                {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    credentials: 'include',
-                }
-            );
-            if (Data.ok) {
-                const data = await Data.json();
-                setEventRequestorDropdown(data.message)
+          const Data = await fetch(
+            `/api/fetchEventRequestor`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              credentials: 'include',
+              body: JSON.stringify({
+                activity_type: "Post Expense",
+    
+              })
             }
+          );
+          if (Data.ok) {
+            const data = await Data.json();
+            setEventRequestorDropdown(data.message)
+          }
         } catch (error) {
-            console.log(error, "something went wrong not able fetch requestor");
+          console.log(error, "something went wrong not able fetch requestor");
         }
-    };
+      };
     const handleClose = async () => {
         const apiCallPromise = new Promise(async (resolve, reject) => {
             setLoading(true);
@@ -187,7 +189,7 @@ const Index = () => {
                         endDate: endDate,
                         pageNo: currentPage,
                         search_name: searchName,
-                        api_name: "Post Expense List"
+                        api_name: "Exception Approval List"
                     })
                 }
             );
@@ -214,6 +216,7 @@ const Index = () => {
 
     useEffect(() => {
         PostExpenseApprovalList();
+        fetchEventRequestor()
     }, [])
 
     const useDebounce = (value: any, delay: any) => {
@@ -240,26 +243,26 @@ const Index = () => {
     const handleExportButton = () => {
         exportEventList();
     };
-    console.log("List", postExpenseApprovalList);
+    console.log("List exception list", postExpenseApprovalList);
 
-    const handleTypeChange = (e:any) => {
-        console.log(e,'e')
-        if(e == 'all'){
-          setStatus('')
-        }else{
-    
-          setStatus(e);
+    const handleTypeChange = (e: any) => {
+        console.log(e, 'e')
+        if (e == 'all') {
+            setStatus('')
+        } else {
+
+            setStatus(e);
         }
-      };
+    };
     const handlecheckchange = (e: any) => {
         console.log(e.target.checked)
         setCheckstate(e.target.checked)
         if (e.target.checked) {
-          setStatus('pending');
+            setStatus('pending');
         } else {
-          setStatus('');
+            setStatus('');
         }
-      };
+    };
 
     return (
         <>
@@ -438,16 +441,16 @@ const Index = () => {
                                                         <TableCell>{data.event_requestor ?? "-"}</TableCell>
                                                         <TableCell>{data.owner ?? "-"}</TableCell>
                                                         <TableCell>{data.current_stage ?? "-"}</TableCell>
-                                                        <TableCell className={(data.travel_request_approved == true && role == "Event Finance") ? 'sticky right-0 bg-[white] z-50 space-x-2 border-l border-slate-200' : 'sticky right-0 bg-[white] z-50 border-l border-slate-200 space-x-2'}>
+                                                        <TableCell className={(data.travel_request_approved == true) ? 'sticky right-0 bg-[white] z-50 space-x-2 border-l border-slate-200' : 'sticky right-0 bg-[white] z-50 border-l border-slate-200 space-x-2'}>
 
-                                                            <Button className="border rounded-full px-4 py-1 border-[#0E4154] text-[#0E4154] hover:text-white hover:bg-[#0E4154] active:text-white active:bg-[#0E4154] transition-all delay-100" onClick={() => router.push(`/post_expense_approval/${data.name}`)} >Take Action</Button>
+                                                            <Button className="border rounded-full px-4 py-1 border-[#0E4154] text-[#0E4154] hover:text-white hover:bg-[#0E4154] active:text-white active:bg-[#0E4154] transition-all delay-100" onClick={() => router.push(`/exception_approval_list/${data.name}`)} >Take Action</Button>
 
-                                                            {
+                                                            {/* {
                                                                 (data.travel_request_approved == true && role == "Event Finance" && data.status != "Closed") ?
                                                                     <Button className="border rounded-full px-4 py-1 border-red-600 text-red-600 hover:text-white hover:bg-red-600 transition-all delay-100" onClick={() => handleDeletePopUp(data.name)} >Close</Button>
                                                                     :
                                                                     <Button className="border rounded-full px-4 py-1 border-red-600 text-red-600 hover:text-white hover:bg-red-600 transition-all delay-100 disabled:cursor-not-allowed" disabled>Close</Button>
-                                                            }
+                                                            } */}
 
                                                         </TableCell>
                                                     </TableRow>

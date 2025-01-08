@@ -12,6 +12,7 @@ import ViewDoc from "@/components/viewDocument";
 import SuccessProp from '@/components/success_prop';
 import { useAuth } from "@/app/context/AuthContext";
 import { Toaster, toast } from 'sonner';
+import { formData } from '@/app/(afterlogin)/awareness_program/page';
 
 type File = {
     name: string;
@@ -102,6 +103,7 @@ type EventData = {
     total_logistics_expense: number;
     actual_vendors: ActualVendor[];
     import_files: ImportFile[];
+    can_approve:boolean;
 }
 
 type DropdownData = {
@@ -267,7 +269,29 @@ const pagess = ({ ...Props }: props) => {
         }));
     }, []);
 
-
+      useEffect(() => {
+        const basicAmount =Number(formdata?.basic_amount || 0) ;
+        const financeGst = Number(formdata?.finance_gst || 0);
+        console.log(typeof basicAmount);
+        console.log(typeof financeGst);
+        const invoiceAmount = basicAmount + (basicAmount * (financeGst / 100)) as number;
+        console.log(`Calculated Invoice Amount: ${invoiceAmount}, Basic Amount: ${basicAmount}, Finance GST: ${financeGst}`);
+        const invoiceAmountRounded = parseFloat(invoiceAmount.toFixed(3));
+        if (invoiceAmount !== formdata?.invoice_amount) {
+            setFormData(prev => ({ ...prev, invoice_amount: invoiceAmountRounded }) as FormData);
+        }
+    }, [formdata?.basic_amount, formdata?.finance_gst]);
+    
+    useEffect(() => {
+      const basicAmount =Number(formdata?.invoice_amount as number || 0) ;
+      const tds = Number(formdata?.tds as number || 0);
+      const netAmount = basicAmount - tds;
+      const netAmountRounded = parseFloat(netAmount.toFixed(3));
+      if (netAmount !== formdata?.net_amount) {
+          setFormData(prev => ({ ...prev, net_amount: netAmountRounded }) as FormData);
+      }
+    }, [formdata?.tds]);
+console.log(expensedata,'expensedata')
     return (
         <>
             <div className='p-8  '>
@@ -330,7 +354,7 @@ const pagess = ({ ...Props }: props) => {
                     }
                 </div>
                 {
-                    !(expensedata?.actual_vendors[0]?.is_approved) && (role != "Event Requestor") ?
+                    (expensedata?.can_approve) && (role != "Event Requestor") ?
                         <div className='flex justify-end gap-2 pt-8'>
                             <Button className={`${expensedata?.actual_vendors[0]?.status == "Post Expense Approved" ? 'cursor-not-allowed' : ''} bg-[#5DBE74] px-6 text-white`} disabled={expensedata?.actual_vendors[0]?.status == "Post Expense Approved" ? true : false} onClick={() => {handleOpen('Approved');setButtonText("Approve")}} >Approve</Button>
                             <Button className={`${expensedata?.actual_vendors[0]?.status == "Post Expense Approved" ? 'cursor-not-allowed' : ''} bg-[#4430BF] px-6 text-white`} disabled={expensedata?.actual_vendors[0]?.status == "Post Expense Approved" ? true : false} onClick={() => {handleOpen('Send Back');setButtonText("Send Back")}}>Send Back</Button>

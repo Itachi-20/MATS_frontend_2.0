@@ -305,43 +305,43 @@ const page = () => {
         }
         formData.append("type", document_type);
 
-        try {
-            const response = await fetch(`/api/fileUpload`, {
-                method: "POST",
-                body: formData,
-                credentials: "include",
-            });
+        // try {
+        //     const response = await fetch(`/api/fileUpload`, {
+        //         method: "POST",
+        //         body: formData,
+        //         credentials: "include",
+        //     });
 
-            if (response.ok) {
-                const data = await response.json();
-                console.log("Upload successful:", data.message.file_name);
-                const newDocument: DocumentRow = {
-                    document_type,
-                    is_private: "1",
-                    filename: data.message.file_name,
-                    creation: data.message.creation,
-                    owner: data.message.modified_by,
-                    file: data.message.file_url,
-                };
-                console.log("newDocument", newDocument)
-                setFormData((prevFormData) => ({
-                    ...prevFormData,
-                    document: Array.isArray(prevFormData?.document) ? [...prevFormData.document, newDocument] : [newDocument],
-                }) as formData);
-                // const updatedDocumentRows = [...documentRows , newDocument];
-                const updatedDocumentRows = [...(Array.isArray(documentRows) ? documentRows : []), newDocument];
+        //     if (response.ok) {
+        //         const data = await response.json();
+        //         console.log("Upload successful:", data.message.file_name);
+        //         const newDocument: DocumentRow = {
+        //             document_type,
+        //             is_private: "1",
+        //             filename: data.message.file_name,
+        //             creation: data.message.creation,
+        //             owner: data.message.modified_by,
+        //             file: data.message.file_url,
+        //         };
+        //         console.log("newDocument", newDocument)
+        //         setFormData((prevFormData) => ({
+        //             ...prevFormData,
+        //             document: Array.isArray(prevFormData?.document) ? [...prevFormData.document, newDocument] : [newDocument],
+        //         }) as formData);
+        //         // const updatedDocumentRows = [...documentRows , newDocument];
+        //         const updatedDocumentRows = [...(Array.isArray(documentRows) ? documentRows : []), newDocument];
 
-                setDocumentRows(updatedDocumentRows);
-                handleReset();
-                setFileName(null);
-                setDocumentType('');
+        //         setDocumentRows(updatedDocumentRows);
+        //         handleReset();
+        //         setFileName(null);
+        //         setDocumentType('');
 
-            } else {
-                alert("File upload failed. Please try again.");
-            }
-        } catch (error) {
-            console.error("Error uploading file:", error);
-        }
+        //     } else {
+        //         alert("File upload failed. Please try again.");
+        //     }
+        // } catch (error) {
+        //     console.error("Error uploading file:", error);
+        // }
 
 
         const apiCallPromise = new Promise(async (resolve, reject) => {
@@ -384,7 +384,7 @@ const page = () => {
         toast.promise(apiCallPromise, {
             loading: 'Submitting vendor details...',
             success: (data) => {
-                return 'Vendor has been added successfully!';
+                return 'Document Added Successfully';
             },
             error: (error) => `Failed to add vendor: ${error.message || error}`,
         });
@@ -603,7 +603,7 @@ const page = () => {
                         </div>
                         <div className="flex flex-col col-span-2 gap-2">
                             <label className="text-black text-sm font-normal capitalize">
-                                Remark<span className="text-[#e60000]">*</span>
+                                Remark
                             </label>
                             <Textarea className='text-black shadow-md' placeholder='Type Here'
                                 name='remark'
