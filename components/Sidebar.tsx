@@ -199,6 +199,10 @@ const Sidebar = () => {
           module: "Post Expense Approval",
           route: "/post_expense_approval",
         },
+        {
+          module: "Unlock Post Expense",
+          route: "/unlock_post_expense",
+        },
       ],
       reports: [
         {
@@ -238,12 +242,17 @@ const Sidebar = () => {
           module: "Travel Expense",
           route: "/travel_desk",
         },
+        {
+          module: "Exception Approval List",
+          route: "/exception_approval_list",
+        },
       ],
       reports: [
         {
           name: "Event Summary Repost",
           route: "/event_report",
         },
+        
       ],
       masters: [],
       settings: [
@@ -259,6 +268,10 @@ const Sidebar = () => {
         {
           module: "Account Approval",
           route: "/account_team",
+        },
+        {
+          module: "Exception Approval List",
+          route: "/exception_approval_list",
         },
       ],
       reports: [

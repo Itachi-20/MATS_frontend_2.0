@@ -59,9 +59,9 @@ type EventEntry = {
   logistics: Logistics[];
   documents: ActivityDocument[];
   advance_approvers: any[]; // Empty array, can be customized later
-  city:string
-  reporting_head:string
-  hcp_ref_no:string
+  city: string
+  reporting_head: string
+  hcp_ref_no: string
 }
 
 type Compensation = {
@@ -150,7 +150,7 @@ type Logistics = {
 type File = {
   url: string;
   name: string;
-  file_name:string
+  file_name: string
 };
 
 type DocumentDetails = {
@@ -167,7 +167,7 @@ type ActivityDocument = {
 
 type Props = {
   pathname: string
-  eventData:EventEntry | undefined |null
+  eventData: EventEntry | undefined | null
 }
 
 const Basic_Details = ({ ...Props }: Props) => {
@@ -238,16 +238,16 @@ const Basic_Details = ({ ...Props }: Props) => {
 
         {/* should be condition based */}
         <div className="flex flex-col gap-2">
-            <label className="lable">
-              Budget Sub Type<span className="text-[#e60000]">*</span>
-            </label>
-            <Input
+          <label className="lable">
+            Budget Sub Type<span className="text-[#e60000]">*</span>
+          </label>
+          <Input
             className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
             placeholder="Type Here"
             readOnly={true}
             value={Props.eventData?.division_sub_category ? Props.eventData?.division_sub_category : ""}
           ></Input>
-          </div>
+        </div>
         <div className="flex flex-col md:gap-2">
           <label className="text-black md:text-sm md:font-normal capitalize">
             city<span className="text-[#e60000]">*</span>
@@ -304,33 +304,45 @@ const Basic_Details = ({ ...Props }: Props) => {
           ></Input>
         </div>
         {
-          Props.eventData && Props.eventData.event_type == "Training and Education" && 
-        <div className="flex flex-col md:gap-2">
-          <label className="text-black md:text-sm md:font-normal capitalize">
-          HCP Services Request Ref Number<span className="text-[#e60000]">*</span>
-          </label>
-          <Input
-            className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
-            placeholder="Type Here"
-            readOnly={true}
-            value={Props.eventData?.hcp_ref_no}
+          Props.eventData && Props.eventData.event_type == "Training and Education" &&
+          <div className="flex flex-col md:gap-2">
+            <label className="text-black md:text-sm md:font-normal capitalize">
+              HCP Services Request Ref Number<span className="text-[#e60000]">*</span>
+            </label>
+            <Input
+              className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
+              placeholder="Type Here"
+              readOnly={true}
+              value={Props.eventData?.hcp_ref_no}
             ></Input>
-        </div>
-          }
-        
+          </div>
+        }
 
+
+        {Props.eventData?.event_type == 'Training and Education' &&
+          <>
+            <div className="flex flex-col gap-2">
+              <label className="lable">
+                Selection Criteria For Faculty<span className="text-[#e60000]">*</span>
+              </label>
+              <textarea className='text-black shadow-md border h-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl pl-2 pt-2' placeholder='Type Here' readOnly value={Props.eventData?.faculty} />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label className="lable">
+                Selection Criteria For Participant<span className="text-[#e60000]">*</span>
+              </label>
+              <textarea className='text-black shadow-md border h-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl pl-2 pt-2' placeholder='Type Here' readOnly value={Props.eventData?.participants} />
+            </div>
+          </>
+        }
+
+        {Props.eventData?.event_type == 'Sponsorship Support' && 
         <div className="flex flex-col gap-2">
           <label className="lable">
-          Selection Criteria For Faculty<span className="text-[#e60000]">*</span>
+            Selection Criteria For Faculty<span className="text-[#e60000]">*</span>
           </label>
-          <textarea className='text-black shadow-md border h-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl pl-2 pt-2' placeholder='Type Here' readOnly value={Props.eventData?.faculty}/>
-        </div>
-        <div className="flex flex-col gap-2">
-          <label className="lable">
-          Selection Criteria For Participant<span className="text-[#e60000]">*</span>
-          </label>
-          <textarea className='text-black shadow-md border h-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl pl-2 pt-2' placeholder='Type Here' readOnly value={Props.eventData?.participants}/>
-        </div>
+          <textarea className='text-black shadow-md border h-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl pl-2 pt-2' placeholder='Type Here' readOnly value={Props.eventData?.faculty} />
+        </div>}
       </div>
     </div>
   )

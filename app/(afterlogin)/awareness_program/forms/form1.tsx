@@ -763,7 +763,7 @@ const Form1 = ({ ...Props }: Props) => {
         </div>
 
       </div>
-      <div className="grid grid-cols-2 gap-10">
+      {/* <div className="grid grid-cols-2 gap-10">
         <div className="flex flex-col gap-2">
           <label className="lable">
             Selection Criteria For Faculty
@@ -788,7 +788,7 @@ const Form1 = ({ ...Props }: Props) => {
             defaultValue={Props.previewData?.participants ? Props.previewData.participants : ""}
           />
         </div>
-      </div>
+      </div> */}
       <div className="flex justify-end pt-5 gap-4">
         {/* <Button className="bg-white text-black border text-md font-normal">
           {" "}
