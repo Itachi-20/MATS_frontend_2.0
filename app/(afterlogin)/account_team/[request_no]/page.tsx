@@ -35,6 +35,7 @@ type travel_vendors = {
   name:string,
   event_conclusion: string,
   status: string,
+  brief_status:string,
 }
 
 type logistics = {
@@ -68,7 +69,9 @@ type  travel_desk_data = {
   total_compensation_expense: string
   total_balance_amount: string;
   total_advance_amount: string;
-  total_estimated_expense: string
+  total_estimated_expense: string;
+  can_approve:boolean;
+  is_submitted:boolean
 }
 
 type vendorType ={
@@ -89,6 +92,7 @@ export default async function BudgetRequestDetail({...Props}:any)  {
   const role = cookie.get("role")?.value;
   const data:travel_desk_data = await travel_desk_data(cookie,request_no);
   const dropdown:dropdown = await dropdownData(cookie);
+  console.log(data?.can_approve,'data?.can_approve')
   return (
     <div className='px-9 py-7'>
         <RequestDetails 
@@ -104,6 +108,8 @@ export default async function BudgetRequestDetail({...Props}:any)  {
         refno = {request_no}
         occurrence_history={data.occurrence_history}
         role = {role}
+        can_approve={data?.can_approve}
+        is_submitted={data?.is_submitted}
         />
     </div>
   )}

@@ -35,6 +35,7 @@ type travel_vendors = {
   name:string,
   event_conclusion: string,
   status: string,
+  brief_status:string
 }
 
 type logistics = {
@@ -46,6 +47,8 @@ type logistics = {
   upload_bill:number,
   remarks:string
   est_amount:number,
+  is_submitted: boolean
+  can_approve: boolean
 }
 
 type  travel_desk_data = {
@@ -68,7 +71,9 @@ type  travel_desk_data = {
   total_compensation_expense: string
   total_balance_amount: string;
   total_advance_amount: string;
-  total_estimated_expense: string
+  total_estimated_expense: string;
+  is_submitted: boolean;
+  can_approve: boolean; 
 }
 
 type vendorType ={
@@ -104,6 +109,8 @@ export default async function BudgetRequestDetail({...Props}:any)  {
         refno = {request_no}
         occurrence_history={data.occurrence_history}
         role = {role}
+        is_submitted= {data?.is_submitted}
+        can_approve= {data?.can_approve}
         />
     </div>
   )}
