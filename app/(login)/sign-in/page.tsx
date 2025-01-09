@@ -6,6 +6,7 @@ import { useAuth } from "../../context/AuthContext";
 import { Loader } from "lucide-react";
 import Cookies from "js-cookie";
 import { Toaster, toast } from 'sonner';
+import { Input } from '@/components/ui/input';
 type formData = {
   user: string,
   pwd: string
@@ -85,7 +86,7 @@ const Index = () => {
               required
               onChange={(e) => { handleOnChange(e) }}
             />
-            <input
+            <Input
               className="h-16 bg-[#ebebf6] rounded-full p-4 my-5 w-full"
               type="password"
               placeholder="Password"
@@ -128,7 +129,7 @@ const Index = () => {
           </div>
         </div> */}
       </div>
-      <Toaster richColors position="top-right" />
+      <Toaster richColors position="bottom-right" />
     </div>
   )
 }
