@@ -21,6 +21,7 @@
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
+  --font-poppins: 'Poppins', sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -63,20 +64,136 @@ body {
 }
 
 .child {
-  display:contents;
+  /* display:contents; */
   opacity: 0;
   max-height: 0;
   height: 0;
-  transition: opacity 0.2s ease-in-out 0.6s;
+  /* transition: opacity 0.2s ease-in-out 0.6s; */
+  transition: ease-in-out;
   transition-delay: 0.2s;
 }
 
 /* When hovering over the parent element (group in Tailwind), the target element becomes visible */
 #parent:hover #element {
-  height: 230px;
+  height: 250px;
   max-height: max-content;
 }
 #parent:hover .child {
   display: block;
   opacity: 100%;
 }
+
+.tarkingBgColor{
+ background-color: linear-gradient(to right, #988AFF, #5945ED)
+
+}
+
+body{
+  font-family: var(--font-poppins);
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.sidebar_container {
+  overflow: scroll; /* Keeps the scrollable behavior */
+}
+
+.sidebar_container::-webkit-scrollbar {
+  display: none; /* Hides the scrollbar */
+}
+
+/* styles/globals.css */
+#nprogress {
+  pointer-events: none;
+}
+
+#nprogress .bar {
+  background: #29d !important;
+  position: fixed;
+  z-index: 1031;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+}
+
+#nprogress .peg {
+  display: block;
+  position: absolute;
+  right: 0;
+  width: 100px;
+  height: 100%;
+  box-shadow: 0 0 10px #29d, 0 0 5px #29d;
+  opacity: 1.0;
+  transform: rotate(3deg) translate(0, -4px);
+}
+
+#nprogress .spinner {
+  display: none;
+}
+
+
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
