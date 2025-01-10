@@ -284,7 +284,8 @@ const Form1 = ({ ...Props }: Props) => {
       reporting_head: '',
       division_sub_category: '',
       division_category: '',
-      event_cost_center: ''
+      event_cost_center: '',
+      event_division: ''
     }) as FormData);
     setCity("")
     try {
@@ -614,7 +615,7 @@ const Form1 = ({ ...Props }: Props) => {
               Event Division
             </label>
             <Select
-              onValueChange={(value) => handleSelectChange(value, "division")}
+              onValueChange={(value) => handleSelectChange(value, "event_division")}
               defaultValue={Props.previewData?.event_division ? Props.previewData.event_division : userid as string}
             >
               <SelectTrigger className="dropdown">

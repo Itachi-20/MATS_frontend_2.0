@@ -548,7 +548,7 @@ const Form1 = ({ ...Props }: Props) => {
               Event Division
             </label>
             <Select
-              onValueChange={(value) => handleSelectChange(value, "division")}
+              onValueChange={(value) => handleSelectChange(value, "event_division")}
               defaultValue={Props.previewData?.event_division ? Props.previewData.event_division : userid as string}
             >
               <SelectTrigger className="dropdown">
