@@ -42,6 +42,10 @@ type dropdownData = {
   sponsorship_ref_no:{
     name:string
   }[]
+  event_division:{
+    name:string;
+    event_division:string;
+  }[];
 };
 type activityDropdown = {
   name: string,
@@ -165,6 +169,7 @@ export type Previewdata = {
   travel_expense_submitted: number;
   travel_expense_approved: number;
   budget:string;
+  event_division:string;
 };
 type ChildVendor = {
   name: string;

@@ -35,20 +35,24 @@ type dropdownData = {
   state: {
     name: string,
     state: string
-  }[]
+  }[],
   currency: {
     name: string
-  }[]
+  }[],
   engagement_type: {
     name: string
     engagement_type: string
-  }[]
+  }[],
   training_ref_no: {
     name: string
-  }[]
+  }[],
   sponsorship_ref_no: {
     name: string
-  }[]
+  }[],
+  event_division:{
+    name:string;
+    event_division:string;
+  }[];
 };
 type Compensation = {
   vendor_type: string;
@@ -176,7 +180,7 @@ const Form1 = ({ ...Props }: Props) => {
     useState<subtypeActivity | null>(null);
   const [subtypeActivityVisible, setSubtypeActivityVisible] = useState(false);
   const [engagementTypes, setEngagementTypes] = useState("");
-  const [formdata, setFormData] = useState<FormData>(Props.previewData ?? '');
+  const [formdata, setFormData] = useState<FormData>(Props.previewData as FormData?? '');
   const [refNo, setRefNo] = useState<string | null>(Props.refno);
   const [eventStartDate, setEventStartDate] = useState<any>(Props.previewData?.event_start_date ? new Date(Props.previewData?.event_start_date).getTime() : "");
   const [reportingHeadDropdown, setReportingHeadDropdown] = useState<reportingHeadDropdown | null>(null)
@@ -601,6 +605,39 @@ const Form1 = ({ ...Props }: Props) => {
               </SelectContent>
             </Select>
           </div>
+
+        {
+          formdata.business_unit == "Orthopedics" &&
+          (
+          <div className="flex flex-col gap-2">
+            <label className="lable">
+              Event Division
+            </label>
+            <Select
+              onValueChange={(value) => handleSelectChange(value, "division")}
+              defaultValue={Props.previewData?.event_division ? Props.previewData.event_division : userid as string}
+            >
+              <SelectTrigger className="dropdown">
+                <SelectValue placeholder="Select" />
+              </SelectTrigger>
+              <SelectContent>
+                {Props.dropdownData && Props.dropdownData.event_division ?
+                  Props.dropdownData.event_division.map((item, index) => {
+                    return (
+                      <SelectItem value={item.name}>
+                        {item.event_division}
+                      </SelectItem>
+                    );
+                  })
+                  :
+                  <SelectItem value={"null"} disabled>No Data Yet</SelectItem>
+                }
+              </SelectContent>
+            </Select>
+          </div>
+          )
+        }
+
           <div className="flex flex-col gap-2">
             <label className="lable">
               event cost center<span className="text-[#e60000]">*</span>

@@ -29,6 +29,10 @@ type dropdownData = {
   currency: {
     name: string
   }[]
+  event_division:{
+    name:string;
+    event_division:string;
+  }[];
 }
 
 type Compensation = {
@@ -161,6 +165,7 @@ export type Previewdata = {
   travel_expense_submitted: number;
   travel_expense_approved: number;
   budget: string;
+  event_division: string;
 };
 
 type ChildVendor = {
