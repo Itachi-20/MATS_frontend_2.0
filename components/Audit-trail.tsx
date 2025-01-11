@@ -45,7 +45,7 @@ const AuditTrail = ({ ...props }: AuditTrailProps) => {
     const PageName = props.PageName;
     const router = useRouter()
     const [isOpen, setIsOpen] = useState(false);
-    const [expandedRow, setExpandedRow] = useState<number | null>(null);
+    const [expandedRow, setExpandedRow] = useState<number | null>(0);
 
     const dataHeader = [
         {
