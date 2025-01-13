@@ -38,6 +38,10 @@ type dropdownData = {
   currency: {
     name: string
   }[]
+  event_division:{
+    name:string,
+    event_division:string
+  }[]
 }
 export type Compensation = {
   vendor_type: string;

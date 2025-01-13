@@ -40,7 +40,11 @@ type dropdownData = {
   city: {
     name: string,
     city: string
-  }[]
+  }[];
+  event_division:{
+    name:string;
+    event_division:string;
+  }[];
 };
 
 type eventCostCenter = {
@@ -142,7 +146,7 @@ const Form1 = ({ ...Props }: Props) => {
   const [businessUnit, setBusinessUnit] = useState(Props.previewData?.business_unit ?? "");
   const [budget, setBudget] = useState(Props.previewData?.division_category ?? "");
   const [fullName, setFullName] = useState<string | null>(null);
-  const [formData, setFormData] = useState<FormData>(Props.previewData ?? '');
+  const [formData, setFormData] = useState<FormData>(Props.previewData as FormData?? '');
   const [errors, setErrors] = useState<FormErrors>();
   const [refNo, setRefNo] = useState<string | null>(Props.refno);
   const [reportingHeadDropdown, setReportingHeadDropdown] = useState<reportingHeadDropdown | null>(null)
@@ -196,7 +200,8 @@ const Form1 = ({ ...Props }: Props) => {
       reporting_head: '',
       division_sub_category: '',
       division_category: '',
-      event_cost_center: ''
+      event_cost_center: '',
+      event_division:''
     }) as FormData);
     setCity("")
     try {
@@ -367,7 +372,7 @@ const Form1 = ({ ...Props }: Props) => {
       if (response.ok) {
         const data = await response.json();
         if (data.message.length == 1) {
-          setFormData((prev) => ({ ...prev, state: data.message[0].name } as FormDataType));
+          setFormData((prev) => ({ ...prev, state: data.message[0].name } as FormData));
         }
         setStateDropdown(data.message);
         return data.data;
@@ -516,6 +521,39 @@ const Form1 = ({ ...Props }: Props) => {
               </SelectContent>
             </Select>
           </div>
+
+        {
+          formData.business_unit == "Orthopedics" &&
+          (
+          <div className="flex flex-col gap-2">
+            <label className="lable">
+              Event Division
+            </label>
+            <Select
+              onValueChange={(value) => handleSelectChange(value, "event_division")}
+              defaultValue={Props.previewData?.event_division ? Props.previewData.event_division : userid as string}
+            >
+              <SelectTrigger className="dropdown">
+                <SelectValue placeholder="Select" />
+              </SelectTrigger>
+              <SelectContent>
+                {Props.dropdownData && Props.dropdownData.event_division ?
+                  Props.dropdownData.event_division.map((item, index) => {
+                    return (
+                      <SelectItem value={item.name}>
+                        {item.event_division}
+                      </SelectItem>
+                    );
+                  })
+                  :
+                  <SelectItem value={"null"} disabled>No Data Yet</SelectItem>
+                }
+              </SelectContent>
+            </Select>
+          </div>
+          )
+        }
+
           <div className="flex flex-col gap-2">
             <label className={`lable ${(errors?.event_cost_center && !formData?.event_cost_center) ? `text-red-600` : `text-black`}`}>
               event cost center<span className="text-[#e60000]">*</span>
