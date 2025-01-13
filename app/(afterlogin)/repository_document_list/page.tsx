@@ -14,6 +14,7 @@ import Svg from '../../(afterlogin)/repository_document_list/svg';
 import AddPopup from './add_popup';
 import { useRouter } from 'nextjs-toploader/app';
 import Link from 'next/link';
+import { useAuth } from '@/app/context/AuthContext';
 
 // TypeScript types for card data
 type CardItem = {
@@ -27,61 +28,9 @@ type CardData = {
   attachments: CardItem[];
 };
 
-// Sample card data
-// const cardData: CardData[] = [
-//   {
-//     title: "Training & Education",
-//     items: [
-//       { fileName: "Item 1", url: "url1" },
-//       { fileName: "Item 2", url: "url2" },
-//       { fileName: "Item 3", url: "url3" },
-//       { fileName: "Item 4", url: "url4" },
-//       { fileName: "Item 5", url: "url5" },
-//     ],
-//   },
-//   {
-//     title: "SOP,s",
-//     items: [
-//       { fileName: "Item A", url: "url1" },
-//       { fileName: "Item B", url: "url2" },
-//       { fileName: "Item C", url: "url3" },
-//       { fileName: "Item D", url: "url4" },
-//       { fileName: "Item E", url: "url5" },
-//     ],
-//   },
-//   {
-//     title: "HCP Services",
-//     items: [
-//       { fileName: "Item A", url: "url1" },
-//       { fileName: "Item B", url: "url2" },
-//       { fileName: "Item C", url: "url3" },
-//       { fileName: "Item D", url: "url4" },
-//       { fileName: "Item E", url: "url5" },
-//     ],
-//   },
-//   {
-//     title: "Closing Document",
-//     items: [
-//       { fileName: "Item A", url: "url1" },
-//       { fileName: "Item B", url: "url2" },
-//       { fileName: "Item C", url: "url3" },
-//       { fileName: "Item D", url: "url4" },
-//       { fileName: "Item E", url: "url5" },
-//     ],
-//   },
-//   {
-//     title: "Awareness Program",
-//     items: [
-//       { fileName: "Item A", url: "url1" },
-//       { fileName: "Item B", url: "url2" },
-//       { fileName: "Item C", url: "url3" },
-//       { fileName: "Item D", url: "url4" },
-//       { fileName: "Item E", url: "url5" },
-//     ],
-//   },
-// ];
-
 const Page: React.FC = () => {
+  
+    const { role, name, userid, clearAuthData } = useAuth();
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [cardData,setCardData] = useState<CardData[]>()
@@ -106,7 +55,8 @@ const Page: React.FC = () => {
       );
       if(tableData.ok){
         const data = await tableData.json();
-        router.push("/repository_document_list");
+        // router.push("/repository_document_list");
+        fetchRepositoryFolder();
       }
      
     } catch (error) {
@@ -149,6 +99,7 @@ const Page: React.FC = () => {
       })
       if(response.ok){
         const data = await response.json();
+        fetchRepositoryFolder();
 
       }
     } catch (error) {
@@ -199,7 +150,7 @@ const Page: React.FC = () => {
                 <h2 className="text-2xl transition-colors duration-300 ease-in-out group-hover:text-[#988AFF] text-wrap">
                   {card.name}
                 </h2>
-                <div onClick={()=>handleDelete(card.name)} className='cursor-pointer'>
+                <div onClick={()=>handleDelete(card.name)} className={`cursor-pointer ${role == "Event Compliance"?"":"hidden"}`}>
                 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#EA3323"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg></div>
               </div>
               <div className="absolute -top-8 -left-8 transition-transform duration-500 ease-in-out group-hover:translate-x-6 group-hover:translate-y-8">
@@ -216,7 +167,7 @@ const Page: React.FC = () => {
                       <Link href={item.url} target='blank'>
                       {item.name}
                       </Link>
-                      <div className='cursor-pointer' onClick={()=>handleFileDelete(item.id)}>
+                      <div className={`cursor-pointer ${role == "Event Compliance"?"":"hidden"}`} onClick={()=>handleFileDelete(item.id)}>
                         
 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#EA3323"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg>
                       </div>
