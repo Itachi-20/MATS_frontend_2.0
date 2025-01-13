@@ -68,7 +68,7 @@ type Props = {
 
 const Form1 = ({ ...Props }: Props) => {
   const { role, name, userid, clearAuthData } = useAuth();
-  const [formData, setFormData] = useState<FormDataType | null>(Props.previewData?? '');
+  const [formData, setFormData] = useState<FormDataType | null>(Props.previewData as FormDataType  ?? '');
   const [errors, setErrors] = useState<FormErrors>();
   const router = useRouter();
   const [businessUnit, setBusinessUnit] = useState(
@@ -224,7 +224,8 @@ const Form1 = ({ ...Props }: Props) => {
       reporting_head: '',
       division_sub_category: '',
       division_category: '',
-      event_cost_center: ''
+      event_cost_center: '',
+      event_division:'',
     }) as FormDataType);
     setCity("")
     try {
@@ -499,6 +500,39 @@ const Form1 = ({ ...Props }: Props) => {
             </SelectContent>
           </Select>
         </div>
+
+          {
+          formData?.business_unit == "Orthopedics" &&
+          (
+          <div className="flex flex-col gap-2">
+            <label className="lable">
+              Event Division
+            </label>
+            <Select
+              onValueChange={(value) => handleSelectChange(value, "event_division")}
+              defaultValue={Props.previewData?.event_division ? Props.previewData.event_division : userid as string}
+            >
+              <SelectTrigger className="dropdown">
+                <SelectValue placeholder="Select" />
+              </SelectTrigger>
+              <SelectContent>
+                {Props.dropdownData && Props.dropdownData.event_division ?
+                  Props.dropdownData.event_division.map((item, index) => {
+                    return (
+                      <SelectItem value={item.name}>
+                        {item.event_division}
+                      </SelectItem>
+                    );
+                  })
+                  :
+                  <SelectItem value={"null"} disabled>No Data Yet</SelectItem>
+                }
+              </SelectContent>
+            </Select>
+          </div>
+          )
+        }
+
         <div className="flex flex-col gap-2">
           <label
             className={`lable ${errors?.event_cost_center && !formData?.event_cost_center
