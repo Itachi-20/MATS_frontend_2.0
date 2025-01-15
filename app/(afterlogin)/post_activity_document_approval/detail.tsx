@@ -94,7 +94,7 @@ type EventEntry = {
   product_amount: number;
   quantity:number;
   is_approved:boolean;
-  can_postactivityapprove:Boolean
+  can_postactivity_approve:Boolean
 }
 
 type Compensation = {
@@ -249,6 +249,8 @@ const handleComment = (value:string)=>{
   setComment(value)
 }
 
+console.log(eventData.can_postactivity_approve,"this is statsus")
+
   return ( 
           <>
     <div className="md:px-7 md:pb-7 md:pt-4 w-full z-20 text-black">
@@ -272,7 +274,7 @@ const handleComment = (value:string)=>{
                 </div>
               </div>
               {
-                eventData?.can_postactivityapprove &&
+                eventData?.can_postactivity_approve &&
               <div className="flex gap-4 text-white items-center">
                 <Button className="bg-[#5dbe74] hover:bg-[#5dbe74] px-6" onClick={()=>{handleDialog();setType("Approved");setButtonText("Approve")}}>Approve</Button>
                 <Button className="bg-[#ff5757] hover:bg-[#ff5757] px-6" onClick={()=>{handleDialog();setType("Rejected");setButtonText("Reject")}}>Reject</Button>
