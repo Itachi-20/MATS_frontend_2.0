@@ -252,6 +252,10 @@ const Sidebar = () => {
           name: "Event Summary Repost",
           route: "/event_report",
         },
+        {
+          name: "Event Passenger List",
+          route: "/event_passenger_list",
+        },
         
       ],
       masters: [],

@@ -581,8 +581,7 @@ const table = ({ ...Props }: Props) => {
   const handleDialog = () => {
     setIsDialog(prev => !prev);
   }
-
-  console.log(vendorDetails, 'vendorDetails')
+  console.log(tabledata.travel_vendors[0].brief_status, 'vendorDetails')
   return (
     <>
       <div className='p-8'>
@@ -947,7 +946,13 @@ const table = ({ ...Props }: Props) => {
                     >
                       Status
                     </TableHead>
-                  
+                    <TableHead
+                      className={
+                        "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                      }
+                    >
+                      Approval Status
+                    </TableHead>
                     <TableHead
                       className={
                         "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
@@ -1012,6 +1017,7 @@ const table = ({ ...Props }: Props) => {
                               <TableCell>{data.vendor_name ?? "-"}</TableCell>
                               <TableCell>{data.actual_amount ?? "-"}</TableCell>
                               <TableCell>{data.status ?? "-"}</TableCell>
+                              <TableCell>{data.brief_status ?? "-"}</TableCell>
                               <TableCell>{data.gst ?? "-"}</TableCell>
                               <TableCell>{data.invoice_amount ?? "-"}</TableCell>
                               <TableCell>{data.tds ?? "-"}</TableCell>
