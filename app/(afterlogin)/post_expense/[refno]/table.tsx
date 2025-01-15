@@ -581,7 +581,7 @@ const table = ({ ...Props }: Props) => {
   const handleDialog = () => {
     setIsDialog(prev => !prev);
   }
-  console.log(tabledata.travel_vendors[0].brief_status, 'vendorDetails')
+  // console.log(tabledata.travel_vendors[0].brief_status, 'vendorDetails')
   return (
     <>
       <div className='p-8'>
