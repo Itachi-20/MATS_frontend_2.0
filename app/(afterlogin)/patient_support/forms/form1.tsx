@@ -45,6 +45,7 @@ type FormData = {
   no_of_hcp: number,
   product_amount: number,
   reporting_head: string,
+  event_division:string
 };
 
 
@@ -100,6 +101,10 @@ type eventCostCenter = {
     name: string;
     therapy: string;
   }[];
+  event_division: {
+    name: string;
+    event_division: string;
+  }[];
 };
 
 type subtypeActivity = {
@@ -135,6 +140,7 @@ type FormErrors = {
   state?: string;
   reporting_head?: string;
   division_category?: string;
+  event_division?:string
 
 }
 
@@ -173,6 +179,16 @@ const Form1 = ({ ...Props }: Props) => {
     if (Props.previewData?.state ? formdata && "state" in formdata && formdata.state == "" : !formdata?.state) errors.state = "State is required";
     if (Props.previewData?.reporting_head ? formdata && "reporting_head" in formdata && formdata.reporting_head == "" : !formdata?.reporting_head) errors.reporting_head = "Reporting Head is required";
     if (Props.previewData?.division_category ? formdata && "division_category" in formdata && formdata.division_category == "" : !formdata?.division_category) errors.division_category = "Budget is required";
+    if((Props.previewData?.business_unit == "Orthopedics" || formdata?.business_unit == "Orthopedics")){
+      if ( 
+        Props.previewData?.event_division
+        ? formdata &&
+        "event_division" in formdata &&
+        formdata.event_division == ""
+        : !formdata?.event_division
+      )
+      errors.event_division = "event_division is required";
+    }
     return errors;
   };
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -187,7 +203,9 @@ const Form1 = ({ ...Props }: Props) => {
       ...formdata
 
     };
-
+    if(Props.previewData?.business_unit != "Orthopedics" || updatedFormData?.business_unit != "Orthopedics"){
+      updatedFormData.event_division = "";
+    }
     updatedFormData.event_type = "Patient Support"
     if (refNo) {
       updatedFormData.name = refNo;
@@ -540,8 +558,18 @@ const Form1 = ({ ...Props }: Props) => {
                 <SelectValue placeholder="Select" />
               </SelectTrigger>
               <SelectContent>
-                {Props.dropdownData && Props.dropdownData.event_division ?
-                  Props.dropdownData.event_division.map((item, index) => {
+                {
+                eventCostCenter ? (
+                  eventCostCenter.event_division.map((item, index) => {
+                    return (
+                      <SelectItem value={item.name}>
+                        {item.event_division}
+                      </SelectItem>
+                    );
+                  })
+                ):
+                Props.eventCostCenter && Props.eventCostCenter.event_division ?
+                  Props.eventCostCenter.event_division.map((item, index) => {
                     return (
                       <SelectItem value={item.name}>
                         {item.event_division}
@@ -553,6 +581,13 @@ const Form1 = ({ ...Props }: Props) => {
                 }
               </SelectContent>
             </Select>
+            {errors &&
+            errors?.event_division &&
+            !formdata?.event_division && (
+              <p className="w-full text-red-500 text-[11px] font-normal text-left">
+                {errors?.event_division}
+              </p>
+            )}
           </div>
           )
         }

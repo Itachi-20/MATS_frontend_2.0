@@ -29,6 +29,10 @@ type eventCostCenter = {
     name: string;
     therapy: string;
   }[];
+  event_division: {
+    name: string;
+    event_division: string;
+  }[];
 };
 type subtypeActivity = {
   name: string;
@@ -50,6 +54,7 @@ type FormErrors = {
   division_category?: string;
   state?: string;
   reporting_head?: string
+  event_division?:string
 };
 type CityDropdown = {
   name: string;
@@ -132,6 +137,17 @@ const Form1 = ({ ...Props }: Props) => {
         : !formData?.reporting_head
     )
       errors.reporting_head = "Reporting Head is required";
+
+      if((Props.previewData?.business_unit == "Orthopedics" || formData?.business_unit == "Orthopedics")){
+        if ( 
+          Props.previewData?.event_division
+          ? formData &&
+          "event_division" in formData &&
+          formData.event_division == ""
+          : !formData?.event_division
+        )
+        errors.event_division = "event_division is required";
+      }
     return errors;
   };
 
@@ -147,6 +163,9 @@ const Form1 = ({ ...Props }: Props) => {
       ...formData,
     };
     updatedFormData.event_type = "Training and Education";
+    if(Props.previewData?.business_unit != "Orthopedics" || updatedFormData?.business_unit != "Orthopedics"){
+      updatedFormData.event_division = "";
+    }
     if (refNo) {
       updatedFormData.name = refNo;
     }
@@ -409,6 +428,8 @@ const Form1 = ({ ...Props }: Props) => {
     setFormData((prev) => ({ ...prev, state: '' }) as FormDataType);
   };
 
+  console.log(Props.previewData?.event_division,"this is event division")
+
   return (
     <div>
       <h1 className="text-black text-2xl font-normal uppercase pb-8">
@@ -516,8 +537,18 @@ const Form1 = ({ ...Props }: Props) => {
                 <SelectValue placeholder="Select" />
               </SelectTrigger>
               <SelectContent>
-                {Props.dropdownData && Props.dropdownData.event_division ?
-                  Props.dropdownData.event_division.map((item, index) => {
+                {
+                eventCostCenter ? (
+                  eventCostCenter.event_division.map((item, index) => {
+                    return (
+                      <SelectItem value={item.name}>
+                        {item.event_division}
+                      </SelectItem>
+                    );
+                  })
+                )
+                :Props.eventCostCenter && Props.eventCostCenter.event_division ?
+                  Props.eventCostCenter.event_division.map((item, index) => {
                     return (
                       <SelectItem value={item.name}>
                         {item.event_division}
@@ -529,6 +560,13 @@ const Form1 = ({ ...Props }: Props) => {
                 }
               </SelectContent>
             </Select>
+            {errors &&
+            errors?.event_division &&
+            !formData?.event_division && (
+              <p className="w-full text-red-500 text-[11px] font-normal text-left">
+                {errors?.event_division}
+              </p>
+            )}
           </div>
           )
         }

@@ -300,6 +300,7 @@ export type FormDataType = {
   no_of_hcp: number,
   hcp_ref_no:string,
   reporting_head:string,
+  event_division:string
 };
   type CompensationType = {
     vendor_type: string;

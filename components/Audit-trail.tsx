@@ -28,6 +28,7 @@ type EventData = {
     event_name: string;
     event_type: string;
     event_start_date: string;
+    event_end_date: string;
     event_venue: string;
     status: string;
     sub_type_of_activity: string;
@@ -57,7 +58,11 @@ const AuditTrail = ({ ...props }: AuditTrailProps) => {
 
         },
         {
-            title: "Event Date",
+            title: "Event Start Date",
+
+        },
+        {
+            title: "Event End Date",
 
         },
         {
@@ -69,48 +74,11 @@ const AuditTrail = ({ ...props }: AuditTrailProps) => {
 
         },
         {
-            title: "Status",
-
-        },
-        {
             title: "",
 
         },
     ]
 
-    const timeline = [
-
-        {
-            "date": "10-10-2024",
-            "time": "12:52 pm",
-            "description": "Test of Training & Education was approved by Parita Pandya"
-        },
-        {
-            "date": "10-10-2024",
-            "time": "12:52 pm",
-            "description": "Test of Training & Education was approved by Parita Pandya"
-        },
-        {
-            "date": "10-10-2024",
-            "time": "12:52 pm",
-            "description": "Test of Training & Education was approved by Parita Pandya"
-        },
-        {
-            "date": "10-10-2024",
-            "time": "12:52 pm",
-            "description": "Test of Training & Education was approved by Parita Pandya"
-        },
-        {
-            "date": "10-10-2024",
-            "time": "12:52 pm",
-            "description": "Test of Training & Education was approved by Parita Pandya"
-        },
-        {
-            "date": "10-10-2024",
-            "time": "12:52 pm",
-            "description": "Test of Training & Education was approved by Parita Pandya"
-        }
-    ];
 
     const handleExpandClick = (id: number) => {
         setIsOpen(!isOpen);
@@ -167,17 +135,17 @@ const AuditTrail = ({ ...props }: AuditTrailProps) => {
                                                         </TableCell>
                                                         <TableCell className={"text-[#625d5d] text-[15px] font-normal text-center"}>
                                                             <span className="">
+                                                                {item.event_end_date ?? "-"}
+                                                            </span>
+                                                        </TableCell>
+                                                        <TableCell className={"text-[#625d5d] text-[15px] font-normal text-center"}>
+                                                            <span className="">
                                                                 {item.event_venue ?? "-"}
                                                             </span>
                                                         </TableCell>
                                                         <TableCell className={"text-[#625d5d] text-[15px] font-normal text-center"}>
                                                             <span className="">
                                                                 {item.sub_type_of_activity ?? "-"}
-                                                            </span>
-                                                        </TableCell>
-                                                        <TableCell className={"text-[#625d5d] text-[15px] font-normal text-center"}>
-                                                            <span className="">
-                                                                {item.status ?? "-"}
                                                             </span>
                                                         </TableCell>
                                                         <TableCell className={"text-[#625d5d] text-[15px] font-normal text-center cursor-pointer"} onClick={() => { handleExpandClick(index) }}>

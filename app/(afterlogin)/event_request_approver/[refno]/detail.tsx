@@ -10,7 +10,7 @@ import Comment_box from "@/components/approvalCommentBox/Comment_box";
 import EventDetails from "@/components/training_and_education/event_detail";
 import EventDetailsSponsorship from "@/components/sponsorshipSupportPreviewComponents/eventDetails"
 import TotalExpense from "@/components/commonPreviewComponents/total_expense";
-import BasicDetails from "@/components/basic_Details";
+import BasicDetails from "@/components/commonPreviewComponents/basic_details";
 import VendorDetails from "@/components/commonPreviewComponents/vendor_detail";
 import HCPDetails from "@/components/previewHCPComponents/hcp_details";
 import BasicDetailsHCP from "@/components/previewHCPComponents/basic_Details";
@@ -84,6 +84,8 @@ type EventEntry = {
   city: string
   reporting_head: string
   is_approved: boolean;
+  event_division:string
+  can_approve:Boolean
 }
 
 type Compensation = {
@@ -199,8 +201,7 @@ const Index = ({ ...Props }: Props) => {
   const [buttonText,setButtonText] = useState<string>("");
   const [refno, setRefno] = useState(Props.refno);
 console.log(refno,'refno')
-  const handleApprove = async () => {
-    // const refno = param.get("refno");
+  const handleApprove = async (isRequestor?:Number) => {
     try {
       const response = await fetch(
         "/api/eventRequestApprove/Approve",
@@ -213,7 +214,8 @@ console.log(refno,'refno')
           body: JSON.stringify({
             name: refno,
             "remark": comment,
-            "action": type
+            "action": type,
+            "to_requestor":isRequestor
           })
         }
       );
@@ -295,7 +297,7 @@ console.log(refno,'refno')
               <h1 className="text-center">{eventData?.modified.substring(0, 10)}</h1>
             </div>
           </div>
-          <div className="flex gap-4 text-white items-center">
+          <div className={`flex gap-4 text-white items-center ${eventData?.can_approve?"":"hidden"}`}>
             {/* <Button className="bg-[#5dbe74] hover:bg-[#5dbe74] px-6" onClick={()=>handleApprove("Approved")}>Approve</Button>
               <Button className="bg-[#ff5757] hover:bg-[#ff5757] px-6" onClick={()=>handleApprove("Rejected")}>Reject</Button>
               <Button className="bg-[#4430bf] hover:bg-[#4430bf] px-6" onClick={()=>handleApprove("Send Back")}>Send Back</Button> */}
