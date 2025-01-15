@@ -40,6 +40,10 @@ type dropdownData = {
     name: string;
     city: string;
   }[];
+  event_division: {
+    name: string;
+    event_division: string;
+  }[];
 };
 
 type eventCostCenter = {
@@ -54,6 +58,10 @@ type eventCostCenter = {
   therapy: {
     name: string;
     therapy: string;
+  }[];
+  event_division:{
+    name:string;
+    event_division:string;
   }[];
 };
 
@@ -102,6 +110,7 @@ type formData = {
   any_govt_hcp: string,
   no_of_hcp: number,
   reporting_head: string,
+  event_division:string,
 };
 type reportingHeadDropdown = {
   reporting_name: string;
@@ -131,6 +140,7 @@ type FormErrors = {
   state?: string;
   reporting_head?: string;
   division_category?: string;
+  event_division?:string
 }
 
 
@@ -144,7 +154,7 @@ const Form1 = ({ ...Props }: Props) => {
   const [subtypeActivityVisible, setSubtypeActivityVisible] = useState(false);
   const [engagementTypes, setEngagementTypes] = useState("");
   const [loading, setLoading] = useState(true);
-  const [formData, setFormData] = useState<formData>(Props.previewData ?? '');
+  const [formData, setFormData] = useState<formData>(Props.previewData as formData?? '');
   const [errors, setErrors] = useState<FormErrors>();
   const [isReportingHeadDialog, setIsReportingHeadDialog] = useState(false);
   const [reportingHeadDropdown, setReportingHeadDropdown] = useState<reportingHeadDropdown | null>(null)
@@ -159,6 +169,16 @@ const Form1 = ({ ...Props }: Props) => {
     if (Props.previewData?.state ? formData && "state" in formData && formData.state == "" : !formData?.state) errors.state = "State is required";
     if (Props.previewData?.reporting_head ? formData && "reporting_head" in formData && formData.reporting_head == "" : !formData?.reporting_head) errors.reporting_head = "Reporting Head is required";
     if (Props.previewData?.division_category ? formData && "division_category" in formData && formData.division_category == "" : !formData?.division_category) errors.division_category = "Budget is required";
+    if((Props.previewData?.business_unit == "Orthopedics" || formData?.business_unit == "Orthopedics")){
+      if ( 
+        Props.previewData?.event_division
+        ? formData &&
+        "event_division" in formData &&
+        formData.event_division == ""
+        : !formData?.event_division
+      )
+      errors.event_division = "event_division is required";
+    }
     return errors;
   };
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -255,7 +275,8 @@ const Form1 = ({ ...Props }: Props) => {
       reporting_head: '',
       division_sub_category: '',
       division_category: '',
-      event_cost_center: ''
+      event_cost_center: '',
+      event_division:''
     }) as formData);
     setCity("")
     try {
@@ -340,7 +361,7 @@ const Form1 = ({ ...Props }: Props) => {
       if (response.ok) {
         const data = await response.json();
         if (data.message.length == 1) {
-          setFormData((prev) => ({ ...prev, state: data.message[0].name } as FormDataType));
+          setFormData((prev) => ({ ...prev, state: data.message[0].name } as formData));
         }
         setStateDropdown(data.message);
         return data.data;
@@ -529,6 +550,56 @@ const Form1 = ({ ...Props }: Props) => {
             </SelectContent>
           </Select>
         </div>
+
+        {
+          formData.business_unit == "Orthopedics" &&
+          (
+          <div className="flex flex-col gap-2">
+            <label className="lable">
+              Event Division
+            </label>
+            <Select
+              onValueChange={(value) => handleSelectChange(value, "event_division")}
+              defaultValue={Props.previewData?.event_division ? Props.previewData.event_division : userid as string}
+            >
+              <SelectTrigger className="dropdown">
+                <SelectValue placeholder="Select" />
+              </SelectTrigger>
+              <SelectContent>
+                {
+                eventCostCenter ? (
+                  eventCostCenter.event_division.map((item, index) => {
+                    return (
+                      <SelectItem value={item.name}>
+                        {item.event_division}
+                      </SelectItem>
+                    );
+                  })
+                ):
+                Props.eventCostCenter && Props.eventCostCenter.event_division ?
+                  Props.eventCostCenter.event_division.map((item, index) => {
+                    return (
+                      <SelectItem value={item.name}>
+                        {item.event_division}
+                      </SelectItem>
+                    );
+                  })
+                  :
+                  <SelectItem value={"null"} disabled>No Data Yet</SelectItem>
+                }
+              </SelectContent>
+            </Select>
+            {errors &&
+            errors?.event_division &&
+            !formData?.event_division && (
+              <p className="w-full text-red-500 text-[11px] font-normal text-left">
+                {errors?.event_division}
+              </p>
+            )}
+          </div>
+          )
+        }
+
         <div className="flex flex-col gap-2">
           <label className={`lable ${(errors?.event_cost_center && !formData?.event_cost_center) ? `text-red-600` : `text-black`}`}>
             event cost center<span className="text-[#e60000]">*</span>
@@ -763,7 +834,7 @@ const Form1 = ({ ...Props }: Props) => {
         </div>
 
       </div>
-      {/* <div className="grid grid-cols-2 gap-10">
+      <div className="grid grid-cols-2 gap-10">
         <div className="flex flex-col gap-2">
           <label className="lable">
             Selection Criteria For Faculty
@@ -788,7 +859,7 @@ const Form1 = ({ ...Props }: Props) => {
             defaultValue={Props.previewData?.participants ? Props.previewData.participants : ""}
           />
         </div>
-      </div> */}
+      </div>
       <div className="flex justify-end pt-5 gap-4">
         {/* <Button className="bg-white text-black border text-md font-normal">
           {" "}

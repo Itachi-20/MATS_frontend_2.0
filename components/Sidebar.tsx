@@ -91,10 +91,10 @@ const Sidebar = () => {
       ],
       masters: [],
       reports: [
-        {
-          name: "Document Repository Type",
-          route: "/repository_document_type",
-        },
+        // {
+        //   name: "Document Repository Type",
+        //   route: "/repository_document_type",
+        // },
         {
           name: "Document Repository List",
           route: "/repository_document_list",

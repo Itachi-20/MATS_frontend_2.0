@@ -35,20 +35,24 @@ type dropdownData = {
   state: {
     name: string,
     state: string
-  }[]
+  }[],
   currency: {
     name: string
-  }[]
+  }[],
   engagement_type: {
     name: string
     engagement_type: string
-  }[]
+  }[],
   training_ref_no: {
     name: string
-  }[]
+  }[],
   sponsorship_ref_no: {
     name: string
-  }[]
+  }[],
+  event_division:{
+    name:string;
+    event_division:string;
+  }[];
 };
 type Compensation = {
   vendor_type: string;
@@ -94,6 +98,7 @@ type FormData = {
   service_type: string,
   sponsorship_ref_no: string,
   reporting_head: string,
+  event_division:string
 };
 type activityDropdown = {
   activity: {
@@ -118,6 +123,10 @@ type eventCostCenter = {
   therapy: {
     name: string;
     therapy: string;
+  }[];
+  event_division: {
+    name: string;
+    event_division: string;
   }[];
 };
 type subtypeActivity = {
@@ -162,7 +171,7 @@ type FormErrors = {
   state?: string;
   reporting_head?: string;
   division_category?:string;
-
+  event_division?:string
 }
 
 const Form1 = ({ ...Props }: Props) => {
@@ -176,7 +185,7 @@ const Form1 = ({ ...Props }: Props) => {
     useState<subtypeActivity | null>(null);
   const [subtypeActivityVisible, setSubtypeActivityVisible] = useState(false);
   const [engagementTypes, setEngagementTypes] = useState("");
-  const [formdata, setFormData] = useState<FormData>(Props.previewData ?? '');
+  const [formdata, setFormData] = useState<FormData>(Props.previewData as FormData?? '');
   const [refNo, setRefNo] = useState<string | null>(Props.refno);
   const [eventStartDate, setEventStartDate] = useState<any>(Props.previewData?.event_start_date ? new Date(Props.previewData?.event_start_date).getTime() : "");
   const [reportingHeadDropdown, setReportingHeadDropdown] = useState<reportingHeadDropdown | null>(null)
@@ -205,6 +214,16 @@ const Form1 = ({ ...Props }: Props) => {
     if (Props.previewData?.state ? formdata && "state" in formdata && formdata.state == "" : !formdata?.state) errors.state = "State is required";
     if (Props.previewData?.reporting_head ? formdata && "reporting_head" in formdata && formdata.reporting_head == "" : !formdata?.reporting_head) errors.reporting_head = "Reporting Head is required";
     if (Props.previewData?.division_category ? formdata && "division_category" in formdata && formdata.division_category == "" : !formdata?.division_category) errors.division_category = "Budget is required";
+    if((Props.previewData?.business_unit == "Orthopedics" || formdata?.business_unit == "Orthopedics")){
+      if ( 
+        Props.previewData?.event_division
+        ? formdata &&
+        "event_division" in formdata &&
+        formdata.event_division == ""
+        : !formdata?.event_division
+      )
+      errors.event_division = "event_division is required";
+    }
     return errors;
   };
   const handleFieldValues = () => {
@@ -280,7 +299,8 @@ const Form1 = ({ ...Props }: Props) => {
       reporting_head: '',
       division_sub_category: '',
       division_category: '',
-      event_cost_center: ''
+      event_cost_center: '',
+      event_division: ''
     }) as FormData);
     setCity("")
     try {
@@ -601,6 +621,57 @@ const Form1 = ({ ...Props }: Props) => {
               </SelectContent>
             </Select>
           </div>
+
+        {
+          formdata.business_unit == "Orthopedics" &&
+          (
+          <div className="flex flex-col gap-2">
+            <label className="lable">
+              Event Division
+            </label>
+            <Select
+              onValueChange={(value) => handleSelectChange(value, "event_division")}
+              defaultValue={Props.previewData?.event_division ? Props.previewData.event_division : userid as string}
+            >
+              <SelectTrigger className="dropdown">
+                <SelectValue placeholder="Select" />
+              </SelectTrigger>
+              <SelectContent>
+                {
+                  eventCostCenter ? (
+                    eventCostCenter.event_division.map((item, index) => {
+                      return (
+                        <SelectItem value={item.name}>
+                          {item.event_division}
+                        </SelectItem>
+                      );
+                    })
+                  )
+                :
+                Props.eventCostCenter && Props.eventCostCenter.event_division ?
+                  Props.eventCostCenter.event_division.map((item, index) => {
+                    return (
+                      <SelectItem value={item.name}>
+                        {item.event_division}
+                      </SelectItem>
+                    );
+                  })
+                  :
+                  <SelectItem value={"null"} disabled>No Data Yet</SelectItem>
+                }
+              </SelectContent>
+            </Select>
+            {errors &&
+            errors?.event_division &&
+            !formdata?.event_division && (
+              <p className="w-full text-red-500 text-[11px] font-normal text-left">
+                {errors?.event_division}
+              </p>
+            )}
+          </div>
+          )
+        }
+
           <div className="flex flex-col gap-2">
             <label className="lable">
               event cost center<span className="text-[#e60000]">*</span>

@@ -13,7 +13,7 @@ import Comment_box from "@/components/approvalCommentBox/Comment_box";
 import EventDetails from "@/components/training_and_education/event_detail";
 import EventDetailsSponsorship from "@/components/sponsorshipSupportPreviewComponents/eventDetails"
 import TotalExpense from "@/components/commonPreviewComponents/total_expense";
-import BasicDetails from "@/components/basic_Details";
+import BasicDetails from "@/components/commonPreviewComponents/basic_details";
 import VendorDetails from "@/components/commonPreviewComponents/vendor_detail";
 import HCPDetails from "@/components/previewHCPComponents/hcp_details";
 import BasicDetailsHCP from "@/components/previewHCPComponents/basic_Details";
@@ -94,9 +94,7 @@ type EventEntry = {
   product_amount: number;
   quantity:number;
   is_approved:boolean;
-  is_postactivity_approved:boolean;
-  is_postactivity_rejected:boolean;
-  is_postactivity_sendback:boolean;
+  can_postactivity_approve:Boolean
 }
 
 type Compensation = {
@@ -209,7 +207,7 @@ const Index = ({...props}:any) => {
   const [buttonText,setButtonText] = useState<string>("")
   const param = useSearchParams();
 
-  const handleApprove = async()=>{
+  const handleApprove = async(isRequestor?:Number)=>{
     const refno = param.get("refno");
       try {
         const response = await fetch(
@@ -223,7 +221,8 @@ const Index = ({...props}:any) => {
             body:JSON.stringify({
               name:refno,
               "remark": comment,
-              "action":type
+              "action":type,
+              "to_requestor":isRequestor
             })
           }
         );
@@ -250,6 +249,8 @@ const handleComment = (value:string)=>{
   setComment(value)
 }
 
+console.log(eventData.can_postactivity_approve,"this is statsus")
+
   return ( 
           <>
     <div className="md:px-7 md:pb-7 md:pt-4 w-full z-20 text-black">
@@ -273,7 +274,7 @@ const handleComment = (value:string)=>{
                 </div>
               </div>
               {
-                !(eventData?.is_postactivity_approved || eventData?.is_postactivity_rejected || eventData?.is_postactivity_sendback) &&
+                eventData?.can_postactivity_approve &&
               <div className="flex gap-4 text-white items-center">
                 <Button className="bg-[#5dbe74] hover:bg-[#5dbe74] px-6" onClick={()=>{handleDialog();setType("Approved");setButtonText("Approve")}}>Approve</Button>
                 <Button className="bg-[#ff5757] hover:bg-[#ff5757] px-6" onClick={()=>{handleDialog();setType("Rejected");setButtonText("Reject")}}>Reject</Button>

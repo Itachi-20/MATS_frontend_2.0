@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import EventDetails from "@/components/training_and_education/event_detail";
 import EventDetailsSponsorship from "@/components/sponsorshipSupportPreviewComponents/eventDetails"
 import TotalExpense from "@/components/commonPreviewComponents/total_expense";
-import BasicDetails from "@/components/basic_Details";
+import BasicDetails from "@/components/commonPreviewComponents/basic_details";
 import VendorDetails from "@/components/commonPreviewComponents/vendor_detail";
 import HCPDetails from "@/components/previewHCPComponents/hcp_details";
 import BasicDetailsHCP from "@/components/previewHCPComponents/basic_Details";
@@ -20,6 +20,7 @@ import ShippingDetails from "@/components/previewPatientSupportComponents/shippi
 import EquipmentDetails from "@/components/nonMonetoryPreviewComponents/equipmentDetails"
 import Sponsorship_Details from "@/components/sponsorshipSupportPreviewComponents/sponsorshipDetails";
 import Other_Details from "@/components/sponsorshipSupportPreviewComponents/other_details";
+import { Input } from "@/components/ui/input";
 
 type EventEntry = {
   name: string;
@@ -360,6 +361,22 @@ export default function EventListPage() {
       <Documents
         eventData={eventData}
         PageName={"eventListPage"} />
+        {
+          eventData?.event_type == "HCP Services" && 
+          <div className="grid md:grid-cols-3 md:gap-6">
+        <div className="flex flex-col md:gap-2">
+          <label className="text-black md:text-sm md:font-normal capitalize">
+            Occurance Date<span className="text-[#e60000]">*</span>
+          </label>
+          <Input
+            className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
+            placeholder="Type Here"
+            readOnly={true}
+            value={eventData?.occurance_date}
+          ></Input>
+        </div>
+        </div>
+        }
     </div>
   )
 }

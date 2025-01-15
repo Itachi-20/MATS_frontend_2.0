@@ -85,6 +85,7 @@ type EventEntry = {
   organization_name:string;
   preactivity_submitted:number;
   product_amount:number;
+  event_division:string
 }
 
 type Compensation = {

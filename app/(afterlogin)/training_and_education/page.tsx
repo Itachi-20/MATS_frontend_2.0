@@ -50,6 +50,10 @@ export type DropdownDataType = {
     name: string,
     vendor_type: string
   }[],
+  event_division:{
+    name:string;
+    event_division:string;
+  }[];
 };
 export type ActivityDropdownType = {
   name: string,
@@ -174,6 +178,7 @@ export type PreviewDataType = {
   travel_expense_submitted: number;
   travel_expense_approved: number;
   budget:string;
+  event_division:string;
 };
   type ChildVendor = {
     name: string;
@@ -295,6 +300,7 @@ export type FormDataType = {
   no_of_hcp: number,
   hcp_ref_no:string,
   reporting_head:string,
+  event_division:string
 };
   type CompensationType = {
     vendor_type: string;
