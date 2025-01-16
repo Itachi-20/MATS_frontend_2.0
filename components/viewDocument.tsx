@@ -32,7 +32,6 @@ type Props = {
 
 const AddDocument = ({ ...Props }: Props) => {
   //   const base_url = process.env.NEXT_PUBLIC_FRAPPE_URL;
-
   return (
     <div className="absolute z-50 flex inset-0 items-center justify-center bg-black bg-opacity-50">
       <div className="border-2 w-[850px] rounded-xl p-10 bg-white relative">

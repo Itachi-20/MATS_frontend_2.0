@@ -897,7 +897,7 @@ const table = ({ ...Props }: Props) => {
         {
           tabledata?.travel_vendors.length > 0 &&
           <>
-            <h3 className='text-2xl font-semibold'>Travel Desk</h3>
+            <h3 className='text-2xl font-semibold text-black'>Travel Desk</h3>
             <div className="border bg-white h-full p-4 rounded-[18px] my-6">
               <Table className={""}>
                 <TableHeader className={"bg-[#E0E9FF]"}>
@@ -937,7 +937,14 @@ const table = ({ ...Props }: Props) => {
                         "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                       }
                     >
-                      Billable Amount
+                      Actual Amount
+                    </TableHead>
+                    <TableHead
+                      className={
+                        "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
+                      }
+                    >
+                      Total Amount
                     </TableHead>
                     <TableHead
                       className={
@@ -946,7 +953,7 @@ const table = ({ ...Props }: Props) => {
                     >
                       Status
                     </TableHead>
-                    <TableHead
+                    {/* <TableHead
                       className={
                         "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
                       }
@@ -981,7 +988,7 @@ const table = ({ ...Props }: Props) => {
                       }
                     >
                       Net Amount
-                    </TableHead>
+                    </TableHead> */}
                     {/* <TableHead
                       className={
                         "text-center  text-[#625d5d] text-[15px] font-normal font-['Montserrat']"
@@ -1015,13 +1022,14 @@ const table = ({ ...Props }: Props) => {
                               <TableCell>{data.vendor_type ?? "-"}</TableCell>
                               <TableCell>{data.vendor_code ?? "-"}</TableCell>
                               <TableCell>{data.vendor_name ?? "-"}</TableCell>
+                              <TableCell>{data.est_amount ?? "-"}</TableCell>
                               <TableCell>{data.actual_amount ?? "-"}</TableCell>
                               <TableCell>{data.status ?? "-"}</TableCell>
-                              <TableCell>{data.brief_status ?? "-"}</TableCell>
+                              {/* <TableCell>{data.brief_status ?? "-"}</TableCell>
                               <TableCell>{data.gst ?? "-"}</TableCell>
                               <TableCell>{data.invoice_amount ?? "-"}</TableCell>
                               <TableCell>{data.tds ?? "-"}</TableCell>
-                              <TableCell>{data.net_amount ?? "-"}</TableCell>
+                              <TableCell>{data.net_amount ?? "-"}</TableCell> */}
                               {/* <TableCell>{data.utr_number ?? "-"}</TableCell>
                               <TableCell>{data.payment_date ?? "-"}</TableCell> */}
 
@@ -1060,7 +1068,9 @@ const table = ({ ...Props }: Props) => {
       </div>
       {
         open &&
+        <div className='text-black'>
         <ViewDocument setClose={setOpen} data={fileData} />
+        </div>
       }
       {exportopen && <UploadExport handleExport={handleExport} data={tabledata.import_files} />}
       {isDeletePropOpen && <Ondeleteprop setClose={setIsDeletePropOpen} handleSubmit={handleRecordDeletion} Loading={isLoading} text={"Are you sure you want to delete this expense?"} />}

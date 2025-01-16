@@ -31,7 +31,7 @@ type Props = {
 
 export default function RequestDetails({ ...Props }: Props) {
     const router = useRouter();
-    console.log(Props.data.total_compensation_expense, 'Props.data.total_compensation_expense')
+    console.log(Props.data, 'Props.data.total_compensation_expense')
     return (
         //  <div className='border-[0.5px] border-[#848484] rounded-3xl mt-5 mb-10 p-2 text-black grid grid-cols-3'>
         //         <div className='grid-cols-1 px-6 border-r-[0.5px] border-[#848484]'>

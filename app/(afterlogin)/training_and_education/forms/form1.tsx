@@ -428,8 +428,8 @@ const Form1 = ({ ...Props }: Props) => {
     setFormData((prev) => ({ ...prev, state: '' }) as FormDataType);
   };
 
-  console.log(Props.previewData?.event_division,"this is event division")
-
+  // console.log(Props.previewData?.event_division,"this is event division")
+  console.log(formData,"this is form data")
   return (
     <div>
       <h1 className="text-black text-2xl font-normal uppercase pb-8">
