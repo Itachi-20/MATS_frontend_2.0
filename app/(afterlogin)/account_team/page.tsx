@@ -90,7 +90,7 @@ const [tableData,setTableData] = useState<EventDetails[]>([])
       );
       if (Data.ok) {
         const data = await Data.json();
-        console.log(data)
+        console.log(data,"inside api data")
         setTableData(data.message)
         setLoading(false)
       } else {
@@ -159,6 +159,7 @@ const [tableData,setTableData] = useState<EventDetails[]>([])
     fetchTableData()
   }, [currentPage, debouncedSearchName, status])
 
+  console.log(tableData,"this is table data")
 
 
   return (

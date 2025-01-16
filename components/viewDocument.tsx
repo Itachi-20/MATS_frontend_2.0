@@ -22,6 +22,8 @@ type DocumentRow = {
   file_name: string;
   name: string;
   file_url: string;
+  creation:string
+  owner:string
 };
 
 type Props = {
@@ -45,6 +47,8 @@ const AddDocument = ({ ...Props }: Props) => {
             <TableHeader className="bg-[#E0E9FF] sticky top-0 z-10">
               <TableRow className="text-[#625d5d] text-[15px] font-normal">
                 <TableHead colSpan={3} className="text-center rounded-tl-2xl py-3">Document Name</TableHead>
+                <TableHead colSpan={3} className="text-center py-3">Creation Date</TableHead>
+                <TableHead colSpan={3} className="text-center py-3">Created By</TableHead>
                 <TableHead colSpan={3} className="text-center rounded-tr-2xl py-3">Download</TableHead>
               </TableRow>
             </TableHeader>
@@ -56,6 +60,8 @@ const AddDocument = ({ ...Props }: Props) => {
                   {Props.data.map((row, index) => (
                     <TableRow key={index}>
                       <TableCell colSpan={3} className="text-center truncate py-3">{row.file_name}</TableCell>
+                      <TableCell colSpan={3} className="text-center truncate py-3">{row.creation.substring(0,10)}</TableCell>
+                      <TableCell colSpan={3} className="text-center truncate py-3">{row.owner}</TableCell>
                       <TableCell colSpan={3} className="text-center py-3">
                         <Link
                           href={row.file_url}
