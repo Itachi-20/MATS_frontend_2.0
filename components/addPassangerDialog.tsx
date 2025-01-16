@@ -225,7 +225,6 @@ const addPassangerDialog = ({ ...Props }: Props) => {
                 <SelectContent>
                   <SelectItem value="Male">{"Male"}</SelectItem>
                   <SelectItem value="Female">{"Female"}</SelectItem>
-                  <SelectItem value="Other">{"Prefer Not To Say"}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -381,7 +380,6 @@ const addPassangerDialog = ({ ...Props }: Props) => {
                 ></Input>
               </label>
             </div> */}
-
             <div className="grid grid-cols-1 text-nowrap relative">
               <label
                 htmlFor="file"
@@ -416,7 +414,6 @@ const addPassangerDialog = ({ ...Props }: Props) => {
                 />
               </label>
             </div>
-
             <div className="flex flex-col gap-2">
               <label className="lable">
                 Remarks<span className="text-[#e60000]">*</span>
@@ -439,7 +436,8 @@ const addPassangerDialog = ({ ...Props }: Props) => {
                     <Image src={'/svg/view.svg'} alt='viewsvg' width={24} height={18} /> <span className="underline">View File</span>
                 </Link>
               ) : (
-                <></>
+                <>
+                </>
               )}
             </div>
             <Button

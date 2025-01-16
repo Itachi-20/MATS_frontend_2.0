@@ -1,5 +1,5 @@
 'use client'
-import React,{useRef} from 'react'
+import React, { useRef } from 'react'
 import { Input } from "@/components/ui/input";
 import {
     Select,
@@ -65,6 +65,7 @@ type DocumentRow = {
 };
 type formData = {
     name: string;
+    company:string;
     vendor_type: string;
     vendor_name: string;
     remark: string;
@@ -88,6 +89,7 @@ type Errors = {
     vendor_code: string;
     email: string;
     contact_number: string;
+    company:string;
 }
 const page = () => {
     const [dropdownData, setDropdownData] = useState<dropdownData | null>(null);
@@ -184,6 +186,7 @@ const page = () => {
         if (!formdata?.vendor_name) errors.vendor_name = "Vendor Name is required";
         if (!formdata?.pan_number) errors.pan_number = "Amount is required";
         if (!formdata?.email) errors.email = "Email is required";
+        if (!formdata?.company) errors.company = "Company is required";
         if (!formdata?.contact_number) {
             errors.contact_number = "Contact Number is required";
         } else {
@@ -194,7 +197,6 @@ const page = () => {
                 errors.contact_number = "Contact Number should be valid 10 digits";
             }
         }
-        //  if (!formdata?.contact_number || formdata?.contact_number.length != 13  ) errors.contact_number = "Contact Number is required and Should valid";
         return errors;
     };
     const handleFinalSubmit = async () => {
@@ -458,6 +460,8 @@ const page = () => {
     const availableOptions = allOptions.filter(
         (option) => !documentRows.some((row) => row.document_type === option)
     );
+
+    console.log(formdata, 'formdata')
     return (
         <>
             <div className='p-7 w-full relative z-20 text-black'>
@@ -473,7 +477,42 @@ const page = () => {
                             </Button>
                         }
                     </div>
-                    <div className="grid grid-cols-2 gap-12 pb-8">
+                    <div className="grid grid-cols-2 gap-6 pb-8">
+                        <div className="flex flex-col gap-2">
+                            <label className={`lable ${(errors?.company && !formdata?.company) ? `text-red-600` : `text-black text-sm font-normal capitalize`}`}>
+                                Company Name
+                            </label>
+                            <Select
+                                onValueChange={(value) => handleSelectChange(value, "company")}
+                                value={formdata ? formdata?.company : ''}
+                            >
+                                <SelectTrigger className="dropdown">
+                                    <SelectValue placeholder="Select" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {dropdownData ?
+                                        dropdownData.company.map((item, index) => {
+                                            return (
+                                                <SelectItem value={item.name}>
+                                                    {item.company_name}
+                                                </SelectItem>
+                                            );
+                                        })
+                                        :
+                                        <SelectItem value={"null"} disabled>No Data Yet</SelectItem>
+                                    }
+                                </SelectContent>
+                            </Select>
+                            {
+                                errors &&
+                                (errors?.company && !formdata?.company) &&
+                                (
+                                    <p className="w-full text-red-500 text-[11px] font-normal text-left">
+                                        {errors?.company}
+                                    </p>
+                                )
+                            }
+                        </div>
                         <div className="flex flex-col gap-2">
                             <label className={`lable ${(errors?.vendor_type && !formdata?.vendor_type) ? `text-red-600` : `text-black`}`}>
                                 Vendor Type<span className="text-[#e60000]">*</span>
@@ -601,7 +640,7 @@ const page = () => {
                                 )
                             }
                         </div>
-                        <div className="flex flex-col col-span-2 gap-2">
+                        <div className="flex flex-col col-span-1 gap-2">
                             <label className="text-black text-sm font-normal capitalize">
                                 Remark
                             </label>
@@ -669,8 +708,8 @@ const page = () => {
                                                 {/* <h1 className="mt-[2px]">{fileName ? fileName : ' Receipt/Bill'}</h1> */}
                                                 <span className="font-medium truncate max-w-[200px]">{fileName ? fileName : ' Receipt/Bill'}</span>
                                             </div>
-                                            <Input type="file" onChange={(e) => { handleFileUpload(e) }} id="file" className="hidden" 
-                                            ref={inputFile}
+                                            <Input type="file" onChange={(e) => { handleFileUpload(e) }} id="file" className="hidden"
+                                                ref={inputFile}
                                             ></Input>
                                         </label>
                                         <div className='items-baseline pt-7'>

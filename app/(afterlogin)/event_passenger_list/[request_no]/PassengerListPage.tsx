@@ -249,11 +249,13 @@ export default function PassengerListPage({ ...Props }: Props) {
         <>
             <div className='flex justify-between items-center'>
                 <Button className={`bg-white text-black border rounded-[8px] text-lg leading-normal font-normal px-[20px] py-[6px] font-['Poppins']`} onClick={() => handleSubmit()}>
-                    <div>
+                    {/* <div>
                         <svg fill="#000000" width="800px" height="800px" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"><path d="M222.927 580.115l301.354 328.512c24.354 28.708 20.825 71.724-7.883 96.078s-71.724 20.825-96.078-7.883L19.576 559.963a67.846 67.846 0 01-13.784-20.022 68.03 68.03 0 01-5.977-29.488l.001-.063a68.343 68.343 0 017.265-29.134 68.28 68.28 0 011.384-2.6 67.59 67.59 0 0110.102-13.687L429.966 21.113c25.592-27.611 68.721-29.247 96.331-3.656s29.247 68.721 3.656 96.331L224.088 443.784h730.46c37.647 0 68.166 30.519 68.166 68.166s-30.519 68.166-68.166 68.166H222.927z" /></svg>
-                    </div>
+                    </div> */}
+                    Back
+                    {/* <span className='text-black'>Back</span> */}
                 </Button>
-                { !(role == 'Event Travel') && <div className='flex gap-4'>
+                { !(Props.role == 'Event Travel') && <div className='flex gap-4'>
                     <div className='flex space-x-6'>
                         <button className='flex space-x-[10px] border-[1px] border-[#4430BF] rounded-[8px] items-center py-[6px] px-6' onClick={() => handleDialog()}>
                             <svg width="16" height="16" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -272,17 +274,22 @@ export default function PassengerListPage({ ...Props }: Props) {
                     </Button>
                 </div>}
             </div>
-            <div className="md:pt-8">
+            <div className="md:pt-2 justify-end">
                 <div className='flex justify-between items-center gap-2'>
-                    <div className='flex gap-2 pl-2 text-black'>
+                    {/* <div className='flex gap-2 pl-2 text-black'>
                         Event No :<span>{refNo && refNo}</span>
-                    </div>
+                    </div> */}
+{/* <div></div> */}
+                    {/* <Button className="bg-white text-black border rounded-[8px] text-lg leading-normal font-normal px-[20px] py-[6px] font-['Poppins'] ">
+                    Export
+                </Button> */}
                 </div>
+                
                 <div className="border bg-white h-full p-4 mt-[20px] rounded-[18px]">
                     <Table className="">
                         <TableHeader className={"bg-[#E0E9FF] sticky top-0 z-20"}>
                             <TableRow className={"text-nowrap rounded-r-2xl"}>
-                                <TableHead
+                                {!(Props.role == 'Event Travel') && <TableHead
                                     className={
                                         " rounded-l-2xl text-left text-[#625d5d] lg:text-[15px] sm:text-[12px] text-[11px] font-normal font-['Montserrat']"
                                     }
@@ -295,11 +302,9 @@ export default function PassengerListPage({ ...Props }: Props) {
                                         onChange={() => handleSelectAllChange(passangerData)}
                                     />
                                     <label htmlFor="select_all" className='text-black '></label>
-                                </TableHead>
+                                </TableHead>}
                                 <TableHead
-                                    className={
-                                        "text-left text-[#625d5d] lg:text-[15px] sm:text-[12px] text-[11px] font-normal font-['Montserrat']"
-                                    }
+                                className={!(Props.role == 'Event Travel') ? "text-left text-[#625d5d] lg:text-[15px] sm:text-[12px] text-[11px] font-normal font-['Montserrat']":` rounded-l-2xl text-left text-[#625d5d] lg:text-[15px] sm:text-[12px] text-[11px] font-normal font-['Montserrat']` }
                                 >
                                     Full Name
                                 </TableHead>
@@ -346,7 +351,7 @@ export default function PassengerListPage({ ...Props }: Props) {
                                 >
                                     Remarks
                                 </TableHead>
-                                {!(role == 'Event Travel') && <TableHead
+                                {!(Props.role == 'Event Travel') && <TableHead
                                     className={
                                         "text-left  text-[#625d5d] lg:text-[15px] sm:text-[12px] text-[11px] font-normal font-['Montserrat']"
                                     }
@@ -384,6 +389,7 @@ export default function PassengerListPage({ ...Props }: Props) {
                                                 key={index}
                                                 className="text-left text-nowrap text-black"
                                             >
+                                                {!(Props.role == 'Event Travel')  && 
                                                 <TableCell>
                                                     <input
                                                         type="checkbox"
@@ -391,7 +397,7 @@ export default function PassengerListPage({ ...Props }: Props) {
                                                         checked={selectedRows?.some((row) => row.name === data.name)}
                                                         onChange={() => handleCheckboxChange(data.name)}
                                                     />
-                                                </TableCell>
+                                                </TableCell>}
                                                 <TableCell>{data.full_name ?? "-"}</TableCell>
                                                 <TableCell>{data.gender ?? "-"}</TableCell>
                                                 <TableCell>{data.source ?? "-"} </TableCell>
@@ -399,7 +405,7 @@ export default function PassengerListPage({ ...Props }: Props) {
                                                 <TableCell>{data.age ?? "-"}</TableCell>
                                                 <TableCell>{data.date_of_birth ?? "-"}</TableCell>
                                                 <TableCell className='max-w-[80px] truncate'>{data.remarks ?? "-"}</TableCell>
-                                                {!(role == 'Event Travel') && <TableCell>
+                                                {!(Props.role == 'Event Travel') && <TableCell>
                                                     <SingleUpload files={selectedFile} setFiles={setSelectedFile} onNext={handleFileUpload} buttonText={'Upload'} name={data.name} />
                                                 </TableCell>}
                                                 <TableCell className='flex gap-1'>
@@ -418,7 +424,7 @@ export default function PassengerListPage({ ...Props }: Props) {
                                                             <path d="M320-240h320v-80H320v80Zm0-160h320v-80H320v80ZM240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v480q0 33-23.5 56.5T720-80H240Zm280-520v-200H240v640h480v-440H520ZM240-800v200-200 640-640Z" />
                                                         </svg>
                                                     </Link>
-                                                    {!(role == 'Event Travel') && <button onClick={() => handleEditData(data)}>
+                                                    {!(Props.role == 'Event Travel') && <button onClick={() => handleEditData(data)}>
                                                         <Image src={'/svg/editIcon.svg'} alt='editsvg' width={20} height={18} />
                                                     </button>}
                                                 </TableCell>
