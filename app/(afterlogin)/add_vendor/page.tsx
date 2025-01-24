@@ -461,6 +461,10 @@ const page = () => {
         (option) => !documentRows.some((row) => row.document_type === option)
     );
 
+    const handleApproval = (status:string)=>{
+
+    }
+
     console.log(formdata, 'formdata')
     return (
         <>
@@ -769,16 +773,19 @@ const page = () => {
 
                     </div>
 
-                    <div className="flex justify-end pt-5 gap-4">
+                    <div className={`flex justify-end pt-5 gap-4`}>
                         {view != "view" &&
                             <>
                                 {/* <Button className="bg-white text-black border text-md font-normal hover:bg-white" >
                                    Back
                                 </Button> */}
-                                <Button className="bg-[#4430bf] text-white text-md font-normal border hover:bg-[#4430bf]" onClick={formdata?.pan_check ? handleConfirmpopup : handleFinalSubmit}>
+                                <Button className={`${role != "Event Requestor"?"hidden":""} bg-[#4430bf] text-white text-md font-normal border hover:bg-[#4430bf]`} onClick={formdata?.pan_check ? handleConfirmpopup : handleFinalSubmit}>
                                     Submit
                                 </Button>
-
+                                <div className={`${role == "Event Finance"?"":"hidden"} flex gap-4`}>
+                                <Button className={`bg-[#5dbe74] hover:bg-[#5dbe74] px-6 text-white`} onClick={()=>{handleApproval("Approve")}}>Approve</Button>
+                                <Button className={`bg-[#ff5757] hover:bg-[#ff5757] px-6 text-white`} onClick={()=>{handleApproval("Reject")}}>Reject</Button>
+                                </div>
                             </>
                         }
                     </div>

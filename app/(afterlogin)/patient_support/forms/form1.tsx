@@ -477,7 +477,7 @@ const Form1 = ({ ...Props }: Props) => {
       <div className="grid grid-cols-2 gap-6 pb-8">
         <div className="flex flex-col gap-2">
           <label className="lable">
-            Company Names
+            Company Name
           </label>
           <Select
             onValueChange={(value) => { handleSelectChange(value, "company") }}

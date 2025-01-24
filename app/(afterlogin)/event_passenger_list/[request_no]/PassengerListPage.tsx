@@ -86,6 +86,7 @@ export default function PassengerListPage({ ...Props }: Props) {
             if (response.ok) {
                 const data = await response.json();
                 setPassangerData(data.data);
+                console.log(data.data)
                 setLoading(false);
             } else {
                 console.log("submission failed");
@@ -257,6 +258,10 @@ export default function PassengerListPage({ ...Props }: Props) {
                 </Button>
                 { !(Props.role == 'Event Travel') && <div className='flex gap-4'>
                     <div className='flex space-x-6'>
+                        <a href='http://localhost:3000/Passenger Details.xlsx' download="Passenger Details.xlsx">
+                        <Button className='border border-black shadow-lg text-black'>Template</Button>
+                            
+                        </a>
                         <button className='flex space-x-[10px] border-[1px] border-[#4430BF] rounded-[8px] items-center py-[6px] px-6' onClick={() => handleDialog()}>
                             <svg width="16" height="16" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path id="Vector" d="M14.8571 9.64286H9.14286V15.3571C9.14286 15.6602 9.02245 15.9509 8.80812 16.1653C8.59379 16.3796 8.30311 16.5 8 16.5C7.6969 16.5 7.40621 16.3796 7.19188 16.1653C6.97755 15.9509 6.85714 15.6602 6.85714 15.3571V9.64286H1.14286C0.839753 9.64286 0.549063 9.52245 0.334735 9.30812C0.120408 9.09379 0 8.8031 0 8.5C0 8.1969 0.120408 7.90621 0.334735 7.69188C0.549063 7.47755 0.839753 7.35714 1.14286 7.35714H6.85714V1.64286C6.85714 1.33975 6.97755 1.04906 7.19188 0.834735C7.40621 0.620407 7.6969 0.5 8 0.5C8.30311 0.5 8.59379 0.620407 8.80812 0.834735C9.02245 1.04906 9.14286 1.33975 9.14286 1.64286V7.35714H14.8571C15.1602 7.35714 15.4509 7.47755 15.6653 7.69188C15.8796 7.90621 16 8.1969 16 8.5C16 8.8031 15.8796 9.09379 15.6653 9.30812C15.4509 9.52245 15.1602 9.64286 14.8571 9.64286Z" fill="#4430BF" />

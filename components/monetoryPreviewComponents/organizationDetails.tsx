@@ -266,7 +266,7 @@ const event_Details = ({ ...Props }: Props) => {
               Comments<span className="text-[#e60000]">*</span>
             </label>
             <textarea
-              className='text-black shadow-md border h-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl pl-2 pt-2'
+              className='md:rounded-xl bg-[#f6f6f6] text-black shadow-md border h-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl pl-2 pt-2'
               placeholder="Type Here"
               readOnly={true}
               value={Props.eventData?.comments}

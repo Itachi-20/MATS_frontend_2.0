@@ -327,6 +327,7 @@ const index = async({...Props}:any) => {
           forms == "2"?
           <Form2
           previewData={previewdata}
+          cityDropdown={cityDropdown}
           refno = {refno}
           />:
           forms == "3"?

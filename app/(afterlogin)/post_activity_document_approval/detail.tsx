@@ -277,8 +277,8 @@ console.log(eventData.can_postactivity_approve,"this is statsus")
                 eventData?.can_postactivity_approve &&
               <div className="flex gap-4 text-white items-center">
                 <Button className="bg-[#5dbe74] hover:bg-[#5dbe74] px-6" onClick={()=>{handleDialog();setType("Approved");setButtonText("Approve")}}>Approve</Button>
-                <Button className="bg-[#ff5757] hover:bg-[#ff5757] px-6" onClick={()=>{handleDialog();setType("Rejected");setButtonText("Reject")}}>Reject</Button>
                 <Button className="bg-[#4430bf] hover:bg-[#4430bf] px-6" onClick={()=>{handleDialog();setType("Send Back");setButtonText("Send Back")}}>Send Back</Button>
+                <Button className="bg-[#ff5757] hover:bg-[#ff5757] px-6" onClick={()=>{handleDialog();setType("Rejected");setButtonText("Reject")}}>Reject</Button>
               </div>
               }
             </div>

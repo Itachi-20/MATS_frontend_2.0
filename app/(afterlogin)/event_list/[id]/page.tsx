@@ -248,7 +248,7 @@ export default function EventListPage() {
             </Link>
           </div>
         </div>
-        <div className="flex border rounded-xl justify-between p-3 bg-white gap-4">
+        <div className="flex border rounded-xl justify-between p-3 bg-white gap-4 w-full">
           <div className="grid grid-cols-3 w-full gap-4">
             <div className="col-span-1">
               <h1 className="bg-[#ecf2ff] px-2 rounded-xl text-center">Request Number</h1>

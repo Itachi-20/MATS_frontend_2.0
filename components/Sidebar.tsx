@@ -149,15 +149,15 @@ const Sidebar = () => {
     moduleItems = {
       modules: [
         {
-          module: "Event Request Approval",
+          module: "Pre-Activity Approval",
           route: "/event_approver_list",
         },
         {
-          module: "Post Document Approval",
+          module: "Post-Activity Approval",
           route: "/post_activity_document_approval_list",
         },
         {
-          module: "Post Expense Approval",
+          module: "Post-Expense Approval",
           route: "/post_expense_approval",
         },
       ],

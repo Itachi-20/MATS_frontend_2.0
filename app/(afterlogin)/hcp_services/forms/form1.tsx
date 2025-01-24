@@ -166,7 +166,7 @@ type FormErrors = {
   service_type?: string;
   event_venue?: string;
   event_name?: string;
-  sponsorship_ref_no: string;
+  // sponsorship_ref_no: string;
   training_ref_no: string;
   state?: string;
   reporting_head?: string;
@@ -207,7 +207,7 @@ const Form1 = ({ ...Props }: Props) => {
     if ((Props.previewData?.event_end_date ? (formdata && ("event_end_date" in formdata && formdata.event_end_date == '')) : (!formdata?.event_end_date))) errors.event_end_date = "Event End Date is required";
     if ((Props.previewData?.annual_plan ? (formdata && ("annual_plan" in formdata && formdata.annual_plan)) : (((formdata?.type_of_engagement == "MSA") || (formdata?.type_of_engagement == "Scientific Advisory Consultancy Agreement")) && (!formdata?.annual_plan)))) errors.annual_plan = "Annual Plan is required";
     if ((Props.previewData?.service_type ? (formdata && ("service_type" in formdata && formdata.service_type == '')) : ((formdata?.type_of_engagement == "MSA") && (!formdata?.service_type)))) errors.service_type = "Service Type is required";
-    if ((Props.previewData?.sponsorship_ref_no ? (formdata && ("sponsorship_ref_no" in formdata && formdata.sponsorship_ref_no == '')) : ((formdata?.type_of_engagement == "One Time") && (!formdata?.sponsorship_ref_no)))) errors.sponsorship_ref_no = "Sponsorship Reference Number is required";
+    // if ((Props.previewData?.sponsorship_ref_no ? (formdata && ("sponsorship_ref_no" in formdata && formdata.sponsorship_ref_no == '')) : ((formdata?.type_of_engagement == "One Time") && (!formdata?.sponsorship_ref_no)))) errors.sponsorship_ref_no = "Sponsorship Reference Number is required";
     if ((Props.previewData?.training_ref_no ? (formdata && ("training_ref_no" in formdata && formdata.training_ref_no == '')) : ((formdata?.type_of_engagement == "One Time") && (!formdata?.training_ref_no)))) errors.training_ref_no = "Training Reference Number is required";
     if ((Props.previewData?.event_venue ? (formdata && ("event_venue" in formdata && formdata.event_venue == '')) : ((formdata?.type_of_engagement == "One Time") && (!formdata?.event_venue)))) errors.event_venue = "Event Venue is required";
     if ((Props.previewData?.event_name ? (formdata && ("event_name" in formdata && formdata.event_name == '')) : ((formdata?.type_of_engagement == "One Time") && (!formdata?.event_name)))) errors.event_name = "Event Name is required";
@@ -556,7 +556,7 @@ const Form1 = ({ ...Props }: Props) => {
         <div className="grid grid-cols-2 gap-6 pb-8">
           <div className="flex flex-col gap-2">
             <label className="lable">
-              Company Names
+              Company Name
             </label>
             <Select
               onValueChange={(value) => { handleSelectChange(value, "company") }}
@@ -1025,14 +1025,14 @@ const Form1 = ({ ...Props }: Props) => {
                 </div>
                 <div className="flex flex-col md:gap-2">
                   <label className="text-black md:text-sm md:font-normal capitalize">
-                    Sponsorship Support Request Ref Number<span className="text-[#e60000]">*</span>
+                    Sponsorship Support Request Ref Number
                   </label>
                   <Select
                     onValueChange={(value) => { handleSelectChange(value, "sponsorship_ref_no") }}
                     defaultValue={Props.previewData?.sponsorship_ref_no ? Props.previewData.sponsorship_ref_no : ""}
                   >
                     <SelectTrigger className="dropdown">
-                      <SelectValue placeholder="Select" />
+                      <SelectValue placeholder="Select"/>
                     </SelectTrigger>
                     <SelectContent>
                       {
@@ -1044,7 +1044,7 @@ const Form1 = ({ ...Props }: Props) => {
                       }
                     </SelectContent>
                   </Select>
-                  {
+                  {/* {
                     errors &&
                     (errors?.sponsorship_ref_no && !formdata?.sponsorship_ref_no) &&
                     (
@@ -1052,7 +1052,7 @@ const Form1 = ({ ...Props }: Props) => {
                         {errors?.sponsorship_ref_no}
                       </p>
                     )
-                  }
+                  } */}
                 </div>
               </div>
             </div>

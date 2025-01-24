@@ -736,7 +736,7 @@ const table = ({ ...Props }: Props) => {
                             <TableCell className="sticky right-0 bg-[white] z-20 ">
                               <div className="">
                                 {
-                                  <button className="border rounded-full px-4 py-1 border-[#0e4154] text-[#0e4154]" onClick={() => { router.push(`/event_request_approver/${data.name}`) }}>Take Action</button>
+                                  <button className="border rounded-full px-4 py-1 border-[#0e4154] text-[#0e4154]" onClick={() => { router.push(`/event_request_approver/${data.name}`) }}>View</button>
                                 }
                               </div>
                             </TableCell>

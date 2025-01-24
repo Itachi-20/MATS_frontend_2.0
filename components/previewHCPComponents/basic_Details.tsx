@@ -338,7 +338,7 @@ const Basic_Details = ({ ...Props }: Props) => {
           <label className="lable">
             Selection Criteria For Faculty<span className="text-[#e60000]">*</span>
           </label>
-          <Textarea className='text-black shadow-md bg-[#f6f6f6]' placeholder='Type Here' readOnly value={Props.eventData?.faculty}/>
+          <Textarea className='md:rounded-xl bg-[#f6f6f6] text-black shadow-md bg-[#f6f6f6]' placeholder='Type Here' readOnly value={Props.eventData?.faculty}/>
         </div>
         {/* <div className="flex flex-col gap-2">
           <label className="lable">
