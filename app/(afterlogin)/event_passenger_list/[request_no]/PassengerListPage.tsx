@@ -258,7 +258,7 @@ export default function PassengerListPage({ ...Props }: Props) {
                 </Button>
                 { !(Props.role == 'Event Travel') && <div className='flex gap-4'>
                     <div className='flex space-x-6'>
-                        <a href='http://localhost:3000/Passenger Details.xlsx' download="Passenger Details.xlsx">
+                        <a href='http://localhost:3000/Passenger Details.xlsx' download="Passenger Details.xlsx" target={'_blank'}>
                         <Button className='border border-black shadow-lg text-black'>Template</Button>
                             
                         </a>
