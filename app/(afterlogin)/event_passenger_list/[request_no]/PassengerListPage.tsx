@@ -118,6 +118,7 @@ export default function PassengerListPage({ ...Props }: Props) {
                 fetchData();
                 setSelectedRows([])
                 resolve(data);
+                setSelectAll(false);
             } catch (error) {
                 reject(error);
                 setSelectedRows([])
@@ -258,7 +259,7 @@ export default function PassengerListPage({ ...Props }: Props) {
                 </Button>
                 { !(Props.role == 'Event Travel') && <div className='flex gap-4'>
                     <div className='flex space-x-6'>
-                        <a href='http://localhost:3000/Passenger Details.xlsx' download="Passenger Details.xlsx" target={'_blank'}>
+                        <a href={`${process.env.NEXT_PUBLIC_TESTING_URL}/Passenger Details.xlsx`} download="Passenger Details.xlsx" target={'_blank'}>
                         <Button className='border border-black shadow-lg text-black'>Template</Button>
                             
                         </a>
@@ -354,6 +355,34 @@ export default function PassengerListPage({ ...Props }: Props) {
                                         "text-left  text-[#625d5d] lg:text-[15px] sm:text-[12px] text-[11px] font-normal font-['Montserrat']"
                                     }
                                 >
+                                    Aadhar No
+                                </TableHead>
+                                <TableHead
+                                    className={
+                                        "text-left  text-[#625d5d] lg:text-[15px] sm:text-[12px] text-[11px] font-normal font-['Montserrat']"
+                                    }
+                                >
+                                    Date Of Journey
+                                </TableHead>
+                                <TableHead
+                                    className={
+                                        "text-left  text-[#625d5d] lg:text-[15px] sm:text-[12px] text-[11px] font-normal font-['Montserrat']"
+                                    }
+                                >
+                                    Mode Of Transport
+                                </TableHead>
+                                <TableHead
+                                    className={
+                                        "text-left  text-[#625d5d] lg:text-[15px] sm:text-[12px] text-[11px] font-normal font-['Montserrat']"
+                                    }
+                                >
+                                    Travel Type
+                                </TableHead>
+                                <TableHead
+                                    className={
+                                        "text-left  text-[#625d5d] lg:text-[15px] sm:text-[12px] text-[11px] font-normal font-['Montserrat']"
+                                    }
+                                >
                                     Remarks
                                 </TableHead>
                                 {!(Props.role == 'Event Travel') && <TableHead
@@ -409,6 +438,10 @@ export default function PassengerListPage({ ...Props }: Props) {
                                                 <TableCell>{data.destination ?? "-"} </TableCell>
                                                 <TableCell>{data.age ?? "-"}</TableCell>
                                                 <TableCell>{data.date_of_birth ?? "-"}</TableCell>
+                                                <TableCell>{data.aadhar_no ?? "-"}</TableCell>
+                                                <TableCell>{data.date_of_journey ?? "-"}</TableCell>
+                                                <TableCell>{data.mode_of_transport ?? "-"}</TableCell>
+                                                <TableCell>{data.travel_type ?? "-"}</TableCell>
                                                 <TableCell className='max-w-[80px] truncate'>{data.remarks ?? "-"}</TableCell>
                                                 {!(Props.role == 'Event Travel') && <TableCell>
                                                     <SingleUpload files={selectedFile} setFiles={setSelectedFile} onNext={handleFileUpload} buttonText={'Upload'} name={data.name} />

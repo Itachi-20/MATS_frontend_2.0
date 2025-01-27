@@ -1004,6 +1004,7 @@ const Form1 = ({ ...Props }: Props) => {
                       <SelectValue placeholder="Select" />
                     </SelectTrigger>
                     <SelectContent>
+                    <SelectItem value={"NA"}>{"NA"}</SelectItem>
                       {
                         Props.dropdownData && Props.dropdownData.training_ref_no?.map((item, index) => {
                           return (
@@ -1023,7 +1024,7 @@ const Form1 = ({ ...Props }: Props) => {
                     )
                   }
                 </div>
-                <div className="flex flex-col md:gap-2">
+                {/* <div className="flex flex-col md:gap-2">
                   <label className="text-black md:text-sm md:font-normal capitalize">
                     Sponsorship Support Request Ref Number
                   </label>
@@ -1043,7 +1044,7 @@ const Form1 = ({ ...Props }: Props) => {
                         })
                       }
                     </SelectContent>
-                  </Select>
+                  </Select> */}
                   {/* {
                     errors &&
                     (errors?.sponsorship_ref_no && !formdata?.sponsorship_ref_no) &&
@@ -1053,7 +1054,7 @@ const Form1 = ({ ...Props }: Props) => {
                       </p>
                     )
                   } */}
-                </div>
+                {/* </div> */}
               </div>
             </div>
 

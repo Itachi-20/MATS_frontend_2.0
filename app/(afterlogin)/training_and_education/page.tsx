@@ -5,7 +5,7 @@ import Form3 from "@/app/(afterlogin)/training_and_education/forms/form3";
 import Form4 from "@/app/(afterlogin)/training_and_education/forms/form4";
 import Preview_Form from './forms/preview_form';
 import { AppWrapper } from '@/app/context/module';
-import { PreviewData, handleBusinessUnitChange, activityList, dropdown } from '../hcp_services/utility';
+import { PreviewData, handleBusinessUnitChange, activityList, dropdown } from '../training_and_education/utility';
 import { cookies } from 'next/headers';
 import {handleStateChange,handleReportingChange,handleCityChange,handleCityDropdown} from '../training_and_education/utility'
 import {DropdownDataType,ActivityDropdownType,PreviewDataType} from './Types'

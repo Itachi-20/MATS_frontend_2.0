@@ -15,8 +15,8 @@ import { AppContext } from '@/app/context/module'
 
 import { useRouter } from "nextjs-toploader/app";
 import { Previewdata } from '@/app/(afterlogin)/hcp_services/page'
-
-
+import SearchDropdown from '@/components/hcp/SearchDropdown';
+import AddHCPDialog from '@/components/hcp/addHCP'
 type dropdownData = {
   company: {
     name: string,
@@ -103,9 +103,15 @@ type activityDropdown = {
   }[]
 }
 
+type Dropdown = {
+  name: string;
+  city: string
+}
+
 type Props = {
   previewData: Previewdata | null;
   refno: string;
+  cityDropdown:Dropdown[]
 }
 
 type FormErrors = {
@@ -123,6 +129,42 @@ const Form2 = ({ ...Props }: Props) => {
   const [errors, setErrors] = useState<FormErrors>();
   const [refNo, setRefNo] = useState<string | null>(Props.refno);
   const [hcpValue, setHCPValue] = useState<string>()
+  const [isSuggestionDialog,setIsSuggestionDialog] = useState<Boolean>(true);
+  const [searchValue,setsearchValue] =useState<string>("");
+  const [citydropdown, setCityDropdown] = useState<Dropdown[]>(Props.cityDropdown);
+  const [isAddHCP,setIsAddHCP] = useState<boolean>(false);
+
+  const handleLoadCity = async (city_name: string, page_length: number, page_no: number) => {
+    try {
+      const response = await fetch("/api/loadCityDropdown", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          city_name: city_name,
+          page_length: page_length,
+          page_no: page_no,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setCityDropdown(data.data);
+        return data.data;
+      } else {
+        console.log("Response not okay  state change");
+      }
+    } catch (error) {
+      console.error("Error during state  change:", error);
+    }
+  };
+
+  const clearCity = () => {
+    console.log('inside claer city')
+    setsearchValue('');
+  };
+
   const handleAnyHCPChange = (value: string) => {
     setHCPValue(value);
   }
@@ -210,9 +252,9 @@ const Form2 = ({ ...Props }: Props) => {
         Hcp Details
       </h1>
       <div className='grid grid-cols-2 gap-6'>
-        <div className='flex flex-col gap-2'>
+        <div className='flex flex-col gap-2 relative'>
           <label className='lable'>Hcp Name <span className='text-[#e60000]'>*</span></label>
-          <Input className='dropdown' placeholder='Type Here'
+          {/* <Input className='dropdown' placeholder='Type Here'
             name='hcp_name'
             onChange={(e) => { handlefieldChange(e) }}
             defaultValue={Props.previewData?.hcp_name ? Props.previewData.hcp_name : ""}
@@ -225,7 +267,8 @@ const Form2 = ({ ...Props }: Props) => {
                 {errors?.hcp_name}
               </p>
             )
-          }
+          } */}
+        <SearchDropdown setsearchValue={setsearchValue} searchValue={searchValue} dropdown={citydropdown} handleValueChange={handleLoadCity} clearValue={clearCity} placeholder={"Search HCP...."} />
         </div>
         <div className='flex flex-col gap-2'>
           <label className='lable'>Hospital Affiliation<span className='text-[#e60000]'>*</span></label>
@@ -322,6 +365,10 @@ const Form2 = ({ ...Props }: Props) => {
         <Button className='bg-white text-black border text-md font-normal' onClick={() => router.push(`/hcp_services?forms=1&refno=${Props.refno}`)}>Back</Button>
         <Button className='bg-[#4430bf] text-white text-md font-normal border' onClick={(e) => handleSubmit(e)}>Next</Button>
       </div>
+      {
+        isAddHCP && 
+        <AddHCPDialog/>
+      }
     </div>
   );
 }
