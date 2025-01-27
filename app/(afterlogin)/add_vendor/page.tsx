@@ -28,6 +28,7 @@ import { useSearchParams } from 'next/navigation'
 import { useAuth } from "../../context/AuthContext";
 import ConfirmPopup from '@/components/deleteDialog'
 import Image from 'next/image';
+import ApproveCommentBox from '@/components/Comment_box'
 
 type dropdownData = {
     company: {
@@ -103,6 +104,10 @@ const page = () => {
     const [confirmpopup, setConfirmPopup] = useState(false)
     const [formdata, setFormData] = useState<formData>();
     const [loading, setLoading] = useState(false)
+    const [isApproveDialog,setIsApproveDialog] = useState<boolean>(false);
+    const [comment,setComment] = useState<string>("");
+    const [buttonText,setButtonText] = useState<string>("");
+    const [status,setStatus] = useState<string>("")
     const base_url = process.env.NEXT_PUBLIC_FRAPPE_URL;
     const router = useRouter()
     const view = useSearchParams().get('view')
@@ -140,6 +145,16 @@ const page = () => {
     useEffect(() => {
         dropdown();
     }, [])
+
+
+    const handleDialog = ()=>{
+        setIsApproveDialog(prev=>!prev)
+    }
+
+    // const handleComment = (value: string) => {
+    //     setComment(value)
+    //   }
+      
 
     const vendorViewData = async () => {
 
@@ -461,8 +476,28 @@ const page = () => {
         (option) => !documentRows.some((row) => row.document_type === option)
     );
 
-    const handleApproval = (status:string)=>{
-
+    const handleApproval = async (remarks?:string , status?:string)=>{
+        try {
+            const response = await fetch(`/api/approveVendor/`,{
+                headers:{
+                    "Content-Type":"application/json"
+                },body:JSON.stringify({
+                    name:refno,
+                    action:status,
+                    remark:remarks
+                }),
+                method:"post"
+            });
+            if(response.ok){
+                setTimeout(()=>{
+                    router.push('/event_vendor_list');
+                },2000);
+                toast.success(`${status + "ed"} Successfully`)
+            }
+        } catch (error) {
+            console.error(error);
+            toast.error("Something went wrong");
+        }
     }
 
     console.log(formdata, 'formdata')
@@ -783,14 +818,22 @@ const page = () => {
                                     Submit
                                 </Button>
                                 <div className={`${role == "Event Finance"?"":"hidden"} flex gap-4`}>
-                                <Button className={`bg-[#5dbe74] hover:bg-[#5dbe74] px-6 text-white`} onClick={()=>{handleApproval("Approve")}}>Approve</Button>
-                                <Button className={`bg-[#ff5757] hover:bg-[#ff5757] px-6 text-white`} onClick={()=>{handleApproval("Reject")}}>Reject</Button>
+                                <Button className={`bg-[#5dbe74] hover:bg-[#5dbe74] px-6 text-white`} onClick={()=>{handleApproval("","Approve"); setButtonText("Approve"); }}>Approve</Button>
+                                <Button className={`bg-[#ff5757] hover:bg-[#ff5757] px-6 text-white`} onClick={()=>{handleApproval("","Reject"); setButtonText("Reject"); }}>Reject</Button>
                                 </div>
                             </>
                         }
                     </div>
                 </div>
             </div>
+           {/* {isApproveDialog &&  
+               <ApproveCommentBox
+               handleClose={handleDialog}
+               handleSubmit={handleApproval}
+               ButtonText = {buttonText}
+               />
+            } */}
+           
             <Toaster richColors position="top-right" />
             {
 
