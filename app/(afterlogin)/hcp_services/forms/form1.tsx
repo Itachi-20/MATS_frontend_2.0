@@ -259,7 +259,9 @@ const Form1 = ({ ...Props }: Props) => {
       ...formdata
 
     };
-
+    if(updatedFormData?.training_ref_no != "NA"){
+      updatedFormData.training_ref_no = "";
+    }
     updatedFormData.event_type = "HCP Services"
     if (refNo) {
       updatedFormData.name = refNo;
