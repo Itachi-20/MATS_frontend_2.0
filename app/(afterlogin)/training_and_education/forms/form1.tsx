@@ -136,7 +136,7 @@ const Form1 = ({ ...Props }: Props) => {
       ...formData,
     };
     updatedFormData.event_type = "Training and Education";
-    if(Props.previewData?.business_unit != "Orthopedics" || updatedFormData?.business_unit != "Orthopedics"){
+    if(updatedFormData?.business_unit != "Orthopedics"){
       updatedFormData.event_division = "";
     }
     if(updatedFormData?.hcp_ref_no != "NA"){

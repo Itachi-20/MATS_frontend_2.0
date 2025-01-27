@@ -199,7 +199,9 @@ const Form1 = ({ ...Props }: Props) => {
       updatedFormData.name = Props.refNo;
     }
 
-
+    if(updatedFormData?.business_unit != "Orthopedics"){
+      updatedFormData.event_division = "";
+    }
     try {
       const response = await fetch(
         "/api/training_and_education/handleSubmit",

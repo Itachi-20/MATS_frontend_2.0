@@ -262,6 +262,9 @@ const Form1 = ({ ...Props }: Props) => {
     if(updatedFormData?.training_ref_no != "NA"){
       updatedFormData.training_ref_no = "";
     }
+    if(updatedFormData?.business_unit != "Orthopedics"){
+      updatedFormData.event_division = "";
+    }
     updatedFormData.event_type = "HCP Services"
     if (refNo) {
       updatedFormData.name = refNo;

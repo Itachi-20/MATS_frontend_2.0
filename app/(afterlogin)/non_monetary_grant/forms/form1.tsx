@@ -195,7 +195,7 @@ const Form1 = ({ ...Props }: Props) => {
       ...formData
 
     };
-    if(Props.previewData?.business_unit != "Orthopedics" || updatedFormData?.business_unit != "Orthopedics"){
+    if( updatedFormData?.business_unit != "Orthopedics"){
       updatedFormData.event_division = "";
     }
     updatedFormData.event_type = "Non Monetary Grant"

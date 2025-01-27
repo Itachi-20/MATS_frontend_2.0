@@ -215,7 +215,7 @@ const Form1 = ({ ...Props }: Props) => {
 
     };
     updatedFormData.event_type = "Sponsorship Support"
-    if(Props.previewData?.business_unit != "Orthopedics" || updatedFormData?.business_unit != "Orthopedics"){
+    if(updatedFormData?.business_unit != "Orthopedics"){
       updatedFormData.event_division = "";
     }
     if (refNo) {
