@@ -242,7 +242,7 @@ export default function EventListPage() {
         <div className="flex justify-between">
           <h1 className=" md:text-[30px] md:font-medium capitalize md:pb-4 text-black">{eventData?.event_type}</h1>
           <div className="flex gap-4 bg-white">
-            <Link href={`/event_passanger_list/${refno}`}>
+            <Link href={`/event_passenger_list/${refno}`}>
             <Button className="bg-white text-black border text-md font-normal rounded-xl py-2 hover:bg-white">
                           Add Passenger
                         </Button>

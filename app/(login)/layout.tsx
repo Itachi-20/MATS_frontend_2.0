@@ -5,6 +5,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
+    <>
       <div className="bg-white h-screen md:grid grid-cols-3 text-black">
       <div className=" col-span-2 text-white relative md:block hidden">
         <Image
@@ -28,5 +29,6 @@ export default function RootLayout({
       </div>
         {children}
         </div>
+              </>
   );
 }
