@@ -111,7 +111,7 @@ const Sidebar = () => {
     moduleItems = {
       modules: [
         {
-          module: "Event Request Approval",
+          module: "Pre-Activity Approval",
           route: "/event_approver_list",
         },
         {
@@ -119,7 +119,7 @@ const Sidebar = () => {
           route: "/advance_payment",
         },
         {
-          module: "Post Document Approval",
+          module: "Post-Activity Approval",
           route: "/post_activity_document_approval_list",
         },
         {
