@@ -254,7 +254,7 @@ const Form2 = ({ ...Props }: Props) => {
       <div className='grid grid-cols-2 gap-6'>
         <div className='flex flex-col gap-2 relative'>
           <label className='lable'>Hcp Name <span className='text-[#e60000]'>*</span></label>
-          {/* <Input className='dropdown' placeholder='Type Here'
+          <Input className='dropdown' placeholder='Type Here'
             name='hcp_name'
             onChange={(e) => { handlefieldChange(e) }}
             defaultValue={Props.previewData?.hcp_name ? Props.previewData.hcp_name : ""}
@@ -267,8 +267,8 @@ const Form2 = ({ ...Props }: Props) => {
                 {errors?.hcp_name}
               </p>
             )
-          } */}
-        <SearchDropdown setsearchValue={setsearchValue} searchValue={searchValue} dropdown={citydropdown} handleValueChange={handleLoadCity} clearValue={clearCity} placeholder={"Search HCP...."} />
+          }
+        {/* <SearchDropdown setsearchValue={setsearchValue} searchValue={searchValue} dropdown={citydropdown} handleValueChange={handleLoadCity} clearValue={clearCity} placeholder={"Search HCP...."} /> */}
         </div>
         <div className='flex flex-col gap-2'>
           <label className='lable'>Hospital Affiliation<span className='text-[#e60000]'>*</span></label>
