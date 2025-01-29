@@ -10,7 +10,7 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { Button } from '@/components/ui/button';
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../../context/AuthContext";
 import { tableData } from "@/app/(afterlogin)/dashboard/page"
 import { useRouter } from "nextjs-toploader/app";
 import {
@@ -640,9 +640,26 @@ export default function DetailsRequestSummary({ ...Props }: Props) {
                             </div>
                             <div>
                                 <h3 className="text-[#151D48] text-base font-semibold tracking-wide">
-                                    Pre Activity
+                                    Advance Expense
                                 </h3>
                                 <span className="text-[#425166] text-sm font-semibold">{Props.carddata?.preactivity_approved_count ?? "n/a"}</span>
+                            </div>
+                            {/* <h1 className="text-[#4078ec] text-xs font-medium">
+                    +8% from yesterday
+                  </h1> */}
+                        </div>
+                        <div className="flex flex-col justify-between items-stretch col-span-1 bg-[#B5D9FF] p-5 rounded-2xl">
+                            <div className="">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
+                                    <circle cx="20" cy="20" r="20" fill="black" />
+                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M20 32C26.6274 32 32 26.6274 32 20C32 13.3726 26.6274 8 20 8C13.3726 8 8 13.3726 8 20C8 26.6274 13.3726 32 20 32ZM21.9609 23.3732C22.3514 23.7637 22.9846 23.7637 23.3751 23.3732C23.7656 22.9826 23.7656 22.3495 23.3751 21.9589L21.4142 19.9981L23.3725 18.0398C23.763 17.6493 23.763 17.0161 23.3725 16.6256C22.9819 16.2351 22.3488 16.2351 21.9583 16.6256L20 18.5839L18.0417 16.6256C17.6512 16.2351 17.0181 16.2351 16.6275 16.6256C16.237 17.0161 16.237 17.6493 16.6275 18.0398L18.5858 19.9981L16.6249 21.9589C16.2344 22.3495 16.2344 22.9826 16.6249 23.3732C17.0154 23.7637 17.6486 23.7637 18.0391 23.3732L20 21.4123L21.9609 23.3732ZM23.4442 11.6853C21.5205 10.8885 19.38 10.7833 17.3874 11.3878C15.3949 11.9922 13.6736 13.2688 12.5168 15.0001C11.36 16.7314 10.8392 18.8102 11.0433 20.8824C11.2474 22.9546 12.1637 24.8919 13.636 26.3642C14.0266 26.7547 14.6597 26.7547 15.0503 26.3642C15.4408 25.9737 15.4408 25.3405 15.0503 24.95C13.9051 23.8048 13.1924 22.298 13.0337 20.6864C12.875 19.0747 13.28 17.4578 14.1797 16.1112C15.0795 14.7647 16.4183 13.7718 17.968 13.3017C19.5178 12.8315 21.1826 12.9133 22.6788 13.5331C24.175 14.1528 25.41 15.2722 26.1735 16.7005C26.9369 18.1287 27.1814 19.7775 26.8655 21.3659C26.5495 22.9542 25.6926 24.3839 24.4408 25.4113C23.1889 26.4387 21.6195 27.0002 20 27.0002C19.4477 27.0002 19 27.448 19 28.0002C19 28.5525 19.4477 29.0002 20 29.0002C22.0822 29.0002 24.1 28.2783 25.7095 26.9573C27.3191 25.6364 28.4209 23.7982 28.8271 21.7561C29.2333 19.7139 28.9188 17.594 27.9373 15.7577C26.9558 13.9213 25.3679 12.4821 23.4442 11.6853Z" fill="white" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 className="text-[#151D48] text-base font-semibold tracking-wide">
+                                    Post Expense
+                                </h3>
+                                <span className="text-[#425166] text-sm font-semibold">{Props.carddata?.draft_count ?? "n/a"}</span>
                             </div>
                             {/* <h1 className="text-[#4078ec] text-xs font-medium">
                     +8% from yesterday
@@ -665,23 +682,7 @@ export default function DetailsRequestSummary({ ...Props }: Props) {
                     +8% from yesterday
                   </h1> */}
                         </div>
-                        <div className="flex flex-col justify-between items-stretch col-span-1 bg-[#B5D9FF] p-5 rounded-2xl">
-                            <div className="">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
-                                    <circle cx="20" cy="20" r="20" fill="black" />
-                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M20 32C26.6274 32 32 26.6274 32 20C32 13.3726 26.6274 8 20 8C13.3726 8 8 13.3726 8 20C8 26.6274 13.3726 32 20 32ZM21.9609 23.3732C22.3514 23.7637 22.9846 23.7637 23.3751 23.3732C23.7656 22.9826 23.7656 22.3495 23.3751 21.9589L21.4142 19.9981L23.3725 18.0398C23.763 17.6493 23.763 17.0161 23.3725 16.6256C22.9819 16.2351 22.3488 16.2351 21.9583 16.6256L20 18.5839L18.0417 16.6256C17.6512 16.2351 17.0181 16.2351 16.6275 16.6256C16.237 17.0161 16.237 17.6493 16.6275 18.0398L18.5858 19.9981L16.6249 21.9589C16.2344 22.3495 16.2344 22.9826 16.6249 23.3732C17.0154 23.7637 17.6486 23.7637 18.0391 23.3732L20 21.4123L21.9609 23.3732ZM23.4442 11.6853C21.5205 10.8885 19.38 10.7833 17.3874 11.3878C15.3949 11.9922 13.6736 13.2688 12.5168 15.0001C11.36 16.7314 10.8392 18.8102 11.0433 20.8824C11.2474 22.9546 12.1637 24.8919 13.636 26.3642C14.0266 26.7547 14.6597 26.7547 15.0503 26.3642C15.4408 25.9737 15.4408 25.3405 15.0503 24.95C13.9051 23.8048 13.1924 22.298 13.0337 20.6864C12.875 19.0747 13.28 17.4578 14.1797 16.1112C15.0795 14.7647 16.4183 13.7718 17.968 13.3017C19.5178 12.8315 21.1826 12.9133 22.6788 13.5331C24.175 14.1528 25.41 15.2722 26.1735 16.7005C26.9369 18.1287 27.1814 19.7775 26.8655 21.3659C26.5495 22.9542 25.6926 24.3839 24.4408 25.4113C23.1889 26.4387 21.6195 27.0002 20 27.0002C19.4477 27.0002 19 27.448 19 28.0002C19 28.5525 19.4477 29.0002 20 29.0002C22.0822 29.0002 24.1 28.2783 25.7095 26.9573C27.3191 25.6364 28.4209 23.7982 28.8271 21.7561C29.2333 19.7139 28.9188 17.594 27.9373 15.7577C26.9558 13.9213 25.3679 12.4821 23.4442 11.6853Z" fill="white" />
-                                </svg>
-                            </div>
-                            <div>
-                                <h3 className="text-[#151D48] text-base font-semibold tracking-wide">
-                                    Post Activity
-                                </h3>
-                                <span className="text-[#425166] text-sm font-semibold">{Props.carddata?.draft_count ?? "n/a"}</span>
-                            </div>
-                            {/* <h1 className="text-[#4078ec] text-xs font-medium">
-                    +8% from yesterday
-                  </h1> */}
-                        </div>
+                        
                         <div className="flex flex-col justify-between items-stretch col-span-1 bg-[#BFFFCE] p-5 rounded-2xl">
                             <div className="">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
@@ -720,7 +721,7 @@ export default function DetailsRequestSummary({ ...Props }: Props) {
                 </div>
                 <div className='w-full'>
                     <div className='rounded-2xl border border-[#848484] p-6'>
-                        <StackedBarChart data={data} setGraphFilter={setGraphFilter} graphFilter={graphFilter} />
+                        <StackedBarChart data={data} setGraphFilter={setGraphFilter} graphFilter={graphFilter} role={role}/>
                     </div>
                     <div className='flex space-x-3 mt-10 justify-end'>
                         <div>
