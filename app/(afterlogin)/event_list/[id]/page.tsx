@@ -199,6 +199,11 @@ export default function EventListPage() {
     router.push(`/audit_trail/${refno}`)
   }
 
+  const handleNavigation = () => {
+    const fromValue = encodeURIComponent(`event_list/${refno}`);
+    router.push(`/event_passenger_list/${refno}?from=${fromValue}`);
+  };
+
 
   const eventDataApi = async () => {
     console.log("inside event Data")
@@ -242,11 +247,9 @@ export default function EventListPage() {
         <div className="flex justify-between">
           <h1 className=" md:text-[30px] md:font-medium capitalize md:pb-4 text-black">{eventData?.event_type}</h1>
           <div className="flex gap-4 bg-white">
-            <Link href={`/event_passenger_list/${refno}`}>
-            <Button className="bg-white text-black border text-md font-normal rounded-xl py-2 hover:bg-white">
+            <Button onClick={()=>{handleNavigation()}} className="bg-white text-black border text-md font-normal rounded-xl py-2 hover:bg-white">
                           Add Passenger
                         </Button>
-            </Link>
             <Button className="border border-[#4430bf] text-[#4430bf] px-6" onClick={() => handlClick(refno as string)}>Audit Trail</Button>
             <Link href={"/event_list"}>
               <Button className="bg-white text-black border px-8 hover:bg-white" onClick={()=>{router.push("/event_list")}}>Back</Button>
