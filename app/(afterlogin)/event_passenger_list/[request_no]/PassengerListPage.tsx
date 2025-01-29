@@ -14,6 +14,7 @@ import AddPassangerDialog from '@/components/addPassangerDialog';
 import { Toaster, toast } from 'sonner'
 import { Loader2 } from "lucide-react";
 import { useSearchParams } from 'next/navigation'
+import Ondeletepopup from '@/components/onDeletePopUp';
 type passanger = {
     name: string;
     full_name: string;
@@ -61,6 +62,7 @@ export default function PassengerListPage({ ...Props }: Props) {
         const from = useSearchParams().get('from')
     const [importFile, setImportFile] = useState<File[]>([])
     const [selectedFile, setSelectedFile] = useState<File[]>([]);
+    const [isDeletePopup, setIsDeletePopup] = useState<boolean>(false);
     const inputFile = useRef(null);
     const handleDialog = () => {
         setAddPassengerDialog(prev => !prev)
@@ -119,6 +121,7 @@ export default function PassengerListPage({ ...Props }: Props) {
                 setSelectedRows([])
                 resolve(data);
                 setSelectAll(false);
+                setIsDeletePopup(prev=>!prev)
             } catch (error) {
                 reject(error);
                 setSelectedRows([])
@@ -275,7 +278,7 @@ export default function PassengerListPage({ ...Props }: Props) {
                     <ExportUpload files={importFile} setFiles={setImportFile} onNext={ImportFile} buttonText={'Import'} />
                     <Button className={`px-4 py-2 bg-red-500 text-white rounded-md ${selectedRows?.length === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
                         disabled={selectedRows?.length === 0 || !selectedRows ? true : false}
-                        onClick={handleDelete}>
+                        onClick={()=>{setIsDeletePopup(prev => !prev)}}>
                         Delete
                     </Button>
                 </div>}
@@ -491,6 +494,14 @@ export default function PassengerListPage({ ...Props }: Props) {
                 </div>
 
             </div>
+            {
+                isDeletePopup && 
+                <Ondeletepopup
+                setClose={setIsDeletePopup}
+                handleDelete={handleDelete}
+                text=''
+                />
+            }
             {
                 isFilePopup &&
                 <FilePopup
