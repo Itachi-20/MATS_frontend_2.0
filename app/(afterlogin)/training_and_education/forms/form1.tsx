@@ -12,49 +12,11 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { PreviewDataType, DropdownDataType, FormDataType } from "../page";
+import { PreviewDataType, DropdownDataType, FormDataType } from "../Types";
+import {eventCostCenter,subtypeActivity,reportingHeadDropdown,stateDropdown,FormErrors,CityDropdown} from '../Types'
 import { useAuth } from "@/app/context/AuthContext";
 import IsReportingHeadDialog from "@/components/isReportingHeadDialog";
 import CityDropdwon from '@/components/training_and_education/search_city'
-type eventCostCenter = {
-  cost_center: {
-    name: string;
-    cost_center_description: string;
-  }[];
-  division_category: {
-    name: string;
-    category: string;
-  }[];
-  therapy: {
-    name: string;
-    therapy: string;
-  }[];
-};
-type subtypeActivity = {
-  name: string;
-  division_sub_category: string;
-}[];
-
-type reportingHeadDropdown = {
-  reporting_name: string;
-  reporting: string;
-}[];
-type stateDropdown = {
-  name: string;
-  state: string;
-}[];
-
-type FormErrors = {
-  sub_type_of_activity?: string;
-  event_cost_center?: string;
-  division_category?: string;
-  state?: string;
-  reporting_head?: string
-};
-type CityDropdown = {
-  name: string;
-  city: string
-}
 
 type Props = {
   cityDropdown: CityDropdown[];
@@ -132,6 +94,33 @@ const Form1 = ({ ...Props }: Props) => {
         : !formData?.reporting_head
     )
       errors.reporting_head = "Reporting Head is required";
+
+      if((Props.previewData?.business_unit == "Orthopedics" || formData?.business_unit == "Orthopedics")){
+        if ( 
+          Props.previewData?.event_division
+          ? formData &&
+          "event_division" in formData &&
+          formData.event_division == ""
+          : !formData?.event_division
+        )
+        errors.event_division = "event_division is required";
+      }
+      if (
+        Props.previewData?.faculty
+          ? formData &&
+          "faculty" in formData &&
+          formData.faculty == ""
+          : !formData?.faculty
+      )
+      errors.faculty = "Selection Criteria For Faculty is required";
+      if (
+        Props.previewData?.participants
+          ? formData &&
+          "participants" in formData &&
+          formData.participants == ""
+          : !formData?.participants
+      )
+      errors.participants = "Selection Criteria For Participants is required";
     return errors;
   };
 
@@ -147,6 +136,12 @@ const Form1 = ({ ...Props }: Props) => {
       ...formData,
     };
     updatedFormData.event_type = "Training and Education";
+    if(updatedFormData?.business_unit != "Orthopedics"){
+      updatedFormData.event_division = "";
+    }
+    if(updatedFormData?.hcp_ref_no != "NA"){
+      updatedFormData.hcp_ref_no = "";
+    }
     if (refNo) {
       updatedFormData.name = refNo;
     }
@@ -409,6 +404,8 @@ const Form1 = ({ ...Props }: Props) => {
     setFormData((prev) => ({ ...prev, state: '' }) as FormDataType);
   };
 
+  // console.log(Props.previewData?.event_division,"this is event division")
+  console.log(formData,"this is form data")
   return (
     <div>
       <h1 className="text-black text-2xl font-normal uppercase pb-8">
@@ -516,8 +513,18 @@ const Form1 = ({ ...Props }: Props) => {
                 <SelectValue placeholder="Select" />
               </SelectTrigger>
               <SelectContent>
-                {Props.dropdownData && Props.dropdownData.event_division ?
-                  Props.dropdownData.event_division.map((item, index) => {
+                {
+                eventCostCenter ? (
+                  eventCostCenter.event_division.map((item, index) => {
+                    return (
+                      <SelectItem value={item.name}>
+                        {item.event_division}
+                      </SelectItem>
+                    );
+                  })
+                )
+                :Props.eventCostCenter && Props.eventCostCenter.event_division ?
+                  Props.eventCostCenter.event_division.map((item, index) => {
                     return (
                       <SelectItem value={item.name}>
                         {item.event_division}
@@ -529,6 +536,13 @@ const Form1 = ({ ...Props }: Props) => {
                 }
               </SelectContent>
             </Select>
+            {errors &&
+            errors?.event_division &&
+            !formData?.event_division && (
+              <p className="w-full text-red-500 text-[11px] font-normal text-left">
+                {errors?.event_division}
+              </p>
+            )}
           </div>
           )
         }
@@ -820,6 +834,9 @@ const Form1 = ({ ...Props }: Props) => {
               <SelectValue placeholder="Select" />
             </SelectTrigger>
             <SelectContent>
+            <SelectItem value="NA">
+                      {"NA"}
+                    </SelectItem>
               {Props.dropdownData && Props.dropdownData.hcp_ref_no ? (
                 Props.dropdownData.hcp_ref_no?.map((item, index) => {
                   return (
@@ -829,9 +846,9 @@ const Form1 = ({ ...Props }: Props) => {
                   );
                 })
               ) : (
-                <SelectItem value={"null"} disabled>
-                  No Data Yet
-                </SelectItem>
+                <SelectItem value="NA">
+                      {"NA"}
+                    </SelectItem>
               )}
             </SelectContent>
           </Select>
@@ -879,28 +896,53 @@ const Form1 = ({ ...Props }: Props) => {
       </div>
       <div className="grid grid-cols-2 gap-10">
         <div className="flex flex-col gap-2">
-          <label className="lable">Selection Criteria For Faculty</label>
+          <label className={`lable ${errors?.faculty && !formData?.faculty
+                ? `text-red-500`
+                : ""}`}>Selection Criteria For Faculty <span className={"text-[#e60000]"}>*</span></label>
           <textarea
             defaultValue={Props.previewData?.faculty ?? ""}
-            className="text-black shadow-md border h-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-md pl-2 pt-2"
+            className={`text-black shadow-md border h-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-md pl-2 pt-2
+              ${errors?.faculty && !formData?.faculty
+                ? `border border-red-600`
+                : ``}
+              `}
             placeholder="Type Here"
             name="faculty"
             onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
               handlefieldChange(e);
             }}
           />
+          {errors &&
+            errors?.faculty &&
+            !formData?.faculty && (
+              <p className="w-full text-red-500 text-[11px] font-normal text-left">
+                {errors?.faculty}
+              </p>
+            )}
         </div>
         <div className="flex flex-col gap-2">
-          <label className="lable">Selection Criteria For Participant</label>
+          <label className={`lable ${errors?.participants && !formData?.participants
+                ? `text-red-500`
+                : ``}`}>Selection Criteria For Participant <span className={"text-[#e60000]"}>*</span></label>
           <textarea
             defaultValue={Props.previewData?.participants ?? ""}
-            className="text-black shadow-md border h-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-md pl-2 pt-2"
+            className={`text-black shadow-md border h-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-md pl-2 pt-2
+              ${errors?.participants && !formData?.participants
+                ? `border border-red-600`
+                : ``}`}
             placeholder="Type Here"
             name="participants"
             onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
               handlefieldChange(e);
             }}
           />
+          {errors &&
+            errors?.participants &&
+            !formData?.participants && (
+              <p className="w-full text-red-500 text-[11px] font-normal text-left">
+                {errors?.participants}
+              </p>
+            )}
         </div>
       </div>
       <div className="flex justify-end pt-5 gap-4">

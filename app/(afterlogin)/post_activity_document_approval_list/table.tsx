@@ -703,7 +703,7 @@ const table = ({ ...Props }: Props) => {
                                         );
                                       }}
                                     >
-                                      Take Action
+                                      View
                                     </button>
                                   }
                                 </div>

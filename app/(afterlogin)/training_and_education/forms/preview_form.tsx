@@ -82,6 +82,7 @@ type EventEntry = {
   hcp_name: string;
   preactivity_submitted: number;
   hcp_ref_no: string;
+  event_division:string
 }
 
 type Compensation = {

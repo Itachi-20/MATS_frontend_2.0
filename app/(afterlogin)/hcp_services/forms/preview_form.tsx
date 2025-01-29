@@ -78,6 +78,7 @@ type EventEntry = {
   type_of_engagement: string;
   product_details: string;
   any_additional_expense: string;
+  event_division:string
 }
 
 type Compensation = {

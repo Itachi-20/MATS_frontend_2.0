@@ -98,6 +98,7 @@ type FormData = {
   service_type: string,
   sponsorship_ref_no: string,
   reporting_head: string,
+  event_division:string
 };
 type activityDropdown = {
   activity: {
@@ -122,6 +123,10 @@ type eventCostCenter = {
   therapy: {
     name: string;
     therapy: string;
+  }[];
+  event_division: {
+    name: string;
+    event_division: string;
   }[];
 };
 type subtypeActivity = {
@@ -161,12 +166,12 @@ type FormErrors = {
   service_type?: string;
   event_venue?: string;
   event_name?: string;
-  sponsorship_ref_no: string;
+  // sponsorship_ref_no: string;
   training_ref_no: string;
   state?: string;
   reporting_head?: string;
   division_category?:string;
-
+  event_division?:string
 }
 
 const Form1 = ({ ...Props }: Props) => {
@@ -202,13 +207,23 @@ const Form1 = ({ ...Props }: Props) => {
     if ((Props.previewData?.event_end_date ? (formdata && ("event_end_date" in formdata && formdata.event_end_date == '')) : (!formdata?.event_end_date))) errors.event_end_date = "Event End Date is required";
     if ((Props.previewData?.annual_plan ? (formdata && ("annual_plan" in formdata && formdata.annual_plan)) : (((formdata?.type_of_engagement == "MSA") || (formdata?.type_of_engagement == "Scientific Advisory Consultancy Agreement")) && (!formdata?.annual_plan)))) errors.annual_plan = "Annual Plan is required";
     if ((Props.previewData?.service_type ? (formdata && ("service_type" in formdata && formdata.service_type == '')) : ((formdata?.type_of_engagement == "MSA") && (!formdata?.service_type)))) errors.service_type = "Service Type is required";
-    if ((Props.previewData?.sponsorship_ref_no ? (formdata && ("sponsorship_ref_no" in formdata && formdata.sponsorship_ref_no == '')) : ((formdata?.type_of_engagement == "One Time") && (!formdata?.sponsorship_ref_no)))) errors.sponsorship_ref_no = "Sponsorship Reference Number is required";
+    // if ((Props.previewData?.sponsorship_ref_no ? (formdata && ("sponsorship_ref_no" in formdata && formdata.sponsorship_ref_no == '')) : ((formdata?.type_of_engagement == "One Time") && (!formdata?.sponsorship_ref_no)))) errors.sponsorship_ref_no = "Sponsorship Reference Number is required";
     if ((Props.previewData?.training_ref_no ? (formdata && ("training_ref_no" in formdata && formdata.training_ref_no == '')) : ((formdata?.type_of_engagement == "One Time") && (!formdata?.training_ref_no)))) errors.training_ref_no = "Training Reference Number is required";
     if ((Props.previewData?.event_venue ? (formdata && ("event_venue" in formdata && formdata.event_venue == '')) : ((formdata?.type_of_engagement == "One Time") && (!formdata?.event_venue)))) errors.event_venue = "Event Venue is required";
     if ((Props.previewData?.event_name ? (formdata && ("event_name" in formdata && formdata.event_name == '')) : ((formdata?.type_of_engagement == "One Time") && (!formdata?.event_name)))) errors.event_name = "Event Name is required";
     if (Props.previewData?.state ? formdata && "state" in formdata && formdata.state == "" : !formdata?.state) errors.state = "State is required";
     if (Props.previewData?.reporting_head ? formdata && "reporting_head" in formdata && formdata.reporting_head == "" : !formdata?.reporting_head) errors.reporting_head = "Reporting Head is required";
     if (Props.previewData?.division_category ? formdata && "division_category" in formdata && formdata.division_category == "" : !formdata?.division_category) errors.division_category = "Budget is required";
+    if((Props.previewData?.business_unit == "Orthopedics" || formdata?.business_unit == "Orthopedics")){
+      if ( 
+        Props.previewData?.event_division
+        ? formdata &&
+        "event_division" in formdata &&
+        formdata.event_division == ""
+        : !formdata?.event_division
+      )
+      errors.event_division = "event_division is required";
+    }
     return errors;
   };
   const handleFieldValues = () => {
@@ -244,7 +259,12 @@ const Form1 = ({ ...Props }: Props) => {
       ...formdata
 
     };
-
+    if(updatedFormData?.training_ref_no != "NA"){
+      updatedFormData.training_ref_no = "";
+    }
+    if(updatedFormData?.business_unit != "Orthopedics"){
+      updatedFormData.event_division = "";
+    }
     updatedFormData.event_type = "HCP Services"
     if (refNo) {
       updatedFormData.name = refNo;
@@ -541,7 +561,7 @@ const Form1 = ({ ...Props }: Props) => {
         <div className="grid grid-cols-2 gap-6 pb-8">
           <div className="flex flex-col gap-2">
             <label className="lable">
-              Company Names
+              Company Name
             </label>
             <Select
               onValueChange={(value) => { handleSelectChange(value, "company") }}
@@ -622,8 +642,19 @@ const Form1 = ({ ...Props }: Props) => {
                 <SelectValue placeholder="Select" />
               </SelectTrigger>
               <SelectContent>
-                {Props.dropdownData && Props.dropdownData.event_division ?
-                  Props.dropdownData.event_division.map((item, index) => {
+                {
+                  eventCostCenter ? (
+                    eventCostCenter.event_division.map((item, index) => {
+                      return (
+                        <SelectItem value={item.name}>
+                          {item.event_division}
+                        </SelectItem>
+                      );
+                    })
+                  )
+                :
+                Props.eventCostCenter && Props.eventCostCenter.event_division ?
+                  Props.eventCostCenter.event_division.map((item, index) => {
                     return (
                       <SelectItem value={item.name}>
                         {item.event_division}
@@ -635,6 +666,13 @@ const Form1 = ({ ...Props }: Props) => {
                 }
               </SelectContent>
             </Select>
+            {errors &&
+            errors?.event_division &&
+            !formdata?.event_division && (
+              <p className="w-full text-red-500 text-[11px] font-normal text-left">
+                {errors?.event_division}
+              </p>
+            )}
           </div>
           )
         }
@@ -971,6 +1009,7 @@ const Form1 = ({ ...Props }: Props) => {
                       <SelectValue placeholder="Select" />
                     </SelectTrigger>
                     <SelectContent>
+                    <SelectItem value={"NA"}>{"NA"}</SelectItem>
                       {
                         Props.dropdownData && Props.dropdownData.training_ref_no?.map((item, index) => {
                           return (
@@ -990,16 +1029,16 @@ const Form1 = ({ ...Props }: Props) => {
                     )
                   }
                 </div>
-                <div className="flex flex-col md:gap-2">
+                {/* <div className="flex flex-col md:gap-2">
                   <label className="text-black md:text-sm md:font-normal capitalize">
-                    Sponsorship Support Request Ref Number<span className="text-[#e60000]">*</span>
+                    Sponsorship Support Request Ref Number
                   </label>
                   <Select
                     onValueChange={(value) => { handleSelectChange(value, "sponsorship_ref_no") }}
                     defaultValue={Props.previewData?.sponsorship_ref_no ? Props.previewData.sponsorship_ref_no : ""}
                   >
                     <SelectTrigger className="dropdown">
-                      <SelectValue placeholder="Select" />
+                      <SelectValue placeholder="Select"/>
                     </SelectTrigger>
                     <SelectContent>
                       {
@@ -1010,8 +1049,8 @@ const Form1 = ({ ...Props }: Props) => {
                         })
                       }
                     </SelectContent>
-                  </Select>
-                  {
+                  </Select> */}
+                  {/* {
                     errors &&
                     (errors?.sponsorship_ref_no && !formdata?.sponsorship_ref_no) &&
                     (
@@ -1019,8 +1058,8 @@ const Form1 = ({ ...Props }: Props) => {
                         {errors?.sponsorship_ref_no}
                       </p>
                     )
-                  }
-                </div>
+                  } */}
+                {/* </div> */}
               </div>
             </div>
 

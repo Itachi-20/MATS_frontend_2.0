@@ -90,6 +90,7 @@ type EventEntry = {
   product_amount: number;
   quantity:number;
   total_estimateed_expense: number;
+  event_division:string
 }
 
 type Compensation = {

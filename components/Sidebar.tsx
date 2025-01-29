@@ -91,10 +91,10 @@ const Sidebar = () => {
       ],
       masters: [],
       reports: [
-        {
-          name: "Document Repository Type",
-          route: "/repository_document_type",
-        },
+        // {
+        //   name: "Document Repository Type",
+        //   route: "/repository_document_type",
+        // },
         {
           name: "Document Repository List",
           route: "/repository_document_list",
@@ -111,7 +111,7 @@ const Sidebar = () => {
     moduleItems = {
       modules: [
         {
-          module: "Event Request Approval",
+          module: "Pre-Activity Approval",
           route: "/event_approver_list",
         },
         {
@@ -119,7 +119,7 @@ const Sidebar = () => {
           route: "/advance_payment",
         },
         {
-          module: "Post Document Approval",
+          module: "Post-Activity Approval",
           route: "/post_activity_document_approval_list",
         },
         {
@@ -149,15 +149,15 @@ const Sidebar = () => {
     moduleItems = {
       modules: [
         {
-          module: "Event Request Approval",
+          module: "Pre-Activity Approval",
           route: "/event_approver_list",
         },
         {
-          module: "Post Document Approval",
+          module: "Post-Activity Approval",
           route: "/post_activity_document_approval_list",
         },
         {
-          module: "Post Expense Approval",
+          module: "Post-Expense Approval",
           route: "/post_expense_approval",
         },
       ],
@@ -251,6 +251,10 @@ const Sidebar = () => {
         {
           name: "Event Summary Repost",
           route: "/event_report",
+        },
+        {
+          name: "Event Passenger List",
+          route: "/event_passenger_list",
         },
         
       ],

@@ -439,7 +439,7 @@ const Index = () => {
                                                         <TableCell>{data.current_stage ?? "-"}</TableCell>
                                                         <TableCell className={(data.travel_request_approved == true && role == "Event Finance") ? 'sticky right-0 bg-[white] z-50 space-x-2 border-l border-slate-200' : 'sticky right-0 bg-[white] z-50 border-l border-slate-200 space-x-2'}>
 
-                                                            <Button className="border rounded-full px-4 py-1 border-[#0E4154] text-[#0E4154] hover:text-white hover:bg-[#0E4154] active:text-white active:bg-[#0E4154] transition-all delay-100" onClick={() => router.push(`/post_expense_approval/${data.name}`)} >Take Action</Button>
+                                                            <Button className="border rounded-full px-4 py-1 border-[#0E4154] text-[#0E4154] hover:text-white hover:bg-[#0E4154] active:text-white active:bg-[#0E4154] transition-all delay-100" onClick={() => router.push(`/post_expense_approval/${data.name}`)} >View</Button>
 
                                                             {
                                                                 (data.travel_request_approved == true && role == "Event Finance" && data.status != "Closed") ?

@@ -154,15 +154,15 @@ const Basic_Details = ({ ...Props }: Props) => {
         </div> */}
         <div className='flex flex-col gap-2'>
           <label className='lable'>Ship To<span className='text-[#e60000]'>*</span></label>
-          <Textarea className='text-black shadow-md' placeholder='Type Here'disabled value={Props.eventData?.ship_to} />
+          <Textarea className='md:rounded-xl bg-[#f6f6f6] text-black shadow-md' placeholder='Type Here'disabled value={Props.eventData?.ship_to} />
         </div>
         <div className='flex flex-col gap-2'>
           <label className='lable'>Bill To<span className='text-[#e60000]'>*</span></label>
-          <Textarea className='text-black shadow-md' placeholder='Type Here'disabled value={Props.eventData?.bill_to}/>
+          <Textarea className='md:rounded-xl bg-[#f6f6f6] text-black shadow-md' placeholder='Type Here'disabled value={Props.eventData?.bill_to}/>
         </div>
         <div className='flex flex-col gap-2'>
           <label className='lable'>BU Rational<span className='text-[#e60000]'>*</span></label>
-          <Textarea className='text-black shadow-md' placeholder='Type Here' disabled value={Props.eventData?.bu_rational}/>
+          <Textarea className='md:rounded-xl bg-[#f6f6f6] text-black shadow-md' placeholder='Type Here' disabled value={Props.eventData?.bu_rational}/>
         </div>
       </div>
     </div>

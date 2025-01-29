@@ -14,9 +14,9 @@ import { useContext } from 'react';
 import { AppContext } from '@/app/context/module'
 
 import { useRouter } from "nextjs-toploader/app";
-import {Previewdata} from '@/app/(afterlogin)/hcp_services/page'
-
-
+import { Previewdata } from '@/app/(afterlogin)/hcp_services/page'
+import SearchDropdown from '@/components/hcp/SearchDropdown';
+import AddHCPDialog from '@/components/hcp/addHCP'
 type dropdownData = {
   company: {
     name: string,
@@ -103,9 +103,15 @@ type activityDropdown = {
   }[]
 }
 
+type Dropdown = {
+  name: string;
+  city: string
+}
+
 type Props = {
   previewData: Previewdata | null;
   refno: string;
+  cityDropdown:Dropdown[]
 }
 
 type FormErrors = {
@@ -123,6 +129,42 @@ const Form2 = ({ ...Props }: Props) => {
   const [errors, setErrors] = useState<FormErrors>();
   const [refNo, setRefNo] = useState<string | null>(Props.refno);
   const [hcpValue, setHCPValue] = useState<string>()
+  const [isSuggestionDialog,setIsSuggestionDialog] = useState<Boolean>(true);
+  const [searchValue,setsearchValue] =useState<string>("");
+  const [citydropdown, setCityDropdown] = useState<Dropdown[]>(Props.cityDropdown);
+  const [isAddHCP,setIsAddHCP] = useState<boolean>(false);
+
+  const handleLoadCity = async (city_name: string, page_length: number, page_no: number) => {
+    try {
+      const response = await fetch("/api/loadCityDropdown", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          city_name: city_name,
+          page_length: page_length,
+          page_no: page_no,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setCityDropdown(data.data);
+        return data.data;
+      } else {
+        console.log("Response not okay  state change");
+      }
+    } catch (error) {
+      console.error("Error during state  change:", error);
+    }
+  };
+
+  const clearCity = () => {
+    console.log('inside claer city')
+    setsearchValue('');
+  };
+
   const handleAnyHCPChange = (value: string) => {
     setHCPValue(value);
   }
@@ -141,7 +183,19 @@ const Form2 = ({ ...Props }: Props) => {
     if ((Props.previewData?.hcp_name ? (formdata && ("hcp_name" in formdata && formdata.hcp_name == '')) : !formdata?.hcp_name)) errors.hcp_name = "Program Name is required";
     if ((Props?.previewData?.hospital_affiliation ? (formdata && ("hospital_affiliation" in formdata && formdata.hospital_affiliation == '')) : !formdata?.hospital_affiliation)) errors.hospital_affiliation = "Program Venue is required";
     if ((Props?.previewData?.any_govt_hcp ? (formdata && ("any_govt_hcp" in formdata && formdata.any_govt_hcp == '')) : !formdata?.any_govt_hcp)) errors.any_govt_hcp = "Engagement of any government hCP’s is required";
-    if (((formdata?.any_govt_hcp == "Yes") || (Props?.previewData?.any_govt_hcp == "Yes")) && (Props?.previewData?.no_of_hcp ? (formdata && ("no_of_hcp" in formdata && !formdata.no_of_hcp)) : !formdata?.no_of_hcp)) errors.no_of_hcp = "No of HCP is required";
+    // if (((formdata?.any_govt_hcp == "Yes") || (Props?.previewData?.any_govt_hcp == "Yes")) && (Props?.previewData?.no_of_hcp ? (formdata && ("no_of_hcp" in formdata && !formdata.no_of_hcp)) : !formdata?.no_of_hcp)) errors.no_of_hcp = "No of HCP is required";
+    if (
+      ((formdata?.any_govt_hcp == "Yes") || (Props?.previewData?.any_govt_hcp == "Yes")) &&
+      (
+        Props?.previewData?.no_of_hcp
+          ? (formdata && ("no_of_hcp" in formdata && !formdata.no_of_hcp))
+          : !formdata?.no_of_hcp
+      )
+    ) {
+      errors.no_of_hcp = "No of HCP is required";
+    } else if (formdata?.no_of_hcp !== undefined && (formdata.no_of_hcp < 0 || formdata.no_of_hcp > 99)) {
+      errors.no_of_hcp = "No of HCP must be between 0 and 99";
+    }
     if ((Props?.previewData?.bu_rational ? (formdata && ("bu_rational" in formdata && formdata.bu_rational == '')) : !formdata?.bu_rational)) errors.bu_rational = "BU Rational is required";
     return errors;
   };
@@ -198,7 +252,7 @@ const Form2 = ({ ...Props }: Props) => {
         Hcp Details
       </h1>
       <div className='grid grid-cols-2 gap-6'>
-        <div className='flex flex-col gap-2'>
+        <div className='flex flex-col gap-2 relative'>
           <label className='lable'>Hcp Name <span className='text-[#e60000]'>*</span></label>
           <Input className='dropdown' placeholder='Type Here'
             name='hcp_name'
@@ -214,6 +268,7 @@ const Form2 = ({ ...Props }: Props) => {
               </p>
             )
           }
+        {/* <SearchDropdown setsearchValue={setsearchValue} searchValue={searchValue} dropdown={citydropdown} handleValueChange={handleLoadCity} clearValue={clearCity} placeholder={"Search HCP...."} /> */}
         </div>
         <div className='flex flex-col gap-2'>
           <label className='lable'>Hospital Affiliation<span className='text-[#e60000]'>*</span></label>
@@ -273,11 +328,9 @@ const Form2 = ({ ...Props }: Props) => {
                 onChange={(e) => handlefieldChange(e)}
               ></Input>
               {
-                errors &&
-                (errors?.no_of_hcp && !formdata?.no_of_hcp) &&
-                (
+                errors?.no_of_hcp && (
                   <p className="w-full text-red-500 text-[11px] font-normal text-left">
-                    {errors?.no_of_hcp}
+                    {errors.no_of_hcp}
                   </p>
                 )
               }
@@ -312,6 +365,10 @@ const Form2 = ({ ...Props }: Props) => {
         <Button className='bg-white text-black border text-md font-normal' onClick={() => router.push(`/hcp_services?forms=1&refno=${Props.refno}`)}>Back</Button>
         <Button className='bg-[#4430bf] text-white text-md font-normal border' onClick={(e) => handleSubmit(e)}>Next</Button>
       </div>
+      {
+        isAddHCP && 
+        <AddHCPDialog/>
+      }
     </div>
   );
 }

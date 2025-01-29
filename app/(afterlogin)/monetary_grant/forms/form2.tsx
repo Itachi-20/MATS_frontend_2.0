@@ -156,7 +156,20 @@ const Form2 = ({ ...Props }: Props) => {
     if ((Props?.previewData?.event_start_date ? (formdata && ("event_start_date" in formdata && formdata.event_start_date == '')) : !formdata?.event_start_date)) errors.event_start_date = "Event Start Date activity is required";
     if ((Props?.previewData?.event_end_date ? (formdata && ("event_end_date" in formdata && formdata.event_end_date == '')) : !formdata?.event_end_date)) errors.event_end_date = "Event End Date is required";
     if ((Props?.previewData?.any_govt_hcp ? (formdata && ("any_govt_hcp" in formdata && formdata.any_govt_hcp == '')) : !formdata?.any_govt_hcp)) errors.any_govt_hcp = "Engagement of any government hCP’s is required";
-    if (((formdata?.any_govt_hcp  == "Yes") || (Props?.previewData?.any_govt_hcp  == "Yes")) && (Props?.previewData?.no_of_hcp ? (formdata && ("no_of_hcp" in formdata && !formdata.no_of_hcp)) : !formdata?.no_of_hcp)) errors.no_of_hcp = "No of HCP is required";
+    // if (((formdata?.any_govt_hcp  == "Yes") || (Props?.previewData?.any_govt_hcp  == "Yes")) && (Props?.previewData?.no_of_hcp ? (formdata && ("no_of_hcp" in formdata && !formdata.no_of_hcp)) : !formdata?.no_of_hcp)) errors.no_of_hcp = "No of HCP is required";
+    if (
+      ((formdata?.any_govt_hcp == "Yes") || (Props?.previewData?.any_govt_hcp == "Yes")) &&
+      (
+        Props?.previewData?.no_of_hcp
+          ? (formdata && ("no_of_hcp" in formdata && !formdata.no_of_hcp))
+          : !formdata?.no_of_hcp
+      )
+    ) {
+      errors.no_of_hcp = "No of HCP is required";
+    } else if (formdata?.no_of_hcp !== undefined && (formdata.no_of_hcp < 0 || formdata.no_of_hcp > 99)) {
+      errors.no_of_hcp = "No of HCP must be between 0 and 99";
+    }
+
     if ((Props?.previewData?.bu_rational ? (formdata && ("bu_rational" in formdata && formdata.bu_rational == '')) : !formdata?.bu_rational)) errors.bu_rational = "BU Rational is required";
     return errors;
   };
@@ -332,11 +345,9 @@ const Form2 = ({ ...Props }: Props) => {
                   onChange={(e) => handlefieldChange(e)}
                 ></Input>
                 {
-                  errors &&
-                  (errors?.no_of_hcp && !formdata?.no_of_hcp) &&
-                  (
+                  errors?.no_of_hcp && (
                     <p className="w-full text-red-500 text-[11px] font-normal text-left">
-                      {errors?.no_of_hcp}
+                      {errors.no_of_hcp}
                     </p>
                   )
                 }

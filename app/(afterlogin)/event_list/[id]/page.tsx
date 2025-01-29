@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import EventDetails from "@/components/training_and_education/event_detail";
 import EventDetailsSponsorship from "@/components/sponsorshipSupportPreviewComponents/eventDetails"
 import TotalExpense from "@/components/commonPreviewComponents/total_expense";
-import BasicDetails from "@/components/basic_Details";
+import BasicDetails from "@/components/commonPreviewComponents/basic_details";
 import VendorDetails from "@/components/commonPreviewComponents/vendor_detail";
 import HCPDetails from "@/components/previewHCPComponents/hcp_details";
 import BasicDetailsHCP from "@/components/previewHCPComponents/basic_Details";
@@ -20,6 +20,7 @@ import ShippingDetails from "@/components/previewPatientSupportComponents/shippi
 import EquipmentDetails from "@/components/nonMonetoryPreviewComponents/equipmentDetails"
 import Sponsorship_Details from "@/components/sponsorshipSupportPreviewComponents/sponsorshipDetails";
 import Other_Details from "@/components/sponsorshipSupportPreviewComponents/other_details";
+import { Input } from "@/components/ui/input";
 
 type EventEntry = {
   name: string;
@@ -198,6 +199,11 @@ export default function EventListPage() {
     router.push(`/audit_trail/${refno}`)
   }
 
+  const handleNavigation = () => {
+    const fromValue = encodeURIComponent(`event_list/${refno}`);
+    router.push(`/event_passenger_list/${refno}?from=${fromValue}`);
+  };
+
 
   const eventDataApi = async () => {
     console.log("inside event Data")
@@ -241,13 +247,16 @@ export default function EventListPage() {
         <div className="flex justify-between">
           <h1 className=" md:text-[30px] md:font-medium capitalize md:pb-4 text-black">{eventData?.event_type}</h1>
           <div className="flex gap-4 bg-white">
+            <Button onClick={()=>{handleNavigation()}} className="bg-white text-black border text-md font-normal rounded-xl py-2 hover:bg-white">
+                          Add Passenger
+                        </Button>
             <Button className="border border-[#4430bf] text-[#4430bf] px-6" onClick={() => handlClick(refno as string)}>Audit Trail</Button>
             <Link href={"/event_list"}>
               <Button className="bg-white text-black border px-8 hover:bg-white" onClick={()=>{router.push("/event_list")}}>Back</Button>
             </Link>
           </div>
         </div>
-        <div className="flex border rounded-xl justify-between p-3 bg-white gap-4">
+        <div className="flex border rounded-xl justify-between p-3 bg-white gap-4 w-full">
           <div className="grid grid-cols-3 w-full gap-4">
             <div className="col-span-1">
               <h1 className="bg-[#ecf2ff] px-2 rounded-xl text-center">Request Number</h1>
@@ -360,6 +369,22 @@ export default function EventListPage() {
       <Documents
         eventData={eventData}
         PageName={"eventListPage"} />
+        {
+          eventData?.event_type == "HCP Services" && 
+          <div className="grid md:grid-cols-3 md:gap-6">
+        <div className="flex flex-col md:gap-2">
+          <label className="text-black md:text-sm md:font-normal capitalize">
+            Occurance Date<span className="text-[#e60000]">*</span>
+          </label>
+          <Input
+            className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
+            placeholder="Type Here"
+            readOnly={true}
+            value={eventData?.occurance_date}
+          ></Input>
+        </div>
+        </div>
+        }
     </div>
   )
 }
