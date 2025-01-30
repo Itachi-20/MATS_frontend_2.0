@@ -358,7 +358,7 @@ const Form3 = ({ ...Props }: Props) => {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="logistics">Logistics</SelectItem>
-                <SelectItem value="compensation">Compensation</SelectItem>
+                <SelectItem value="compensation">Non Logistics</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -578,7 +578,7 @@ const Form3 = ({ ...Props }: Props) => {
         </div>
       </div>
       <h1 className="text-black text-2xl font-normal uppercase pb-8">
-        Compensation Budget
+        Non Logistics Budget
       </h1>
       <div className="border border-[#848484] p-7 rounded-[50px] w-full mr-4  bg-white">
         <Table className={"overflow-hidden"}>

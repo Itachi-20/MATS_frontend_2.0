@@ -1072,13 +1072,13 @@ const Form1 = ({ ...Props }: Props) => {
                   <label className="text-black md:text-sm md:font-normal capitalize">
                     Event Name<span className="text-[#e60000]">*</span>
                   </label>
-                  <Input
-                    className="text-black shadow md:rounded-xl md:py-5"
+                  <textarea
+                    className='text-black shadow-md border h-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl pl-2 pt-2'
                     placeholder="Type Here"
                     name="event_name"
                     onChange={(e) => { handlefieldChange(e) }}
                     defaultValue={Props.previewData?.event_name ? Props.previewData.event_name : ""}
-                  ></Input>
+                  ></textarea>
                   {
                     errors &&
                     (errors?.event_name && !formdata?.event_name) &&
@@ -1093,13 +1093,13 @@ const Form1 = ({ ...Props }: Props) => {
                   <label className="text-black md:text-sm md:font-normal capitalize">
                     Event Venue<span className="text-[#e60000]">*</span>
                   </label>
-                  <Input
-                    className="text-black shadow md:rounded-xl md:py-5"
+                  <textarea
+                    className='text-black shadow-md border h-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl pl-2 pt-2'
                     placeholder="Type Here"
                     name="event_venue"
                     onChange={(e) => { handlefieldChange(e) }}
                     defaultValue={Props.previewData?.event_venue ? Props.previewData.event_venue : ""}
-                  ></Input>
+                  ></textarea>
                   {
                     errors &&
                     (errors?.event_venue && !formdata?.event_venue) &&

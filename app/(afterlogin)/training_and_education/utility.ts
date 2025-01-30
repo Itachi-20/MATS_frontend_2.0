@@ -6,9 +6,11 @@ export const dropdown = async ()=>{
                 "Content-Type": "application/json",
             },
         });
-
+        
+        
         if (response.ok) {
-            const data = await response.json();
+          const data = await response.json();
+          console.log("-----sdf-", data);
             return data.data
         } else {
             console.log('error in dropdown api');
