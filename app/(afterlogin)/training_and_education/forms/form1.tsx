@@ -139,7 +139,7 @@ const Form1 = ({ ...Props }: Props) => {
     if(updatedFormData?.business_unit != "Orthopedics"){
       updatedFormData.event_division = "";
     }
-    if(updatedFormData?.hcp_ref_no != "NA"){
+    if(updatedFormData?.hcp_ref_no == "NA"){
       updatedFormData.hcp_ref_no = "";
     }
     if (refNo) {

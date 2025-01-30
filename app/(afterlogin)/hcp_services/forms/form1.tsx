@@ -259,7 +259,7 @@ const Form1 = ({ ...Props }: Props) => {
       ...formdata
 
     };
-    if(updatedFormData?.training_ref_no != "NA"){
+    if(updatedFormData?.training_ref_no == "NA"){
       updatedFormData.training_ref_no = "";
     }
     if(updatedFormData?.business_unit != "Orthopedics"){
@@ -551,6 +551,7 @@ const Form1 = ({ ...Props }: Props) => {
     setFormData((prev) => ({ ...prev, reporting_head: '' }) as FormData);
     setFormData((prev) => ({ ...prev, state: '' }) as FormData);
   };
+  console.log(formdata,"----------------")
   return (
     // </div>
     <>
