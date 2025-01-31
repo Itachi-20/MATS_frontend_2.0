@@ -15,6 +15,7 @@ import AddPopup from './add_popup';
 import { useRouter } from 'nextjs-toploader/app';
 import Link from 'next/link';
 import { useAuth } from '@/app/context/AuthContext';
+import DeleteDialog from '@/components/deleteDialog';
 
 // TypeScript types for card data
 type CardItem = {
@@ -34,11 +35,13 @@ const Page: React.FC = () => {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [cardData,setCardData] = useState<CardData[]>()
+  const [isDeleteDialog,setIsDeleteDialog] = useState<boolean>(false);
+  const [deleteName,setDeleteName] = useState<string>("");
   const handleAdd = () => {
     setOpen(prevState => !prevState);
   };
 
-  const handleDelete = async(name:string)=>{
+  const handleDelete = async()=>{
     try {
       const tableData = await fetch(
         `api/documentRepositoryDelete/`,
@@ -49,7 +52,7 @@ const Page: React.FC = () => {
           },
           credentials:"include",
           body:JSON.stringify({
-            name:name
+            name:deleteName
           })
         }
       );
@@ -150,7 +153,7 @@ const Page: React.FC = () => {
                 <h2 className="text-2xl transition-colors duration-300 ease-in-out group-hover:text-[#988AFF] text-wrap">
                   {card.name}
                 </h2>
-                <div onClick={()=>handleDelete(card.name)} className={`cursor-pointer ${role == "Event Compliance"?"":"hidden"}`}>
+                <div onClick={()=>{setDeleteName(card?.name); setIsDeleteDialog(prev=>!prev);}} className={`cursor-pointer ${role == "Event Compliance"?"":"hidden"}`}>
                 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#EA3323"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg></div>
               </div>
               <div className="absolute -top-8 -left-8 transition-transform duration-500 ease-in-out group-hover:translate-x-6 group-hover:translate-y-8">
@@ -167,7 +170,7 @@ const Page: React.FC = () => {
                       <Link href={item.url} target='blank'>
                       {item.name}
                       </Link>
-                      <div className={`cursor-pointer ${role == "Event Compliance"?"":"hidden"}`} onClick={()=>handleFileDelete(item.id)}>
+                      <div className={`cursor-pointer ${role == "Event Compliance"?"":"hidden"}`} onClick={()=>{setDeleteName(item?.name);setIsDeleteDialog(prev=>!prev);}}>
                         
 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#EA3323"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg>
                       </div>
@@ -179,7 +182,16 @@ const Page: React.FC = () => {
           ))}
         </div>
       </div>
-
+          
+            {
+              isDeleteDialog &&
+              <DeleteDialog
+              text='Are you Sure You Want To Delete?'
+              handleSubmit={handleDelete}
+              setClose={setIsDeleteDialog}
+              />
+            }
+          
       {open && <AddPopup cardData={cardData} handleAdd={handleAdd}/>}
     </>
   );

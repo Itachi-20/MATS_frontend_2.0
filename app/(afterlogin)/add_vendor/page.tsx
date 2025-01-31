@@ -29,6 +29,7 @@ import { useAuth } from "../../context/AuthContext";
 import ConfirmPopup from '@/components/deleteDialog'
 import Image from 'next/image';
 import ApproveCommentBox from '@/components/Comment_box'
+import DeleteDialog from '@/components/deleteDialog';
 
 type dropdownData = {
     company: {
@@ -108,6 +109,8 @@ const page = () => {
     const [comment,setComment] = useState<string>("");
     const [buttonText,setButtonText] = useState<string>("");
     const [status,setStatus] = useState<string>("")
+    const [isDeleteDialog,setIsDeleteDialog] = useState<boolean>(false);
+    const [documentDeleteIndex,setDocumentDeleteIndex] = useState<number | null>(0);
     const base_url = process.env.NEXT_PUBLIC_FRAPPE_URL;
     const router = useRouter()
     const view = useSearchParams().get('view')
@@ -467,9 +470,8 @@ const page = () => {
         setConfirmPopup(true)
     };
 
-    const handleDeleteDocument = async (index: number) => {
-        console.log('indise delete ', index)
-        setDocumentRows((prevRows) => prevRows.filter((_, i) => i !== index));
+    const handleDeleteDocument = async () => {
+        setDocumentRows((prevRows) => prevRows.filter((_, i) => i !== documentDeleteIndex));
     };
 
     const availableOptions = allOptions.filter(
@@ -792,7 +794,7 @@ const page = () => {
                                                 >
                                                     View
                                                 </Link>
-                                                <button onClick={() => handleDeleteDocument(index)} ><Image src={'/svg/delete.svg'} alt='deletesvg' width={20} height={18} /></button>
+                                                <button onClick={() => {setDocumentDeleteIndex(index);setIsDeleteDialog(prev=>!prev);}} ><Image src={'/svg/delete.svg'} alt='deletesvg' width={20} height={18} /></button>
                                             </TableCell>
                                         </TableRow>
                                     ))
@@ -833,6 +835,14 @@ const page = () => {
                ButtonText = {buttonText}
                />
             } */}
+            {
+                isDeleteDialog && 
+                <DeleteDialog
+                 setClose={setIsDeleteDialog}
+                 handleSubmit={handleDeleteDocument}
+                 text='Are You Sure You Want To Delete This Document?'
+                />
+            }
            
             <Toaster richColors position="top-right" />
             {

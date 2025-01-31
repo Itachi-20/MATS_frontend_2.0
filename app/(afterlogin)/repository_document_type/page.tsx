@@ -63,7 +63,7 @@ const page = () => {
 
   return (
     <>
-      <div className='p-7 w-full relative z-20 text-black'>
+      <div className='p-7 w-full z-20 text-black'>
         <div className="flex justify-between pb-5">
           <Input
             className="w-[40%] rounded-[50px] bg-[#ecf2ff]"

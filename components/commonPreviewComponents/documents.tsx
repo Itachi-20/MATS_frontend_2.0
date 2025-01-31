@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Image from 'next/image';
 import {
   Table,
@@ -13,6 +13,7 @@ import page from '@/app/(afterlogin)/advance_payment/[request_number]/page';
 import Link from 'next/link';
 import { useRouter } from 'nextjs-toploader/app';
 import { toast,Toaster } from 'sonner';
+import DeleteDialog from '../deleteDialog';
 
 interface DocumentsProps {
   PageName: string;
@@ -187,10 +188,12 @@ type Props = {
 }
 
 const Documents = ({ PageName, ...Props }: Props) => {
+  const [isDeleteDialog,setIsDeleteDialog] = useState<boolean>(false);
+  const [deleteName,setDeleteName] = useState<string>("");
   console.log(Props.eventData?.documents, "this is documents")
   const router = useRouter();
 
-  const handleDelete = async (name: String) => {
+  const handleDelete = async () => {
     try {
       const response = await fetch(`/api/training_and_education/fileDelete/`, {
         method: "POST",
@@ -200,7 +203,7 @@ const Documents = ({ PageName, ...Props }: Props) => {
         },
         credentials: 'include',
         body: JSON.stringify({
-          name: name
+          name: deleteName
         })
       })
       if (response.ok) {
@@ -262,19 +265,19 @@ const Documents = ({ PageName, ...Props }: Props) => {
                                       </Link>
                                       {
                                         item.activity_type == "Pre Activity" && Props.eventData?.preactivity_submitted != 1 &&
-                                        <div onClick={async () => { await handleDelete(item3.name) }}>
+                                        <div onClick={async () => { setDeleteName(item3.name); setIsDeleteDialog(prev => !prev) }}>
                                         <Image src={"/svg/delete.svg"} width={20} height={20} alt='view-document' className='cursor-pointer' />
                                       </div>
                                       }
                                       {
                                         item.activity_type == "Executed" && Props.eventData?.executed != 1 &&
-                                        <div onClick={async () => { await handleDelete(item3.name) }}>
+                                        <div onClick={async () => { setDeleteName(item3.name); setIsDeleteDialog(prev => !prev) }}>
                                         <Image src={"/svg/delete.svg"} width={20} height={20} alt='view-document' className='cursor-pointer' />
                                       </div>
                                       }
                                       {
                                         item.activity_type == "Post Activity" && Props.eventData?.post_activity_submitted != 1 &&
-                                        <div onClick={async () => { await handleDelete(item3.name) }}>
+                                        <div onClick={() => {setDeleteName(item3.name); setIsDeleteDialog(prev => !prev) }}>
                                         <Image src={"/svg/delete.svg"} width={20} height={20} alt='view-document' className='cursor-pointer' />
                                       </div>
                                       }
@@ -296,6 +299,14 @@ const Documents = ({ PageName, ...Props }: Props) => {
                   </Table>
                 </div>
               </div>
+              {
+                  isDeleteDialog && 
+                  <DeleteDialog
+                  text='Are You Sure You Want To Delete This Document?'
+                  setClose={setIsDeleteDialog}
+                  handleSubmit={handleDelete}
+                  />
+              }
               <Toaster richColors position="top-right" />
             </div>
             

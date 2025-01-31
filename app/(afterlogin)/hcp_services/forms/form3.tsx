@@ -22,6 +22,7 @@ import { useRouter } from 'nextjs-toploader/app';
 import { Previewdata } from '@/app/(afterlogin)/hcp_services/page'
 import { Toaster, toast } from 'sonner'
 import Image from 'next/image';
+import DeleteDialog from '@/components/deleteDialog';
 type Props = {
   vendorType: {
     name: string,
@@ -100,6 +101,9 @@ const Form3 = ({ ...Props }: Props) => {
   const [compansationVendorType, setCompansationVendorType] = useState("");
   const [compansationAmount, setCompansationAmount] = useState(0);
   const [compansation_is_GST, setCompansation_is_GST] = useState(0);
+  const [isDeleteDialog,setIsDeleteDialog] = useState<boolean>(false);
+  const [deleteName,setDeleteName] = useState<string>("");
+  const [deleteType,setDeleteType] = useState<string>("");
   const PreviewData = async () => {
     try {
       const response = await fetch("/api/previewData", {
@@ -236,8 +240,7 @@ const Form3 = ({ ...Props }: Props) => {
     }
   };
 
-  const handleCompensationDelete = async (deletename: string) => {
-    console.log("deletename", deletename)
+  const handleCompensationDelete = async () => {
     try {
       const response = await fetch(
         "/api/deleteVendor",
@@ -248,7 +251,7 @@ const Form3 = ({ ...Props }: Props) => {
           },
           credentials: 'include',
           body: JSON.stringify({
-            name: deletename
+            name: deleteName
           })
         }
       );
@@ -266,7 +269,7 @@ const Form3 = ({ ...Props }: Props) => {
       console.error("Error during Submission:", error);
     }
   };
-  const handleLogisticDelete = async (deletename: string) => {
+  const handleLogisticDelete = async () => {
     try {
       const response = await fetch(
         "/api/deleteVendor",
@@ -277,7 +280,7 @@ const Form3 = ({ ...Props }: Props) => {
           },
           credentials: 'include',
           body: JSON.stringify({
-            name: deletename
+            name: deleteName
           })
         }
       );
@@ -555,7 +558,7 @@ const Form3 = ({ ...Props }: Props) => {
                 <><TableCell>{item.vendor_type}</TableCell><TableCell>{item.est_amount}</TableCell>
                   <TableCell>
                     <div className="flex justify-around">
-                      <div onClick={() => { handleLogisticDelete(item.name) }} >
+                      <div onClick={() => { setDeleteName(item.name);setDeleteType("Logistics");setIsDeleteDialog(prev=>!prev); }} >
                         <Image src={"/svg/delete.svg"} width={20} height={20} alt='view-document' className='cursor-pointer' />
                       </div>
                     </div>
@@ -628,7 +631,7 @@ const Form3 = ({ ...Props }: Props) => {
                 </TableCell>
                 <TableCell>
                   <div className="flex justify-around">
-                    <div className="hover:cursor-pointer" onClick={() => handleCompensationDelete(item.name)}>
+                    <div className="hover:cursor-pointer" onClick={() => {setDeleteName(item.name);setIsDeleteDialog(prev=>!prev);setDeleteType("Compansation");}}>
                       <Image src={"/svg/delete.svg"} width={20} height={20} alt='view-document' className='cursor-pointer' />
                     </div>
                   </div>
@@ -695,7 +698,14 @@ const Form3 = ({ ...Props }: Props) => {
         <Button className="bg-[#4430bf] text-white text-md font-normal border hover:bg-[#4430bf]" onClick={(e: React.MouseEvent<HTMLButtonElement>) => handleSubmit(e)}>
           Next
         </Button>
-
+        {
+            isDeleteDialog &&
+            <DeleteDialog
+            text='Are you Sure You Want To Delete This Entry?'
+            handleSubmit={deleteType == "Compansation"?handleCompensationDelete:handleLogisticDelete}
+            setClose={setIsDeleteDialog}
+            />
+          }
         <Toaster richColors position="top-right" />
 
       </div>
