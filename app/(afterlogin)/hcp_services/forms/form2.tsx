@@ -8,130 +8,28 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
-import { useContext } from 'react';
-import { AppContext } from '@/app/context/module'
-
 import { useRouter } from "nextjs-toploader/app";
-import { Previewdata } from '@/app/(afterlogin)/hcp_services/page'
-import SearchDropdown from '@/components/hcp/SearchDropdown';
 import AddHCPDialog from '@/components/hcp/addHCP'
-type dropdownData = {
-  company: {
-    name: string,
-    company_name: "string"
-  }[],
-  division: {
-    name: string,
-    division_name: string
-  }[],
-  requestor: {
-    full_name: string,
-    email: string
-  }[],
-  vendor_type: {
-    name: string,
-    vendor_type: string
-  }[],
-  state: {
-    name: string,
-    state: string
-  }[]
-  currency: {
-    name: string
-  }[]
-  engagement_type: {
-    name: string
-    engagement_type: string
-  }[]
-}
+import {FormErrors,DropdownDataType, PreviewDataType} from '@/app/Types/EventData'
 
-type Compensation = {
-  vendor_type: string;
-  vendor_name: string;
-  est_amount: number;
-  gst_included?: number;
-};
-
-type Logistics = {
-  vendor_type: string;
-  est_amount: number;
-};
-
-type formData = {
-  name: string | null;
-  event_type: string;
-  company: string;
-  event_cost_center: string;
-  state: string;
-  city: string;
-  event_start_date: string;
-  event_end_date: string;
-  bu_rational: string;
-  faculty: string;
-  participants: string;
-  therapy: string;
-  event_name: string;
-  event_venue: string;
-  comments: string;
-  compensation: Compensation[];
-  logistics: Logistics[];
-  total_compensation_expense: number;
-  total_logistics_expense: number;
-  event_requestor: string;
-  business_unit: string;
-  division_category: string;
-  division_sub_category: string;
-  sub_type_of_activity: string;
-  any_govt_hcp: string,
-  no_of_hcp: number,
-  hcp_name: string,
-  hospital_affiliation: string
-};
-
-
-type activityDropdown = {
-  activity: {
-    name: string,
-    activity_name: string
-  }[],
-  document: {
-    name: string,
-    activity_type: string,
-    document_name: string
-  }[]
-}
-
-type Dropdown = {
-  name: string;
-  city: string
-}
 
 type Props = {
-  previewData: Previewdata | null;
+  previewData: PreviewDataType | null;
   refno: string;
-  cityDropdown:Dropdown[]
-}
-
-type FormErrors = {
-  hcp_name?: string;
-  hospital_affiliation?: string;
-  any_govt_hcp?: string;
-  no_of_hcp?: string;
-  bu_rational?: string;
+  cityDropdown:DropdownDataType[]
 }
 
 const Form2 = ({ ...Props }: Props) => {
   const router = useRouter();
   const [engagementHCP, setEngagementHCP] = useState<string>(Props.previewData?.any_govt_hcp ?? "");
-  const [formdata, setFormData] = useState<formData>();
+  const [formdata, setFormData] = useState<PreviewDataType>();
   const [errors, setErrors] = useState<FormErrors>();
   const [refNo, setRefNo] = useState<string | null>(Props.refno);
   const [hcpValue, setHCPValue] = useState<string>()
   const [isSuggestionDialog,setIsSuggestionDialog] = useState<Boolean>(true);
   const [searchValue,setsearchValue] =useState<string>("");
-  const [citydropdown, setCityDropdown] = useState<Dropdown[]>(Props.cityDropdown);
+  const [citydropdown, setCityDropdown] = useState<DropdownDataType[]>(Props.cityDropdown);
   const [isAddHCP,setIsAddHCP] = useState<boolean>(false);
 
   const handleLoadCity = async (city_name: string, page_length: number, page_no: number) => {
@@ -170,12 +68,12 @@ const Form2 = ({ ...Props }: Props) => {
   }
 
   const handleSelectChange = (value: string, name: string) => {
-    setFormData((prev) => ({ ...prev, [name]: value }) as formData);
+    setFormData((prev) => ({ ...prev, [name]: value }) as PreviewDataType);
   };
 
   const handlefieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }) as formData);
+    setFormData(prev => ({ ...prev, [name]: value }) as PreviewDataType);
   }
   const validateAtSubmit = () => {
     const errors: FormErrors = {};

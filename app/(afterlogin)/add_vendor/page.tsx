@@ -28,7 +28,6 @@ import { useSearchParams } from 'next/navigation'
 import { useAuth } from "../../context/AuthContext";
 import ConfirmPopup from '@/components/deleteDialog'
 import Image from 'next/image';
-import ApproveCommentBox from '@/components/Comment_box'
 import DeleteDialog from '@/components/deleteDialog';
 
 type dropdownData = {

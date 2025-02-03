@@ -3,7 +3,7 @@ import Table from "@/app/(afterlogin)/event_report/table"
 import {eventApprovalSummaryReport} from '../event_report/utility';
 import {fetchEventRequestor} from '../event_report/utility';
 import { cookies } from "next/headers";
-
+import {eventCostCenter,subtypeActivity,reportingHeadDropdown,stateDropdown,FormErrors,CityDropdown, PreviewDataType, ChildVendor} from '@/app/Types/EventData'
 
 export type Event = {
     name: string;
@@ -56,6 +56,8 @@ export type Event = {
     status6: string;
     status7: string;
     is_approved: boolean;
+    zone:string,
+    hcp_name:string
   };
 
   export type EventRequestor = {

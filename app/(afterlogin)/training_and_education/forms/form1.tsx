@@ -13,7 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { PreviewDataType, DropdownDataType, FormDataType } from "../Types";
-import {eventCostCenter,subtypeActivity,reportingHeadDropdown,stateDropdown,FormErrors,CityDropdown} from '../Types'
+import {eventCostCenter,subtypeActivity,reportingHeadDropdown,stateDropdown,FormErrors,CityDropdown} from '@/app/Types/EventData'
 import { useAuth } from "@/app/context/AuthContext";
 import IsReportingHeadDialog from "@/components/isReportingHeadDialog";
 import CityDropdwon from '@/components/training_and_education/search_city'

@@ -4,16 +4,6 @@ import { Button } from "@/components/ui/button";
 import Documents from "@/components/documents"
 import SimpleFileUpload from "@/components/multiple_file_upload";
 import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Input } from '@/components/ui/input';
-import {
   Select,
   SelectContent,
   SelectItem,
@@ -22,54 +12,10 @@ import {
 } from "@/components/ui/select";
 import { useRouter } from 'nextjs-toploader/app';
 import { Toaster, toast } from 'sonner'
-type Compensation = {
-  vendor_type: string;
-  vendor_name: string;
-  est_amount: number;
-  gst_included?: number;
-};
-
-type Logistics = {
-  vendor_type: string;
-  est_amount: number;
-};
-
-type formData = {
-  name: string | null;
-  event_type: string;
-  company: string;
-  event_cost_center: string;
-  state: string;
-  city: string;
-  event_start_date: string;
-  event_end_date: string;
-  bu_rational: string;
-  faculty: string;
-  participants: string;
-  therapy: string;
-  event_name: string;
-  event_venue: string;
-  comments: string;
-  compensation: Compensation[];
-  logistics: Logistics[];
-  total_compensation_expense: number;
-  total_logistics_expense: number;
-  event_requestor: string;
-  business_unit: string;
-  division_category: string;
-  division_sub_category: string;
-  sub_type_of_activity: string;
-  any_govt_hcp: string,
-  no_of_hcp: number
-};
-
-type activityDropdown = {
-  name: string,
-  document_name: string
-}[]
+import { PreviewDataType, ActivityDropdownType} from '@/app/Types/EventData'
 
 type Props = {
-  activityDropdown: activityDropdown | null
+  activityDropdown: ActivityDropdownType | null
   refno: string | null
 }
 const form4 = ({ ...Props }: Props) => {
@@ -78,7 +24,7 @@ const form4 = ({ ...Props }: Props) => {
   const [activityType, setActivityType] = useState('Pre Activity');
   const [refno, setRefno] = useState(Props.refno);
   const [documentType, setDocumentType] = useState("");
-  const [formdata, setFormData] = useState<formData | {}>({});
+  const [formdata, setFormData] = useState<PreviewDataType | {}>({});
   // const [refNo,setRefNo] = useState<string | null>(localStorage.getItem("refno")?localStorage.getItem("refno"):"");
   const [preview_data, setPreviewData] = useState<any>(null);
   const [uploadedFiles, setUploadedFiles] = useState<FileList | null>(null)

@@ -12,7 +12,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Toaster, toast } from 'sonner';
-import { PreviewDataType, FormDataType } from "../page";
+import { PreviewDataType, FormDataType } from "@/app/Types/EventData";
 import { handleEventStartDateValidate, handleEventEndDateValidate } from "@/app/utility/dateValidation";
 
 type Props = {

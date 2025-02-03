@@ -1,7 +1,5 @@
 import React from 'react'
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import BeneficiaryDetails from "@/components/beneficiary_details";
 
 type EventEntry = {
   name: string;

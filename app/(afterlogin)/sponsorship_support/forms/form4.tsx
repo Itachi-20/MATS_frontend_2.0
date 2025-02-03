@@ -13,13 +13,9 @@ import { useRouter } from 'nextjs-toploader/app';
 import Documents from "@/components/documents"
 import SimpleFileUpload from "@/components/multiple_file_upload";
 import { Toaster, toast } from 'sonner'
-type activityDropdown = {
-  name: string,
-  document_name: string
-}[]
-
+import {eventCostCenter,subtypeActivity,reportingHeadDropdown,stateDropdown,FormErrors,CityDropdown, PreviewDataType, ChildVendor, ActivityDropdownType} from '@/app/Types/EventData'
 type Props = {
-  activityDropdown: activityDropdown | null
+  activityDropdown: ActivityDropdownType | null
   refno: string | null
 }
 const form4 = ({ ...Props }: Props) => {

@@ -3,7 +3,6 @@ import React from 'react'
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -20,7 +19,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import Link from 'next/link';
 import { useState, useEffect } from 'react'
 import { useRouter } from 'nextjs-toploader/app';
 import { useParams } from 'next/navigation';

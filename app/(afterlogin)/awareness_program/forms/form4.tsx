@@ -4,16 +4,7 @@ import React, { useState, useEffect } from 'react'
 import { Button } from "@/components/ui/button";
 import Documents from "@/components/documents"
 import SimpleFileUpload from "@/components/multiple_file_upload";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Input } from '@/components/ui/input';
+import { ActivityDropdownType } from '@/app/Types/EventData';
 import {
   Select,
   SelectContent,
@@ -21,57 +12,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Item } from '@radix-ui/react-select';
 import { useRouter } from 'nextjs-toploader/app';
 import { Toaster, toast } from 'sonner'
-type Compensation = {
-  vendor_type: string;
-  vendor_name: string;
-  est_amount: number;
-  gst_included?: number;
-};
 
-type Logistics = {
-  vendor_type: string;
-  est_amount: number;
-};
-
-// type formData = {
-//   name: string | null;
-//   event_type: string;
-//   company: string;
-//   event_cost_center: string;
-//   state: string;
-//   city: string;
-//   event_start_date: string;
-//   event_end_date: string;
-//   bu_rational: string;
-//   faculty: string;
-//   participants: string;
-//   therapy: string;
-//   event_name: string;
-//   event_venue: string;
-//   comments: string;
-//   compensation: Compensation[];
-//   logistics: Logistics[];
-//   total_compensation_expense: number;
-//   total_logistics_expense: number;
-//   event_requestor: string;
-//   business_unit: string;
-//   division_category: string;
-//   division_sub_category: string;
-//   sub_type_of_activity: string;
-//   any_govt_hcp: string,
-//   no_of_hcp: number
-// };
-
-type activityDropdown = {
-  name: string,
-  document_name: string
-}[]
 type Props = {
   refNo: string | null
-  activityDropdown: activityDropdown | null
+  activityDropdown: ActivityDropdownType | null
 }
 const form4 = ({ ...Props }: Props) => {
   console.log("++++++++++++++++", Props.activityDropdown, "---------------");

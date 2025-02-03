@@ -18,8 +18,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Checkbox } from '@/components/ui/checkbox';
-import { Previewdata } from '@/app/(afterlogin)/monetary_grant/page'
+import {PreviewDataType} from '@/app/Types/EventData'
 import { useRouter } from 'nextjs-toploader/app';
 import { Toaster, toast } from 'sonner'
 import Image from 'next/image';
@@ -32,9 +31,8 @@ type Props = {
   currency: {
     name: string
   }[] | null,
-  previewData: Previewdata | null | undefined
+  previewData: PreviewDataType | null | undefined
   refno: string | undefined;
-  // logisticsBudget:Logistics[]
 }
 type Budget = "logistics" | "compensation" | "";
 
@@ -59,41 +57,12 @@ type Logistics = {
   budget_category: string
 };
 
-type formData = {
-  name: string | null;
-  event_type: string;
-  company: string;
-  event_cost_center: string;
-  state: string;
-  city: string;
-  event_start_date: string;
-  event_end_date: string;
-  bu_rational: string;
-  faculty: string;
-  participants: string;
-  therapy: string;
-  event_name: string;
-  event_venue: string;
-  comments: string;
-  compensation: Compensation[];
-  logistics: Logistics[];
-  total_compensation_expense: number;
-  total_logistics_expense: number;
-  event_requestor: string;
-  business_unit: string;
-  division_category: string;
-  division_sub_category: string;
-  sub_type_of_activity: string;
-  any_govt_hcp: string,
-  no_of_hcp: number
-};
-
 
 const Form3 = ({ ...Props }: Props) => {
   const router = useRouter();
-  const [formdata, setFormData] = useState<formData>();
+  const [formdata, setFormData] = useState<PreviewDataType>();
   const [refNo, setRefNo] = useState<string | null>(Props.refno ?? "");
-  const [previewData, setPreviewData] = useState<Previewdata>()
+  const [previewData, setPreviewData] = useState<PreviewDataType>()
   const [budgetType, setBudgetType] = useState<Budget>("");
   const [vendorName, setVendorName] = useState<vendorName | null>(null);
   const [logisticVendorType, setLogisticVendorType] = useState("");
@@ -139,10 +108,10 @@ const Form3 = ({ ...Props }: Props) => {
   };
   const handlefieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }) as formData);
+    setFormData(prev => ({ ...prev, [name]: value }) as PreviewDataType);
   };
   const handleSelectChange = (value: string, name: string) => {
-    setFormData((prev) => ({ ...prev, [name]: value }) as formData);
+    setFormData((prev) => ({ ...prev, [name]: value }) as PreviewDataType);
   };
   const handleLogisticsAdd = async () => {
     try {

@@ -63,7 +63,7 @@ export default function PassengerListPage({ ...Props }: Props) {
     const [importFile, setImportFile] = useState<File[]>([])
     const [selectedFile, setSelectedFile] = useState<File[]>([]);
     const [isDeletePopup, setIsDeletePopup] = useState<boolean>(false);
-    const inputFile = useRef(null);
+    const inputFile = useRef<any>(null);
     const handleDialog = () => {
         setAddPassengerDialog(prev => !prev)
     }

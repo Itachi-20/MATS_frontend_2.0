@@ -8,7 +8,7 @@ import { AppWrapper } from '@/app/context/module';
 import { PreviewData, handleBusinessUnitChange, activityList, dropdown } from '../training_and_education/utility';
 import { cookies } from 'next/headers';
 import {handleStateChange,handleReportingChange,handleCityChange,handleCityDropdown} from '../training_and_education/utility'
-import {DropdownDataType,ActivityDropdownType,PreviewDataType} from './Types'
+import {DropdownDataType,ActivityDropdownType,PreviewDataType} from '@/app/Types/EventData'
 
 const index = async ({...Props}:any) => {
 

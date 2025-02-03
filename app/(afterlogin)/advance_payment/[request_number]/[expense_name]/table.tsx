@@ -2,7 +2,6 @@ import React from 'react'
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -10,7 +9,6 @@ import {
 } from "@/components/ui/table";
 import Image from 'next/image';
 import ViewDocument from '@/components/view_document'
-import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 type DocumentRow = {
   file_name: string;

@@ -12,11 +12,11 @@ import {
 import ViewDocument from '@/components/viewDocument';
 
 type DocumentRow = {
-    name: string,
-    file_name: string;
-    createdDate: string;
-    createdBy: string;
-    file_url: string;
+  file_name: string;
+  name: string;
+  file_url: string;
+  creation:string
+  owner:string
   };
 
 type Props = {

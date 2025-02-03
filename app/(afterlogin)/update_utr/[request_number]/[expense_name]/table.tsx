@@ -12,29 +12,9 @@ import Image from 'next/image';
 import ViewDocument from '@/components/viewDocument'
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
-type DocumentRow = {
-  name: string;
-  file_name: string;
-  file_url: string;
-};
+import {ActualVendor,DocumentRow} from './expenseDetail'
 
-type ActualVendor = {
-  event_request_number:string
-  name: string;
-  vendor_type: string;
-  vendor_name: string;
-  files: DocumentRow[];
-  status: string;
-  advance: number;
-  gst: string;
-  invoice_amount: number;
-  tds: number;
-  net_amount: number;
-  utr_number: string | null;
-  payment_date: string | null;
-  parent: string;
-  finance_gst:number | null;
-};
+
 type Props = {
   expensetabledata: ActualVendor[] | undefined; // Props includes the tableData field
 };

@@ -6,65 +6,20 @@ import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import { Toaster, toast } from 'sonner'
 import { useRouter } from "next/navigation";
-import { Previewdata } from '@/app/(afterlogin)/non_monetary_grant/page';
 import { handleEventStartDateValidate, handleEventEndDateValidate } from "@/app/utility/dateValidation";
+import {eventCostCenter,subtypeActivity,reportingHeadDropdown,stateDropdown,FormErrors,CityDropdown, PreviewDataType, ChildVendor} from '@/app/Types/EventData'
 
-type formData = {
-  name: string | null;
-  event_type: string;
-  company: string;
-  event_cost_center: string;
-  state: string;
-  city: string;
-  event_start_date: string;
-  event_end_date: string;
-  bu_rational: string;
-  faculty: string;
-  participants: string;
-  therapy: string;
-  organization_name: string;
-  event_venue: string;
-  comments: string;
-  compensation: Compensation[];
-  logistics: Logistics[];
-  total_compensation_expense: number;
-  total_logistics_expense: number;
-  event_requestor: string;
-  business_unit: string;
-  division_category: string;
-  division_sub_category: string;
-  sub_type_of_activity: string;
-  any_govt_hcp: string,
-  no_of_hcp: number
-};
-type Compensation = {
-  vendor_type: string;
-  vendor_name: string;
-  est_amount: number;
-  gst_included?: number;
-};
 
-type Logistics = {
-  vendor_type: string;
-  est_amount: number;
-};
 type Props = {
-  previewData: Previewdata | null;
+  previewData: PreviewDataType | null;
   refno: string;
-}
-
-type FormErrors = {
-  organization_name?: string;
-  event_start_date?: string;
-  event_end_date?: string;
-  bu_rational?: string;
 }
 
 const Form2 = ({ ...Props }: Props) => {
   const start_date_ref: React.RefObject<any> = useRef(null);
   const end_date_ref: React.RefObject<any> = useRef(null);
   const [eventStartDate, setEventStartDate] = useState<any>(Props.previewData?.event_start_date ? new Date(Props.previewData?.event_start_date).getTime() : "");  
-  const [formdata, setFormData] = useState<formData>();
+  const [formdata, setFormData] = useState<PreviewDataType>();
       const [errors, setErrors] = useState<FormErrors>();
   
   const [refNo, setRefNo] = useState<string | null>(Props.refno);
@@ -126,7 +81,7 @@ const Form2 = ({ ...Props }: Props) => {
 
   const handlefieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }) as formData);
+    setFormData(prev => ({ ...prev, [name]: value }) as PreviewDataType);
   }
 
   const handleStartDateClick = () => {

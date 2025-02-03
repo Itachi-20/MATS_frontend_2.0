@@ -13,15 +13,6 @@ import { Button } from '@/components/ui/button';
 import { useAuth } from "../../context/AuthContext";
 import { tableData } from "@/app/(afterlogin)/dashboard/page"
 import { useRouter } from "nextjs-toploader/app";
-import {
-    Table,
-    TableBody,
-    TableCaption,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table";
 import DatePicker from "@/app/(afterlogin)/event_list/date-picker";
 import TableList from "@/components/requestSummary/activityTable";
 import ExpenseTableList from "@/components/requestSummary/expenseTable";
@@ -36,6 +27,8 @@ type CardData = {
     advance_approved_count: number,
     post_exp_appr_count: number,
     expense_approved_count: number
+    used_budget:string
+    total_budget:number
 }
 type ActivityListType = {
     modules:string,

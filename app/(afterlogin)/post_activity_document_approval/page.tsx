@@ -32,7 +32,7 @@ const fetchData = async(ref_no:string)=>{
   const Page = async ({ searchParams }: { searchParams: { refno?: string } }) => {
     const refno = searchParams?.refno 
     console.log(refno,'refno')
-    const tableData = await fetchData(refno);
+    const tableData = await fetchData(refno?refno:"");
   
     console.log(tableData, 'this is table data');
     return (

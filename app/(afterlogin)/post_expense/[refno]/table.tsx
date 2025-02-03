@@ -203,11 +203,11 @@ type VendorData = {
   file: File | null;
 };
 type DocumentRow = {
-  name: string,
   file_name: string;
-  createdDate: string;
-  createdBy: string;
+  name: string;
   file_url: string;
+  creation:string
+  owner:string
 };
 const table = ({ ...Props }: Props) => {
   const { role, name, userid, clearAuthData } = useAuth();

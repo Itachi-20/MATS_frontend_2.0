@@ -14,9 +14,11 @@ import { useAuth } from "@/app/context/AuthContext";
 import { Toaster, toast } from 'sonner';
 
 type File = {
-    name: string;
     file_name: string;
-    file_url: string;
+  name: string;
+  file_url: string;
+  creation:string
+  owner:string
 };
 
 type ActualVendor = {

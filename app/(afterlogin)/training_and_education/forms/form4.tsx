@@ -5,66 +5,14 @@ import { Button } from "@/components/ui/button";
 import Documents from "@/components/documents"
 import SimpleFileUpload from "@/components/multiple_file_upload";
 import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Input } from '@/components/ui/input';
-import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Item } from '@radix-ui/react-select';
 import { useRouter } from 'nextjs-toploader/app';
 import { Toaster, toast } from 'sonner'
-import AddPassangerDialog from '@/components/addPassangerDialog';
-type Compensation = {
-  vendor_type: string;
-  vendor_name: string;
-  est_amount: number;
-  gst_included?: number;
-};
-
-type Logistics = {
-  vendor_type: string;
-  est_amount: number;
-};
-
-// type formData = {
-//   name: string | null;
-//   event_type: string;
-//   company: string;
-//   event_cost_center: string;
-//   state: string;
-//   city: string;
-//   event_start_date: string;
-//   event_end_date: string;
-//   bu_rational: string;
-//   faculty: string;
-//   participants: string;
-//   therapy: string;
-//   event_name: string;
-//   event_venue: string;
-//   comments: string;
-//   compensation: Compensation[];
-//   logistics: Logistics[];
-//   total_compensation_expense: number;
-//   total_logistics_expense: number;
-//   event_requestor: string;
-//   business_unit: string;
-//   division_category: string;
-//   division_sub_category: string;
-//   sub_type_of_activity: string;
-//   any_govt_hcp: string,
-//   no_of_hcp: number
-// };
 
 type activityDropdown = {
   name: string,
@@ -76,7 +24,6 @@ type Props = {
   activityDropdown: activityDropdown | null
 }
 const form4 = ({ ...Props }: Props) => {
-  console.log("++++++++++++++++", Props.activityDropdown, "---------------");
   const router = useRouter();
   const [refNo, setRefNo] = useState<string | null>(Props.refNo ?? "");
   const [activityType, setActivityType] = useState("Pre Activity");
@@ -167,7 +114,6 @@ const form4 = ({ ...Props }: Props) => {
       if (response.ok) {
         const data = await response.json();
         setPreviewData(data.data);
-        // console.log(data, "PreviewData")
       } else {
         console.log('Response was not OKAY');
       }
@@ -181,10 +127,6 @@ const form4 = ({ ...Props }: Props) => {
 
   useEffect(() => {
   }, [preview_data])
-
-  const handleDialog = () => {
-    setAddPassengerDialog(prev => !prev)
-  }
 
   const handleNavigation = () => {
     const fromValue = encodeURIComponent(`training_and_education?forms=4&refno=${refNo}`);

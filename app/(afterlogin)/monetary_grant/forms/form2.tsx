@@ -13,113 +13,18 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Toaster, toast } from 'sonner'
 import { useRouter } from 'nextjs-toploader/app';
-import { Previewdata } from '@/app/(afterlogin)/monetary_grant/page';
+import {eventCostCenter,subtypeActivity,reportingHeadDropdown,stateDropdown,FormErrors,CityDropdown, PreviewDataType, ChildVendor} from '@/app/Types/EventData'
 import { handleEventStartDateValidate, handleEventEndDateValidate } from "@/app/utility/dateValidation";
 
-type dropdownData = {
-  company: {
-    name: string;
-    company_name: "string";
-  }[];
-  division: {
-    name: string;
-    division_name: string;
-  }[];
-  requestor: {
-    full_name: string;
-    email: string;
-  }[];
-  vendor_type: {
-    name: string;
-    vendor_type: string;
-  }[];
-  state: {
-    name: string;
-    state: string;
-  }[];
-};
-
-type eventCostCenter = {
-  cost_center: {
-    name: string;
-    cost_center_description: string;
-  }[];
-  division_category: {
-    name: string;
-    category: string;
-  }[];
-  therapy: {
-    name: string;
-    therapy: string;
-  }[];
-};
-
-type subtypeActivity = {
-  name: string;
-  division_sub_category: string
-}[];
-
-type Compensation = {
-  vendor_type: string;
-  vendor_name: string;
-  est_amount: number;
-  gst_included?: number;
-};
-
-type Logistics = {
-  vendor_type: string;
-  est_amount: number;
-};
-
-type formData = {
-  name: string | null;
-  organization_name:string;
-  event_type: string;
-  company: string;
-  event_cost_center: string;
-  state: string;
-  city: string;
-  event_start_date: string;
-  event_end_date: string;
-  bu_rational: string;
-  faculty: string;
-  participants: string;
-  therapy: string;
-  event_name: string;
-  event_venue: string;
-  comments: string;
-  compensation: Compensation[];
-  logistics: Logistics[];
-  total_compensation_expense: number;
-  total_logistics_expense: number;
-  event_requestor: string;
-  business_unit: string;
-  division_category: string;
-  division_sub_category: string;
-  sub_type_of_activity: string;
-  any_govt_hcp: string,
-  no_of_hcp: number
-};
-
 type Props = {
-  previewData: Previewdata | null;
+  previewData: PreviewDataType | null;
   refno: string;
-}
-
-type FormErrors = {
-  organization_name?: string;
-  event_venue?: string;
-  event_start_date?: string;
-  event_end_date?: string;
-  any_govt_hcp?: string;
-  no_of_hcp?: string;
-  bu_rational?: string;
 }
 
 const Form2 = ({ ...Props }: Props) => {
   const start_date_ref: React.RefObject<any> = useRef(null);
   const end_date_ref: React.RefObject<any> = useRef(null);
-  const [formdata, setFormData] = useState<formData>();
+  const [formdata, setFormData] = useState<PreviewDataType>();
     const [errors, setErrors] = useState<FormErrors>();
   const [refNo, setRefNo] = useState<string | null>(Props.refno);
   const router = useRouter()
@@ -140,14 +45,14 @@ const Form2 = ({ ...Props }: Props) => {
   };
   const handlefieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }) as formData);
+    setFormData(prev => ({ ...prev, [name]: value }) as PreviewDataType);
   };
   const handleSelectChange = (value: string, name: string) => {
     // if(name == "any_govt_hcp" && value == "No"){
     //   const noofhcpfield = document.getElementsByName("no_of_hcp")[0] as HTMLInputElement;
     //   noofhcpfield.value = "0";
     // }
-    setFormData((prev) => ({ ...prev, [name]: value }) as formData);
+    setFormData((prev) => ({ ...prev, [name]: value }) as PreviewDataType);
   };
   const validateAtSubmit = async () => {
     const errors: FormErrors = {};

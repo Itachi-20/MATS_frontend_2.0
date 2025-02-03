@@ -39,6 +39,31 @@ export type eventCostCenter = {
     event_division?:string
     faculty?:string
     participants?:string
+    event_name?: string;
+  event_venue?: string;
+  event_start_date?: string;
+  event_end_date?: string;
+  any_govt_hcp?: string;
+  no_of_hcp?: string;
+  bu_rational?: string;
+  type_of_engagement?: string;
+  product_details?: string;
+  annual_plan?: string;
+  service_type?: string;
+  // sponsorship_ref_no: string;
+  training_ref_no?: string;
+  hcp_name?: string;
+  hospital_affiliation?: string;
+  organization_name?: string;
+  product_amount?:string
+  requesting_hospital_name?: string;
+  ship_to?:string,
+  bill_to?:string,
+  currency?:string
+  organizer_name?: string;
+  entitlement_in_lieu_of_sponsorship?: string;
+  sponsorship_amount?: string;
+  sponsor_currency?: string | number;
   };
   export type CityDropdown = {
     name: string;
@@ -216,6 +241,10 @@ export type eventCostCenter = {
     travel_expense_approved: number;
     budget:string;
     event_division:string;
+    can_postactivity_approve:boolean
+    can_approve:boolean
+    is_approved:boolean
+    occurance_date:string
   };
    export  type ChildVendor = {
       name: string;

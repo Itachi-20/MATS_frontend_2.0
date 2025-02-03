@@ -3,7 +3,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from 'nextjs-toploader/app';
-import Documents from "@/components/documents";
+import Documents from "@/components/commonPreviewComponents/documents";
 import { Button } from "@/components/ui/button";
 import EventDetails from "@/components/training_and_education/event_detail";
 import EventDetailsSponsorship from "@/components/sponsorshipSupportPreviewComponents/eventDetails"
@@ -21,180 +21,15 @@ import EquipmentDetails from "@/components/nonMonetoryPreviewComponents/equipmen
 import Sponsorship_Details from "@/components/sponsorshipSupportPreviewComponents/sponsorshipDetails";
 import Other_Details from "@/components/sponsorshipSupportPreviewComponents/other_details";
 import { Input } from "@/components/ui/input";
+import {eventCostCenter,subtypeActivity,reportingHeadDropdown,stateDropdown,FormErrors,CityDropdown, PreviewDataType, ChildVendor} from '@/app/Types/EventData'
 
-type EventEntry = {
-  name: string;
-  owner: string;
-  creation: string;
-  modified: string;
-  modified_by: string;
-  docstatus: number;
-  idx: number;
-  event_type: string;
-  company: string;
-  event_cost_center: string;
-  state: string;
-  sub_type_of_activity: string;
-  business_unit: string;
-  division_category: string;
-  therapy: string;
-  event_requestor: string;
-  division_sub_category: string;
-  status: string;
-  current_stage: string;
-  event_name: string;
-  event_start_date: string;
-  any_govt_hcp: string;
-  comments: string;
-  faculty: string;
-  event_venue: string;
-  event_end_date: string;
-  no_of_hcp: number;
-  bu_rational: string;
-  participants: string;
-  total_compensation_expense: number;
-  has_advance_expense: number;
-  total_logistics_expense: number;
-  total_estimated_expense: number;
-  currency: string;
-  preactivity_status: string;
-  advance_status: string;
-  post_activity_status: string;
-  post_expense_status: string;
-  post_expense_check: number;
-  travel_expense_status: string;
-  travel_expense_check: number;
-  invoice_amount: number;
-  basic_amount: number;
-  tds: number;
-  gst: number;
-  net_amount: number;
-  doctype: string;
-  compensation: Compensation[];
-  travel_expense_approvers: any[]; // Empty array, can be customized later
-  post_expense_approvers: any[]; // Empty array, can be customized later
-  preactivity_approvers: ApproverStatus[];
-  post_activity_approvers: any[]; // Empty array, can be customized later
-  occurrence_status: OccurrenceStatus[];
-  logistics: Logistics[];
-  documents: Document[];
-  advance_approvers: any[]; // Empty array, can be customized later
-  city: string;
-  reporting_head: string;
-  type_of_engagement: string;
-  executed:number;
-  preactivity_approved:number;
-  post_activity_approved:number;
-  post_activity_submitted:number
-}
-
-type Compensation = {
-  name: string;
-  owner: string;
-  creation: string;
-  modified: string;
-  modified_by: string;
-  docstatus: number;
-  idx: number;
-  vendor_type: string;
-  actual_amount: number;
-  status: string;
-  vendor_name: string;
-  advance: number;
-  budget_category: string;
-  est_amount: number;
-  gst_included: number;
-  gst: string;
-  occurrence_no: number;
-  parent: string;
-  parentfield: string;
-  parenttype: string;
-  doctype: string;
-}
-
-type ApproverStatus = {
-  name: string;
-  owner: string;
-  creation: string;
-  modified: string;
-  modified_by: string;
-  docstatus: number;
-  idx: number;
-  approver_level: string;
-  action_date: string;
-  approver: string;
-  remarks: string;
-  approver_status: string;
-  occurrence_no: number;
-  parent: string;
-  parentfield: string;
-  parenttype: string;
-  doctype: string;
-}
-
-type OccurrenceStatus = {
-  name: string;
-  owner: string;
-  creation: string;
-  modified: string;
-  modified_by: string;
-  docstatus: number;
-  idx: number;
-  occurrence_no: number;
-  status: string;
-  parent: string;
-  parentfield: string;
-  parenttype: string;
-  doctype: string;
-}
-
-type Logistics = {
-  name: string;
-  owner: string;
-  creation: string;
-  modified: string;
-  modified_by: string;
-  docstatus: number;
-  idx: number;
-  vendor_type: string;
-  actual_amount: number;
-  status: string;
-  advance: number;
-  budget_category: string;
-  est_amount: number;
-  gst_included: number;
-  gst: string;
-  occurrence_no: number;
-  parent: string;
-  parentfield: string;
-  parenttype: string;
-  doctype: string;
-}
-
-type Document = {
-  name: string;
-  owner: string;
-  creation: string;
-  modified: string;
-  modified_by: string;
-  docstatus: number;
-  idx: number;
-  activity_type: string;
-  occurrence_no: number;
-  document_type: string;
-  file: string;
-  parent: string;
-  parentfield: string;
-  parenttype: string;
-  doctype: string;
-}
 
 
 
 export default function EventListPage() {
   const router = useRouter();
   const refno = useParams().id;
-  const [eventData, setEventData] = useState<EventEntry>();
+  const [eventData, setEventData] = useState<PreviewDataType | null>(null);
   const handlClick = (refno: string) => {
     router.push(`/audit_trail/${refno}`)
   }
@@ -297,6 +132,7 @@ export default function EventListPage() {
         <>
           <BeneficialDetails
             eventData={eventData}
+            pathname=""
           />
 
           <ShippingDetails
@@ -310,10 +146,12 @@ export default function EventListPage() {
         <>
           <Sponsorship_Details
             eventData={eventData}
+            pathname=""
           />
 
           <Other_Details
             eventData={eventData}
+            pathname=""
           />
         </>
 
@@ -330,16 +168,19 @@ export default function EventListPage() {
         eventData?.event_type == "Monetary Grant" &&
         <OrganizationDetailsMonetary
           eventData={eventData}
+          pathname=""
         />
       }
       {
         eventData?.event_type == "Sponsorship Support" &&
         <EventDetailsSponsorship
+        pathname=""
           eventData={eventData} />
       }
       {
         eventData?.event_type == "Non Monetary Grant" &&
         <EquipmentDetails
+        pathname=""
           eventData={eventData}
         />
       }
