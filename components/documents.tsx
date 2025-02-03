@@ -208,6 +208,7 @@ const Documents = ({PageName,...Props}:Props) => {
       if(response.ok){
         toast.success('Deleted Successfully')
         console.log("successfully deleted");
+        setIsDeleteDialog(false);
         Props.fetchFile();
       }
     } catch (error) {
