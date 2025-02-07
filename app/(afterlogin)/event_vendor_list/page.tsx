@@ -234,7 +234,7 @@ const page = () => {
                 Add New Vendor
               </span>
             </Button>
-            <Select>
+            {/* <Select>
               <SelectTrigger className="dropdown rounded-[25px] gap-4">
                 <SelectValue className="text-nowrap" placeholder="Vendor Type" />
               </SelectTrigger>
@@ -243,8 +243,8 @@ const page = () => {
                 <SelectItem value="dark">Dark</SelectItem>
                 <SelectItem value="system">System</SelectItem>
               </SelectContent>
-            </Select>
-            <Select>
+            </Select> */}
+            {/* <Select>
               <SelectTrigger className="dropdown rounded-[25px] gap-4">
                 <SelectValue placeholder="Export" />
               </SelectTrigger>
@@ -253,7 +253,8 @@ const page = () => {
                 <SelectItem value="dark">Dark</SelectItem>
                 <SelectItem value="system">System</SelectItem>
               </SelectContent>
-            </Select>
+            </Select> */}
+            <Button className='border rounded-xl'>Export</Button>
             {/* <Button className="text-black text-md font-normal bg-white hover:bg-white border rounded-[25px] px-8 py-5 shadow">
               Back
             </Button> */}

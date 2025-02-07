@@ -84,14 +84,6 @@ const table = ({ ...Props }: Props) => {
 
             <TableHead
               className={
-                "text-center"
-              }
-            >
-              Remark
-            </TableHead>
-
-            <TableHead
-              className={
                 "text-center "
               }
             >
@@ -120,6 +112,13 @@ const table = ({ ...Props }: Props) => {
             </TableHead>
             <TableHead
               className={
+                "text-center"
+              }
+            >
+              Remark
+            </TableHead>
+            <TableHead
+              className={
                 "text-center rounded-r-2xl sticky right-0 z-30 bg-[#E0E9FF]"
               }
             >
@@ -143,13 +142,13 @@ const table = ({ ...Props }: Props) => {
                         <TableCell>{data.vendor_type}</TableCell>
                         <TableCell>{data.vendor_name}</TableCell>
                         <TableCell>{data.vendor_code}</TableCell>
-                        <TableCell>{data.remark}</TableCell>
                         <TableCell>{data.pan_number}</TableCell>
                         <TableCell>{data.email}</TableCell>
                         <TableCell>{data.contact_number}</TableCell>
                         <TableCell>{data.status}
                           {/* {data.status == "Approved" ? data.status :<Button className="bg-[#F0EDFF] w-[75px] text-[#4430BF] text-sm  rounded-md font-semibold hover:underline capitalize" onClick={() => router.push(`/add_vendor?refno=${data.name}`)}>Approve</Button>} */}
                         </TableCell>
+                        <TableCell>{data.remark}</TableCell>
 
                         <TableCell className="flex space-x-6 items-center justify-center border-l-2 sticky right-0 bg-[white] z-30">
                           {/* <div className="hover:cursor-pointer" onClick={() => router.push(`/add_vendor?refno=${data.name}&view=view`)}>

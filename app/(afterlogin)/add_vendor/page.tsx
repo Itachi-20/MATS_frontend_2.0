@@ -815,7 +815,7 @@ const page = () => {
                                 {/* <Button className="bg-white text-black border text-md font-normal hover:bg-white" >
                                    Back
                                 </Button> */}
-                                <Button className={`${role != "Event Requestor"?"hidden":""} bg-[#4430bf] text-white text-md font-normal border hover:bg-[#4430bf]`} onClick={formdata?.pan_check ? handleConfirmpopup : handleFinalSubmit}>
+                                <Button className={`${role == "Event Requestor" || role == "Event Finance"?"":"hidden"} bg-[#4430bf] text-white text-md font-normal border hover:bg-[#4430bf]`} onClick={formdata?.pan_check ? handleConfirmpopup : handleFinalSubmit}>
                                     Submit
                                 </Button>
                                 <div className={`${role == "Event Finance"?"":"hidden"} flex gap-4`}>
