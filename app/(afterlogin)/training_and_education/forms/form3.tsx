@@ -19,7 +19,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useRouter } from 'nextjs-toploader/app';
-import { Previewdata } from '@/app/(afterlogin)/hcp_services/page'
 import { Toaster, toast } from 'sonner'
 import Image from 'next/image';
 import DeleteDialog from '@/components/deleteDialog';
@@ -66,7 +65,7 @@ const Form3 = ({ ...Props }: Props) => {
   const router = useRouter();
   const [formdata, setFormData] = useState<PreviewDataType>();
   const [refNo, setRefNo] = useState<string | null>(Props.refNo ?? "");
-  const [previewData, setPreviewData] = useState<Previewdata>()
+  const [previewData, setPreviewData] = useState<PreviewDataType>()
   const [budgetType, setBudgetType] = useState<Budget>("");
   const [vendorName, setVendorName] = useState<vendorName | null>(null);
   const [logisticVendorType, setLogisticVendorType] = useState("");
