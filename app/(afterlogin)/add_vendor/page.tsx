@@ -324,44 +324,6 @@ const page = () => {
         }
         formData.append("type", document_type);
 
-        // try {
-        //     const response = await fetch(`/api/fileUpload`, {
-        //         method: "POST",
-        //         body: formData,
-        //         credentials: "include",
-        //     });
-
-        //     if (response.ok) {
-        //         const data = await response.json();
-        //         console.log("Upload successful:", data.message.file_name);
-        //         const newDocument: DocumentRow = {
-        //             document_type,
-        //             is_private: "1",
-        //             filename: data.message.file_name,
-        //             creation: data.message.creation,
-        //             owner: data.message.modified_by,
-        //             file: data.message.file_url,
-        //         };
-        //         console.log("newDocument", newDocument)
-        //         setFormData((prevFormData) => ({
-        //             ...prevFormData,
-        //             document: Array.isArray(prevFormData?.document) ? [...prevFormData.document, newDocument] : [newDocument],
-        //         }) as formData);
-        //         // const updatedDocumentRows = [...documentRows , newDocument];
-        //         const updatedDocumentRows = [...(Array.isArray(documentRows) ? documentRows : []), newDocument];
-
-        //         setDocumentRows(updatedDocumentRows);
-        //         handleReset();
-        //         setFileName(null);
-        //         setDocumentType('');
-
-        //     } else {
-        //         alert("File upload failed. Please try again.");
-        //     }
-        // } catch (error) {
-        //     console.error("Error uploading file:", error);
-        // }
-
 
         const apiCallPromise = new Promise(async (resolve, reject) => {
             try {
@@ -815,7 +777,7 @@ const page = () => {
                                 {/* <Button className="bg-white text-black border text-md font-normal hover:bg-white" >
                                    Back
                                 </Button> */}
-                                <Button className={`${role == "Event Requestor" || role == "Event Finance"?"":"hidden"} bg-[#4430bf] text-white text-md font-normal border hover:bg-[#4430bf]`} onClick={formdata?.pan_check ? handleConfirmpopup : handleFinalSubmit}>
+                                <Button className={`${(role == "Event Requestor" || role == "Event Finance") && documentRows?.length > 0?"":"hidden"} bg-[#4430bf] text-white text-md font-normal border hover:bg-[#4430bf]`} onClick={formdata?.pan_check ? handleConfirmpopup : handleFinalSubmit}>
                                     Submit
                                 </Button>
                                 <div className={`${role == "Event Finance"?"":"hidden"} flex gap-4`}>
