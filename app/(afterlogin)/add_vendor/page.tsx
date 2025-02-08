@@ -75,6 +75,7 @@ type formData = {
     email: string;
     contact_number: string;
     pan_check: boolean;
+    can_approve:boolean;
     document: DocumentRow[];
 };
 
@@ -152,11 +153,6 @@ const page = () => {
     const handleDialog = ()=>{
         setIsApproveDialog(prev=>!prev)
     }
-
-    // const handleComment = (value: string) => {
-    //     setComment(value)
-    //   }
-      
 
     const vendorViewData = async () => {
 
@@ -444,7 +440,8 @@ const page = () => {
             const response = await fetch(`/api/approveVendor/`,{
                 headers:{
                     "Content-Type":"application/json"
-                },body:JSON.stringify({
+                },
+                body:JSON.stringify({
                     name:refno,
                     action:status,
                     remark:remarks
@@ -463,7 +460,7 @@ const page = () => {
         }
     }
 
-    console.log(formdata, 'formdata')
+    console.log(formdata?.can_approve, 'formdata')
     return (
         <>
             <div className='p-7 w-full relative z-20 text-black'>
@@ -782,7 +779,7 @@ const page = () => {
                                     Submit
                                 </Button>
                                 </div>
-                                <div className={`${role == "Event Finance" && refno?"":"hidden"} flex gap-4`}>
+                                <div className={`${formdata?.can_approve && refno?"":"hidden"} flex gap-4`}>
                                 <Button className={`bg-[#5dbe74] hover:bg-[#5dbe74] px-6 text-white`} onClick={()=>{handleApproval("","Approve"); setButtonText("Approve"); }}>Approve</Button>
                                 <Button className={`bg-[#ff5757] hover:bg-[#ff5757] px-6 text-white`} onClick={()=>{handleApproval("","Reject"); setButtonText("Reject"); }}>Reject</Button>
                                 </div>

@@ -131,7 +131,8 @@ const page = () => {
 
       if (response.ok) {
         const data = await response.json();
-        setVendorData(data.data);
+        console.log(data,'data')
+        setVendorData(data.message);
       } else {
         console.log('Error fetching data');
       }

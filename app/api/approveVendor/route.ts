@@ -20,9 +20,10 @@ export async function POST(req: Request) {
         }
 
         const Response = await response.json();
-        console.log(response,"SERVER RESPONSE")
+        
         return NextResponse.json(Response);
     } catch (error: any) {
+        console.log(error,"SERVER RESPONSE")
         return NextResponse.json({ error: error.message || 'Something went wrong' }, { status: 500 });
     }
 }
