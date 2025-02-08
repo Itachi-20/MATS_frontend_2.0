@@ -15,7 +15,6 @@ export async function GET(req: Request) {
         if (!response.ok) {
             throw new Error(`Error: ${response.statusText}`);
         }
-
         return response;
     } catch (error: any) {
         return NextResponse.json({ error: error.message || 'Something went wrong' }, { status: 500 });

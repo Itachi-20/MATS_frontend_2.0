@@ -47,14 +47,14 @@ type Props = {
 const table = ({ ...Props }: Props) => {
   const router = useRouter()
   const [loading, setLoading] = useState(true)
+
   useEffect(() => {
-    if (Props.vendorData) {
+    if (Props?.vendorData) {
+      setLoading(false)
+    }else{
       setLoading(false);
     }
-    setLoading(false);
-  }, [Props.vendorData]);
-
-  console.log(Props.vendorData, 'Props')
+  }, []);
   return (
     <div className="border bg-white h-full p-4 rounded-[18px]">
       <Table className={""}>
@@ -133,7 +133,7 @@ const table = ({ ...Props }: Props) => {
               Loading...
             </div>
           </></TableCell></TableRow></TableBody> :
-            Props.vendorData ?
+             Props?.vendorData ?
               <TableBody>
                 {Props &&
                   Props.vendorData?.map((data, index) => {
@@ -187,7 +187,7 @@ const table = ({ ...Props }: Props) => {
                               </g>
                             </svg>
                           </div>
-                          <Image src={"/svg/delete.svg"} width={20} height={20} alt='view-document' className='cursor-pointer' onClick={() => Props.handleDeleteVendor(data.name)} />
+                          {/* <Image src={"/svg/delete.svg"} width={20} height={20} alt='view-document' className='cursor-pointer' onClick={() => Props.handleDeleteVendor(data.name)} /> */}
                         </TableCell>
                       </TableRow>
                     );
@@ -195,13 +195,13 @@ const table = ({ ...Props }: Props) => {
               </TableBody>
 
               :
-              <TableBody>
+                <TableBody>
                 <TableRow className="text-center text-nowrap">
-                  <TableCell className="" colSpan={9}>No Result</TableCell>
+                <TableCell className="" colSpan={9}>No Result</TableCell>
                 </TableRow>
-
-              </TableBody>
-        }
+                
+                </TableBody>
+              }
       </Table>
       <Toaster richColors position="top-right" />
     </div>
