@@ -11,159 +11,25 @@ import {
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/app/context/AuthContext";
-import { Previewdata } from '@/app/(afterlogin)/hcp_services/page';
+// import { Previewdata } from '@/app/(afterlogin)/hcp_services/page';
 import { Toaster, toast } from 'sonner';
 import IsReportingHeadDialog from "@/components/isReportingHeadDialog";
 import CityDropdwon from '@/components/training_and_education/search_city'
-type dropdownData = {
-  company: {
-    name: string,
-    company_name: "string"
-  }[],
-  division: {
-    name: string,
-    division_name: string
-  }[],
-  requestor: {
-    full_name: string,
-    email: string
-  }[],
-  vendor_type: {
-    name: string,
-    vendor_type: string
-  }[],
-  state: {
-    name: string,
-    state: string
-  }[]
-  currency: {
-    name: string
-  }[]
-  engagement_type: {
-    name: string
-    engagement_type: string
-  }[]
-  training_ref_no: {
-    name: string
-  }[]
-  sponsorship_ref_no: {
-    name: string
-  }[]
-};
-type Compensation = {
-  vendor_type: string;
-  vendor_name: string;
-  est_amount: number;
-  gst_included?: number;
-};
-type Logistics = {
-  vendor_type: string;
-  est_amount: number;
-};
-type FormData = {
-  name: string | null;
-  event_type: string;
-  company: string;
-  event_cost_center: string;
-  state: string;
-  city: string;
-  event_start_date: string;
-  event_end_date: string;
-  bu_rational: string;
-  faculty: string;
-  participants: string;
-  therapy: string;
-  event_name: string;
-  event_venue: string;
-  comments: string;
-  compensation: Compensation[];
-  logistics: Logistics[];
-  total_compensation_expense: number;
-  total_logistics_expense: number;
-  event_requestor: string;
-  business_unit: string;
-  division_category: string;
-  division_sub_category: string;
-  sub_type_of_activity: string;
-  any_govt_hcp: string,
-  no_of_hcp: number,
-  type_of_engagement: string,
-  training_ref_no:string,
-  product_details:string,
-  annual_plan: number,
-  service_type: string,
-  sponsorship_ref_no: string,
-  reporting_head: string,
-};
-type activityDropdown = {
-  activity: {
-    name: string,
-    activity_name: string
-  }[],
-  document: {
-    name: string,
-    activity_type: string,
-    document_name: string
-  }[]
-}
-type eventCostCenter = {
-  cost_center: {
-    name: string;
-    cost_center_description: string;
-  }[];
-  division_category: {
-    name: string;
-    category: string;
-  }[];
-  therapy: {
-    name: string;
-    therapy: string;
-  }[];
-};
-type subtypeActivity = {
-  name: string;
-  division_sub_category: string
-}[];
-type reportingHeadDropdown = {
-  reporting_name: string;
-  reporting: string
-}[];
-type CityDropdown = {
-  name: string;
-  city: string
-}
-type stateDropdown = {
-  name: string;
-  state: string;
-}[];
+import { DropdownDataType, PreviewDataType} from "@/app/Types/EventData";
+import {eventCostCenter,subtypeActivity,reportingHeadDropdown,stateDropdown,FormErrors,CityDropdown} from '@/app/Types/EventData'
+
 
 type Props = {
   cityDropdown: CityDropdown[];
   cityDropdownData: CityDropdown[];
   ReportingHeadDropdown: reportingHeadDropdown | null
-  dropdownData: dropdownData | null;
-  previewData: Previewdata | null;
+  dropdownData: DropdownDataType | null;
+  previewData: PreviewDataType | null;
   eventCostCenter: eventCostCenter | null;
   refno: string;
   subtypeActivity: subtypeActivity | null;
 };
-type FormErrors = {
-  type_of_engagement?: string;
-  event_cost_center?: string;
-  product_details?: string;
-  event_end_date?: string;
-  event_start_date?: string;
-  annual_plan?: string;
-  service_type?: string;
-  event_venue?: string;
-  event_name?: string;
-  sponsorship_ref_no: string;
-  training_ref_no: string;
-  state?: string;
-  reporting_head?: string;
-  division_category?:string;
 
-}
 
 const Form1 = ({ ...Props }: Props) => {
   const router = useRouter();
@@ -176,7 +42,7 @@ const Form1 = ({ ...Props }: Props) => {
     useState<subtypeActivity | null>(null);
   const [subtypeActivityVisible, setSubtypeActivityVisible] = useState(false);
   const [engagementTypes, setEngagementTypes] = useState("");
-  const [formdata, setFormData] = useState<FormData>(Props.previewData ?? '');
+  const [formdata, setFormData] = useState<PreviewDataType>(Props.previewData as PreviewDataType?? '');
   const [refNo, setRefNo] = useState<string | null>(Props.refno);
   const [eventStartDate, setEventStartDate] = useState<any>(Props.previewData?.event_start_date ? new Date(Props.previewData?.event_start_date).getTime() : "");
   const [reportingHeadDropdown, setReportingHeadDropdown] = useState<reportingHeadDropdown | null>(null)
@@ -198,13 +64,23 @@ const Form1 = ({ ...Props }: Props) => {
     if ((Props.previewData?.event_end_date ? (formdata && ("event_end_date" in formdata && formdata.event_end_date == '')) : (!formdata?.event_end_date))) errors.event_end_date = "Event End Date is required";
     if ((Props.previewData?.annual_plan ? (formdata && ("annual_plan" in formdata && formdata.annual_plan)) : (((formdata?.type_of_engagement == "MSA") || (formdata?.type_of_engagement == "Scientific Advisory Consultancy Agreement")) && (!formdata?.annual_plan)))) errors.annual_plan = "Annual Plan is required";
     if ((Props.previewData?.service_type ? (formdata && ("service_type" in formdata && formdata.service_type == '')) : ((formdata?.type_of_engagement == "MSA") && (!formdata?.service_type)))) errors.service_type = "Service Type is required";
-    if ((Props.previewData?.sponsorship_ref_no ? (formdata && ("sponsorship_ref_no" in formdata && formdata.sponsorship_ref_no == '')) : ((formdata?.type_of_engagement == "One Time") && (!formdata?.sponsorship_ref_no)))) errors.sponsorship_ref_no = "Sponsorship Reference Number is required";
+    // if ((Props.previewData?.sponsorship_ref_no ? (formdata && ("sponsorship_ref_no" in formdata && formdata.sponsorship_ref_no == '')) : ((formdata?.type_of_engagement == "One Time") && (!formdata?.sponsorship_ref_no)))) errors.sponsorship_ref_no = "Sponsorship Reference Number is required";
     if ((Props.previewData?.training_ref_no ? (formdata && ("training_ref_no" in formdata && formdata.training_ref_no == '')) : ((formdata?.type_of_engagement == "One Time") && (!formdata?.training_ref_no)))) errors.training_ref_no = "Training Reference Number is required";
     if ((Props.previewData?.event_venue ? (formdata && ("event_venue" in formdata && formdata.event_venue == '')) : ((formdata?.type_of_engagement == "One Time") && (!formdata?.event_venue)))) errors.event_venue = "Event Venue is required";
     if ((Props.previewData?.event_name ? (formdata && ("event_name" in formdata && formdata.event_name == '')) : ((formdata?.type_of_engagement == "One Time") && (!formdata?.event_name)))) errors.event_name = "Event Name is required";
     if (Props.previewData?.state ? formdata && "state" in formdata && formdata.state == "" : !formdata?.state) errors.state = "State is required";
     if (Props.previewData?.reporting_head ? formdata && "reporting_head" in formdata && formdata.reporting_head == "" : !formdata?.reporting_head) errors.reporting_head = "Reporting Head is required";
     if (Props.previewData?.division_category ? formdata && "division_category" in formdata && formdata.division_category == "" : !formdata?.division_category) errors.division_category = "Budget is required";
+    if((Props.previewData?.business_unit == "Orthopedics" || formdata?.business_unit == "Orthopedics")){
+      if ( 
+        Props.previewData?.event_division
+        ? formdata &&
+        "event_division" in formdata &&
+        formdata.event_division == ""
+        : !formdata?.event_division
+      )
+      errors.event_division = "event_division is required";
+    }
     return errors;
   };
   const handleFieldValues = () => {
@@ -219,14 +95,14 @@ const Form1 = ({ ...Props }: Props) => {
       event_end_date: "",
       event_start_date: "",
       product_details: "",
-    })as FormData);
+    })as PreviewDataType);
   };
   const handleSelectChange = (value: string, name: string) => {
-    setFormData((prev) => ({ ...prev, [name]: value }) as FormData);
+    setFormData((prev) => ({ ...prev, [name]: value }) as PreviewDataType);
   };
   const handlefieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }) as FormData);
+    setFormData(prev => ({ ...prev, [name]: value }) as PreviewDataType);
   };
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -240,7 +116,12 @@ const Form1 = ({ ...Props }: Props) => {
       ...formdata
 
     };
-
+    if(updatedFormData?.training_ref_no == "NA"){
+      updatedFormData.training_ref_no = "";
+    }
+    if(updatedFormData?.business_unit != "Orthopedics"){
+      updatedFormData.event_division = "";
+    }
     updatedFormData.event_type = "HCP Services"
     if (refNo) {
       updatedFormData.name = refNo;
@@ -280,8 +161,9 @@ const Form1 = ({ ...Props }: Props) => {
       reporting_head: '',
       division_sub_category: '',
       division_category: '',
-      event_cost_center: ''
-    }) as FormData);
+      event_cost_center: '',
+      event_division: ''
+    }) as PreviewDataType);
     setCity("")
     try {
       const response = await fetch(
@@ -394,7 +276,7 @@ const Form1 = ({ ...Props }: Props) => {
     }
   };
   useEffect(() => {
-    setFormData({ ...formdata, name: refNo } as FormData)
+    setFormData({ ...formdata, name: refNo } as PreviewDataType)
   }, [refNo])
 
   useEffect(() => {
@@ -429,7 +311,7 @@ const Form1 = ({ ...Props }: Props) => {
         if (response.ok) {
           const data = await response.json();
           if (data.message.length == 1) {
-            setFormData((prev) => ({ ...prev, state: data.message[0].name } as FormData));
+            setFormData((prev) => ({ ...prev, state: data.message[0].name } as PreviewDataType));
           }
           setStateDropdown(data.message);
           return data.data;
@@ -470,7 +352,7 @@ const Form1 = ({ ...Props }: Props) => {
     useEffect(() => {
       console.log(city, 'city')
       if (city) {
-        setFormData((prev) => ({ ...prev, city: city } as FormData));
+        setFormData((prev) => ({ ...prev, city: city } as PreviewDataType));
         handleCityChange(city)
       }
     }, [city]);
@@ -502,7 +384,7 @@ const Form1 = ({ ...Props }: Props) => {
           const data = await response.json();
           setReportingHeadDropdown(data.data);
           if (data.data.length == 1) {
-            setFormData((prev) => ({ ...prev, reporting_head: data.data[0].reporting } as FormData));
+            setFormData((prev) => ({ ...prev, reporting_head: data.data[0].reporting } as PreviewDataType));
           }
           return data.data;
         } else {
@@ -523,9 +405,10 @@ const Form1 = ({ ...Props }: Props) => {
   const clearCity = () => {
     console.log('inside claer city')
     setCity('');
-    setFormData((prev) => ({ ...prev, reporting_head: '' }) as FormData);
-    setFormData((prev) => ({ ...prev, state: '' }) as FormData);
+    setFormData((prev) => ({ ...prev, reporting_head: '' }) as PreviewDataType);
+    setFormData((prev) => ({ ...prev, state: '' }) as PreviewDataType);
   };
+  console.log(formdata,"----------------")
   return (
     // </div>
     <>
@@ -536,7 +419,7 @@ const Form1 = ({ ...Props }: Props) => {
         <div className="grid grid-cols-2 gap-6 pb-8">
           <div className="flex flex-col gap-2">
             <label className="lable">
-              Company Names
+              Company Name
             </label>
             <Select
               onValueChange={(value) => { handleSelectChange(value, "company") }}
@@ -601,6 +484,57 @@ const Form1 = ({ ...Props }: Props) => {
               </SelectContent>
             </Select>
           </div>
+
+        {
+          formdata.business_unit == "Orthopedics" &&
+          (
+          <div className="flex flex-col gap-2">
+            <label className="lable">
+              Event Division
+            </label>
+            <Select
+              onValueChange={(value) => handleSelectChange(value, "event_division")}
+              defaultValue={Props.previewData?.event_division ? Props.previewData.event_division : userid as string}
+            >
+              <SelectTrigger className="dropdown">
+                <SelectValue placeholder="Select" />
+              </SelectTrigger>
+              <SelectContent>
+                {
+                  eventCostCenter ? (
+                    eventCostCenter.event_division.map((item, index) => {
+                      return (
+                        <SelectItem value={item.name}>
+                          {item.event_division}
+                        </SelectItem>
+                      );
+                    })
+                  )
+                :
+                Props.eventCostCenter && Props.eventCostCenter.event_division ?
+                  Props.eventCostCenter.event_division.map((item, index) => {
+                    return (
+                      <SelectItem value={item.name}>
+                        {item.event_division}
+                      </SelectItem>
+                    );
+                  })
+                  :
+                  <SelectItem value={"null"} disabled>No Data Yet</SelectItem>
+                }
+              </SelectContent>
+            </Select>
+            {errors &&
+            errors?.event_division &&
+            !formdata?.event_division && (
+              <p className="w-full text-red-500 text-[11px] font-normal text-left">
+                {errors?.event_division}
+              </p>
+            )}
+          </div>
+          )
+        }
+
           <div className="flex flex-col gap-2">
             <label className="lable">
               event cost center<span className="text-[#e60000]">*</span>
@@ -933,6 +867,7 @@ const Form1 = ({ ...Props }: Props) => {
                       <SelectValue placeholder="Select" />
                     </SelectTrigger>
                     <SelectContent>
+                    <SelectItem value={"NA"}>{"NA"}</SelectItem>
                       {
                         Props.dropdownData && Props.dropdownData.training_ref_no?.map((item, index) => {
                           return (
@@ -952,16 +887,16 @@ const Form1 = ({ ...Props }: Props) => {
                     )
                   }
                 </div>
-                <div className="flex flex-col md:gap-2">
+                {/* <div className="flex flex-col md:gap-2">
                   <label className="text-black md:text-sm md:font-normal capitalize">
-                    Sponsorship Support Request Ref Number<span className="text-[#e60000]">*</span>
+                    Sponsorship Support Request Ref Number
                   </label>
                   <Select
                     onValueChange={(value) => { handleSelectChange(value, "sponsorship_ref_no") }}
                     defaultValue={Props.previewData?.sponsorship_ref_no ? Props.previewData.sponsorship_ref_no : ""}
                   >
                     <SelectTrigger className="dropdown">
-                      <SelectValue placeholder="Select" />
+                      <SelectValue placeholder="Select"/>
                     </SelectTrigger>
                     <SelectContent>
                       {
@@ -972,8 +907,8 @@ const Form1 = ({ ...Props }: Props) => {
                         })
                       }
                     </SelectContent>
-                  </Select>
-                  {
+                  </Select> */}
+                  {/* {
                     errors &&
                     (errors?.sponsorship_ref_no && !formdata?.sponsorship_ref_no) &&
                     (
@@ -981,8 +916,8 @@ const Form1 = ({ ...Props }: Props) => {
                         {errors?.sponsorship_ref_no}
                       </p>
                     )
-                  }
-                </div>
+                  } */}
+                {/* </div> */}
               </div>
             </div>
 
@@ -995,13 +930,13 @@ const Form1 = ({ ...Props }: Props) => {
                   <label className="text-black md:text-sm md:font-normal capitalize">
                     Event Name<span className="text-[#e60000]">*</span>
                   </label>
-                  <Input
-                    className="text-black shadow md:rounded-xl md:py-5"
+                  <textarea
+                    className='text-black shadow-md border h-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl pl-2 pt-2'
                     placeholder="Type Here"
                     name="event_name"
                     onChange={(e) => { handlefieldChange(e) }}
                     defaultValue={Props.previewData?.event_name ? Props.previewData.event_name : ""}
-                  ></Input>
+                  ></textarea>
                   {
                     errors &&
                     (errors?.event_name && !formdata?.event_name) &&
@@ -1016,13 +951,13 @@ const Form1 = ({ ...Props }: Props) => {
                   <label className="text-black md:text-sm md:font-normal capitalize">
                     Event Venue<span className="text-[#e60000]">*</span>
                   </label>
-                  <Input
-                    className="text-black shadow md:rounded-xl md:py-5"
+                  <textarea
+                    className='text-black shadow-md border h-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl pl-2 pt-2'
                     placeholder="Type Here"
                     name="event_venue"
                     onChange={(e) => { handlefieldChange(e) }}
                     defaultValue={Props.previewData?.event_venue ? Props.previewData.event_venue : ""}
-                  ></Input>
+                  ></textarea>
                   {
                     errors &&
                     (errors?.event_venue && !formdata?.event_venue) &&

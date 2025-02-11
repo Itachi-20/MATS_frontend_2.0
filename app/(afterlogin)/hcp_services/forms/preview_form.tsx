@@ -13,174 +13,11 @@ import Add_vendor from "@/components/add_vendor";
 import { usePathname } from 'next/navigation'
 import { useRouter } from 'nextjs-toploader/app';
 import Comment_box from "@/components/Comment_box";
-import { Previewdata } from '@/app/(afterlogin)/hcp_services/page'
+import { PreviewDataType } from "@/app/Types/EventData";
 import Hcp_Details from "@/components/previewHCPComponents/hcp_details";
 
-type EventEntry = {
-  name: string | null;
-  owner: string | null;
-  creation: string | null;
-  modified: string | null;
-  modified_by: string | null;
-  docstatus: string | null;
-  idx: number;
-  event_type: string | null;
-  company: string | null;
-  event_cost_center: string | null;
-  state: string;
-  sub_type_of_activity: string | null;
-  business_unit: string;
-  division_category: string;
-  therapy: string;
-  event_requestor: string;
-  division_sub_category: string | null;
-  status: string;
-  current_stage: string;
-  event_name: string | null;
-  event_start_date: string;
-  any_govt_hcp: string;
-  comments: string | null;
-  faculty: string;
-  event_venue: string;
-  event_end_date: string;
-  no_of_hcp: number;
-  bu_rational: string;
-  participants: string;
-  total_compensation_expense: number;
-  has_advance_expense: number;
-  total_logistics_expense: number;
-  total_estimated_expense: number;
-  currency: string;
-  preactivity_status: string;
-  advance_status: string;
-  post_activity_status: string;
-  post_expense_status: string;
-  post_expense_check: number;
-  travel_expense_status: string;
-  travel_expense_check: number;
-  invoice_amount: number;
-  basic_amount: number;
-  tds: number;
-  gst: number;
-  net_amount: number;
-  doctype: string;
-  compensation: Compensation[];
-  travel_expense_approvers: any[]; // Empty array, can be customized later
-  post_expense_approvers: any[]; // Empty array, can be customized later
-  preactivity_approvers: ApproverStatus[];
-  post_activity_approvers: any[]; // Empty array, can be customized later
-  occurrence_status: OccurrenceStatus[];
-  logistics: Logistics[];
-  documents: ActivityDocument[];
-  advance_approvers: any[]; // Empty array, can be customized later
-  city: string;
-  reporting_head: string;
-  type_of_engagement: string;
-  product_details: string;
-  any_additional_expense: string;
-}
-
-type Compensation = {
-  name: string;
-  owner: string;
-  creation: string;
-  modified: string;
-  modified_by: string;
-  docstatus: number;
-  idx: number;
-  vendor_type: string;
-  actual_amount: number;
-  status: string;
-  vendor_name: string;
-  advance: number;
-  budget_category: string;
-  est_amount: number;
-  gst_included: number;
-  gst: string;
-  occurrence_no: number;
-  parent: string;
-  parentfield: string;
-  parenttype: string;
-  doctype: string;
-}
-
-type ApproverStatus = {
-  name: string;
-  owner: string;
-  creation: string;
-  modified: string;
-  modified_by: string;
-  docstatus: number;
-  idx: number;
-  approver_level: string;
-  action_date: string;
-  approver: string;
-  remarks: string;
-  approver_status: string;
-  occurrence_no: number;
-  parent: string;
-  parentfield: string;
-  parenttype: string;
-  doctype: string;
-}
-
-type OccurrenceStatus = {
-  name: string;
-  owner: string;
-  creation: string;
-  modified: string;
-  modified_by: string;
-  docstatus: number;
-  idx: number;
-  occurrence_no: number;
-  status: string;
-  parent: string;
-  parentfield: string;
-  parenttype: string;
-  doctype: string;
-}
-
-type Logistics = {
-  name: string;
-  owner: string;
-  creation: string;
-  modified: string;
-  modified_by: string;
-  docstatus: number;
-  idx: number;
-  vendor_type: string;
-  actual_amount: number;
-  status: string;
-  advance: number;
-  budget_category: string;
-  est_amount: number;
-  gst_included: number;
-  gst: string;
-  occurrence_no: number;
-  parent: string;
-  parentfield: string;
-  parenttype: string;
-  doctype: string;
-}
-
-type File = {
-  url: string;
-  name: string;
-  file_name: string
-};
-
-type DocumentDetails = {
-  type: string;
-  file: File[];
-};
-
-type ActivityDocument = {
-  activity_type: string;
-  document: DocumentDetails[];
-};
-
 type Props = {
-  previewData: Previewdata | null;
+  previewData: PreviewDataType | null;
   refno: string | null;
 }
 
@@ -189,7 +26,7 @@ const Preview_Form = ({ ...Props }: Props) => {
   const router = useRouter()
   const [dialog, setDialog] = useState(false);
   const [addVendor, setAddVendor] = useState(false);
-  const [preview_data, setPreviewData] = useState<Previewdata | null | undefined>(Props.previewData);
+  const [preview_data, setPreviewData] = useState<PreviewDataType | null>(Props.previewData);
   const [comment, setComment] = useState<string>();
   const [isCommentbox, setIsCommentbox] = useState<boolean>();
   const [refNo, setRefNo] = useState<string | null>(Props.refno);

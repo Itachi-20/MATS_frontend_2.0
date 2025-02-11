@@ -15,84 +15,24 @@ import { AppContext } from '@/app/context/module';
 import { useState } from 'react';
 import { Toaster, toast } from 'sonner'
 import { useRouter } from "nextjs-toploader/app";
-import {Previewdata} from '@/app/(afterlogin)/patient_support/page';
 import { handleEventStartDateValidate, handleEventEndDateValidate } from "@/app/utility/dateValidation";
-
-type EventEntry = {
-  product_amount: number
-}
-
-type Compensation = {
-  vendor_type: string;
-  vendor_name: string;
-  est_amount: number;
-  gst_included?: number;
-};
-
-type Logistics = {
-  vendor_type: string;
-  est_amount: number;
-};
-
-type formData = {
-  name: string | null;
-  event_type: string;
-  company: string;
-  event_cost_center: string;
-  state: string;
-  city: string;
-  event_start_date: string;
-  event_end_date: string;
-  bu_rational: string;
-  faculty: string;
-  participants: string;
-  therapy: string;
-  requesting_hospital_name: string;
-  event_venue: string;
-  comments: string;
-  compensation: Compensation[];
-  logistics: Logistics[];
-  total_compensation_expense: number;
-  total_logistics_expense: number;
-  total_estimated_expense: number,
-  event_requestor: string;
-  business_unit: string;
-  division_category: string;
-  division_sub_category: string;
-  sub_type_of_activity: string;
-  any_govt_hcp: string,
-  no_of_hcp: number,
-  product_amount: string,
-  ship_to: string,
-  bill_to: string,
-  currency: string,
-};
+import {eventCostCenter,subtypeActivity,reportingHeadDropdown,stateDropdown,FormErrors,CityDropdown, PreviewDataType, ChildVendor} from '@/app/Types/EventData'
 
 type Props = {
-  previewData:Previewdata | null;
+  previewData:PreviewDataType | null;
   refno:string ;
   currency: {
     name: string
   }[] | null
 }
 
-type FormErrors = {
-  requesting_hospital_name?: string;
-  event_start_date?: string;
-  event_end_date?: string;
-  ship_to?: string;
-  bill_to?: string;
-  bu_rational?: string;
-  currency?: string;
-}
-
 const Form2 = ({ ...Props }: Props) => {
   const start_date_ref: React.RefObject<any> = useRef(null);
   const end_date_ref: React.RefObject<any> = useRef(null);
   const router = useRouter();
-  const [formdata, setFormData] = useState<formData>();
+  const [formdata, setFormData] = useState<PreviewDataType>();
   const [errors, setErrors] = useState<FormErrors>();
-  const [preview_data, setPreviewData] = useState<EventEntry | null>(null);
+  const [preview_data, setPreviewData] = useState<PreviewDataType | null>(null);
   const [refNo,setRefNo] = useState<string | null>(Props.refno ?? "");
   const [eventStartDate, setEventStartDate] = useState<any>(Props.previewData?.event_start_date ? new Date(Props.previewData?.event_start_date).getTime() : "");
 
@@ -109,11 +49,11 @@ const Form2 = ({ ...Props }: Props) => {
     }
   };
   const handleSelectChange = (value: string, name: string) => {
-    setFormData((prev) => ({ ...prev, [name]: value }) as formData);
+    setFormData((prev) => ({ ...prev, [name]: value }) as PreviewDataType);
   };
   const handlefieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }) as formData);
+    setFormData(prev => ({ ...prev, [name]: value }) as PreviewDataType);
   };
   const validateAtSubmit = () => {
     const errors: FormErrors = {};

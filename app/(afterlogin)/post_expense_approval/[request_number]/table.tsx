@@ -79,7 +79,7 @@ const TableComponent = ({ ...Props }: Props) => {
       setLoading(false);
     }
     setLoading(false);
-  }, [Props.tableData.occurence]);
+  }, [Props?.tableData?.occurence]);
   return (
     <TooltipProvider>
 

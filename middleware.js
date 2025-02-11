@@ -18,8 +18,9 @@ export async function middleware(req) {
 
 // Optional: Define route matching
 export const config = {
-    matcher: ['/training_and_education'],
-    matcher: ['/awareness_program'],
-    matcher: ['/dashboard'],
+    // matcher: ['/training_and_education'],
+    // matcher: ['/awareness_program'],
+    // matcher: ['/dashboard'],
+    matcher:["/((?!api/sign-in|_next|sign-in).*)"]
     
 };

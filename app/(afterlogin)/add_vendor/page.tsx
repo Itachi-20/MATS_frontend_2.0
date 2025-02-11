@@ -1,5 +1,5 @@
 'use client'
-import React,{useRef} from 'react'
+import React, { useRef } from 'react'
 import { Input } from "@/components/ui/input";
 import {
     Select,
@@ -28,6 +28,7 @@ import { useSearchParams } from 'next/navigation'
 import { useAuth } from "../../context/AuthContext";
 import ConfirmPopup from '@/components/deleteDialog'
 import Image from 'next/image';
+import DeleteDialog from '@/components/deleteDialog';
 
 type dropdownData = {
     company: {
@@ -65,6 +66,7 @@ type DocumentRow = {
 };
 type formData = {
     name: string;
+    company:string;
     vendor_type: string;
     vendor_name: string;
     remark: string;
@@ -73,6 +75,7 @@ type formData = {
     email: string;
     contact_number: string;
     pan_check: boolean;
+    can_approve:boolean;
     document: DocumentRow[];
 };
 
@@ -88,6 +91,7 @@ type Errors = {
     vendor_code: string;
     email: string;
     contact_number: string;
+    company:string;
 }
 const page = () => {
     const [dropdownData, setDropdownData] = useState<dropdownData | null>(null);
@@ -101,6 +105,12 @@ const page = () => {
     const [confirmpopup, setConfirmPopup] = useState(false)
     const [formdata, setFormData] = useState<formData>();
     const [loading, setLoading] = useState(false)
+    const [isApproveDialog,setIsApproveDialog] = useState<boolean>(false);
+    const [comment,setComment] = useState<string>("");
+    const [buttonText,setButtonText] = useState<string>("");
+    const [status,setStatus] = useState<string>("")
+    const [isDeleteDialog,setIsDeleteDialog] = useState<boolean>(false);
+    const [documentDeleteIndex,setDocumentDeleteIndex] = useState<number | null>(0);
     const base_url = process.env.NEXT_PUBLIC_FRAPPE_URL;
     const router = useRouter()
     const view = useSearchParams().get('view')
@@ -138,6 +148,11 @@ const page = () => {
     useEffect(() => {
         dropdown();
     }, [])
+
+
+    const handleDialog = ()=>{
+        setIsApproveDialog(prev=>!prev)
+    }
 
     const vendorViewData = async () => {
 
@@ -184,6 +199,7 @@ const page = () => {
         if (!formdata?.vendor_name) errors.vendor_name = "Vendor Name is required";
         if (!formdata?.pan_number) errors.pan_number = "Amount is required";
         if (!formdata?.email) errors.email = "Email is required";
+        if (!formdata?.company) errors.company = "Company is required";
         if (!formdata?.contact_number) {
             errors.contact_number = "Contact Number is required";
         } else {
@@ -194,7 +210,6 @@ const page = () => {
                 errors.contact_number = "Contact Number should be valid 10 digits";
             }
         }
-        //  if (!formdata?.contact_number || formdata?.contact_number.length != 13  ) errors.contact_number = "Contact Number is required and Should valid";
         return errors;
     };
     const handleFinalSubmit = async () => {
@@ -305,44 +320,6 @@ const page = () => {
         }
         formData.append("type", document_type);
 
-        // try {
-        //     const response = await fetch(`/api/fileUpload`, {
-        //         method: "POST",
-        //         body: formData,
-        //         credentials: "include",
-        //     });
-
-        //     if (response.ok) {
-        //         const data = await response.json();
-        //         console.log("Upload successful:", data.message.file_name);
-        //         const newDocument: DocumentRow = {
-        //             document_type,
-        //             is_private: "1",
-        //             filename: data.message.file_name,
-        //             creation: data.message.creation,
-        //             owner: data.message.modified_by,
-        //             file: data.message.file_url,
-        //         };
-        //         console.log("newDocument", newDocument)
-        //         setFormData((prevFormData) => ({
-        //             ...prevFormData,
-        //             document: Array.isArray(prevFormData?.document) ? [...prevFormData.document, newDocument] : [newDocument],
-        //         }) as formData);
-        //         // const updatedDocumentRows = [...documentRows , newDocument];
-        //         const updatedDocumentRows = [...(Array.isArray(documentRows) ? documentRows : []), newDocument];
-
-        //         setDocumentRows(updatedDocumentRows);
-        //         handleReset();
-        //         setFileName(null);
-        //         setDocumentType('');
-
-        //     } else {
-        //         alert("File upload failed. Please try again.");
-        //     }
-        // } catch (error) {
-        //     console.error("Error uploading file:", error);
-        // }
-
 
         const apiCallPromise = new Promise(async (resolve, reject) => {
             try {
@@ -450,14 +427,40 @@ const page = () => {
         setConfirmPopup(true)
     };
 
-    const handleDeleteDocument = async (index: number) => {
-        console.log('indise delete ', index)
-        setDocumentRows((prevRows) => prevRows.filter((_, i) => i !== index));
+    const handleDeleteDocument = async () => {
+        setDocumentRows((prevRows) => prevRows.filter((_, i) => i !== documentDeleteIndex));
     };
 
     const availableOptions = allOptions.filter(
         (option) => !documentRows.some((row) => row.document_type === option)
     );
+
+    const handleApproval = async (remarks?:string , status?:string)=>{
+        try {
+            const response = await fetch(`/api/approveVendor/`,{
+                headers:{
+                    "Content-Type":"application/json"
+                },
+                body:JSON.stringify({
+                    name:refno,
+                    action:status,
+                    remark:remarks
+                }),
+                method:"post"
+            });
+            if(response.ok){
+                setTimeout(()=>{
+                    router.push('/event_vendor_list');
+                },2000);
+                toast.success(`${status + "ed"} Successfully`)
+            }
+        } catch (error) {
+            console.error(error);
+            toast.error("Something went wrong");
+        }
+    }
+
+    console.log(formdata, 'formdata')
     return (
         <>
             <div className='p-7 w-full relative z-20 text-black'>
@@ -473,7 +476,42 @@ const page = () => {
                             </Button>
                         }
                     </div>
-                    <div className="grid grid-cols-2 gap-12 pb-8">
+                    <div className="grid grid-cols-2 gap-6 pb-8">
+                        <div className="flex flex-col gap-2">
+                            <label className={`lable ${(errors?.company && !formdata?.company) ? `text-red-600` : `text-black text-sm font-normal capitalize`}`}>
+                                Company Name
+                            </label>
+                            <Select
+                                onValueChange={(value) => handleSelectChange(value, "company")}
+                                value={formdata ? formdata?.company : ''}
+                            >
+                                <SelectTrigger className="dropdown">
+                                    <SelectValue placeholder="Select" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {dropdownData ?
+                                        dropdownData.company.map((item, index) => {
+                                            return (
+                                                <SelectItem value={item.name}>
+                                                    {item.company_name}
+                                                </SelectItem>
+                                            );
+                                        })
+                                        :
+                                        <SelectItem value={"null"} disabled>No Data Yet</SelectItem>
+                                    }
+                                </SelectContent>
+                            </Select>
+                            {
+                                errors &&
+                                (errors?.company && !formdata?.company) &&
+                                (
+                                    <p className="w-full text-red-500 text-[11px] font-normal text-left">
+                                        {errors?.company}
+                                    </p>
+                                )
+                            }
+                        </div>
                         <div className="flex flex-col gap-2">
                             <label className={`lable ${(errors?.vendor_type && !formdata?.vendor_type) ? `text-red-600` : `text-black`}`}>
                                 Vendor Type<span className="text-[#e60000]">*</span>
@@ -601,7 +639,7 @@ const page = () => {
                                 )
                             }
                         </div>
-                        <div className="flex flex-col col-span-2 gap-2">
+                        <div className="flex flex-col col-span-1 gap-2">
                             <label className="text-black text-sm font-normal capitalize">
                                 Remark
                             </label>
@@ -669,8 +707,8 @@ const page = () => {
                                                 {/* <h1 className="mt-[2px]">{fileName ? fileName : ' Receipt/Bill'}</h1> */}
                                                 <span className="font-medium truncate max-w-[200px]">{fileName ? fileName : ' Receipt/Bill'}</span>
                                             </div>
-                                            <Input type="file" onChange={(e) => { handleFileUpload(e) }} id="file" className="hidden" 
-                                            ref={inputFile}
+                                            <Input type="file" onChange={(e) => { handleFileUpload(e) }} id="file" className="hidden"
+                                                ref={inputFile}
                                             ></Input>
                                         </label>
                                         <div className='items-baseline pt-7'>
@@ -714,7 +752,7 @@ const page = () => {
                                                 >
                                                     View
                                                 </Link>
-                                                <button onClick={() => handleDeleteDocument(index)} ><Image src={'/svg/delete.svg'} alt='deletesvg' width={20} height={18} /></button>
+                                                <button onClick={() => {setDocumentDeleteIndex(index);setIsDeleteDialog(prev=>!prev);}} ><Image src={'/svg/delete.svg'} alt='deletesvg' width={20} height={18} /></button>
                                             </TableCell>
                                         </TableRow>
                                     ))
@@ -730,21 +768,42 @@ const page = () => {
 
                     </div>
 
-                    <div className="flex justify-end pt-5 gap-4">
+                    <div className={`flex justify-end pt-5 gap-4`}>
                         {view != "view" &&
                             <>
                                 {/* <Button className="bg-white text-black border text-md font-normal hover:bg-white" >
                                    Back
                                 </Button> */}
-                                <Button className="bg-[#4430bf] text-white text-md font-normal border hover:bg-[#4430bf]" onClick={formdata?.pan_check ? handleConfirmpopup : handleFinalSubmit}>
+                                <div className={`${refno?"hidden":""}`}>
+                                <Button className={`${(role == "Event Requestor" || role == "Event Finance")?"":"hidden"} bg-[#4430bf] text-white text-md font-normal border hover:bg-[#4430bf]`} onClick={formdata?.pan_check ? handleConfirmpopup : handleFinalSubmit}>
                                     Submit
                                 </Button>
-
+                                </div>
+                                <div className={`${formdata?.can_approve && refno?"":"hidden"} flex gap-4`}>
+                                <Button className={`bg-[#5dbe74] hover:bg-[#5dbe74] px-6 text-white`} onClick={()=>{handleApproval("","Approve"); setButtonText("Approve"); }}>Approve</Button>
+                                <Button className={`bg-[#ff5757] hover:bg-[#ff5757] px-6 text-white`} onClick={()=>{handleApproval("","Reject"); setButtonText("Reject"); }}>Reject</Button>
+                                </div>
                             </>
                         }
                     </div>
                 </div>
             </div>
+           {/* {isApproveDialog &&  
+               <ApproveCommentBox
+               handleClose={handleDialog}
+               handleSubmit={handleApproval}
+               ButtonText = {buttonText}
+               />
+            } */}
+            {
+                isDeleteDialog && 
+                <DeleteDialog
+                 setClose={setIsDeleteDialog}
+                 handleSubmit={handleDeleteDocument}
+                 text='Are You Sure You Want To Delete This Document?'
+                />
+            }
+           
             <Toaster richColors position="top-right" />
             {
 

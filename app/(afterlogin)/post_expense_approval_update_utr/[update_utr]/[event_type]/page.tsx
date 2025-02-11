@@ -13,9 +13,11 @@ import SuccessProp from '@/components/success_prop';
 
 
 type File = {
-    name: string;
-    file_name: string;
-    file_url: string;
+  file_name: string;
+  name: string;
+  file_url: string;
+  creation:string
+  owner:string
   };
   
   type ActualVendor = {

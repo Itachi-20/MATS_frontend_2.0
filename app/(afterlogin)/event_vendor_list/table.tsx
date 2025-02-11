@@ -47,14 +47,14 @@ type Props = {
 const table = ({ ...Props }: Props) => {
   const router = useRouter()
   const [loading, setLoading] = useState(true)
+
   useEffect(() => {
-    if (Props.vendorData) {
+    if (Props?.vendorData) {
+      setLoading(false)
+    }else{
       setLoading(false);
     }
-    setLoading(false);
-  }, [Props.vendorData]);
-
-  console.log(Props.vendorData, 'Props')
+  }, []);
   return (
     <div className="border bg-white h-full p-4 rounded-[18px]">
       <Table className={""}>
@@ -84,14 +84,6 @@ const table = ({ ...Props }: Props) => {
 
             <TableHead
               className={
-                "text-center"
-              }
-            >
-              Remark
-            </TableHead>
-
-            <TableHead
-              className={
                 "text-center "
               }
             >
@@ -110,6 +102,13 @@ const table = ({ ...Props }: Props) => {
               }
             >
               Contact
+            </TableHead>
+            <TableHead
+              className={
+                "text-center"
+              }
+            >
+              Remark
             </TableHead>
             <TableHead
               className={
@@ -134,7 +133,7 @@ const table = ({ ...Props }: Props) => {
               Loading...
             </div>
           </></TableCell></TableRow></TableBody> :
-            Props.vendorData ?
+             Props?.vendorData ?
               <TableBody>
                 {Props &&
                   Props.vendorData?.map((data, index) => {
@@ -143,10 +142,10 @@ const table = ({ ...Props }: Props) => {
                         <TableCell>{data.vendor_type}</TableCell>
                         <TableCell>{data.vendor_name}</TableCell>
                         <TableCell>{data.vendor_code}</TableCell>
-                        <TableCell>{data.remark}</TableCell>
                         <TableCell>{data.pan_number}</TableCell>
                         <TableCell>{data.email}</TableCell>
                         <TableCell>{data.contact_number}</TableCell>
+                        <TableCell>{data.remark}</TableCell>
                         <TableCell>{data.status}
                           {/* {data.status == "Approved" ? data.status :<Button className="bg-[#F0EDFF] w-[75px] text-[#4430BF] text-sm  rounded-md font-semibold hover:underline capitalize" onClick={() => router.push(`/add_vendor?refno=${data.name}`)}>Approve</Button>} */}
                         </TableCell>
@@ -188,7 +187,7 @@ const table = ({ ...Props }: Props) => {
                               </g>
                             </svg>
                           </div>
-                          <Image src={"/svg/delete.svg"} width={20} height={20} alt='view-document' className='cursor-pointer' onClick={() => Props.handleDeleteVendor(data.name)} />
+                          {/* <Image src={"/svg/delete.svg"} width={20} height={20} alt='view-document' className='cursor-pointer' onClick={() => Props.handleDeleteVendor(data.name)} /> */}
                         </TableCell>
                       </TableRow>
                     );
@@ -196,13 +195,13 @@ const table = ({ ...Props }: Props) => {
               </TableBody>
 
               :
-              <TableBody>
+                <TableBody>
                 <TableRow className="text-center text-nowrap">
-                  <TableCell className="" colSpan={9}>No Result</TableCell>
+                <TableCell className="" colSpan={9}>No Result</TableCell>
                 </TableRow>
-
-              </TableBody>
-        }
+                
+                </TableBody>
+              }
       </Table>
       <Toaster richColors position="top-right" />
     </div>

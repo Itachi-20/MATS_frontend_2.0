@@ -11,56 +11,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Toaster, toast } from 'sonner'
-type activityDropdown = {
-  name: string,
-  document_name: string
-}[]
-type Compensation = {
-  vendor_type: string;
-  vendor_name: string;
-  est_amount: number;
-  gst_included?: number;
-};
+import {eventCostCenter,subtypeActivity,reportingHeadDropdown,stateDropdown,FormErrors,CityDropdown, PreviewDataType, ChildVendor, ActivityDropdownType} from '@/app/Types/EventData'
 
-type Logistics = {
-  vendor_type: string;
-  est_amount: number;
-};
-
-type formData = {
-  name: string | null;
-  event_type: string;
-  company: string;
-  event_cost_center: string;
-  state: string;
-  city: string;
-  event_start_date: string;
-  event_end_date: string;
-  bu_rational: string;
-  faculty: string;
-  participants: string;
-  therapy: string;
-  event_name: string;
-  event_venue: string;
-  comments: string;
-  compensation: Compensation[];
-  logistics: Logistics[];
-  total_compensation_expense: number;
-  total_logistics_expense: number;
-  event_requestor: string;
-  business_unit: string;
-  division_category: string;
-  division_sub_category: string;
-  sub_type_of_activity: string;
-  any_govt_hcp: string,
-  no_of_hcp: number
-};
 
 type Props = {
-  activityDropdown: activityDropdown | null
+  activityDropdown: ActivityDropdownType | null
   refno: string | null
 }
 const form4 = ({ ...Props }: Props) => {
@@ -69,7 +26,7 @@ const form4 = ({ ...Props }: Props) => {
   const [activityType, setActivityType] = useState('Pre Activity');
   const [refno, setRefno] = useState(Props.refno ?? "");
   const [documentType, setDocumentType] = useState("");
-  const [formdata, setFormData] = useState<formData | {}>({});
+  const [formdata, setFormData] = useState<PreviewDataType | {}>({});
   // const [refNo,setRefNo] = useState<string | null>(localStorage.getItem("refno")?localStorage.getItem("refno"):"");
   const [preview_data, setPreviewData] = useState<any>(null);
   const [uploadedFiles, setUploadedFiles] = useState<FileList | null>(null);
@@ -180,12 +137,39 @@ const form4 = ({ ...Props }: Props) => {
   useEffect(() => {
   }, [preview_data])
 
+  const handleNavigation = () => {
+    const fromValue = encodeURIComponent(`patient_support?forms=3&refno=${refno}`);
+    router.push(`/event_passenger_list/${refno}?from=${fromValue}`);
+  };
   return (
     // </div>
     (<div>
-      <h1 className="text-black text-2xl font-normal uppercase pb-8">
-        Documents
-      </h1>
+      <div className='flex justify-between items-center'>
+        <h1 className="text-black text-2xl font-normal uppercase pb-8">
+          Documents
+        </h1>
+        <div className="flex justify-end pt-5 gap-4 pb-4">
+          <div className="relative">
+            <svg
+              className="absolute top-3 left-4"
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                id="Vector"
+                d="M14.8571 9.14286H9.14286V14.8571C9.14286 15.1602 9.02245 15.4509 8.80812 15.6653C8.59379 15.8796 8.30311 16 8 16C7.6969 16 7.40621 15.8796 7.19188 15.6653C6.97755 15.4509 6.85714 15.1602 6.85714 14.8571V9.14286H1.14286C0.839753 9.14286 0.549063 9.02245 0.334735 8.80812C0.120408 8.59379 0 8.3031 0 8C0 7.6969 0.120408 7.40621 0.334735 7.19188C0.549063 6.97755 0.839753 6.85714 1.14286 6.85714H6.85714V1.14286C6.85714 0.839752 6.97755 0.549062 7.19188 0.334735C7.40621 0.120407 7.6969 0 8 0C8.30311 0 8.59379 0.120407 8.80812 0.334735C9.02245 0.549062 9.14286 0.839752 9.14286 1.14286V6.85714H14.8571C15.1602 6.85714 15.4509 6.97755 15.6653 7.19188C15.8796 7.40621 16 7.6969 16 8C16 8.3031 15.8796 8.59379 15.6653 8.80812C15.4509 9.02245 15.1602 9.14286 14.8571 9.14286Z"
+                fill="#635E5E"
+              />
+            </svg>
+            <Button className="bg-white text-black border text-md font-normal rounded-xl pl-10 py-2 hover:bg-white" onClick={() => handleNavigation()}>
+              Add Passenger
+            </Button>
+          </div>
+        </div>
+      </div>
       <div className="grid grid-cols-3 gap-6 pb-7 text-black">
         <div className="flex flex-col gap-2">
           <label className="lable">

@@ -9,13 +9,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body>
+    // <html lang="en">
+    //   <body>
+    <>
         {/* <NProgress
           color="#29d"
           stopDelayMs={1000}
           height={10}
-        /> */}
+          /> */}
         <NextTopLoader
         color="#4430bf"
         initialPosition={0.4}
@@ -28,7 +29,7 @@ export default function RootLayout({
         shadow="0 0 10px ##4430bf,0 0 5px #4430bf"
         zIndex={1600}
         showAtBottom={true}
-         />
+        />
         <div className="h-screen bg-[#EBEBF6] grid grid-cols-6 relative overflow-hidden">
           <div className="col-span-1 mx-auto max-w-[200px]">
             <Sidebar />
@@ -47,7 +48,8 @@ export default function RootLayout({
             {children}
           </div>
         </div>
-      </body>
-    </html>
+        </>
+    //   </body>
+    // </html>
   );
 }

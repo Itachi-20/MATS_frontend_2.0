@@ -10,192 +10,25 @@ import VendorDetails from "@/components/vendor_Details";
 import LogisticsBudget from "@/components/logistics_budget";
 import CompensationBudget from "@/components/compensation_budget"
 import TotalExpense from "@/components/total_Expense"
-import Documents from "@/components/documents"
+import Documents from "@/components/commonPreviewComponents/documents"
 import Add_vendor from "@/components/add_vendor";
 // import ShippingDetails from "@/components/shipping_details";
 import BeneficiaryDetails from "@/components/previewPatientSupportComponents/beneficialDetails";
 import OtherDetails from "@/components/sponsorshipSupportPreviewComponents/other_details";
 import { useEffect } from "react";
 import Comment_box from "@/components/Comment_box";  
-import { Previewdata } from '@/app/(afterlogin)/patient_support/page'
+import {eventCostCenter,subtypeActivity,reportingHeadDropdown,stateDropdown,FormErrors,CityDropdown, PreviewDataType, ChildVendor} from '@/app/Types/EventData'
 
 type Props = {
-  previewData: Previewdata | null;
+  previewData: PreviewDataType | null;
   refno: string | null;
 }
 
-type EventEntry = {
-  name: string;
-  owner: string;
-  creation: string;
-  modified: string;
-  modified_by: string;
-  docstatus: number;
-  idx: number;
-  event_type: string;
-  company: string;
-  event_cost_center: string;
-  state: string;
-  sub_type_of_activity: string;
-  business_unit: string;
-  division_category: string;
-  therapy: string;
-  event_requestor: string;
-  division_sub_category: string;
-  status: string;
-  current_stage: string;
-  event_name: string;
-  event_start_date: string;
-  any_govt_hcp: string;
-  comments: string;
-  faculty: string;
-  event_venue: string;
-  event_end_date: string;
-  no_of_hcp: number;
-  bu_rational: string;
-  participants: string;
-  total_compensation_expense: number;
-  has_advance_expense: number;
-  total_logistics_expense: number;
-  total_estimated_expense: number;
-  currency: string;
-  preactivity_status: string;
-  advance_status: string;
-  post_activity_status: string;
-  post_expense_status: string;
-  post_expense_check: number;
-  travel_expense_status: string;
-  travel_expense_check: number;
-  invoice_amount: number;
-  basic_amount: number;
-  tds: number;
-  gst: number;
-  net_amount: number;
-  doctype: string;
-  compensation: Compensation[];
-  travel_expense_approvers: any[]; // Empty array, can be customized later
-  post_expense_approvers: any[]; // Empty array, can be customized later
-  preactivity_approvers: ApproverStatus[];
-  post_activity_approvers: any[]; // Empty array, can be customized later
-  occurrence_status: OccurrenceStatus[];
-  logistics: Logistics[];
-  documents: Document[];
-  advance_approvers: any[]; // Empty array, can be customized later
-  city: string
-  reporting_head:string;
-  requesting_hospital_name:string;
-  ship_to:string;
-  bill_to:string;
-  organization_name:string;
-  product_amount: number;
-  quantity:number;
-  total_estimateed_expense: number;
-}
 
-type Compensation = {
-  name: string;
-  owner: string;
-  creation: string;
-  modified: string;
-  modified_by: string;
-  docstatus: number;
-  idx: number;
-  vendor_type: string;
-  actual_amount: number;
-  status: string;
-  vendor_name: string;
-  advance: number;
-  budget_category: string;
-  est_amount: number;
-  gst_included: number;
-  gst: string;
-  occurrence_no: number;
-  parent: string;
-  parentfield: string;
-  parenttype: string;
-  doctype: string;
-}
-
-type ApproverStatus = {
-  name: string;
-  owner: string;
-  creation: string;
-  modified: string;
-  modified_by: string;
-  docstatus: number;
-  idx: number;
-  approver_level: string;
-  action_date: string;
-  approver: string;
-  remarks: string;
-  approver_status: string;
-  occurrence_no: number;
-  parent: string;
-  parentfield: string;
-  parenttype: string;
-  doctype: string;
-}
-
-type OccurrenceStatus = {
-  name: string;
-  owner: string;
-  creation: string;
-  modified: string;
-  modified_by: string;
-  docstatus: number;
-  idx: number;
-  occurrence_no: number;
-  status: string;
-  parent: string;
-  parentfield: string;
-  parenttype: string;
-  doctype: string;
-}
-
-type Logistics = {
-  name: string;
-  owner: string;
-  creation: string;
-  modified: string;
-  modified_by: string;
-  docstatus: number;
-  idx: number;
-  vendor_type: string;
-  actual_amount: number;
-  status: string;
-  advance: number;
-  budget_category: string;
-  est_amount: number;
-  gst_included: number;
-  gst: string;
-  occurrence_no: number;
-  parent: string;
-  parentfield: string;
-  parenttype: string;
-  doctype: string;
-}
-
-type Document = {
-  name: string;
-  owner: string;
-  creation: string;
-  modified: string;
-  modified_by: string;
-  docstatus: number;
-  idx: number;
-  activity_type: string;
-  occurrence_no: number;
-  document_type: string;
-  file: string;
-  parent: string;
-  parentfield: string;
-  parenttype: string;
-  doctype: string;
-}
 const Preview_Form = ({...Props}:Props) => {
   const pathname = usePathname();
   const router = useRouter();
-  const [preview_data, setPreviewData] = useState<EventEntry | null>(null);
+  const [preview_data, setPreviewData] = useState<PreviewDataType | null>(null);
   const [dialog,setDialog] = useState(false);
   const [addVendor,setAddVendor] = useState(false);
 

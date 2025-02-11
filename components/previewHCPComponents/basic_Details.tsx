@@ -68,6 +68,7 @@ type EventEntry = {
   service_type:string;
   sponsorship_ref_no: string;
   training_ref_no: string;
+  event_division:string
 }
 
 type Compensation = {
@@ -209,6 +210,20 @@ const Basic_Details = ({ ...Props }: Props) => {
             value={Props.eventData?.business_unit}
           ></Input>
         </div>
+        {
+                  Props && Props.eventData?.business_unit == "Orthopedics" &&
+                  <div className="flex flex-col md:gap-2">
+                  <label className="text-black md:text-sm md:font-normal capitalize">
+                    Event Division<span className="text-[#e60000]">*</span>
+                  </label>
+                  <Input
+                    className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
+                    placeholder="Type Here"
+                    readOnly={true}
+                    value={Props.eventData?.event_division}
+                  ></Input>
+                </div>
+                }
         <div className="flex flex-col md:gap-2">
           <label className="text-black md:text-sm md:font-normal capitalize">
             Event Requester<span className="text-[#e60000]">*</span>
@@ -323,7 +338,7 @@ const Basic_Details = ({ ...Props }: Props) => {
           <label className="lable">
             Selection Criteria For Faculty<span className="text-[#e60000]">*</span>
           </label>
-          <Textarea className='text-black shadow-md bg-[#f6f6f6]' placeholder='Type Here' readOnly value={Props.eventData?.faculty}/>
+          <Textarea className='md:rounded-xl bg-[#f6f6f6] text-black shadow-md bg-[#f6f6f6]' placeholder='Type Here' readOnly value={Props.eventData?.faculty}/>
         </div>
         {/* <div className="flex flex-col gap-2">
           <label className="lable">

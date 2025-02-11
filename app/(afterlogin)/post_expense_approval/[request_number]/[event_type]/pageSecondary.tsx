@@ -12,12 +12,14 @@ import ViewDoc from "@/components/viewDocument";
 import SuccessProp from '@/components/success_prop';
 import { useAuth } from "@/app/context/AuthContext";
 import { Toaster, toast } from 'sonner';
-import { formData } from '@/app/(afterlogin)/awareness_program/page';
+import {eventCostCenter,subtypeActivity,reportingHeadDropdown,stateDropdown,FormErrors,CityDropdown, PreviewDataType, ChildVendor} from '@/app/Types/EventData'
 
 type File = {
-    name: string;
     file_name: string;
+    name: string;
     file_url: string;
+    creation:string
+    owner:string
 };
 
 type ActualVendor = {

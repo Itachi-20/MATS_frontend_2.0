@@ -13,113 +13,18 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Toaster, toast } from 'sonner'
 import { useRouter } from 'nextjs-toploader/app';
-import { Previewdata } from '@/app/(afterlogin)/monetary_grant/page';
+import {eventCostCenter,subtypeActivity,reportingHeadDropdown,stateDropdown,FormErrors,CityDropdown, PreviewDataType, ChildVendor} from '@/app/Types/EventData'
 import { handleEventStartDateValidate, handleEventEndDateValidate } from "@/app/utility/dateValidation";
 
-type dropdownData = {
-  company: {
-    name: string;
-    company_name: "string";
-  }[];
-  division: {
-    name: string;
-    division_name: string;
-  }[];
-  requestor: {
-    full_name: string;
-    email: string;
-  }[];
-  vendor_type: {
-    name: string;
-    vendor_type: string;
-  }[];
-  state: {
-    name: string;
-    state: string;
-  }[];
-};
-
-type eventCostCenter = {
-  cost_center: {
-    name: string;
-    cost_center_description: string;
-  }[];
-  division_category: {
-    name: string;
-    category: string;
-  }[];
-  therapy: {
-    name: string;
-    therapy: string;
-  }[];
-};
-
-type subtypeActivity = {
-  name: string;
-  division_sub_category: string
-}[];
-
-type Compensation = {
-  vendor_type: string;
-  vendor_name: string;
-  est_amount: number;
-  gst_included?: number;
-};
-
-type Logistics = {
-  vendor_type: string;
-  est_amount: number;
-};
-
-type formData = {
-  name: string | null;
-  organization_name:string;
-  event_type: string;
-  company: string;
-  event_cost_center: string;
-  state: string;
-  city: string;
-  event_start_date: string;
-  event_end_date: string;
-  bu_rational: string;
-  faculty: string;
-  participants: string;
-  therapy: string;
-  event_name: string;
-  event_venue: string;
-  comments: string;
-  compensation: Compensation[];
-  logistics: Logistics[];
-  total_compensation_expense: number;
-  total_logistics_expense: number;
-  event_requestor: string;
-  business_unit: string;
-  division_category: string;
-  division_sub_category: string;
-  sub_type_of_activity: string;
-  any_govt_hcp: string,
-  no_of_hcp: number
-};
-
 type Props = {
-  previewData: Previewdata | null;
+  previewData: PreviewDataType | null;
   refno: string;
-}
-
-type FormErrors = {
-  organization_name?: string;
-  event_venue?: string;
-  event_start_date?: string;
-  event_end_date?: string;
-  any_govt_hcp?: string;
-  no_of_hcp?: string;
-  bu_rational?: string;
 }
 
 const Form2 = ({ ...Props }: Props) => {
   const start_date_ref: React.RefObject<any> = useRef(null);
   const end_date_ref: React.RefObject<any> = useRef(null);
-  const [formdata, setFormData] = useState<formData>();
+  const [formdata, setFormData] = useState<PreviewDataType>();
     const [errors, setErrors] = useState<FormErrors>();
   const [refNo, setRefNo] = useState<string | null>(Props.refno);
   const router = useRouter()
@@ -140,14 +45,14 @@ const Form2 = ({ ...Props }: Props) => {
   };
   const handlefieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }) as formData);
+    setFormData(prev => ({ ...prev, [name]: value }) as PreviewDataType);
   };
   const handleSelectChange = (value: string, name: string) => {
     // if(name == "any_govt_hcp" && value == "No"){
     //   const noofhcpfield = document.getElementsByName("no_of_hcp")[0] as HTMLInputElement;
     //   noofhcpfield.value = "0";
     // }
-    setFormData((prev) => ({ ...prev, [name]: value }) as formData);
+    setFormData((prev) => ({ ...prev, [name]: value }) as PreviewDataType);
   };
   const validateAtSubmit = async () => {
     const errors: FormErrors = {};
@@ -156,7 +61,20 @@ const Form2 = ({ ...Props }: Props) => {
     if ((Props?.previewData?.event_start_date ? (formdata && ("event_start_date" in formdata && formdata.event_start_date == '')) : !formdata?.event_start_date)) errors.event_start_date = "Event Start Date activity is required";
     if ((Props?.previewData?.event_end_date ? (formdata && ("event_end_date" in formdata && formdata.event_end_date == '')) : !formdata?.event_end_date)) errors.event_end_date = "Event End Date is required";
     if ((Props?.previewData?.any_govt_hcp ? (formdata && ("any_govt_hcp" in formdata && formdata.any_govt_hcp == '')) : !formdata?.any_govt_hcp)) errors.any_govt_hcp = "Engagement of any government hCP’s is required";
-    if (((formdata?.any_govt_hcp  == "Yes") || (Props?.previewData?.any_govt_hcp  == "Yes")) && (Props?.previewData?.no_of_hcp ? (formdata && ("no_of_hcp" in formdata && !formdata.no_of_hcp)) : !formdata?.no_of_hcp)) errors.no_of_hcp = "No of HCP is required";
+    // if (((formdata?.any_govt_hcp  == "Yes") || (Props?.previewData?.any_govt_hcp  == "Yes")) && (Props?.previewData?.no_of_hcp ? (formdata && ("no_of_hcp" in formdata && !formdata.no_of_hcp)) : !formdata?.no_of_hcp)) errors.no_of_hcp = "No of HCP is required";
+    if (
+      ((formdata?.any_govt_hcp == "Yes") || (Props?.previewData?.any_govt_hcp == "Yes")) &&
+      (
+        Props?.previewData?.no_of_hcp
+          ? (formdata && ("no_of_hcp" in formdata && !formdata.no_of_hcp))
+          : !formdata?.no_of_hcp
+      )
+    ) {
+      errors.no_of_hcp = "No of HCP is required";
+    } else if (formdata?.no_of_hcp !== undefined && (formdata.no_of_hcp < 0 || formdata.no_of_hcp > 99)) {
+      errors.no_of_hcp = "No of HCP must be between 0 and 99";
+    }
+
     if ((Props?.previewData?.bu_rational ? (formdata && ("bu_rational" in formdata && formdata.bu_rational == '')) : !formdata?.bu_rational)) errors.bu_rational = "BU Rational is required";
     return errors;
   };
@@ -332,11 +250,9 @@ const Form2 = ({ ...Props }: Props) => {
                   onChange={(e) => handlefieldChange(e)}
                 ></Input>
                 {
-                  errors &&
-                  (errors?.no_of_hcp && !formdata?.no_of_hcp) &&
-                  (
+                  errors?.no_of_hcp && (
                     <p className="w-full text-red-500 text-[11px] font-normal text-left">
-                      {errors?.no_of_hcp}
+                      {errors.no_of_hcp}
                     </p>
                   )
                 }

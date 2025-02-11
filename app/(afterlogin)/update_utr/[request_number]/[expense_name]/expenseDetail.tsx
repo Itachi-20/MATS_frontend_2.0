@@ -37,10 +37,12 @@ type EventTable = {
 
 };
 
-type DocumentRow = {
-  name: string;
+export type DocumentRow = {
   file_name: string;
+  name: string;
   file_url: string;
+  creation:string
+  owner:string
 };
 
 type File = {
@@ -48,7 +50,7 @@ type File = {
   file_name: string;
   file_url: string;
 };
-type ActualVendor = {
+export type ActualVendor = {
   event_request_number: string
   name: string;
   document_no: string;

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Image from 'next/image';
 import {
   Table,
@@ -13,6 +13,7 @@ import page from '@/app/(afterlogin)/advance_payment/[request_number]/page';
 import Link from 'next/link';
 import { useRouter } from 'nextjs-toploader/app';
 import { Toaster, toast } from 'sonner'
+import DeleteDialog from './deleteDialog';
 interface DocumentsProps {
   PageName: string; 
 }
@@ -186,10 +187,12 @@ type Props = {
 }
 
 const Documents = ({PageName,...Props}:Props) => {
+   const [isDeleteDialog,setIsDeleteDialog] = useState<boolean>(false);
+    const [deleteName,setDeleteName] = useState<string>("");
   console.log(Props.eventData?.documents,"this is documents")
   const router = useRouter();
 
-  const handleDelete = async (name:String)=>{
+  const handleDelete = async ()=>{
     try {
       const response = await fetch(`api/training_and_education/fileDelete/`,{
         method: "POST",
@@ -199,12 +202,13 @@ const Documents = ({PageName,...Props}:Props) => {
         },
         credentials:'include',
         body:JSON.stringify({
-          name:name
+          name:deleteName
         })
       })
       if(response.ok){
         toast.success('Deleted Successfully')
         console.log("successfully deleted");
+        setIsDeleteDialog(false);
         Props.fetchFile();
       }
     } catch (error) {
@@ -259,7 +263,7 @@ const Documents = ({PageName,...Props}:Props) => {
                         <Link rel="stylesheet" href={item3.url} target='blank'>
                       <Image src={"/svg/view.svg"} width={20} height={20}  alt='view-document' className='cursor-pointer' />
                         </Link>
-                        <div className={`${Props.eventData && Props.eventData.preactivity_submitted == 1 ?"hidden":""}`} onClick={async()=>{await handleDelete(item3.name)}}>
+                        <div className={`${Props.eventData && Props.eventData.preactivity_submitted == 1 ?"hidden":""}`} onClick={()=>{setDeleteName(item3.name); setIsDeleteDialog(prev => !prev)}}>
                       <Image src={"/svg/delete.svg"} width={20} height={20}  alt='view-document' className='cursor-pointer' />
                         </div>
                       </div>
@@ -277,6 +281,14 @@ const Documents = ({PageName,...Props}:Props) => {
             </Table>
           </div>
         </div>
+        {
+                  isDeleteDialog && 
+                  <DeleteDialog
+                  text='Are You Sure You Want To Delete This Document?'
+                  setClose={setIsDeleteDialog}
+                  handleSubmit={handleDelete}
+                  />
+              }
         <Toaster richColors position="top-right" />
 
       </div>

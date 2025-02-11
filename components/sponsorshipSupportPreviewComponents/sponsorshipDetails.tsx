@@ -212,7 +212,7 @@ const Sponsorship_Details = ({...Props}:Props) => {
                         value={Props.eventData?.organizer_name}
                         readOnly
                     ></Input> */}
-                    <textarea className='text-black shadow-md border h-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl pl-2 pt-2' placeholder='Type Here'
+                    <textarea className='md:rounded-xl bg-[#f6f6f6] text-black shadow-md border h-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl pl-2 pt-2' placeholder='Type Here'
                       readOnly={true}
                       value={Props.eventData?.organizer_name}
           />

@@ -6,7 +6,7 @@ import { useAuth } from "../../app/context/AuthContext";
 type props = {
   handleClose: () => void;
   handleComment:(value:string)=>void;
-  Submitbutton:()=>void;
+  Submitbutton:(isRequestor?:Number)=>void;
   ButtonText:string
 }
 
@@ -20,7 +20,7 @@ const Comment_box = ({ handleClose,handleComment,Submitbutton,ButtonText }: prop
   }
   return (
     // <div className="absolute z-50 flex pt-10 items-center justify-center bg-black bg-opacity-50">
-        <div className="bg-white rounded-xl border p-7 md:max-w-[600px] md:max-h-[350px] h-full w-full gap-8 text-black md:text-md font-light flex flex-col items-center">
+        <div className="bg-white rounded-xl border p-7 md:max-w-[650px] md:max-h-[350px] h-full w-full gap-8 text-black md:text-md font-light flex flex-col items-center justify-center">
         <h1 className="text-2xl font-poppins">Comments</h1>
         <Textarea onChange={(e)=>handleComment(e.target.value)} className="h-full md:max-h-40"
         />
@@ -28,9 +28,15 @@ const Comment_box = ({ handleClose,handleComment,Submitbutton,ButtonText }: prop
               <Button className="bg-white text-black border text-md font-normal px-12 rounded-md hover:bg-white" onClick={handleClose}>
                 Back
               </Button>
-              <Button className={`text-white text-md font-normal border px-8 ${buttonColor[ButtonText]}`} onClick={()=>Submitbutton()}>
-                {ButtonText}
+              <Button className={`text-white text-md font-normal border px-8 ${buttonColor[ButtonText]}`} onClick={()=>Submitbutton(0)}>
+                {ButtonText == "Send Back"?"To Approver":ButtonText}
               </Button>
+              {
+                ButtonText == "Send Back" && 
+                <Button className={`text-white text-md font-normal border px-8 ${buttonColor[ButtonText]}`} onClick={()=>Submitbutton(1)}>
+                {"To Requestor"}
+              </Button>
+              }
             </div>
         </div>
         // </div >

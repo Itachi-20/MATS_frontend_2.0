@@ -1,8 +1,5 @@
 'use client'
 import React, { useState, useEffect } from "react";
-import Image from "next/image";
-import Sidebar from "@/components/Sidebar";
-import Navbar from "@/components/Navbar";
 import { Input } from "@/components/ui/input";
 import { useRouter } from 'nextjs-toploader/app';
 import { Loader2 } from "lucide-react";
@@ -16,7 +13,6 @@ import {
 import {
     Table,
     TableBody,
-    TableCaption,
     TableCell,
     TableHead,
     TableHeader,
@@ -28,7 +24,6 @@ import DatePicker from '../event_list/date-picker'
 import Pagination from "@/components/eventList/pagination";
 import Requestor_filter from '@/components/dashboard/search_event_requestor_component'
 import { Label } from "@/components/ui/label"
-import { log } from "console";
 type post_expense_approvers = {
     level1: string;
     level2: string;

@@ -9,72 +9,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Toaster, toast } from 'sonner';
-import { Previewdata } from '@/app/(afterlogin)/hcp_services/page';
+import { Toaster } from 'sonner';
 import { handleEventStartDateValidate, handleEventEndDateValidate } from "@/app/utility/dateValidation";
-
-type Compensation = {
-  vendor_type: string;
-  vendor_name: string;
-  est_amount: number;
-  gst_included?: number;
-};
-
-type Logistics = {
-  vendor_type: string;
-  est_amount: number;
-};
-
-type formData = {
-  name: string | null;
-  event_type: string;
-  company: string;
-  event_cost_center: string;
-  state: string;
-  city: string;
-  event_start_date: string;
-  event_end_date: string;
-  bu_rational: string;
-  faculty: string;
-  participants: string;
-  therapy: string;
-  event_name: string;
-  event_venue: string;
-  comments: string;
-  compensation: Compensation[];
-  logistics: Logistics[];
-  total_compensation_expense: number;
-  total_logistics_expense: number;
-  event_requestor: string;
-  business_unit: string;
-  division_category: string;
-  division_sub_category: string;
-  sub_type_of_activity: string;
-  any_govt_hcp: string,
-  no_of_hcp: number
-};
-
+import {FormErrors,PreviewDataType} from '@/app/Types/EventData'
 type Props = {
-  previewData: Previewdata | null;
+  previewData: PreviewDataType | null;
   refNo: string | undefined;
 }
-type FormErrors = {
-  event_name?: string;
-  event_venue?: string;
-  event_start_date?: string;
-  event_end_date?: string;
-  any_govt_hcp?: string;
-  no_of_hcp?: string;
-  bu_rational?: string;
-}
+
 const Form2 = ({ ...Props }: Props) => {
 
   const router = useRouter();
   const start_date_ref: React.RefObject<any> = useRef(null);
   const end_date_ref: React.RefObject<any> = useRef(null);
-  const [formdata, setFormData] = useState<formData>();
+  const [formdata, setFormData] = useState<PreviewDataType>();
   const [errors, setErrors] = useState<FormErrors>();
   const [refNo, setRefNo] = useState<string | null>(Props.refNo ?? "");
   const [eventStartDate, setEventStartDate] = useState<any>(Props.previewData?.event_start_date ? new Date(Props.previewData?.event_start_date).getTime() : "");
@@ -100,7 +49,19 @@ const Form2 = ({ ...Props }: Props) => {
     if ((Props?.previewData?.event_start_date ? (formdata && ("event_start_date" in formdata && formdata.event_start_date == '')) : !formdata?.event_start_date)) errors.event_start_date = "Program Start Date is required";
     if ((Props?.previewData?.event_end_date ? (formdata && ("event_end_date" in formdata && formdata.event_end_date == '')) : !formdata?.event_end_date)) errors.event_end_date = "Program End Date is required";
     if ((Props?.previewData?.any_govt_hcp ? (formdata && ("any_govt_hcp" in formdata && formdata.any_govt_hcp == '')) : !formdata?.any_govt_hcp)) errors.any_govt_hcp = "Engagement of any government hCP’s is required";
-    if (((formdata?.any_govt_hcp  == "Yes") || (Props?.previewData?.any_govt_hcp  == "Yes")) && (Props?.previewData?.no_of_hcp ? (formdata && ("no_of_hcp" in formdata && !formdata.no_of_hcp)) : !formdata?.no_of_hcp)) errors.no_of_hcp = "No of HCP is required";
+    // if (((formdata?.any_govt_hcp  == "Yes") || (Props?.previewData?.any_govt_hcp  == "Yes")) && (Props?.previewData?.no_of_hcp ? (formdata && ("no_of_hcp" in formdata && !formdata.no_of_hcp)) : !formdata?.no_of_hcp)) errors.no_of_hcp = "No of HCP is required";
+    if (
+      ((formdata?.any_govt_hcp == "Yes") || (Props?.previewData?.any_govt_hcp == "Yes")) &&
+      (
+        Props?.previewData?.no_of_hcp
+          ? (formdata && ("no_of_hcp" in formdata && !formdata.no_of_hcp))
+          : !formdata?.no_of_hcp
+      )
+    ) {
+      errors.no_of_hcp = "No of HCP is required";
+    } else if (formdata?.no_of_hcp !== undefined && (formdata.no_of_hcp < 0 || formdata.no_of_hcp > 99)) {
+      errors.no_of_hcp = "No of HCP must be between 0 and 99";
+    }
     if ((Props?.previewData?.bu_rational ? (formdata && ("bu_rational" in formdata && formdata.bu_rational == '')) : !formdata?.bu_rational)) errors.bu_rational = "BU Rational is required";
     return errors;
   };
@@ -150,10 +111,10 @@ const Form2 = ({ ...Props }: Props) => {
   };
   const handlefieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }) as formData);
+    setFormData(prev => ({ ...prev, [name]: value }) as PreviewDataType);
   }
   const handleSelectChange = (value: string, name: string) => {
-    setFormData((prev) => ({ ...prev, [name]: value }) as formData);
+    setFormData((prev) => ({ ...prev, [name]: value }) as PreviewDataType);
   };
 
   console.log("Formdata", formdata)
@@ -167,13 +128,13 @@ const Form2 = ({ ...Props }: Props) => {
         <div className='grid grid-cols-2 gap-6'>
           <div className='flex flex-col gap-2'>
             <label className={`lable ${(errors?.event_name && !formdata?.event_name) ? `text-red-600` : `text-black`}`}>Program Name <span className='text-[#e60000]'>*</span></label>
-            <Input
-              className={`${(errors?.event_name && !formdata?.event_name) ? `border border-red-600` : `border border-neutral-200`} dropdown h-10 rounded-md bg-white px-3 py-2 text-sm`}
+            <textarea
+              className={`rounded-lg ${(errors?.event_name && !formdata?.event_name) ? `border border-red-600` : `border border-neutral-200`} dropdown h-10 rounded-md bg-white px-3 py-2 text-sm`}
               placeholder='Type Here'
               name='event_name'
               defaultValue={Props.previewData?.event_name ? Props.previewData.event_name : ""}
               onChange={(e) => handlefieldChange(e)}
-            ></Input>
+            ></textarea>
             {
               errors &&
               (errors?.event_name && !formdata?.event_name) &&
@@ -186,13 +147,13 @@ const Form2 = ({ ...Props }: Props) => {
           </div>
           <div className='flex flex-col gap-2'>
             <label className={`lable ${(errors?.event_venue && !formdata?.event_venue) ? `text-red-600` : `text-black`}`}>Program Venue and Location<span className='text-[#e60000]'>*</span></label>
-            <Input
-              className={`${(errors?.event_venue && !formdata?.event_venue) ? `border border-red-600` : `border border-neutral-200`} dropdown h-10 rounded-md bg-white px-3 py-2 text-sm`}
+            <textarea
+              className={`rounded-lg ${(errors?.event_venue && !formdata?.event_venue) ? `border border-red-600` : `border border-neutral-200`} dropdown h-10 rounded-md bg-white px-3 py-2 text-sm`}
               placeholder='Type Here'
               name={"event_venue"}
               defaultValue={Props.previewData?.event_venue ? Props.previewData.event_venue : ""}
               onChange={(e) => handlefieldChange(e)}
-            ></Input>
+            ></textarea>
             {
               errors &&
               (errors?.event_venue && !formdata?.event_venue) &&
@@ -307,14 +268,12 @@ const Form2 = ({ ...Props }: Props) => {
                   onChange={(e) => handlefieldChange(e)}
                 ></Input>
                 {
-                  errors &&
-                  (errors?.no_of_hcp && !formdata?.no_of_hcp) &&
-                  (
-                    <p className="w-full text-red-500 text-[11px] font-normal text-left">
-                      {errors?.no_of_hcp}
-                    </p>
-                  )
-                }
+                errors?.no_of_hcp && (
+                  <p className="w-full text-red-500 text-[11px] font-normal text-left">
+                    {errors.no_of_hcp}
+                  </p>
+                )
+              }
               </div>
               :
               <div className='flex flex-col gap-2'></div>

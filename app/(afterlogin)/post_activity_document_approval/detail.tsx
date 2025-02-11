@@ -1,11 +1,7 @@
 "use client"
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-//import BasicDetails from "@/components/basic_Details"
-//import EventDetails from "@/components/event_Details"
-//import VendorDetails from "@/components/vendor_Details"
-//import TotalExpense from "@/components/total_Expense"
-import Documents from "@/components/documents"
+import Documents from "@/components/commonPreviewComponents/documents"
 import { useSearchParams } from 'next/navigation'
 import { useRouter } from "nextjs-toploader/app";
 import Comment_box from "@/components/approvalCommentBox/Comment_box";
@@ -13,203 +9,32 @@ import Comment_box from "@/components/approvalCommentBox/Comment_box";
 import EventDetails from "@/components/training_and_education/event_detail";
 import EventDetailsSponsorship from "@/components/sponsorshipSupportPreviewComponents/eventDetails"
 import TotalExpense from "@/components/commonPreviewComponents/total_expense";
-import BasicDetails from "@/components/basic_Details";
+import BasicDetails from "@/components/commonPreviewComponents/basic_details";
 import VendorDetails from "@/components/commonPreviewComponents/vendor_detail";
 import HCPDetails from "@/components/previewHCPComponents/hcp_details";
 import BasicDetailsHCP from "@/components/previewHCPComponents/basic_Details";
 import HCPEventDetail from "@/components/previewHCPComponents/event_Details"
-import { useParams } from 'next/navigation'
 import OrganizationDetailsMonetary from '@/components/monetoryPreviewComponents/organizationDetails'
 import BeneficialDetails from "@/components/previewPatientSupportComponents/beneficialDetails"
 import ShippingDetails from "@/components/previewPatientSupportComponents/shippingDetails"
 import EquipmentDetails from "@/components/nonMonetoryPreviewComponents/equipmentDetails"
 import Sponsorship_Details from "@/components/sponsorshipSupportPreviewComponents/sponsorshipDetails";
 import Other_Details from "@/components/sponsorshipSupportPreviewComponents/other_details";
+import {eventCostCenter,subtypeActivity,reportingHeadDropdown,stateDropdown,FormErrors,CityDropdown, PreviewDataType, ChildVendor} from '@/app/Types/EventData'
 
-type EventEntry = {
-  name: string;
-  owner: string;
-  creation: string;
-  modified: string;
-  modified_by: string;
-  docstatus: number;
-  idx: number;
-  event_type: string;
-  company: string;
-  event_cost_center: string;
-  state: string;
-  sub_type_of_activity: string;
-  business_unit: string;
-  division_category: string;
-  therapy: string;
-  event_requestor: string;
-  division_sub_category: string;
-  status: string;
-  current_stage: string;
-  event_name: string;
-  event_start_date: string;
-  any_govt_hcp: string;
-  comments: string;
-  faculty: string;
-  event_venue: string;
-  event_end_date: string;
-  no_of_hcp: number;
-  bu_rational: string;
-  participants: string;
-  total_compensation_expense: number;
-  has_advance_expense: number;
-  total_logistics_expense: number;
-  total_estimated_expense: number;
-  currency: string;
-  preactivity_status: string;
-  advance_status: string;
-  post_activity_status: string;
-  post_expense_status: string;
-  post_expense_check: number;
-  travel_expense_status: string;
-  travel_expense_check: number;
-  invoice_amount: number;
-  basic_amount: number;
-  tds: number;
-  gst: number;
-  net_amount: number;
-  doctype: string;
-  compensation: Compensation[];
-  travel_expense_approvers: any[]; // Empty array, can be customized later
-  post_expense_approvers: any[]; // Empty array, can be customized later
-  preactivity_approvers: ApproverStatus[];
-  post_activity_approvers: any[]; // Empty array, can be customized later
-  occurrence_status: OccurrenceStatus[];
-  logistics: Logistics[];
-  documents: ActivityDocument[];
-  advance_approvers: any[]; // Empty array, can be customized later
-  city:string
-  reporting_head:string,
-  type_of_engagement:string
-  product_details:string
-  annual_plan:number;
-  service_type:string;
-  sponsorship_ref_no: string;
-  training_ref_no: string;
-  product_amount: number;
-  quantity:number;
-  is_approved:boolean;
-  is_postactivity_approved:boolean;
-  is_postactivity_rejected:boolean;
-  is_postactivity_sendback:boolean;
-}
-
-type Compensation = {
-  name: string;
-  owner: string;
-  creation: string;
-  modified: string;
-  modified_by: string;
-  docstatus: number;
-  idx: number;
-  vendor_type: string;
-  actual_amount: number;
-  status: string;
-  vendor_name: string;
-  advance: number;
-  budget_category: string;
-  est_amount: number;
-  gst_included: number;
-  gst: string;
-  occurrence_no: number;
-  parent: string;
-  parentfield: string;
-  parenttype: string;
-  doctype: string;
-}
-
-type ApproverStatus = {
-  name: string;
-  owner: string;
-  creation: string;
-  modified: string;
-  modified_by: string;
-  docstatus: number;
-  idx: number;
-  approver_level: string;
-  action_date: string;
-  approver: string;
-  remarks: string;
-  approver_status: string;
-  occurrence_no: number;
-  parent: string;
-  parentfield: string;
-  parenttype: string;
-  doctype: string;
-}
-
-type OccurrenceStatus = {
-  name: string;
-  owner: string;
-  creation: string;
-  modified: string;
-  modified_by: string;
-  docstatus: number;
-  idx: number;
-  occurrence_no: number;
-  status: string;
-  parent: string;
-  parentfield: string;
-  parenttype: string;
-  doctype: string;
-}
-
-type Logistics = {
-  name: string;
-  owner: string;
-  creation: string;
-  modified: string;
-  modified_by: string;
-  docstatus: number;
-  idx: number;
-  vendor_type: string;
-  actual_amount: number;
-  status: string;
-  advance: number;
-  budget_category: string;
-  est_amount: number;
-  gst_included: number;
-  gst: string;
-  occurrence_no: number;
-  parent: string;
-  parentfield: string;
-  parenttype: string;
-  doctype: string;
-}
-
-type File = {
-  url: string;
-  name: string;
-  file_name:string
-};
-
-type DocumentDetails = {
-  type: string;
-  file: File[];
-};
-
-type ActivityDocument = {
-  activity_type: string;
-  document: DocumentDetails[];
-};
 
 
 
 const Index = ({...props}:any) => {
   const router = useRouter();
-  const [eventData,setEventData] = useState<EventEntry>(props.tableData);
+  const [eventData,setEventData] = useState<PreviewDataType>(props.tableData);
   const [isCommentbox,setIsCommentbox] = useState<boolean>(false);
   const [comment,setComment] = useState<string>();
   const [type,setType] = useState<string>();
   const [buttonText,setButtonText] = useState<string>("")
   const param = useSearchParams();
 
-  const handleApprove = async()=>{
+  const handleApprove = async(isRequestor?:Number)=>{
     const refno = param.get("refno");
       try {
         const response = await fetch(
@@ -223,7 +48,8 @@ const Index = ({...props}:any) => {
             body:JSON.stringify({
               name:refno,
               "remark": comment,
-              "action":type
+              "action":type,
+              "to_requestor":isRequestor
             })
           }
         );
@@ -250,6 +76,8 @@ const handleComment = (value:string)=>{
   setComment(value)
 }
 
+console.log(eventData.can_postactivity_approve,"this is statsus")
+
   return ( 
           <>
     <div className="md:px-7 md:pb-7 md:pt-4 w-full z-20 text-black">
@@ -273,11 +101,11 @@ const handleComment = (value:string)=>{
                 </div>
               </div>
               {
-                !(eventData?.is_postactivity_approved || eventData?.is_postactivity_rejected || eventData?.is_postactivity_sendback) &&
+                eventData?.can_postactivity_approve &&
               <div className="flex gap-4 text-white items-center">
                 <Button className="bg-[#5dbe74] hover:bg-[#5dbe74] px-6" onClick={()=>{handleDialog();setType("Approved");setButtonText("Approve")}}>Approve</Button>
-                <Button className="bg-[#ff5757] hover:bg-[#ff5757] px-6" onClick={()=>{handleDialog();setType("Rejected");setButtonText("Reject")}}>Reject</Button>
                 <Button className="bg-[#4430bf] hover:bg-[#4430bf] px-6" onClick={()=>{handleDialog();setType("Send Back");setButtonText("Send Back")}}>Send Back</Button>
+                <Button className="bg-[#ff5757] hover:bg-[#ff5757] px-6" onClick={()=>{handleDialog();setType("Rejected");setButtonText("Reject")}}>Reject</Button>
               </div>
               }
             </div>
@@ -302,6 +130,7 @@ const handleComment = (value:string)=>{
         eventData?.event_type == "Patient Support" && 
         <>
         <BeneficialDetails
+        pathname=""
         eventData={eventData}
         />
 
@@ -315,10 +144,12 @@ const handleComment = (value:string)=>{
         eventData?.event_type == "Sponsorship Support" &&
         <>
           <Sponsorship_Details
+          pathname=""
             eventData={eventData}
           />
 
           <Other_Details
+          pathname=""
             eventData={eventData}
           />
         </>
@@ -335,17 +166,20 @@ const handleComment = (value:string)=>{
       {
         eventData?.event_type == "Monetary Grant" && 
         <OrganizationDetailsMonetary
+        pathname=""
         eventData={eventData}
         />
       }
       {
         eventData?.event_type == "Sponsorship Support" && 
         <EventDetailsSponsorship
+        pathname=""
         eventData={eventData}/>
       }
       {
         eventData?.event_type == "Non Monetary Grant" && 
         <EquipmentDetails
+        pathname=""
         eventData={eventData}
         />
       }

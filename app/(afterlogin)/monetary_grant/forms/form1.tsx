@@ -12,127 +12,19 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Previewdata } from '@/app/(afterlogin)/monetary_grant/page'
+import {eventCostCenter,subtypeActivity,reportingHeadDropdown,stateDropdown,FormErrors,CityDropdown, PreviewDataType, ChildVendor, DropdownDataType} from '@/app/Types/EventData'
 import { useAuth } from "@/app/context/AuthContext";
 import IsReportingHeadDialog from "@/components/isReportingHeadDialog";
 import CityDropdwon from '@/components/training_and_education/search_city'
-type dropdownData = {
-  company: {
-    name: string;
-    company_name: "string";
-  }[];
-  division: {
-    name: string;
-    division_name: string;
-  }[];
-  requestor: {
-    full_name: string;
-    email: string;
-  }[];
-  vendor_type: {
-    name: string;
-    vendor_type: string;
-  }[];
-  state: {
-    name: string;
-    state: string;
-  }[];
-  city: {
-    name: string,
-    city: string
-  }[]
-};
 
-type eventCostCenter = {
-  cost_center: {
-    name: string;
-    cost_center_description: string;
-  }[];
-  division_category: {
-    name: string;
-    category: string;
-  }[];
-  therapy: {
-    name: string;
-    therapy: string;
-  }[];
-};
-
-type subtypeActivity = {
-  name: string;
-  division_sub_category: string
-}[];
-
-type Compensation = {
-  vendor_type: string;
-  vendor_name: string;
-  est_amount: number;
-  gst_included?: number;
-};
-
-type Logistics = {
-  vendor_type: string;
-  est_amount: number;
-};
-
-type FormData = {
-  name: string | null;
-  event_type: string;
-  company: string;
-  event_cost_center: string;
-  state: string;
-  city: string;
-  event_start_date: string;
-  event_end_date: string;
-  bu_rational: string;
-  faculty: string;
-  participants: string;
-  therapy: string;
-  event_name: string;
-  event_venue: string;
-  comments: string;
-  compensation: Compensation[];
-  logistics: Logistics[];
-  total_compensation_expense: number;
-  total_logistics_expense: number;
-  event_requestor: string;
-  business_unit: string;
-  division_category: string;
-  division_sub_category: string;
-  sub_type_of_activity: string;
-  any_govt_hcp: string,
-  no_of_hcp: number,
-  reporting_head: string,
-};
-
-type reportingHeadDropdown = {
-  reporting_name: string;
-  reporting: string
-}[];
-type CityDropdown = {
-  name: string;
-  city: string
-}
-type stateDropdown = {
-  name: string;
-  state: string;
-}[];
 type Props = {
   cityDropdown: CityDropdown[];
   cityDropdownData: CityDropdown[];
   ReportingHeadDropdown: reportingHeadDropdown | null
-  dropdownData: dropdownData | null;
-  previewData: Previewdata | null;
+  dropdownData: DropdownDataType | null;
+  previewData: PreviewDataType | null;
   eventCostCenter: eventCostCenter | null;
   refno: string;
-}
-
-type FormErrors = {
-  sub_type_of_activity?: string;
-  event_cost_center?: string;
-  state?: string;
-  reporting_head?: string;
-  division_category?: string;
 }
 
 
@@ -142,7 +34,7 @@ const Form1 = ({ ...Props }: Props) => {
   const [businessUnit, setBusinessUnit] = useState(Props.previewData?.business_unit ?? "");
   const [budget, setBudget] = useState(Props.previewData?.division_category ?? "");
   const [fullName, setFullName] = useState<string | null>(null);
-  const [formData, setFormData] = useState<FormData>(Props.previewData ?? '');
+  const [formData, setFormData] = useState<PreviewDataType>(Props.previewData as PreviewDataType?? '');
   const [errors, setErrors] = useState<FormErrors>();
   const [refNo, setRefNo] = useState<string | null>(Props.refno);
   const [reportingHeadDropdown, setReportingHeadDropdown] = useState<reportingHeadDropdown | null>(null)
@@ -196,8 +88,9 @@ const Form1 = ({ ...Props }: Props) => {
       reporting_head: '',
       division_sub_category: '',
       division_category: '',
-      event_cost_center: ''
-    }) as FormData);
+      event_cost_center: '',
+      event_division:''
+    }) as PreviewDataType);
     setCity("")
     try {
       const response = await fetch(
@@ -226,12 +119,12 @@ const Form1 = ({ ...Props }: Props) => {
   };
   const handlefieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }) as FormData);
+    setFormData(prev => ({ ...prev, [name]: value }) as PreviewDataType);
   };
   const handleSelectChange = (value: string, name: string) => {
     if (name == "business_unit") { setBusinessUnit(value) };
     if (name == "division_category") { setBudget(value) };
-    setFormData((prev) => ({ ...prev, [name]: value }) as FormData);
+    setFormData((prev) => ({ ...prev, [name]: value }) as PreviewDataType);
   };
   const validateAtSubmit = () => {
     const errors: FormErrors = {};
@@ -241,6 +134,16 @@ const Form1 = ({ ...Props }: Props) => {
     if (Props.previewData?.state ? formData && "state" in formData && formData.state == "" : !formData?.state) errors.state = "State is required";
     if (Props.previewData?.reporting_head ? formData && "reporting_head" in formData && formData.reporting_head == "" : !formData?.reporting_head) errors.reporting_head = "Reporting Head is required";
     if (Props.previewData?.division_category ? formData && "division_category" in formData && formData.division_category == "" : !formData?.division_category) errors.division_category = "Budget is required";
+    if((Props.previewData?.business_unit == "Orthopedics" || formData?.business_unit == "Orthopedics")){
+      if ( 
+        Props.previewData?.event_division
+        ? formData &&
+        "event_division" in formData &&
+        formData.event_division == ""
+        : !formData?.event_division
+      )
+      errors.event_division = "event_division is required";
+    }
     return errors;
   };
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -254,6 +157,9 @@ const Form1 = ({ ...Props }: Props) => {
     const updatedFormData = {
       ...formData
     };
+    if(updatedFormData?.business_unit != "Orthopedics"){
+      updatedFormData.event_division = "";
+    }
     updatedFormData.event_type = "Monetary Grant"
     if (refNo) {
       updatedFormData.name = refNo;
@@ -316,7 +222,7 @@ const Form1 = ({ ...Props }: Props) => {
         const data = await response.json();
         setReportingHeadDropdown(data.data);
         if (data.data.length == 1) {
-          setFormData((prev) => ({ ...prev, reporting_head: data.data[0].reporting } as FormData));
+          setFormData((prev) => ({ ...prev, reporting_head: data.data[0].reporting } as PreviewDataType));
         }
         return data.data;
       } else {
@@ -367,7 +273,7 @@ const Form1 = ({ ...Props }: Props) => {
       if (response.ok) {
         const data = await response.json();
         if (data.message.length == 1) {
-          setFormData((prev) => ({ ...prev, state: data.message[0].name } as FormDataType));
+          setFormData((prev) => ({ ...prev, state: data.message[0].name } as PreviewDataType));
         }
         setStateDropdown(data.message);
         return data.data;
@@ -408,7 +314,7 @@ const Form1 = ({ ...Props }: Props) => {
   useEffect(() => {
     console.log(city, 'city')
     if (city) {
-      setFormData((prev) => ({ ...prev, city: city } as FormData));
+      setFormData((prev) => ({ ...prev, city: city } as PreviewDataType));
       handleCityChange(city)
     }
   }, [city]);
@@ -422,8 +328,8 @@ const Form1 = ({ ...Props }: Props) => {
   const clearCity = () => {
     console.log('inside claer city')
     setCity('');
-    setFormData((prev) => ({ ...prev, reporting_head: '' }) as FormData);
-    setFormData((prev) => ({ ...prev, state: '' }) as FormData);
+    setFormData((prev) => ({ ...prev, reporting_head: '' }) as PreviewDataType);
+    setFormData((prev) => ({ ...prev, state: '' }) as PreviewDataType);
   };
 
   return (
@@ -516,6 +422,56 @@ const Form1 = ({ ...Props }: Props) => {
               </SelectContent>
             </Select>
           </div>
+
+        {
+          formData.business_unit == "Orthopedics" &&
+          (
+          <div className="flex flex-col gap-2">
+            <label className="lable">
+              Event Division
+            </label>
+            <Select
+              onValueChange={(value) => handleSelectChange(value, "event_division")}
+              defaultValue={Props.previewData?.event_division ? Props.previewData.event_division : userid as string}
+            >
+              <SelectTrigger className="dropdown">
+                <SelectValue placeholder="Select" />
+              </SelectTrigger>
+              <SelectContent>
+                {
+                eventCostCenter ? (
+                  eventCostCenter.event_division.map((item, index) => {
+                    return (
+                      <SelectItem value={item.name}>
+                        {item.event_division}
+                      </SelectItem>
+                    );
+                  })
+                ):
+                Props.eventCostCenter && Props.eventCostCenter.event_division ?
+                  Props.eventCostCenter.event_division.map((item, index) => {
+                    return (
+                      <SelectItem value={item.name}>
+                        {item.event_division}
+                      </SelectItem>
+                    );
+                  })
+                  :
+                  <SelectItem value={"null"} disabled>No Data Yet</SelectItem>
+                }
+              </SelectContent>
+            </Select>
+            {errors &&
+            errors?.event_division &&
+            !formData?.event_division && (
+              <p className="w-full text-red-500 text-[11px] font-normal text-left">
+                {errors?.event_division}
+              </p>
+            )}
+          </div>
+          )
+        }
+
           <div className="flex flex-col gap-2">
             <label className={`lable ${(errors?.event_cost_center && !formData?.event_cost_center) ? `text-red-600` : `text-black`}`}>
               event cost center<span className="text-[#e60000]">*</span>

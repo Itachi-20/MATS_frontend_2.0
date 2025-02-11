@@ -5,8 +5,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, } from "@/components/ui/table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from "@/components/ui/select";
-import { getTableData } from './utility'
-import { cookies } from "next/headers";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import DatePicker from "../event_list/date-picker"
@@ -25,9 +23,9 @@ type EventDetails = {
   owner: number;
 };
 
-export const formatDate = (dateString: string) => {
+export const formatDate = (dateString?: string) => {
   if (dateString) {
-    const [year, month, day] = dateString.split('-').map(Number);
+    const [year, month, day] = dateString?.split('-').map(Number);
     const date = new Date(year, month - 1, day);
     const formattedDate = `${String(date.getDate()).padStart(2, '0')}-${String(date.getMonth() + 1).padStart(2, '0')}-${date.getFullYear()}`;
     return formattedDate;
@@ -50,8 +48,8 @@ const useDebounce = (value: any, delay: any) => {
 };
 export default function BudgetRequestPage() {
 const [tableData,setTableData] = useState<EventDetails[]>([])
-  const [startDate, setStartDate] = useState<string>('');
-  const [endDate, setEndDate] = useState<string>('');
+  const [startDate, setStartDate] = useState<string>("");
+  const [endDate, setEndDate] = useState<string>("");
   const [isPickerOpen, setIsPickerOpen] = useState(false);
   const total_event_list = 12;
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -90,7 +88,7 @@ const [tableData,setTableData] = useState<EventDetails[]>([])
       );
       if (Data.ok) {
         const data = await Data.json();
-        console.log(data)
+        console.log(data,"inside api data")
         setTableData(data.message)
         setLoading(false)
       } else {
@@ -159,6 +157,7 @@ const [tableData,setTableData] = useState<EventDetails[]>([])
     fetchTableData()
   }, [currentPage, debouncedSearchName, status])
 
+  console.log(tableData,"this is table data")
 
 
   return (

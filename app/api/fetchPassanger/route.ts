@@ -4,7 +4,8 @@ export async function POST(req: Request) {
     try {
         const body = await req.json();
         const cookies = req.headers.get("cookie")
-        const response = await fetch(`${process.env.FRAPPE_URL}/api/resource/Passenger Details?filters=[["event_no","=","${body.refno}"],["is_deleted","=",0]]&fields=["name","full_name","source","destination","date_of_birth","age","aadhar_no","remarks"]`, {
+        console.log(body.refno,'body.refno')
+        const response = await fetch(`${process.env.FRAPPE_URL}/api/method/matsapp.api.event.passenger.passenger.get_event_passenger_list?name=${body.refno}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

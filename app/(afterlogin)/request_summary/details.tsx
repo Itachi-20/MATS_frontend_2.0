@@ -13,15 +13,6 @@ import { Button } from '@/components/ui/button';
 import { useAuth } from "../../context/AuthContext";
 import { tableData } from "@/app/(afterlogin)/dashboard/page"
 import { useRouter } from "nextjs-toploader/app";
-import {
-    Table,
-    TableBody,
-    TableCaption,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table";
 import DatePicker from "@/app/(afterlogin)/event_list/date-picker";
 import TableList from "@/components/requestSummary/activityTable";
 import ExpenseTableList from "@/components/requestSummary/expenseTable";
@@ -36,6 +27,8 @@ type CardData = {
     advance_approved_count: number,
     post_exp_appr_count: number,
     expense_approved_count: number
+    used_budget:string
+    total_budget:number
 }
 type ActivityListType = {
     modules:string,
@@ -770,7 +763,7 @@ export default function DetailsRequestSummary({ ...Props }: Props) {
                         </div>
                     </div>
                     <div className='mt-10 space-y-10'>
-                        <div className='border border-[#848484] p-6 rounded-2xl'>
+                        {/* <div className='border border-[#848484] p-6 rounded-2xl'>
                             <div className='flex justify-between pb-5'>
                                 <div className='text-[25px] font-medium leading-[32px] text-[#05004E]'>
                                     Pre-Activity Requests
@@ -780,13 +773,13 @@ export default function DetailsRequestSummary({ ...Props }: Props) {
                                 </div>
                             </div>
                             <TableList activityData={activityData}/>
-                        </div>
+                        </div> */}
 
 
                         <div className='border border-[#848484] p-6 rounded-2xl'>
                             <div className='flex justify-between pb-5'>
                                 <div className='text-[25px] font-medium leading-[32px] text-[#05004E]'>
-                                    Event Executed
+                                Pre-Activity Requests
                                 </div>
                                 <div>
                                     <Button className="text-black w-34 shadow border hover:shadow-md active:shadow-lg lg:text-sm lg:rounded-[25px] lg:gap-4 sm:rounded-[50px] rounded-[50px] sm:text-[9px] sm:gap-[10px] gap-[9px] sm:font-normal sm:leading-[10.97px] text-[9px]" onClick={exportEventList}>Export</Button>
