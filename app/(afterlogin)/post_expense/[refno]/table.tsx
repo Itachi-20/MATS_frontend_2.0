@@ -616,7 +616,7 @@ const table = ({ ...Props }: Props) => {
           <div className='grid-cols-1 px-6'>
             <ul className=''>
               <li className='border-b p-2'>Total logistics Expense :<span className='font-semibold px-1'>{Props.tableData ? Props.tableData.total_logistics_expense : ''}</span></li>
-              <li className='border-b p-2'>Total Compensation Expense :<span className='font-semibold px-1'>{Props.tableData ? Props.tableData.total_compensation_expense : ''}</span></li>
+              <li className='border-b p-2'>Total Non-Logistics Expense :<span className='font-semibold px-1'>{Props.tableData ? Props.tableData.total_compensation_expense : ''}</span></li>
               <li className='border-b p-2'>Total Estimated Expense :<span className='font-semibold px-1'>{Props.tableData ? Props.tableData.total_estimated_expense : ''}</span></li>
               <li className='border-b p-2'>Total Advance Expense :<span className='font-semibold px-1'>{Props.tableData ? Props.tableData.total_advance_amount : ''}</span></li>
               <li className=' p-2'>Total Remaining Expense :<span className='font-semibold px-1'>{Props.tableData ? Props.tableData.total_balance_amount : ''}</span></li>
