@@ -14,7 +14,9 @@ import Add_vendor from "@/components/add_vendor";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 import Comment_box from "@/components/Comment_box";
-import { Previewdata } from '@/app/(afterlogin)/monetary_grant/page'
+// import { Previewdata } from '@/app/(afterlogin)/monetary_grant/page'
+import { PreviewDataType } from "@/app/Types/EventData";
+import Link from "next/link";
 type EventEntry = {
   name: string | null;
   owner: string | null;
@@ -180,14 +182,14 @@ type ActivityDocument = {
 };
 
 type Props = {
-  previewData: Previewdata | null;
+  previewData: PreviewDataType | null;
   refno: string | null;
 }
 
 const Preview_Form = ({...Props}:Props) => {
   const pathname = usePathname();
   const router = useRouter();
-  const [preview_data, setPreviewData] = useState<Previewdata | null | undefined>(Props.previewData);
+  const [preview_data, setPreviewData] = useState<PreviewDataType | null>(Props.previewData);
   const [dialog,setDialog] = useState(false);
   const [isCommentbox,setIsCommentbox] = useState<boolean>();
   const [addVendor,setAddVendor] = useState(false);
@@ -266,6 +268,11 @@ const Preview_Form = ({...Props}:Props) => {
 
   return (
       <>
+      <div className="flex justify-end w-full">
+        <Link href={`/audit_trail/${refNo}`}>
+      <Button className="border border-[#4430bf] text-[#4430bf] px-6">Audit Trail</Button>
+        </Link>
+    </div>
         <div className="md:px-7 md:pb-7 md:pt-4 w-full z-20">
             
         <BasicDetails
@@ -275,6 +282,7 @@ const Preview_Form = ({...Props}:Props) => {
         />
 
         <OrganizationDetails
+        pathname=""
           eventData={preview_data}
         />
 

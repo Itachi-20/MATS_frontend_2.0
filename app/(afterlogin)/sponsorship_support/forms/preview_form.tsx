@@ -14,6 +14,7 @@ import { useRouter } from 'nextjs-toploader/app';
 import Comment_box from "@/components/Comment_box";  
 import VendorDetails from "@/components/commonPreviewComponents/vendor_detail"
 import {eventCostCenter,subtypeActivity,reportingHeadDropdown,stateDropdown,FormErrors,CityDropdown, PreviewDataType, ChildVendor} from '@/app/Types/EventData'
+import Link from "next/link";
 
 type Props = {
     refno: string | null
@@ -92,6 +93,11 @@ const Preview_Form = ({...Props}:Props) => {
   }, [])
   return (
       <>
+      <div className="flex justify-end w-full">
+        <Link href={`/audit_trail/${refNo}`}>
+      <Button className="border border-[#4430bf] text-[#4430bf] px-6">Audit Trail</Button>
+        </Link>
+    </div>
         <div className="md:px-7 md:pb-7 md:pt-4 w-full z-20">
             
         <BasicDetails
