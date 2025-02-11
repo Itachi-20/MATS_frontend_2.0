@@ -14,6 +14,7 @@ import IsReportingHeadDialog from "@/components/isReportingHeadDialog";
 import CityDropdwon from '@/components/training_and_education/search_city'
 import { PreviewDataType } from "@/app/Types/EventData";
 import {eventCostCenter,subtypeActivity,reportingHeadDropdown,stateDropdown,FormErrors,CityDropdown,DropdownDataType} from '@/app/Types/EventData'
+import Link from "next/link";
 
 
 
@@ -360,6 +361,11 @@ const Form1 = ({ ...Props }: Props) => {
   };
   return (
     <div>
+      <div className="flex justify-end w-full">
+        <Link href={`/audit_trail/${Props?.refNo}`}>
+      <Button className="border border-[#4430bf] text-[#4430bf] px-6">Audit Trail</Button>
+        </Link>
+    </div>
       <h1 className="text-black text-2xl font-normal uppercase pb-8">
         Basic Detail
       </h1>

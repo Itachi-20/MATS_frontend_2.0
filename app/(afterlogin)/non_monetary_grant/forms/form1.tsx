@@ -14,6 +14,7 @@ import { useAuth } from "@/app/context/AuthContext";
 import IsReportingHeadDialog from "@/components/isReportingHeadDialog";
 import CityDropdwon from '@/components/training_and_education/search_city'
 import {eventCostCenter,subtypeActivity,reportingHeadDropdown,stateDropdown,FormErrors,CityDropdown, PreviewDataType, ChildVendor, DropdownDataType} from '@/app/Types/EventData'
+import Link from "next/link";
 
 type Props = {
   cityDropdown: CityDropdown[];
@@ -332,6 +333,11 @@ const Form1 = ({ ...Props }: Props) => {
     // </div>
     (
       <div>
+        <div className="flex justify-end w-full">
+        <Link href={`/audit_trail/${refNo}`}>
+      <Button className="border border-[#4430bf] text-[#4430bf] px-6">Audit Trail</Button>
+        </Link>
+    </div>
         <h1 className="text-black text-2xl font-normal uppercase pb-8">
           Basic Detail
         </h1>
