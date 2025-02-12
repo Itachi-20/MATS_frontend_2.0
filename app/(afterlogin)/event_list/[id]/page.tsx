@@ -221,7 +221,7 @@ export default function EventListPage() {
             className="text-black shadow md:rounded-xl bg-[#f6f6f6] md:py-5"
             placeholder="Type Here"
             readOnly={true}
-            value={eventData?.occurance_date}
+            value={eventData?.next_occurence_date}
           ></Input>
         </div>
         </div>

@@ -244,7 +244,7 @@ export type eventCostCenter = {
     can_postactivity_approve:boolean
     can_approve:boolean
     is_approved:boolean
-    occurance_date:string
+    next_occurence_date:string
   };
    export  type ChildVendor = {
       name: string;
