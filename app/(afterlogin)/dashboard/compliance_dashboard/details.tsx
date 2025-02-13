@@ -10,9 +10,18 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { Button } from '@/components/ui/button';
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../../context/AuthContext";
 import { tableData } from "@/app/(afterlogin)/dashboard/page"
 import { useRouter } from "nextjs-toploader/app";
+import {
+    Table,
+    TableBody,
+    TableCaption,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
 import DatePicker from "@/app/(afterlogin)/event_list/date-picker";
 import TableList from "@/components/requestSummary/activityTable";
 import ExpenseTableList from "@/components/requestSummary/expenseTable";
@@ -27,8 +36,6 @@ type CardData = {
     advance_approved_count: number,
     post_exp_appr_count: number,
     expense_approved_count: number
-    used_budget:string
-    total_budget:number
 }
 type ActivityListType = {
     modules:string,
@@ -82,10 +89,10 @@ export default function DetailsRequestSummary({ ...Props }: Props) {
     
     const DATA_COUNT = graphFilter != "Budget Expense" ? 13 : 12;
     const NUMBER_CFG = { count: DATA_COUNT - 1, min: 0, max: 100 };
-    const labels = graphFilter == "Budget Expense" ? Utils.xlabel({ count: DATA_COUNT }) : Utils.months({ count: DATA_COUNT });
+    const labels = Utils.months({ count: DATA_COUNT });
     const data = {
         labels: labels,
-        datasets: graphFilter != "Budget Expense" ? [
+        datasets:[
             {
                 label: 'Training & Education',
                 data: Utils.numbers(NUMBER_CFG),
@@ -121,18 +128,7 @@ export default function DetailsRequestSummary({ ...Props }: Props) {
                 data: Utils.numbers(NUMBER_CFG),
                 backgroundColor: Utils.CHART_COLORS.red,
             },
-        ] : [
-            {
-                label: 'Total Used',
-                data: Utils.numbers(NUMBER_CFG),
-                backgroundColor: Utils.CHART_COLORS.skyblue,
-            },
-            {
-                label: 'Budget Used',
-                data: Utils.numbers(NUMBER_CFG),
-                backgroundColor: Utils.CHART_COLORS.darkblue,
-            },
-        ],
+        ]
 
     };
 
@@ -713,23 +709,9 @@ export default function DetailsRequestSummary({ ...Props }: Props) {
                 </div>
                 <div className='w-full'>
                     <div className='rounded-2xl border border-[#848484] p-6'>
-                        <StackedBarChart data={data} setGraphFilter={setGraphFilter} graphFilter={graphFilter} />
+                        <StackedBarChart data={data} setGraphFilter={setGraphFilter} graphFilter={graphFilter} role={role}/>
                     </div>
                     <div className='flex space-x-3 mt-10 justify-end'>
-                        <div>
-                            <Select
-                                onValueChange={(value) => handleSelectChange(value, "graph_filter")}
-                            >
-                                <SelectTrigger className="dropdown rounded-[50px]" >
-                                    <SelectValue placeholder={"Select User"} />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value={"Monthly Count"}>Monthly Count</SelectItem>
-                                    <SelectItem value={"Monthly Expense"}>Monthly Expense</SelectItem>
-                                    <SelectItem value={"Budget Expense"}>Budget Expense</SelectItem>
-                                </SelectContent>
-                            </Select>
-                        </div>
                         <div>
                             <Select
                                 onValueChange={(value) => handleSelectChange(value, "graph_filter")}
@@ -763,7 +745,7 @@ export default function DetailsRequestSummary({ ...Props }: Props) {
                         </div>
                     </div>
                     <div className='mt-10 space-y-10'>
-                        {/* <div className='border border-[#848484] p-6 rounded-2xl'>
+                        <div className='border border-[#848484] p-6 rounded-2xl'>
                             <div className='flex justify-between pb-5'>
                                 <div className='text-[25px] font-medium leading-[32px] text-[#05004E]'>
                                     Pre-Activity Requests
@@ -773,13 +755,13 @@ export default function DetailsRequestSummary({ ...Props }: Props) {
                                 </div>
                             </div>
                             <TableList activityData={activityData}/>
-                        </div> */}
+                        </div>
 
 
                         <div className='border border-[#848484] p-6 rounded-2xl'>
                             <div className='flex justify-between pb-5'>
                                 <div className='text-[25px] font-medium leading-[32px] text-[#05004E]'>
-                                Pre-Activity Requests
+                                    Event Executed
                                 </div>
                                 <div>
                                     <Button className="text-black w-34 shadow border hover:shadow-md active:shadow-lg lg:text-sm lg:rounded-[25px] lg:gap-4 sm:rounded-[50px] rounded-[50px] sm:text-[9px] sm:gap-[10px] gap-[9px] sm:font-normal sm:leading-[10.97px] text-[9px]" onClick={exportEventList}>Export</Button>

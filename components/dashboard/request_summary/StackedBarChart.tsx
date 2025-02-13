@@ -1,4 +1,3 @@
-
 'use client'; // Ensure this component runs on the client side
 
 import { Bar } from 'react-chartjs-2';
@@ -23,7 +22,7 @@ import {
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, SubTitle);
 
-const StackedBarChart = ({ data, setGraphFilter, graphFilter }) => {
+const StackedBarChart = ({ data, setGraphFilter, graphFilter, role }) => {
   const [graphTableVisibility,setGraphTableVisibility] = useState<boolean>(false);
   const documentRows = graphFilter != "Budget Expense"? [
     {
@@ -164,8 +163,11 @@ const StackedBarChart = ({ data, setGraphFilter, graphFilter }) => {
                       </SelectTrigger>
                       <SelectContent>
                          <SelectItem value={"Monthly Count"}>Monthly Count</SelectItem>     
-                         <SelectItem value={"Monthly Expense"}>Monthly Expense</SelectItem>     
-                         <SelectItem value={"Budget Expense"}>Budget Expense</SelectItem>     
+                         <SelectItem value={"Monthly Expense"}>Monthly Expense</SelectItem>  
+                         {
+                          role != "Event Compliance" &&
+                          <SelectItem value={"Budget Expense"}>Budget Expense</SelectItem>  
+                         }   
                       </SelectContent>
                   </Select>
                 </div>

@@ -1,6 +1,7 @@
 import React from "react";
 import Details from '@/app/(afterlogin)/dashboard/details'
-import DetailsNew from '@/app/(afterlogin)/request_summary/details'
+import ComplianceDetails from '@/app/(afterlogin)/dashboard/compliance_dashboard/details';
+import FinanceDetails from '@/app/(afterlogin)/dashboard/finance_dashboard/details';
 import {fetchEventList} from '@/app/(afterlogin)/dashboard/utility'
 import {fetchCardData} from '@/app/(afterlogin)/dashboard/utility'
 import {fetchEventApproverList} from '@/app/(afterlogin)/dashboard/utility'
@@ -45,6 +46,7 @@ const Index = async() => {
  }  
 
  if(role == 'Event Finance'){
+  console.log("In if elese")
   table = await fetchEventFinanceList(cookie);
   carddata = await fetchFinanceCardData(cookie);
 }
@@ -62,10 +64,19 @@ if(role == 'Event Travel'){
     carddata={carddata}
     />
     :
-    <DetailsNew
-    tableData={table}
-    carddata={carddata}
-    />
+    (role == 'Event Compliance'
+      ?
+
+      <ComplianceDetails
+        tableData={table}
+        carddata={carddata}
+        />
+        :
+        <FinanceDetails
+        tableData={table}
+        carddata={carddata}
+        />
+    )
   );
 };
 

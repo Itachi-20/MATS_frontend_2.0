@@ -33,7 +33,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-, "app/(afterlogin)/repository_document_list", "app/(afterlogin)/request_summary/page.tswex"  ],
+, "app/(afterlogin)/repository_document_list", "app/(afterlogin)/audit_log/page.tsx"  ],
   "exclude": [
     "node_modules"
   ],
